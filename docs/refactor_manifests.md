@@ -33,7 +33,7 @@ a staging area inside an active root.
 | Dimension Fonts | Dimension Drink | Recipes and milestone references only; Dimension Drink owns obelisks, charge, sessions, tickets, and arrival sites |
 | Settlement paths | Settlement Roads | No pack placement script; Settlement Roads owns dry-route planning, persistence, road palette, and placement; bridge scaffolding is dormant and unsupported |
 | Vanilla vessel durability and recipes | Better Content Fixes | No boat mutation or hiding script |
-| Coin acquisition, recipes, village trades, and currency loot | Better Content Economy | No parallel KubeJS coin catalogue, trade, drop, recipe-removal, or emerald-replacement script |
+| Coin acquisition, purse storage/UI/pickup, village and external-merchant trades, and currency loot | Better Content Economy | No parallel KubeJS coin catalogue, purse, pickup, trade, drop, recipe-removal, or emerald-replacement script |
 | TConstruct affixes and Epic Fight mapping | Tinkers' Construct Affixes | Pack supplies no parallel material-affix catalogue |
 | World reset lifecycle | World Lifecycle Manager | Pack supplies runtime configuration and deploys its independent JAR |
 | Persistent footprints and notes | Player Traces | Pack supplies runtime configuration and deploys its independent JAR |

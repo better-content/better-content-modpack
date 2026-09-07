@@ -2477,6 +2477,16 @@
       ]
     },
     {
+      "id": "wanderer_trade:better_content_economy:village_starter:minecraft:villager_spawn_egg",
+      "source": "wanderer_trade",
+      "output": "minecraft:villager_spawn_egg",
+      "policy": "support_only",
+      "era_reference": null,
+      "evidence": [
+        "../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/trader/VillageStarterOffer.java"
+      ]
+    },
+    {
       "id": "wanderer_trade:BC_WANDERER_MARKET:additionalweaponry:wrench:271",
       "source": "wanderer_trade",
       "output": "additionalweaponry:wrench",
