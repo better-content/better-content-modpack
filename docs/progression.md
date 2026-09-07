@@ -28,10 +28,14 @@ Generated capacity and efficiency modifiers may extend or shorten that baseline.
 Exhausting charge ends the run and returns its participants.
 
 Bumblezone and Ratlantis are expedition-only: upstream portals, tokens, and hive
-teleportation are disabled. Bumblezone nurseries are the origin of non-space food
-cultivars and always yield four propagules. Outside an authored origin, uprooting
-preserves one propagule with only a one-percent mature bonus; edible produce is
-never itself the planting item.
+teleportation are disabled. Ordinary vegetable patches generate naturally in the
+Overworld, but Bumblezone nurseries remain the origin of non-space food seed stock
+and yield two to four propagules from mature plants. Outside an authored origin,
+uprooting preserves one propagule with a ten-percent chance for a second; edible
+produce is never itself the planting item. The Field Cook and Embark selections
+therefore offer cabbage and tomatoes as food, not their seeds. The cultivar loot
+modifier runs after the pack's other global loot modifiers so grass cannot leak
+wheat or sage seed into the Overworld.
 
 ## Era 2 — Create Powered Works
 

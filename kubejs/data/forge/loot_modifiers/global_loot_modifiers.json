@@ -357,6 +357,7 @@
     "thirst:add_loot_simple_dungeon_fr",
     "twilightforest:fiery_pick_smelting",
     "twilightforest:giant_pick_grouping",
-    "ubesdelight:add_loot_village_plains_house"
+    "ubesdelight:add_loot_village_plains_house",
+    "bumblezone_cultivars:propagation"
   ]
 }

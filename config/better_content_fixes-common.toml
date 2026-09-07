@@ -4,6 +4,23 @@
 	#When disabled, vanilla hold-to-sneak input remains active and the custom toggle handler is inert.
 	toggleSneak = false
 
+[sleepingOverhaul]
+	#Paces Sleeping Overhaul's simulated ticks instead of allowing an effectively instant night.
+	paceTimelapse = true
+	#Target simulated ticks per real second while Sleeping Overhaul timelapse is active.
+	#Range: 20 ~ 2000
+	targetTicksPerSecond = 800
+
+[items]
+	#Extra horizontal item-pickup radius in blocks. Vanilla vertical reach is unchanged.
+	#Range: 0.0 ~ 8.0
+	extraPickupHorizontalRadius = 1.0
+
+[vegetation]
+	#Chance to remove vanilla grass or tall grass once per distinct block entry by a moving living entity.
+	#Range: 0.0 ~ 1.0
+	decorativeTrampleChance = 0.1
+
 [dynamicTrees]
 	#Replaces Dynamic Trees' NormalSeasonManager season context HashMap with a ConcurrentHashMap.
 	#This is intended to prevent ConcurrentModificationException during parallel feature generation, especially with C2ME threaded features.

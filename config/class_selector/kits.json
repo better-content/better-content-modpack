@@ -40,8 +40,8 @@
   {
     "id": "field_cook",
     "title": "Field Cook",
-    "blurb": "Food variety, crop starts, and hydration",
-    "description": "Safe fallback kit for body-system starts. It provides food and crop variety, but no kitchen workstation, knife, crate, pouch, or storage bypass.",
+    "blurb": "Food variety, seasonal planning, and hydration",
+    "description": "Safe fallback kit for body-system starts. It provides food variety without bypassing Bumblezone seed provenance, and no kitchen workstation, knife, crate, pouch, or storage bypass.",
     "items": [
       {
         "item": "sereneseasons:calendar",
@@ -49,12 +49,12 @@
         "slot": "weapon.offhand"
       },
       {
-        "item": "farmersdelight:cabbage_seeds",
+        "item": "farmersdelight:cabbage",
         "count": 16,
         "slot": "inventory"
       },
       {
-        "item": "farmersdelight:tomato_seeds",
+        "item": "farmersdelight:tomato",
         "count": 16,
         "slot": "inventory"
       },
