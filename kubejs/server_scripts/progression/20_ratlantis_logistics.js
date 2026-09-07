@@ -27,6 +27,59 @@ ServerEvents.recipes(function (event) {
         L: 'ratlantis_logistics:courier_lattice'
     }).id('kubejs:ratlantis_logistics/root/pretty_pipes')
 
+    // The first Ratlantis trip establishes a useful 32-pipe network. Modules
+    // then expose two additional visible tiers instead of charging hidden
+    // inventory costs after crafting.
+    event.remove({ output: 'prettypipes:blank_module' })
+    event.shaped('prettypipes:blank_module', ['QMQ', 'SPS', 'QRQ'], {
+        Q: 'minecraft:quartz', M: 'ratlantis_logistics:oratchalcum_mechanism',
+        S: 'minecraft:stone_slab', P: 'prettypipes:pipe', R: 'minecraft:redstone'
+    }).id('kubejs:ratlantis_logistics/tier/oratchalcum_blank_module')
+
+    var BC_PRETTY_PIPES_HIGH_MODULES = {
+        high_crafting_module: {
+            pattern: ['GCG', 'GMG', 'GIG'],
+            key: { G: 'minecraft:gold_ingot', C: 'ratlantis_logistics:arcane_logistics_core',
+                M: 'prettypipes:medium_crafting_module', I: 'minecraft:iron_ingot' }
+        },
+        high_extraction_module: {
+            pattern: ['GCG', 'GMG', 'GGG'],
+            key: { G: 'minecraft:gold_ingot', C: 'ratlantis_logistics:arcane_logistics_core',
+                M: 'prettypipes:medium_extraction_module' }
+        },
+        high_filter_module: {
+            pattern: ['GCG', 'BMB', 'GBG'],
+            key: { G: 'minecraft:gold_ingot', C: 'ratlantis_logistics:arcane_logistics_core',
+                B: 'minecraft:iron_bars', M: 'prettypipes:medium_filter_module' }
+        },
+        high_high_priority_module: {
+            pattern: ['PCP', 'PMP', 'PPP'],
+            key: { C: 'ratlantis_logistics:arcane_logistics_core', P: 'minecraft:paper',
+                M: 'prettypipes:medium_high_priority_module' }
+        },
+        high_low_priority_module: {
+            pattern: ['PCP', 'PMP', 'PPP'],
+            key: { C: 'ratlantis_logistics:arcane_logistics_core', P: '#forge:cobblestone',
+                M: 'prettypipes:medium_low_priority_module' }
+        },
+        high_retrieval_module: {
+            pattern: ['RCR', 'GMG', 'RGR'],
+            key: { R: 'minecraft:redstone_block', C: 'ratlantis_logistics:arcane_logistics_core',
+                G: 'minecraft:gold_ingot', M: 'prettypipes:medium_retrieval_module' }
+        },
+        high_speed_module: {
+            pattern: ['GCG', 'BMB', 'GBG'],
+            key: { G: 'minecraft:gold_ingot', C: 'ratlantis_logistics:arcane_logistics_core',
+                B: 'minecraft:sugar', M: 'prettypipes:medium_speed_module' }
+        }
+    }
+    Object.keys(BC_PRETTY_PIPES_HIGH_MODULES).forEach(function (module) {
+        var recipe = BC_PRETTY_PIPES_HIGH_MODULES[module]
+        event.remove({ output: 'prettypipes:' + module })
+        event.shaped('prettypipes:' + module, recipe.pattern, recipe.key)
+            .id('kubejs:ratlantis_logistics/tier/arcane_' + module)
+    })
+
     event.remove({ output: 'sophisticatedstorage:hopper_upgrade' })
     event.shaped('sophisticatedstorage:hopper_upgrade', ['IRI', 'HLH', ' U '], {
         I: '#forge:ingots/iron', R: '#forge:dusts/redstone', H: 'minecraft:hopper',

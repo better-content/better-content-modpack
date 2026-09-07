@@ -32,6 +32,12 @@ selectors resolve against the live item registry, avoiding a second hand-kept
 loot denylist. Static config, guide, quest, trade, worldgen, and custom-hook
 checks cover the other acquisition surfaces.
 
+Pretty Pipes uses a visible three-tier Ratlantis ladder. The Courier Lattice recipe yields four
+lattices and each lattice-rooted pipe recipe yields eight pipes, so the first expedition supports
+a 32-pipe starter network. A blank module visibly consumes an Oratchalcum Mechanism. The seven
+high crafting, extraction, filter, high-priority, low-priority, retrieval, and speed modules each
+visibly consume one Arcane Logistics Core; their low and medium recipes retain upstream costs.
+
 Selectors are family-level wherever possible: namespace, tag, ID prefix, or an
 exact ID when no stable family exists. Capability roots prove the first
 meaningful entry into a system; they do not replace every downstream recipe.
