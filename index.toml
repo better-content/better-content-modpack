@@ -7482,7 +7482,7 @@ hash = "e2e54bd11a880d784559d4344cdfe1228251f6503e0ca52bb89d0b6c8ecb6118"
 
 [[files]]
 file = "kubejs/config/economy_acquisition.json"
-hash = "eb65718e49630d93a5358048d5b9778dd52301781bb10614dcefa13bbde9f5fb"
+hash = "bd54a786e0d56b168e451854a1aaf9072d1965dff7272b037edce0ed77afd033"
 
 [[files]]
 file = "kubejs/config/food_effect_progression_candidates.json"
