@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "AGENTS.md"
-hash = "e8dc95272e6214eb80491e42225b86afd27c45738ec987909a3426f1c58e8f4a"
+hash = "bc2b204b92fa0eca93466e8e6438b6c2f67bb13a885798e786ba196fd41fdbf4"
 
 [[files]]
 file = "LICENSE"
@@ -2578,7 +2578,7 @@ hash = "f1d7bd782ae6603b429b3e5b7ce958deea5d2876fc03fc5e9d71feb7d7e152cb"
 
 [[files]]
 file = "config/globalgamerules-common.toml"
-hash = "9f3775f4e8ed2ba2fa010eff185df333b4a5dd5175dfa6f1db6b653eb9bff2c5"
+hash = "6c4bd80e9ce25be05155c6deeb75d69f29c7b44bf88b98e0ebe223ab994c6b85"
 
 [[files]]
 file = "config/goety/goety-attributes.toml"
@@ -4662,7 +4662,7 @@ hash = "58a1f0b44737ca37c3e974cd50a03e8bdd9f8967ec9de1634e2737c82c967c70"
 
 [[files]]
 file = "defaultconfigs/configurabledeath-server.toml"
-hash = "4e93a64ad96d393e87098462fbe062564f912c1b92d07a63f06c054e3175d820"
+hash = "57fd242c375b41e8281340b7793e82bfd8e5608b070d529e44fc2cb9a972fb91"
 
 [[files]]
 file = "defaultconfigs/create-server.toml"
@@ -4706,7 +4706,7 @@ hash = "6f6e45c48f1da1ad70871c2462b717bef6c51f99c100bbeebe66fa71f0e82b8a"
 
 [[files]]
 file = "defaultconfigs/iceandfire-server.toml"
-hash = "c2aebbc7227edcb76858005f3391a184cd42d75c584fd5266ac29aaf7835d527"
+hash = "b180e9eaee4257bb3d4789df558e98ff849be855cab459460ad6469653eaf284"
 
 [[files]]
 file = "defaultconfigs/incontrol-server.toml"
@@ -7925,6 +7925,10 @@ file = "kubejs/data/c/tags/items/wrenches.json"
 hash = "7392b4249b82885a0c5faf72d7c28722ca7600537e1b5404d3f993bc3c5bfb97"
 
 [[files]]
+file = "kubejs/data/complicated_bees/advancements/grant_book_on_first.json"
+hash = "c57ab6bb6fb8d5659e33a3775af423168a5535ad7abf64cb609c546828a91b44"
+
+[[files]]
 file = "kubejs/data/complicated_bees/complicated_bees/mutation/ender/ender.json"
 hash = "0bed8c9e76693dc9b16c2cffe455614c5b63a3bcdc7f56a530795c17448b7c4a"
 
@@ -9373,6 +9377,10 @@ file = "kubejs/data/occultism/modonomicon/books/dictionary_of_spirits/entries/st
 hash = "7032a7a08610677bc56a27630e8423346436ac9d982c631ea4f0f895f64c1672"
 
 [[files]]
+file = "kubejs/data/parcool/advancements/grant_parcool_guide.json"
+hash = "c57ab6bb6fb8d5659e33a3775af423168a5535ad7abf64cb609c546828a91b44"
+
+[[files]]
 file = "kubejs/data/projectvibrantjourneys/loot_tables/blocks/ice_chunks.json"
 hash = "59dae689131d98ad3d82dc0abeec43b1922e7462d48a2020b772ccec1de77ecb"
 
@@ -9978,7 +9986,7 @@ hash = "fe902c8e51a00d3933125df0a57d966f81ba2a1c913d273a69fdd576733f8ac1"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/check__35_wood_family_alias_compat.js"
-hash = "ff110ccc81e4563fa91bee22d796200a2629e94114720310b59a37476c14477c"
+hash = "ba48f13c00c14050058bca53b7d5b56cccf6d68685f0f99f7819b1e1ec185bff"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/check__40_dirt_grass_compat.js"
@@ -11096,7 +11104,7 @@ metafile = true
 
 [[files]]
 file = "mods/pillager-campaigns-0.5.3.jar"
-hash = "7d750eba23bc63feefcc5a3a407372c1930eb99b52057ceb78a43678a02d42f4"
+hash = "5550f6f817dc657fd69d5713e132e275fdff9b1c27681f222a9ab8a45d034283"
 
 [[files]]
 file = "mods/ping-wheel.pw.toml"
@@ -11578,6 +11586,14 @@ metafile = true
 [[files]]
 file = "options.txt"
 hash = "f215f0a3a3c63efda404a8bae2800b6031cf04138a3030d035d2c48f42952cf0"
+
+[[files]]
+file = "pack-test-lock.main.kts"
+hash = "12df4f25dcb02a37e4ac60e7bdd0910aa3e37f72df42b2590dc52dbf4fe7dd80"
+
+[[files]]
+file = "pack-test-queue.main.kts"
+hash = "74851df7dab886f679956868011bd64fd92910c9663ad92b68f49cacc18cfe58"
 
 [[files]]
 file = "package.sh"
