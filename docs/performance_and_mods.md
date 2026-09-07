@@ -63,6 +63,16 @@ Runtime recipe-audit and block-hardness diagnostics ship disabled. An explicitly
 atomically refreshes ignored `generated/runtime-dumps/`. Incomplete snapshots never replace the
 last complete one.
 
+## Shader block motion classification
+
+The active Complementary Reimagined archive limits `block.10005` grass motion to flexible plants.
+Full cubes and rigid assemblies—including Burnt/Ice and Fire grass blocks, Tinkers' Construct slime
+grass blocks, tree roots and branches, hedges, planters, flower boxes, pots, doors, and cactus
+structures—must remain outside that class so their vertices do not deform like grass. Additions need
+a model-shape audit: plant stems, crops, vines, flowers, ferns, and saplings may use grass motion;
+host blocks, wood, containers, and multipart rigid supports may not. The focused static archive
+contract freezes both the 81 audited exclusions and representative flexible inclusions.
+
 ## C2ME, Distant Horizons, and world generation
 
 C2ME remains active with threaded world generation and no-tick view distance. In `config/c2me.toml`,
