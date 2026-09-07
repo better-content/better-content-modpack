@@ -76,6 +76,28 @@ Distant Horizons remains enabled during compatibility validation. Server generat
 enabled. LOD transparency is disabled to avoid incorrect Distant Horizons/Oculus/shader depth
 composition; nearby vanilla and shader water remain unchanged.
 
+`better_content_fixes` owns the foreground tick-budget governor. After a 100-tick sample warmup it
+temporarily overrides only Distant Horizons' optional distant generation when the sliding p95
+exceeds 50 ms or a tick exceeds 100 ms. It clears its in-memory override only after 600 consecutive
+ticks with p95 at or below 40 ms and no tick above 100 ms, and never enables a user-disabled DH
+setting. `/better_content_fixes performance_status` reports p50/p95/p99/max and override state.
+
+The controlled exploration acceptance budget is measured after 60 seconds of warmup over a
+ten-minute fresh-terrain route: median at most 40 ms, p95 at most 50 ms, p99 at most 100 ms, and no
+tick above 250 ms. Pauses, saves, maintenance commands, and dimension transitions are separate
+scenarios. C2ME already prioritizes chunk tasks by ticket level and distance; a strict global
+near-player-first guarantee is not claimed because dependency chunks, synchronous player-critical
+loads, forced tickets, and cross-dimension work must remain starvation-free. Keep the paired C2ME
+IO compatibility settings above unchanged unless separately validated.
+
+Performance evidence must use fixed candidate hashes, seed, route, view/simulation distances, DH
+and C2ME settings, forced-ticket inventory, and host-load notes. Capture the same loaded-terrain
+control and fresh-terrain route with `spark profiler start --timeout 600 --thread *
+--ignore-sleeping`, plus a server-thread spike capture with `--only-ticks-over 50`. Store the
+profiles, measurements, and sorted SHA-256 manifest under
+`workspace_artifacts/evidence/performance-fonts/<UTC>/`; do not treat paused time, maintenance
+commands, or the pre-event-driven Heat Sync profile as a gameplay baseline.
+
 Lost Cities, Twilight Forest, and Fallout Wastelands are Creating Space destinations declared under
 `kubejs/data/*/creatingspace/rocket_accessible_dimension/`. The Flesh That Hates is active, but its
 six Mushroom Fields structures are disabled by `datapacks/worldgen_compat_fixes`, and
