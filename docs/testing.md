@@ -17,6 +17,30 @@ An explicit pack-test request selects one existing candidate group:
 ./test.main.kts all
 ```
 
+All heavyweight selectors and `release.main.kts` share one kernel-backed runner mutex. The
+supported entry points acquire it automatically and publish current ownership at
+`$HOME/.local/share/worklane/pack-tests/owner.json`; contention fails immediately with exit code
+75 and that ownership record. `fast` and custom-mod repository-local checks do not use this mutex.
+Do not invoke the heavyweight Gradle tasks directly: they require the inherited lock token.
+
+Only `workspace_coord` admits work to the persistent queue. It supplies an immutable-candidate
+handoff and registers it with:
+
+```sh
+./pack-test-queue.main.kts request /absolute/path/to/handoff.json
+./pack-test-queue.main.kts status
+./pack-test-queue.main.kts run-next
+```
+
+Product lanes do not wait inside a runner process when the mutex is owned. They register their
+dependency with `workspace_coord`, become idle, and resume when the coordinator or `pack_tests`
+notifies the handoff callback. The `bc.pack_test_handoff.v1` document must include explicit user
+authorization, request ID and selector; producer and callback agent/pane identity; modpack HEAD
+and status; absolute client/server paths and SHA-256 hashes; repository revisions/statuses;
+producer validations; artifacts; ordered dependencies; requested scenarios; and prior evidence.
+Admission copies the document into the queue, rejects duplicate request IDs, and the harness
+revalidates the exact candidate paths and hashes before use.
+
 The selectors map exactly to `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
 `singleplayerTest`. Gradle also exposes the aggregate `modpackTest`, but `test.main.kts all`
 deliberately sequences `test`, the candidate gate, and the three independent runtime groups so a
@@ -37,6 +61,19 @@ events and the run's `candidate_selected` hashes match the target under discussi
 makes a snapshot usable evidence; recency alone does not make it current. Preserve unmatched
 snapshots as historical candidate evidence and do not use their volatile totals as claims about the
 tracked pack.
+
+The runtime-data-dumper completion schema is `bc.runtime_dump_completion.v3` and includes
+`dimensions.json` (`bc.dimensions.v1`). Multiplayer smoke discovers targets at run time from the
+loaded Creating Space rocket-accessible-dimension registry and enabled Dimension Drink Font
+configuration; target counts are evidence, not hard-coded assumptions. Every discovered target
+must be loaded. The test traverses three fresh, pairwise-distant locations per target as a
+spectator, requires a post-teleport heartbeat within 90 seconds, then requires three consecutive
+10-second samples at at least 18 mean TPS within 180 seconds. Timeouts retain the command, server
+tail, process state, and fixture for diagnosis. Candidate hashes are checked again after traversal.
+
+The lifecycle smoke verifies one lineage transition, its committed archive, and final clean state.
+It intentionally avoids a second generation; longer persistence matrices require separate explicit
+authorization.
 
 ## Evidence maintenance
 

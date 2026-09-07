@@ -22,6 +22,14 @@ fun usage(): Nothing {
 if (selector == null || (selector !in taskBySelector && selector != "all") || args.size != 1) usage()
 val selected = selector ?: usage()
 
+if (selected != "fast" && System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
+    val status = ProcessBuilder(
+        root.resolve("pack-test-lock.main.kts").absolutePath,
+        "run", "test", selected, "--", __FILE__.absolutePath, selected,
+    ).directory(root).inheritIO().start().waitFor()
+    exitProcess(status)
+}
+
 val runId = if (selected == "fast") null else {
     System.getenv("BC_TEST_RUN_ID")?.takeIf { it.isNotBlank() }
         ?: DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC)
@@ -55,7 +63,10 @@ fun gradle(suite: String, task: String): Int {
     val process = ProcessBuilder(root.resolve("gradlew").absolutePath, "--no-daemon", task)
         .directory(root)
         .inheritIO()
-        .apply { if (runId != null) environment()["BC_TEST_RUN_ID"] = runId }
+        .apply {
+            environment()["BC_TEST_SELECTOR"] = selected
+            if (runId != null) environment()["BC_TEST_RUN_ID"] = runId
+        }
         .start()
     val status = process.waitFor()
     if (status != 0 || suite == "fast") return status

@@ -58,6 +58,30 @@ class DedicatedServerFixture(private val evidence: EvidenceRun) : AutoCloseable 
     fun waitLogCount(pattern: Regex, count: Int, description: String, timeout: Duration = Duration.ofMinutes(15)) =
         process.waitForLogCount(pattern, count, timeout, description)
 
+    fun commandResult(command: String, pattern: Regex, description: String, timeout: Duration): MatchResult {
+        val offset = if (log.exists()) log.readText().length else 0
+        send(command)
+        val deadline = System.nanoTime() + timeout.toNanos()
+        while (System.nanoTime() < deadline) {
+            val text = if (log.exists()) log.readText() else ""
+            pattern.find(text.drop(offset))?.let { return it }
+            check(process.alive) { "server exited before $description; see $log" }
+            Thread.sleep(250)
+        }
+        process.captureDiagnostics(evidence.directory.resolve("server-${description.replace(Regex("[^a-z0-9]+", RegexOption.IGNORE_CASE), "-")}-timeout"))
+        error("timed out waiting for $description; see $log")
+    }
+
+    fun runtimeDump(timeout: Duration = Duration.ofMinutes(15)): Path {
+        val dump = server.resolve("generated/runtime-dumps")
+        require(Files.notExists(dump)) { "fresh fixture unexpectedly contains runtime evidence" }
+        send("runtimedata dump")
+        val deadline = System.nanoTime() + timeout.toNanos()
+        while (!Files.isRegularFile(dump.resolve("snapshot.json")) && System.nanoTime() < deadline) Thread.sleep(500)
+        require(Files.isRegularFile(dump.resolve("snapshot.json"))) { "runtime snapshot timed out" }
+        return dump
+    }
+
     fun assertHashes() {
         require(Hashes.sha256(pair.client) == pair.clientSha256) { "client candidate changed during test" }
         require(Hashes.sha256(pair.server) == pair.serverSha256) { "server candidate changed during test" }

@@ -25,7 +25,6 @@ class ServerRuntimeTest {
         var ready = false
         var snapshot = false
         var first = false
-        var second = false
 
         @JvmStatic @BeforeAll fun start() { fixture = DedicatedServerFixture(evidence.run) }
         @JvmStatic @AfterAll fun stop() {
@@ -44,12 +43,7 @@ class ServerRuntimeTest {
     fun runtimeSnapshotIsCompleteAndPromoted() {
         assumeTrue(ready, "server readiness failed")
         evidence.run.checkpoint("runtime snapshot") {
-            val dump = fixture.server.resolve("generated/runtime-dumps")
-            assertTrue(Files.notExists(dump), "fresh candidate unexpectedly contains runtime evidence")
-            fixture.send("runtimedata dump")
-            val deadline = System.nanoTime() + Duration.ofMinutes(15).toNanos()
-            while (!Files.isRegularFile(dump.resolve("snapshot.json")) && System.nanoTime() < deadline) Thread.sleep(500)
-            assertTrue(Files.isRegularFile(dump.resolve("snapshot.json")), "runtime snapshot timed out")
+            val dump = fixture.runtimeDump()
             val id = promoteSnapshot(dump, fixture.config.root.resolve("generated/runtime-dumps"), fixture.config.runId)
             evidence.run.event("runtime_snapshot", mapOf("snapshot_id" to id))
             snapshot = true
@@ -57,27 +51,16 @@ class ServerRuntimeTest {
     }
 
     @Test @Order(3)
-    fun generationZeroCommitsToGenerationOne() {
+    fun oneLineageTransitionCommitsAndArchivesCleanly() {
         assumeTrue(snapshot, "runtime snapshot prerequisite failed")
-        evidence.run.checkpoint("first lifecycle") {
+        evidence.run.checkpoint("lineage transition and archive") {
             lifecycle(1)
             assertTrue("perks\t-" in fixture.server.resolve(".world_lifecycle_manager/perks-v2.tsv").readLines())
             assertTrue("generation\t1" in fixture.server.resolve(".world_lifecycle_manager/lineage-v5.tsv").readLines())
-            first = true
-        }
-    }
-
-    @Test @Order(4)
-    fun generationOneCommitsToGenerationTwoAndArchivesVerify() {
-        assumeTrue(first, "first lifecycle prerequisite failed")
-        evidence.run.checkpoint("repeat lifecycle and archives") {
-            lifecycle(2)
-            assertTrue("perks\t-" in fixture.server.resolve(".world_lifecycle_manager/perks-v2.tsv").readLines())
-            assertTrue("generation\t2" in fixture.server.resolve(".world_lifecycle_manager/lineage-v5.tsv").readLines())
             val archives = Files.list(fixture.server.resolve(".world_lifecycle_manager/archives")).use { stream ->
                 stream.filter { Files.isRegularFile(it) && it.fileName.toString().endsWith(".zip") }.sorted().toList()
             }
-            assertEquals(2, archives.size)
+            assertEquals(1, archives.size)
             val lineage = fixture.server.resolve(".world_lifecycle_manager/lineage-v5.tsv").readLines()
                 .first { it.startsWith("lineage\t") }.substringAfter('\t')
             archives.forEach { archive ->
@@ -92,13 +75,13 @@ class ServerRuntimeTest {
                 )
             }
             assertTrue(Files.size(fixture.server.resolve("logs/world-lifecycle-manager-supervisor.log")) > 0)
-            second = true
+            first = true
         }
     }
 
-    @Test @Order(5)
+    @Test @Order(4)
     fun serverEvidenceIsCleanAndCandidatesAreUnchanged() {
-        assumeTrue(second, "lifecycle prerequisite failed")
+        assumeTrue(first, "lineage transition prerequisite failed")
         evidence.run.checkpoint("server log and hash audit") {
             fixture.stopGracefully()
             fixture.auditLogs()

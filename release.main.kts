@@ -37,6 +37,15 @@ if (args.count { it == "--jobs" } > 1 || args.count { it == "--skip-tests" } > 1
     exitProcess(2)
 }
 
+if (System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
+    val command = mutableListOf(
+        root.resolve("pack-test-lock.main.kts").absolutePath,
+        "run", "release", if (skipTests) "release-skip-tests" else "all", "--", __FILE__.absolutePath,
+    )
+    command.addAll(args)
+    exitProcess(ProcessBuilder(command).directory(root).inheritIO().start().waitFor())
+}
+
 val runId = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC)
     .format(java.time.Instant.now()) + "-" + ProcessHandle.current().pid()
 val evidence = root.resolve("generated/test-evidence/$runId")

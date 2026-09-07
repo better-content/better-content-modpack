@@ -64,13 +64,55 @@ object CandidateLocator {
         val clientRelease = clients.single().parent.parent
         val serverRelease = servers.single().parent.parent
         require(clientRelease == serverRelease) { "client and server candidates belong to different releases" }
-        return CandidatePair(
+        val pair = CandidatePair(
             clientRelease,
             clients.single(),
             servers.single(),
             Hashes.sha256(clients.single()),
             Hashes.sha256(servers.single()),
         )
+        System.getenv("BC_PACK_TEST_HANDOFF")?.takeIf { it.isNotBlank() }?.let {
+            PackTestHandoff.validate(Path.of(it), pair)
+        }
+        return pair
+    }
+}
+
+object PackTestHandoff {
+    private val mapper = jacksonObjectMapper()
+
+    fun validate(path: Path, pair: CandidatePair): String {
+        require(Files.isRegularFile(path)) { "pack-test handoff is missing: $path" }
+        val document = mapper.readTree(path.toFile())
+        require(document.path("schema").asText() == "bc.pack_test_handoff.v1") { "unexpected pack-test handoff schema" }
+        require(document.path("producer").path("agent").asText() == "workspace_coord") {
+            "only workspace_coord may admit an immutable candidate"
+        }
+        require(document.path("authorization").path("explicit").asBoolean()) { "pack-test handoff lacks explicit authorization" }
+        require(document.path("callback").path("agent").asText().isNotBlank() && document.path("callback").path("pane_id").asText().isNotBlank()) {
+            "pack-test handoff lacks a callback agent and pane"
+        }
+        require(document.path("modpack").path("head").asText().isNotBlank() && document.path("modpack").path("status").isArray) {
+            "pack-test handoff lacks modpack revision/status"
+        }
+        listOf("repositories", "validations", "artifacts", "dependencies", "scenarios", "prior_evidence").forEach { field ->
+            require(document.path(field).isArray) { "pack-test handoff field must be an array: $field" }
+        }
+        val requestId = document.path("request_id").asText()
+        require(requestId.isNotBlank()) { "pack-test handoff has no request ID" }
+        System.getenv("BC_TEST_SELECTOR")?.takeIf { it.isNotBlank() && it != "fast" }?.let { selector ->
+            require(document.path("selector").asText() == selector) { "pack-test selector differs from the handoff" }
+        }
+        fun validateSide(side: String, actualPath: Path, actualHash: String) {
+            val expected = document.path("candidate").path(side)
+            require(Path.of(expected.path("path").asText()).toAbsolutePath().normalize() == actualPath.toAbsolutePath().normalize()) {
+                "$side candidate path differs from the handoff"
+            }
+            require(expected.path("sha256").asText() == actualHash) { "$side candidate hash differs from the handoff" }
+        }
+        validateSide("client", pair.client, pair.clientSha256)
+        validateSide("server", pair.server, pair.serverSha256)
+        return requestId
     }
 }
 
@@ -113,6 +155,7 @@ data class TestConfig(
     val username: String,
     val clientMain: Path,
     val java: Path,
+    val handoff: Path?,
 ) {
     companion object {
         fun load(): TestConfig {
@@ -138,6 +181,7 @@ data class TestConfig(
                 System.getenv("BC_TEST_CLIENT_MAIN")?.let { Path.of(it) }
                     ?: Path.of(System.getProperty("user.home"), ".cache/bc/tests/client-main"),
                 javaCandidate.toAbsolutePath().normalize(),
+                System.getenv("BC_PACK_TEST_HANDOFF")?.takeIf(String::isNotBlank)?.let(Path::of)?.toAbsolutePath()?.normalize(),
             )
         }
     }
@@ -153,6 +197,11 @@ class EvidenceRun(val config: TestConfig, val suite: String) {
 
     init {
         event("suite_started", mapOf("suite" to suite, "root" to config.root.absolutePathString()))
+        config.handoff?.let { source ->
+            require(Files.isRegularFile(source)) { "pack-test handoff is missing: $source" }
+            Files.copy(source, directory.resolve("handoff.json"), StandardCopyOption.REPLACE_EXISTING)
+            event("handoff_selected", mapOf("request_id" to PackTestHandoff.validate(source, CandidateLocator.locate(config.root))))
+        }
         capture("git-status.txt", listOf("git", "status", "--short"), config.root)
         capture("git-head.txt", listOf("git", "rev-parse", "HEAD"), config.root)
         capture("java-version.txt", listOf(config.java.toString(), "-version"), config.root)

@@ -36,6 +36,9 @@ tasks.withType<Test>().configureEach {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
     systemProperty("bc.repo.root", layout.projectDirectory.asFile.absolutePath)
+    val testTemp = layout.buildDirectory.dir("tmp/tests")
+    systemProperty("java.io.tmpdir", testTemp.get().asFile.absolutePath)
+    doFirst { testTemp.get().asFile.mkdirs() }
 }
 
 tasks.test {
@@ -51,6 +54,11 @@ fun registerPackTest(name: String, tag: String, descriptionText: String) =
         classpath = sourceSets.test.get().runtimeClasspath
         useJUnitPlatform { includeTags(tag) }
         shouldRunAfter(tasks.test)
+        doFirst {
+            require(!System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
+                "pack-level Gradle tasks must be invoked through ./test.main.kts so the shared runner mutex is held"
+            }
+        }
     }
 
 val candidateTest = registerPackTest("candidateTest", "candidate", "Validates the exact packaged client/server ZIP pair.")

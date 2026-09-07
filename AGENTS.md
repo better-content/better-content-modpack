@@ -17,6 +17,10 @@ This repository is the Better Content Forge 1.20.1 modpack content layer.
   workspace. `./maintenance.main.kts prune --apply` removes only superseded test evidence and
   redundant distribution staging after cleanliness, process, path, and candidate-hash guards pass.
 - `./package.sh` is the shared internal packager; do not invoke alternate assemblers.
+- `./pack-test-queue.main.kts` is the persistent coordinator queue, and
+  `./pack-test-lock.main.kts` is the internal single-runner mutex wrapper. Only
+  `workspace_coord` may admit an immutable-candidate handoff; `pack_tests` owns queue execution,
+  harness state, and test documentation.
 
 `dist.sh` performs packaging only. Command availability, input copying, packwiz export, and
 ZIP creation may fail operationally; it must not add validation, integrity, provenance,
@@ -46,6 +50,15 @@ runtime snapshot, lifecycle/archive evidence, process diagnostics, and retained 
 Never report only that tests failed, delete a failed fixture, rebuild the candidate, or rerun an
 expensive suite before inspecting its evidence. Confirm whether child processes were cleaned up so
 another agent can safely continue.
+
+All heavyweight pack selectors and releases share the same kernel-backed mutex. Invoke them only
+through `test.main.kts`, `release.main.kts`, or `pack-test-queue.main.kts run-next`; direct
+heavyweight Gradle tasks reject calls without the inherited lock token. Contention is fail-fast
+with exit code 75 and published owner metadata. A product lane must register its dependency with
+`workspace_coord` and become idle for callback, never block a shell or poll the mutex. Queue
+admission requires `bc.pack_test_handoff.v1`, explicit authorization, an allowed selector,
+producer/callback identities, modpack and repository state, exact candidate paths and hashes,
+producer validations and artifacts, ordered dependencies, scenarios, and prior evidence.
 
 Superseded evidence may be pruned only through the guarded maintenance command. It retains evidence
 matching the current candidate, the newest passed evidence for any suite missing from that run, and

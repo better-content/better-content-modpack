@@ -11,12 +11,12 @@ object RuntimeSnapshotValidator {
     private val mapper = jacksonObjectMapper()
     private val expected = setOf(
         "recipes.json", "registries.json", "tags.json", "mods.json",
-        "loot.json", "trades.json", "worldgen.json", "lighting.json",
+        "loot.json", "trades.json", "worldgen.json", "dimensions.json", "lighting.json",
     )
 
     fun validate(directory: Path): String {
         val snapshot = read(directory.resolve("snapshot.json"))
-        require(snapshot.path("schema").asText() == "bc.runtime_dump_completion.v2") { "unexpected runtime snapshot schema" }
+        require(snapshot.path("schema").asText() == "bc.runtime_dump_completion.v3") { "unexpected runtime snapshot schema" }
         require(snapshot.path("complete").asBoolean() && snapshot.path("evidence_state").asText() == "complete") {
             "runtime snapshot is incomplete"
         }

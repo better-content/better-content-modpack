@@ -125,11 +125,70 @@ class HarnessFastTest {
     }
 
     @Test
+    fun immutableHandoffMustMatchCoordinatorAndCandidateHashes(@TempDir root: Path) {
+        val client = root.resolve("release/client/better-content.zip").also {
+            it.parent.createDirectories()
+            it.writeText("client")
+        }
+        val server = root.resolve("release/server/better-content.zip").also {
+            it.parent.createDirectories()
+            it.writeText("server")
+        }
+        val pair = CandidatePair(root.resolve("release"), client, server, Hashes.sha256(client), Hashes.sha256(server))
+        val handoff = root.resolve("handoff.json")
+        val mapper = jacksonObjectMapper()
+        mapper.writeValue(handoff.toFile(), mapOf(
+            "schema" to "bc.pack_test_handoff.v1",
+            "request_id" to "request-1",
+            "producer" to mapOf("agent" to "workspace_coord"),
+            "authorization" to mapOf("explicit" to true),
+            "callback" to mapOf("agent" to "fixture", "pane_id" to "w1:p1"),
+            "modpack" to mapOf("head" to "head-1", "status" to emptyList<String>()),
+            "repositories" to emptyList<Any>(),
+            "validations" to emptyList<Any>(),
+            "artifacts" to emptyList<Any>(),
+            "dependencies" to emptyList<Any>(),
+            "scenarios" to emptyList<Any>(),
+            "prior_evidence" to emptyList<Any>(),
+            "candidate" to mapOf(
+                "client" to mapOf("path" to client.toString(), "sha256" to pair.clientSha256),
+                "server" to mapOf("path" to server.toString(), "sha256" to pair.serverSha256),
+            ),
+        ))
+        assertEquals("request-1", PackTestHandoff.validate(handoff, pair))
+        mapper.writeValue(handoff.toFile(), mapper.readTree(handoff.toFile()).deepCopy<com.fasterxml.jackson.databind.node.ObjectNode>().apply {
+            withObject("candidate").withObject("server").put("sha256", "bad")
+        })
+        assertThrows(IllegalArgumentException::class.java) { PackTestHandoff.validate(handoff, pair) }
+    }
+
+    @Test
+    fun dimensionSmokeDiscoversDynamicAndFontTargets(@TempDir root: Path) {
+        val dimensions = root.resolve("dimensions.json")
+        dimensions.writeText("""{
+          "schema": "bc.dimensions.v1",
+          "complete": true,
+          "loaded_dimensions": ["aether:the_aether", "creatingspace:mars", "minecraft:overworld"],
+          "rocket_accessible_dimensions": ["minecraft:overworld", "creatingspace:mars"]
+        }""")
+        val fonts = root.resolve("fonts").also { it.createDirectories() }
+        fonts.resolve("aether.json").writeText("""{"enabled":true,"targetDimension":"aether:the_aether"}""")
+        val targets = DimensionSmokePlan.discover(dimensions, fonts)
+        assertEquals(listOf("aether:the_aether", "creatingspace:mars", "minecraft:overworld"), targets.map { it.id })
+        assertEquals(setOf("creatingspace"), targets.single { it.id == "creatingspace:mars" }.sources)
+        assertEquals(20.0, DimensionSmokePlan.parseOverallTps("Overall: Mean tick time: 2.1 ms. Mean TPS: 20.000"))
+        assertEquals(
+            listOf(1_000_000 to 1_000_000, 1_010_000 to 1_000_000, 1_000_000 to 1_010_000),
+            DimensionSmokePlan.positions,
+        )
+    }
+
+    @Test
     fun runtimeSnapshotRequiresCompleteConsistentDocuments(@TempDir root: Path) {
         val mapper = jacksonObjectMapper()
-        val names = listOf("recipes.json", "registries.json", "tags.json", "mods.json", "loot.json", "trades.json", "worldgen.json", "lighting.json")
+        val names = listOf("recipes.json", "registries.json", "tags.json", "mods.json", "loot.json", "trades.json", "worldgen.json", "dimensions.json", "lighting.json")
         mapper.writeValue(root.resolve("snapshot.json").toFile(), mapOf(
-            "schema" to "bc.runtime_dump_completion.v2",
+            "schema" to "bc.runtime_dump_completion.v3",
             "complete" to true,
             "evidence_state" to "complete",
             "files" to names,
@@ -169,6 +228,59 @@ class HarnessFastTest {
             process.waitForLog(Regex("ready"), Duration.ofSeconds(5), "fixture readiness")
             assertTrue(process.alive)
         }
+    }
+
+    @Test
+    fun packRunnerMutexPublishesOwnerAndFailsFastForContenders(@TempDir state: Path) {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val lock = root.resolve("pack-test-lock.main.kts")
+        val ready = state.resolve("ready")
+        val first = ProcessBuilder(
+            lock.toString(), "run", "test", "server", "--",
+            "sh", "-c", "test -f '${state.resolve("owner.json")}' && touch '$ready' && sleep 2",
+        ).apply { environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString() }.start()
+        val deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos()
+        while (!Files.exists(ready) && System.nanoTime() < deadline) Thread.sleep(50)
+        assertTrue(Files.exists(ready), "first runner never acquired the mutex")
+
+        val contender = ProcessBuilder(lock.toString(), "run", "test", "candidate", "--", "true")
+            .apply { environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString() }
+            .start()
+        assertEquals(75, contender.waitFor())
+        assertEquals(0, first.waitFor())
+        assertTrue(Files.notExists(state.resolve("owner.json")))
+    }
+
+    @Test
+    fun coordinatorQueueAcceptsWorkspaceHandoffAndRejectsDuplicates(@TempDir state: Path) {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val queue = root.resolve("pack-test-queue.main.kts")
+        val handoff = state.resolve("handoff.json")
+        handoff.writeText("""{
+          "schema": "bc.pack_test_handoff.v1",
+          "request_id": "request-1",
+          "producer": {"agent": "workspace_coord"},
+          "authorization": {"explicit": true},
+          "callback": {"agent": "fixture", "pane_id": "w1:p1"},
+          "modpack": {"head": "head-1", "status": []},
+          "repositories": [],
+          "validations": [],
+          "artifacts": [],
+          "dependencies": [],
+          "scenarios": [],
+          "prior_evidence": [],
+          "selector": "server",
+          "candidate": {
+            "client": {"path": "/candidate/client.zip", "sha256": "${"a".repeat(64)}"},
+            "server": {"path": "/candidate/server.zip", "sha256": "${"b".repeat(64)}"}
+          }
+        }""")
+        fun request(): Int = ProcessBuilder(queue.toString(), "request", handoff.toString())
+            .apply { environment()["BC_PACK_TEST_STATE_ROOT"] = state.resolve("coordination").toString() }
+            .start().waitFor()
+        assertEquals(0, request())
+        assertTrue(Files.list(state.resolve("coordination/queued")).use { it.count() } == 1L)
+        assertTrue(request() != 0)
     }
 
     private fun zip(path: Path, entries: Map<String, String>) {
