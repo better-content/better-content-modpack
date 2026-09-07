@@ -60,6 +60,8 @@ var BC_LADDER_PLANK_ALIASES = [
     ['blossom', 'quark:blossom_planks', 'quark:vertical_blossom_planks', 'quark:world/crafting/woodsets/blossom/ladder']
 ]
 
+var BC_OAK_LADDER_INPUT_TAG = 'kubejs:planks/oak_ladder_inputs'
+
 function bcAddWoodFamilyAliases(event) {
     for (var gi = 0; gi < BC_GENERIC_LOG_FAMILIES.length; gi++) {
         event.add('minecraft:logs', BC_GENERIC_LOG_FAMILIES[gi])
@@ -79,12 +81,27 @@ function bcAddWoodFamilyAliases(event) {
     event.add('minecraft:planks', 'fallout_wastelands_:joshua_tree_woodplanks')
 }
 
-ServerEvents.tags('item', bcAddWoodFamilyAliases)
+ServerEvents.tags('item', function (event) {
+    bcAddWoodFamilyAliases(event)
+
+    // Quark supplies dedicated outputs for the named families above. Every
+    // other loaded plank remains useful by falling back to the oak ladder.
+    event.add(BC_OAK_LADDER_INPUT_TAG, '#minecraft:planks')
+    for (var i = 0; i < BC_LADDER_PLANK_ALIASES.length; i++) {
+        var alias = BC_LADDER_PLANK_ALIASES[i]
+        if (alias[0] === 'oak') continue
+        event.remove(BC_OAK_LADDER_INPUT_TAG, alias[1])
+        event.remove(BC_OAK_LADDER_INPUT_TAG, alias[2])
+    }
+})
 ServerEvents.tags('block', bcAddWoodFamilyAliases)
 
 ServerEvents.recipes(function (event) {
     for (var i = 0; i < BC_LADDER_PLANK_ALIASES.length; i++) {
         var alias = BC_LADDER_PLANK_ALIASES[i]
-        event.replaceInput({ id: alias[3] }, alias[1], '#kubejs:planks/' + alias[0])
+        var inputTag = alias[0] === 'oak'
+            ? '#' + BC_OAK_LADDER_INPUT_TAG
+            : '#kubejs:planks/' + alias[0]
+        event.replaceInput({ id: alias[3] }, alias[1], inputTag)
     }
 })

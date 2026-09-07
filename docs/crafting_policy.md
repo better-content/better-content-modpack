@@ -36,6 +36,12 @@ Selectors are family-level wherever possible: namespace, tag, ID prefix, or an
 exact ID when no stable family exists. Capability roots prove the first
 meaningful entry into a system; they do not replace every downstream recipe.
 
+Wood compatibility preserves dedicated outputs instead of merging wood
+identities. Quark's named ladder families accept their canonical and vertical
+planks, while every other loaded item in `#minecraft:planks` is accepted by
+the oak-ladder recipe. The fallback changes recipe compatibility only; it does
+not classify those planks as oak or replace their normal wood-family tags.
+
 ## Invariants
 
 - Nonliving matter consumes finite substrate. Biological growth and breeding

@@ -18,7 +18,7 @@ Current inventory: **71 active scripts** — 6 client, 57 server, and 8 startup.
 - `kubejs/server_scripts/compat/retained/check__10_overworld_block_drops.js` — Modifies selected Overworld block drops, including randomized gravel resources.
 - `kubejs/server_scripts/compat/retained/check__12_unearthed_regolith_identity.js` — Gives Unearthed regolith variants drops matching their underlying stone identity.
 - `kubejs/server_scripts/compat/retained/check__30_stone_cobble_compat.js` — Unifies compatible stone and cobblestone items under shared tags.
-- `kubejs/server_scripts/compat/retained/check__35_wood_family_alias_compat.js` — Adds exact wood-family aliases required by cross-mod recipes and tags.
+- `kubejs/server_scripts/compat/retained/check__35_wood_family_alias_compat.js` — Preserves dedicated wood-family recipes and routes otherwise unsupported planks through the oak ladder recipe.
 - `kubejs/server_scripts/compat/retained/check__40_dirt_grass_compat.js` — Unifies compatible dirt and grass blocks under shared tags.
 - `kubejs/server_scripts/compat/retained/check__50_sand_compat.js` — Unifies compatible sand blocks and items under shared tags.
 - `kubejs/server_scripts/compat/retained/check__56_standardize_starcatcher_fishing.js` — Removes competing fishing-rod routes so Starcatcher owns meaningful fishing progression.
