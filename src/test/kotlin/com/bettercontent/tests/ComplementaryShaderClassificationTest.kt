@@ -20,7 +20,7 @@ class ComplementaryShaderClassificationTest {
                 ?: error("active Complementary archive lacks shaders/block.properties")
             val properties = zip.getInputStream(entry).bufferedReader().use { it.readText() }
             val activeLine = properties.lineSequence()
-                .single { it.startsWith("block.10005=") && ':' in it }
+                .single { it.startsWith("block.10005=") && "aether:berry_bush" in it }
             val active = activeLine.substringAfter('=').split(' ').filter(String::isNotBlank).toSet()
 
             val rigid = explicitRigidBlocks() + swemFlowerBoxes() + tconstructSlimeGrass()
@@ -37,7 +37,8 @@ class ComplementaryShaderClassificationTest {
                 "twilightforest:huge_water_lily", "undergarden:droopvine")
             assertTrue(active.containsAll(flexible), "flexible vegetation lost its motion class")
 
-            val legacy = properties.lineSequence().single { it.startsWith("block.10005=") && ':' !in it }
+            val legacy = properties.lineSequence()
+                .single { it.startsWith("block.10005=") && "double_plant:half=lower" in it }
             assertTrue("double_plant:half=lower" in legacy)
             assertFalse(zip.entries().asSequence().map { it.name }.toList().hasDuplicates(),
                 "archive contains duplicate entries")
