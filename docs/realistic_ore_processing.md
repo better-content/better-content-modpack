@@ -34,17 +34,18 @@ complementary exploration layers.
 
 1. Ordinary mining yields one host-independent chunk; Silk Touch preserves the
    exact ore block. Nine small chunks combine into one full chunk.
-2. A millstone produces two crushed feeds and Crushing Wheels produce three.
+2. A Millstone produces two crushed feeds and Crushing Wheels produce three.
    A full chunk cooks to two primary units; one crushed feed cooks to one.
-3. Separation consumes four matching crushed feeds, one route-specific grinding
-   ball, and 500 mB of the declared water or acid route. Most routes yield four
-   units of primary concentrate plus curated coproduct chances. An explicit assay
-   variant may instead place all guaranteed output in route-specific concentrates:
-   Hotstone's structural assay intentionally has zero primary output and guarantees
-   titanium with nickel, cobalt, and iron coproducts. Create recipes are capped at
-   four result entries, including the grinding-ball return; rich routes may consume
-   their premium medium to keep that runtime limit.
-4. Furnace exits resolve to canonical native or ChemLib forms. TConstruct molten
+3. The main technical route fills each crushed feed with 250 mB of water, then
+   pressure-separates four matching rinsed feeds at 2 bar. It returns four primary
+   concentrates plus the family's small, curated coproduct set. PneumaticCraft's
+   result format has no chance field, so listed technical coproducts are deliberate
+   deterministic outputs rather than misleading pseudo-probabilities.
+4. Three optional transformations give crushed geology a legible magical use
+   without pretending to be higher-yield ore multiplication: Blood Magic spends
+   LP for one thematic spirit or crystal, Hexerei combines four feeds with all four
+   dimension catalysts, and Ars crushing offers one low-chance elemental essence.
+5. Furnace exits resolve to canonical native or ChemLib forms. TConstruct molten
    exits are metal-only; quartz, gems, salts, carbon, and other nonmetals remain
    item-form outputs.
 
@@ -54,9 +55,9 @@ several late technical profiles without multiplying blocks.
 The retained catalogue is 24 audited outputs plus rock salt, sodium chloride,
 and saltpeter.
 
-Sulfuric and hydrochloric routes begin in Thermal & Pressure. Nitric acid begins
-under Electrical Control. Mixed hydrochloric/nitric acid remains restricted to
-the declared precious-metal routes.
+Acids remain authored chemistry products for their own consumers, but are not a
+second ore-separation matrix. There are no acid permutations, grinding media,
+or hidden "best ball" ladder to memorize.
 
 ## Immediate utility
 
@@ -67,21 +68,18 @@ fire, yields soul sand, and supplies redstone. Tin Quartz later separates gems.
 Hotstone emits light,
 hurts on contact, and can be consolidated into magma.
 
-## Grinding media
+## Four salient routes
 
-| Ball | Return chance | Role |
-| --- | ---: | --- |
-| Andesite | 80% | first mechanical concentration |
-| Iron | 84% | common base-metal route |
-| Brass | 87% | precision route |
-| Steel | 91% | pressure-era sulfides |
-| Nickel | 93% | heat/acid-resistant processing |
-| Titanium | 95% | electrical and aerospace route |
-| Blood-infused | 97% | optional magic crossing |
-| Fluix | 98% | optional post-AE2 crossing |
+| Route | Input | Outcome |
+| --- | --- | --- |
+| Technical | four rinsed feeds at 2 bar | primary concentrate plus a compact deterministic assay |
+| Blood | four crushed feeds and LP | one family-themed spirit or destructive crystal |
+| Hexerei | four crushed feeds and four dimension catalysts | one family-themed occult material |
+| Ars | one crushed feed | a 25% elemental-essence chance, with Tin Quartz's small Source Gem bonus |
 
-The ball is returned probabilistically by its recipe. Route affinity is explicit;
-a higher return chance does not make every ball valid for every deposit.
+These are different uses, not eight media tiers multiplying the same output.
+Recipe viewers show exact outputs and apparatus costs; the processing manifest
+records the shared intent.
 
 ## Design contract
 
@@ -96,12 +94,12 @@ Systemic Salience does not turn ores into neon aspect tokens.
 | --- | --- |
 | Coal, iron, copper, tin, zinc | immediate fuel, tools, bronze, brass, and progression roots |
 | Gold, redstone, quartz, lapis | familiar technical and magical crafting economies |
-| Diamond, emerald, amethyst | deeper Tin Quartz assays and ordinary gem uses |
+| Diamond, emerald, amethyst | deeper Tin Quartz assays and ordinary gem uses; no diamond ore generates |
 | Rock salt, sodium chloride, saltpeter | cooking/preservation first; chemical and nitrate depth later |
 | Soul sand, sulfur | immediate Black Shale/soul utility; soul, reagent, and pollution chemistry |
 | Aluminum, cobalt, osmium, silver | live TConstruct materials and pack metallurgy/electrum routes |
-| Nickel | grinding medium and Creating Space alloy routes |
-| Titanium | premium grinding medium, Space Machine Block, aerospace recipes, and molten material |
+| Nickel | Creating Space alloy routes and molten material |
+| Titanium | Space Machine Block, aerospace recipes, and molten material |
 | Uranium | Hotstone fissile assay, Necronium, nuclear simulation, and Protection Pixel recipes |
 | Thorium | Hotstone fissile assay, nuclear decay chain, and Protection Pixel recipes |
 | Lead, cadmium | Hotstone/Brassroot assay depth and real placeable-block absorber behavior in Latent's nuclear environment scan |

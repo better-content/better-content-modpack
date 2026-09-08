@@ -38,6 +38,9 @@ function bcAcidMixer(event, id, input1, input2, itemOutput, fluidOutput, pressur
 }
 
 ServerEvents.recipes(function (event) {
+    // Diamonds come from Realistic Ores' Tin Quartz assay, never coal compression.
+    event.remove({ id: 'pneumaticcraft:pressure_chamber/coal_to_diamond' })
+
     event.custom({
         type: 'create:mixing',
         ingredients: [

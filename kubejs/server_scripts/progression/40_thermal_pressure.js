@@ -28,14 +28,16 @@ ServerEvents.recipes(function (event) {
         H: 'minecraft:hopper', A: 'kubejs:airtight_machine_block', W: 'pneumaticcraft:pressure_chamber_wall'
     }).id('kubejs:thermal_pressure/direct_root/pressure_chamber_interface')
 
-    event.remove({ output: 'tconstruct:nether_grout', type: 'minecraft:crafting_shaped' })
-    event.remove({ output: 'tconstruct:nether_grout', type: 'minecraft:crafting_shapeless' })
-    event.remove({ input: 'tconstruct:nether_grout', type: 'minecraft:smelting' })
-    event.remove({ input: 'tconstruct:nether_grout', type: 'minecraft:blasting' })
+    event.remove({ output: 'tconstruct:nether_grout' })
+    event.remove({ input: 'tconstruct:nether_grout' })
     event.remove({ id: 'tconstruct:smeltery/casting/scorched/brick_composite' })
     event.custom({
         type: 'create:mixing', heatRequirement: 'heated',
-        ingredients: [{ item: 'minecraft:magma_cream' }, { tag: 'minecraft:soul_fire_base_blocks' }, { item: 'minecraft:gravel' }],
-        results: [{ item: 'tconstruct:nether_grout', count: 2 }]
-    }).id('kubejs:thermal_pressure/foundry/nether_grout')
+        ingredients: [
+            { item: 'realistic_ores:rinsed_hotstone' },
+            { item: 'realistic_ores:rinsed_black_shale' },
+            { item: 'minecraft:gravel' }
+        ],
+        results: [{ item: 'tconstruct:scorched_brick', count: 2 }]
+    }).id('kubejs:thermal_pressure/foundry/scorched_brick')
 })

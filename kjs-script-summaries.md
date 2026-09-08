@@ -39,7 +39,7 @@ Current inventory: **71 active scripts** — 6 client, 57 server, and 8 startup.
 - `kubejs/server_scripts/compat/retained/refactor__balance__82_blood_magic_lifeforce_rework.js` — Makes Still-Beating Hearts the early LP route and pushes stronger Blood Magic throughput deeper.
 - `kubejs/server_scripts/compat/retained/refactor__compatability__45_stone_surface_tool_compat.js` — Assigns selected stone-surface blocks to pickaxe mining tags.
 - `kubejs/server_scripts/compat/retained/refactor__compatability__85_dirt_grass_tag_compat.js` — Rewrites recipes to accept unified dirt and grass tags.
-- `kubejs/server_scripts/compat/retained/refactor__cross_mod_progression__59_formulaic_synthesis_magic_routes.js` — Adds Blood Magic and Ars alternatives for synthesis processes suited to magical handling.
+- `kubejs/server_scripts/compat/retained/refactor__cross_mod_progression__59_formulaic_synthesis_magic_routes.js` — Retains two small Ars crystal crossings without duplicating Realistic Ores separation or acid-specific cutting fluids.
 - `kubejs/server_scripts/compat/retained/refactor__move_to_mod__75_arcane_chunkloader_tags.js` — Defines interchangeable early magical proofs accepted by Arcane Chunk Loaders.
 - `kubejs/server_scripts/compat/retained/refactor__move_to_mod__95_arcane_chunkloader_recipes.js` — Adds power-specialized Arcane Chunk Loader recipes accepting proof from any supported magical discipline.
 - `kubejs/server_scripts/compat/retained/refactor__questionable__70_formal_magic_domains.js` — Generates formal-magic tier, domain, origin, and glyph-provenance tags.
@@ -58,13 +58,13 @@ Current inventory: **71 active scripts** — 6 client, 57 server, and 8 startup.
 - `kubejs/server_scripts/policy/global_loot_progression.js` — Removes progression-breaking materials from broad loot injection surfaces.
 - `kubejs/server_scripts/policy/removed_items.js` — Applies the exact deny list for intentionally unavailable outputs.
 - `kubejs/server_scripts/policy/tnt_recipe.js` — Restricts TNT to the two vanilla sand inputs instead of broad sand tags.
-- `kubejs/server_scripts/progression/10_hand_workshop.js` — Authors the Hand Workshop roots: Font binders, seared metallurgy, and hand-cranked Create entry.
+- `kubejs/server_scripts/progression/10_hand_workshop.js` — Authors four named Font grouts, automated and Melter-scale Andesite Alloy casting, and hand-cranked Create entry.
 - `kubejs/server_scripts/progression/20_ratlantis_logistics.js` — Removes direct Ratlantis access and gives Pretty Pipes, Sophisticated automation, Create requests, Rats, AE2, and Little Logistics visible Ratlantis-rooted recipes.
 - `kubejs/server_scripts/progression/21_bumblezone_cultivars.js` — Removes recipes that would create origin-controlled cultivar propagules outside nursery and harvest acquisition.
 - `kubejs/server_scripts/progression/20_powered_works.js` — Authors the Powered Works Machine Block roots and early kinetic machinery.
 - `kubejs/server_scripts/progression/30_precision_factory.js` — Authors the Precision Factory brass, deployment, and mechanical-crafting roots.
-- `kubejs/server_scripts/progression/40_thermal_pressure.js` — Authors Thermal & Pressure roots for Foundry access, compressed air, and airtight machinery.
-- `kubejs/server_scripts/progression/45_acid_chemistry.js` — Authors reachable, bounded PneumaticCraft acid chemistry routes.
+- `kubejs/server_scripts/progression/40_thermal_pressure.js` — Authors processed-geology Scorched Brick production, compressed-air entry, and airtight machinery while disabling native Nether grout.
+- `kubejs/server_scripts/progression/45_acid_chemistry.js` — Authors bounded PneumaticCraft acid chemistry while removing the coal-compression diamond bypass.
 - `kubejs/server_scripts/progression/50_electrical_control.js` — Authors Electrical Control generation, circuits, sensors, and advanced chemistry roots.
 - `kubejs/server_scripts/progression/60_aerospace.js` — Authors Aerospace engineering, atmosphere-processing, and rocket roots.
 - `kubejs/server_scripts/progression/70_transition_components.js` — Authors reachable cross-mod components used by factory, electrical, aerospace, AE2, geology, and post-AE2 transitions.
@@ -82,4 +82,4 @@ Current inventory: **71 active scripts** — 6 client, 57 server, and 8 startup.
 - `kubejs/startup_scripts/policy/hide_vanilla_tools_from_creative.js` — Removes replaced vanilla tools from creative tabs while leaving registry identities intact.
 - `kubejs/startup_scripts/policy/crafting_policy_contract.js` — Loads `bc.crafting_policy.v1` and blocks startup when a loaded namespace has no policy classification.
 - `kubejs/startup_scripts/progression/10_machine_blocks.js` — Registers the six clean-break Machine Blocks used as one-time era proofs.
-- `kubejs/startup_scripts/progression/20_transition_items.js` — Registers pack-owned intermediates that bridge otherwise separate owning mods.
+- `kubejs/startup_scripts/progression/20_transition_items.js` — Registers the four Font grouts and the remaining pack-owned cross-system intermediates.

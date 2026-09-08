@@ -14,11 +14,12 @@ or gate discovery through quest dependencies.
 ## Era 1 — Hand Workshop and Tinkers' Construct
 
 Build native Tinkers' Construct tools and reach the Nether, Aether, Bumblezone,
-or Ratlantis Dimension Font. Nether and Aether remain the dimensional TConstruct
-origins; Bumblezone pollen puff and Ratlantis raw marbled cheese are universal
-grout binders without affix or Font-currency rewards. Seared metallurgy owns alloy composition. Molten stone plus
-molten iron or zinc becomes molten Andesite Alloy, which is cast to Create's
-native item. The Hand Crank is the only positive SU source before the Nether.
+or Ratlantis Dimension Font. Each origin material makes its own named Font grout,
+and all four grouts smelt to the same Seared Brick. Seared metallurgy owns alloy
+composition: the automated path alloys molten stone with molten iron or zinc,
+then casts molten Andesite Alloy. A Melter can instead consume one andesite with
+10 mB of either molten metal to cast one native Create Andesite Alloy. The Hand
+Crank is the only positive SU source before the Nether.
 
 Font obelisks are powered only by internal charge. An unmodified Font stores
 15,000 charge, costs 600 charge to start, regenerates 0.25 each inactive tick,
@@ -68,12 +69,14 @@ components carry all later recipes.
 
 ## Era 4 — PneumaticCraft and Heat Sync
 
-Create's heated Mixer makes Nether grout for Foundry access. Primitive
-compressed iron and dried-kelp/iron-plate pressure seals keep the entry
-reachable. Mechanically craft `kubejs:airtight_machine_block` from the Brass
-block, four compressed iron ingots, two pressure tubes, and two seals. It
-directly roots the Rotational Compressor and the first Pressure Chamber
-interface.
+Native Nether grout is disabled. Foundry access instead uses a heated Create
+Mixer to combine rinsed Hotstone, rinsed Black Shale, and gravel into Scorched
+Bricks, making the geological, kinetic, and TConstruct systems meet at one
+visible boundary. Primitive compressed iron and dried-kelp/iron-plate pressure
+seals keep the pressure entry reachable. Mechanically craft
+`kubejs:airtight_machine_block` from the Brass block, four compressed iron
+ingots, two pressure tubes, and two seals. It directly roots the Rotational
+Compressor and the first Pressure Chamber interface.
 
 Contained PneumaticCraft processes establish sulfuric and hydrochloric acid.
 Heat Sync stores and moves process heat; its Boiler Heater consumes exactly
