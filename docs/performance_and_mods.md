@@ -42,7 +42,7 @@ deliberate transfer surface. The maintained `config/adchimneys/` definitions cov
 burner, smeltery, and generator emitters.
 
 Claustrophobic Dungeons, Dungeon Crawl, Create Big Cannons, Reliquary, Undergarden, Deeper Darker,
-the standalone coolant mod, the redundant fission-reactor mod, and Create New Age remain retired.
+Temperature Bands, the standalone coolant mod, the redundant fission-reactor mod, and Create New Age remain retired.
 Forbidden and Arcanus, Roots Classic, Mahoutsukai, Eidolon, Theurgy, Psi, and Hex Casting have no
 active Packwiz manifests and are inactive unless deliberately reintroduced.
 
@@ -140,7 +140,7 @@ does not composite the viewport or import server-root legacy data across generat
 `better_content_fixes` owns the active compatibility repairs for Dynamic Trees/Aether, Hyle,
 Unearthed soil and farmland, Burnt grass, C2ME safe-random noise, Weather2 fog under Oculus,
 PVJ Nether groundcover, TFTH proximity audio, and Dimension Font bounded placement. Dynamic Trees
-falling trees remain item-drop only. Dimension Font layout version 2 is new-world data and does not
+falling trees remain item-drop only. Dimension Font layout version 3 is new-world data and does not
 deserialize old pieces.
 
 `pillager_campaigns` bounds its loaded-column sampling, route search, and spawn production; it must

@@ -50,10 +50,10 @@ class HarnessFastTest {
         val document = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         assertEquals("bc.active_custom_mods.v1", document.path("schema").asText())
         val mods = document.path("mods")
-        assertEquals(33, mods.size())
+        assertEquals(34, mods.size())
         val repositories = mods.map { it.path("repository").asText() }.toSet()
-        assertEquals(33, repositories.size)
-        assertEquals(33, mods.map { it.path("modId").asText() }.toSet().size)
+        assertEquals(34, repositories.size)
+        assertEquals(34, mods.map { it.path("modId").asText() }.toSet().size)
         mods.forEach { mod ->
             assertTrue(Files.isRegularFile(root.resolve("mods").resolve(mod.path("artifact").asText())))
             assertTrue(mod.path("tasks").isArray && mod.path("tasks").size() > 0)

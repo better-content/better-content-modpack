@@ -51,7 +51,7 @@ fun main(args: Array<String>) {
     val workspace = root.parent
     val manifest: ActiveModManifest = mapper.readValue(root.resolve("gradle/active-custom-mods.json").toFile())
     require(manifest.schema == "bc.active_custom_mods.v1") { "unexpected active-mod manifest schema" }
-    require(manifest.mods.size == 33) { "fresh dist requires exactly 33 active custom mods" }
+    require(manifest.mods.size == 34) { "fresh dist requires exactly 34 active custom mods" }
     val repositories = manifest.mods.map { it.repository }.toSet()
     require(repositories.size == manifest.mods.size) { "duplicate repository in active-mod manifest" }
     require(manifest.mods.map { it.modId }.toSet().size == manifest.mods.size) { "duplicate mod ID in active-mod manifest" }

@@ -2210,7 +2210,7 @@ hash = "70762c2c9d053a71b1b3a897bd753a8bc31c783504f9a14e907c4095958d86f0"
 
 [[files]]
 file = "config/better_content_fixes-common.toml"
-hash = "d491ab6966a4e67047f22b927e718cb4be665cf4fc3158b0e2f1823553082c20"
+hash = "1a2d776c459c53a6a81d8cafef706a5106d74e0b7df2e476ab40c79c4c1d8513"
 
 [[files]]
 file = "config/bettercaves/forge-1_20_1/liquidregions.json"
@@ -2266,11 +2266,11 @@ hash = "ea5d802ef100270cdba15042e9d24cc85384b404f523f0c4137923212e037a0f"
 
 [[files]]
 file = "config/class_selector/embark.json"
-hash = "0e730337e7e615e604d13647316cff41b04dfb283791b858ed65b8b1f9877e45"
+hash = "992f2a4d03749a6a3e5e73d906d31b16283c0aa2a7f13d6e2e6321396a801bfa"
 
 [[files]]
 file = "config/class_selector/kits.json"
-hash = "aae5b34856c15f25df8ccdad02746e8efbb7b8885016393b7f57810731113eac"
+hash = "0682141294dbd9fd0fda10f8f98e44733b567505df1e10b3de47c2e02e2e3e9a"
 
 [[files]]
 file = "config/coldsweat/client.toml"
@@ -2359,10 +2359,6 @@ hash = "59da95e4650ad76d48f536f7af9a5124baaecdf32d8458eabb2007be00526fe8"
 [[files]]
 file = "config/diet-client.toml"
 hash = "66d437dc7421b47dee7c2a2975c2a67533c063df0b39f7406d815c9b4c13c49a"
-
-[[files]]
-file = "config/dimension_drink/fonts/aether.json"
-hash = "295e0cdae52c67db3654f5039abc1540e24a7bfb6e62e631562d7335d59d58ff"
 
 [[files]]
 file = "config/downed_player_revival-common.toml"
@@ -3455,10 +3451,6 @@ hash = "bf8d3f52f7f1b5a4b8e32c7e83746f6318f762b9f1f429482cee087282c8b52a"
 [[files]]
 file = "config/tectonic.json"
 hash = "a8761bda451dfee5ca93bbbc218634f05ed50bdefdc6d087b4bb7cc2f3339909"
-
-[[files]]
-file = "config/temperaturebands-common.toml"
-hash = "522811223f5d25044d9ef6be0c0e4b9a07318e839b9d622347123115d72d50c8"
 
 [[files]]
 file = "config/the_bumblezone/dimension.toml"
@@ -5713,26 +5705,6 @@ file = "kubejs/assets/kubejs/models/item/rotational_compressor_core.json"
 hash = "aaf47e160a41d5a11dbe91e502e549e46ce271c4546ad40420f1b3e593502117"
 
 [[files]]
-file = "kubejs/assets/kubejs/models/item/sanguine_acetic_cutting_fluid.json"
-hash = "83503e960a4de4a70c76753fe947494dca649324cecffe1469f636d0392f2fad"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/sanguine_hydrochloric_cutting_fluid.json"
-hash = "2506a29960bceb903d0ef2f30ce12b4ef6e9832738f06a3812b5fa56eb12f141"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/sanguine_nitric_cutting_fluid.json"
-hash = "0c9151813d4246b146d1fe6c1a4db37deadac0abb1af2045ea7ea4da980d0595"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/sanguine_phosphoric_cutting_fluid.json"
-hash = "6423648dadc771a61da8a7a62654f650d145244281287c33a4e5adceb71ee49f"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/sanguine_sulfuric_cutting_fluid.json"
-hash = "20cd0c04303da583ed8c2db40c2ca82e25521d9493371f1d87c049d84a254169"
-
-[[files]]
 file = "kubejs/assets/kubejs/models/item/seared_service_fitting.json"
 hash = "bb4c5b67b762a390d0ca5f235ad3890f8643750096fac2638063b6edb9cc47ec"
 
@@ -7450,7 +7422,7 @@ hash = "4f2f2478ef0d685df6e70080193ec2f4e1e2b256327cfb8ad8eec62804894568"
 
 [[files]]
 file = "kubejs/client_scripts/guidance/10_hover_annotations.js"
-hash = "66cf0331265f2faafaf5fab1dbf5420f07cfcc3e9df4f7625fe8ad8028722665"
+hash = "5bb2322b9656c620433cf53130bf90f552d042747b624bd9eab6a7e12b81126b"
 
 [[files]]
 file = "kubejs/client_scripts/policy/hide_vanilla_tools.js"
@@ -7474,7 +7446,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "8b46ffa889b5565c33da673781ae49edb8429fb885ce605507a69ed34a55eb91"
+hash = "4527fc9ada3a6f453c3b64095a138e94ec1559a1f996b16b8ec91cad8e2230d6"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -7498,7 +7470,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "08e9c602aaf696602211f5da0a4a20a8a5ecbb4d81b8c2ecc4023a9c46710ba5"
+hash = "de6133bf1db1b31efbd9b86008d2d0a17207f21a569a87feb3c2393ec6ee3de8"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -7875,10 +7847,6 @@ hash = "2768427d9f5d6a715203824283cf01a9386fa01c4570ae56b5ae3b074931f962"
 [[files]]
 file = "kubejs/data/better_content_fixes/tags/items/seared_melter_heat_sources.json"
 hash = "62424537e90b4490093a8d76cb1a368dee7ff2a67fce1152c260b97f95003fd5"
-
-[[files]]
-file = "kubejs/data/bloodmagic/tags/items/arc/cuttingfluid.json"
-hash = "ce66ccf6dabe9128ffcffca987e8ebf1f5b0eb735468a6f750f26cbaa870ceee"
 
 [[files]]
 file = "kubejs/data/bloodmagic/tags/items/arc/tool.json"
@@ -8546,7 +8514,7 @@ hash = "cf47d22623f9ecc27660f459511618683fc1969d5c24c8d07b43a538f923403f"
 
 [[files]]
 file = "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json"
-hash = "a10c37deda614b789bbf95065c6dd1335c8071bf6345264f25d41d454170c4d7"
+hash = "65d9071d07716f2e28bb2b1ae54875ef8b72ad3582e8140479d3c50dbb5755ba"
 
 [[files]]
 file = "kubejs/data/forge/tags/blocks/farmland.json"
@@ -10070,7 +10038,7 @@ hash = "a76dfcfd2a449c3bb97932e2bf04c53442c6649be9bce49859b8f17dbcc1f14c"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__cross_mod_progression__59_formulaic_synthesis_magic_routes.js"
-hash = "cafbde33f2a46b8293b27d6b91ed6d15adecae3d6a4c4d42165f95514d8dc7cb"
+hash = "69f4d166a806428163c12f57c596a88aaf690fdf049e71f5f3c4d3dc89ab12ad"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__move_to_mod__75_arcane_chunkloader_tags.js"
@@ -10146,7 +10114,7 @@ hash = "8b55ea75834053d2d6da166fb29faf0dd19b7f898f0ed85da07e0f40c0f6aa39"
 
 [[files]]
 file = "kubejs/server_scripts/progression/10_hand_workshop.js"
-hash = "38bececbd46c2475cc7656e28f8667ee2b5359ea714d93c4b963890dac2e1da7"
+hash = "bfbaae2c5e2c5e370290a5e2dd21ea74585177af3bd598c2ba65ca5c08a3fd3c"
 
 [[files]]
 file = "kubejs/server_scripts/progression/20_powered_works.js"
@@ -10154,7 +10122,7 @@ hash = "2ecca2c42d2f3897372519cc70a1a1f66dc241a703280259fbb15288213aa2f3"
 
 [[files]]
 file = "kubejs/server_scripts/progression/20_ratlantis_logistics.js"
-hash = "9e9140c4c0748f954631b17be8e088cfa3f26832b13b1069ddfb9874d6007627"
+hash = "84d0028f58342b02b3643a63b4dd58ab652f3b9bea3f7f23c1f6dfd37c200128"
 
 [[files]]
 file = "kubejs/server_scripts/progression/21_bumblezone_cultivars.js"
@@ -10166,11 +10134,11 @@ hash = "31c5a47489cd22e726700dadea3ed39290fd1f8947e174f7c4072a64ed068960"
 
 [[files]]
 file = "kubejs/server_scripts/progression/40_thermal_pressure.js"
-hash = "e46057dd815f4dd725169a876c604b0520d2c76b1b24cb46dc96afbe90e5de14"
+hash = "46d53c813d67b3325266e78592faaa8b54e8e54a42a92445c245466555e2c469"
 
 [[files]]
 file = "kubejs/server_scripts/progression/45_acid_chemistry.js"
-hash = "754203ffa396694a9e04d83dfca3ed7b854af09e77965cdf2605005d3c0eadc3"
+hash = "9361ea2c178c9e14ba5218969038c718006071da8206dd36e90eb142a3ece771"
 
 [[files]]
 file = "kubejs/server_scripts/progression/50_electrical_control.js"
@@ -10230,7 +10198,7 @@ hash = "efa4b2a9301b1215d947c97461e5f32aea0841be6865736a12645fcd60460d40"
 
 [[files]]
 file = "kubejs/startup_scripts/progression/20_transition_items.js"
-hash = "91179aa754402fd77b016986003c95ca7b314da1318245ba40237eb3f060270d"
+hash = "bd683ce90cc6df391c0094a6ba48596353649467039b7d56e6a13cebbabe873f"
 
 [[files]]
 file = "maintenance.main.kts"
@@ -10335,16 +10303,16 @@ file = "mods/better-content-economy-1.0.0.jar"
 hash = "f652009f21807a34c1802bda1acb770876395297f519fcd29fdc1cc71f2fd199"
 
 [[files]]
-file = "mods/better-content-fixes-0.1.3.jar"
-hash = "eea805a79e793ced860ed1f2c084dcd0020c516157d163d13538b03d111ca48a"
+file = "mods/better-content-fixes-0.1.4.jar"
+hash = "6a5864ef587143f823d5a94e796346161d8ba9550c7a00a5bc3564134e6aada4"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
 hash = "6bbae267bd16a667e3a83e876bc0a5d7e3603d1e57bffa84f4b2bc54435f1f6b"
 
 [[files]]
-file = "mods/better-content-threads-1.0.0.jar"
-hash = "d4e59d5fb5f03681ce17a16b20bd4046781538cb5ed6f091b2bc46303598aeae"
+file = "mods/better-content-threads-1.1.0.jar"
+hash = "25fa9b44cf63f9a17be4a3636f96db8dff0a43cde676249352c3aa4377151a2c"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -10513,8 +10481,8 @@ hash = "b47ea19b5671d0d6c9b6bd3fbefd25aae11ddae2a909d1bf6e6f772104ea89ca"
 metafile = true
 
 [[files]]
-file = "mods/depth-director-0.2.0.jar"
-hash = "b6ae890724ad8f836f78fe088deb6db7b5417bda4b34f35aa9de0f7191ad0d32"
+file = "mods/depth-director-0.2.1.jar"
+hash = "3a35f43b2404cccef94ec0fcf6fee820c5bf27618e94cf1e3f781f0792f4a4cf"
 
 [[files]]
 file = "mods/diet.pw.toml"
@@ -10951,8 +10919,8 @@ hash = "065f6fc2822830e063b6839ca6df52a341a2543e43b3256c743e7fa13e9367ae"
 metafile = true
 
 [[files]]
-file = "mods/latent-chemlib-0.1.0.jar"
-hash = "bd34a3621ff995d367e484f793252df1beaf8f44410dd4aaf738155dd5c1bc16"
+file = "mods/latent-chemlib-0.2.0.jar"
+hash = "bff38b1dafdf1a2a04d2cca5b1fc148f8f5c1dc27e6a6d8b443536a3f94a00e4"
 
 [[files]]
 file = "mods/lithostitched.pw.toml"
@@ -11008,6 +10976,10 @@ metafile = true
 file = "mods/melody.pw.toml"
 hash = "0b9cc190139b0eb2d5f0153f05717ed53edd499ad2a3eeee99ea75d22fd0ef1c"
 metafile = true
+
+[[files]]
+file = "mods/mining-helmet-0.1.0.jar"
+hash = "b0ae54ce6588e037cdef7735438c63fbdcb855a79e9d50910b0bd09ff687e798"
 
 [[files]]
 file = "mods/modernfix.pw.toml"
@@ -11103,8 +11075,8 @@ hash = "b2cb681aaf3e6085148392a06d40899239dc299aaf5ce0adf168fc225d922c97"
 metafile = true
 
 [[files]]
-file = "mods/pillager-campaigns-0.5.3.jar"
-hash = "5550f6f817dc657fd69d5713e132e275fdff9b1c27681f222a9ab8a45d034283"
+file = "mods/pillager-campaigns-0.5.4.jar"
+hash = "dc8a95276d2230e0f9ca4938e38cecbffa815e7a851dfbd5e5137678691b898f"
 
 [[files]]
 file = "mods/ping-wheel.pw.toml"
@@ -11373,11 +11345,6 @@ hash = "a01449c29314bff0ad2047911d8253641801e01997709f53fa5b3f52954232a3"
 metafile = true
 
 [[files]]
-file = "mods/temperaturebands.pw.toml"
-hash = "f5f83347a9df86f91f99534d7efc01ecccff071cc2097159ac73c8e32e8b8f7d"
-metafile = true
-
-[[files]]
 file = "mods/terrablender.pw.toml"
 hash = "fde3d3b1607636100e382dce1bba80ab4608ebfa1ef888a37b86bc8c7dcbafe5"
 metafile = true
@@ -11546,8 +11513,8 @@ hash = "4ded4d3aef90c90d3004fbb73ba363322bb74da6458cba65604e9ae0fe52a67a"
 metafile = true
 
 [[files]]
-file = "mods/water-survival-1.0.0.jar"
-hash = "b06f6aceca329ae0eadee787b78e773ea591d6ca85b293bc92d8cf57f6418bb8"
+file = "mods/water-survival-1.1.0.jar"
+hash = "429b992607ab1cbe530b67391b472ed7e98324e96f26f89300e4b0e902ae602a"
 
 [[files]]
 file = "mods/weather-storms-tornadoes.pw.toml"
@@ -11613,7 +11580,7 @@ hash = "f6f084ae1df2f43e4a0e70b7d361ea766a0db9be9429ef43614d3d1ad8c20be4"
 
 [[files]]
 file = "shaderpacks/ComplementaryReimagined_r5.8.1.zip"
-hash = "d8650d47f7258739fecbf0771b9b1043367e4338452429786cc3fec46f70cc8c"
+hash = "abfcf70287094e293b7ba6e1552bcf095f5ff9787034001d3e69c2b4ea340ab1"
 
 [[files]]
 file = "shaderpacks/ComplementaryReimagined_r5.8.1.zip.txt"
