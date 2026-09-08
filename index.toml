@@ -5521,6 +5521,10 @@ file = "kubejs/assets/kubejs/models/item/ae_logic_package.json"
 hash = "7f3d758869610ab4f7b27e8aee6fcee8fca615fbacb70fafdcc80a2901d4ef4c"
 
 [[files]]
+file = "kubejs/assets/kubejs/models/item/aether_font_grout.json"
+hash = "412d7055b1bf1129bbdc7c31f14f0369194d15d97acd7b33c36f1c07b267e431"
+
+[[files]]
 file = "kubejs/assets/kubejs/models/item/airtight_fluid_module.json"
 hash = "bf4a9de9b60e8f911d5b65c56f7821a299589e43656f59d051c9b0d3859b899a"
 
@@ -5583,6 +5587,10 @@ hash = "e7071773b8c9c0178b5955784452fef7983b267e9ed0141d5f6abdea4eea0c68"
 [[files]]
 file = "kubejs/assets/kubejs/models/item/brine_extract.json"
 hash = "3ecfaa47ccd371ebfa94ae12c153debf15ddd1511fda37f80446fbd0270b9ba0"
+
+[[files]]
+file = "kubejs/assets/kubejs/models/item/bumblezone_font_grout.json"
+hash = "412d7055b1bf1129bbdc7c31f14f0369194d15d97acd7b33c36f1c07b267e431"
 
 [[files]]
 file = "kubejs/assets/kubejs/models/item/caffeine_extract.json"
@@ -5665,6 +5673,10 @@ file = "kubejs/assets/kubejs/models/item/mountain_beryl_lens.json"
 hash = "6f5eb6d24424d3f02e06977ba61ee0d3dcc3ceb162013c42fe07ce80fcd808a5"
 
 [[files]]
+file = "kubejs/assets/kubejs/models/item/nether_font_grout.json"
+hash = "412d7055b1bf1129bbdc7c31f14f0369194d15d97acd7b33c36f1c07b267e431"
+
+[[files]]
 file = "kubejs/assets/kubejs/models/item/oxygenated_vanadium_contact_catalyst.json"
 hash = "a76fa50ebeefc6217ab582262a235e00378095e495fe9ba2ef96bdb51ba35909"
 
@@ -5687,6 +5699,10 @@ hash = "fbc75d225780c28878bbdfb1df802229b7a1451c932111c6f802829070c5fcfd"
 [[files]]
 file = "kubejs/assets/kubejs/models/item/purified_source_core.json"
 hash = "88230cb51b52a5bd4a9de332ed7e08c950c45ff4a2d44e2f892364b37c3c26b6"
+
+[[files]]
+file = "kubejs/assets/kubejs/models/item/ratlantis_font_grout.json"
+hash = "412d7055b1bf1129bbdc7c31f14f0369194d15d97acd7b33c36f1c07b267e431"
 
 [[files]]
 file = "kubejs/assets/kubejs/models/item/raw_impossible_circuit.json"
