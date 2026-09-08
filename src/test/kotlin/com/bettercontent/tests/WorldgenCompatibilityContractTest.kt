@@ -19,14 +19,14 @@ import kotlin.io.path.writeText
 @Tag("fast")
 class WorldgenCompatibilityContractTest {
     @Test
-    fun crashedRocketOverrideRemovesOnlyTheStaleAuthoringPositionMap() {
+    fun crashedRocketOverrideReplacesTheStaleAuthoringPositionMapWithAnEmptyMap() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val override = root.resolve("kubejs/data/creatingspace/structures/crashed_rocket.nbt")
         val compressed = Files.readAllBytes(override)
         val raw = GZIPInputStream(ByteArrayInputStream(compressed)).use { it.readAllBytes() }
 
-        assertEquals("5eae8adec9e11d91e440aae06e01141bc95fc17df255e870a2376a4cc0da068b", sha256(compressed))
-        assertEquals("c2112a3af4504c9aa787d1045d5a4f715ba62dbd1d805cb5f8293be0470273c9", sha256(raw))
+        assertEquals("9d5a714cea5f5d98d34b6210e8db4c54b0e128706e1c9fb6e818cdec08185080", sha256(compressed))
+        assertEquals("48f68ff4a8c8e3deed0dadb11318b6818cf2eeb71c39e1f7d875c64fd2dbdf61", sha256(raw))
 
         val document = NbtReader(raw).readRootCompound()
         assertEquals(listOf(8, 4, 7), document.list("size"))
@@ -42,16 +42,21 @@ class WorldgenCompatibilityContractTest {
         assertEquals(listOf(3, 0, 3), controls.single()["pos"])
         assertEquals(11, controls.single()["state"])
         val controlsNbt = controls.single()["nbt"] as Map<*, *>
-        assertEquals(setOf("id"), controlsNbt.keys)
-        assertFalse(raw.toString(Charsets.UTF_8).contains("initialPosMap"))
+        assertEquals(setOf("id", "initialPosMap"), controlsNbt.keys)
+        assertEquals(emptyMap<String, Any?>(), controlsNbt["initialPosMap"])
+        assertTrue(raw.toString(Charsets.UTF_8).contains("initialPosMap"))
         assertFalse(raw.toString(Charsets.UTF_8).contains("dimensionInitialPosOf"))
 
-        // Reinsert the one removed upstream tag at its original byte offset. Matching the pinned
-        // upstream raw hash proves every other byte of geometry, palette, blocks, and BE data stayed intact.
+        // Swap the explicit empty map for the one stale upstream tag at its original byte offset.
+        // Matching the pinned upstream raw hash proves every other byte of geometry, palette,
+        // blocks, and block-entity data stayed intact.
+        val emptyTag = Base64.getDecoder().decode("CgANaW5pdGlhbFBvc01hcAA=")
         val removedTag = Base64.getDecoder().decode(
             "CgANaW5pdGlhbFBvc01hcAQAT2RpbWVuc2lvbkluaXRpYWxQb3NPZjpSZXNvdXJjZUtleVttaW5lY3JhZnQ6ZGltZW5zaW9uIC8gY3JlYXRpbmdzcGFjZTp0aGVfbW9vbl3//2IAAnJQLAA=",
         )
-        val restored = raw.copyOfRange(0, 8409) + removedTag + raw.copyOfRange(8409, raw.size)
+        assertTrue(raw.copyOfRange(8409, 8409 + emptyTag.size).contentEquals(emptyTag))
+        val restored = raw.copyOfRange(0, 8409) + removedTag +
+            raw.copyOfRange(8409 + emptyTag.size, raw.size)
         assertEquals(14_794, restored.size)
         assertEquals("e59c4579f1954832b015a31189666d9f85df47e3a72f51f44e9d1dc16c48c692", sha256(restored))
     }
