@@ -62,17 +62,17 @@ function bcHoverStyle(line, tone) {
 var BC_HOVER_STATIC = []
 var BC_HOVER_EXACT_TARGETS = {}
 
-function bcHoverAddExact(target, lines, tone, label) {
+function bcHoverAddExact(target, lines, tone, conceptId, label) {
     if (BC_HOVER_EXACT_TARGETS[target]) {
         bcHoverWarn(label + ' duplicates target ' + target)
         return
     }
     BC_HOVER_EXACT_TARGETS[target] = true
-    BC_HOVER_STATIC.push({ target: target, lines: lines, tone: tone })
+    BC_HOVER_STATIC.push({ target: target, lines: lines, tone: tone, conceptId: conceptId })
 }
 
 function bcHoverCompileStatic() {
-    if (String(BC_HOVER_DATA.schema || '') !== 'bc.hover_annotations.v1') {
+    if (String(BC_HOVER_DATA.schema || '') !== 'bc.hover_annotations.v2') {
         bcHoverWarn('unsupported or missing registry schema')
         return
     }
@@ -85,9 +85,10 @@ function bcHoverCompileStatic() {
         var row = annotations[i] || {}
         var label = 'static entry ' + i
         var category = String(row.category || '')
+        var conceptId = String(row.concept_id || '')
         var domain = String(row.domain || '')
         var owner = String(row.owner || '')
-        if (!BC_HOVER_CATEGORIES[category] || !domain || !owner) {
+        if (!BC_HOVER_CATEGORIES[category] || !/^[a-z0-9_.]{3,96}$/.test(conceptId) || !domain || !owner) {
             bcHoverWarn(label + ' has invalid authoring metadata')
             continue
         }
@@ -102,13 +103,13 @@ function bcHoverCompileStatic() {
             continue
         }
         if (selector.item) {
-            bcHoverAddExact(String(selector.item), lines, String(row.tone || ''), label)
+            bcHoverAddExact(String(selector.item), lines, String(row.tone || ''), conceptId, label)
         } else if (Array.isArray(selector.items) && selector.items.length > 0) {
             for (var j = 0; j < selector.items.length; j++) {
-                bcHoverAddExact(String(selector.items[j]), lines, String(row.tone || ''), label)
+                bcHoverAddExact(String(selector.items[j]), lines, String(row.tone || ''), conceptId, label)
             }
         } else if (selector.tag) {
-            BC_HOVER_STATIC.push({ target: '#' + String(selector.tag), lines: lines, tone: String(row.tone || '') })
+            BC_HOVER_STATIC.push({ target: '#' + String(selector.tag), lines: lines, tone: String(row.tone || ''), conceptId: conceptId })
         } else {
             bcHoverWarn(label + ' has an empty selector')
         }

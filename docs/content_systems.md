@@ -54,6 +54,11 @@ and ordinary inventory hover show the same annotation. Static records live in
 generated from an existing authoritative config, such as formal glyph origins
 or the TConstruct/Epic Fight handling catalogue.
 
+The registry uses `bc.hover_annotations.v2`. Every static record has a stable
+`concept_id` shared by equivalent item-local explanations, plus the owning
+domain and authoritative implementation path. Hover copy stays the concise
+local correction while Threads and loading briefs teach the broader model.
+
 Annotations correct a materially wrong or incomplete mental model. They do not
 repeat ingredients, layouts, attributes, or ordinary uses that EMI and native
 tooltips already communicate. Dynamic stack state remains owned by the source
