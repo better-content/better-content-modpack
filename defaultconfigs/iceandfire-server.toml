@@ -1,8 +1,8 @@
 [Generation.Dragon]
 	"Generate Dragon Skeletons" = true
 	"Generate Dragon Skeleton Chance" = 10000
-	"Generate Dragon Cave Chance" = 10000
-	"Generate Dragon Roost Chance" = 10000
+	"Generate Dragon Cave Chance" = 100
+	"Generate Dragon Roost Chance" = 0
 
 [Generation.Structures-Features]
 	"Dangerous World Gen Dist From Spawn" = 10000

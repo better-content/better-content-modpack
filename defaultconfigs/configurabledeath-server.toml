@@ -87,18 +87,17 @@
 #Hunger settings
 [hunger]
 	#Set to true to retain food level on death
-	keepFoodLevel = true
+	keepFoodLevel = false
 	#Highest amount of food level you can respawn with
 	#Range: 0 ~ 20
-	maxFoodLevel = 8
+	maxFoodLevel = 20
 	#Lowest amount of food level you can respawn with
 	#Range: 0 ~ 20
-	minFoodLevel = 8
+	minFoodLevel = 0
 	#Set to true to retain saturation on death
-	keepSaturation = true
+	keepSaturation = false
 
 #Debug settings
 [debug]
 	#Enable detailed logging for debugging purposes. Set to false to reduce log spam.
 	enableDetailedLogging = false
-
