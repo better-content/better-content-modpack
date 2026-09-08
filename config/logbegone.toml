@@ -7,5 +7,6 @@
   phrases = [
 
     "Better Caves expected a ServerLevel, but got:",
-    "Liquid regions will not be generated for this chunk. This may be fatal!"
+    "Liquid regions will not be generated for this chunk. This may be fatal!",
+    "Empty height range:"
   ]

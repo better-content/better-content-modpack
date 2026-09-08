@@ -54,6 +54,21 @@ class WorldgenCompatibilityContractTest {
     }
 
     @Test
+    fun impossibleCrossDimensionHeightRangesAreSuppressedBeforeTheStrictAudit(@TempDir root: Path) {
+        val repository = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val logBegone = repository.resolve("config/logbegone.toml").toFile().readText()
+        assertEquals(1, Regex("\\\"Empty height range:\\\"").findAll(logBegone).count())
+
+        val rawWarning = root.resolve("raw-height-warning.log").also {
+            it.writeText(
+                "[C2ME worker #5/WARN] [net.minecraft.world.level.levelgen.heightproviders.TrapezoidHeight]: " +
+                    "Empty height range: triangle (0 above bottom-504 below top)\n",
+            )
+        }
+        assertEquals(1, LogPolicy.findings(listOf(rawWarning)).size)
+    }
+
+    @Test
     fun crashedRocketOverrideReplacesTheStaleAuthoringPositionMapWithAnEmptyMap() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val override = root.resolve("kubejs/data/creatingspace/structures/crashed_rocket.nbt")
