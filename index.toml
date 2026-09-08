@@ -7961,6 +7961,10 @@ file = "kubejs/data/creatingspace/creatingspace/rocket_accessible_dimension/eart
 hash = "9175c358b5b53702756539ada750f72de9fbe753ca829ba0eb21d3d7824da5d9"
 
 [[files]]
+file = "kubejs/data/creatingspace/structures/crashed_rocket.nbt"
+hash = "5eae8adec9e11d91e440aae06e01141bc95fc17df255e870a2376a4cc0da068b"
+
+[[files]]
 file = "kubejs/data/creatingspace/tags/blocks/moon_carver_replaceables.json"
 hash = "1092fdea5ae4b464b1fd6a774cfe78dd9a02d2d8cfd4ecea4ee3497fdaffd67d"
 
@@ -10320,7 +10324,7 @@ hash = "f8e19dce4d9f2cb3e2b6d6fc6e6abfc9c8949ae75054dc21d65119c18bc7a324"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.4.jar"
-hash = "77d0a4171ca7ae1c108b8bd83ea77c03a6d4ca7e296459b1dbdb598db21ba3f1"
+hash = "124d323f02f8c2fd530dbc22f3732b2307ca8a943d55c20245b882d43d04de94"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
