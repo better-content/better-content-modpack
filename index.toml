@@ -10320,7 +10320,7 @@ hash = "f8e19dce4d9f2cb3e2b6d6fc6e6abfc9c8949ae75054dc21d65119c18bc7a324"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.4.jar"
-hash = "013021b376a28a8ae6c34403e2d656858d95fef77e3497101084d7c37b304f2e"
+hash = "37386d98df073d5b9580036ef2f37241e42fdcc0982653d8a5836720cf489cb0"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
@@ -10328,7 +10328,7 @@ hash = "6bbae267bd16a667e3a83e876bc0a5d7e3603d1e57bffa84f4b2bc54435f1f6b"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
-hash = "56b2756c9ecc7ebc084933d3f5ff40de46df535d61713aa79c213ff732ecb799"
+hash = "9bc85b7dd6f1407e9f4ccd48d4c76b65fb861bd281666ea51e11de69fda20f28"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -10828,7 +10828,7 @@ metafile = true
 
 [[files]]
 file = "mods/heat-sync-0.1.0.jar"
-hash = "4121808b7ed3131f18fc1d615bc6c7cfa0509c28351895aa26cc38d646c0c005"
+hash = "f8954e3a1ef50090e95d280a2c4e33a5209e329f6f0714a6cbf27ec52c16fc9e"
 
 [[files]]
 file = "mods/hexerei.pw.toml"
@@ -11539,7 +11539,7 @@ metafile = true
 
 [[files]]
 file = "mods/world-lifecycle-manager-0.1.0.jar"
-hash = "9c891669fb3fb7c0be3aa77aa29e798ad57ea9dd2e14a8e0f74deca19c65c6f9"
+hash = "3bdaa7a3a5546aa0aa29b7b88eb7da394b8951e01d228ffd5048762dd40c7857"
 
 [[files]]
 file = "mods/xl-packets.pw.toml"
