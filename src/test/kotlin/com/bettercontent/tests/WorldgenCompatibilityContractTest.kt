@@ -20,6 +20,67 @@ import kotlin.io.path.writeText
 @Tag("fast")
 class WorldgenCompatibilityContractTest {
     @Test
+    fun relocatedIchorGeodeKeepsItsMaterialsInsideTheWritableChunkNeighborhood() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val mapper = jacksonObjectMapper()
+        val configured = mapper.readTree(
+            root.resolve(
+                "datapacks/dimension_drink_ore_relocation/data/kubejs/worldgen/configured_feature/" +
+                    "dimension_drink_tconstruct_ichor_geode.json",
+            ).toFile(),
+        )
+        val placed = mapper.readTree(
+            root.resolve(
+                "datapacks/dimension_drink_ore_relocation/data/kubejs/worldgen/placed_feature/" +
+                    "dimension_drink_tconstruct_ichor_geode.json",
+            ).toFile(),
+        )
+
+        assertEquals("kubejs:dimension_drink_tconstruct_ichor_geode", placed.path("feature").asText())
+        assertEquals("minecraft:geode", configured.path("type").asText())
+        val config = configured.path("config")
+        assertEquals(-16, config.path("min_gen_offset").asInt())
+        assertEquals(16, config.path("max_gen_offset").asInt())
+        assertEquals(
+            setOf(
+                "blocks",
+                "crack",
+                "distribution_points",
+                "invalid_blocks_threshold",
+                "layers",
+                "max_gen_offset",
+                "min_gen_offset",
+                "noise_multiplier",
+                "outer_wall_distance",
+                "placements_require_layer0_alternate",
+                "point_offset",
+                "use_alternate_layer0_chance",
+                "use_potential_placements_chance",
+            ),
+            config.fieldNames().asSequence().toSet(),
+        )
+
+        val blocks = config.path("blocks")
+        assertEquals("minecraft:air", blocks.path("filling_provider").path("state").path("Name").asText())
+        assertEquals(
+            "tconstruct:ichor_slime_crystal_block",
+            blocks.path("inner_layer_provider").path("state").path("Name").asText(),
+        )
+        assertEquals("minecraft:calcite", blocks.path("middle_layer_provider").path("state").path("Name").asText())
+        assertEquals("minecraft:netherrack", blocks.path("outer_layer_provider").path("state").path("Name").asText())
+        assertEquals(
+            setOf(
+                "tconstruct:small_ichor_slime_crystal_bud",
+                "tconstruct:medium_ichor_slime_crystal_bud",
+                "tconstruct:large_ichor_slime_crystal_bud",
+                "tconstruct:ichor_slime_crystal_cluster",
+                "tconstruct:cobalt_cluster",
+            ),
+            blocks.path("inner_placements").map { it.path("Name").asText() }.toSet(),
+        )
+    }
+
+    @Test
     fun falloutIndustrialPoolAliasesResolveEveryPinnedTemplateReference() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val mapper = jacksonObjectMapper()

@@ -1,5 +1,5 @@
 {
-  "feature": "tconstruct:ichor_geode",
+  "feature": "kubejs:dimension_drink_tconstruct_ichor_geode",
   "placement": [
     {
       "type": "minecraft:rarity_filter",
