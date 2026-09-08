@@ -64,7 +64,8 @@ fun gradle(suite: String, task: String): Int {
         .directory(root)
         .inheritIO()
         .apply {
-            environment()["BC_TEST_SELECTOR"] = selected
+            if (suite == "fast") environment().remove("BC_TEST_SELECTOR")
+            else environment()["BC_TEST_SELECTOR"] = selected
             if (runId != null) environment()["BC_TEST_RUN_ID"] = runId
         }
         .start()

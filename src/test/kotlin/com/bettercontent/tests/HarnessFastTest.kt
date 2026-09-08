@@ -238,13 +238,19 @@ class HarnessFastTest {
         val first = ProcessBuilder(
             lock.toString(), "run", "test", "server", "--",
             "sh", "-c", "test -f '${state.resolve("owner.json")}' && touch '$ready' && sleep 2",
-        ).apply { environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString() }.start()
+        ).apply {
+            environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString()
+            environment().remove("BC_PACK_TEST_LOCK_TOKEN")
+        }.start()
         val deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos()
         while (!Files.exists(ready) && System.nanoTime() < deadline) Thread.sleep(50)
         assertTrue(Files.exists(ready), "first runner never acquired the mutex")
 
         val contender = ProcessBuilder(lock.toString(), "run", "test", "candidate", "--", "true")
-            .apply { environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString() }
+            .apply {
+                environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString()
+                environment().remove("BC_PACK_TEST_LOCK_TOKEN")
+            }
             .start()
         assertEquals(75, contender.waitFor())
         assertEquals(0, first.waitFor())

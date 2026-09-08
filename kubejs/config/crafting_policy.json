@@ -987,6 +987,10 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
+    "mining_helmet": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
     "mixinsquared": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"

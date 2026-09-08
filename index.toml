@@ -7446,7 +7446,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "4527fc9ada3a6f453c3b64095a138e94ec1559a1f996b16b8ec91cad8e2230d6"
+hash = "e4b04aa1303fd6ab09dcbd788cf15d1cc005dbbfe951a506b220c5919feda818"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -10300,11 +10300,11 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.0.jar"
-hash = "f652009f21807a34c1802bda1acb770876395297f519fcd29fdc1cc71f2fd199"
+hash = "f8e19dce4d9f2cb3e2b6d6fc6e6abfc9c8949ae75054dc21d65119c18bc7a324"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.4.jar"
-hash = "6a5864ef587143f823d5a94e796346161d8ba9550c7a00a5bc3564134e6aada4"
+hash = "013021b376a28a8ae6c34403e2d656858d95fef77e3497101084d7c37b304f2e"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
@@ -10312,7 +10312,7 @@ hash = "6bbae267bd16a667e3a83e876bc0a5d7e3603d1e57bffa84f4b2bc54435f1f6b"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
-hash = "25fa9b44cf63f9a17be4a3636f96db8dff0a43cde676249352c3aa4377151a2c"
+hash = "56b2756c9ecc7ebc084933d3f5ff40de46df535d61713aa79c213ff732ecb799"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -10351,7 +10351,7 @@ metafile = true
 
 [[files]]
 file = "mods/bumblezone-cultivars-0.1.0.jar"
-hash = "df5da7f43c4606da581831e799774a08c58a57a382a60d6457d3817d43492ac2"
+hash = "e71a1f7f374a1c5f128688b042c9c1841f115f331839b8d9e73dfae61b5bea40"
 
 [[files]]
 file = "mods/burnt-basic.pw.toml"
@@ -10482,7 +10482,7 @@ metafile = true
 
 [[files]]
 file = "mods/depth-director-0.2.1.jar"
-hash = "3a35f43b2404cccef94ec0fcf6fee820c5bf27618e94cf1e3f781f0792f4a4cf"
+hash = "b904a78fcbd9098db647917a14a2564a7c5332f4dcd4329694706ca3ed0808f2"
 
 [[files]]
 file = "mods/diet.pw.toml"
@@ -10491,7 +10491,7 @@ metafile = true
 
 [[files]]
 file = "mods/dimension-drink-1.0.0.jar"
-hash = "19695c0d6c5b49bb6d48ab5f6f2f76d0a5545e14f7b143325f13565c0e4ff027"
+hash = "9087d6719447c9f2b3f7d3f8a45df8a1d033f3a9c32fd63787e710de990afbcd"
 
 [[files]]
 file = "mods/distant-horizons.pw.toml"
@@ -10500,7 +10500,7 @@ metafile = true
 
 [[files]]
 file = "mods/downed-player-revival-1.0.0.jar"
-hash = "d36033af0dad2344455a007be39baef3b7380a32ac0f3bcc7ceb300aee22a1ed"
+hash = "5aad49bed9d70f87af04700f3401b85bd4c42270bd8743792ecb0fbb3209e11c"
 
 [[files]]
 file = "mods/dynamic-asset-generator.pw.toml"
@@ -10812,7 +10812,7 @@ metafile = true
 
 [[files]]
 file = "mods/heat-sync-0.1.0.jar"
-hash = "2a78689ff78e42dcd889fabd18cf551f6b1f35359a2883c99d4bedbe41fa46c6"
+hash = "4121808b7ed3131f18fc1d615bc6c7cfa0509c28351895aa26cc38d646c0c005"
 
 [[files]]
 file = "mods/hexerei.pw.toml"
@@ -10920,7 +10920,7 @@ metafile = true
 
 [[files]]
 file = "mods/latent-chemlib-0.2.0.jar"
-hash = "bff38b1dafdf1a2a04d2cca5b1fc148f8f5c1dc27e6a6d8b443536a3f94a00e4"
+hash = "b242e4d9a04bb80fc1e1b02c35c3a506242160797b17ac2c3d458513baf0365e"
 
 [[files]]
 file = "mods/lithostitched.pw.toml"
@@ -10979,7 +10979,7 @@ metafile = true
 
 [[files]]
 file = "mods/mining-helmet-0.1.0.jar"
-hash = "b0ae54ce6588e037cdef7735438c63fbdcb855a79e9d50910b0bd09ff687e798"
+hash = "febb3229d027eff442ec7f0bc645df7dd1c76a6c9b1c0bf20b0d3b17c4a7bde6"
 
 [[files]]
 file = "mods/modernfix.pw.toml"
@@ -11076,7 +11076,7 @@ metafile = true
 
 [[files]]
 file = "mods/pillager-campaigns-0.5.4.jar"
-hash = "dc8a95276d2230e0f9ca4938e38cecbffa815e7a851dfbd5e5137678691b898f"
+hash = "80f6c24ecf47b4254365c17a66a28d39ba9e5b68c8cf1167e83e02ba2740dc01"
 
 [[files]]
 file = "mods/ping-wheel.pw.toml"
@@ -11181,7 +11181,7 @@ metafile = true
 
 [[files]]
 file = "mods/realistic-ores-0.2.0.jar"
-hash = "ab52fb68b9afe9cb51937fe4f82b8f6e47ea8e91c05b0f0399beffd512314387"
+hash = "a0808f9d9df5ad087ec20e5cb1e7d7e55d98bbd9158019b000039cdce9eb9803"
 
 [[files]]
 file = "mods/realistic-physics.pw.toml"
@@ -11215,11 +11215,11 @@ metafile = true
 
 [[files]]
 file = "mods/rpg-stats-1.0.0.jar"
-hash = "36776e4ffdd9920a014e3e05877e809ff3418f662b55511636a49ca363cdad57"
+hash = "f08d143ca07e1c5a3e5eb370798c224de21d350ffed5f0b9e5ea530ad34eb853"
 
 [[files]]
 file = "mods/runtime-data-dumper-0.1.0.jar"
-hash = "3db29e64aaf3b890ca9c23c7e15a368f16127d9e3564405dc7c58e31937f5bf2"
+hash = "39ce0b3a2315acc5212b153041c54f419ebf1ad1330d7f8a80ecd4f044791746"
 
 [[files]]
 file = "mods/satako-library.pw.toml"
@@ -11332,7 +11332,7 @@ metafile = true
 
 [[files]]
 file = "mods/systemic-salience-0.1.0.jar"
-hash = "37574cf52cf1d07c4060c71e5f0d665964322ce2f24ec4366b472755a6112dfa"
+hash = "adb7cb32becfd165762f8af2281e2ad7f4a679e464b3d799dddbc7212eb10b66"
 
 [[files]]
 file = "mods/tconjei.pw.toml"
@@ -11514,7 +11514,7 @@ metafile = true
 
 [[files]]
 file = "mods/water-survival-1.1.0.jar"
-hash = "429b992607ab1cbe530b67391b472ed7e98324e96f26f89300e4b0e902ae602a"
+hash = "16738b3990f158cca00db8db04aa205e6653547775e59616bd3b075998d2c7e0"
 
 [[files]]
 file = "mods/weather-storms-tornadoes.pw.toml"
