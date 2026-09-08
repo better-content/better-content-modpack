@@ -8477,12 +8477,24 @@ file = "kubejs/data/expatternprovider/loot_tables/blocks/ex_emc_interface.json"
 hash = "f2ef2d7bc8fa2d343b0a7dd834f0eb550f84937bc0ce41f37b2cbae81c945496"
 
 [[files]]
+file = "kubejs/data/fallout_wastelands/worldgen/template_pool/industrialruin_open.json"
+hash = "c2a7a72b0f76a6ec41080c103465f03c33de05c0df0668658771380857fa4ca3"
+
+[[files]]
 file = "kubejs/data/fallout_wastelands_/creatingspace/rocket_accessible_dimension/wastelands.json"
 hash = "f133d5f858f66c5b32dbc85f54b4065df96d99cef1e91894e7dfb00f488d83e2"
 
 [[files]]
 file = "kubejs/data/fallout_wastelands_/tags/blocks/vaultdoorblock.json"
 hash = "40defb95b90b81e93e532d584018618b6819b15d11c0fb0489b1e98a6d0f0033"
+
+[[files]]
+file = "kubejs/data/fallout_wastelands_/worldgen/template_pool/industrialruin_open.json"
+hash = "6517788d91fad86b4a316c18af84e70aaa2c7c1dd9dcf7ef82188428c5396c3f"
+
+[[files]]
+file = "kubejs/data/fallout_wastelands_/worldgen/template_pool/industrialruin_openq.json"
+hash = "6f71406196b271b9c16b6bc7933fcfeae86e280387ada2b7c8ad1aff8e2b20cd"
 
 [[files]]
 file = "kubejs/data/farmersdelight/loot_modifiers/straw_from_grass.json"
@@ -10371,7 +10383,7 @@ metafile = true
 
 [[files]]
 file = "mods/bumblezone-cultivars-0.1.0.jar"
-hash = "a6814fec1fb6b9ff616996bf203c5356b0f5761c4a79ea83ca7f758668d92a43"
+hash = "103cfc2d222952a0ea663454ef17a85d1b414c5a92bff9cbd38093c5f9fde3a3"
 
 [[files]]
 file = "mods/burnt-basic.pw.toml"

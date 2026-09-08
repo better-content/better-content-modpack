@@ -1,5 +1,6 @@
 package com.bettercontent.tests
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -18,6 +19,40 @@ import kotlin.io.path.writeText
 
 @Tag("fast")
 class WorldgenCompatibilityContractTest {
+    @Test
+    fun falloutIndustrialPoolAliasesResolveEveryPinnedTemplateReference() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val mapper = jacksonObjectMapper()
+        val ids = listOf(
+            "fallout_wastelands_:industrialruin_open",
+            "fallout_wastelands_:industrialruin_openq",
+            "fallout_wastelands:industrialruin_open",
+        )
+        val pools = ids.map { id ->
+            val (namespace, name) = id.split(':', limit = 2)
+            mapper.readTree(root.resolve("kubejs/data/$namespace/worldgen/template_pool/$name.json").toFile())
+        }
+
+        assertEquals(ids, pools.map { it.path("name").asText() })
+        assertTrue(pools.all { it.path("fallback").asText() == "minecraft:empty" })
+        assertTrue(pools.drop(1).all { it.path("elements") == pools.first().path("elements") })
+
+        val weightedLocations = pools.first().path("elements").associate {
+            it.path("element").path("location").asText() to it.path("weight").asInt()
+        }
+        assertEquals(
+            mapOf(
+                "fallout_wastelands_:walking_area_03way" to 5,
+                "fallout_wastelands_:walking_area_barrel_03way" to 3,
+                "fallout_wastelands_:walking_area_trash_03way" to 3,
+                "fallout_wastelands_:walking_area_truck_03way" to 3,
+                "fallout_wastelands_:factory_ruin_01_01way_v0" to 20,
+                "fallout_wastelands_:factory_ruin_02_01way" to 2,
+            ),
+            weightedLocations,
+        )
+    }
+
     @Test
     fun crashedRocketOverrideReplacesTheStaleAuthoringPositionMapWithAnEmptyMap() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
