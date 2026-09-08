@@ -252,6 +252,34 @@ class HarnessFastTest {
     }
 
     @Test
+    fun logPolicyAcceptsOneBoundedAdChimneysDeferredTaskPerLog(@TempDir root: Path) {
+        fun warning(thread: String = "Render thread", duration: String = "7.318", mod: String = "adchimneys") =
+            "[07:03:06] [$thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+                "Mod '$mod' took $duration s to run a deferred task."
+
+        val acceptedClient = root.resolve("accepted-adchimneys-client.log").also {
+            it.writeText(warning() + "\n")
+        }
+        val acceptedServer = root.resolve("accepted-adchimneys-server.log").also {
+            it.writeText(warning(thread = "main", duration = "8.785") + "\n")
+        }
+        val rejected = root.resolve("rejected-adchimneys.log").also {
+            it.writeText(
+                warning(duration = "10.001") + "\n" +
+                    warning(thread = "Server thread") + "\n" +
+                    warning(mod = "othermod") + "\n",
+            )
+        }
+        val overflow = root.resolve("overflow-adchimneys.log").also {
+            it.writeText(warning() + "\n" + warning(duration = "8.785") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(acceptedClient, acceptedServer)).isEmpty())
+        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(rejected)).map { it.line })
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+    }
+
+    @Test
     fun logPolicyAcceptsOnlyFourExactC2meEarlyBlockEntityWarningsPerLog(@TempDir root: Path) {
         fun warning(index: Int) =
             "[16:58:0$index] [C2ME worker #$index/WARN] [net.minecraft.server.level.WorldGenRegion]: " +

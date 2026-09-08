@@ -61,6 +61,10 @@ object LogPolicy {
         "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
             "Mod 'adpother' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
     )
+    private val adChimneysDeferredTask = Regex(
+        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
+            "Mod 'adchimneys' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
+    )
     private val earlyWorldgenBlockEntity = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[C2ME worker #[0-9]+/WARN] " +
             "\\[net\\.minecraft\\.server\\.level\\.WorldGenRegion]: " +
@@ -82,13 +86,19 @@ object LogPolicy {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
             var acceptedEarlyBlockEntityWarnings = 0
             var acceptedRecoveredPhantomArrays = 0
+            var acceptedAdChimneysDeferredTasks = 0
             Files.readAllLines(path).forEachIndexed { index, line ->
                 val acceptedEarlyBlockEntity = earlyWorldgenBlockEntity.matches(line) &&
                     ++acceptedEarlyBlockEntityWarnings <= 4
                 val acceptedRecoveredPhantomArray = distantHorizonsRecoveredPhantomArray.matches(line) &&
                     ++acceptedRecoveredPhantomArrays <= 1
+                val adChimneysDuration = adChimneysDeferredTask.find(line)
+                    ?.groupValues?.get(1)?.toDoubleOrNull()
+                val acceptedAdChimneysDeferredTask = adChimneysDuration != null &&
+                    adChimneysDuration <= 10.0 && ++acceptedAdChimneysDeferredTasks <= 1
                 if ((fatal.containsMatchIn(line) || warningOrError.containsMatchIn(line)) &&
-                    !acceptedEarlyBlockEntity && !acceptedRecoveredPhantomArray && !isAccepted(line)
+                    !acceptedEarlyBlockEntity && !acceptedRecoveredPhantomArray &&
+                    !acceptedAdChimneysDeferredTask && !isAccepted(line)
                 ) {
                     add(Finding(path, index + 1, line))
                 }
