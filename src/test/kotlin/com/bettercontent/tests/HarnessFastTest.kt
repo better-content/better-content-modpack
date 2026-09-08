@@ -241,6 +241,32 @@ class HarnessFastTest {
     }
 
     @Test
+    fun logPolicyAcceptsOnlyFourExactC2meEarlyBlockEntityWarningsPerLog(@TempDir root: Path) {
+        fun warning(index: Int) =
+            "[16:58:0$index] [C2ME worker #$index/WARN] [net.minecraft.server.level.WorldGenRegion]: " +
+                "Tried to access a block entity before it was created. " +
+                "BlockPos{x=${1_010_182 + index}, y=46, z=1000215}"
+
+        val accepted = root.resolve("accepted-early-be.log").also {
+            it.writeText((1..4).joinToString(separator = "\n", postfix = "\n", transform = ::warning))
+        }
+        val overflow = root.resolve("overflow-early-be.log").also {
+            it.writeText((1..5).joinToString(separator = "\n", postfix = "\n", transform = ::warning))
+        }
+        val wrongShape = root.resolve("wrong-shape-early-be.log").also {
+            it.writeText(
+                warning(1).replace("C2ME worker #1", "Server thread") + "\n" +
+                    warning(2).replace("net.minecraft.server.level.WorldGenRegion", "net.minecraft.Util") + "\n" +
+                    warning(3).replace("before it was created", "after it was removed") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(5), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
     fun managedProcessCapturesOutputAndStops(@TempDir root: Path) {
         val log = root.resolve("process.log")
         ManagedProcess("fixture", listOf("sh", "-c", "echo ready; while :; do sleep 1; done"), root, log).use { process ->

@@ -61,13 +61,24 @@ object LogPolicy {
         "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
             "Mod 'adpother' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
     )
+    private val earlyWorldgenBlockEntity = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[C2ME worker #[0-9]+/WARN] " +
+            "\\[net\\.minecraft\\.server\\.level\\.WorldGenRegion]: " +
+            "Tried to access a block entity before it was created\\. " +
+            "BlockPos\\{x=-?[0-9]+, y=-?[0-9]+, z=-?[0-9]+}$",
+    )
 
     data class Finding(val path: Path, val line: Int, val text: String)
 
     fun findings(paths: Collection<Path>): List<Finding> = buildList {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
+            var acceptedEarlyBlockEntityWarnings = 0
             Files.readAllLines(path).forEachIndexed { index, line ->
-                if ((fatal.containsMatchIn(line) || warningOrError.containsMatchIn(line)) && !isAccepted(line)) {
+                val acceptedEarlyBlockEntity = earlyWorldgenBlockEntity.matches(line) &&
+                    ++acceptedEarlyBlockEntityWarnings <= 4
+                if ((fatal.containsMatchIn(line) || warningOrError.containsMatchIn(line)) &&
+                    !acceptedEarlyBlockEntity && !isAccepted(line)
+                ) {
                     add(Finding(path, index + 1, line))
                 }
             }
@@ -87,6 +98,24 @@ object LogPolicy {
                 "${it.path}:${it.line}: ${it.text}"
             }
         }
+    }
+}
+
+object FalloutWorldgenEvidence {
+    private val cityRuinFarWrite = Regex(
+        "Detected setBlock in a far chunk .*currently generating: " +
+            "ResourceKey\\[minecraft:worldgen/placed_feature / fallout_wastelands_:cityruins]$",
+    )
+
+    fun cityRuinFarWriteCount(path: Path): Int = if (Files.isRegularFile(path)) {
+        Files.readAllLines(path).count(cityRuinFarWrite::containsMatchIn)
+    } else {
+        0
+    }
+
+    fun requireNoCityRuinFarWrites(path: Path) {
+        val count = cityRuinFarWriteCount(path)
+        require(count == 0) { "Fallout cityruins attempted $count far-chunk writes; see $path" }
     }
 }
 

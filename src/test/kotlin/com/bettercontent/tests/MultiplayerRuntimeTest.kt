@@ -91,6 +91,14 @@ class MultiplayerRuntimeTest {
                     evidence.run.event("dimension_teleport_passed", mapOf("dimension" to target.id, "location" to index))
                 }
             }
+            val falloutLog = server.server.resolve("logs/latest.log")
+            val falloutFarWrites = FalloutWorldgenEvidence.cityRuinFarWriteCount(falloutLog)
+            evidence.run.event("fallout_cityruins_worldgen_audit", mapOf(
+                "far_chunk_writes" to falloutFarWrites,
+                "required" to 0,
+                "intact_ruin_probe" to "not deterministic: fresh fixtures use an unpinned world seed and cityruins is a random selector",
+            ))
+            FalloutWorldgenEvidence.requireNoCityRuinFarWrites(falloutLog)
             dimensions = true
         }
     }
