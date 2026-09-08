@@ -222,6 +222,25 @@ class HarnessFastTest {
     }
 
     @Test
+    fun logPolicyAcceptsOnlyBoundedAdPotherDeferredTasks(@TempDir root: Path) {
+        val accepted = root.resolve("accepted-deferred.log").also {
+            it.writeText(
+                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 1.533 s to run a deferred task.\n" +
+                    "[12:56:48] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 2.876 s to run a deferred task.\n",
+            )
+        }
+        val rejected = root.resolve("rejected-deferred.log").also {
+            it.writeText(
+                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 5.001 s to run a deferred task.\n" +
+                    "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'othermod' took 1.533 s to run a deferred task.\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(rejected)).map { it.line })
+    }
+
+    @Test
     fun managedProcessCapturesOutputAndStops(@TempDir root: Path) {
         val log = root.resolve("process.log")
         ManagedProcess("fixture", listOf("sh", "-c", "echo ready; while :; do sleep 1; done"), root, log).use { process ->

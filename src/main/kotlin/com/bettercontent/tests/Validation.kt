@@ -57,17 +57,27 @@ object LogPolicy {
         Regex("Detected setBlock in a far chunk .*currently generating: ResourceKey\\[minecraft:worldgen/placed_feature / natures_spirit:marsh_water_placed]$"),
         Regex("\\[Server thread/WARN] \\[net\\.minecraft\\.network\\.Connection]: handleDisconnection\\(\\) called twice$"),
     )
+    private val adPotherDeferredTask = Regex(
+        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
+            "Mod 'adpother' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
+    )
 
     data class Finding(val path: Path, val line: Int, val text: String)
 
     fun findings(paths: Collection<Path>): List<Finding> = buildList {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
             Files.readAllLines(path).forEachIndexed { index, line ->
-                if ((fatal.containsMatchIn(line) || warningOrError.containsMatchIn(line)) && accepted.none { it.containsMatchIn(line) }) {
+                if ((fatal.containsMatchIn(line) || warningOrError.containsMatchIn(line)) && !isAccepted(line)) {
                     add(Finding(path, index + 1, line))
                 }
             }
         }
+    }
+
+    private fun isAccepted(line: String): Boolean {
+        if (accepted.any { it.containsMatchIn(line) }) return true
+        val duration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull() ?: return false
+        return duration <= 5.0
     }
 
     fun requireClean(paths: Collection<Path>) {
