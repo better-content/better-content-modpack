@@ -67,17 +67,28 @@ object LogPolicy {
             "Tried to access a block entity before it was created\\. " +
             "BlockPos\\{x=-?[0-9]+, y=-?[0-9]+, z=-?[0-9]+}$",
     )
+    private val distantHorizonsRecoveredPhantomArray = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] " +
+            "\\[DH-Phantom Array Recycler Thread\\[[0-9]+]/WARN] " +
+            "\\[DistantHorizons-DistantHorizons-com\\.seibel\\.distanthorizons\\.core\\.pooling\\." +
+            "PhantomArrayListPool]: Pool: \\[Render Reducer]\\. " +
+            "Unable to find checkout for phantom reference " +
+            "\\[java\\.lang\\.ref\\.PhantomReference@[0-9a-f]+], arrays will need to be recreated\\.$",
+    )
 
     data class Finding(val path: Path, val line: Int, val text: String)
 
     fun findings(paths: Collection<Path>): List<Finding> = buildList {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
             var acceptedEarlyBlockEntityWarnings = 0
+            var acceptedRecoveredPhantomArrays = 0
             Files.readAllLines(path).forEachIndexed { index, line ->
                 val acceptedEarlyBlockEntity = earlyWorldgenBlockEntity.matches(line) &&
                     ++acceptedEarlyBlockEntityWarnings <= 4
+                val acceptedRecoveredPhantomArray = distantHorizonsRecoveredPhantomArray.matches(line) &&
+                    ++acceptedRecoveredPhantomArrays <= 1
                 if ((fatal.containsMatchIn(line) || warningOrError.containsMatchIn(line)) &&
-                    !acceptedEarlyBlockEntity && !isAccepted(line)
+                    !acceptedEarlyBlockEntity && !acceptedRecoveredPhantomArray && !isAccepted(line)
                 ) {
                     add(Finding(path, index + 1, line))
                 }

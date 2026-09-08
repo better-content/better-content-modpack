@@ -278,6 +278,33 @@ class HarnessFastTest {
     }
 
     @Test
+    fun logPolicyAcceptsOnlyOneExactRecoveredDistantHorizonsPhantomArrayPerLog(@TempDir root: Path) {
+        fun warning(reference: String = "1359776d") =
+            "[06:28:03] [DH-Phantom Array Recycler Thread[0]/WARN] " +
+                "[DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.pooling.PhantomArrayListPool]: " +
+                "Pool: [Render Reducer]. Unable to find checkout for phantom reference " +
+                "[java.lang.ref.PhantomReference@$reference], arrays will need to be recreated."
+
+        val accepted = root.resolve("accepted-dh-phantom.log").also {
+            it.writeText(warning() + "\n")
+        }
+        val overflow = root.resolve("overflow-dh-phantom.log").also {
+            it.writeText(warning() + "\n" + warning("2468ace0") + "\n")
+        }
+        val wrongShape = root.resolve("wrong-shape-dh-phantom.log").also {
+            it.writeText(
+                warning().replace("DH-Phantom Array Recycler Thread[0]", "Render thread") + "\n" +
+                    warning().replace("PhantomArrayListPool", "OtherPool") + "\n" +
+                    warning().replace("arrays will need to be recreated", "array was lost") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
     fun managedProcessCapturesOutputAndStops(@TempDir root: Path) {
         val log = root.resolve("process.log")
         ManagedProcess("fixture", listOf("sh", "-c", "echo ready; while :; do sleep 1; done"), root, log).use { process ->
