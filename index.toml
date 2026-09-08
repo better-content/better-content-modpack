@@ -2754,7 +2754,7 @@ hash = "441957dfd29357d90c26f0c963f063337dcf62a2a0ec2e2fe3f1ef278e7003b4"
 
 [[files]]
 file = "config/logbegone.toml"
-hash = "e225efbff93ae4308d0cfe5d8246527f439fe532d0414fe732b22f1e69f2dd36"
+hash = "4662c9c13003e2bad357e24d294624107d8538a61d7ab3706fbb93d6c78bdb2f"
 
 [[files]]
 file = "config/lootr-client.toml"
@@ -10332,7 +10332,7 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.0.jar"
-hash = "f8e19dce4d9f2cb3e2b6d6fc6e6abfc9c8949ae75054dc21d65119c18bc7a324"
+hash = "7c65bea14d835e6bc9437e4bfe32bcd2abaf829223738d4e2cc8566ded07cf40"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.4.jar"

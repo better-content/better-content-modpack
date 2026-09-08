@@ -8,5 +8,7 @@
 
     "Better Caves expected a ServerLevel, but got:",
     "Liquid regions will not be generated for this chunk. This may be fatal!",
-    "Empty height range:"
+    "Empty height range:",
+    "Detected ParCool Limitation is not synced. Sending synchronization request...",
+    "Received passengers for unknown entity"
   ]
