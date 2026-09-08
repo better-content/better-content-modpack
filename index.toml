@@ -10324,7 +10324,7 @@ hash = "f8e19dce4d9f2cb3e2b6d6fc6e6abfc9c8949ae75054dc21d65119c18bc7a324"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.4.jar"
-hash = "de5d0c7b3e6213b91fa715aa8458dff2504f380dae7440bb907a1bb037344bc7"
+hash = "bb722835dc3c769cb4b7aa4ec7051e5aa7cc6e2651f038802b313c1c01333592"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
@@ -10371,7 +10371,7 @@ metafile = true
 
 [[files]]
 file = "mods/bumblezone-cultivars-0.1.0.jar"
-hash = "e71a1f7f374a1c5f128688b042c9c1841f115f331839b8d9e73dfae61b5bea40"
+hash = "a6814fec1fb6b9ff616996bf203c5356b0f5761c4a79ea83ca7f758668d92a43"
 
 [[files]]
 file = "mods/burnt-basic.pw.toml"
