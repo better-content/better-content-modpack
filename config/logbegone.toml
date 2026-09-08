@@ -11,5 +11,6 @@
     "Empty height range:",
     "Detected ParCool Limitation is not synced. Sending synchronization request...",
     "Received passengers for unknown entity",
-    "Stop: Invalid name parameter."
+    "Stop: Invalid name parameter.",
+    "Ignoring chunk since it's not in the view range:"
   ]

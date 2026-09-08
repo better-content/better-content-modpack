@@ -2754,7 +2754,7 @@ hash = "441957dfd29357d90c26f0c963f063337dcf62a2a0ec2e2fe3f1ef278e7003b4"
 
 [[files]]
 file = "config/logbegone.toml"
-hash = "8be30c10b3e96971ede527dd7d76095ee4f16bcb8cedb9978da6183180ddfa31"
+hash = "dd127453d18af5a696067002cbb9e63a794407fff1929aca996f486ab2a356c0"
 
 [[files]]
 file = "config/lootr-client.toml"
@@ -10336,7 +10336,7 @@ hash = "3ab876ae703ed4fc1c36a733126233c8505fafd203a7a477ddcf4212f203e6c7"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.4.jar"
-hash = "02acf29dbf2526eebbeb7b7546fe5ffb2d6d22819c3495d6d70cfd13b8559654"
+hash = "7ba71fbd9c9dad69565ef30f66f71dfb317194aa368600b074428770779939ef"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
