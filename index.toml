@@ -10332,11 +10332,11 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.0.jar"
-hash = "7923eea22d2f422238aa90b27f3bd0c280a4985805187d1af97b39988cb27e31"
+hash = "3ab876ae703ed4fc1c36a733126233c8505fafd203a7a477ddcf4212f203e6c7"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.4.jar"
-hash = "8b319ec25c311c432efd0b11f149574a03f7edc0fe10baa642ef795fcefbe538"
+hash = "02acf29dbf2526eebbeb7b7546fe5ffb2d6d22819c3495d6d70cfd13b8559654"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"

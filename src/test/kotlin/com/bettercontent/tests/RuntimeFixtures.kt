@@ -38,6 +38,7 @@ class DedicatedServerFixture(private val evidence: EvidenceRun) : AutoCloseable 
         val roots = Files.list(serverExtract).use { stream -> stream.filter(Files::isDirectory).toList() }
         require(roots.size == 1) { "server candidate must extract to one top-level directory" }
         server = roots.single()
+        disableScheduledBackupsForRuntimeFixture(server)
         replaceExact(server.resolve("eula.txt"), "eula=false", "eula=true")
         replaceExact(server.resolve("server.properties"), "online-mode=true", "online-mode=false")
         val properties = server.resolve("server.properties")
@@ -119,6 +120,12 @@ class DedicatedServerFixture(private val evidence: EvidenceRun) : AutoCloseable 
     }
 
     override fun close() = process.close()
+}
+
+internal fun disableScheduledBackupsForRuntimeFixture(server: Path) {
+    val config = server.resolve("config/ftbbackups2.json")
+    require(config.isRegularFile()) { "server candidate is missing FTB Backups configuration: $config" }
+    replaceExact(config, "\"enabled\": true", "\"enabled\": false")
 }
 
 class ClientFixture(private val evidence: EvidenceRun, private val dedicated: DedicatedServerFixture? = null) : AutoCloseable {

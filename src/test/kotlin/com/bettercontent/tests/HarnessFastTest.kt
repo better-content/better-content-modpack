@@ -25,6 +25,17 @@ import kotlin.io.path.writeText
 @Tag("fast")
 class HarnessFastTest {
     @Test
+    fun runtimeFixtureDisablesWallClockScheduledBackups(@TempDir root: Path) {
+        val config = root.resolve("config").also { it.createDirectories() }.resolve("ftbbackups2.json")
+        config.writeText("""{"enabled": true, "backup_cron": "0 0 */2 * * ?"}""")
+
+        disableScheduledBackupsForRuntimeFixture(root)
+
+        assertEquals("""{"enabled": false, "backup_cron": "0 0 */2 * * ?"}""", Files.readString(config))
+        assertThrows(IllegalArgumentException::class.java) { disableScheduledBackupsForRuntimeFixture(root) }
+    }
+
+    @Test
     fun testFacadeRejectsCachedPackSuiteResultsWithoutFreshEvidence() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val build = Files.readString(root.resolve("build.gradle.kts"))
