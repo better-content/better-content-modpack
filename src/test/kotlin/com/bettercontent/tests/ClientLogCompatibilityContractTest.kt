@@ -16,6 +16,7 @@ class ClientLogCompatibilityContractTest {
         val phrases = listOf(
             "Detected ParCool Limitation is not synced. Sending synchronization request...",
             "Received passengers for unknown entity",
+            "Stop: Invalid name parameter.",
         )
         phrases.forEach { phrase ->
             assertEquals(1, Regex(Regex.escape("\"$phrase\"")).findAll(logBegone).count())
@@ -24,9 +25,10 @@ class ClientLogCompatibilityContractTest {
         val rawWarnings = root.resolve("raw-client-transition-warnings.log").also {
             it.writeText(
                 "[Render thread/WARN] [com.alrex.parcool.ParCool]: ${phrases[0]}\n" +
-                    "[Render thread/WARN] [net.minecraft.client.multiplayer.ClientPacketListener]: ${phrases[1]}\n",
+                    "[Render thread/WARN] [net.minecraft.client.multiplayer.ClientPacketListener]: ${phrases[1]}\n" +
+                    "[Render thread/ERROR] [com.mojang.blaze3d.audio.OpenAlUtil]: ${phrases[2]}\n",
             )
         }
-        assertEquals(2, LogPolicy.findings(listOf(rawWarnings)).size)
+        assertEquals(3, LogPolicy.findings(listOf(rawWarnings)).size)
     }
 }
