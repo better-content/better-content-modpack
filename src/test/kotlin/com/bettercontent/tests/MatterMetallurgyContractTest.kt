@@ -40,6 +40,17 @@ class MatterMetallurgyContractTest {
     }
 
     @Test
+    fun `font grout inventory models inherit the real upstream grout model`() {
+        listOf("aether", "nether", "ratlantis", "bumblezone").forEach { font ->
+            val model = root.resolve("kubejs/assets/kubejs/models/item/${font}_font_grout.json")
+            assertTrue(Files.isRegularFile(model), "missing inventory model for $font Font grout")
+            val contents = Files.readString(model)
+            assertTrue(contents.contains("\"parent\": \"tconstruct:item/grout\""), font)
+            assertFalse(contents.contains("\"textures\""), "$font model must inherit TConstruct's block texture")
+        }
+    }
+
+    @Test
     fun `andesite alloy keeps automation and exact melter scale casts`() {
         assertTrue(handWorkshop.contains("type: 'tconstruct:alloy'"))
         assertTrue(handWorkshop.contains("fluid: 'kubejs:molten_andesite_alloy', amount: 180"))
