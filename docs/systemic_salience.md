@@ -38,7 +38,7 @@ The eight 18×18 badges are canonical byte-identical assets across RPG Stats, Sy
 
 ## Teaching surfaces
 
-There is deliberately no explicit comparison screen. Discovery is reinforced through the RPG allocation screen, Diet screen labels, food and ore tooltips, nutrition activation feedback, ore blocks in the world, and EMI's ordinary tooltip/recipe surfaces. Natural names lead; the aspect badge, glyph, colour, and name appear when the player interacts closely enough to need the formal identity.
+There is deliberately no explicit comparison screen. Discovery is reinforced through the RPG allocation screen, Diet's native nutrition screen, food and ore tooltips, nutrition activation feedback, ore blocks in the world, and EMI's ordinary tooltip/recipe surfaces. Natural names lead; the aspect badge, glyph, colour, and name appear when the player interacts closely enough to need the formal identity.
 
 RPG point increments provide a quiet preview pulse and motif. A successful server-confirmed allocation produces a short recap. Nutrition threshold crossings and discrete abilities use the corresponding motion and motif, while the meal recap explains which bodily state changed and for approximately how long. Ore tooltips formally name the identity and preserve Shift for the assay summary; ore discovery never interrupts play with a toast or action-bar message.
 
@@ -70,7 +70,7 @@ Diet stores six ordinary groups: Proteins, Grains, Fruits, Fats, Vegetables, and
 - Sugar accelerates attack/use cadence while sharply increasing nutrient expenditure and later metabolic debt.
 - Alcohol has a narrow moderate-composure window; high load degrades handling and can cause stumbles. Maximum alcohol is unambiguously bad.
 
-The Diet screen labels every group with exactly one aspect identity. Generic Diet-wide bonuses are disabled so the discrete behavior is the lesson.
+Diet's native screen remains the authoritative nutrition display. Generic Diet-wide bonuses are disabled so the discrete behavior is the lesson.
 
 ## Ores
 

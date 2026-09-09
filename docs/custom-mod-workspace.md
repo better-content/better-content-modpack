@@ -40,8 +40,8 @@ legacy JARs are rebuilt, and every staged release artifact retains the source me
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
 | [arcane-chunk-loaders](https://github.com/better-content/arcane-chunk-loaders) | `arcane_chunk_loaders` | `arcane-chunk-loaders-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-content-fixes](https://github.com/better-content/better-content-fixes) | `better_content_fixes` | `better-content-fixes-0.1.4.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-content-economy](https://github.com/better-content/better-content-economy) | `better_content_economy` | `better-content-economy-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-content-fixes](https://github.com/better-content/better-content-fixes) | `better_content_fixes` | `better-content-fixes-0.1.5.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-content-economy](https://github.com/better-content/better-content-economy) | `better_content_economy` | `better-content-economy-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-quests](https://github.com/better-content/better-content-quests) | `better_content_quests` | `better-content-quests-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-threads](https://github.com/better-content/better-content-threads) | `better_content_threads` | `better-content-threads-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [bumblezone-cultivars](https://github.com/better-content/bumblezone-cultivars) | `bumblezone_cultivars` | `bumblezone-cultivars-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
@@ -66,9 +66,9 @@ legacy JARs are rebuilt, and every staged release artifact retains the source me
 | [ratlantis-logistics](https://github.com/better-content/ratlantis-logistics) | `ratlantis_logistics` | `ratlantis-logistics-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [runtime-data-dumper](https://github.com/better-content/runtime-data-dumper) | `runtime_data_dumper` | `runtime-data-dumper-0.1.0.jar` | `./gradlew build stageRuntimeJar` |
 | [downed-player-revival](https://github.com/better-content/downed-player-revival) | `downed_player_revival` | `downed-player-revival-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [rpg-stats](https://github.com/better-content/rpg-stats) | `rpg_stats` | `rpg-stats-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [rpg-stats](https://github.com/better-content/rpg-stats) | `rpg_stats` | `rpg-stats-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [settlement-roads](https://github.com/better-content/settlement-roads) | `settlement_roads` | `settlement-roads-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [systemic-salience](https://github.com/better-content/systemic-salience) | `systemic_salience` | `systemic-salience-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [systemic-salience](https://github.com/better-content/systemic-salience) | `systemic_salience` | `systemic-salience-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [tinkers-construct-affixes](https://github.com/better-content/tinkers-construct-affixes) | `tinkers_construct_affixes` | `tinkers-construct-affixes-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [player-traces](https://github.com/better-content/player-traces) | `player_traces` | `player-traces-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [village-walls](https://github.com/better-content/village-walls) | `village_walls` | `village-walls-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |

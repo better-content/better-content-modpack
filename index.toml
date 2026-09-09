@@ -8733,6 +8733,10 @@ file = "kubejs/data/immersive_weathering/tags/blocks/grassy_blocks.json"
 hash = "d5f5d9f3aaec685bf97e85535b0cbaaa02c4d124fd217c480f3e4f5fb99c30bb"
 
 [[files]]
+file = "kubejs/data/kubejs/forge/biome_modifier/remove_iceandfire_silver_ore.json"
+hash = "654f3598c5a5102cd221134805032dcb3a7b2a0aa391528abcad20cc5accca78"
+
+[[files]]
 file = "kubejs/data/kubejs/recipes/goety/spire_armor_trim.json"
 hash = "7ab5c3ef85aeae614d3d443fb9bf8b8c528cb5520676e4078e5cd6a96cf7ce04"
 
@@ -9986,7 +9990,7 @@ hash = "7b6f993ab92b919019dcd09b191add597ba5290f21155325e84673e48027eb6f"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/check__30_stone_cobble_compat.js"
-hash = "fe902c8e51a00d3933125df0a57d966f81ba2a1c913d273a69fdd576733f8ac1"
+hash = "92171be43a176e749674b87dfa697253ee8f12224321ef40af6c0e0884cdc180"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/check__35_wood_family_alias_compat.js"
@@ -10006,7 +10010,7 @@ hash = "5de50303c4e055de13881de69758130c313b4c8dfe0cb9d973a8b554bc3b1ad7"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/check__75_stone_cobble_tag_compat.js"
-hash = "9245affdcbb452cd2d749540114ee5541df86f8a4d503f3164770d3e1613d656"
+hash = "37cd9d378b8b21d8ad8af376e15ea0e9e18180118f568f59bd4db0f9e85cedc8"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/check__90_sand_tag_compat.js"
@@ -10335,12 +10339,12 @@ hash = "ddff810b39bb8873325aa34230c2a174073ad9bbf002e04a66835735550a1b7b"
 metafile = true
 
 [[files]]
-file = "mods/better-content-economy-1.0.0.jar"
-hash = "3ab876ae703ed4fc1c36a733126233c8505fafd203a7a477ddcf4212f203e6c7"
+file = "mods/better-content-economy-1.0.1.jar"
+hash = "0ac3b1ae03c98205f1e6e715dae4bed9b1281583c58e013a754b742ce0c92310"
 
 [[files]]
-file = "mods/better-content-fixes-0.1.4.jar"
-hash = "e2766c59a79b54089a0ac358dfd634e15290e1714036a9c624988a6196a1e4d0"
+file = "mods/better-content-fixes-0.1.5.jar"
+hash = "b5be0be09e891755f00b699ef761b232b77262a36a919c945fcd668a894b0e0f"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
@@ -11250,8 +11254,8 @@ hash = "ca4411ac6d8a9a892948bb63cd0ba52ae5523ca5e257632d6ae8c933b660c5ee"
 metafile = true
 
 [[files]]
-file = "mods/rpg-stats-1.0.0.jar"
-hash = "f08d143ca07e1c5a3e5eb370798c224de21d350ffed5f0b9e5ea530ad34eb853"
+file = "mods/rpg-stats-1.0.1.jar"
+hash = "5d322b4c222719758650b95f5a832cbe0d53e3dd2c4eaf7ba079a5109a06b0cb"
 
 [[files]]
 file = "mods/runtime-data-dumper-0.1.0.jar"
@@ -11367,8 +11371,8 @@ hash = "148bc9c5989ac676d91b6f07a5e871d7b5d11c1b7b46fe30c3894c1512069a88"
 metafile = true
 
 [[files]]
-file = "mods/systemic-salience-0.1.0.jar"
-hash = "adb7cb32becfd165762f8af2281e2ad7f4a679e464b3d799dddbc7212eb10b66"
+file = "mods/systemic-salience-0.1.1.jar"
+hash = "f67119d644445a0b82197e83a26704d7dd377bb47571e80c6edd408010c46431"
 
 [[files]]
 file = "mods/tconjei.pw.toml"
