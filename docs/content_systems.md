@@ -65,6 +65,25 @@ tooltips already communicate. Dynamic stack state remains owned by the source
 mod. World events, controls, onboarding, scouting, and other guidance without a
 natural item anchor remain on their event, HUD, or world surfaces.
 
+## Learning surface hierarchy
+
+Better Content uses several cooperating learning surfaces rather than a single
+progression guide:
+
+| Surface | Authority |
+| --- | --- |
+| Loading lessons and the Threads Lessons reference | Spoiler-free fundamentals and changed mental models that should be available before the relevant event occurs |
+| Contextual Thread cards | Discovering a broader rule through authoritative play evidence, preserving it across the lineage, and handing off to a precise deeper surface |
+| Item-hover annotations | One- or two-line corrections tied naturally to a specific stack, identical in inventory and EMI hover |
+| EMI, Ponder, and native GuideME/Patchouli or system screens | Recipes, apparatus, multiblocks, exact operating instructions, and dynamic state owned by the implementing mod |
+| HUD, event, and world feedback | Immediate controls, warnings, scouting, rescue, and other guidance whose meaning depends on the live situation |
+| FTB Quests | A secondary achievement ledger and optional teaser, never a tutorial, dependency graph, or recipe guide |
+
+Shared concepts align equivalent explanations, but each surface keeps its own
+depth. A loading lesson may lead to a known Thread and its native doorway; it
+does not reveal an unknown card. Hover annotations stay concise and never grow
+into lesson prose merely to reproduce another surface.
+
 ## Achievement ledger
 
 FTB Quests is not a progression guide. Its live authored surface is three

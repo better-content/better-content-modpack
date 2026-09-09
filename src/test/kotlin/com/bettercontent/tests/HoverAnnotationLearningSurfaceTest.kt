@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.zip.ZipFile
 
 @Tag("fast")
 class HoverAnnotationLearningSurfaceTest {
@@ -47,5 +48,38 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(script.contains("var conceptId = String(row.concept_id || '')"))
         assertTrue(script.contains("conceptId: conceptId"))
         assertTrue(script.contains("ItemEvents.tooltip"))
+    }
+
+    @Test
+    fun `bundled Threads exposes optional owned lessons and no obsolete dodge teaching`() {
+        val jar = root.resolve("mods/better-content-threads-1.1.0.jar")
+        ZipFile(jar.toFile()).use { zip ->
+            fun json(path: String) = zip.getInputStream(zip.getEntry(path)).bufferedReader().use { reader ->
+                jacksonObjectMapper().readTree(reader)
+            }
+            val lessons = json("assets/better_content_threads/loading_briefs/catalogue.json")
+            val threads = json("data/better_content_threads/threads/catalogue.json")
+            assertEquals("bc.loading_briefs.v3", lessons.path("schema").asText())
+            assertEquals(16, lessons.path("briefs").size())
+            val concepts = threads.path("threads").associate {
+                it.path("id").asText() to it.path("concept_id").asText()
+            }
+            lessons.path("briefs").forEach { lesson ->
+                assertTrue(lesson.path("concept_id").asText().matches(Regex("[a-z0-9_.]{3,80}")))
+                assertTrue(lesson.path("owner").asText().isNotBlank())
+                lesson.path("related_thread").asText().takeIf(String::isNotEmpty)?.let { related ->
+                    assertEquals(lesson.path("concept_id").asText(), concepts[related], lesson.path("id").asText())
+                }
+            }
+            val movement = lessons.path("briefs").first { it.path("id").asText() == "movement" }.path("body").asText()
+            assertTrue(movement.contains("directional double-tap dodging is disabled"))
+            assertTrue(!movement.contains("double taps also dodge"))
+        }
+
+        val client = ZipFile(jar.toFile()).use { zip ->
+            val entry = zip.getEntry("com/bettercontent/threads/ThreadClient.class")
+            zip.getInputStream(entry).readBytes().toString(Charsets.ISO_8859_1)
+        }
+        assertTrue(client.contains("keepReading"))
     }
 }

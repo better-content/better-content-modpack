@@ -49,16 +49,28 @@ underlying mechanic.
 
 ## Loading and arrival briefs
 
-World joins select one of 12 spoiler-free mental-model briefs. The first lesson
-always introduces Threads and displays the current reader binding (`M` by
-default). The remaining 11 rotate without repeats until the cycle is exhausted,
-then refill while avoiding an immediate repeat. Rotation history is client-local.
+Top-level world and server joins select one of 16 spoiler-free mental-model
+lessons. The first introduces Threads; the others cover the fading HUD,
+hydration, nutrition, food variety, metabolism, body temperature, configured
+movement, simulated sleep, downing and revival, life stats, seasons, moving
+weather, pollution, structural support, and pillager campaigns. Lessons resume
+at the next unseen entry, cycle in manifest order, and retain client-local
+history without becoming progression gates.
 
-The selected headline, two-line lesson, and bespoke diagram render over the
-actual connection or level-loading screen. The same lesson then becomes a
-mandatory paused arrival plate after the player and level are ready. Continue,
-Enter, or Space dismisses it; Escape does not. A disconnected attempt does not
-consume the lesson. Dimension changes do not start a new loading episode.
+The selected lesson and its 512×256 illustration render over the connection or
+level-loading screen with Previous, Next, and Keep Reading controls. Loading
+never imposes mandatory onboarding: the world opens immediately when ready
+unless the player explicitly selects Keep Reading. That opt-in carries the exact
+page into a voluntary paused World Ready screen; Continue, Enter, Space, or
+Escape enters the world. A disconnected attempt does not consume the lesson,
+and dimension changes do not start a new loading episode.
+
+The Threads reader exposes a separate Lessons mode containing all 16 lessons
+from the start. Opening a lesson there records it in the same client-local
+rotation history. A lesson may point to one related Thread and, through that
+card's exact doorway, its authoritative native guide, Ponder, EMI, or system
+surface. Related Thread details remain sealed until the card is contextually
+known; the lesson library never marks cards known, active, read, or complete.
 
 ## Definition and delivery contract
 
@@ -68,6 +80,13 @@ Every `bc.threads.v2` definition includes a stable `concept_id`, authoritative
 `renewal`, or `control`. Loading requires exactly 52 active identities and
 exactly orders 1–13 in every suit. The clean-break player schema is version 4;
 state from earlier experimental schemas is intentionally ignored.
+
+Every `bc.loading_briefs.v3` definition includes a stable lesson ID, concept ID,
+authoritative owner, category, bounded headline/body/action copy, 512×256 art,
+and an optional related Thread ID. Related lessons reuse the Thread concept ID;
+unrelated fundamentals retain their own stable concepts. Existing schema-2
+client rotation files remain readable because their stable lesson IDs did not
+change.
 
 Bounded packet protocol 8 validates card and concept IDs, title, suit, order,
 aspect, resource locations, rule/prose bounds, state, history, unique identities,
