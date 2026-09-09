@@ -23,7 +23,7 @@
     {"repository":"pillager-campaigns","modId":"pillager_campaigns","artifact":"pillager-campaigns-0.5.4.jar","tasks":["verifyFull","verifyWorld","stageRuntimeJar"]},
     {"repository":"world-lifecycle-manager","modId":"world_lifecycle_manager","artifact":"world-lifecycle-manager-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"procedural-bouquets","modId":"procedural_bouquets","artifact":"procedural-bouquets-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
-    {"repository":"rail-scout","modId":"rail_scout","artifact":"rail-scout-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
+    {"repository":"rail-beetle","modId":"rail_beetle","artifact":"rail-beetle-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"realistic-ores","modId":"realistic_ores","artifact":"realistic-ores-0.2.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"ratlantis-logistics","modId":"ratlantis_logistics","artifact":"ratlantis-logistics-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"runtime-data-dumper","modId":"runtime_data_dumper","artifact":"runtime-data-dumper-0.1.0.jar","tasks":["build","stageRuntimeJar"]},

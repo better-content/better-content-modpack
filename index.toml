@@ -7466,7 +7466,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "e4b04aa1303fd6ab09dcbd788cf15d1cc005dbbfe951a506b220c5919feda818"
+hash = "90aa7586a11c4ce6c157c378d5e3acd3a23faa73355fbfed7ddf8c167444b9dd"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -7490,7 +7490,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "de6133bf1db1b31efbd9b86008d2d0a17207f21a569a87feb3c2393ec6ee3de8"
+hash = "c4dfb47d7fd37abaf0f1f1bf7d770348ef83d4804a86b4baf2735872d6a1dc9a"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -10194,7 +10194,7 @@ hash = "a95c80855c0b079f8b2764f38ea49214f56554ec19ad42c510f84a1e8249a5c6"
 
 [[files]]
 file = "kubejs/server_scripts/transport/10_optional_engineering_roots.js"
-hash = "450a4ecad202fa587c1eb4aa6bc7dcb4d3906f5332a79da0c6b4b9871dbc69b3"
+hash = "7160eb39356bf6243002f8bbd26c8fa5e8254357925b5d58f394dac290b7319f"
 
 [[files]]
 file = "kubejs/server_scripts/utility/10_recipe_surface_helpers.js"
@@ -11197,8 +11197,8 @@ hash = "a60d4b1d58f9f88269b5ab460bfeb3638c8a9a3f35292ca6fc36d2d5a256130c"
 metafile = true
 
 [[files]]
-file = "mods/rail-scout-0.1.0.jar"
-hash = "454b5db91f04ab95ddd48c87a4ffebe67fed80c371a29b1689e21f0202cbae72"
+file = "mods/rail-beetle-0.1.0.jar"
+hash = "cbd94258f346a8a222a02d906c6aed3e4ecc18bcb3f45b922de320c7bb3311ba"
 
 [[files]]
 file = "mods/ratlantis-logistics-0.1.0.jar"

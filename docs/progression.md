@@ -113,8 +113,17 @@ in the Hand Workshop; rough mechanical experiments begin in Powered Works;
 precision trains and controls in Precision Factory; pressure-driven flight in
 Thermal & Pressure; sensors and gyros in Electrical Control. Aether materials
 gate stable high-performance flight, never primitive ships, basic Trackwork, or
-low-performance aircraft. Rail Scouts join the Precision Factory branch by
-combining a Railway Casing, a Barrel, a Minecart, and two Electron Tubes.
+low-performance aircraft. The Rail Beetle joins the Precision Factory branch by
+combining a Railway Casing, a Barrel, a Minecart, and two Electron Tubes. Its
+baseline coal firebox, 4-block/second drive, 64-rail survey, two-cart drawgear,
+and one-wide/four-deep bridge work remain complete and practical. One engine
+cradle accepts conditional Create steam, PowerGrid flux, Ars Source, Blood
+lifeforce, Pneumatic air, Goety soul, or Malum spirit drives; an empty alternate
+drive falls back to cargo fuel. Six module bays accept one module per family.
+Tier-I machinery begins in Precision Factory, mechanical and civil Tier-II
+modules mature in Thermal & Pressure, and efficiency, survey, and dispatch
+Tier-II modules require Electrical Control. Every Tier-II recipe consumes its
+Tier-I assembly.
 
 ## World compatibility
 

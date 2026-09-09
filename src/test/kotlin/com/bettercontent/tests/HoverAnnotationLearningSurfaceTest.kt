@@ -18,7 +18,7 @@ class HoverAnnotationLearningSurfaceTest {
     fun `every annotation has a bounded stable concept and concise copy`() {
         assertEquals("bc.hover_annotations.v2", registry.path("schema").asText())
         val rows = registry.path("annotations")
-        assertEquals(49, rows.size())
+        assertEquals(52, rows.size())
         rows.forEach { row ->
             assertTrue(row.path("concept_id").asText().matches(Regex("[a-z0-9_.]{3,96}")))
             assertTrue(row.path("owner").asText().isNotBlank())
@@ -26,6 +26,14 @@ class HoverAnnotationLearningSurfaceTest {
             assertTrue(lines.size in 1..2)
             assertTrue(lines.joinToString(" ").trim().split(Regex("\\s+")).size <= 24)
         }
+    }
+
+    @Test
+    fun `Rail Beetle annotations teach baseline power and tier progression`() {
+        val text = Files.readString(root.resolve("kubejs/config/hover_annotations.json"))
+        assertTrue(text.contains("Surveying, driving, laying rail and shallow bridges are baseline."))
+        assertTrue(text.contains("A depleted alternate engine automatically yields to the built-in coal firebox."))
+        assertTrue(text.contains("Tier II consumes its matching Tier-I module"))
     }
 
     @Test
