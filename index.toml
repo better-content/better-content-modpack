@@ -10340,11 +10340,11 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.1.jar"
-hash = "0ac3b1ae03c98205f1e6e715dae4bed9b1281583c58e013a754b742ce0c92310"
+hash = "31136400d9be5dd96e18c98b30d7493aed5c2d1523860f8d7363455a78457c4d"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.7.jar"
-hash = "a69d71eca37740090002c66492bc1f9f8c74c37fc49282b21e28419ff759b5cb"
+hash = "ac0ae00d3aa9c81982c34a49055b73c5a948964ae90e257f080554908e5400d9"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
@@ -10352,7 +10352,7 @@ hash = "6bbae267bd16a667e3a83e876bc0a5d7e3603d1e57bffa84f4b2bc54435f1f6b"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
-hash = "7c6c17b1b74e0de4cc829ddc82061a81d8de214766bbff6e9a1db1da18125b9e"
+hash = "f1d5d403f022be77acc4cd1c814ffa5ef5d20cb68e94527f033a4f2b0782746c"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -10522,7 +10522,7 @@ metafile = true
 
 [[files]]
 file = "mods/depth-director-0.2.1.jar"
-hash = "b904a78fcbd9098db647917a14a2564a7c5332f4dcd4329694706ca3ed0808f2"
+hash = "6ac900b8b37506d69357ff21df32780ebbcbd7945d2ed93922ae584cb94e7bf5"
 
 [[files]]
 file = "mods/diet.pw.toml"
@@ -11111,7 +11111,7 @@ metafile = true
 
 [[files]]
 file = "mods/pillager-campaigns-0.5.4.jar"
-hash = "80f6c24ecf47b4254365c17a66a28d39ba9e5b68c8cf1167e83e02ba2740dc01"
+hash = "26580272442a5cf5e181bdfaf05ee4b4f27a6657c1318767e47fa054ff1942d1"
 
 [[files]]
 file = "mods/ping-wheel.pw.toml"
@@ -11198,7 +11198,7 @@ metafile = true
 
 [[files]]
 file = "mods/rail-beetle-0.1.0.jar"
-hash = "71903dd50364fce8f57f1089b29b0784c6a8635ff0ad061551746f732e844691"
+hash = "20208ed0a98e2b9932a0d7336e1b568bcbc9c0c88c3020f9659e63af9c8e32ce"
 
 [[files]]
 file = "mods/ratlantis-logistics-0.1.0.jar"
@@ -11216,7 +11216,7 @@ metafile = true
 
 [[files]]
 file = "mods/realistic-ores-0.2.0.jar"
-hash = "ae3e62d76f0bfe3cb8c74d86fbd71a56c06c2d6193cb9240f5ae31086c386598"
+hash = "9ee617980f39f843c44fdb7b2ae1095f4fb55ccbe8562611c7b942bb464f924e"
 
 [[files]]
 file = "mods/realistic-physics.pw.toml"
@@ -11250,7 +11250,7 @@ metafile = true
 
 [[files]]
 file = "mods/rpg-stats-1.0.1.jar"
-hash = "5d322b4c222719758650b95f5a832cbe0d53e3dd2c4eaf7ba079a5109a06b0cb"
+hash = "8bb431bef2aae1edff7376a6894dbceeb332e19fd73f80098617b402cd3e92a9"
 
 [[files]]
 file = "mods/runtime-data-dumper-0.1.0.jar"
@@ -11367,7 +11367,7 @@ metafile = true
 
 [[files]]
 file = "mods/systemic-salience-0.1.1.jar"
-hash = "f67119d644445a0b82197e83a26704d7dd377bb47571e80c6edd408010c46431"
+hash = "71a45c8b04175ec4a3123e81f9fa569f03bf7f9ba4ef3b21005913ad78d2b64f"
 
 [[files]]
 file = "mods/tconjei.pw.toml"
