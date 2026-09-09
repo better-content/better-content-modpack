@@ -10343,8 +10343,8 @@ file = "mods/better-content-economy-1.0.1.jar"
 hash = "0ac3b1ae03c98205f1e6e715dae4bed9b1281583c58e013a754b742ce0c92310"
 
 [[files]]
-file = "mods/better-content-fixes-0.1.6.jar"
-hash = "74a8cfb7780ca8ad36c54af5e1b4091ea13bf3dc3b29f22f413f9c30db6a942d"
+file = "mods/better-content-fixes-0.1.7.jar"
+hash = "a14d804685c234f372b08d079c4ffb7a11e1924126fe699bc6b4e3bb3c9eb652"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
@@ -10638,11 +10638,6 @@ metafile = true
 [[files]]
 file = "mods/entityculling.pw.toml"
 hash = "d618683f8252b0d5a5986b8f3121959fc089e48988bc8aa8b060791ad91e6c42"
-metafile = true
-
-[[files]]
-file = "mods/epic-fight-first-person-model.pw.toml"
-hash = "cbd77fbc6ae5fcf600a36a26d8ab50c8ca82010424a66414bad6e70f67b43109"
 metafile = true
 
 [[files]]
