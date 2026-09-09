@@ -40,7 +40,7 @@ legacy JARs are rebuilt, and every staged release artifact retains the source me
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
 | [arcane-chunk-loaders](https://github.com/better-content/arcane-chunk-loaders) | `arcane_chunk_loaders` | `arcane-chunk-loaders-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-content-fixes](https://github.com/better-content/better-content-fixes) | `better_content_fixes` | `better-content-fixes-0.1.5.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-content-fixes](https://github.com/better-content/better-content-fixes) | `better_content_fixes` | `better-content-fixes-0.1.6.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-economy](https://github.com/better-content/better-content-economy) | `better_content_economy` | `better-content-economy-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-quests](https://github.com/better-content/better-content-quests) | `better_content_quests` | `better-content-quests-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-threads](https://github.com/better-content/better-content-threads) | `better_content_threads` | `better-content-threads-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |

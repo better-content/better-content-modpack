@@ -2,7 +2,7 @@
   "schema": "bc.active_custom_mods.v1",
   "mods": [
     {"repository":"arcane-chunk-loaders","modId":"arcane_chunk_loaders","artifact":"arcane-chunk-loaders-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
-    {"repository":"better-content-fixes","modId":"better_content_fixes","artifact":"better-content-fixes-0.1.5.jar","tasks":["verifyFull","stageRuntimeJar"]},
+    {"repository":"better-content-fixes","modId":"better_content_fixes","artifact":"better-content-fixes-0.1.6.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"better-content-economy","modId":"better_content_economy","artifact":"better-content-economy-1.0.1.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"better-content-quests","modId":"better_content_quests","artifact":"better-content-quests-1.0.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"better-content-threads","modId":"better_content_threads","artifact":"better-content-threads-1.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},

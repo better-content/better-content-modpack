@@ -10343,8 +10343,8 @@ file = "mods/better-content-economy-1.0.1.jar"
 hash = "0ac3b1ae03c98205f1e6e715dae4bed9b1281583c58e013a754b742ce0c92310"
 
 [[files]]
-file = "mods/better-content-fixes-0.1.5.jar"
-hash = "b5be0be09e891755f00b699ef761b232b77262a36a919c945fcd668a894b0e0f"
+file = "mods/better-content-fixes-0.1.6.jar"
+hash = "74a8cfb7780ca8ad36c54af5e1b4091ea13bf3dc3b29f22f413f9c30db6a942d"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
