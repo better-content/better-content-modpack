@@ -11216,7 +11216,7 @@ metafile = true
 
 [[files]]
 file = "mods/realistic-ores-0.2.0.jar"
-hash = "c2655375456e37a5f4e940365e7c5fa1aa23272d37d9c55b921ec04441455de0"
+hash = "ae3e62d76f0bfe3cb8c74d86fbd71a56c06c2d6193cb9240f5ae31086c386598"
 
 [[files]]
 file = "mods/realistic-physics.pw.toml"
