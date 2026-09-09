@@ -170,23 +170,43 @@ hash = "3bd2f3c03bee924c1b7a833ce917a6943c3397e32bd1bd07bb98683c725a94ed"
 
 [[files]]
 file = "config/adlods/Deposits/black_shale.cfg"
-hash = "daf71943bc1ee9fe06e41d42a341be0327541b363758dbd9eb2556db6a2c73b1"
+hash = "9eb139835dc9b6758e1b75bd20b602e926246e45b8c576048fbd1e5de855db28"
+
+[[files]]
+file = "config/adlods/Deposits/black_shale_echo.cfg"
+hash = "7947b831cfa0ade3fdc65c02a14855fbe1c09c6c3ac3a8a53a88c5766a70f02e"
 
 [[files]]
 file = "config/adlods/Deposits/brassroot.cfg"
-hash = "0d3b02b8a9ade0491a68aaa5c8ee3027e8228b6c86be5cff01b63e7c6d1beb1c"
+hash = "9a87174d968a2ab94b468956f79abd510f3abdf918f15fa85c8111a1f619e690"
+
+[[files]]
+file = "config/adlods/Deposits/brassroot_echo.cfg"
+hash = "eb9f945c4bba786dfc6eeb226eebb853698cfb3797c3682f99d484e28d160b51"
 
 [[files]]
 file = "config/adlods/Deposits/coal.cfg"
-hash = "c64acf00c34ff94a3332503bd51d5507c7fd34caba298bffeab8eef629161eaf"
+hash = "33f10b01c490585bbc53c32395ab101e3a9cd07e789cf2f090c91b4327d017f4"
+
+[[files]]
+file = "config/adlods/Deposits/coal_echo.cfg"
+hash = "aaf0457ae005e7f64f2240ea405a6e8aae394c5fdfab61e5cfcd3b24aecdacc8"
 
 [[files]]
 file = "config/adlods/Deposits/copper_bloom.cfg"
-hash = "a24e6f6ba1857cea82ea9b1690fcf34864030c14bffc3e33cb99b6519dbaae07"
+hash = "da9e698fee490772210b9f0c2c2672edaaea218a3b628da67994dc8a55dd0ec0"
+
+[[files]]
+file = "config/adlods/Deposits/copper_bloom_echo.cfg"
+hash = "46216f2b1f6c6a64e6df686df7a78be27080f682dce6cff1ae5cc1660894d430"
 
 [[files]]
 file = "config/adlods/Deposits/evaporite_beds.cfg"
-hash = "2271e059fd2f00fefb899b4ed80c8c97ea50294bf8f7401602f9aca6ce7575df"
+hash = "97749f7d4153dd3d23c7ef116cb7cc581a7783855866dab2e2259ce92bf345c4"
+
+[[files]]
+file = "config/adlods/Deposits/evaporite_beds_echo.cfg"
+hash = "47d3d7039d9e9660f62c9b023233f9b615d71624dd2c72dfd97258031d6e611d"
 
 [[files]]
 file = "config/adlods/Deposits/gas_pocket.cfg"
@@ -194,11 +214,19 @@ hash = "fc211a8cc4133bbf890a22fa15007114bbd7fcf11b8a4a37a39993a9db377711"
 
 [[files]]
 file = "config/adlods/Deposits/hotstone.cfg"
-hash = "4e958cff30b8c5775a5f4b649574f636396381fcc2de7dd09dda4768bf42d9ba"
+hash = "1cb950433f178c9906ea816af13d845c552dae9913ffbbc9f4ad7ba6937d765b"
+
+[[files]]
+file = "config/adlods/Deposits/hotstone_echo.cfg"
+hash = "5d6700f74e1306c24722d2d6f9754535604a7eaa4f8de9bffed137ba36028e23"
 
 [[files]]
 file = "config/adlods/Deposits/iron.cfg"
-hash = "a82d7980e0a2ac79407087cc3fe5df453fc9b5eb7a3ee70ff4b8acb470c970f9"
+hash = "6f6d0213d13a8c2eefc13f1db31902780a1bd7a07841423ef87cf58154561b0d"
+
+[[files]]
+file = "config/adlods/Deposits/iron_echo.cfg"
+hash = "32a7b2a9a0ded012dbd38164397b1f3f41f602367a0a945afe2d71a039df790a"
 
 [[files]]
 file = "config/adlods/Deposits/nether_gold.cfg"
@@ -226,7 +254,11 @@ hash = "d3dba3ec0fc2ccd5a20d2b49c93825726e40d1a9aa4a78ea3219e1fd783e1c9c"
 
 [[files]]
 file = "config/adlods/Deposits/tin_quartz.cfg"
-hash = "15812fa1920eb7fb77a328b709f18d12c4bd7ee0f51b12658a3196fe2839e3a1"
+hash = "55d0a1ac8bf87fd574776415cb31e2bbe71fb4acc7b61b06d0363db71321a15c"
+
+[[files]]
+file = "config/adlods/Deposits/tin_quartz_echo.cfg"
+hash = "b075360429c717656866d3823f35105cf65b295e39f0f72078c025db6189192c"
 
 [[files]]
 file = "config/adlods/Geodes/amethyst.cfg"
@@ -4559,38 +4591,6 @@ hash = "a1da0aa23ddc4b12dcb53dea0b690fd8878f7c4ef5a243d0849853c9897a4b11"
 [[files]]
 file = "datapacks/worldgen_compat_fixes/data/projectvibrantjourneys/worldgen/configured_feature/charred_bones.json"
 hash = "ea7264356b67359e9f9951341e916a724554c903a6f36b06e7da9ce7b44bbebe"
-
-[[files]]
-file = "datapacks/worldgen_compat_fixes/data/realistic_ores/worldgen/configured_feature/black_shale_stone.json"
-hash = "a0b4d0cac7f3187875e6e3084f68ce3889701b2164f3090f243ffeaecb0a86f7"
-
-[[files]]
-file = "datapacks/worldgen_compat_fixes/data/realistic_ores/worldgen/configured_feature/brassroot_stone.json"
-hash = "3a6686e8b8695a5615a452992ac7527b20a50f9fca5729d03ba3cdd95299eeb9"
-
-[[files]]
-file = "datapacks/worldgen_compat_fixes/data/realistic_ores/worldgen/configured_feature/coal_measures_stone.json"
-hash = "4e6db6bc5e473bd6583ad9fab0eee6d0303d28687a0f2a3ed0e42b346265b282"
-
-[[files]]
-file = "datapacks/worldgen_compat_fixes/data/realistic_ores/worldgen/configured_feature/copper_bloom_stone.json"
-hash = "87409ca4beb1099dc23d89bad124a7a402e5a5b7a94bb38503bab0ee37b9ab9b"
-
-[[files]]
-file = "datapacks/worldgen_compat_fixes/data/realistic_ores/worldgen/configured_feature/evaporite_beds_stone.json"
-hash = "924a78defd8c9d9e623962c6c89e3d883c7c58b658eaf34d3dbf52d6edb21e26"
-
-[[files]]
-file = "datapacks/worldgen_compat_fixes/data/realistic_ores/worldgen/configured_feature/hotstone_stone.json"
-hash = "7f7f5ef06f0b604cf1d4ba24ea7c14b62dc98d0d790565f768bf3e8999f17fff"
-
-[[files]]
-file = "datapacks/worldgen_compat_fixes/data/realistic_ores/worldgen/configured_feature/ironstone_stone.json"
-hash = "3b34c26d1cec0b9561475604607d7c6013d8edfb2fb040225f8e09bda1f6af3c"
-
-[[files]]
-file = "datapacks/worldgen_compat_fixes/data/realistic_ores/worldgen/configured_feature/tin_quartz_stone.json"
-hash = "f89f4b55976612d7cd08ddbf04c35f1fc06667aee19e1aee269d6805da2d0c7a"
 
 [[files]]
 file = "datapacks/worldgen_compat_fixes/data/the_flesh_that_hates/worldgen/structure/house1.json"
@@ -11221,7 +11221,7 @@ metafile = true
 
 [[files]]
 file = "mods/realistic-ores-0.2.0.jar"
-hash = "a0808f9d9df5ad087ec20e5cb1e7d7e55d98bbd9158019b000039cdce9eb9803"
+hash = "8ce156af91163202c0e45233e645f583b21fee3590ecac6caa8b8e5fbdd52018"
 
 [[files]]
 file = "mods/realistic-physics.pw.toml"

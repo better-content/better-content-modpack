@@ -11,14 +11,14 @@ behavioural fantasies:
 
 | Deposit | Immediate promise | Visual identity |
 | --- | --- | --- |
-| Coal Measures | fuel | broad broken black strata |
-| Ironstone | iron and tools | thick rusty bedded bands |
-| Copper Bloom | copper | green oxidation around brassy mineralization |
-| Tin Quartz | bronze and quartz | white crystal ribbons with dark inclusions |
-| Brassroot | zinc and brass | yellow-grey branching roots |
-| Evaporite Beds | salt and preservation | pale crystalline beds |
-| Hotstone | dangerous usable heat and heavy matter | dark energetic mineral body |
-| Black Shale | redstone and supernatural material | black strata with violet contamination |
+| Coal Measures | fuel | broken uneven carbon seams; home Y 40..144, echo Y 160..320 |
+| Ironstone | iron and tools | rusty lenticular/oolitic beds; home Y -16..80, echo Y 112..288 |
+| Copper Bloom | copper | branching stockwork and oxidation halos; home Y 16..112, echo Y -112..-56 |
+| Tin Quartz | bronze and quartz | steep quartz lodes and cassiterite splays; home Y -72..16, echo Y 160..384 |
+| Brassroot | zinc and brass | asymmetric dendritic fracture veins; home Y -48..40, echo Y 96..192 |
+| Evaporite Beds | salt and preservation | stacked salt/gypsum beds; home Y 72..176, echo Y -32..24 |
+| Hotstone | dangerous usable heat and heavy matter | lopsided breccia pipes; home Y -128..-72, echo Y 192..448 |
+| Black Shale | redstone and supernatural material | dark laminations and violet stringers; home Y -104..-24, echo Y 0..64 |
 
 Oil Seep remains a separate fluid surface feature. Technical materials survive
 as assay depth where they have an audited pack use; they do not create additional
@@ -28,7 +28,10 @@ Each family exposes authored stone and deepslate blocks, a surface sample whose
 item identity is `small_ore_chunk_<family>`, a full `ore_chunk_<family>`, and a
 `crushed_<family>` processing feed. Native and Excavated Variants hosts separate
 and reassemble losslessly. Scattered family worldgen and ADLODS deposits remain
-complementary exploration layers.
+complementary exploration layers. ADLODS mirrors the same home and echo bands: the home
+configuration carries about 85% of expected large-body supply (95% for Hotstone), while
+the distant echo is 1.5 times larger per body (2 times for Hotstone). Aggregate expected
+yield remains within 1% of the prior configuration for every family.
 
 ## Processing depth
 
