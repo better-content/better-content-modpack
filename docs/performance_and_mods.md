@@ -73,6 +73,12 @@ a model-shape audit: plant stems, crops, vines, flowers, ferns, and saplings may
 host blocks, wood, containers, and multipart rigid supports may not. The focused static archive
 contract freezes both the 81 audited exclusions and representative flexible inclusions.
 
+Realistic Ores uses Complementary's `block.10024` modded-ore material class rather than the
+full-block emissive class. The active shader options set `GLOWING_ORE_MASTER=2`, so the shader
+detects and emits only contrasting mineral pixels. The focused archive contract freezes all 16
+canonical stone/deepslate deposits and all 312 generated Excavated Variants deposits across the
+39 active host stones; an ore family or host-stone change must update that classification together.
+
 ## C2ME, Distant Horizons, and world generation
 
 C2ME remains active with threaded world generation and no-tick view distance. In `config/c2me.toml`,

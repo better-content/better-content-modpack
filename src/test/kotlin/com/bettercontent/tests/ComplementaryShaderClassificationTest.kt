@@ -45,6 +45,55 @@ class ComplementaryShaderClassificationTest {
         }
     }
 
+    @Test
+    fun everyRealisticOreAndExcavatedHostVariantUsesTheGlowingOreClass() {
+        val families = setOf(
+            "black_shale", "brassroot", "coal_measures", "copper_bloom",
+            "evaporite_beds", "hotstone", "ironstone", "tin_quartz")
+        val hosts = setOf(
+            "aether_holystone", "aether_mossy_holystone", "andesite", "calcite",
+            "create_asurine", "create_crimsite", "create_limestone", "create_ochrum",
+            "create_scorchia", "create_scoria", "create_veridium", "diorite", "dripstone",
+            "granite", "quark_jasper", "quark_limestone", "quark_shale", "red_sandstone",
+            "sandstone", "smooth_basalt", "tuff", "unearthed_beige_limestone",
+            "unearthed_conglomerate", "unearthed_dacite", "unearthed_dolerite",
+            "unearthed_gabbro", "unearthed_granodiorite", "unearthed_grey_limestone",
+            "unearthed_limestone", "unearthed_mudstone", "unearthed_phyllite",
+            "unearthed_pillow_basalt", "unearthed_quartzite", "unearthed_rhyolite",
+            "unearthed_schist", "unearthed_siltstone", "unearthed_slate",
+            "unearthed_weathered_rhyolite", "unearthed_white_granite")
+        val canonical = families.flatMapTo(linkedSetOf()) { family ->
+            setOf("realistic_ores:$family", "realistic_ores:deepslate_$family")
+        }
+        val excavated = hosts.flatMapTo(linkedSetOf()) { host ->
+            families.map { family -> "excavated_variants:${host}_$family" }
+        }
+        val expected = canonical + excavated
+
+        ZipFile(archive.toFile()).use { zip ->
+            val entry = zip.getEntry("shaders/block.properties")
+                ?: error("active Complementary archive lacks shaders/block.properties")
+            val properties = zip.getInputStream(entry).bufferedReader().use { it.readText() }
+            val glowingOres = properties.lineSequence().single { it.startsWith("block.10024=") }
+                .substringAfter('=').split(' ').filter(String::isNotBlank).toSet()
+            val realisticCoverage = glowingOres.filterTo(linkedSetOf()) { id ->
+                id.startsWith("realistic_ores:") ||
+                    id.startsWith("excavated_variants:") && families.any { id.endsWith("_$it") }
+            }
+
+            assertEquals(16, canonical.size)
+            assertEquals(312, excavated.size)
+            assertEquals(expected, realisticCoverage,
+                "canonical and runtime Excavated Variants ores must share Complementary's modded-ore glow class")
+        }
+
+        val activeOptions = root.resolve("shaderpacks/ComplementaryReimagined_r5.8.1.zip.txt")
+            .toFile().readLines().filter { '=' in it }
+            .associate { it.substringBefore('=') to it.substringAfter('=') }
+        assertEquals("2", activeOptions["GLOWING_ORE_MASTER"],
+            "the active shader profile must enable glowing modded ores")
+    }
+
     private fun explicitRigidBlocks() = setOf(
         "burnt:burnt_cactus", "burnt:burnt_grass", "burnt:burnt_mangrove_roots",
         "burnt:recovering_grass", "burnt:smoldering_cactus", "burnt:smoldering_grass",
