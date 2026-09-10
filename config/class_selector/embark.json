@@ -265,6 +265,17 @@
       "cost": 1,
       "maxPurchases": 2,
       "slot": "inventory"
+    },
+    {
+      "id": "spirit_pouch",
+      "title": "Spirit Pouch",
+      "category": "Commerce",
+      "blurb": "Storage for spirits earned on the road.",
+      "item": "malum:spirit_pouch",
+      "count": 1,
+      "cost": 3,
+      "maxPurchases": 1,
+      "slot": "inventory"
     }
   ]
 }
