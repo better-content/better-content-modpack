@@ -218,6 +218,7 @@ class EvidenceRun(val config: TestConfig, val suite: String) {
             StandardOpenOption.CREATE,
             StandardOpenOption.APPEND,
         )
+        println("[pack-test:$suite] ${mapper.writeValueAsString(document)}")
         writeSummary("running")
     }
 
