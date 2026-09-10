@@ -153,18 +153,13 @@
   },
   {
     "id": "market_runner",
-    "title": "Market Runner",
-    "blurb": "Small trade float and travel supplies",
-    "description": "Safe fallback kit for village and wares recovery play. It gives a bounded low-tier trade float and travel support without Wares items or production materials.",
+    "title": "Spirit Runner",
+    "blurb": "A pouch and travel supplies",
+    "description": "Carry the spirits released by your own kills and seek matching village markets. The kit supplies storage, never free commerce spirits.",
     "items": [
       {
-        "item": "createdeco:copper_coin",
-        "count": 16,
-        "slot": "inventory"
-      },
-      {
-        "item": "createdeco:zinc_coin",
-        "count": 2,
+        "item": "malum:spirit_pouch",
+        "count": 1,
         "slot": "inventory"
       },
       {

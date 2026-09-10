@@ -12,7 +12,7 @@
 			description: ["Return from death carrying a Still-Beating Heart."]
 			icon: "rpg_stats:still_beating_heart"
 			id: "-35B188221859A8E"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFEB", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFEB", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ id: "1BE1D63A4BF53240", item: "rpg_stats:still_beating_heart", type: "item" }]
 			title: "Still-Beating Heart"
 			x: 0d
@@ -22,7 +22,7 @@
 			description: ["Acquire the first Blood Altar."]
 			icon: "bloodmagic:altar"
 			id: "124A80CBF921A4AD"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFE9", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFE9", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ id: "1D4CBD81575B7561", item: "bloodmagic:altar", type: "item" }]
 			title: "Blood Altar"
 			x: 3d
@@ -32,7 +32,7 @@
 			description: ["Acquire Hexerei's place-bound preparation surface."]
 			icon: "hexerei:mixing_cauldron"
 			id: "3BD8898DC0688EF5"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFCF", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFCF", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ id: "15C7C06D3F426D5E", item: "hexerei:mixing_cauldron", type: "item" }]
 			title: "Hexerei Cauldron"
 			x: 6d
@@ -42,7 +42,7 @@
 			description: ["Acquire Malum's spirit-working altar and vessel."]
 			icon: "malum:spirit_altar"
 			id: "01A0351EECE105FA"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFE3", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFE3", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [
 				{ id: "-689F7A505DAD8A4C", item: "malum:spirit_altar", type: "item" }
 				{ id: "72F74E5861F624F2", item: "malum:spirit_jar", type: "item" }
@@ -55,7 +55,7 @@
 			description: ["Acquire Goety's Dark Altar for command work."]
 			icon: "goety:dark_altar"
 			id: "-29C4EF30B9D6CC4C"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFD8", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFD8", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ id: "2A0A1F10405D3B0A", item: "goety:dark_altar", type: "item" }]
 			title: "Goety Dark Altar"
 			x: 12d
@@ -65,7 +65,7 @@
 			description: ["Complete a Font expedition and return successfully."]
 			icon: "dimension_drink:return_seal"
 			id: "-261F04B21A0D1CBF"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFD0", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFD0", item: "minecraft:experience_bottle", type: "item" }]
 			shape: "hexagon"
 			size: 1.5d
 			tasks: [{ criterion: "font_aggregate_return", id: "52C51393D069A825", type: "better_content_quests:criterion" }]
@@ -77,7 +77,7 @@
 			description: ["Acquire the vessel used for a first Occultist pact."]
 			icon: "occultism:otherstone"
 			id: "-735ED0CAFAC02D0A"
-			rewards: [{ count: 1, id: "-18FFFFFFFFFFFFC9", item: "createdeco:industrial_iron_coin", type: "item" }]
+			rewards: [{ count: 1, id: "-18FFFFFFFFFFFFC9", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ id: "-47A7F5D32915C8D9", item: "occultism:golden_sacrificial_bowl", type: "item" }]
 			title: "First Occult Pact"
 			x: 3d
@@ -87,7 +87,7 @@
 			description: ["Acquire a Novice Spell Book for formal spellcraft."]
 			icon: "ars_nouveau:spell_parchment"
 			id: "-3E61448AAD27C528"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFC5", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFC5", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ id: "5D7BE49D09C06B88", item: "ars_nouveau:novice_spell_book", type: "item" }]
 			title: "Novice Formal Grammar"
 			x: 6d
@@ -97,7 +97,7 @@
 			description: ["Acquire an Archmage Spell Book as optional formal mastery."]
 			icon: "minecraft:enchanted_book"
 			id: "-28A36C12FE61F54"
-			rewards: [{ count: 1, id: "-18FFFFFFFFFFFFBF", item: "createdeco:industrial_iron_coin", type: "item" }]
+			rewards: [{ count: 1, id: "-18FFFFFFFFFFFFBF", item: "minecraft:experience_bottle", type: "item" }]
 			shape: "hexagon"
 			size: 1.5d
 			tasks: [{ id: "280B927942B48C76", item: "ars_nouveau:archmage_spell_book", type: "item" }]
@@ -109,7 +109,7 @@
 			description: ["Acquire the World Condenser Interface for Lineage work."]
 			icon: "world_lifecycle_manager:world_condenser_interface"
 			id: "19A16EC4030C73DD"
-			rewards: [{ count: 1, id: "2FB2E66B7623087E", item: "createdeco:brass_coin", type: "item" }]
+			rewards: [{ count: 1, id: "2FB2E66B7623087E", item: "minecraft:experience_bottle", type: "item" }]
 			shape: "hexagon"
 			size: 1.5d
 			tasks: [{ id: "525769DEC530354D", item: "world_lifecycle_manager:world_condenser_interface", type: "item" }]

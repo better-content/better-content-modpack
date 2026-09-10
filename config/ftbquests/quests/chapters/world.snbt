@@ -12,7 +12,7 @@
 			description: ["Finalize the site that this life will treat as home."]
 			icon: "minecraft:lodestone"
 			id: "7838A4605E6A8E08"
-			rewards: [{ count: 2, id: "7002000000000001", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "7002000000000001", item: "minecraft:experience_bottle", type: "item" }]
 			shape: "hexagon"
 			size: 1.5d
 			tasks: [{ criterion: "class_selector_start_finalized", id: "7071614ADB727504", type: "better_content_quests:criterion" }]
@@ -24,7 +24,7 @@
 			description: ["Complete a safe shelter, fresh storage, clean water and travel provisions."]
 			icon: "minecraft:lantern"
 			id: "4B3FCC1B9569023E"
-			rewards: [{ count: 4, id: "67B2A76AD2F63E1E", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 4, id: "67B2A76AD2F63E1E", item: "minecraft:experience_bottle", type: "item" }]
 			shape: "hexagon"
 			size: 1.5d
 			tasks: [
@@ -41,7 +41,7 @@
 			description: ["Sustain animals, cultivated soil, varied meals and a finished ferment."]
 			icon: "minecraft:bell"
 			id: "7FF2F274923CC05E"
-			rewards: [{ count: 2, id: "59B2D0D6E0683DA8", item: "createdeco:zinc_coin", type: "item" }]
+			rewards: [{ count: 2, id: "59B2D0D6E0683DA8", item: "minecraft:experience_bottle", type: "item" }]
 			shape: "hexagon"
 			size: 1.5d
 			tasks: [
@@ -58,7 +58,7 @@
 			description: ["Assemble a working vessel and make water travel a deliberate capability."]
 			icon: "vs_eureka:anchor"
 			id: "41AE4E6CED77EA27"
-			rewards: [{ count: 1, id: "093E65417C75EB34", item: "createdeco:iron_coin", type: "item" }]
+			rewards: [{ count: 1, id: "093E65417C75EB34", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ criterion: "ship_assembled", id: "060C5EE0FE6C2C3B", type: "better_content_quests:criterion" }]
 			title: "Real Boat"
 			x: 9d
@@ -68,7 +68,7 @@
 			description: ["Reach the Nether's country of sustained heat."]
 			icon: "minecraft:flint_and_steel"
 			id: "75FD0C4219599FB8"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFB6", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFB6", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ dimension: "minecraft:the_nether", id: "-2841F53DDDFB1A8F", type: "dimension" }]
 			title: "Nether"
 			x: 12d
@@ -78,7 +78,7 @@
 			description: ["Reach the Aether's high country."]
 			icon: "aether:skyroot_log"
 			id: "-16179BE9531ABFC1"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFB5", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFB5", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ dimension: "aether:the_aether", id: "6C00359DC3265E88", type: "dimension" }]
 			title: "Aether"
 			x: 0d
@@ -88,7 +88,7 @@
 			description: ["Reach The Bumblezone's pollen country."]
 			icon: "the_bumblezone:pollen_puff"
 			id: "3166DEC5523A3029"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFB4", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFB4", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ dimension: "the_bumblezone:the_bumblezone", id: "-429392FF520AA78B", type: "dimension" }]
 			title: "The Bumblezone"
 			x: 3d
@@ -98,7 +98,7 @@
 			description: ["Reach Ratlantis and its lost logistics landscape."]
 			icon: "rats:marbled_cheese_raw"
 			id: "-1DE4BC20489C815A"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFB3", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFB3", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ dimension: "rats:ratlantis", id: "11F4D120B4316CA0", type: "dimension" }]
 			title: "Ratlantis"
 			x: 6d
@@ -108,7 +108,7 @@
 			description: ["Leave the atmosphere and reach Earth orbit."]
 			icon: "creatingspace:rocket_controls"
 			id: "-52B1CF27D038EA77"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFB2", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFB2", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ dimension: "creatingspace:earth_orbit", id: "-11F5C0D3A237600B", type: "dimension" }]
 			title: "Earth Orbit"
 			x: 9d
@@ -118,7 +118,7 @@
 			description: ["Land on Mars."]
 			icon: "creatingspace:mars_stone"
 			id: "-284E4CC8B95B8A2B"
-			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFA9", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-18FFFFFFFFFFFFA9", item: "minecraft:experience_bottle", type: "item" }]
 			shape: "hexagon"
 			size: 1.5d
 			tasks: [{ dimension: "creatingspace:mars", id: "-393929212FA351E7", type: "dimension" }]

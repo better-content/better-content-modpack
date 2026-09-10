@@ -12,7 +12,7 @@
 			description: ["Form a working Smeltery for full-scale alloying and casting."]
 			icon: "tconstruct:mighty_smelting"
 			id: "76D4FB5757FB9A04"
-			rewards: [{ count: 4, id: "7A84E740FC887A55", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 4, id: "7A84E740FC887A55", item: "minecraft:experience_bottle", type: "item" }]
 			shape: "hexagon"
 			size: 1.5d
 			tasks: [{ criterion: "formed_tcon_smeltery", id: "20261455D5A784E5", type: "better_content_quests:criterion" }]
@@ -24,7 +24,7 @@
 			description: ["Operate one connected hand-powered Create workcell."]
 			icon: "create:wrench"
 			id: "1D83365BAFA20FFE"
-			rewards: [{ count: 1, id: "2E4FCF6DE5DADD7B", item: "createdeco:industrial_iron_coin", type: "item" }]
+			rewards: [{ count: 1, id: "2E4FCF6DE5DADD7B", item: "minecraft:experience_bottle", type: "item" }]
 			shape: "hexagon"
 			size: 1.5d
 			tasks: [{ criterion: "manual_workcell_run", id: "6505AB2A21A82296", type: "better_content_quests:criterion" }]
@@ -36,7 +36,7 @@
 			description: ["Acquire the paired roots of contained pressure industry."]
 			icon: "pneumaticcraft:pressure_chamber_wall"
 			id: "-57FB125AB0AEF4BD"
-			rewards: [{ count: 3, id: "4F8717A29797905F", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 3, id: "4F8717A29797905F", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [
 				{ id: "-379070C94279973C", item: "kubejs:airtight_machine_block", type: "item" }
 				{ id: "7003000000000001", item: "pneumaticcraft:pressure_chamber_interface", type: "item" }
@@ -49,7 +49,7 @@
 			description: ["Acquire the Electrical proof and first stationary generator housing."]
 			icon: "powergrid:generator_housing"
 			id: "1D88EAD05EC7472F"
-			rewards: [{ count: 4, id: "-2C8C5DF8AFE670CA", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 4, id: "-2C8C5DF8AFE670CA", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [
 				{ id: "-7A027D83BD77EA81", item: "kubejs:electrical_machine_block", type: "item" }
 				{ id: "189208B82D10BA4B", item: "powergrid:generator_housing", type: "item" }
@@ -62,7 +62,7 @@
 			description: ["Acquire a station and signal for rail control."]
 			icon: "create:track_station"
 			id: "1FAB04C51E5BFD74"
-			rewards: [{ count: 2, id: "62405FC45897A681", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "62405FC45897A681", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [
 				{ id: "53FE1E41CF080F04", item: "create:track_station", type: "item" }
 				{ id: "27A904293BD453AE", item: "create:track_signal", type: "item" }
@@ -75,7 +75,7 @@
 			description: ["Earn a rat's trust with Ratlantean bait."]
 			icon: "ratlantis_logistics:ratlantean_bait"
 			id: "059400F045CDB205"
-			rewards: [{ count: 2, id: "-3D2F3DFEBACDF8A2", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "-3D2F3DFEBACDF8A2", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ advancement: "rats:tame_rat", id: "61CB6598DCFCC274", type: "advancement" }]
 			title: "Ratlantean Trust"
 			x: 0d
@@ -85,7 +85,7 @@
 			description: ["Acquire the pipe that begins deterministic bulk logistics."]
 			icon: "prettypipes:pipe"
 			id: "-2CC19143CD515E64"
-			rewards: [{ count: 2, id: "4FB1725750070DAE", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 2, id: "4FB1725750070DAE", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [{ id: "95A2C46EE1917CC2", item: "prettypipes:pipe", type: "item" }]
 			title: "Courier Pipe"
 			x: 3d
@@ -95,7 +95,7 @@
 			description: ["Acquire Create's stock and request controls."]
 			icon: "create:stock_ticker"
 			id: "-1D5DC3BF35524A83"
-			rewards: [{ count: 1, id: "57A152AE34017CF3", item: "createdeco:zinc_coin", type: "item" }]
+			rewards: [{ count: 1, id: "57A152AE34017CF3", item: "minecraft:experience_bottle", type: "item" }]
 			tasks: [
 				{ id: "7AD72D0DE46276BD", item: "create:stock_ticker", type: "item" }
 				{ id: "4EA0FF629BFE06A4", item: "create:redstone_requester", type: "item" }
@@ -109,8 +109,8 @@
 			icon: "ae2:controller"
 			id: "-60AC67F5D4C3A19B"
 			rewards: [
-				{ count: 2, id: "-18FFFFFFFFFFFFED", item: "createdeco:copper_coin", type: "item" }
-				{ count: 1, id: "595C7BC12B40DEA8", item: "createdeco:zinc_coin", type: "item" }
+				{ count: 2, id: "-18FFFFFFFFFFFFED", item: "minecraft:experience_bottle", type: "item" }
+				{ count: 1, id: "595C7BC12B40DEA8", item: "minecraft:experience_bottle", type: "item" }
 			]
 			tasks: [
 				{ id: "67CFB5FDBABFAB56", item: "ae2:controller", type: "item" }
@@ -124,7 +124,7 @@
 			description: ["Acquire the Space proof and air liquefier for launch engineering."]
 			icon: "creatingspace:air_liquefier"
 			id: "-40568D6C5239A396"
-			rewards: [{ count: 3, id: "-18FFFFFFFFFFFFF8", item: "createdeco:copper_coin", type: "item" }]
+			rewards: [{ count: 3, id: "-18FFFFFFFFFFFFF8", item: "minecraft:experience_bottle", type: "item" }]
 			shape: "hexagon"
 			size: 1.5d
 			tasks: [

@@ -223,28 +223,6 @@
       "slot": "inventory"
     },
     {
-      "id": "copper_coins",
-      "title": "Copper Coins",
-      "category": "Trade",
-      "blurb": "A small low-tier trade float.",
-      "item": "createdeco:copper_coin",
-      "count": 16,
-      "cost": 1,
-      "maxPurchases": 2,
-      "slot": "inventory"
-    },
-    {
-      "id": "zinc_coins",
-      "title": "Zinc Coins",
-      "category": "Trade",
-      "blurb": "A limited higher-tier trade reserve.",
-      "item": "createdeco:zinc_coin",
-      "count": 2,
-      "cost": 2,
-      "maxPurchases": 1,
-      "slot": "inventory"
-    },
-    {
       "id": "saddle",
       "title": "Saddle",
       "category": "Trail",

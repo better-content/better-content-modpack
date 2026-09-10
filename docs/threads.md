@@ -2,7 +2,7 @@
 
 Threads is a contextual, non-objective collection of 52 illustrated possibilities: four suits of thirteen cards. World concerns encountered places, Works concerns learned making, Powers concerns negotiated capability, and Fragility concerns systems that reveal their limits. The deck borrows the pleasure of discovering and displaying a finite archive without imitating an existing tarot deck or another game's visual language.
 
-All 52 cards are live teaching surfaces. Fragility 7–13 explain seven especially important divergences from ordinary Minecraft: sleep advances simulation, hunger differs from nutrition, food carries temperature, coins do not convert upward, the End is not a vanilla doorway, EMI is the recipe authority, and the body has custom motions.
+All 52 cards are live teaching surfaces. Fragility 7–13 explain seven especially important divergences from ordinary Minecraft: sleep advances simulation, hunger differs from nutrition, food carries temperature, player kills release colour-matched commerce spirits, the End is not a vanilla doorway, EMI is the recipe authority, and the body has custom motions.
 
 ## Player contract
 

@@ -27,7 +27,7 @@ Better Content is a Forge 1.20.1 expert-pack content layer built around systems 
 
 “Tech,” “magic,” and “adventure” remain useful player-facing packages, but they are not assumed to be causal roots. Tech chiefly packages organized mastery of Matter under Place constraints. Formal magic records and reproduces powers whose authority comes from a magical root. Adventure packages travel, danger, discovery, and exchange across several roots. This distinction is a working model for evaluating progression, not a claim that the current implementation already conforms to it.
 
-Geological deposits, Y-band locality, processing ladders, machine casing tiers, coin/villager/wares economy, obelisk and dimension routes, body systems, persistent traces, and the death/respawn life-length loop are all progression surfaces through which those roots meet.
+Geological deposits, Y-band locality, processing ladders, machine casing tiers, spirit/villager markets, obelisk and dimension routes, body systems, persistent traces, and the death/respawn life-length loop are all progression surfaces through which those roots meet.
 
 The main source trees are `kubejs/`, `config/`, `defaultconfigs/`, `datapacks/`, `globalresources/`, `resourcepacks/`, `shaderpacks/`, active `mods/*.pw.toml`, and bundled custom jars in `mods/`. Root `dist.sh` is the package-once primitive, `test.main.kts` is the explicitly selected granular evaluation facade, and `release.main.kts` owns explicitly requested fresh tested distributions; `package.sh` remains the internal packager.
 

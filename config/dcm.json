@@ -3,29 +3,23 @@
     "enableCoinDrops": false,
     "onlyHostileDrops": false,
     "conversionRate": 0,
-    "disableCopperCoin": false,
-    "disableIronCoin": false,
-    "disableGoldCoin": false,
-    "disablePlatinumCoin": false,
+    "disableCopperCoin": true,
+    "disableIronCoin": true,
+    "disableGoldCoin": true,
+    "disablePlatinumCoin": true,
     "disableTinCoin": true,
     "disableNickelCoin": true,
     "disableSilverCoin": true,
     "disableSteelCoin": true,
     "disableBronzeCoin": true,
-    "disableBrassCoin": false,
+    "disableBrassCoin": true,
     "disableOsmiumCoin": true,
     "disableDiamondCoin": true,
     "disableEmeraldCoin": true,
     "disableRubyCoin": true,
     "disableSapphireCoin": true,
     "disableTopazCoin": true,
-    "coinConversionOrder": [
-      "copper",
-      "iron",
-      "brass",
-      "gold",
-      "platinum"
-    ]
+    "coinConversionOrder": []
   },
   "loot": {
     "droprates": {
@@ -57,7 +51,7 @@
       "shouldDropRandomExtra": false,
       "dropExtraLimit": 3
     },
-    "dropCoinsOnPlayerDeath": true,
+    "dropCoinsOnPlayerDeath": false,
     "generateChestLoot": false,
     "chestLootLimit": 3,
     "lootFromSpawnerEntities": false,
@@ -74,15 +68,11 @@
     "blacklistedEntities": []
   },
   "gui": {
-    "walletEnabled": true,
+    "walletEnabled": false,
     "walletGuiPos": "MIDDLE",
     "walletGuiAxis": "BOTTOM",
     "walletMaxSlotSize": 999,
-    "clientShowWallet": true,
-    "walletDisplay": [
-      "coins",
-      "autopickup",
-      "movebuttons"
-    ]
+    "clientShowWallet": false,
+    "walletDisplay": []
   }
 }

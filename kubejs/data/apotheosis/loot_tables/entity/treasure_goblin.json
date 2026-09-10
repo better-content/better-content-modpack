@@ -2,27 +2,6 @@
   "type": "minecraft:entity",
   "pools": [
     {
-      "name": "bounded_coin_reward",
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "createdeco:brass_coin",
-          "weight": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 3,
-                "max": 7
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "bounded_supplies",
       "rolls": {
         "type": "minecraft:uniform",

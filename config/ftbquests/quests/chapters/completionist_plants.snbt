@@ -14,7 +14,7 @@
 			rewards: [{
 				count: 8
 				id: "30F344E253D0190C"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -34,7 +34,7 @@
 			rewards: [{
 				count: 8
 				id: "43261A45C67F3584"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -54,7 +54,7 @@
 			rewards: [{
 				count: 8
 				id: "-26F0DA36C65270D4"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -74,7 +74,7 @@
 			rewards: [{
 				count: 8
 				id: "-217F4A0ED5C4A5BE"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -94,7 +94,7 @@
 			rewards: [{
 				count: 8
 				id: "798905C303F61E78"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -114,7 +114,7 @@
 			rewards: [{
 				count: 8
 				id: "50AB06BDF186DCB1"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -134,7 +134,7 @@
 			rewards: [{
 				count: 8
 				id: "2DAD299E350647DD"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -154,7 +154,7 @@
 			rewards: [{
 				count: 8
 				id: "-4ED1E87127B8504F"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -174,7 +174,7 @@
 			rewards: [{
 				count: 8
 				id: "129F450376935128"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -194,7 +194,7 @@
 			rewards: [{
 				count: 8
 				id: "36E6844BD3E0ACB9"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -220,7 +220,7 @@
 			rewards: [{
 				count: 8
 				id: "-2C6AFD3079A97661"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -246,7 +246,7 @@
 			rewards: [{
 				count: 8
 				id: "76D7710BC4BA175F"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -266,7 +266,7 @@
 			rewards: [{
 				count: 8
 				id: "-202E3A16F852D135"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -286,7 +286,7 @@
 			rewards: [{
 				count: 8
 				id: "3A1407A04CDB91BF"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -306,7 +306,7 @@
 			rewards: [{
 				count: 8
 				id: "43CBCB92EB675D5F"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -326,7 +326,7 @@
 			rewards: [{
 				count: 8
 				id: "310F72216584C0D4"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -346,7 +346,7 @@
 			rewards: [{
 				count: 8
 				id: "248192A1B76060EC"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -366,7 +366,7 @@
 			rewards: [{
 				count: 8
 				id: "547992C1DAC348DF"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -386,7 +386,7 @@
 			rewards: [{
 				count: 8
 				id: "4AE018246310ADB8"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -406,7 +406,7 @@
 			rewards: [{
 				count: 8
 				id: "514220FCF43F265D"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -426,7 +426,7 @@
 			rewards: [{
 				count: 8
 				id: "-768F096B9884145A"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -446,7 +446,7 @@
 			rewards: [{
 				count: 8
 				id: "3AC31BF8E7988F61"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -466,7 +466,7 @@
 			rewards: [{
 				count: 8
 				id: "-4AE36D95DB5874CD"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -486,7 +486,7 @@
 			rewards: [{
 				count: 8
 				id: "-5DD0EE8C7EEC0CBC"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -506,7 +506,7 @@
 			rewards: [{
 				count: 8
 				id: "62FEEF134C7F0D3E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -526,7 +526,7 @@
 			rewards: [{
 				count: 8
 				id: "-195D8E6702161B1F"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -546,7 +546,7 @@
 			rewards: [{
 				count: 8
 				id: "0C970FD0285BEDC3"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -566,7 +566,7 @@
 			rewards: [{
 				count: 8
 				id: "-8D495769B3A0D"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -586,7 +586,7 @@
 			rewards: [{
 				count: 8
 				id: "-7D186B3825F5E454"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -606,7 +606,7 @@
 			rewards: [{
 				count: 8
 				id: "-6EE5E7F7F25611A7"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -632,7 +632,7 @@
 			rewards: [{
 				count: 8
 				id: "-F73EC681DEEDEE3"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -658,7 +658,7 @@
 			rewards: [{
 				count: 8
 				id: "7435D44593A548E2"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -678,7 +678,7 @@
 			rewards: [{
 				count: 8
 				id: "18C54A57104C75DC"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -698,7 +698,7 @@
 			rewards: [{
 				count: 8
 				id: "-5C4E02FE8E610787"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -718,7 +718,7 @@
 			rewards: [{
 				count: 8
 				id: "-10B7A4FFD7AC3ECB"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -738,7 +738,7 @@
 			rewards: [{
 				count: 8
 				id: "368DA75CFFF14D52"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -758,7 +758,7 @@
 			rewards: [{
 				count: 8
 				id: "-33C0EB8262ED2953"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -778,7 +778,7 @@
 			rewards: [{
 				count: 8
 				id: "6103CF3C54ABD1F5"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -798,7 +798,7 @@
 			rewards: [{
 				count: 8
 				id: "72952C1BCBAAAE2E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -818,7 +818,7 @@
 			rewards: [{
 				count: 8
 				id: "20294B190C1973D2"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -838,7 +838,7 @@
 			rewards: [{
 				count: 8
 				id: "7A3B230ADDB49BFF"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -858,7 +858,7 @@
 			rewards: [{
 				count: 8
 				id: "-27CB04DEAE4874A3"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -878,7 +878,7 @@
 			rewards: [{
 				count: 8
 				id: "14D39468B30CC9DE"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -898,7 +898,7 @@
 			rewards: [{
 				count: 8
 				id: "-36DA3778077560D5"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -918,7 +918,7 @@
 			rewards: [{
 				count: 8
 				id: "-1855E52FC5A8595F"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -938,7 +938,7 @@
 			rewards: [{
 				count: 8
 				id: "-233465BA9318A14B"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -958,7 +958,7 @@
 			rewards: [{
 				count: 8
 				id: "-3C9A87E26A1FD2CB"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -978,7 +978,7 @@
 			rewards: [{
 				count: 8
 				id: "020571BECA9BF02E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -998,7 +998,7 @@
 			rewards: [{
 				count: 8
 				id: "-63BF066CEE01C952"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1018,7 +1018,7 @@
 			rewards: [{
 				count: 8
 				id: "454AD0CE37485B40"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1038,7 +1038,7 @@
 			rewards: [{
 				count: 8
 				id: "440A453CCD865048"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1058,7 +1058,7 @@
 			rewards: [{
 				count: 8
 				id: "-2072B95B91E7B43E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1078,7 +1078,7 @@
 			rewards: [{
 				count: 8
 				id: "-4925531369560A6E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1098,7 +1098,7 @@
 			rewards: [{
 				count: 8
 				id: "4849F5AC79A58B39"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1118,7 +1118,7 @@
 			rewards: [{
 				count: 8
 				id: "-72B416212C4F7523"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1138,7 +1138,7 @@
 			rewards: [{
 				count: 8
 				id: "-37EA3CF4DBD1DD40"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1158,7 +1158,7 @@
 			rewards: [{
 				count: 8
 				id: "05977CB5588C18A1"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1178,7 +1178,7 @@
 			rewards: [{
 				count: 8
 				id: "-79B9509B2AE40F78"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1198,7 +1198,7 @@
 			rewards: [{
 				count: 8
 				id: "-3C515B7CDAC2E7EA"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1218,7 +1218,7 @@
 			rewards: [{
 				count: 8
 				id: "-1929EE230BE84E05"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1238,7 +1238,7 @@
 			rewards: [{
 				count: 8
 				id: "-3007E67440F6EB83"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1258,7 +1258,7 @@
 			rewards: [{
 				count: 8
 				id: "264D2B595C5AFD82"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1278,7 +1278,7 @@
 			rewards: [{
 				count: 8
 				id: "-36B5B718BB89645E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1298,7 +1298,7 @@
 			rewards: [{
 				count: 8
 				id: "-19CFC742C53B329C"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1318,7 +1318,7 @@
 			rewards: [{
 				count: 8
 				id: "4508C3A2108B7354"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1338,7 +1338,7 @@
 			rewards: [{
 				count: 8
 				id: "-7E5F8C40962D418B"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1358,7 +1358,7 @@
 			rewards: [{
 				count: 8
 				id: "4AAE572BF97EE9E2"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1378,7 +1378,7 @@
 			rewards: [{
 				count: 8
 				id: "4F601ED6012A618C"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1398,7 +1398,7 @@
 			rewards: [{
 				count: 8
 				id: "6F027D059B87EEB6"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1418,7 +1418,7 @@
 			rewards: [{
 				count: 8
 				id: "-1DB50B70894AA881"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1438,7 +1438,7 @@
 			rewards: [{
 				count: 8
 				id: "0C3915576DD986AD"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1458,7 +1458,7 @@
 			rewards: [{
 				count: 8
 				id: "-B5A8A2CBD96325E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1478,7 +1478,7 @@
 			rewards: [{
 				count: 8
 				id: "53C9ABECF98509B5"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1498,7 +1498,7 @@
 			rewards: [{
 				count: 8
 				id: "-16F3852D76BC2810"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1524,7 +1524,7 @@
 			rewards: [{
 				count: 8
 				id: "-31101ACA5C89575F"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1550,7 +1550,7 @@
 			rewards: [{
 				count: 8
 				id: "-1589E32BBEE9EFF8"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1570,7 +1570,7 @@
 			rewards: [{
 				count: 8
 				id: "-4D33E1648F54C07E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1590,7 +1590,7 @@
 			rewards: [{
 				count: 8
 				id: "636E806DCD23FC0A"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1610,7 +1610,7 @@
 			rewards: [{
 				count: 8
 				id: "-5563E71CCE8AFCB8"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1630,7 +1630,7 @@
 			rewards: [{
 				count: 8
 				id: "-31E78CC142419984"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1650,7 +1650,7 @@
 			rewards: [{
 				count: 8
 				id: "-A53E5E3167E626B"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1670,7 +1670,7 @@
 			rewards: [{
 				count: 8
 				id: "-EC66343F8A3A0E7"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1690,7 +1690,7 @@
 			rewards: [{
 				count: 8
 				id: "-7D3BBB73279DFDA6"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1710,7 +1710,7 @@
 			rewards: [{
 				count: 8
 				id: "3763D864F38F38E3"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1730,7 +1730,7 @@
 			rewards: [{
 				count: 8
 				id: "5CE95EFDF85F1A89"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1750,7 +1750,7 @@
 			rewards: [{
 				count: 8
 				id: "-51FAB67CE195860A"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1770,7 +1770,7 @@
 			rewards: [{
 				count: 8
 				id: "1DB49C973C1CCCF3"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1790,7 +1790,7 @@
 			rewards: [{
 				count: 8
 				id: "-3F8436426AF050AA"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1810,7 +1810,7 @@
 			rewards: [{
 				count: 8
 				id: "-CD6BC582DF34FAB"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1830,7 +1830,7 @@
 			rewards: [{
 				count: 8
 				id: "-1A35C1EF66D9A85D"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1850,7 +1850,7 @@
 			rewards: [{
 				count: 8
 				id: "2B7AEE5C44DD99E0"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1870,7 +1870,7 @@
 			rewards: [{
 				count: 8
 				id: "-3D6A00548A39E4E1"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1890,7 +1890,7 @@
 			rewards: [{
 				count: 8
 				id: "-444ABDB28F710E62"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1910,7 +1910,7 @@
 			rewards: [{
 				count: 8
 				id: "2A38DDF202C8ADBB"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1930,7 +1930,7 @@
 			rewards: [{
 				count: 8
 				id: "-3E7633BB44614BB6"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1950,7 +1950,7 @@
 			rewards: [{
 				count: 8
 				id: "2BF507A7A9D96A2F"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1970,7 +1970,7 @@
 			rewards: [{
 				count: 8
 				id: "-17164755049BA779"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -1990,7 +1990,7 @@
 			rewards: [{
 				count: 8
 				id: "0580E2DFC08EBEAC"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2010,7 +2010,7 @@
 			rewards: [{
 				count: 8
 				id: "74172769DD30DEF1"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2030,7 +2030,7 @@
 			rewards: [{
 				count: 8
 				id: "4F6B20124D081B8E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2050,7 +2050,7 @@
 			rewards: [{
 				count: 8
 				id: "41CFDE12323DDC92"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2070,7 +2070,7 @@
 			rewards: [{
 				count: 8
 				id: "4E3CB0881823FE72"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2090,7 +2090,7 @@
 			rewards: [{
 				count: 8
 				id: "447C01C276EB703E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2110,7 +2110,7 @@
 			rewards: [{
 				count: 8
 				id: "4223BDCCE88C515C"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2130,7 +2130,7 @@
 			rewards: [{
 				count: 8
 				id: "40743ADCA531C42E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2150,7 +2150,7 @@
 			rewards: [{
 				count: 8
 				id: "4B0F726B4D15B993"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2170,7 +2170,7 @@
 			rewards: [{
 				count: 8
 				id: "4F980DD02DF4EA48"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2190,7 +2190,7 @@
 			rewards: [{
 				count: 8
 				id: "4B41DAD0F36A5A1F"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2210,7 +2210,7 @@
 			rewards: [{
 				count: 8
 				id: "41666D3C5ADED886"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2230,7 +2230,7 @@
 			rewards: [{
 				count: 8
 				id: "4FE4B288483C1FD3"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2250,7 +2250,7 @@
 			rewards: [{
 				count: 8
 				id: "415F8662573DD02B"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2270,7 +2270,7 @@
 			rewards: [{
 				count: 8
 				id: "4FF34A9C886A6A75"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2290,7 +2290,7 @@
 			rewards: [{
 				count: 8
 				id: "46605A409E3EC215"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2310,7 +2310,7 @@
 			rewards: [{
 				count: 8
 				id: "43470E3F96651143"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2330,7 +2330,7 @@
 			rewards: [{
 				count: 8
 				id: "4FA960964EF9EB69"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2350,7 +2350,7 @@
 			rewards: [{
 				count: 8
 				id: "4D75A327365EA2DE"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2370,7 +2370,7 @@
 			rewards: [{
 				count: 8
 				id: "4CBD7E8A2E41C137"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2390,7 +2390,7 @@
 			rewards: [{
 				count: 8
 				id: "4B735A424BF6337B"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2410,7 +2410,7 @@
 			rewards: [{
 				count: 8
 				id: "460868C96D3801A6"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2430,7 +2430,7 @@
 			rewards: [{
 				count: 8
 				id: "4F0A6433AF3EFDB1"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2450,7 +2450,7 @@
 			rewards: [{
 				count: 8
 				id: "497B186F9E02242C"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2470,7 +2470,7 @@
 			rewards: [{
 				count: 8
 				id: "4840639AC2E8ACA1"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2490,7 +2490,7 @@
 			rewards: [{
 				count: 8
 				id: "47DC91DA7789603E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2510,7 +2510,7 @@
 			rewards: [{
 				count: 8
 				id: "4149BED400A5C337"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2530,7 +2530,7 @@
 			rewards: [{
 				count: 8
 				id: "46BD6EB0F47B91BF"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2550,7 +2550,7 @@
 			rewards: [{
 				count: 8
 				id: "40A754AC0D111B9D"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2570,7 +2570,7 @@
 			rewards: [{
 				count: 8
 				id: "449D839520580497"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2590,7 +2590,7 @@
 			rewards: [{
 				count: 8
 				id: "46AABFAD23B72223"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2610,7 +2610,7 @@
 			rewards: [{
 				count: 8
 				id: "4DA7E1F85F5BEF7E"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2630,7 +2630,7 @@
 			rewards: [{
 				count: 8
 				id: "413B077BEA8C39D6"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2650,7 +2650,7 @@
 			rewards: [{
 				count: 8
 				id: "447CB6E294E17641"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2670,7 +2670,7 @@
 			rewards: [{
 				count: 8
 				id: "4FB5E0A32EBE91B2"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2690,7 +2690,7 @@
 			rewards: [{
 				count: 8
 				id: "41636264CA1E538C"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2710,7 +2710,7 @@
 			rewards: [{
 				count: 8
 				id: "4DB051DE88C42540"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2730,7 +2730,7 @@
 			rewards: [{
 				count: 8
 				id: "47D0C986532336CE"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2750,7 +2750,7 @@
 			rewards: [{
 				count: 8
 				id: "4BCF39769C5A1BFB"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2770,7 +2770,7 @@
 			rewards: [{
 				count: 8
 				id: "4004FFA6843A9CFE"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"
@@ -2790,7 +2790,7 @@
 			rewards: [{
 				count: 8
 				id: "41BEDA07D28DA444"
-				item: "createdeco:copper_coin"
+				item: "minecraft:experience_bottle"
 				type: "item"
 			}]
 			shape: "rsquare"

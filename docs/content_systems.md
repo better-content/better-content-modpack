@@ -15,7 +15,7 @@ runtime logic.
 | Occult physical components | Hexerei | The mixing cauldron requires Aether, Nether, Bumblezone, and Ratlantis trophies equally; Occultism retains rituals, spirit fire, bindings, servants, and the finite dimensional matrix |
 | Occult storage | None | Controllers, stabilizers, remotes, satchel, wormholes, mineshaft, and miners are closed; finite AE2 storage and visible Ratlantis-rooted logistics remain |
 | Vanilla boat durability, vessel-drop suppression, reinforced recipes | Better Content Fixes | No boat mutation or hiding scripts |
-| Coin acquisition, purse storage and pickup routing, merchant currency, village commerce, loot replacement, and wandering-trader lifecycle | Better Content Economy | The standalone mod owns combat and chest income, seven direct-coin purse slots and their survival-inventory panel, the exact 312-row villager catalogue, exact emerald-to-copper conversion for external merchants, emerald-to-coin loot policy, scheduled themed offers, the village-starter offer, Wares agreements, and the optional Font map |
+| Player-kill spirit release, spirit commerce, seven village professions, and wandering-trader lifecycle | Better Content Economy | The standalone mod owns credited-kill release through Malum's animated spirit entities, the exact 245-offer villager catalogue, seven matching stations/outfits/behaviours, seven 13-good wandering stocks, and matching villager-egg offers; coins, emerald commerce, and eldritch/umbral trade are closed |
 | TCon alloy composition and casting | Tinkers' Construct | Removes bypasses and authors exact cross-mod alloy recipes |
 | Kinetic assembly | Create | Uses Machine Blocks only at listed direct roots |
 | Pressure chemistry | PneumaticCraft | Pack authors bounded cross-mod acid/root recipes |
@@ -93,29 +93,28 @@ tease major possibilities; they contain no dependency graph, quest links,
 recipe chains, onboarding instructions, or item-local explanatory prose.
 
 Gameplay criteria, stack predicates, dimension or structure tasks, and only
-then exact item tasks prove completion. Every player-visible completable quest
-awards an authored Create Deco coin that remains manually claimed. Deleted
+then exact item tasks prove completion. Player-visible quests award experience
+bottles that remain manually claimed; they never mint commerce spirits. Deleted
 guide-node rewards are not redistributed. FTB visibility has no pack-authored
 unlock policy or book-burning bypass.
 
-The wandering trader is one shared temporary world visitor. Its first scheduled
-arrival is after two active-server days, successful visits repeat every five
-days, and themes rotate through Naturalist, Surveyor, Quartermaster, and
-Antiquarian. Every themed visitor also carries one guaranteed, one-use village
-starter offer: eight copper coins buy two ordinary unassigned villager spawn
-eggs. Raw vanilla and third-party wandering offers are removed; only the curated
-themed stock, starter offer, Wares agreement, and dimensional Font-map adapter
-are allowed.
+The seven ordinary village professions correspond one-to-one with sacred,
+wicked, arcane, aerial, aqueous, earthen, and infernal spirits. Each has a
+matching coloured workstation, outfit, local utility behaviour, and 35-offer
+catalogue priced only in its own spirit at 1–8. Other employed villager
+professions are normalized into these seven; raw vanilla and third-party offers
+are removed. Eldritch and umbral spirits never appear in commerce.
 
-The coin purse is the existing seven-slot `better_content_economy:coin_purse`
-Curios store, restricted to the seven direct Create Deco coin items. The same
-storage is visible as an attached 2x4 panel in the survival inventory; its eighth
-cell is intentionally inactive. Ground-picked direct coins fill matching purse
-stacks and then empty purse slots before ordinary inventory, while coin stacks
-and all non-coin items retain normal pickup behavior. Offers exposed by
-non-vanilla `AbstractVillager` merchants convert exact emerald stacks in either
-cost position or the result to the same count of copper coins without changing
-uses, demand, XP, price multipliers, or other offer metadata.
+Wandering traders use the same seven identities, colours, and matching payment
+spirits. Every identity carries 13 themed goods plus one one-use offer of two
+matching spirits for two villager eggs already assigned to the corresponding
+profession. Player-credited hostile kills are the only commerce-spirit source:
+Malum-native mappings remain authoritative, otherwise a hostile deterministically
+releases two ordinary spirits through Malum's floating, homing item entities.
+Spawner-origin mobs and economy actors release none. The native Spirit Pouch is
+the sole supported specialist storage surface. Create Deco coins, coin stacks,
+wallets, coin recipes, emerald-priced offers, Wares/Font adapters, and specialist
+harvesting tools are inert or hidden.
 
 ## New worlds and backups
 

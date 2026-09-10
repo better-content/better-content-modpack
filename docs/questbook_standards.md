@@ -4,7 +4,7 @@
 
 FTB Quests is Better Content's secondary achievement ledger and optional content teaser.
 It records a small number of meaningful things the player has accomplished and
-rewards those accomplishments with authored coins. It is not a progression
+rewards those accomplishments without issuing commerce spirits. It is not a progression
 guide, recipe map, onboarding flow, checklist of intermediates, or second copy
 of EMI.
 
@@ -69,16 +69,12 @@ worth remembering.
 
 ## Rewards
 
-Every player-visible completable quest awards at least one Create Deco coin.
-Rewards remain manually claimed. Retained milestones preserve their existing
-authored denomination and count; deleting guide nodes does not redistribute
-their former rewards. Completionist entries continue to award eight copper
-coins each.
-
-Coin denominations are non-convertible. Choose a denomination for its authored
-trader and contract role, not as a freely exchangeable value tier. Hidden
-technical records, if any are introduced in the future, are not player-visible
-quests and receive no reward.
+Player-visible quests award experience bottles rather than commerce spirits.
+Rewards remain manually claimed and retain their stable reward identities.
+Spirits prove a credited player kill and therefore must never be granted by a
+quest, loot table, kit, recipe, ore, or other non-combat source. Hidden technical
+records, if any are introduced in the future, are not player-visible quests and
+receive no reward.
 
 ## Stable Identity and Migration
 
@@ -98,7 +94,7 @@ the unsigned display form with the signed on-disk form.
 
 Completionist chapters may be dense because exhaustive collection is their
 explicit purpose. Entries remain independent, use automatic tasks, have unique
-and visually legible icons, and grant exactly eight copper coins. They do not
+and visually legible icons, and grant exactly eight experience bottles. They do not
 feed World, Works, or Powers and never gate ordinary play.
 
 Update a completionist roster only when the active obtainable content changes.
@@ -114,7 +110,7 @@ For every milestone change:
 2. Confirm the node has no dependencies or quest links and is visible from the
    start.
 3. Confirm the task proves exactly what the title and sentence claim.
-4. Confirm a manually claimable coin reward is present.
+4. Confirm any reward is manually claimable and does not issue a commerce spirit.
 5. Render the affected chapter with the supported standalone layout harness and
    inspect icons, spacing, labels, and clipping.
 6. When pack-level testing is explicitly requested, run `./test.main.kts all` and confirm FTB loads three milestone chapters plus the six

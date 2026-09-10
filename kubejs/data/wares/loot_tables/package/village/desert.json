@@ -216,21 +216,6 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 2,
-                "max": 6
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "createdeco:iron_coin",
-          "weight": 2
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
