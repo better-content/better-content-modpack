@@ -2298,11 +2298,11 @@ hash = "ea5d802ef100270cdba15042e9d24cc85384b404f523f0c4137923212e037a0f"
 
 [[files]]
 file = "config/class_selector/embark.json"
-hash = "992f2a4d03749a6a3e5e73d906d31b16283c0aa2a7f13d6e2e6321396a801bfa"
+hash = "324244892b7dd639fb5fc4c755d188450b22901bbcc83664807b1e0bdbb7ff88"
 
 [[files]]
 file = "config/class_selector/kits.json"
-hash = "0682141294dbd9fd0fda10f8f98e44733b567505df1e10b3de47c2e02e2e3e9a"
+hash = "160e6cf8305fb0f9a4936330d6a3a094027fd9e70916e1495c17e3296ed30b13"
 
 [[files]]
 file = "config/coldsweat/client.toml"
@@ -2382,7 +2382,7 @@ hash = "541ee90994c1cf3d4e132df2ac3ff74004bc3952d3914ae843b5089a4dda8a95"
 
 [[files]]
 file = "config/dcm.json"
-hash = "b171a1b06507d4f85131fc40b9953ab071a6488e87b95ac454ca502f33c47c1d"
+hash = "8af702836aaf01ffe0607fe00bf7614d688c17b80fb834cbf28feb4336abffd7"
 
 [[files]]
 file = "config/depth_director-common.toml"
@@ -2558,39 +2558,39 @@ hash = "cbad6bb5e774e1a155184eb2d9f6f784072dc242cf744cd8f5fe6b67d7ce5acd"
 
 [[files]]
 file = "config/ftbquests/quests/chapters/completionist_armour_sets.snbt"
-hash = "b4a9bf01036b3de4baef52c4e221abf42f0e00d7ef9db55564c77d54013efdcf"
+hash = "b1215e6fa83a1909d13205e3a6f14d7c9baede9eeee131804e77ed83583eddae"
 
 [[files]]
 file = "config/ftbquests/quests/chapters/completionist_consumables.snbt"
-hash = "daaa60246d9a4fb65f67003648370852815e1aa76ef9ac9f6baafe9b73056dd4"
+hash = "dbdae4bd301f449717c3ac7d46c6ac87998a3d0aa726af9b452569bf5efcd0b8"
 
 [[files]]
 file = "config/ftbquests/quests/chapters/completionist_effects.snbt"
-hash = "06134e982471927ce324ea15c1bd19c8f50444f225946d81c95e26e2d7e62cae"
+hash = "f75391bf33a7ab3f97a0df512bdaa24bd22a6aef578def68bf07ecb12498feed"
 
 [[files]]
 file = "config/ftbquests/quests/chapters/completionist_enchantments.snbt"
-hash = "1b3ba34c649b5a4a87a94b263f050277aa5d87e1f97c7ccb569e605e26897725"
+hash = "c010fa85ccf1a1f86638d6410d3f7f023ea5f780556871748d487e35069cb00b"
 
 [[files]]
 file = "config/ftbquests/quests/chapters/completionist_plants.snbt"
-hash = "1f049bbcf8207e2df5aa155ae3ff9ce72905baa198117c6515a7aa3fcd220dea"
+hash = "3f09a381d92a58efbfd33e937d7ff56454fe002b0be99c3c86216ed43802b9f5"
 
 [[files]]
 file = "config/ftbquests/quests/chapters/completionist_tcon_weapons.snbt"
-hash = "17eaf09bda21da2e07357375e56605f4af7d197af16143939dbe5816e9741bed"
+hash = "cf1e116f4abf2712c46f2f141c886b0316550a7c75bba517ae8eba8dcca6215c"
 
 [[files]]
 file = "config/ftbquests/quests/chapters/powers.snbt"
-hash = "77c9b9fd120a2cd3e91f5efeb331d1fcde5927a006b2b62c5dcbd845c96bf6c6"
+hash = "b416b8bb9dfa5d46419c2e754e062f55de14700c0ea6757bd3eb978397b3c542"
 
 [[files]]
 file = "config/ftbquests/quests/chapters/works.snbt"
-hash = "fac4cae96546ed7f3f467ae03226b848b35f10091ff667f0247b6a5ebfc3b855"
+hash = "8daa9073a27be583cbd8850a348093b7491f3fb66443cc8b9fbabc3edb62caae"
 
 [[files]]
 file = "config/ftbquests/quests/chapters/world.snbt"
-hash = "1d7cdf6c0a84a4144f67d0d407a30c59f9040fb0639907ae8a622fc97c636116"
+hash = "02d1d551ffd6a67729950b702c1a904c6cd0de71139ae208e9f78ae41c75003a"
 
 [[files]]
 file = "config/ftbquests/quests/data.snbt"
@@ -2874,7 +2874,7 @@ hash = "f6bd7454df7a3acd43642bbc04bef5b3f1ea67608871b4cdcb60794f1f7a86fc"
 
 [[files]]
 file = "config/malum-common.toml"
-hash = "29c7a7a97d3a622c8dd7ed6740fccd305f91b550f85890bc50abd34083f087a1"
+hash = "45b84de73a87ae5aab4a6407afe86be8e322b495b73844e5785b006b70a6302d"
 
 [[files]]
 file = "config/mantle-client.toml"
@@ -3130,7 +3130,7 @@ hash = "b8abbb068b58ccdf7dabf606fc364c4d8b79351a630c674242222c049a5fee36"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_stone.toml"
-hash = "5eb55f81ea2691df79512d75ad694e0e82f83ca9d0c87760683e11686008000f"
+hash = "4a22dbe52dabb4320d8a2abef20cbf14fee538c8e4c733791f052fcc85c7299f"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_wood.toml"
@@ -7473,10 +7473,6 @@ file = "kubejs/config/cross_mod_boundaries.json"
 hash = "e2e54bd11a880d784559d4344cdfe1228251f6503e0ca52bb89d0b6c8ecb6118"
 
 [[files]]
-file = "kubejs/config/economy_acquisition.json"
-hash = "bd54a786e0d56b168e451854a1aaf9072d1965dff7272b037edce0ed77afd033"
-
-[[files]]
 file = "kubejs/config/food_effect_progression_candidates.json"
 hash = "e4027172d8c1f1e0c00a568640e6a18ed3d6009e85045fcbf824b7df2fee0e23"
 
@@ -7490,7 +7486,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "c4dfb47d7fd37abaf0f1f1bf7d770348ef83d4804a86b4baf2735872d6a1dc9a"
+hash = "478e39e6d40b61d91b8a5a4d2db0346f7b7ed25a6fc5c545d0424d8183caa57a"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -7502,7 +7498,7 @@ hash = "dd5d86a21560f6468d0df679ffe6068a2cf4a6f9c972276fe2d5acc693fb5a85"
 
 [[files]]
 file = "kubejs/config/quarantined_items.json"
-hash = "69c74e03f9e5961340e125b6896ba092bb8e4d11f84d9af5e2901928ce6ccb31"
+hash = "c3e6bd07a623766f6b0e9730e26d3407ddcf99e6afde061a16062289d93d9359"
 
 [[files]]
 file = "kubejs/config/surface_registry.json"
@@ -7614,63 +7610,63 @@ hash = "f409d7c30eb6f312cbdacd66a0f159b12d1d266e24d72fc6e983e30c82422d23"
 
 [[files]]
 file = "kubejs/data/apotheosis/loot_tables/chests/chest_valuable.json"
-hash = "4aeba54c922b654b213ada7c293894dc81e69baa7347a2571dc1533ab257bb5d"
+hash = "c11a61d594cbd92f1f5d1d2382629b14d7955ed5de4d7f132d2c815c58c86d18"
 
 [[files]]
 file = "kubejs/data/apotheosis/loot_tables/chests/spawner_brutal.json"
-hash = "5cd668ccd5c8a5dd4969fb10565e9d520ec72e28adcd84747283f6ccb45ec544"
+hash = "a4394fef4213bd48722ea6fc3fd8070f7524caadd8cbee9dfdd0cbb32540b4b5"
 
 [[files]]
 file = "kubejs/data/apotheosis/loot_tables/chests/spawner_brutal_rotate.json"
-hash = "d74e10d3e4a909b3818b32eec108660ce81001ed4baf03e2d02754c86845aff1"
+hash = "7652bfcffcc1447de48729346fecfaf4a0583ba14d439a2ba2ba0b80e60cdf8c"
 
 [[files]]
 file = "kubejs/data/apotheosis/loot_tables/chests/spawner_swarm.json"
-hash = "af9da612562dbb418bbc5b158e0d25a78517bf5365b4e9ac0c381c160eed7dbd"
+hash = "4112386894796d9dd96c0595ec43f272e435a4e573d38535d140979f11a82962"
 
 [[files]]
 file = "kubejs/data/apotheosis/loot_tables/chests/tome_tower.json"
-hash = "b77af62997b77aab37e257c8298b9ac98f6bda64f39bea79ef7e040175febe7b"
+hash = "87a9160eef81e1cb131c47c961dc3342db59b77442a1689ffc8e90ac2b9e1f9d"
 
 [[files]]
 file = "kubejs/data/apotheosis/loot_tables/entity/treasure_goblin.json"
-hash = "b6d7e8093132ed80f0971561c211df051d3d29e2a06e4950d7ffeb16720ab773"
+hash = "d296a5fee8a4c6fad465eecf3fe99c0ad80ab69cc190ea61bf2a7a197e94a2c5"
 
 [[files]]
 file = "kubejs/data/apotheotic_additions/loot_tables/chests/aa_spawner.json"
-hash = "716872ebae2f953d708668cd58d44bf561f920e74a647cb804bbd79788de4713"
+hash = "1c9b1c6aad1dc5ebb52b7b90b67f94f8067ac7f514e48a39adbd182cf85348fd"
 
 [[files]]
 file = "kubejs/data/apotheotic_additions/loot_tables/chests/ars_spawner.json"
-hash = "dd9cf04a9fdb54397d91a579563e0cad104b5c6d1306153f65ddfdb340c20b3e"
+hash = "f56afe0f5e0f9d1af568dc89bdc1d6b6035504c3852701714435435fd42c5432"
 
 [[files]]
 file = "kubejs/data/apotheotic_additions/loot_tables/chests/born_in_chaos_spawner.json"
-hash = "86f3c2e44e7c3aae72c3c21f9ed8617c8780e4841a9cb15340e2deed18651c1a"
+hash = "ad36ba8528393fb3b1a227c479442e48ca6caeb29bd4a236958896c9403386a5"
 
 [[files]]
 file = "kubejs/data/apotheotic_additions/loot_tables/chests/caves_spawner.json"
-hash = "ee4d42dc09fde312d857a50097bc8e5c65c0ee50c28889b88a9e0f9d0dd7c0aa"
+hash = "a95f3d443dd3874173308a78ca21f09edca87a602f2d0981d8be0bb5ce50c750"
 
 [[files]]
 file = "kubejs/data/apotheotic_additions/loot_tables/chests/create_spawner.json"
-hash = "3398afad69640500fadb34058d60afa5f7de74facb59c04deaa46c4620d9533e"
+hash = "b346c6d689c3d6810b90228aba4d1d364118ad445ff404031aec5004a23bfbba"
 
 [[files]]
 file = "kubejs/data/apotheotic_additions/loot_tables/chests/eidolon_spawner.json"
-hash = "59f594e7b5bce0c755a2a3adf3bd948817be27f6810c0dc4c070414cb0c37ef2"
+hash = "b8db2110ba210b69403e2c76b55edb335b8dee5154f87759743790d498b214fc"
 
 [[files]]
 file = "kubejs/data/apotheotic_additions/loot_tables/chests/ender_spawner.json"
-hash = "d807edcbc7e55d698c815470cc1a5d5b9cc705772dc6cc1044c40544684f24e9"
+hash = "83c1341ae3ebdd7950ebe8827f6c7be0ec13dc4759fb36b32726b563163a24a9"
 
 [[files]]
 file = "kubejs/data/apotheotic_additions/loot_tables/chests/ie_spawner.json"
-hash = "0bdeef0aaad47d5452f995212265b36febc50b42f66491dd82c80df3632d39f3"
+hash = "79947fc09065abf1e791ca15a02ac9678f07453a9639a10795ca4d9b85ebe967"
 
 [[files]]
 file = "kubejs/data/apotheotic_additions/loot_tables/chests/witherstorm_spawner.json"
-hash = "a1bb7ddf094800d4e7e90b901904b99bf6c1a6abde1845ba1b1d41128132a4c9"
+hash = "f48ab53488a64aa537e6f27b9a9de27b5202eef6b94eb855d0a57657d2dc220b"
 
 [[files]]
 file = "kubejs/data/ars_nouveau/recipes/ritual_harvest.json"
@@ -8550,7 +8546,7 @@ hash = "cf47d22623f9ecc27660f459511618683fc1969d5c24c8d07b43a538f923403f"
 
 [[files]]
 file = "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json"
-hash = "65d9071d07716f2e28bb2b1ae54875ef8b72ad3582e8140479d3c50dbb5755ba"
+hash = "7b9f8791c7310963aaab7af37f5dabcbfbd110fe83cb134184c4dcff4371d5db"
 
 [[files]]
 file = "kubejs/data/forge/tags/blocks/farmland.json"
@@ -9063,6 +9059,18 @@ hash = "3040901c6c74b67c2182bfc63ef29609ba4200890b9ff23892f27294d048cd5e"
 [[files]]
 file = "kubejs/data/malum/advancements/recipes/zinc_from_node_smelting.json"
 hash = "3040901c6c74b67c2182bfc63ef29609ba4200890b9ff23892f27294d048cd5e"
+
+[[files]]
+file = "kubejs/data/malum/capabilities/weapons/edge_of_deliverance.json"
+hash = "d0d7ed87c1a48e24c0e0f9636d88de8f453b4317605c2796774b4694b6ce9e1a"
+
+[[files]]
+file = "kubejs/data/malum/capabilities/weapons/tyrving.json"
+hash = "518c6f36acd8f2aab633a3f62b6903baac94fff0e2d0726321c10b8f44dd0a96"
+
+[[files]]
+file = "kubejs/data/malum/capabilities/weapons/weight_of_worlds.json"
+hash = "61554a39fdefafe7236c32706d4def6115825734afa92c8e85ef891d81402c19"
 
 [[files]]
 file = "kubejs/data/malum/recipes/create/crushing/crush_rare_earths.json"
@@ -9906,71 +9914,71 @@ hash = "57d48c17b4b1b18f802510cca4fe049b3a42e1bb2fbac3e608af5d9741297acb"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/desert_payment_sell.json"
-hash = "a726963f391e521c41652c6f80434db73efe4c26d0d82de9c24b4c57149c0c92"
+hash = "21f4f75bf7640a22bd5cabc03413f00ac51b719e7c22b0b8cac3d31a62739271"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/desert_requested_buy.json"
-hash = "aa06a655c377da635f53fa5321990cbf8e797a25fce669f1e9a63c0b37ed3d98"
+hash = "c8a5781af792ee4ecddb8ecc7484371bcdfaed0e5df58fb11ca9306f4c4c1243"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/plains_payment_sell.json"
-hash = "4e1380a0b38b2c64d6fe2bfab67609231bb7acc7a5b88dcda540cb77c8a1ee67"
+hash = "b2efbb601bbd8d5448016988e27d737ccb00de8e0ca3de915d75cc13a090e713"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/plains_requested_buy.json"
-hash = "5a373bcb492d231e3e96b9c35eb319c936d9ff2470fefcc3aeeb2a1c983dedcf"
+hash = "73e37df3c1dc182deced7714d4c9055a24678a03dcb89a9d877f23df5ea01542"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/savanna_payment_sell.json"
-hash = "7ad15f21ee58f57632202666e6774c5c885a37d7955e484abd1d4ac561faf96f"
+hash = "1ca62141dfd799b710c09fcbcb3c6e8a46c7ab91bf3a756d47c859c9ba05898a"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/savanna_requested_buy.json"
-hash = "8293fc767971c5396a4c5ef6c7d362fffb316083e07df2b05732324ddc0d35b7"
+hash = "0bf28d145d7ee0a96d4a3bc046e5f432ccfa3451b0ed72930f6aacba913bb7eb"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/snowy_payment_sell.json"
-hash = "fd17947faa2460a972b82da56c9e44c57bc69ff4865c73704ffa67f3705f0e3b"
+hash = "8f290597c4426f3ffef32e8a10f6b05e0be27c4eb2e4ff3e5edd62fa6b75b227"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/snowy_requested_buy.json"
-hash = "2508da9f46dc201236acd6bb97810d5ccbaaa92371458552936220e89f008d14"
+hash = "7ddbf20b254ac0fcc704d7301af173af35269d370fcade12e1675e2ad45f373d"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/taiga_payment_sell.json"
-hash = "43de55c683e3cf3e9999438c7a1387e22d282a6c1abc4d926047272b3adf43e9"
+hash = "d489cee966d27d011ccdbb0d86a22c54ced0dfd53550e64356ca747473679381"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/taiga_requested_buy.json"
-hash = "f74bd1cb38a21f535a7d509e810ffb069cdec0565ca595d1fe62852608155797"
+hash = "ef051554c475ca534e2e1ebc9ae1f04be9a954c683c0c78d115f4df19bcdf2fc"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/wandering_trader/rare_price.json"
-hash = "33515df7e2067ace9140207b3c6a59b7259fe139aa8b1f92c6aedaa32fc9077d"
+hash = "4659a910538694f21b9d31a90cecb068439b286ced5bfbee437e040276e3e257"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/wandering_trader/regular_price.json"
-hash = "1c3024581db59c5acceaefe3b4657f654e6c639e765b91cf1fa415be3feb81a0"
+hash = "8b28027d54119a91b87502b64b121418a0ad71dab1f5d98849909d249bcb3805"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/package/village/desert.json"
-hash = "cb03384d11d744acd6c8aaba8b60805962345e084c22bd01b305c9edc5f0cc13"
+hash = "c42f996bf1170b7408d8cab8b2ddc02e240299dcc67866ff9c0ed6d9c5955bf3"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/package/village/plains.json"
-hash = "ccd098fa1746ceba39d356e3e0a0539fc9ee8907cef03a97d42dea1375e037d6"
+hash = "738e6a39a64db14ecf1504afdfde3a26dead9ff6011b31dd0904c3c37567d4ce"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/package/village/savanna.json"
-hash = "d9278ffa0c65198231b55080dae74219e5add434bead6434dd11369f195c0cdc"
+hash = "cc10867c9a036dcd310b7e70ea5419f85603a261b9fa10d662d33095fb941c84"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/package/village/snowy.json"
-hash = "9fbea4a9831006372cc2ede3215e65623cb215a0a980ee2135b7722bae028aab"
+hash = "3dd502c124d4098cebacdd80a3f637e983b797fa90347c75ceb5d09564637bcb"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/package/village/taiga.json"
-hash = "53dabdc57b80e447ff95d2033033aa8a12ed9e210aaa9a32dcd6586f6ede784a"
+hash = "c7f60de8a85d347dcdb315b59a9f7d6a1892f443853cc362389ceee1b3be25f9"
 
 [[files]]
 file = "kubejs/inactive_review/no_complex_grid_defaults.js"
@@ -10340,19 +10348,19 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.1.jar"
-hash = "fff03ea8002770746d5c4dc2272c7bd3b4fe224e6bfed72eac8803100c009747"
+hash = "6d25260398492a45078f23e235974f3b6885b4621c0978526deabdd4193f241d"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.7.jar"
-hash = "b0212acf9dd8524d562f3c32adb204c7628c43f227c159263d630dc6f2702cf9"
+hash = "868fa8659802a348666b61d2a368b9cc333662d889aef6557bdae85116c9b5b3"
 
 [[files]]
 file = "mods/better-content-quests-1.0.0.jar"
-hash = "d7f4251e81daa36e80e24b91394a4a4506ba847002558b41949cdf4ab16b65ea"
+hash = "80d4df40454f0a9c2377f53ab99c17e63018be5e2e86b578f62044c394f91659"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
-hash = "21f3396c4da5b8243ae9ad0a32405aab197c1381b233c831614f74999fadbcda"
+hash = "1780e1da6cad6cf85c8c5b271a599690cf53f2b165c83ba0bf152ff356457c85"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -10410,7 +10418,7 @@ metafile = true
 
 [[files]]
 file = "mods/class-selector-1.0.0.jar"
-hash = "7c91b36308efa4c44a0611fa175161f8de5d643bc99f8ea951547b66088338eb"
+hash = "3f4b2158ff998f68e70cac415d09e2e684d66448c705bdac929fbec3131e206a"
 
 [[files]]
 file = "mods/cloth-config.pw.toml"
@@ -10531,7 +10539,7 @@ metafile = true
 
 [[files]]
 file = "mods/dimension-drink-1.0.0.jar"
-hash = "eeaa3e7489e923078f13a98055a2f5f54511a89df271809839f115ab0b8496f1"
+hash = "0b13ce990f8ab132ee0c244a6ea338cd1d0927386c07bc7a06ed7c2dfd9ee14e"
 
 [[files]]
 file = "mods/distant-horizons.pw.toml"
@@ -11216,7 +11224,7 @@ metafile = true
 
 [[files]]
 file = "mods/realistic-ores-0.2.0.jar"
-hash = "38da5cd8fc559f0c3a6cdca8891485e8cdf6d91fc0cb6ca0c8c6244029e07587"
+hash = "e501f528a03b284bfa4f9cfa4d28f9707e678a9905c61588533e1150a72bd369"
 
 [[files]]
 file = "mods/realistic-physics.pw.toml"
@@ -11254,7 +11262,7 @@ hash = "65e90aa3117eb654a4c8bf9614c9d6a62b1d48cd74c8e0b717b9dd790205b9ec"
 
 [[files]]
 file = "mods/runtime-data-dumper-0.1.0.jar"
-hash = "e7990000ce895cd08217d5301e6342b077f4683d506e9c72c43141424795613b"
+hash = "c05b7de71e4c9d2c059be4e6132947c5a61ccc7768b56420cca8f639fb5a74d3"
 
 [[files]]
 file = "mods/satako-library.pw.toml"
