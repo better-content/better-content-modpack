@@ -86,6 +86,39 @@ fun main(args: Array<String>) {
     Files.writeString(evidence.resolve("preflight.tsv"), preflight.joinToString("\n", postfix = "\n"))
     require(preflight.all { it.endsWith("\tclean") }) { "all active repositories must exist and be clean; see ${evidence.resolve("preflight.tsv")}" }
 
+    val reflectionAllowances = readReflectionAllowlist(root.resolve("gradle/reflection-allowlist.txt"))
+    val customRepositories = Files.list(workspace.resolve("mod_source")).use { stream ->
+        stream.filter { Files.isDirectory(it) && it.resolve(".git").exists() }
+            .map { it.fileName.toString() }.sorted().toList()
+    }
+    val unknownReflectionRepositories = reflectionAllowances
+        .filterNot { it.repository in customRepositories }
+        .sortedWith(compareBy(ReflectionAllowance::repository, ReflectionAllowance::sourcePath))
+    require(unknownReflectionRepositories.isEmpty()) {
+        "reflection allowlist names repositories outside the custom-mod workspace: " +
+            unknownReflectionRepositories.joinToString { "${it.repository}:${it.sourcePath}" }
+    }
+    val staleReflectionAllowances = reflectionAllowances.filterNot { allowance ->
+        Files.isRegularFile(workspace.resolve("mod_source").resolve(allowance.repository).resolve(allowance.sourcePath))
+    }.sortedWith(compareBy(ReflectionAllowance::repository, ReflectionAllowance::sourcePath))
+    require(staleReflectionAllowances.isEmpty()) {
+        "reflection allowlist contains stale source paths: " +
+            staleReflectionAllowances.joinToString { "${it.repository}:${it.sourcePath}" }
+    }
+    val unusedReflectionAllowances = unusedReflectionAllowances(workspace, reflectionAllowances)
+    require(unusedReflectionAllowances.isEmpty()) {
+        "reflection allowlist contains source paths without reflection: " +
+            unusedReflectionAllowances.joinToString { "${it.repository}:${it.sourcePath}" }
+    }
+    val sourceReflection = sourceReflectionViolations(workspace, customRepositories, reflectionAllowances)
+    Files.writeString(
+        evidence.resolve("reflection-source-audit.tsv"),
+        if (sourceReflection.isEmpty()) "PASS\n" else sourceReflection.joinToString("\n", postfix = "\n"),
+    )
+    require(sourceReflection.isEmpty()) {
+        "custom source uses forbidden reflection; see ${evidence.resolve("reflection-source-audit.tsv")}"
+    }
+
     val dependencyWarmup = root.resolve("build/release-dependency-warmup/$runId")
     try {
         runLogged(root, packageResolveCommand(root, dependencyWarmup), evidence.resolve("dependency-cache.log"))
@@ -118,6 +151,22 @@ fun main(args: Array<String>) {
     }
     if (failures.isNotEmpty()) Files.writeString(evidence.resolve("failures.txt"), failures.joinToString("\n", postfix = "\n"))
     require(failures.isEmpty()) { "custom-mod validation failed; nothing was deployed:\n${failures.joinToString("\n")}" }
+
+    val bytecodeReflection = built.flatMap { item ->
+        bytecodeReflectionViolations(
+            item.definition.repository,
+            workspace.resolve("mod_source").resolve(item.definition.repository),
+            item.jar,
+            reflectionAllowances,
+        )
+    }
+    Files.writeString(
+        evidence.resolve("reflection-bytecode-audit.tsv"),
+        if (bytecodeReflection.isEmpty()) "PASS\n" else bytecodeReflection.joinToString("\n", postfix = "\n"),
+    )
+    require(bytecodeReflection.isEmpty()) {
+        "staged custom-mod bytecode uses forbidden reflection; see ${evidence.resolve("reflection-bytecode-audit.tsv")}"
+    }
 
     val modsDirectory = root.resolve("mods")
     built.forEach { item ->

@@ -6,6 +6,11 @@ import com.bettercontent.tests.release.packageResolveCommand
 import com.bettercontent.tests.release.jarDeclaresMod
 import com.bettercontent.tests.release.readSourceCommit
 import com.bettercontent.tests.release.sourceUpdateStatus
+import com.bettercontent.tests.release.ReflectionAllowance
+import com.bettercontent.tests.release.readReflectionAllowlist
+import com.bettercontent.tests.release.sourceReflectionViolations
+import com.bettercontent.tests.release.unusedReflectionAllowances
+import com.bettercontent.tests.release.bytecodeReflectionViolations
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -13,6 +18,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.Opcodes
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
@@ -70,7 +77,110 @@ class HarnessFastTest {
             assertTrue(mod.path("tasks").isArray && mod.path("tasks").size() > 0)
             assertTrue(mod.path("dependsOn").let { it.isMissingNode || (it.isArray && it.all { dependency -> dependency.asText() in repositories }) })
         }
-        assertEquals(listOf("heat-sync"), mods.single { it.path("repository").asText() == "latent-chemlib" }.path("dependsOn").map { it.asText() })
+        fun dependencies(repository: String) = mods.single { it.path("repository").asText() == repository }
+            .path("dependsOn").map { it.asText() }
+        assertEquals(listOf("heat-sync"), dependencies("latent-chemlib"))
+        assertEquals(listOf("dimension-drink"), dependencies("better-content-economy"))
+        assertEquals(listOf("class-selector", "dimension-drink"), dependencies("better-content-quests"))
+        assertEquals(listOf("dynamic-survival-hud"), dependencies("better-content-fixes"))
+        assertEquals(listOf("world-lifecycle-manager"), dependencies("class-selector"))
+        assertEquals(listOf("downed-player-revival"), dependencies("depth-director"))
+        assertEquals(listOf("downed-player-revival"), dependencies("pillager-campaigns"))
+        assertEquals(listOf("downed-player-revival"), dependencies("player-traces"))
+        assertEquals(
+            listOf(
+                "arcane-chunk-loaders", "better-content-economy", "better-content-fixes",
+                "dimension-drink", "downed-player-revival", "heat-sync", "pillager-campaigns",
+                "player-traces", "realistic-ores", "rpg-stats", "settlement-roads",
+                "systemic-salience", "water-survival", "world-lifecycle-manager",
+            ),
+            dependencies("better-content-threads"),
+        )
+
+        mods.forEach { mod ->
+            val repository = mod.path("repository").asText()
+            val repositoryRoot = root.parent.resolve("mod_source").resolve(repository)
+            val buildText = listOf(repositoryRoot.resolve("build.gradle"), repositoryRoot.resolve("build.gradle.kts"))
+                .filter(Files::isRegularFile)
+                .joinToString("\n") { Files.readString(it) }
+            val siblingBuildDependencies = Regex("""\.\./([a-z0-9-]+)/build/libs""")
+                .findAll(buildText).map { it.groupValues[1] }.toSet()
+            val missingBuildDependencies = siblingBuildDependencies - dependencies(repository).toSet()
+            assertTrue(
+                missingBuildDependencies.isEmpty(),
+                "$repository omits release dependencies for sibling build artifacts: ${missingBuildDependencies.sorted()}",
+            )
+        }
+    }
+
+    @Test
+    fun reflectionAllowlistIsExactAndSourceAuditRejectsUnlistedUse(@TempDir root: Path) {
+        val workspace = root.resolve("workspace")
+        val repository = workspace.resolve("mod_source/example")
+        val source = repository.resolve("src/main/java/example/Probe.java").also { it.parent.createDirectories() }
+        source.writeText("package example; final class Probe { Class<?> load() throws Exception { return Class\n.forName(\"example.Target\"); } }")
+        repository.resolve("src/test/java/example/BoundaryTest.java").also {
+            it.parent.createDirectories()
+            it.writeText("package example; final class BoundaryTest { String forbidden = \"Class.forName(\"; }")
+        }
+        assertEquals(1, sourceReflectionViolations(workspace, listOf("example"), emptySet()).size)
+        val allowance = ReflectionAllowance("example", "src/main/java/example/Probe.java")
+        assertTrue(sourceReflectionViolations(workspace, listOf("example"), setOf(allowance)).isEmpty())
+        assertTrue(unusedReflectionAllowances(workspace, setOf(allowance)).isEmpty())
+        val staleAllowance = ReflectionAllowance("example", "src/test/java/example/BoundaryTest.java")
+        assertEquals(listOf(staleAllowance), unusedReflectionAllowances(workspace, setOf(staleAllowance)))
+
+        val allowlist = root.resolve("allowlist.txt")
+        allowlist.writeText("example\tsrc/main/java/example/Probe.java\n")
+        assertEquals(setOf(allowance), readReflectionAllowlist(allowlist))
+    }
+
+    @Test
+    fun activeReflectionAllowlistMatchesWorkspaceSources() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val workspace = root.parent
+        val allowances = readReflectionAllowlist(root.resolve("gradle/reflection-allowlist.txt"))
+        val customRepositories = Files.list(workspace.resolve("mod_source")).use { stream ->
+            stream.filter { Files.isDirectory(it) && it.resolve(".git").toFile().isDirectory }
+                .map { it.fileName.toString() }.sorted().toList()
+        }
+        val stale = allowances.filterNot { allowance ->
+            allowance.repository in customRepositories && Files.isRegularFile(
+                workspace.resolve("mod_source").resolve(allowance.repository).resolve(allowance.sourcePath),
+            )
+        }
+        assertEquals(emptyList<ReflectionAllowance>(), stale.sortedWith(compareBy(ReflectionAllowance::repository, ReflectionAllowance::sourcePath)))
+        assertEquals(emptyList<ReflectionAllowance>(), unusedReflectionAllowances(workspace, allowances))
+        assertEquals(emptyList<String>(), sourceReflectionViolations(workspace, customRepositories, allowances))
+    }
+
+    @Test
+    fun stagedBytecodeAuditRejectsReflectiveInvocation(@TempDir root: Path) {
+        val repository = root.resolve("example")
+        repository.resolve("src/main/java/example/Probe.java").also {
+            it.parent.createDirectories()
+            it.writeText("package example; final class Probe {}")
+        }
+        val writer = ClassWriter(0)
+        writer.visit(Opcodes.V17, Opcodes.ACC_FINAL or Opcodes.ACC_SUPER, "example/Probe", null, "java/lang/Object", null)
+        writer.visitMethod(Opcodes.ACC_STATIC, "load", "()Ljava/lang/Class;", null, arrayOf("java/lang/ClassNotFoundException")).also { method ->
+            method.visitCode()
+            method.visitLdcInsn("example.Target")
+            method.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/Class", "forName", "(Ljava/lang/String;)Ljava/lang/Class;", false)
+            method.visitInsn(Opcodes.ARETURN)
+            method.visitMaxs(1, 0)
+            method.visitEnd()
+        }
+        writer.visitEnd()
+        val jar = root.resolve("example.jar")
+        ZipOutputStream(Files.newOutputStream(jar)).use { output ->
+            output.putNextEntry(ZipEntry("example/Probe.class"))
+            output.write(writer.toByteArray())
+            output.closeEntry()
+        }
+        assertEquals(1, bytecodeReflectionViolations("example", repository, jar, emptySet()).size)
+        val allowance = ReflectionAllowance("example", "src/main/java/example/Probe.java")
+        assertTrue(bytecodeReflectionViolations("example", repository, jar, setOf(allowance)).isEmpty())
     }
 
     @Test

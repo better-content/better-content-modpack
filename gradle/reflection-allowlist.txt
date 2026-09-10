@@ -1,0 +1,6 @@
+# Reflection is permitted only in Runtime Data Dumper's diagnostic boundary and its direct test.
+# Format: repository<TAB>repository-relative source path
+runtime-data-dumper	src/main/java/com/bettercontent/runtimedatadumper/ReflectiveFabricBiomeModifierAdapter.java
+runtime-data-dumper	src/main/java/com/bettercontent/runtimedatadumper/ReflectivePneumaticRecipeAdapter.java
+runtime-data-dumper	src/main/java/com/bettercontent/runtimedatadumper/ReflectiveRecipeFamilyAdapter.java
+runtime-data-dumper	src/test/java/com/bettercontent/runtimedatadumper/RecipeGraphExporterTest.java

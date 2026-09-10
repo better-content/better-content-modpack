@@ -25,8 +25,24 @@ modpack. It requires clean active source repositories, runs every active reposit
 full verification, stages and validates fresh JARs, deploys them as a group, refreshes the pack,
 invokes `dist.sh` once, and runs all granular pack suites against those exact candidates. The
 machine-readable release inventory is `gradle/active-custom-mods.json`; this table documents the
-same active set for humans. Inventory `dependsOn` edges are release-build order constraints;
-`latent-chemlib` waits for the staged Heat Sync dependency before its own clean build begins.
+same active set for humans. Inventory `dependsOn` edges are release-build order constraints. They
+stage typed Better Content API providers before their consumers: Dimension Drink before Economy,
+Class Selector and Dimension Drink before Better Content Quests, Dynamic Survival HUD before Better
+Content Fixes, WLM before Class Selector, Revival before its three consumers, every domain-event
+provider before Threads, and Heat Sync before Latent Chemlib.
+This directed build graph is intentionally acyclic; Threads is the downstream event listener and
+no provider depends on it.
+
+## Reflection Boundary
+
+Custom Java and Kotlin source must use typed APIs, Forge events, or narrow mapped Mixin
+accessors/invokers. Runtime reflection is permitted only for Runtime Data Dumper's diagnostic
+adapters and direct adapter tests listed by exact repository-relative path in
+`gradle/reflection-allowlist.txt`. The fresh release preflight scans every Git repository in the
+canonical `mod_source/` workspace, and the staged-JAR gate inspects every active custom mod before
+deployment; an unlisted reflective call aborts the release.
+Optional integrations use explicit loaded-mod and supported-version guards. Missing optional mods
+remain inert, while API drift in an expected pinned integration is a visible validation failure.
 
 The fresh-dist flow also performs a local-only source revision check before building. Each bundled
 custom JAR records its repository, mod ID, and source `HEAD` in
