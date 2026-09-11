@@ -43,7 +43,7 @@ The eight 18×18 badges are canonical byte-identical assets across RPG Stats, Sy
 
 There is deliberately no explicit comparison screen. Discovery is reinforced through the RPG allocation screen, Diet's native nutrition screen, food and ore tooltips, nutrition activation feedback, ore blocks in the world, and EMI's ordinary tooltip/recipe surfaces. Natural names lead; the aspect badge, glyph, colour, and name appear when the player interacts closely enough to need the formal identity.
 
-RPG point increments provide a quiet preview pulse and motif. A successful server-confirmed allocation produces a short recap. Nutrition threshold crossings and discrete abilities use the corresponding motion and motif, while the meal recap explains which bodily state changed and for approximately how long. Ore tooltips formally name the identity and preserve Shift for the assay summary; ore discovery never interrupts play with a toast or action-bar message.
+RPG point increments provide a quiet preview pulse and motif. A successful server-confirmed allocation produces a short recap. Nutrition threshold crossings and discrete abilities use the corresponding motion and motif, while the meal recap explains which bodily state changed and for approximately how long. Recap labels wrap within the viewport and use bright neutral text beside the aspect badge. Four to ten seconds of display time scale with the number of changed states; menus and a hidden HUD pause that timer. Ore tooltips formally name the identity and preserve Shift for the assay summary; ore discovery never interrupts play with a toast or action-bar message.
 
 ## RPG development
 

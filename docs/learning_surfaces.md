@@ -42,6 +42,27 @@ remain cosmetic; lessons and the reader are not progression gates. Commerce spir
 come from credited player kills under the native-mapping and fallback rules described
 in [Content ownership](content_systems.md).
 
+## Readability and timing
+
+- Put the mechanical rule and a useful next action before interpretation. Explain what
+  the player can do; do not turn event predicates such as death or a terminal campaign
+  outcome into instructions to seek that outcome.
+- Preserve complete sentences. Wrap headlines, rules, and actions; use visible scrolling
+  when they cannot fit. At narrow GUI widths, catalogues use one column. Decorative art
+  may yield space to text, but art keeps its original aspect ratio.
+- Use readable neutral text on a dark backing. Aspect pigments belong in badges and
+  accents; dark pigments must not become the only way to read a label. Ordinary pack
+  hover text uses light gray, with explicit wording for warnings.
+- Loading copy fits its actual wrapped height and never delays entering the world.
+  A lesson needs eight seconds of rendered exposure to advance loading history; quick
+  joins and loading stalls do not count as reading. All lessons remain directly available.
+- Movement lessons display the current loaded bindings. Menus must not consume the
+  lifetime of a meal recap, and larger recaps need more reading time than a single line.
+- Show a native doorway only when its installed target can be opened. Do not substitute
+  a raw resource ID, a guessed key binding, or a vague message for a working guide.
+- Keep player-authored Trace notes distinct from curated instructions. Their usefulness
+  depends on what players leave; the pack supplies readable, contextual presentation.
+
 ## Review and validation
 
 - Trace every changed claim and trigger to its implementation; inspect related surfaces

@@ -7398,7 +7398,7 @@ hash = "4f2f2478ef0d685df6e70080193ec2f4e1e2b256327cfb8ad8eec62804894568"
 
 [[files]]
 file = "kubejs/client_scripts/guidance/10_hover_annotations.js"
-hash = "5bb2322b9656c620433cf53130bf90f552d042747b624bd9eab6a7e12b81126b"
+hash = "57d279f3e093dc2c37e552740f36cea704aafaf9114365835f24174598a78ef4"
 
 [[files]]
 file = "kubejs/client_scripts/policy/hide_vanilla_tools.js"
@@ -7442,7 +7442,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "73689423866532153cb7a5b5f7bc5cf89f5cbad5fd256952a947b53c564ee7b5"
+hash = "837644c8119a7671e7a27881ea2e6c3037e5e3e118eb9e29e129c02903c3f816"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"

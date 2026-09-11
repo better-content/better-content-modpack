@@ -14,9 +14,9 @@ All 52 cards are live teaching surfaces. Fragility 7–13 explain seven especial
 - `M` by default and the pause-menu button open the reader. Every reminder renders the current conflict-aware binding in a physical keycap beside the literal label `Threads`. Its catalogue has four suit tabs and thirteen stable positions per suit; unknown cards remain sealed.
 - An unread thumbnail is a dark archive plate with a faint suit edge and leaking aspect trace. Selecting it shows the unexposed plate and `Let the plate develop / Click or Space to remember`; development does not start automatically.
 - Development is a single 800 ms linear crossfade from the neutral code-drawn archive plate to the illustration. Existing illustrations retain their authored pixels, and their thumbnails remain derived from the same art. The code-drawn aspect cues use the shipped ore-matched palette. A click or Space during development completes it and is consumed before any doorway or facsimile control.
-- Title, rule, prose, invitation, action, doorway, and facsimile controls remain hidden until development completes. The detail reader presents the plain mechanical rule before its shorter lore interpretation. Only completion marks a plate read; Escape or navigation beforehand leaves it unread.
+- Title, rule, prose, invitation, action, doorway, and facsimile controls remain hidden until development completes. The detail reader presents the plain mechanical rule and useful next action before its shorter lore interpretation. Text wraps in a scrollable pane; wheel, Up/Down, and Page Up/Down read the text, while Left/Right change cards. Narrow catalogues use one column, with keyboard selection and an explicit scrolling hint. Only completion marks a plate read; Escape or navigation beforehand leaves it unread.
 - Known lore and art persist across the lineage. Current invitations, active state, and current completion reset for each successor generation. Re-encountering a known card in a successor produces a contextual notice without marking its plate unread again. Completion history retains total count, first generation, last generation, and route counts.
-- A live card exposes a doorway only when a specific authoritative native surface exists. Doorways open native Font, Ponder, EMI, guide, or system interfaces. A card such as Ruins may omit the control rather than offer a vague or false destination. Signed facsimiles are freely reissued cosmetic copies; they retain collector and lineage identity, grant nothing, and never unlock a card for their recipient.
+- A live card exposes a doorway only when a specific authoritative native surface exists. The client exposes working EMI/Ponder targets and explicitly matched, bound nutrition, RPG, or Trace Sight controls. Other declared Font, guide, power, campaign, and lifecycle targets stay hidden until an actual opener exists. A card such as Ruins may omit the control rather than offer a vague or false destination. Signed facsimiles are freely reissued cosmetic copies; they retain collector and lineage identity, grant nothing, and never unlock a card for their recipient.
 - On-character display remains unresolved. Do not ship a placeholder cosmetic render.
 
 ## Trigger contract
@@ -55,7 +55,7 @@ hydration, nutrition, food variety, metabolism, body temperature, configured
 movement, simulated sleep, downing and revival, life stats, seasons, moving
 weather, pollution, structural support, and pillager campaigns. Lessons resume
 at the next unseen entry, cycle in manifest order, and retain client-local
-history without becoming progression gates.
+history without becoming progression gates. A loading lesson is recorded only after eight seconds of rendered exposure; fast joins and stalls do not consume unread lessons.
 
 The selected lesson and its 512×256 illustration render over the connection or
 level-loading screen with Previous, Next, and Keep Reading controls. Loading
@@ -68,8 +68,8 @@ and dimension changes do not start a new loading episode.
 The Threads reader exposes a separate Lessons mode containing all 16 lessons
 from the start. Opening a lesson there records it in the same client-local
 rotation history. A lesson may point to one related Thread and, through that
-card's exact doorway, its authoritative native guide, Ponder, EMI, or system
-surface. Related Thread details remain sealed until the card is contextually
+card's exact doorway, an available native Ponder, EMI, or system surface. Unsupported native targets
+are hidden rather than replaced by a resource-ID message. Related Thread details remain sealed until the card is contextually
 known; the lesson library never marks cards known, active, read, or complete.
 
 ## Definition and delivery contract

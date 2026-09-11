@@ -56,7 +56,7 @@ function bcHoverTextLines(rawLines) {
 }
 
 function bcHoverStyle(line, tone) {
-    return tone === 'warning' ? Text.red(line) : Text.darkGray(line)
+    return tone === 'warning' ? Text.red(line) : Text.gray(line)
 }
 
 var BC_HOVER_STATIC = []
@@ -257,9 +257,9 @@ ItemEvents.tooltip(function (event) {
         for (var l = 0; l < row.lines.length; l++) event.add(row.target, bcHoverStyle(row.lines[l], row.tone))
     }
     for (var f = 0; f < BC_HOVER_FORMAL.length; f++) {
-        event.add(BC_HOVER_FORMAL[f].target, Text.darkGray(BC_HOVER_FORMAL[f].line))
+        event.add(BC_HOVER_FORMAL[f].target, Text.gray(BC_HOVER_FORMAL[f].line))
     }
     for (var c = 0; c < BC_HOVER_COMBAT.length; c++) {
-        event.add(BC_HOVER_COMBAT[c].target, Text.darkGray(BC_HOVER_COMBAT[c].line))
+        event.add(BC_HOVER_COMBAT[c].target, Text.gray(BC_HOVER_COMBAT[c].line))
     }
 })
