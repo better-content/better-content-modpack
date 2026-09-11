@@ -10316,7 +10316,7 @@ hash = "fdb36d8e69604c20c8a02e2131026dad3949638efa0a33093baa36467e35231a"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
-hash = "888c5e83226cdcd6aa5738add82f3c22442832b102239017eb5fadfb8c82f944"
+hash = "669c1f7fe0a3577f26506e680c4e2821c2314578e22a5a11bf46251a3b9454aa"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -11311,7 +11311,7 @@ metafile = true
 
 [[files]]
 file = "mods/systemic-salience-0.1.1.jar"
-hash = "b31b6710680b0269ed9b644b5bb9586d0f0a8b43c637e58ec90e50f918be46c6"
+hash = "274e6e725bf5385a237367b44d2798277a12ae7d724e1a5eafee09b568b37a9e"
 
 [[files]]
 file = "mods/tconjei.pw.toml"
