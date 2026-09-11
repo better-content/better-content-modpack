@@ -103,7 +103,7 @@ ServerEvents.recipes(function (event) {
     event.shaped('littlelogistics:rapid_hopper', ['GHG', ' L ', ' R '], {
         G: '#forge:ingots/gold', H: 'minecraft:hopper',
         L: 'ratlantis_logistics:courier_lattice', R: 'minecraft:redstone_block'
-    }).id('kubejs:ratlantis_logistics/root/rapid_hopper')
+    }).id('littlelogistics:rapid_hopper')
 
     // Docks and rails stay inertly available. Every usable native vehicle pays
     // its Ratlantis proof within the visible recipe.

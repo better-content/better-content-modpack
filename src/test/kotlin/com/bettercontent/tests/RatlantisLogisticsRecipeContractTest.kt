@@ -38,6 +38,6 @@ class RatlantisLogisticsRecipeContractTest {
         ))
         assertTrue(script.contains("L: 'ratlantis_logistics:courier_lattice'"))
         assertTrue(script.contains("R: 'minecraft:redstone_block'"))
-        assertTrue(script.contains("kubejs:ratlantis_logistics/root/rapid_hopper"))
+        assertTrue(script.contains("}).id('littlelogistics:rapid_hopper')"))
     }
 }
