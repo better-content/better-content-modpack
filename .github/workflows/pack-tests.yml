@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 env:
-  PACKWIZ_REVISION: dfd8b68a4796c763e25bad50265ea1f1233e24f1
+  PACKWIZ_REVISION: v0.0.0-20260906154125-ef87d964f8cb
 
 jobs:
   candidate:
@@ -19,7 +19,9 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-          cache: gradle
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Install pinned Kotlin SDK
+        run: bash .github/scripts/install-kotlin.sh
       - uses: actions/setup-go@v5
         with:
           go-version: stable
@@ -40,7 +42,7 @@ jobs:
       - name: Validate candidate contracts
         env:
           BC_TEST_RUN_ID: ci-${{ github.run_id }}-${{ github.run_attempt }}-candidate
-        run: ./gradlew --no-daemon candidateTest
+        run: ./test.main.kts candidate
       - name: Upload exact candidate pair
         uses: actions/upload-artifact@v4
         with:
@@ -73,7 +75,9 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-          cache: gradle
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Install pinned Kotlin SDK
+        run: bash .github/scripts/install-kotlin.sh
       - uses: actions/setup-go@v5
         if: matrix.suite != 'server'
         with:
@@ -95,7 +99,7 @@ jobs:
       - name: Run selected pack suite
         env:
           BC_TEST_RUN_ID: ci-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.suite }}
-        run: ./gradlew --no-daemon ${{ matrix.suite }}Test
+        run: ./test.main.kts ${{ matrix.suite }}
       - name: Upload durable evidence
         if: always()
         uses: actions/upload-artifact@v4

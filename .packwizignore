@@ -8,6 +8,7 @@ docs
 /build/
 /gradle/
 /gradlew
+/gradlew.bat
 /release.main.kts
 /settings.gradle.kts
 /src/

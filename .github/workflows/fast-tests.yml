@@ -1,8 +1,8 @@
 name: Fast test harness
 
 on:
+  push:
   pull_request:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -18,9 +18,13 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-          cache: gradle
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Install pinned Kotlin SDK
+        run: bash .github/scripts/install-kotlin.sh
+      - name: Verify provider bootstrap
+        run: python3 .github/scripts/test_prepare_provider_jars.py
       - name: Compile and run Minecraft-free harness tests
-        run: ./gradlew --no-daemon test
+        run: ./test.main.kts fast
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4

@@ -244,7 +244,7 @@ private fun build(
     }
     val tasks = if (skipTests) listOf("stageRuntimeJar") else mod.tasks
     val buildCommand = listOf(repository.resolve("gradlew").toString(), "--no-daemon", "clean") + tasks
-    runLogged(repository, buildCommand, log)
+    runLogged(repository, buildCommand, log, providerBuildEnvironment(staging))
     val jar = repository.resolve("build/libs").resolve(mod.artifact)
     require(Files.isRegularFile(jar)) { "${mod.repository} did not stage ${mod.artifact}" }
     require(jarDeclaresMod(jar, mod.modId)) { "${mod.artifact} does not declare ${mod.modId}" }
@@ -337,9 +337,13 @@ internal fun packageResolveCommand(root: Path, target: Path): List<String> = lis
     "client",
 )
 
-private fun runLogged(cwd: Path, command: List<String>, log: Path) {
+internal fun providerBuildEnvironment(staging: Path): Map<String, String> =
+    mapOf("BC_CUSTOM_MOD_JAR_DIR" to staging.toAbsolutePath().normalize().toString())
+
+private fun runLogged(cwd: Path, command: List<String>, log: Path, environment: Map<String, String> = emptyMap()) {
     log.parent.createDirectories()
-    val process = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true).redirectOutput(log.toFile()).start()
+    val process = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true).redirectOutput(log.toFile())
+        .apply { environment().putAll(environment) }.start()
     val status = process.waitFor()
     require(status == 0) { "command failed ($status): ${command.joinToString(" ")}; see $log" }
 }

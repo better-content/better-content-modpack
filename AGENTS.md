@@ -12,7 +12,7 @@ This repository is the Better Content Forge 1.20.1 modpack content layer.
   runtime JARs whose source revision matches and validates/rebuilds changed repositories, then
   packages exactly once and runs `all`.
   `--skip-tests` is allowed only when the explicit fresh-dist request prohibits tests; it still
-  rebuilds and stages every active runtime JAR and packages exactly once.
+  reuses unchanged JARs, builds/stages changed sources without verification, and packages exactly once.
 - `./maintenance.main.kts audit` reports evidence retention decisions without changing the
   workspace. `./maintenance.main.kts prune --apply` removes only superseded test evidence and
   redundant distribution staging after cleanliness, process, path, and candidate-hash guards pass.
@@ -75,18 +75,15 @@ The narrowly scoped `bc.crafting_policy.v1` contract is an authorized content po
 general audit utility: its KubeJS startup check must reject unknown loaded namespaces and its
 runtime recipe reporting may name exact cut-family leaks and live consumers. Keep it in
 `kubejs/config/` and KubeJS scripts; it does not authorize a `tools/` tree or unrelated checks.
-Questbook visual authoring is the sole exception: use the Minecraft-free sibling harness at
-`/home/dev/ftb-quests-layout-harness/standalone` to render and inspect live FTB Quests chapter
-layouts and to run its icon audit against an available reference-client atlas. These are focused
-authoring checks, not permission to run pack-level suites.
+The former standalone quest-layout harness is obsolete and is not required. Teaching now spans
+Threads, loading screens, and other maintained surfaces; review their actual content and behavior
+without recreating the obsolete harness or inferring permission for pack-level suites.
 
 ## Tools and quarantine
 The entire former `tools/` tree is quarantined. Do not recreate an active `tools/` directory.
 `quarantine/` is unsupported and removable. Active runtime content and supported scripts
 must not depend on or include it. Do not restore or invoke quarantined code unless the user
-explicitly reverses this decision. This quarantine applies to the pack-local former `tools/`
-tree, not to `/home/dev/ftb-quests-layout-harness`, which is the supported questbook layout
-renderer. Custom mod sources live in independent repositories under
+explicitly reverses this decision. Custom mod sources live in independent repositories under
 `/home/dev/mod_source/` and must not be recreated here or at the workspace top level.
 
 ## Runtime safety
@@ -122,6 +119,6 @@ must name every chapter and cross-cutting integration file in scope. Before hand
   not run under the frugal-testing policy.
 
 Do not invent a second quest compiler, schema, linter, audit, or validation command. Review SNBT
-and presentation according to `docs/questbook_standards.md`; use only the sibling standalone
-layout harness's documented render and icon-audit commands for static visual authoring.
+and presentation according to `docs/questbook_standards.md`; the obsolete standalone layout
+harness and its icon audit are no longer requirements.
 `./test.main.kts` remains the supported pack-test facade, subject to the explicit-order policy.

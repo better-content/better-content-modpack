@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "AGENTS.md"
-hash = "bc2b204b92fa0eca93466e8e6438b6c2f67bb13a885798e786ba196fd41fdbf4"
+hash = "21b5150803cb210727e5f8d2cb64d532237543fd78d639222dc1a94bf44ff32d"
 
 [[files]]
 file = "LICENSE"
@@ -7486,7 +7486,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "e7859a8ff92ddd41bf36d835570c99bd3ffd6b47fc8d5882766e9c7cb3a95d41"
+hash = "73689423866532153cb7a5b5f7bc5cf89f5cbad5fd256952a947b53c564ee7b5"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -10161,6 +10161,10 @@ file = "kubejs/server_scripts/policy/tnt_recipe.js"
 hash = "8b55ea75834053d2d6da166fb29faf0dd19b7f898f0ed85da07e0f40c0f6aa39"
 
 [[files]]
+file = "kubejs/server_scripts/progression/00_primitive_workshop.js"
+hash = "bee03edac6c9be40893b394e6fef8d127ca76d3762b83e274fb65daf729ec1f8"
+
+[[files]]
 file = "kubejs/server_scripts/progression/10_hand_workshop.js"
 hash = "bfbaae2c5e2c5e370290a5e2dd21ea74585177af3bd598c2ba65ca5c08a3fd3c"
 
@@ -10170,7 +10174,7 @@ hash = "2ecca2c42d2f3897372519cc70a1a1f66dc241a703280259fbb15288213aa2f3"
 
 [[files]]
 file = "kubejs/server_scripts/progression/20_ratlantis_logistics.js"
-hash = "84d0028f58342b02b3643a63b4dd58ab652f3b9bea3f7f23c1f6dfd37c200128"
+hash = "79c7e9914df8abbfd26172d01d0fc76a5ab973f3f0f0e5db8aaa299b1074c84a"
 
 [[files]]
 file = "kubejs/server_scripts/progression/21_bumblezone_cultivars.js"
@@ -10178,7 +10182,7 @@ hash = "6944ec8164dfb032a0fd7880521468d5fd5371e45663749167086cada32ded62"
 
 [[files]]
 file = "kubejs/server_scripts/progression/30_precision_factory.js"
-hash = "31c5a47489cd22e726700dadea3ed39290fd1f8947e174f7c4072a64ed068960"
+hash = "3025e1c97608a38391c9586bff2c88ad215f54f5fd7762511ed1c519c44ecb50"
 
 [[files]]
 file = "kubejs/server_scripts/progression/40_thermal_pressure.js"

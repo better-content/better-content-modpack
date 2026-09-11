@@ -21,8 +21,9 @@ packwiz refresh
 unless the user separately requests pack-level testing.
 
 When the user explicitly requests a fresh tested distribution, run `./release.main.kts` from the
-modpack. It requires clean active source repositories, runs every active repository's documented
-full verification, stages and validates fresh JARs, deploys them as a group, refreshes the pack,
+modpack. It requires clean active source repositories, reuses valid source-identical bundled JARs,
+runs documented verification for changed or unannotated sources, stages and validates their fresh
+JARs, deploys the staged set as a group, refreshes the pack,
 invokes `dist.sh` once, and runs all granular pack suites against those exact candidates. The
 machine-readable release inventory is `gradle/active-custom-mods.json`; this table documents the
 same active set for humans. Inventory `dependsOn` edges are release-build order constraints. They
@@ -32,6 +33,40 @@ Content Fixes, WLM before Class Selector, Revival before its three consumers, ev
 provider before Threads, and Heat Sync before Latent Chemlib.
 This directed build graph is intentionally acyclic; Threads is the downstream event listener and
 no provider depends on it.
+
+`--skip-tests` is reserved for an explicitly test-free fresh-dist request. It retains unchanged
+artifact reuse, stages changed sources without verification, and skips pack suites. There is no
+implicit forced-rebuild mode.
+
+## Reproducible Build Bootstrap
+
+Every repository owns its official Gradle wrapper and a distribution SHA-256. Use `./gradlew`;
+neither a global Gradle installation nor another checkout supplies the launcher. Java 17 is selected
+through toolchain discovery, not a machine-specific installation path.
+
+Typed provider consumers accept `BC_CUSTOM_MOD_JAR_DIR`, an explicit directory containing canonical
+runtime artifact filenames. A blank override or missing required JAR fails during configuration;
+it never silently falls back to another directory. With the variable unset, ordinary local builds
+retain the canonical sibling `build/libs/` convention. Release builds pass their own staging
+directory, which contains both reused and rebuilt providers in dependency order.
+
+Repository CI checks out the modpack at the immutable commit in its workflow and runs
+`.github/scripts/prepare-provider-jars.py --pack-root PATH --repository NAME --output DIRECTORY`.
+This standard-library Python 3.11+ helper validates the provider closure, Packwiz SHA-256 entries,
+and bundled source identities before staging anything. It does not build providers, warm the pack
+cache, deploy JARs, or package the modpack. Update the workflow's pinned baseline deliberately when
+a consumer requires a newer provider API; never substitute a floating branch.
+
+Plugin selectors are pinned to the versions resolved during hygiene remediation. RPG Stats and
+Systemic Salience retain their previously resolved `1.2.0.7-dev-SNAPSHOT` Parchment plugin to avoid
+an unrequested toolchain change. Snapshot content and full transitive dependency locking/verification
+remain reproducibility limitations requiring a separate reviewed change.
+
+CI Kotlin is SDKMAN-managed `2.2.21` under `$HOME/.sdkman/candidates/kotlin/2.2.21`, activated by
+`source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk use kotlin 2.2.21` and exposed through
+`$HOME/.local/bin`. Pack workflows use Packwiz `v0.0.0-20260906154125-ef87d964f8cb`, matching the
+workspace inventory. Heavyweight workflow steps invoke `test.main.kts` and acquire its normal lock;
+they are manual-only and are not a routine consequence of a hygiene change.
 
 ## Reflection Boundary
 
