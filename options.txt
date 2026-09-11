@@ -260,8 +260,6 @@ key_key.deeperdarker.transmit:key.keyboard.v:SHIFT
 key_key.findme.search:key.keyboard.y
 key_key.findme.pull_one:key.keyboard.keypad.4
 key_key.findme.pull_stack:key.keyboard.keypad.5
-key_key.ftbteams.open_gui:key.keyboard.unknown
-key_key.ftbquests.quests:key.keyboard.j
 key_key.better_content_threads.open_reader:key.keyboard.m
 key_artifacts.key.helium_flamingo.activate:key.keyboard.unknown
 key_artifacts.key.night_vision_goggles.toggle:key.keyboard.unknown

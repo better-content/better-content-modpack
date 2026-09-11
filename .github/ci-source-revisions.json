@@ -7,15 +7,11 @@
     },
     {
       "repository": "better-content-economy",
-      "commit": "1f27f4c7fb7c1e39cae6b5dda040e662a9b9d4c7"
+      "commit": "f574041fff37128540f84342c063be09d1630b94"
     },
     {
       "repository": "better-content-fixes",
-      "commit": "97751ae63336b9ea9c3e1d96e18febc707740334"
-    },
-    {
-      "repository": "better-content-quests",
-      "commit": "58544ee799286efd7b2d6d57b8ba86f4ba241403"
+      "commit": "1d31cb10880e0ff75118179bbcfff6502bb4b9aa"
     },
     {
       "repository": "better-content-threads",
@@ -51,19 +47,19 @@
     },
     {
       "repository": "dynamic-survival-hud",
-      "commit": "bade726e0c560f1dee793b5006916ac6a51788d4"
+      "commit": "e7934c699b767d261fda5b4a80aefcd7d229534a"
     },
     {
       "repository": "dynamic-trees-dimension-compat",
-      "commit": "6bf6acfa98d1568f6753808ee1aabf5f335a3e5e"
+      "commit": "7de39c2f4b5c03d865d5be6be0f472f4e6e9efb1"
     },
     {
       "repository": "dynamic-trees-hexerei",
-      "commit": "bad060a3a0c8237bc3f0210ef20fb37315c82ed4"
+      "commit": "3749a1f84eebe4887d6a2c8a40a104fb8753430d"
     },
     {
       "repository": "dynamic-trees-malum",
-      "commit": "d9978c61e1ab9a82d38d1878e7f3ebfa9b07c284"
+      "commit": "bb2c2304305c54205dac8898f958e64b7ab3bb65"
     },
     {
       "repository": "heat-sync",
@@ -95,7 +91,7 @@
     },
     {
       "repository": "player-traces",
-      "commit": "404a327e8f74dd85320a34ef48350ae60b10353e"
+      "commit": "5837305cd9fbaab98954d468063e5ecd0bdcd02f"
     },
     {
       "repository": "procedural-bouquets",
@@ -119,7 +115,7 @@
     },
     {
       "repository": "runtime-data-dumper",
-      "commit": "6a5005507577f866ffb80b8e6c6a1beef2a1396c"
+      "commit": "405f84398aed7749043d6882a7a8d3f96e9f8e78"
     },
     {
       "repository": "settlement-roads",
@@ -139,7 +135,7 @@
     },
     {
       "repository": "water-survival",
-      "commit": "24842056fac44fbf677397d478a85f7ef0b26217"
+      "commit": "ebb39f53fdc324e0420f9b3c41deadf2038bf3c2"
     },
     {
       "repository": "world-lifecycle-manager",

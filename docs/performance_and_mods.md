@@ -46,11 +46,17 @@ Temperature Bands, the standalone coolant mod, the redundant fission-reactor mod
 Forbidden and Arcanus, Roots Classic, Mahoutsukai, Eidolon, Theurgy, Psi, and Hex Casting have no
 active Packwiz manifests and are inactive unless deliberately reintroduced.
 
+FTB Quests, its Better Content integration, FTB Teams, FTB XMod Compat, and FTB Filter
+System are retired. FTB Library remains required by Satako, and independent FTB Backups
+remains active. Learning is owned by Threads, loading lessons, hover, and native surfaces.
+
 ## Runtime and memory policy
 
 `release.main.kts` is the only fresh tested distribution path. It stages clean custom-mod builds,
 packages once, and tests the unchanged candidate pair. Runtime fixtures extract those candidates
-and change only disposable EULA, authentication, and port settings. The production server profile
+and change disposable EULA, authentication, and port settings, plus disable FTB Backups'
+scheduled backups inside the fixture. The production backup configuration is unchanged.
+The production server profile
 uses the root 4 GiB initial and 16 GiB maximum heap baseline.
 
 Full-pack memory pressure is primarily a content/profile question. Do not remove active content or

@@ -2,7 +2,7 @@
 
 The crafting graph is every survival acquisition or transformation edge, not
 only crafting-table recipes. It includes recipes, machine processes, rituals,
-loot, trades, world generation, entity drops, fishing, quest rewards, guide
+loot, trades, world generation, entity drops, fishing, guide
 recipes, and custom runtime hooks.
 
 `kubejs/config/crafting_policy.json` is the machine-readable
@@ -29,8 +29,9 @@ roots.
 Recipe cuts and canonical-duplicate selectors are also applied to the global
 loot modifier from this same contract. Exact selectors and namespace/prefix
 selectors resolve against the live item registry, avoiding a second hand-kept
-loot denylist. Static config, guide, quest, trade, worldgen, and custom-hook
-checks cover the other acquisition surfaces.
+loot denylist. Config, guides, trades, worldgen, and custom hooks need focused
+inspection of their owning sources; the generic runtime suite does not assert every
+acquisition edge.
 
 Pretty Pipes uses a visible three-tier Ratlantis ladder. The Courier Lattice recipe yields four
 lattices and each lattice-rooted pipe recipe yields eight pipes, so the first expedition supports
@@ -60,7 +61,6 @@ not classify those planks as oak or replace their normal wood-family tags.
   Unique weapons, bows, armor, creature gear, and material integrations remain.
 - The vanilla End is inaccessible. End ecology needed by the pack is routed to
   Creating Space orbit, Ratlantis, Overworld cultivation, or Ice and Fire.
-- Quest SNBT is hand-authored. No generative quest graph is a production input.
 
 Vanilla water/lava source renewal and renewable stone loops are acknowledged
 noncompliance for this release. PneumaticCraft's infinite-source exception is

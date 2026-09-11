@@ -1,15 +1,15 @@
 # Progression
 
-This pack uses six technology eras. Machine Blocks are one-time capability
-proofs: only the explicitly named root machines consume them. Downstream
-recipes return to each mod's native manufactured parts. Their proof recipes
+This pack uses six technology eras. Machine Blocks primarily prove capability
+at explicitly named root machines. Downstream recipes normally return to each
+mod's native manufactured parts; Rail Beetle Tier-II modules are an explicit
+exception described below. Their proof recipes
 produce batches of four Andesite, four Copper, four Brass, two Airtight, two
 Electrical, and one Space Machine Block.
 
 Progression is communicated by executable recipes, apparatus, native guides,
-item-hover annotations, and event or world feedback. FTB Quests records a small
-set of completed milestones but does not prescribe routes, expose recipe chains,
-or gate discovery through quest dependencies.
+item-hover annotations, loading lessons, contextual Threads, and event or world
+feedback. Learning surfaces do not impose an objective graph or grant quest rewards.
 
 ## Prelude — Primitive Workshop
 
@@ -104,7 +104,10 @@ seals keep the pressure entry reachable. Mechanically craft
 ingots, two pressure tubes, and two seals. It directly roots the Rotational
 Compressor and the first Pressure Chamber interface.
 
-Contained PneumaticCraft processes establish sulfuric and hydrochloric acid.
+Contained PneumaticCraft processes establish sulfuric, hydrochloric, and nitric
+acid. Saltpeter and sulfuric acid make nitric acid in the heated pressure process;
+gold concentrate with hydrochloric and nitric acid yields Platinum Group Residue
+in Create mixing. These routes have no Electrical Machine Block or PowerGrid gate.
 Heat Sync stores and moves process heat; its Boiler Heater consumes exactly
 1/2/3 heat for an active Create boiler's 1/2/3 heat level.
 
@@ -117,8 +120,7 @@ wires, and an electron tube. It directly roots PowerGrid's first stationary
 generator housing and the circuit-design station. PowerGrid is the sole
 stationary electrical-generation authority; PneumaticCraft remains the pressure
 and petroleum authority. Iron-and-coal steel composite smelts into canonical
-TCon steel for that machinery and later transition parts. Nitric acid and
-gold/PGM-only mixed-acid recovery begin here. PowerGrid parts, sensors, motors,
+TCon steel for that machinery and later transition parts. PowerGrid parts, sensors, motors,
 and circuits carry later recipes.
 
 ## Era 6 — Creating Space
@@ -149,7 +151,10 @@ drive falls back to cargo fuel. Six module bays accept one module per family.
 Tier-I machinery begins in Precision Factory, mechanical and civil Tier-II
 modules mature in Thermal & Pressure, and efficiency, survey, and dispatch
 Tier-II modules require Electrical Control. Every Tier-II recipe consumes its
-Tier-I assembly.
+Tier-I assembly. These nine module upgrades explicitly depart from root-only
+Machine Block use: the six mechanical/civil upgrades each consume two Airtight
+Machine Blocks; the three efficiency/survey/dispatch upgrades each consume two
+Electrical Machine Blocks.
 
 ## World compatibility
 

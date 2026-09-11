@@ -8,16 +8,19 @@ Every row has exactly one representative in each authority. Aspect words appear 
 
 | Aspect | Glyph | sRGB | RPG development | Diet identity | Ore identity |
 | --- | --- | --- | --- | --- | --- |
-| Impact | ✦ | `#E4717D` | Strength | Proteins | Hotstone |
-| Tempo | » | `#AA652B` | Dexterity | Sugar | Copper Bloom |
-| Work | ⚒ | `#CAA903` | Aptitude | Grains | Tin Quartz |
-| Mobility | ➜ | `#C0E304` | Agility | Fruits | Brassroot |
-| Endurance | ∞ | `#35BBD0` | Constitution | Fats | Coal Measures |
-| Robustness | ◆ | `#1175FC` | Fortitude | Vegetables | Ironstone |
-| Renewal | ✚ | `#6FEDBA` | Vitality | Dairy | Evaporite Beds |
-| Control | ⊕ | `#8A6CB2` | Perception | Alcohol | Black Shale |
+| Impact | ✦ | `#FF4055` | Strength | Proteins | Hotstone |
+| Tempo | » | `#00A985` | Dexterity | Sugar | Copper Bloom |
+| Work | ⚒ | `#F0E2C5` | Aptitude | Grains | Tin Quartz |
+| Mobility | ➜ | `#E0B01F` | Agility | Fruits | Brassroot |
+| Endurance | ∞ | `#52606A` | Constitution | Fats | Coal Measures |
+| Robustness | ◆ | `#AF6A2F` | Fortitude | Vegetables | Ironstone |
+| Renewal | ✚ | `#6CCAF0` | Vitality | Dairy | Evaporite Beds |
+| Control | ⊕ | `#8E5BB7` | Perception | Alcohol | Black Shale |
 
-The palette was numerically optimized in OKLCH with an sRGB-gamut constraint. Glyph, name, value structure, morphology, and actual behavior remain mandatory parallel cues; hue is never authoritative alone.
+The shipped ore identity palette is authoritative and is shared by the RPG, bodily-state,
+and Threads aspect definitions. Glyph, name, value structure, morphology, and actual
+behavior remain mandatory parallel cues; hue is never authoritative alone. Ore morphology
+and existing artwork are preserved rather than recolored to a separate documentation palette.
 
 ## Sensory grammar
 

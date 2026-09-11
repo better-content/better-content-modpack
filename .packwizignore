@@ -36,7 +36,6 @@ fresh-dist
 logs
 /error.txt
 /libraries/
-/modpack questbook notes
 /pca.sh
 /run.bat
 /run.sh

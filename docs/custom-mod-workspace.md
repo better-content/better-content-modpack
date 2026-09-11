@@ -28,7 +28,7 @@ invokes `dist.sh` once, and runs all granular pack suites against those exact ca
 machine-readable release inventory is `gradle/active-custom-mods.json`; this table documents the
 same active set for humans. Inventory `dependsOn` edges are release-build order constraints. They
 stage typed Better Content API providers before their consumers: Dimension Drink before Economy,
-Class Selector and Dimension Drink before Better Content Quests, Dynamic Survival HUD before Better
+Dynamic Survival HUD before Better
 Content Fixes, WLM before Class Selector, Revival before its three consumers, every domain-event
 provider before Threads, and Heat Sync before Latent Chemlib.
 This directed build graph is intentionally acyclic; Threads is the downstream event listener and
@@ -94,12 +94,13 @@ legacy JARs are rebuilt, and every staged release artifact retains the source me
 
 ## Canonical Active Inventory
 
+The active set contains 33 custom mods.
+
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
 | [arcane-chunk-loaders](https://github.com/better-content/arcane-chunk-loaders) | `arcane_chunk_loaders` | `arcane-chunk-loaders-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-fixes](https://github.com/better-content/better-content-fixes) | `better_content_fixes` | `better-content-fixes-0.1.7.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-economy](https://github.com/better-content/better-content-economy) | `better_content_economy` | `better-content-economy-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-content-quests](https://github.com/better-content/better-content-quests) | `better_content_quests` | `better-content-quests-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-threads](https://github.com/better-content/better-content-threads) | `better_content_threads` | `better-content-threads-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [bumblezone-cultivars](https://github.com/better-content/bumblezone-cultivars) | `bumblezone_cultivars` | `bumblezone-cultivars-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [class-selector](https://github.com/better-content/class-selector) | `class_selector` | `class-selector-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |

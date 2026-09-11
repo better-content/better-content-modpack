@@ -6,10 +6,10 @@ This directory contains the pack's living documentation. Add another focused liv
 
 - `README.md`: docs index, pack thesis, and living-doc policy.
 - `progression.md`: progression spine, gates, chokepoints, pinnacle powers, and deadlock checks.
-- `content_systems.md`: recipes, materials, chemistry, casings, loot, trades, quests, and content surfaces.
+- `content_systems.md`: recipes, materials, chemistry, casings, loot, trades, and content surfaces.
 - `crafting_policy.md`: enforceable crafting-graph definition, selector rules, invariants, and known debt.
 - `balance_policy.md`: canonical register of upstream departures, owners, acquisition channels, rationale, and verification.
-- `questbook_standards.md`: secondary-ledger purpose, milestone tasks, icons, copy, rewards, visibility, and review policy.
+- `learning_surfaces.md`: learning-surface ownership, authoring, evidence, and review policy.
 - `realistic_ore_processing.md`: theory, invariants, yield semantics, authoring rules, and maintenance contract for geological deposit processing.
 - `refactor_manifests.md`: current executable-script, progression, and custom-system ownership manifests.
 - `weapon_balance_philosophy.md`: cross-system weapon balance doctrine, measurement rules, exceptions, and the current TCon/Epic Fight implementation.
@@ -31,13 +31,13 @@ Geological deposits, Y-band locality, processing ladders, machine casing tiers, 
 
 The main source trees are `kubejs/`, `config/`, `defaultconfigs/`, `datapacks/`, `globalresources/`, `resourcepacks/`, `shaderpacks/`, active `mods/*.pw.toml`, and bundled custom jars in `mods/`. Root `dist.sh` is the package-once primitive, `test.main.kts` is the explicitly selected granular evaluation facade, and `release.main.kts` owns explicitly requested fresh tested distributions; `package.sh` remains the internal packager.
 
-Runtime directories, raw logs, crash reports, screenshots, profiler dumps, generated quest/site/runtime dumps, and local launcher state are not documentation. Keep them under `~/.cache/bc`, `server-instance/`, `server-template/`, or `generated/` unless explicitly requested otherwise.
+Runtime directories, raw logs, crash reports, screenshots, profiler dumps, generated runtime dumps, and local launcher state are not documentation. Keep them under `~/.cache/bc`, `server-instance/`, `server-template/`, or `generated/` unless explicitly requested otherwise.
 
 ## Doc Policy
 
 Do not add new one-off audits, pass reports, JSON summaries, raw logs, RAM dumps, or diagnostics under `docs/`. Fold durable conclusions into the closest living doc and leave raw evidence in the run root.
 
-When progression behavior changes, update `progression.md` and/or `content_systems.md`. When crafting-graph scope, mod categorization, item-support policy, exception families, or durable integration findings change, update `crafting_policy.md` and the affected `balance_policy.md` row. When player-facing quest structure, presentation, or authoring policy changes, update `questbook_standards.md`. When the Realistic Ores processing model, yields, assays, media, solvents, or extension rules change, update `realistic_ore_processing.md`. When executable script inventory or cross-repository ownership changes, update `refactor_manifests.md` and the root `kjs-script-summaries.md`. When Systemic Salience mappings or presentation change, update `systemic_salience.md`. When weapon references, normalized bands, compensation rules, generic-effect valuation, animation coverage, alternate modes, or signature exceptions change, update `weapon_balance_philosophy.md`. When custom-mod ownership, identity, validation, or deployment changes, update `custom-mod-workspace.md`. When mod composition, performance, or runtime compatibility changes, update `performance_and_mods.md`. Pack-level suites are run only on explicit user instruction through `test.main.kts`, as defined in the root `AGENTS.md` and summarized in `testing.md`.
+When progression behavior changes, update `progression.md` and/or `content_systems.md`. When crafting-graph scope, mod categorization, item-support policy, exception families, or durable integration findings change, update `crafting_policy.md` and the affected `balance_policy.md` row. When player-facing teaching or authoring policy changes, update `learning_surfaces.md`. When the Realistic Ores processing model, yields, assays, media, solvents, or extension rules change, update `realistic_ore_processing.md`. When executable script inventory or cross-repository ownership changes, update `refactor_manifests.md` and the root `kjs-script-summaries.md`. When Systemic Salience mappings or presentation change, update `systemic_salience.md`. When weapon references, normalized bands, compensation rules, generic-effect valuation, animation coverage, alternate modes, or signature exceptions change, update `weapon_balance_philosophy.md`. When custom-mod ownership, identity, validation, or deployment changes, update `custom-mod-workspace.md`. When mod composition, performance, or runtime compatibility changes, update `performance_and_mods.md`. Pack-level suites are run only on explicit user instruction through `test.main.kts`, as defined in the root `AGENTS.md` and summarized in `testing.md`.
 
 Claims in these docs must be checked against their current implementation or evidence authority.
 The tracked pack, including its Packwiz manifests, bundled custom JARs, config, data, and scripts,

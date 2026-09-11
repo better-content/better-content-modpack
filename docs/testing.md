@@ -122,7 +122,8 @@ full pack suite. It records each mod's `reused` or `rebuilt` mode and JAR hash b
 unchanged ZIP pair.
 Legacy JARs without source metadata are replaced during this bootstrap run.
 
-`--skip-tests` is the explicit untested-release path. It rebuilds each active mod through
-`stageRuntimeJar`, deploys the complete set, refreshes Packwiz, and packages exactly once, but skips
-the custom-mod verification tasks and the full pack suite. Release evidence and provenance record
-that tests were skipped; use this only when the fresh-dist request explicitly prohibits tests.
+`--skip-tests` is the explicit untested-release path. It still reuses valid source-identical
+bundled JARs. Changed or unannotated sources build through `stageRuntimeJar` without the custom-mod
+verification tasks; the complete staged set is deployed, Packwiz refreshed, and packaging runs
+exactly once. It skips the full pack suite. Release evidence and provenance record that tests
+were skipped; use this only when the fresh-dist request explicitly prohibits tests.

@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "AGENTS.md"
-hash = "21b5150803cb210727e5f8d2cb64d532237543fd78d639222dc1a94bf44ff32d"
+hash = "9c59c31e05a81e552787bd91bd673605598746793359c419f5dbaf2969c6adb8"
 
 [[files]]
 file = "LICENSE"
@@ -2553,50 +2553,6 @@ file = "config/ftbbackups2.json"
 hash = "b92b3881dad96f1b828373cbd98a39fa81674856f7e70c1c7cd978b763cd9903"
 
 [[files]]
-file = "config/ftbquests/quests/chapter_groups.snbt"
-hash = "cbad6bb5e774e1a155184eb2d9f6f784072dc242cf744cd8f5fe6b67d7ce5acd"
-
-[[files]]
-file = "config/ftbquests/quests/chapters/completionist_armour_sets.snbt"
-hash = "b1215e6fa83a1909d13205e3a6f14d7c9baede9eeee131804e77ed83583eddae"
-
-[[files]]
-file = "config/ftbquests/quests/chapters/completionist_consumables.snbt"
-hash = "dbdae4bd301f449717c3ac7d46c6ac87998a3d0aa726af9b452569bf5efcd0b8"
-
-[[files]]
-file = "config/ftbquests/quests/chapters/completionist_effects.snbt"
-hash = "f75391bf33a7ab3f97a0df512bdaa24bd22a6aef578def68bf07ecb12498feed"
-
-[[files]]
-file = "config/ftbquests/quests/chapters/completionist_enchantments.snbt"
-hash = "c010fa85ccf1a1f86638d6410d3f7f023ea5f780556871748d487e35069cb00b"
-
-[[files]]
-file = "config/ftbquests/quests/chapters/completionist_plants.snbt"
-hash = "3f09a381d92a58efbfd33e937d7ff56454fe002b0be99c3c86216ed43802b9f5"
-
-[[files]]
-file = "config/ftbquests/quests/chapters/completionist_tcon_weapons.snbt"
-hash = "cf1e116f4abf2712c46f2f141c886b0316550a7c75bba517ae8eba8dcca6215c"
-
-[[files]]
-file = "config/ftbquests/quests/chapters/powers.snbt"
-hash = "b416b8bb9dfa5d46419c2e754e062f55de14700c0ea6757bd3eb978397b3c542"
-
-[[files]]
-file = "config/ftbquests/quests/chapters/works.snbt"
-hash = "8daa9073a27be583cbd8850a348093b7491f3fb66443cc8b9fbabc3edb62caae"
-
-[[files]]
-file = "config/ftbquests/quests/chapters/world.snbt"
-hash = "02d1d551ffd6a67729950b702c1a904c6cd0de71139ae208e9f78ae41c75003a"
-
-[[files]]
-file = "config/ftbquests/quests/data.snbt"
-hash = "0fef376c367cb165e7b886c03ada2a3d32abee8abce89b7bf351edd0d6e196aa"
-
-[[files]]
 file = "config/genetic-animals-common.toml"
 hash = "1d746047c3bb1798c1ad0b1e046341f603e3ba180052aeb128349b86b71d79d2"
 
@@ -2663,6 +2619,10 @@ hash = "b0f8eabb0b138d2486a174188269d69102bce66cedb45033732687af192b1ff1"
 [[files]]
 file = "config/iceandfire-client.toml"
 hash = "28ebeb5f6b38ebd0a2d4f3cca0f24612681ec67408b4e5bf67ba819f54d65c76"
+
+[[files]]
+file = "config/iceandfire-common.toml"
+hash = "c2aebbc7227edcb76858005f3391a184cd42d75c584fd5266ac29aaf7835d527"
 
 [[files]]
 file = "config/immersive_weathering-client.toml"
@@ -3130,11 +3090,11 @@ hash = "b8abbb068b58ccdf7dabf606fc364c4d8b79351a630c674242222c049a5fee36"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_stone.toml"
-hash = "4a22dbe52dabb4320d8a2abef20cbf14fee538c8e4c733791f052fcc85c7299f"
+hash = "5ec4e884d209dbd65b978055add8a7f63bf4c08b2e29b8041d70ec1156a2ba89"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_wood.toml"
-hash = "8d83a62e88d3082d99506196ebf3621bd7fbb5b8b88cf2321580ee3843bf1bed"
+hash = "e2be53282a90812452e73a4114f1b093a156113c186d9265f46c33e27a1499ae"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_wooden_fence.toml"
@@ -3142,7 +3102,7 @@ hash = "e2259ad143901c4564ff97aa1da1c16187c9d0b42abc3d7058e90b080f5e3cdd"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_pack_solid_blocks.toml"
-hash = "183f94e6cf1c36ca686a1dbeda48337dc6071654b9aecf3ac899847ea3631610"
+hash = "03f7c208a200f2c5d262ea515f3b706daba1c2b2d7db095c283ebfad740ae173"
 
 [[files]]
 file = "config/rbp/block_definitions/glass.toml"
@@ -4699,10 +4659,6 @@ hash = "56196ac767c162f0c40e1d1bdcd088c94fd558302532927da36d57b96294f8f7"
 [[files]]
 file = "defaultconfigs/framedblocks-server.toml"
 hash = "6f6e45c48f1da1ad70871c2462b717bef6c51f99c100bbeebe66fa71f0e82b8a"
-
-[[files]]
-file = "defaultconfigs/iceandfire-server.toml"
-hash = "b180e9eaee4257bb3d4789df558e98ff849be855cab459460ad6469653eaf284"
 
 [[files]]
 file = "defaultconfigs/incontrol-server.toml"
@@ -7466,7 +7422,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "90aa7586a11c4ce6c157c378d5e3acd3a23faa73355fbfed7ddf8c167444b9dd"
+hash = "0ac0d5eaeddeff62a79df4e5f84fc172ad12a844c9972a57586725260357c270"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -10352,15 +10308,11 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.1.jar"
-hash = "e945cc159c7c044246021c6392bc16d72f8d4fc4e32c54c6d513db56f657e418"
+hash = "7ac60a99ad014b35507adbb256de9cf986f38a16416bc9f7b061e74750f2f965"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.7.jar"
-hash = "d37a31e951ba8babcf0ad827f3e73ca255a0b0e147f41485bbc8561cddaa6aa2"
-
-[[files]]
-file = "mods/better-content-quests-1.0.0.jar"
-hash = "0276ecc26aa0d25f36d53a1a4aeebe02c526f049d7552559e896e78ac53f9f9c"
+hash = "fdb36d8e69604c20c8a02e2131026dad3949638efa0a33093baa36467e35231a"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
@@ -10561,7 +10513,7 @@ metafile = true
 
 [[files]]
 file = "mods/dynamic-survival-hud-1.0.0.jar"
-hash = "0816f35048f5ab05115ae8fbe83bbe8e4b343cc62d2ea689c9e7ae7efaaa4ac9"
+hash = "d386ffcbbf59a5bf8d2035986b0bd35056d4ce616d0a43c8af8126d439a22a99"
 
 [[files]]
 file = "mods/dynamic-trees-ars-nouveau.pw.toml"
@@ -10778,28 +10730,8 @@ hash = "b3693e7a5647d4e28fc30ad3e85193c668a98a410dc3f425f19561cfea68957f"
 metafile = true
 
 [[files]]
-file = "mods/ftb-filter-system.pw.toml"
-hash = "306994966b56905bb3468a0a9abb5bbcef853d4b1081526e62143c86fe473932"
-metafile = true
-
-[[files]]
 file = "mods/ftb-library-forge.pw.toml"
 hash = "9db3089b9504be94818135f452daa1f2abbcb478d31abba2b19833902ea5daa5"
-metafile = true
-
-[[files]]
-file = "mods/ftb-quests-forge.pw.toml"
-hash = "99c44324eac89306a4ada0f32d1635003bf67b7ac0b13ceca9a71d5d92bddf78"
-metafile = true
-
-[[files]]
-file = "mods/ftb-teams-forge.pw.toml"
-hash = "efda76423b21f9bfab4ad8d0411f0b06a199ab7e3e12ca16dc0586c1828b8f07"
-metafile = true
-
-[[files]]
-file = "mods/ftb-xmod-compat.pw.toml"
-hash = "39e65bf3c47517cdb2f9b4b49c6632dd56db797744faaf8b1a3726b1b95aacb4"
 metafile = true
 
 [[files]]
@@ -11266,7 +11198,7 @@ hash = "69559c65af88d480b5e62ee87090a5ef49f89dfd3b6f37deefbb893558e30b37"
 
 [[files]]
 file = "mods/runtime-data-dumper-0.1.0.jar"
-hash = "4d1f809a4afc9ccea348910cfa313f74ddf065bef66d5b7702c1a1e6af2eb03f"
+hash = "1c0e7c68052075da4ad5566831d6eebd1194e722c7bdd85c958e5de0ce18939a"
 
 [[files]]
 file = "mods/satako-library.pw.toml"
@@ -11561,7 +11493,7 @@ metafile = true
 
 [[files]]
 file = "mods/water-survival-1.1.0.jar"
-hash = "60460dd59b27b3f15f178aea56cadc99a62b00d3e4234a0420f1befc18690e2b"
+hash = "8cb67b2d0e475009330c37292a0b5151d3debeb159e78ccd66b5665ab6005f73"
 
 [[files]]
 file = "mods/weather-storms-tornadoes.pw.toml"
@@ -11599,7 +11531,7 @@ metafile = true
 
 [[files]]
 file = "options.txt"
-hash = "f215f0a3a3c63efda404a8bae2800b6031cf04138a3030d035d2c48f42952cf0"
+hash = "078f95ef93b6e49662c57d6b3e908efa98fc8cf32e3b8e8bd5b0c905bdbccf3f"
 
 [[files]]
 file = "pack-test-lock.main.kts"

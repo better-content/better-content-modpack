@@ -195,10 +195,6 @@
       "primary_role": "edge_provider",
       "support_state": "full"
     },
-    "better_content_quests": {
-      "primary_role": "presentation",
-      "support_state": "not_applicable"
-    },
     "better_content_threads": {
       "primary_role": "presentation",
       "support_state": "full"
@@ -775,23 +771,7 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
-    "ftbfiltersystem": {
-      "primary_role": "presentation",
-      "support_state": "not_applicable"
-    },
     "ftblibrary": {
-      "primary_role": "infrastructure",
-      "support_state": "not_applicable"
-    },
-    "ftbquests": {
-      "primary_role": "presentation",
-      "support_state": "not_applicable"
-    },
-    "ftbteams": {
-      "primary_role": "infrastructure",
-      "support_state": "not_applicable"
-    },
-    "ftbxmodcompat": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },

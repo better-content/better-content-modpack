@@ -2,15 +2,15 @@
 
 The modpack owns cross-mod progression policy, six Machine Blocks, genuinely
 cross-mod transition items, exact era-root recipes, optional transport gates,
-the milestone ledger, and player documentation. Owning mods keep lifecycle and
+learning surfaces, and player documentation. Owning mods keep lifecycle and
 runtime logic.
 
 | System | Owner | Pack boundary |
 | --- | --- | --- |
-| Deposits, chunks, samples, processing, grinding balls, canonical outputs | Realistic Ores | Supplies acid/era inputs only; no duplicate ore registration |
-| Radioactive profiles, disturbance persistence, emissions | Latent ChemLib | Provides progression recipes and milestone recognition only where the accomplishment remains salient |
+| Deposits, chunks, samples, processing, canonical outputs | Realistic Ores | Supplies acid/era inputs only; no duplicate ore registration |
+| Radioactive profiles, disturbance persistence, emissions | Latent ChemLib | Provides progression recipes; the mod owns physical behavior and its gameplay events |
 | Heat storage/transport and Create Boiler Heater | Heat Sync | Provides era placement; native UI and hover own operating facts |
-| Dimension Font obelisks, travel sessions, charge, and arrival sites | Dimension Drink | Pack recipes and quests may point to Fonts; the mod owns neutral charge generation/drain, session lifecycle, chunk tickets, and destination placement |
+| Dimension Font obelisks, travel sessions, charge, and arrival sites | Dimension Drink | Pack recipes and learning surfaces may point to Fonts; the mod owns neutral charge generation/drain, session lifecycle, chunk tickets, and destination placement |
 | Blood Altar bootstrap and tier reference | Blood Magic | Still-Beating Heart plus overworld materials opens the altar; Blood Magic's in-game guide remains the authoritative Tier 1-5 multiblock reference |
 | Occult physical components | Hexerei | The mixing cauldron requires Aether, Nether, Bumblezone, and Ratlantis trophies equally; Occultism retains rituals, spirit fire, bindings, servants, and the finite dimensional matrix |
 | Occult storage | None | Controllers, stabilizers, remotes, satchel, wormholes, mineshaft, and miners are closed; finite AE2 storage and visible Ratlantis-rooted logistics remain |
@@ -42,8 +42,11 @@ Startup scripts register only the stable Machine Blocks and still-required
 pack transition items. Server scripts are grouped by progression era,
 transport, compatibility, utility, and narrow removal policy. Mandatory recipes
 use exact installed IDs; optional addon recipes use explicit mod-loaded guards.
-Scripts do not scan arbitrary recipe JSON, inspect namespaces, or silently skip
-mandatory roots.
+Ordinary integration scripts do not scan arbitrary recipe JSON, classify namespaces,
+or silently skip mandatory roots. The narrow crafting-policy contract is an explicit
+exception: its startup classifier checks loaded namespaces, and its final recipe
+report inspects recipe JSON for named cut-family leaks and consumers. This does not
+authorize a general audit framework; see [Crafting graph policy](crafting_policy.md).
 
 ## Item-hover annotations
 
@@ -83,26 +86,16 @@ progression guide:
 | Item-hover annotations | One- or two-line corrections tied naturally to a specific stack, identical in inventory and EMI hover |
 | EMI, Ponder, and native GuideME/Patchouli or system screens | Recipes, apparatus, multiblocks, exact operating instructions, and dynamic state owned by the implementing mod |
 | HUD, event, and world feedback | Immediate controls, warnings, scouting, rescue, and other guidance whose meaning depends on the live situation |
-| FTB Quests | A secondary achievement ledger and optional teaser, never a tutorial, dependency graph, or recipe guide |
 
 Shared concepts align equivalent explanations, but each surface keeps its own
 depth. A loading lesson may lead to a known Thread and its native doorway; it
 does not reveal an unknown card. Hover annotations stay concise and never grow
 into lesson prose merely to reproduce another surface.
 
-## Achievement ledger
+Authoring and review follow [Learning surfaces](learning_surfaces.md). There is no
+active achievement ledger or replacement reward system.
 
-FTB Quests is not a progression guide. Its live authored surface is three
-always-visible, independent ten-node chapters—World, Works, and Powers—plus six
-optional completionist chapters. Milestones record durable accomplishments and
-tease major possibilities; they contain no dependency graph, quest links,
-recipe chains, onboarding instructions, or item-local explanatory prose.
-
-Gameplay criteria, stack predicates, dimension or structure tasks, and only
-then exact item tasks prove completion. Player-visible quests award experience
-bottles that remain manually claimed; they never mint commerce spirits. Deleted
-guide-node rewards are not redistributed. FTB visibility has no pack-authored
-unlock policy or book-burning bypass.
+## Spirit commerce
 
 The seven ordinary village professions correspond one-to-one with sacred,
 wicked, arcane, aerial, aqueous, earthen, and infernal spirits. Each has a
@@ -114,10 +107,11 @@ are removed. Eldritch and umbral spirits never appear in commerce.
 Wandering traders use the same seven identities, colours, and matching payment
 spirits. Every identity carries 13 themed goods plus one one-use offer of two
 matching spirits for two villager eggs already assigned to the corresponding
-profession. Player-credited hostile kills are the only commerce-spirit source:
-Malum-native mappings remain authoritative, otherwise a hostile deterministically
-releases two ordinary spirits through Malum's floating, homing item entities.
-Spawner-origin mobs and economy actors release none. The native Spirit Pouch is
+profession. Player-credited kills release spirits through Malum's floating, homing
+item entities. Malum-native mappings remain authoritative, including mapped passive
+animals such as cows, pigs, sheep, and chickens. Only the unmapped fallback is
+hostile-only: it deterministically releases two ordinary spirits. Spawner-origin
+mobs, already-soulless victims, and economy actors release none. The native Spirit Pouch is
 the sole supported specialist storage surface. Create Deco coins, coin stacks,
 wallets, coin recipes, emerald-priced offers, Wares/Font adapters, and specialist
 harvesting tools are inert or hidden.

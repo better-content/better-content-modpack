@@ -91,34 +91,17 @@ Treat pre-existing changes as user-owned. Do not delete player worlds, saves, lo
 reports, screenshots, profiler data, or launcher state unless explicitly asked. The tracked
 root `options.txt` remains the client-default source.
 
-## FTB Quests authoring protocol
+## Learning-surface authoring
 
-Treat `config/ftbquests/quests/` as hand-authored runtime content. Generative quest graphs,
-generated quest directories, and quest-storage compilers are prohibited and must not replace
-live SNBT. Read `docs/questbook_standards.md` before changing the questbook.
+Read `docs/learning_surfaces.md` before changing player teaching. Maintained surfaces are loading
+lessons, Threads, tooltips, EMI/Ponder, native guides, and contextual HUD feedback. FTB Quests and
+its custom integration are retired; do not recreate quest graphs, completion ledgers, or compilers.
 
-Before editing, state the intended player action, the task that proves it, and every literal
-prerequisite. Inspect the entire affected chapter plus any linked source quests, reveal rules,
-or KubeJS/custom-mod criteria. Do not infer mechanics from quest prose alone; trace the recipe,
-event, tag, criterion, or integration that implements them.
+State the intended player action and choose the surface that can teach it at the useful moment.
+Trace every mechanical claim to the actual recipe, event, tag, or implementation. Preserve domain
+events consumed by Threads and avoid duplicating rewards or progression state across surfaces.
 
-Preserve chapter, quest, task, and reward IDs when their meanings remain the same. For new IDs,
-use unique uppercase 16-digit hexadecimal values and search all live and stored quest content
-before assigning them. A native quest link points to its authoritative quest; never duplicate
-its task, reward, or completion state. Do not reorder unrelated SNBT or rewrite whole chapters
-for a local change.
-
-Coordinate overlapping quest edits at chapter granularity through the lane claim files. A claim
-must name every chapter and cross-cutting integration file in scope. Before handoff, report:
-
-- the player-visible behavior changed;
-- IDs added, removed, or repurposed;
-- dependencies, links, visibility, criteria, and rewards affected;
-- supporting runtime files changed outside `config/ftbquests/`;
-- the explicitly ordered pack-suite result and evidence path, or that pack testing was intentionally
-  not run under the frugal-testing policy.
-
-Do not invent a second quest compiler, schema, linter, audit, or validation command. Review SNBT
-and presentation according to `docs/questbook_standards.md`; the obsolete standalone layout
-harness and its icon audit are no longer requirements.
+Coordinate overlapping content and integration edits through the lane claim files. Before handoff,
+report the player-visible change, affected surfaces and triggers, local verification, and the
+explicitly ordered pack-suite result or that pack testing was intentionally omitted.
 `./test.main.kts` remains the supported pack-test facade, subject to the explicit-order policy.

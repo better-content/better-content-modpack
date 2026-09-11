@@ -46,7 +46,7 @@ yield remains within 1% of the prior configuration for every family.
    deterministic outputs rather than misleading pseudo-probabilities.
 4. Three optional transformations give crushed geology a legible magical use
    without pretending to be higher-yield ore multiplication: Blood Magic spends
-   LP for one thematic spirit or crystal, Hexerei combines four feeds with all four
+   LP for one thematic material, Hexerei combines four feeds with all four
    dimension catalysts, and Ars crushing offers one low-chance elemental essence.
 5. Furnace exits resolve to canonical native or ChemLib forms. TConstruct molten
    exits are metal-only; quartz, gems, salts, carbon, and other nonmetals remain
@@ -76,13 +76,28 @@ hurts on contact, and can be consolidated into magma.
 | Route | Input | Outcome |
 | --- | --- | --- |
 | Technical | four rinsed feeds at 2 bar | primary concentrate plus a compact deterministic assay |
-| Blood | four crushed feeds and LP | one family-themed spirit or destructive crystal |
+| Blood | four crushed feeds and LP | one family-themed material, as listed below; no Malum spirits |
 | Hexerei | four crushed feeds and four dimension catalysts | one family-themed occult material |
 | Ars | one crushed feed | a 25% elemental-essence chance, with Tin Quartz's small Source Gem bonus |
 
 These are different uses, not eight media tiers multiplying the same output.
 Recipe viewers show exact outputs and apparatus costs; the processing manifest
 records the shared intent.
+
+The Blood Magic alchemy-table route consumes four matching crushed feeds. Ordinary
+families cost 2,000 LP at upgrade level 2 and take 200 ticks; Black Shale and Hotstone
+cost 5,000 LP at upgrade level 3 and take 400 ticks. Its exact one-item outputs are:
+
+| Deposit | Blood output |
+| --- | --- |
+| Coal Measures | `minecraft:blaze_powder` |
+| Ironstone | `minecraft:clay_ball` |
+| Copper Bloom | `minecraft:phantom_membrane` |
+| Tin Quartz | `minecraft:lapis_lazuli` |
+| Brassroot | `minecraft:phantom_membrane` |
+| Evaporite Beds | `minecraft:prismarine_crystals` |
+| Black Shale | `bloodmagic:corrupted_dust` |
+| Hotstone | `bloodmagic:destructivecrystal` |
 
 ## Design contract
 

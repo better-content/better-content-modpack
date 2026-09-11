@@ -8,13 +8,13 @@ the closest living design document in the same change.
 ## Executable KubeJS surface
 
 KubeJS executes JavaScript recursively under all three active roots. The current
-tree contains 71 active scripts: 6 client, 57 server, and 8 startup. The exact
+tree contains 72 active scripts: 6 client, 58 server, and 8 startup. The exact
 path and responsibility index is maintained in [`../kjs-script-summaries.md`](../kjs-script-summaries.md).
 
 | Root | Active areas | Count |
 | --- | --- | ---: |
 | `kubejs/client_scripts` | compatibility 4, guidance 1, policy 1 | 6 |
-| `kubejs/server_scripts` | compatibility 37, policy 6, progression 10, transport 1, utility 2, root policy report 1 | 57 |
+| `kubejs/server_scripts` | compatibility 37, policy 6, progression 11, transport 1, utility 2, root policy report 1 | 58 |
 | `kubejs/startup_scripts` | compatibility 3, policy 3, progression 2 | 8 |
 
 The `compat/retained` and `compat/reviewed` names classify ownership history;
@@ -30,7 +30,7 @@ a staging area inside an active root.
 | Geological deposits and processing | Realistic Ores | Era inputs only; see [`realistic_ore_processing.md`](realistic_ore_processing.md) |
 | Radiation and contained chemistry | Latent ChemLib | Cross-mod gates; no duplicate physical simulation |
 | Industrial heat | Heat Sync | Era placement and integrations; Heat Sync owns storage, transfer, ambient mapping, and Create boiler heat |
-| Dimension Fonts | Dimension Drink | Recipes and milestone references only; Dimension Drink owns obelisks, charge, sessions, tickets, and arrival sites |
+| Dimension Fonts | Dimension Drink | Recipes and learning references only; Dimension Drink owns obelisks, charge, sessions, tickets, and arrival sites |
 | Settlement paths | Settlement Roads | No pack placement script; Settlement Roads owns dry-route planning, persistence, road palette, and placement; bridge scaffolding is dormant and unsupported |
 | Vanilla vessel durability and recipes | Better Content Fixes | No boat mutation or hiding script |
 | Credited-kill spirit release, seven village professions/stations/behaviours, matching spirit trades, and seven wandering identities | Better Content Economy | No parallel KubeJS spirit source, trade catalogue, profession conversion, or kill-drop script; pack policy only retires old coin/equipment surfaces |

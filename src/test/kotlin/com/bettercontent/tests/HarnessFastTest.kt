@@ -68,10 +68,10 @@ class HarnessFastTest {
         val document = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         assertEquals("bc.active_custom_mods.v1", document.path("schema").asText())
         val mods = document.path("mods")
-        assertEquals(34, mods.size())
+        assertEquals(33, mods.size())
         val repositories = mods.map { it.path("repository").asText() }.toSet()
-        assertEquals(34, repositories.size)
-        assertEquals(34, mods.map { it.path("modId").asText() }.toSet().size)
+        assertEquals(33, repositories.size)
+        assertEquals(33, mods.map { it.path("modId").asText() }.toSet().size)
         mods.forEach { mod ->
             assertTrue(Files.isRegularFile(root.resolve("mods").resolve(mod.path("artifact").asText())))
             assertTrue(mod.path("tasks").isArray && mod.path("tasks").size() > 0)
@@ -81,7 +81,6 @@ class HarnessFastTest {
             .path("dependsOn").map { it.asText() }
         assertEquals(listOf("heat-sync"), dependencies("latent-chemlib"))
         assertEquals(listOf("dimension-drink"), dependencies("better-content-economy"))
-        assertEquals(listOf("class-selector", "dimension-drink"), dependencies("better-content-quests"))
         assertEquals(listOf("dynamic-survival-hud"), dependencies("better-content-fixes"))
         assertEquals(listOf("world-lifecycle-manager"), dependencies("class-selector"))
         assertEquals(listOf("downed-player-revival"), dependencies("depth-director"))
@@ -110,6 +109,41 @@ class HarnessFastTest {
                 missingBuildDependencies.isEmpty(),
                 "$repository omits release dependencies for sibling build artifacts: ${missingBuildDependencies.sorted()}",
             )
+        }
+    }
+
+    @Test
+    fun retiredQuestContentIsAbsentAndSharedFtbModsRemain() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val retiredNamespaces = setOf("better_content_quests", "ftbquests", "ftbteams", "ftbxmodcompat", "ftbfiltersystem")
+        val namespaces = jacksonObjectMapper().readTree(root.resolve("kubejs/config/crafting_policy.json").toFile())
+            .path("namespaces")
+        retiredNamespaces.forEach { assertTrue(!namespaces.has(it), "retired namespace remains classified: $it") }
+        listOf("ftblibrary", "ftbbackups2").forEach { assertTrue(namespaces.has(it), "shared namespace is missing: $it") }
+
+        listOf(
+            "mods/better-content-quests-1.0.0.jar", "mods/ftb-quests-forge.pw.toml",
+            "mods/ftb-teams-forge.pw.toml", "mods/ftb-xmod-compat.pw.toml",
+            "mods/ftb-filter-system.pw.toml", "modpack questbook notes",
+        ).forEach { assertTrue(!Files.exists(root.resolve(it)), "retired quest content remains: $it") }
+        listOf("mods/ftb-library-forge.pw.toml", "mods/ftb-backups-2.pw.toml", "config/ftbbackups2.json")
+            .forEach { assertTrue(Files.isRegularFile(root.resolve(it)), "shared FTB content is missing: $it") }
+
+        val questConfig = root.resolve("config/ftbquests")
+        if (Files.exists(questConfig)) {
+            Files.walk(questConfig).use { files ->
+                assertTrue(files.noneMatch(Files::isRegularFile), "retired quest configuration remains")
+            }
+        }
+        val options = Files.readString(root.resolve("options.txt"))
+        assertTrue(!options.contains("key_key.ftbteams.") && !options.contains("key_key.ftbquests."))
+        Files.list(root.resolve("config/rbp/block_definitions")).use { definitions ->
+            definitions.filter(Files::isRegularFile).forEach { definition ->
+                val text = Files.readString(definition)
+                retiredNamespaces.forEach { namespace ->
+                    assertTrue(!text.contains("$namespace:"), "retired block definition in $definition: $namespace")
+                }
+            }
         }
     }
 
