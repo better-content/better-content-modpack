@@ -456,25 +456,43 @@ class HarnessFastTest {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val lock = root.resolve("pack-test-lock.main.kts")
         val ready = state.resolve("ready")
+        val release = state.resolve("release")
         val first = ProcessBuilder(
             lock.toString(), "run", "test", "server", "--",
-            "sh", "-c", "test -f '${state.resolve("owner.json")}' && touch '$ready' && sleep 2",
+            "sh", "-c", "test -f '${state.resolve("owner.json")}' && touch '$ready' && while [ ! -f '$release' ]; do sleep 0.1; done",
         ).apply {
             environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString()
             environment().remove("BC_PACK_TEST_LOCK_TOKEN")
+            redirectErrorStream(true)
+            redirectOutput(state.resolve("holder.log").toFile())
         }.start()
-        val deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos()
-        while (!Files.exists(ready) && System.nanoTime() < deadline) Thread.sleep(50)
-        assertTrue(Files.exists(ready), "first runner never acquired the mutex")
+        val holderTracker = ProcessTracker(first.toHandle())
+        try {
+            // Cold Kotlin script compilation must not expire the holder's lease.
+            val deadline = System.nanoTime() + Duration.ofSeconds(45).toNanos()
+            while (!Files.exists(ready) && first.isAlive && System.nanoTime() < deadline) Thread.sleep(50)
+            assertTrue(Files.exists(ready), "first runner never acquired the mutex; see holder.log")
 
-        val contender = ProcessBuilder(lock.toString(), "run", "test", "candidate", "--", "true")
-            .apply {
-                environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString()
-                environment().remove("BC_PACK_TEST_LOCK_TOKEN")
+            val contender = ProcessBuilder(lock.toString(), "run", "test", "candidate", "--", "true")
+                .apply {
+                    environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString()
+                    environment().remove("BC_PACK_TEST_LOCK_TOKEN")
+                    redirectErrorStream(true)
+                    redirectOutput(state.resolve("contender.log").toFile())
+                }.start()
+            val contenderTracker = ProcessTracker(contender.toHandle())
+            try {
+                assertTrue(contender.waitFor(45, java.util.concurrent.TimeUnit.SECONDS), "contender timed out; see contender.log")
+                assertEquals(75, contender.exitValue())
+            } finally {
+                contenderTracker.stop(Duration.ofSeconds(5))
             }
-            .start()
-        assertEquals(75, contender.waitFor())
-        assertEquals(0, first.waitFor())
+        } finally {
+            release.writeText("contender finished\n")
+            first.waitFor(10, java.util.concurrent.TimeUnit.SECONDS)
+            holderTracker.stop(Duration.ofSeconds(5))
+        }
+        assertEquals(0, first.exitValue())
         assertTrue(Files.notExists(state.resolve("owner.json")))
     }
 

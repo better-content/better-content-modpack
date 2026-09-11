@@ -1,0 +1,149 @@
+{
+  "schema": "bc.ci_source_revisions.v1",
+  "repositories": [
+    {
+      "repository": "arcane-chunk-loaders",
+      "commit": "2fa0d95a84f55a6b50d87b41c8bd2c79b349f331"
+    },
+    {
+      "repository": "better-content-economy",
+      "commit": "1f27f4c7fb7c1e39cae6b5dda040e662a9b9d4c7"
+    },
+    {
+      "repository": "better-content-fixes",
+      "commit": "97751ae63336b9ea9c3e1d96e18febc707740334"
+    },
+    {
+      "repository": "better-content-quests",
+      "commit": "58544ee799286efd7b2d6d57b8ba86f4ba241403"
+    },
+    {
+      "repository": "better-content-threads",
+      "commit": "a0767f1c7c357f56e2f0b39dcc14a95cf949d40a"
+    },
+    {
+      "repository": "bumblezone-cultivars",
+      "commit": "656ac5b8bfba8fb5765f0b02cd04be09397a7821"
+    },
+    {
+      "repository": "class-selector",
+      "commit": "fcd4f934fb9a249b0ca9708f9d774e802770a6b0"
+    },
+    {
+      "repository": "create-train-fuel-scaling",
+      "commit": "04187541124f1e2f8fa7fff5993c6eb5b1bf8a63"
+    },
+    {
+      "repository": "create-transmission-loss",
+      "commit": "fbc56c2f775caec1b40e61e98705c7a8e3dc8e53"
+    },
+    {
+      "repository": "depth-director",
+      "commit": "34dd6b329ed9696a4ef2e2f0d6ee683a2ece0ff7"
+    },
+    {
+      "repository": "dimension-drink",
+      "commit": "2660fd248e0a95d62b8cb3560cc0a4f1c5783c36"
+    },
+    {
+      "repository": "downed-player-revival",
+      "commit": "8d76eadee60e2640b37c12a7ef4a4bb96701729f"
+    },
+    {
+      "repository": "dynamic-survival-hud",
+      "commit": "bade726e0c560f1dee793b5006916ac6a51788d4"
+    },
+    {
+      "repository": "dynamic-trees-dimension-compat",
+      "commit": "6bf6acfa98d1568f6753808ee1aabf5f335a3e5e"
+    },
+    {
+      "repository": "dynamic-trees-hexerei",
+      "commit": "bad060a3a0c8237bc3f0210ef20fb37315c82ed4"
+    },
+    {
+      "repository": "dynamic-trees-malum",
+      "commit": "d9978c61e1ab9a82d38d1878e7f3ebfa9b07c284"
+    },
+    {
+      "repository": "heat-sync",
+      "commit": "95dbfd39eadc9435d166d725ee45ac4f42dc8721"
+    },
+    {
+      "repository": "immersive-weathering-sampler",
+      "commit": "71b1934b55eadc620209cba20fd97827b45935cf"
+    },
+    {
+      "repository": "latent-chemlib",
+      "commit": "67d1c9e00694c537325158187f874232a5dc8b84"
+    },
+    {
+      "repository": "mining-helmet",
+      "commit": "3e9da1f7fa896db5706267a1f5eaf340198bb24e"
+    },
+    {
+      "repository": "oc2r-create-bridge",
+      "commit": "22330b2d037c2368124d4b1f8e1ecd32e8b93498"
+    },
+    {
+      "repository": "oc2r-wireless-pubsub",
+      "commit": "995fa8f8cb55de0f08246eb7b5746da22732a38a"
+    },
+    {
+      "repository": "pillager-campaigns",
+      "commit": "0cd7837039a8c560efac7ca24bad56abf8246863"
+    },
+    {
+      "repository": "player-traces",
+      "commit": "404a327e8f74dd85320a34ef48350ae60b10353e"
+    },
+    {
+      "repository": "procedural-bouquets",
+      "commit": "46ea06b128c58b0e46f940f6baf411c0db426a72"
+    },
+    {
+      "repository": "rail-beetle",
+      "commit": "2e56e3682e8fc0eee658788f9f62b6349fadbccf"
+    },
+    {
+      "repository": "ratlantis-logistics",
+      "commit": "849b3edcd0cc0307dec2c62234dba858e00bb6da"
+    },
+    {
+      "repository": "realistic-ores",
+      "commit": "b9d175ce6146a0acdb7dd90b7229b6e6a2a4559c"
+    },
+    {
+      "repository": "rpg-stats",
+      "commit": "a18305d9ca83537edd9becf6fac8b1b735b65c25"
+    },
+    {
+      "repository": "runtime-data-dumper",
+      "commit": "6a5005507577f866ffb80b8e6c6a1beef2a1396c"
+    },
+    {
+      "repository": "settlement-roads",
+      "commit": "5555345ae885ae5ab974fc6e9ee490ee4282f9af"
+    },
+    {
+      "repository": "systemic-salience",
+      "commit": "58b4ad7d46d6168c93e2e6c811aa13ea8869dceb"
+    },
+    {
+      "repository": "tinkers-construct-affixes",
+      "commit": "eb4ed4ee0e6b1e94f3009254a5e6e0f16505d75a"
+    },
+    {
+      "repository": "village-walls",
+      "commit": "249fe721eb1e49ab45044400dc396394ef35621f"
+    },
+    {
+      "repository": "water-survival",
+      "commit": "24842056fac44fbf677397d478a85f7ef0b26217"
+    },
+    {
+      "repository": "world-lifecycle-manager",
+      "commit": "76ae17416a8e67e83067272f5882e41c00f68365"
+    }
+  ]
+}

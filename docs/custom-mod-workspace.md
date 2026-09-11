@@ -57,6 +57,12 @@ and bundled source identities before staging anything. It does not build provide
 cache, deploy JARs, or package the modpack. Update the workflow's pinned baseline deliberately when
 a consumer requires a newer provider API; never substitute a floating branch.
 
+The pack's fast reflection-boundary check also inspects custom-mod source files. Its CI workflow
+materializes source-only checkouts at the revisions in `.github/ci-source-revisions.json`, including
+both validation-only repositories. These checkouts are not built or used as provider artifacts.
+Refresh their pins deliberately after reviewed source changes; never skip the reflection check
+merely because a fresh runner starts without `mod_source/`.
+
 Plugin selectors are pinned to the versions resolved during hygiene remediation. RPG Stats and
 Systemic Salience retain their previously resolved `1.2.0.7-dev-SNAPSHOT` Parchment plugin to avoid
 an unrequested toolchain change. Snapshot content and full transitive dependency locking/verification
