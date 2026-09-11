@@ -59,11 +59,17 @@ The registry uses `bc.hover_annotations.v2`. Every static record has a stable
 domain and authoritative implementation path. Hover copy stays the concise
 local correction while Threads and loading briefs teach the broader model.
 
-Annotations correct a materially wrong or incomplete mental model. They do not
-repeat ingredients, layouts, attributes, or ordinary uses that EMI and native
-tooltips already communicate. Dynamic stack state remains owned by the source
-mod. World events, controls, onboarding, scouting, and other guidance without a
-natural item anchor remain on their event, HUD, or world surfaces.
+Annotations cover every pack-owned transition family and every curriculum-important
+system with a natural item anchor when the native hover does not explain the pack's
+model. An existing native tooltip counts as coverage when it already teaches that
+model; the pack does not add a duplicate merely to claim ownership.
+
+Copy may identify a capability root, lifecycle, process authority, requirement,
+or another useful role beyond correcting an outright misconception. It still does
+not repeat ingredients, layouts, attributes, or ordinary uses that EMI and native
+tooltips already communicate. Dynamic stack state remains owned by the source mod.
+World events, controls, onboarding, scouting, and other guidance without a natural
+item anchor remain on their event, HUD, loading-lesson, Thread, or world surfaces.
 
 ## Learning surface hierarchy
 

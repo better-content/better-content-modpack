@@ -63,9 +63,11 @@ The achievement ledger must not duplicate those facts merely because a task
 uses the same item, and no primary surface may direct players to a quest as its
 authoritative explanation.
 
-Annotate only when a competent player would otherwise form a materially wrong
-or incomplete mental model. Create a milestone only when the completed act is
-worth remembering.
+Annotate every pack-owned transition family and every curriculum-important system
+with a natural item anchor unless its native hover already explains the relevant
+pack model. Keep the annotation to one or two concise lines and leave recipes,
+dynamic state, and full procedures on their authoritative surfaces. Create a
+milestone only when the completed act is worth remembering.
 
 ## Rewards
 

@@ -18,14 +18,93 @@ class HoverAnnotationLearningSurfaceTest {
     fun `every annotation has a bounded stable concept and concise copy`() {
         assertEquals("bc.hover_annotations.v2", registry.path("schema").asText())
         val rows = registry.path("annotations")
-        assertEquals(52, rows.size())
+        val allowedCategories = setOf(
+            "correction", "lifecycle_state", "hidden_composition", "general_uses",
+            "capability_root", "process_authority", "operation_contract", "requirement_limit",
+            "provenance", "scope_boundary", "persistence_consequence", "economy_semantics",
+            "combat_handling",
+        )
+        val exactTargets = mutableListOf<String>()
         rows.forEach { row ->
             assertTrue(row.path("concept_id").asText().matches(Regex("[a-z0-9_.]{3,96}")))
+            assertTrue(row.path("category").asText() in allowedCategories, row.toString())
+            assertTrue(row.path("domain").asText().matches(Regex("[a-z0-9_.]{3,96}")))
             assertTrue(row.path("owner").asText().isNotBlank())
+            val selector = row.path("selector")
+            val selectorKinds = listOf("item", "items", "tag").count(selector::has)
+            assertEquals(1, selectorKinds, row.toString())
+            selector.path("item").takeIf { !it.isMissingNode }?.asText()?.let {
+                assertTrue(it.matches(Regex("[a-z0-9_.-]+:[a-z0-9_./-]+")), row.toString())
+                exactTargets += it
+            }
+            selector.path("items").takeIf { it.isArray }?.map { it.asText() }?.let { items ->
+                assertTrue(items.isNotEmpty(), row.toString())
+                assertEquals(items.size, items.distinct().size, row.toString())
+                assertTrue(items.all { it.matches(Regex("[a-z0-9_.-]+:[a-z0-9_./-]+")) }, row.toString())
+                exactTargets += items
+            }
+            selector.path("tag").takeIf { !it.isMissingNode }?.asText()?.let {
+                assertTrue(it.matches(Regex("[a-z0-9_.-]+:[a-z0-9_./-]+")), row.toString())
+            }
             val lines = row.path("lines").map { it.asText() }
             assertTrue(lines.size in 1..2)
             assertTrue(lines.joinToString(" ").trim().split(Regex("\\s+")).size <= 24)
         }
+        assertEquals(exactTargets.size, exactTargets.distinct().size, "duplicate exact item selectors")
+    }
+
+    @Test
+    fun `every pack-created transition item has an annotation`() {
+        val source = Files.readString(root.resolve("kubejs/startup_scripts/progression/20_transition_items.js"))
+        val registered = Regex("\\['([a-z0-9_]+)',\\s*'[^']+'\\]")
+            .findAll(source)
+            .map { "kubejs:${it.groupValues[1]}" }
+            .toSet()
+        val missing = registered - exactTargets()
+        assertTrue(registered.isNotEmpty())
+        assertTrue(missing.isEmpty(), "unannotated pack-created transition items: ${missing.sorted()}")
+    }
+
+    @Test
+    fun `critical curriculum systems retain natural hover anchors`() {
+        val exact = exactTargets()
+        val tags = tagTargets()
+        val expectedExact = setOf(
+            "dimension_drink:dimensional_font",
+            "dimension_drink:return_seal",
+            "bumblezone_cultivars:living_pollen_nursery",
+            "water_survival:rain_collector",
+            "mining_helmet:mining_helmet",
+            "oc2r_wireless_pubsub:wireless_relay",
+            "procedural_bouquets:bouquet_grid",
+            "better_content_economy:sacred_reliquary",
+            "malum:spirit_pouch",
+            "ratlantis_logistics:courier_lattice",
+            "rail_beetle:route_beacon",
+            "traces:foot_traffic_probe",
+            "tinkers_construct_affixes:affixed_part_cache",
+            "create:schematicannon",
+            "sereneseasons:calendar",
+            "weather2:tornado_sensor",
+            "adpother:aerometer",
+            "bloodmagic:altar",
+            "hexerei:mixing_cauldron",
+            "ae2:blank_pattern",
+            "ae2:pattern_provider",
+            "creatingspace:rocket_controls",
+            "iceandfire:dragonsteel_fire_ingot",
+            "realistic_ores:surface_sample_hotstone",
+        )
+        val expectedTags = setOf(
+            "bumblezone_cultivars:seeds",
+            "dynamictrees:seeds",
+            "realistic_ores:crushed_feeds",
+            "realistic_ores:rinsed_feeds",
+            "realistic_ores:radioactive_forms/uranium/hosted_ore_blocks",
+            "realistic_ores:radioactive_forms/thorium/hosted_ore_blocks",
+        )
+        assertTrue((expectedExact - exact).isEmpty(), "missing exact anchors: ${(expectedExact - exact).sorted()}")
+        assertTrue((expectedTags - tags).isEmpty(), "missing tag anchors: ${(expectedTags - tags).sorted()}")
     }
 
     @Test
@@ -90,4 +169,19 @@ class HoverAnnotationLearningSurfaceTest {
         }
         assertTrue(client.contains("keepReading"))
     }
+
+    private fun exactTargets(): Set<String> = registry.path("annotations").flatMap { row ->
+        val selector = row.path("selector")
+        when {
+            selector.has("item") -> listOf(selector.path("item").asText())
+            selector.has("items") -> selector.path("items").map { it.asText() }
+            else -> emptyList()
+        }
+    }.toSet()
+
+    private fun tagTargets(): Set<String> = registry.path("annotations")
+        .map { it.path("selector") }
+        .filter { it.has("tag") }
+        .map { it.path("tag").asText() }
+        .toSet()
 }
