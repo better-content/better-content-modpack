@@ -129,6 +129,14 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    fun `early handling annotations expose the primitive and automatic boundary`() {
+        val text = Files.readString(root.resolve("kubejs/config/hover_annotations.json"))
+        assertTrue(text.contains("Passive vertical transfer from canvas and iron fittings"))
+        assertTrue(text.contains("Automatic crafting begins after Create's Mechanical Crafter."))
+        assertTrue(text.contains("High-throughput transfer requires a Courier Lattice from Ratlantis."))
+    }
+
+    @Test
     fun `tooltip compiler consumes v2 concepts without changing the item-local surface`() {
         val script = Files.readString(root.resolve("kubejs/client_scripts/guidance/10_hover_annotations.js"))
         assertTrue(script.contains("bc.hover_annotations.v2"))

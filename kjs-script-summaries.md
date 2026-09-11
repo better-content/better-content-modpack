@@ -2,7 +2,7 @@
 
 This index is generated from the three executable KubeJS roots. Every listed JavaScript file is active; directory names such as `retained` and `reviewed` describe review history, not load state. `kubejs/inactive_review` is deliberately excluded because it is outside the executable roots.
 
-Current inventory: **71 active scripts** — 6 client, 57 server, and 8 startup.
+Current inventory: **72 active scripts** — 6 client, 58 server, and 8 startup.
 
 ## Client scripts
 
@@ -58,6 +58,7 @@ Current inventory: **71 active scripts** — 6 client, 57 server, and 8 startup.
 - `kubejs/server_scripts/policy/global_loot_progression.js` — Removes progression-breaking materials from broad loot injection surfaces.
 - `kubejs/server_scripts/policy/removed_items.js` — Applies the exact deny list for intentionally unavailable outputs.
 - `kubejs/server_scripts/policy/tnt_recipe.js` — Restricts TNT to the two vanilla sand inputs instead of broad sand tags.
+- `kubejs/server_scripts/progression/00_primitive_workshop.js` — Establishes the pre-Font fiber, fired-goods, and simple-fittings recipe layer for local handling and homestead utilities.
 - `kubejs/server_scripts/progression/10_hand_workshop.js` — Authors four named Font grouts, automated and Melter-scale Andesite Alloy casting, and hand-cranked Create entry.
 - `kubejs/server_scripts/progression/20_ratlantis_logistics.js` — Removes direct Ratlantis access and gives Pretty Pipes, Sophisticated automation, Create requests, Rats, AE2, and Little Logistics visible Ratlantis-rooted recipes.
 - `kubejs/server_scripts/progression/21_bumblezone_cultivars.js` — Removes recipes that would create origin-controlled cultivar propagules outside nursery and harvest acquisition.

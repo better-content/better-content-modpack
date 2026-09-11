@@ -26,6 +26,11 @@ ServerEvents.recipes(function (event) {
     event.shaped('3x create:mechanical_crafter', [' E ', 'EBE', ' A '], {
         E: 'create:electron_tube', B: 'kubejs:brass_machine_block', A: 'create:andesite_alloy'
     }).id('kubejs:precision_factory/direct_root/mechanical_crafter')
+    event.remove({ id: 'quark:automation/crafting/crafter' })
+    event.shaped('quark:crafter', ['III', 'ICI', 'RMR'], {
+        I: '#forge:ingots/iron', C: 'minecraft:crafting_table',
+        R: '#forge:dusts/redstone', M: 'create:mechanical_crafter'
+    }).id('kubejs:precision_factory/quark_crafter')
     event.remove({ id: 'create:crafting/kinetics/track_station' })
     event.shaped('create:track_station', [' R ', ' B ', ' S '], {
         R: 'create:railway_casing', B: 'kubejs:brass_machine_block', S: 'create:sturdy_sheet'

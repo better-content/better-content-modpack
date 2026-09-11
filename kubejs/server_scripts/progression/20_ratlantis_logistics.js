@@ -97,6 +97,14 @@ ServerEvents.recipes(function (event) {
         C: '#forge:cheese', L: 'ratlantis_logistics:courier_lattice'
     }).id('kubejs:ratlantis_logistics/root/rat_work_orders')
 
+    // Ordinary hoppers remain early local transport. The high-throughput
+    // variant joins Ratlantis because it is a scalable logistics upgrade.
+    event.remove({ id: 'littlelogistics:rapid_hopper' })
+    event.shaped('littlelogistics:rapid_hopper', ['GHG', ' L ', ' R '], {
+        G: '#forge:ingots/gold', H: 'minecraft:hopper',
+        L: 'ratlantis_logistics:courier_lattice', R: 'minecraft:redstone_block'
+    }).id('kubejs:ratlantis_logistics/root/rapid_hopper')
+
     // Docks and rails stay inertly available. Every usable native vehicle pays
     // its Ratlantis proof within the visible recipe.
     ;[

@@ -11,6 +11,30 @@ item-hover annotations, and event or world feedback. FTB Quests records a small
 set of completed milestones but does not prescribe routes, expose recipe chains,
 or gate discovery through quest dependencies.
 
+## Prelude — Primitive Workshop
+
+Before the first Dimension Font, crafting follows three material steps. Handworked
+goods begin with wood and twigs, rock, flint, bone, hides, wool, straw, string,
+Farmer's Delight rope, canvas, paper, and dyes. Hearth work adds charcoal or coal,
+clay, brick, glass, and cooked stone. Simple copper and iron ingots, nuggets,
+chains, and buckets then provide fittings. Redstone, plates, alloys, gears,
+casings, and Machine Blocks are not primitive-workshop reagents.
+
+Local handling is useful at this stage without becoming a logistics network.
+Quark's wooden chute ejects items into the world, Farmer's Delight's basket
+catches them, and Create's canvas-and-iron chute moves items vertically between
+inventories without power. Vanilla and copper hoppers, the Little Logistics fluid
+hopper, Quark pipes, and Supplementaries faucets and pulleys remain available as
+bounded local transport. Rain collection, cooking, temperature preparation,
+rustic storage and construction, boats, minecarts, ziplines, hang gliders, and
+primitive Eureka ships use the same workshop palette.
+
+Origin crops retain their native uses, but generic workshop goods do not depend
+on them. Farmer's Delight straw and canvas therefore provide early alternatives
+for sacks, awnings, doormats, feeding troughs, thatch, and wattle-and-daub, while
+coal provides the ordinary fire-pit route. Explicitly bamboo-, flax-, food-, or
+magic-themed content remains tied to its own material.
+
 ## Era 1 — Hand Workshop and Tinkers' Construct
 
 Build native Tinkers' Construct tools and reach the Nether, Aether, Bumblezone,
@@ -47,7 +71,8 @@ high modules and advanced automation. AE2's Energy Acceptor requires PowerGrid
 generation, Ratlantis logistics, OC2R computation, meteor material, and
 Impossible Matter together. Vanilla chests and hoppers, early Create movement,
 Eureka, Little Logistics docks, and Wares remain independent; usable Little
-Logistics vehicles require a visible Ratlantis component.
+Logistics vehicles and its high-throughput Rapid Hopper require a visible
+Ratlantis component.
 
 Craft `kubejs:andesite_machine_block` from one Seared Brick block, four
 Andesite Alloy, and four iron plates. It directly unlocks only the Millstone and
@@ -65,7 +90,8 @@ TCon alloying is the only brass composition route. Compact the Copper block,
 Brass Casing, four brass plates, two electron tubes, and polished rose quartz
 into `kubejs:brass_machine_block`. It directly unlocks the Deployer, Mechanical
 Crafter, the first steam engine, and precision transport controls. Precision Mechanisms and native
-components carry all later recipes.
+components carry all later recipes. Quark's automatic Crafter is downstream of
+the Create Mechanical Crafter rather than an independent iron-and-redstone bypass.
 
 ## Era 4 — PneumaticCraft and Heat Sync
 

@@ -29,4 +29,15 @@ class RatlantisLogisticsRecipeContractTest {
         assertEquals(7, Regex("C: 'ratlantis_logistics:arcane_logistics_core'").findAll(script).count())
         assertTrue(script.contains("event.remove({ id: 'prettypipes:module_clearing' })"))
     }
+
+    @Test
+    fun `rapid hopper is a visible Ratlantis throughput upgrade`() {
+        assertTrue(script.contains("event.remove({ id: 'littlelogistics:rapid_hopper' })"))
+        assertTrue(script.contains(
+            "event.shaped('littlelogistics:rapid_hopper', ['GHG', ' L ', ' R ']",
+        ))
+        assertTrue(script.contains("L: 'ratlantis_logistics:courier_lattice'"))
+        assertTrue(script.contains("R: 'minecraft:redstone_block'"))
+        assertTrue(script.contains("kubejs:ratlantis_logistics/root/rapid_hopper"))
+    }
 }
