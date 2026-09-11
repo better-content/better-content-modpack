@@ -77,10 +77,16 @@ fun cleanupFixtures(resources: List<AutoCloseable>, report: (Map<String, Any?>) 
         else -> (if (error is ProcessCleanupException) error.survivingPids else emptyList()) +
             survivingPids(error.cause) + error.suppressed.flatMap(::survivingPids)
     }
-    report(mapOf(
-        "complete" to (failure == null),
-        "surviving_pids" to survivingPids(failure).distinct().sorted(),
-        "error" to failure?.let { it.cause?.message ?: it.message },
-    ))
-    if (failure != null) throw failure
+    val reportingFailure = runCatching {
+        report(mapOf(
+            "complete" to (failure == null),
+            "surviving_pids" to survivingPids(failure).distinct().sorted(),
+            "error" to failure?.let { it.cause?.message ?: it.message },
+        ))
+    }.exceptionOrNull()
+    if (failure != null) {
+        reportingFailure?.let(failure::addSuppressed)
+        throw failure
+    }
+    if (reportingFailure != null) throw reportingFailure
 }

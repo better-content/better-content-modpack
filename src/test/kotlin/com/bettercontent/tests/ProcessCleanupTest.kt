@@ -100,6 +100,18 @@ class ProcessCleanupTest {
     }
 
     @Test
+    fun evidenceWriteFailureDoesNotMaskCleanupFailure() {
+        val cleanup = ProcessCleanupException(listOf(123L))
+        val reporting = java.io.IOException("evidence directory is full")
+        val error = assertThrows(IllegalStateException::class.java) {
+            cleanupFixtures(listOf(AutoCloseable { throw cleanup })) { throw reporting }
+        }
+        assertSame(cleanup, error.cause)
+        assertSame(reporting, error.suppressed.single())
+        assertEquals(listOf(123L), (error.cause as ProcessCleanupException).survivingPids)
+    }
+
+    @Test
     fun terminationDeadlineFailsWhenAnOperatingSystemHandleRemainsAlive() {
         // A refused signal is an OS boundary condition; do not leave a real unkillable process behind.
         val refusing = object : ProcessHandle {
