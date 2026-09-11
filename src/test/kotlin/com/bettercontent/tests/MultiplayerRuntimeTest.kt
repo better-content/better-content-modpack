@@ -34,9 +34,10 @@ class MultiplayerRuntimeTest {
         @JvmStatic
         @AfterAll
         fun stop() {
-            if (::client.isInitialized) client.close()
-            if (::server.isInitialized) server.close()
-            evidence.run.event("process_cleanup", mapOf("complete" to true))
+            cleanupFixtures(buildList {
+                if (::client.isInitialized) add(client)
+                if (::server.isInitialized) add(server)
+            }) { evidence.run.event("process_cleanup", it) }
         }
     }
 

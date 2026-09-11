@@ -240,8 +240,7 @@ class ClientFixture(private val evidence: EvidenceRun, private val dedicated: De
     }
 
     override fun close() {
-        launcher?.close()
-        xvfb?.close()
+        closeAll(launcher, xvfb)
     }
 }
 

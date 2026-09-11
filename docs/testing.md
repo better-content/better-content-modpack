@@ -55,6 +55,12 @@ input. Failed fixtures are retained. Automated tests must not synthesize mouse m
 clicks. Threads reader development, the World Condenser configuration screen, and single-player
 world creation are manual visual gates. Before rerunning, inspect the existing run and report its
 ID, hashes, failed or aborted cases, evidence path, retained fixture, and process cleanup state.
+Cleanup retains observed process descendants after their parent exits and checks termination after
+graceful and forced shutdown. Every fixture is closed even when an earlier close fails. The
+`process_cleanup` event reports `complete=false`, surviving PIDs, and an error when cleanup fails;
+the suite then fails and retains its fixture and original failure evidence. `complete=true` means
+all tracked processes have exited. The fast suite tests ordinary, forced, and orphaned-child
+shutdown without launching Minecraft.
 
 A runtime snapshot is evidence for a target only when its snapshot ID appears in that run's server
 events and the run's `candidate_selected` hashes match the target under discussion. Completeness

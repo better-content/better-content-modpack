@@ -29,8 +29,9 @@ class SingleplayerRuntimeTest {
         @JvmStatic
         @AfterAll
         fun stop() {
-            if (::client.isInitialized) client.close()
-            evidence.run.event("process_cleanup", mapOf("complete" to true))
+            cleanupFixtures(if (::client.isInitialized) listOf(client) else emptyList()) {
+                evidence.run.event("process_cleanup", it)
+            }
         }
     }
 

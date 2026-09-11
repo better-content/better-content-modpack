@@ -279,6 +279,7 @@ class ManagedProcess(
 ) : AutoCloseable {
     private val process: Process
     private val input: BufferedWriter
+    private val tracker: ProcessTracker
 
     init {
         log.parent.createDirectories()
@@ -287,10 +288,12 @@ class ManagedProcess(
         builder.environment().putAll(environment)
         process = builder.start()
         input = process.outputStream.bufferedWriter()
+        tracker = ProcessTracker(process.toHandle())
     }
 
     val alive: Boolean get() = process.isAlive
     val pid: Long get() = process.pid()
+    internal val trackedPids: Set<Long> get() = tracker.trackedPids()
 
     fun send(line: String) {
         require(process.isAlive) { "$name is not running" }
@@ -341,12 +344,7 @@ class ManagedProcess(
 
     fun stop(timeout: Duration = Duration.ofSeconds(20)) {
         runCatching { input.close() }
-        val handles = process.descendants().toList().asReversed() + process.toHandle()
-        handles.filter { it.isAlive }.forEach { it.destroy() }
-        val deadline = System.nanoTime() + timeout.toNanos()
-        while (handles.any { it.isAlive } && System.nanoTime() < deadline) Thread.sleep(100)
-        handles.filter { it.isAlive }.forEach { it.destroyForcibly() }
-        process.waitFor(5, TimeUnit.SECONDS)
+        tracker.stop(timeout)
     }
 
     override fun close() = stop()

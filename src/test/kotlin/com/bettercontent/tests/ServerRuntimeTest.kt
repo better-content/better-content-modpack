@@ -28,8 +28,9 @@ class ServerRuntimeTest {
 
         @JvmStatic @BeforeAll fun start() { fixture = DedicatedServerFixture(evidence.run) }
         @JvmStatic @AfterAll fun stop() {
-            if (::fixture.isInitialized) fixture.close()
-            evidence.run.event("process_cleanup", mapOf("complete" to true))
+            cleanupFixtures(if (::fixture.isInitialized) listOf(fixture) else emptyList()) {
+                evidence.run.event("process_cleanup", it)
+            }
         }
     }
 
