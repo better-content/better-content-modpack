@@ -35,7 +35,46 @@ object RuntimeSnapshotValidator {
         require(recipes.path("partial_count").asInt(-1) == 0 && recipes.path("error_count").asInt(-1) == 0) {
             "runtime recipe graph contains partial or errored entries"
         }
+        validateOreProcessing(recipes, read(directory.resolve("tags.json")))
         return snapshotId
+    }
+
+    internal fun validateOreProcessing(recipes: JsonNode, tags: JsonNode) {
+        val expectedOccultismOutputs = mapOf(
+            "occultism:crushing/blaze_powder_from_rod" to ("minecraft:blaze_powder" to 1),
+            "occultism:crushing/certus_quartz_dust_from_gem" to ("ae2:certus_quartz_dust" to 1),
+            "occultism:crushing/coal_dust" to ("bloodmagic:coalsand" to 4),
+            "occultism:crushing/datura" to ("occultism:datura_seeds" to 2),
+            "occultism:crushing/end_stone_dust" to ("occultism:crushed_end_stone" to 1),
+            "occultism:crushing/iesnium_dust" to ("occultism:iesnium_dust" to 2),
+            "occultism:crushing/iesnium_dust_from_ingot" to ("occultism:iesnium_dust" to 1),
+            "occultism:crushing/iesnium_dust_from_raw" to ("occultism:iesnium_dust" to 2),
+            "occultism:crushing/iesnium_dust_from_raw_block" to ("occultism:iesnium_dust" to 18),
+            "occultism:crushing/iridium_dust_from_ingot" to ("chemlib:iridium_dust" to 1),
+            "occultism:crushing/redstone_dust" to ("minecraft:redstone" to 4),
+            "occultism:crushing/tungsten_dust_from_ingot" to ("chemlib:tungsten_dust" to 1),
+        )
+        recipes.path("recipes").forEach { recipe ->
+            val recipeId = recipe.path("id").asText()
+            val expectedOutput = expectedOccultismOutputs[recipeId] ?: return@forEach
+            val outputs = recipe.path("outputs")
+            require(outputs.size() == 1) { "$recipeId does not have one canonical output" }
+            val output = outputs[0]
+            require(
+                output.path("kind").asText() == "item" &&
+                    output.path("id").asText() == expectedOutput.first &&
+                    output.path("count").asInt() == expectedOutput.second,
+            ) { "$recipeId has a broken or non-canonical output: $outputs" }
+        }
+
+        val realisticDeposit = Regex(
+            "^excavated_variants:.*_(?:black_shale|brassroot|coal_measures|copper_bloom|" +
+                "evaporite_beds|hotstone|ironstone|tin_quartz)$",
+        )
+        listOf("forge:ores", "c:ores").forEach { tag ->
+            val leaked = tags.path("item_tags").path(tag).map(JsonNode::asText).filter(realisticDeposit::matches)
+            require(leaked.isEmpty()) { "$tag contains Realistic Ores hosted variants: ${leaked.take(10)}" }
+        }
     }
 
     private fun read(path: Path): JsonNode {

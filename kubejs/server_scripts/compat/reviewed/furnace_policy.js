@@ -70,7 +70,9 @@
 
     function tagMatchesOreOrRaw(tagId, base) {
         try {
-            var seg = tagPath(tagId).split('/')
+            var path = tagPath(tagId)
+            if (path === (base + '_ores') || path === ('ores_' + base)) return true
+            var seg = path.split('/')
             if (seg.length < 2) return false
                 var kind = seg[seg.length - 2]
                 var name = seg[seg.length - 1]
@@ -106,6 +108,8 @@
             var p = splitId(itemId).path
             if (p === ('raw_' + base + '_block')) return true
                 if (p === (base + '_raw_block')) return true
+                    if (p === ('raw_' + base + '_bricks')) return true
+                        if (p === (base + '_raw_bricks')) return true
         } catch (e) {}
         return false
     }
@@ -187,7 +191,7 @@
 
     ServerEvents.recipes(function (event) {
         var changed = 0
-        var skippedNoIngot = 0
+        var skippedUnsupportedResult = 0
         var skippedNotTarget = 0
         var skippedNoNugget = 0
         var skippedCantConvertIngredient = 0
@@ -203,14 +207,25 @@
                     if (!resultId) return
 
                         var res = splitId(resultId)
-                        if (!endsWith(res.path, '_ingot')) { skippedNoIngot++; return }
+                        var base = null
+                        if (endsWith(res.path, '_ingot')) {
+                            base = res.path.substring(0, res.path.length - '_ingot'.length)
+                        } else if (endsWith(res.path, '_block')) {
+                            base = res.path.substring(0, res.path.length - '_block'.length)
+                        } else {
+                            skippedUnsupportedResult++
+                            return
+                        }
 
                         if (!json || !json.has('ingredient')) return
                             var ingEl = json.get('ingredient')
 
-                            var base = res.path.substring(0, res.path.length - '_ingot'.length)
                             var kind = ingredientKind(ingEl, base)
                             if (!kind) { skippedNotTarget++; return }
+                            if (endsWith(res.path, '_block') && kind !== 'raw_block') {
+                                skippedNotTarget++
+                                return
+                            }
 
                             var nuggetId = pickNuggetId(base, res.ns)
                             if (!nuggetId) { skippedNoNugget++; return }
@@ -243,7 +258,7 @@
         })
 
         log('done: changed=' + changed +
-        ' skippedNoIngot=' + skippedNoIngot +
+        ' skippedUnsupportedResult=' + skippedUnsupportedResult +
         ' skippedNotTarget=' + skippedNotTarget +
         ' skippedNoNugget=' + skippedNoNugget +
         ' skippedCantConvertIngredient=' + skippedCantConvertIngredient +

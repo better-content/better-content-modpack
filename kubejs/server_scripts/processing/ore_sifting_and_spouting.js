@@ -14,7 +14,7 @@
         'create:crushed_raw_gold': true,
         'create:crushed_raw_iron': true,
         'create:crushed_raw_zinc': true,
-        'iceandfire:crushed_silver_ore': true,
+        'create:crushed_raw_silver': true,
         'creatingspace:moon_regolith': true,
         'malum:copper_node': true,
         'malum:gold_node': true,
@@ -28,7 +28,7 @@
         'create:crushed_raw_gold': { nugget: 'minecraft:gold_nugget', concentrate: 'realistic_ores:gold_concentrate', base: 2, chance: 0.25 },
         'create:crushed_raw_iron': { nugget: 'minecraft:iron_nugget', concentrate: 'realistic_ores:iron_concentrate', base: 2, chance: 0.25 },
         'create:crushed_raw_zinc': { nugget: 'create:zinc_nugget', concentrate: 'realistic_ores:zinc_concentrate', base: 2, chance: 0.25 },
-        'iceandfire:crushed_silver_ore': { nugget: 'iceandfire:silver_nugget', concentrate: 'realistic_ores:silver_concentrate', base: 2, chance: 0.25 },
+        'create:crushed_raw_silver': { nugget: 'iceandfire:silver_nugget', concentrate: 'realistic_ores:silver_concentrate', base: 2, chance: 0.25 },
         'malum:copper_node': { nugget: 'create:copper_nugget', concentrate: 'realistic_ores:copper_concentrate', base: 1, chance: 0.5 },
         'malum:gold_node': { nugget: 'minecraft:gold_nugget', concentrate: 'realistic_ores:gold_concentrate', base: 1, chance: 0.5 },
         'malum:iron_node': { nugget: 'minecraft:iron_nugget', concentrate: 'realistic_ores:iron_concentrate', base: 1, chance: 0.5 },
@@ -94,7 +94,8 @@
                 for (var i = 0; i < SHARED_METALS.length; i++) {
                     var material = SHARED_METALS[i]
                     if (encoded.indexOf('forge:raw_materials/' + material) >= 0
-                            || encoded.indexOf('forge:ores/' + material) >= 0) {
+                            || encoded.indexOf('forge:ores/' + material) >= 0
+                            || encoded.indexOf('forge:storage_blocks/raw_' + material) >= 0) {
                         event.remove({ id: '' + recipe.getId() })
                         break
                     }
@@ -195,6 +196,15 @@
                 ignore_crushing_multiplier: false, ingredient: raw,
                 result: { item: concentrate.item, count: 2 }
             }).id('kubejs:ore_magic/occultism_raw_' + material)
+
+            var rawBlockTag = 'forge:storage_blocks/raw_' + material
+            if (tagHasItems(rawBlockTag)) {
+                event.custom({
+                    type: 'occultism:crushing', crushing_time: 200,
+                    ignore_crushing_multiplier: false, ingredient: { tag: rawBlockTag },
+                    result: { item: concentrate.item, count: 18 }
+                }).id('kubejs:ore_magic/occultism_raw_block_' + material)
+            }
         })
 
         event.remove({ type: 'create:splashing' })

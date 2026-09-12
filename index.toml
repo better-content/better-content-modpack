@@ -4786,7 +4786,7 @@ hash = "3563ea312a000e828a1ed9ca0845fd133ebe8939dd17cb2f7e0e3d66afcaec74"
 
 [[files]]
 file = "defaultresources/excavated_variants/excavated_variants/modifiers/tag_attachment.json5"
-hash = "311c5d45ddfa73eb987c61a38cc744b346c1110dfe6b02d099a95d63c99125d2"
+hash = "c7ffc1109334120b4051471ebb780613c856a7022ce49513bbb6fec8cddc187a"
 
 [[files]]
 file = "defaultresources/excavated_variants/excavated_variants/variants/minecraft.json5"
@@ -9954,7 +9954,7 @@ hash = "0871972a2a53c027f0e9f6c9f2ef9cc6227f9ed9c0c1a1539134aa8a2535c12f"
 
 [[files]]
 file = "kubejs/server_scripts/compat/reviewed/furnace_policy.js"
-hash = "d8ec7613baa98a7e1eb168e17241af5c351089d42850f70097dba93c2e365c04"
+hash = "c79beda30fd4533b5e0d222f75e26820f93da10e8ac362b58095b4d3511c1753"
 
 [[files]]
 file = "kubejs/server_scripts/compat/reviewed/ingot_rewrites.js"
@@ -9963,6 +9963,10 @@ hash = "da4c4ccb12b836f8595d4b8f3c9dfde3835a5a899fb414726eaf891c9bad32bb"
 [[files]]
 file = "kubejs/server_scripts/compat/reviewed/kettle_rune_swap.js"
 hash = "79767d9ddefcb5ce0c54d6da348d9c134f09e25a5b6733a778778ffaa201448e"
+
+[[files]]
+file = "kubejs/server_scripts/compat/reviewed/occultism_crushing_outputs.js"
+hash = "ea5855ced9a286a5ba25a60293d82ecb3ad77d73cea0a7b1e6a868ec3d83d14d"
 
 [[files]]
 file = "kubejs/server_scripts/compat/reviewed/replaceable_deepslate.js"
@@ -9998,7 +10002,7 @@ hash = "8b55ea75834053d2d6da166fb29faf0dd19b7f898f0ed85da07e0f40c0f6aa39"
 
 [[files]]
 file = "kubejs/server_scripts/processing/ore_sifting_and_spouting.js"
-hash = "cb79aac5fbc73820a1c6c7bfeb55974f26222666948e15b637c090a487c2b539"
+hash = "ac349bc55b56fb76b0d7171808481b52952ad4cd5c99148f321fffbc0ef33459"
 
 [[files]]
 file = "kubejs/server_scripts/progression/00_primitive_workshop.js"
