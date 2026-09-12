@@ -37,7 +37,7 @@ ServerEvents.recipes(function (event) {
 // Eyes remain a finite ritual ingredient, but cannot open the vanilla End.
 BlockEvents.rightClicked('minecraft:end_portal_frame', function (event) {
     if (event.item && event.item.id === 'minecraft:ender_eye') {
-        event.player.tell('The closed End does not answer. Seek orbit instead.')
+        event.player.tell('The End portal is disabled. Use Dimensional Fonts to visit other dimensions.')
         event.cancel()
     }
 })

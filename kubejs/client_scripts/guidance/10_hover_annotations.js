@@ -128,7 +128,7 @@ function bcFormalGlyphKey(itemId) {
 function bcFormalOriginName(origin) {
     var key = String(origin)
     var names = {
-        core: 'Ars grammar',
+        core: 'Ars Nouveau',
         hexerei: 'Hexerei',
         occultism: 'Occultism',
         blood_magic: 'Blood Magic',
@@ -229,7 +229,7 @@ function bcHoverCompileCombatGroup(rows, workFirst) {
         }
         var line = 'Combat handling: ' + label
         if (row.alternate && row.alternate.mode) line += ' · alternate: ' + bcCombatAlternate(row.alternate.mode)
-        line += workFirst ? '. Work-first tool.' : '.'
+        line += workFirst ? '. Primarily a gathering tool.' : '.'
         if (!bcHoverValidLines([line], 'combat item ' + itemId)) continue
         BC_HOVER_EXACT_TARGETS[itemId] = true
         BC_HOVER_COMBAT.push({ target: itemId, line: line })

@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "This stored-coordinate travel ritual is intentionally unavailable in Better Content progression."
+      "text": "This travel ritual is disabled in Better Content."
     }
   ]
 }

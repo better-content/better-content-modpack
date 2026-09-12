@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "This legacy recipe is intentionally unavailable in Better Content progression."
+      "text": "This recipe is disabled in Better Content."
     }
   ]
 }

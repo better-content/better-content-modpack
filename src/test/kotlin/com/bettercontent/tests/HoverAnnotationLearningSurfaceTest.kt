@@ -110,9 +110,9 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Rail Beetle annotations teach baseline power and tier progression`() {
         val text = Files.readString(root.resolve("kubejs/config/hover_annotations.json"))
-        assertTrue(text.contains("Surveying, driving, laying rail and shallow bridges are baseline."))
-        assertTrue(text.contains("A depleted alternate engine automatically yields to the built-in coal firebox."))
-        assertTrue(text.contains("Tier II consumes its matching Tier-I module"))
+        assertTrue(text.contains("Surveys, drives, and builds rails and shallow bridges."))
+        assertTrue(text.contains("Switches to the built-in coal firebox when depleted."))
+        assertTrue(text.contains("Crafting Tier II consumes the matching Tier I module."))
     }
 
     @Test

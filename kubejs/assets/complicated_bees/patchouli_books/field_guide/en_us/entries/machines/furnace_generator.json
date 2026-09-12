@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "This generator is intentionally unavailable; PowerGrid owns stationary electrical generation."
+      "text": "This generator is disabled. Use a PowerGrid generator for electricity."
     }
   ]
 }

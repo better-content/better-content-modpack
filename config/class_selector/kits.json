@@ -3,7 +3,7 @@
     "id": "wayfinder",
     "title": "Wayfinder",
     "blurb": "Scouting, maps, and route recovery",
-    "description": "Safe fallback kit for players who want to mark routes and recover from dangerous scouting without starting with tools, machines, metals, logs, or storage.",
+    "description": "Explore with a compass, maps, and a spyglass. Includes paper, torches, and a drinking bowl.",
     "items": [
       {
         "item": "minecraft:compass",
@@ -41,7 +41,7 @@
     "id": "field_cook",
     "title": "Field Cook",
     "blurb": "Food variety, seasonal planning, and hydration",
-    "description": "Safe fallback kit for body-system starts. It provides food variety without bypassing Bumblezone seed provenance, and no kitchen workstation, knife, crate, pouch, or storage bypass.",
+    "description": "Start with varied food, rice for planting, a seasonal calendar, a waterskin, and a drinking bowl. Cabbage and tomatoes are food, not seeds.",
     "items": [
       {
         "item": "sereneseasons:calendar",
@@ -89,7 +89,7 @@
     "id": "rail_scout",
     "title": "Rail Scout",
     "blurb": "Manual physical-route starter",
-    "description": "Safe fallback kit for local logistics starts. It gives unpowered rails and a minecart, not powered rails, Create trains, stations, packages, or production.",
+    "description": "Build a short minecart route with unpowered rails and a minecart. Includes a compass, torches, and a drinking bowl.",
     "items": [
       {
         "item": "minecraft:rail",
@@ -122,7 +122,7 @@
     "id": "flood_runner",
     "title": "Flood Runner",
     "blurb": "Water-route survival",
-    "description": "Safe fallback kit for rivers, coasts, and flooded caves. It starts hydration and route consumables only, with no armor, Create equipment, mining tool, or extraction shortcut.",
+    "description": "Explore with rope, torches, dried kelp, a waterskin, and a drinking bowl.",
     "items": [
       {
         "item": "minecraft:dried_kelp",
@@ -155,7 +155,7 @@
     "id": "market_runner",
     "title": "Spirit Runner",
     "blurb": "A pouch and travel supplies",
-    "description": "Carry the spirits released by your own kills and seek matching village markets. The kit supplies storage, never free commerce spirits.",
+    "description": "Store spirits from your kills in a Spirit Pouch and trade at matching village markets. No spirits are included.",
     "items": [
       {
         "item": "malum:spirit_pouch",
@@ -183,7 +183,7 @@
     "id": "trail_wrangler",
     "title": "Trail Wrangler",
     "blurb": "Mount, animal, and camp-route support",
-    "description": "Safe fallback kit for animal and settlement routing. It gives route support and travel food without TNT inputs, tools, logs, storage, or automation.",
+    "description": "Travel with animals using a saddle and leads. Includes candles, carrots, and a drinking bowl.",
     "items": [
       {
         "item": "minecraft:saddle",

@@ -1,12 +1,12 @@
 {
-  "name": "Stationary Generation Policy",
+  "name": "Generating Electricity",
   "icon": "powergrid:generator_housing",
   "category": "pneumaticcraft:machines",
   "advancement": "pneumaticcraft:advanced_pressure_tube",
   "pages": [
     {
       "type": "text",
-      "text": "The Pneumatic Dynamo is unavailable in Better Content. PneumaticCraft owns pressure production, petroleum splitting, gas production, storage and electrical consumption; PowerGrid owns stationary electrical generation."
+      "text": "The Pneumatic Dynamo is disabled. Use PowerGrid to generate electricity. PneumaticCraft still supplies pressure, gas processing, storage, and machines that use electricity."
     },
     {
       "type": "spotlight",

@@ -42,9 +42,25 @@ remain cosmetic; lessons and the reader are not progression gates. Commerce spir
 come from credited player kills under the native-mapping and fallback rules described
 in [Content ownership](content_systems.md).
 
+## Writing tone
+
+Use clear, direct language on every Better Content-owned learning surface. Name the
+mechanic, explain the rule, then give a useful action. Titles describe their subject;
+proper names such as Threads, Source, and Dimensional Fonts remain unchanged.
+
+Do not add lore, metaphors, personification, rhetorical invitations, or filler to
+instructions. Replace internal design terms such as "bootstrap", "authority", and
+"progression branch" with what the player can do or needs. Keep concrete requirements,
+limits, costs, and warnings. Short copy does not need a minimum word count.
+
+Threads use a title, rule, and action; there is no prose or invitation layer. Hover
+annotations remain one or two lines totaling at most 24 words. Apply this tone to
+pack-authored guide notices, not to copied third-party guide prose or narrative design
+documents.
+
 ## Readability and timing
 
-- Put the mechanical rule and a useful next action before interpretation. Explain what
+- State the mechanical rule and a useful next action directly. Explain what
   the player can do; do not turn event predicates such as death or a terminal campaign
   outcome into instructions to seek that outcome.
 - Preserve complete sentences. Wrap headlines, rules, and actions; use visible scrolling

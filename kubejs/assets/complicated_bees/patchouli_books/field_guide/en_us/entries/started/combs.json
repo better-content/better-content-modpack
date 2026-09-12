@@ -17,7 +17,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "PowerGrid supplies the centrifuge's electrical power; Complicated Bees generators are intentionally unavailable."
+      "text": "Power the centrifuge with a PowerGrid generator. Complicated Bees generators are disabled."
     }
   ]
 }

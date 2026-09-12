@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Ars Energistique source conversion is intentionally unavailable; PowerGrid owns stationary electrical generation."
+      "text": "Ars Energistique Source conversion is disabled. Use PowerGrid to generate electricity."
     }
   ]
 }
