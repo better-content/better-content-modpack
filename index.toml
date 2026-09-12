@@ -7401,6 +7401,10 @@ file = "kubejs/client_scripts/guidance/10_hover_annotations.js"
 hash = "6458b711eb208ab70b0b2d80f57eec64bb9c487a070ceafc9207c0945d2c0b2d"
 
 [[files]]
+file = "kubejs/client_scripts/policy/hide_burnt_content.js"
+hash = "1dd1e8e01339a90fb91cd57e509aa2b6f5eb48b2effe200258a9f7e419a6255f"
+
+[[files]]
 file = "kubejs/client_scripts/policy/hide_completed_tcon_tools.js"
 hash = "c0f449eec4223c8a6267b4061e440a4ab8866f287d1cb4e9adc1e12171343a0c"
 

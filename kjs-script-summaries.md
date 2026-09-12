@@ -2,7 +2,7 @@
 
 This index is generated from the three executable KubeJS roots. Every listed JavaScript file is active; directory names such as `retained` and `reviewed` describe review history, not load state. `kubejs/inactive_review` is deliberately excluded because it is outside the executable roots.
 
-Current inventory: **76 active scripts** — 7 client, 60 server, and 9 startup.
+Current inventory: **77 active scripts** — 8 client, 60 server, and 9 startup.
 
 ## Client scripts
 
@@ -10,6 +10,7 @@ Current inventory: **76 active scripts** — 7 client, 60 server, and 9 startup.
 - `kubejs/client_scripts/compat/retained/check__48_hide_replaced_fishing_rods.js` — Hides native fishing rods superseded by the pack’s Starcatcher fishing route.
 - `kubejs/client_scripts/compat/retained/remove__40_hide_quarantined_systems.js` — Hides quarantined chemistry, transport, test, legacy, and unsupported items from recipe viewers.
 - `kubejs/client_scripts/guidance/10_hover_annotations.js` — Adds the pack's item-local hover annotations through the normal tooltip pipeline.
+- `kubejs/client_scripts/policy/hide_burnt_content.js` — Hides Burnt’s transient and damaged block-state items from recipe viewers while preserving its world simulation.
 - `kubejs/client_scripts/policy/hide_completed_tcon_tools.js` — Hides completed TConstruct and extension tools from recipe viewers while retaining wearable armor and construction inputs.
 - `kubejs/client_scripts/policy/hide_excavated_variants.js` — Hides Excavated Variants’ host-stone permutations from recipe viewers without removing their recipes or world content.
 - `kubejs/client_scripts/policy/hide_vanilla_tools.js` — Hides vanilla-style tools whose reachable native-system replacements own progression.
