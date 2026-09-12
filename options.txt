@@ -229,7 +229,7 @@ key_key.ars_nouveau.qc8:key.keyboard.unknown
 key_key.ars_nouveau.qc9:key.keyboard.unknown
 key_key.ars_nouveau.qc10:key.keyboard.unknown
 key_key.ars_nouveau.familiar_toggle:key.keyboard.unknown
-key_key.moreartifacts.eye.teleport:key.keyboard.t:ALT
+key_key.moreartifacts.eye.teleport:key.keyboard.p:ALT
 key_key.moreartifacts.dragon.eye:key.keyboard.d:ALT
 key_key.aether.open_accessories.desc:key.keyboard.unknown
 key_key.aether.gravitite_jump_ability.desc:key.keyboard.space
@@ -248,7 +248,9 @@ key_key.sophisticatedbackpacks.toggle_upgrade_4:key.keyboard.unknown
 key_key.sophisticatedbackpacks.toggle_upgrade_5:key.keyboard.unknown
 key_key.sophisticatedbackpacks.toggle_upgrade_1:key.keyboard.z:ALT
 key_key.sophisticatedbackpacks.toggle_upgrade_2:key.keyboard.x:ALT
-key_key.relics.ability_list:key.keyboard.r:ALT
+key_key.relics.ability_list:key.keyboard.a:ALT
+key_key.rotavision.rotate:key.keyboard.r:ALT
+key_key.rotavision.toggle:key.keyboard.t:ALT
 key_key.relics.research_relic:key.keyboard.left.shift
 key_key.starcatcher.minigame_hit:key.keyboard.space
 key_key.starcatcher.expand_tournament:key.keyboard.tab
@@ -314,7 +316,7 @@ key_quark.keybind.patreon_emote.zombie:key.keyboard.unknown
 key_quark.keybind.change_hotbar:key.keyboard.unknown
 key_quark.keybind.sort_player:key.keyboard.unknown
 key_quark.keybind.sort_container:key.keyboard.unknown
-key_quark.keybind.lock_rotation:key.keyboard.k:ALT
+key_quark.keybind.lock_rotation:key.keyboard.unknown
 key_quark.keybind.narrator_readout:key.keyboard.unknown
 key_quark.keybind.narrator_full_readout:key.keyboard.unknown
 key_quark.keybind.variant_selector:key.keyboard.r

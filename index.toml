@@ -2958,7 +2958,7 @@ hash = "a5d08b917ef15d63c2be151c5741f52ec8a892027c1dd6b3cf23a88282834229"
 
 [[files]]
 file = "config/quark-common.toml"
-hash = "dd261ba459b1fefcb554e92276770e5715066c766035af55834a3c017199370a"
+hash = "26f0c342678f91e9cc1b619c5d03b1ce4ce7dd8afe072db1a4027ef805112cdc"
 
 [[files]]
 file = "config/quickstack-client.toml"
@@ -3323,6 +3323,10 @@ hash = "b025745a639962dbe5f7e906e0e0df4406d610830f6c4d21909b56f4eb93e5d1"
 [[files]]
 file = "config/rehooked-client.toml"
 hash = "57b311978a3316609a243e6720ea4a4318cc66ac1980742a8c51d94b5576b559"
+
+[[files]]
+file = "config/rotavision-common.toml"
+hash = "74381833464f541f4a9de556f207825ad8908a17c991a1def876652e8571f193"
 
 [[files]]
 file = "config/satako-client.toml"
@@ -10187,8 +10191,8 @@ file = "mods/better-content-economy-1.0.1.jar"
 hash = "7ac60a99ad014b35507adbb256de9cf986f38a16416bc9f7b061e74750f2f965"
 
 [[files]]
-file = "mods/better-content-fixes-0.1.7.jar"
-hash = "34d5151cff9f5c728f60528be34b20655d7b314d6753ebe1093dfb33c85564be"
+file = "mods/better-content-fixes-0.1.8.jar"
+hash = "ff70e697a69aa54cc9dd3747e720ab056d8e1d713e7e9fb0fd1a9d78f1592a21"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
@@ -11074,6 +11078,11 @@ hash = "ca4411ac6d8a9a892948bb63cd0ba52ae5523ca5e257632d6ae8c933b660c5ee"
 metafile = true
 
 [[files]]
+file = "mods/rotavision.pw.toml"
+hash = "b24be4d1b09e91deb683237dc8272ed31fb2d9dae989e38c5059c1f5d11e9599"
+metafile = true
+
+[[files]]
 file = "mods/rpg-stats-1.0.1.jar"
 hash = "69559c65af88d480b5e62ee87090a5ef49f89dfd3b6f37deefbb893558e30b37"
 
@@ -11412,7 +11421,7 @@ metafile = true
 
 [[files]]
 file = "options.txt"
-hash = "078f95ef93b6e49662c57d6b3e908efa98fc8cf32e3b8e8bd5b0c905bdbccf3f"
+hash = "6ec30ea8f9b5b4750a95ca75860c303c5b320895baddd7bc217c9ef628049226"
 
 [[files]]
 file = "pack-test-lock.main.kts"

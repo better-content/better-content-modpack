@@ -1,0 +1,4 @@
+#Should RotaVision be enabled by default when a player joins?
+defaultEnabled = true
+#Should the 'Rotated' action bar message be shown?
+showRotationMessages = true

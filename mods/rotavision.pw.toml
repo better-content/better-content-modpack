@@ -1,0 +1,13 @@
+name = "RotaVision"
+filename = "rotavision-1.0.2.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "7c578c83f1d73dce81f116423f861d589e59950e"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8715474
+project-id = 1535985

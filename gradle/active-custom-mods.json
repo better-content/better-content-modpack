@@ -2,7 +2,7 @@
   "schema": "bc.active_custom_mods.v1",
   "mods": [
     {"repository":"arcane-chunk-loaders","modId":"arcane_chunk_loaders","artifact":"arcane-chunk-loaders-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
-    {"repository":"better-content-fixes","modId":"better_content_fixes","artifact":"better-content-fixes-0.1.7.jar","tasks":["verifyFull","stageRuntimeJar"],"dependsOn":["dynamic-survival-hud"]},
+    {"repository":"better-content-fixes","modId":"better_content_fixes","artifact":"better-content-fixes-0.1.8.jar","tasks":["verifyFull","stageRuntimeJar"],"dependsOn":["dynamic-survival-hud"]},
     {"repository":"better-content-economy","modId":"better_content_economy","artifact":"better-content-economy-1.0.1.jar","tasks":["verifyFull","stageRuntimeJar"],"dependsOn":["dimension-drink"]},
     {"repository":"better-content-threads","modId":"better_content_threads","artifact":"better-content-threads-1.1.0.jar","tasks":["verifyFull","stageRuntimeJar"],"dependsOn":["arcane-chunk-loaders","better-content-economy","better-content-fixes","dimension-drink","downed-player-revival","heat-sync","pillager-campaigns","player-traces","realistic-ores","rpg-stats","settlement-roads","systemic-salience","water-survival","world-lifecycle-manager"]},
     {"repository":"bumblezone-cultivars","modId":"bumblezone_cultivars","artifact":"bumblezone-cultivars-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},

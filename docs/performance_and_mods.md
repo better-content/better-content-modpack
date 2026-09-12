@@ -148,6 +148,15 @@ Generated RBP assignments are registry-exact and mutually exclusive. Loose sand 
 for granular blocks rather than pickaxe-mined masonry; full blocks, slabs, stairs, and walls use
 material-appropriate construction or wood profiles with shape-scaled mass and support.
 
+RotaVision 1.0.2 shows a translucent context-oriented ghost for every held BlockItem, even before a
+manual rotation is selected. Better Content Fixes asks the server for a rate-limited, read-only RBP
+evaluation of the proposed states: teal is supported in the current server snapshot, pulsing amber
+predicts a fall or crushing failure, red remains vanilla-invalid placement, and white means the result
+is unmanaged, unavailable, pending, or stale. This is an advisory snapshot rather than a future
+stability guarantee; it never blocks placement, schedules physics, or mutates RBP stability data.
+Beds, doors, and double plants include their companion state. Building Gadgets and Create schematic
+systems are intentionally outside the v1 preview scope.
+
 ## Custom compatibility ownership
 
 `world_lifecycle_manager` owns dedicated-server succession and the persistent schematic library.
