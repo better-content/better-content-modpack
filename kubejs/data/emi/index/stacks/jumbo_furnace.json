@@ -1,0 +1,7 @@
+{
+  "disable": true,
+  "filters": [
+    "jumbofurnace:jumbo_furnace",
+    "jumbofurnace:jumbo_furnace_jei"
+  ]
+}

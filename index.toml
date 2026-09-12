@@ -7385,10 +7385,6 @@ file = "kubejs/client_scripts/compat/retained/check__46_hide_hexerei_mahogany_tr
 hash = "eec16eb29b49af4727f031e62f30f3a0112207b0c37046df09c03913c3415178"
 
 [[files]]
-file = "kubejs/client_scripts/compat/retained/check__47_hide_ae2_facades_from_emi.js"
-hash = "7ff999bfda91396044c85870d9cd3b009b4866c0b2a4535e24867f4ec6816ce6"
-
-[[files]]
 file = "kubejs/client_scripts/compat/retained/check__48_hide_replaced_fishing_rods.js"
 hash = "7e13ba7b4324b11b4667129f85e7fdbd14b7ca52868dc8e59d3ea7b533b61654"
 
@@ -7454,11 +7450,11 @@ hash = "dd5d86a21560f6468d0df679ffe6068a2cf4a6f9c972276fe2d5acc693fb5a85"
 
 [[files]]
 file = "kubejs/config/quarantined_items.json"
-hash = "c3e6bd07a623766f6b0e9730e26d3407ddcf99e6afde061a16062289d93d9359"
+hash = "ca5c668e65a13be6dde5fbef45bbb9208f77e1ad0d90047c6379ad2c85c90a70"
 
 [[files]]
 file = "kubejs/config/surface_registry.json"
-hash = "46940e857300a46d9972ff9861050755c2caca59663727d294253fcd7e24722d"
+hash = "e25ae945d39a0864e7d2acdd1fb33875092259c5c280eb69617e2280673eedb9"
 
 [[files]]
 file = "kubejs/config/tcon_edps_catalogue.json"
@@ -8301,6 +8297,14 @@ file = "kubejs/data/dynamictrees/tags/blocks/foliage.json"
 hash = "73b7960739e0c1c25daf3c9812734c940114f743a480b9b49e8e5f6c78b27de2"
 
 [[files]]
+file = "kubejs/data/emi/index/stacks/ae2_facades.json"
+hash = "9a0dcd1a1aab6df6a4b61ac118f1aca985947b180f304f3edec21ec84bf784f5"
+
+[[files]]
+file = "kubejs/data/emi/index/stacks/jumbo_furnace.json"
+hash = "1d3cf5a74900fee31bc64fd7e8f94e5cdb3afa716dced052f268f88d4d22335c"
+
+[[files]]
 file = "kubejs/data/endermanoverhaul/tags/worldgen/biome/end_islands_spawns.json"
 hash = "5b3b1ffa5fa8edeea343e43f1633e194d6864493db7fb7df651a1ee124fbc461"
 
@@ -8683,6 +8687,10 @@ hash = "d5f5d9f3aaec685bf97e85535b0cbaaa02c4d124fd217c480f3e4f5fb99c30bb"
 [[files]]
 file = "kubejs/data/immersive_weathering/tags/blocks/grassy_blocks.json"
 hash = "d5f5d9f3aaec685bf97e85535b0cbaaa02c4d124fd217c480f3e4f5fb99c30bb"
+
+[[files]]
+file = "kubejs/data/jumbofurnace/tags/blocks/jumbofurnaceable.json"
+hash = "bef4d172fc1bfb34d342e79090726c4a0c272dd404783c3ea022b992e0e0415e"
 
 [[files]]
 file = "kubejs/data/kubejs/forge/biome_modifier/remove_iceandfire_silver_ore.json"
@@ -10105,6 +10113,10 @@ file = "kubejs/server_scripts/policy/dimension_access.js"
 hash = "b74321fc28e24513cc9782de3c64ca329373c60d31d35743373152b266baa299"
 
 [[files]]
+file = "kubejs/server_scripts/policy/disable_jumbo_furnace.js"
+hash = "346d0f05c499e3238a83b2c02e7c1a11e9045902bc108c013e2f8e2db30877d7"
+
+[[files]]
 file = "kubejs/server_scripts/policy/global_loot_progression.js"
 hash = "f93fa2c265dc53a671de49ca711a0dbee5fa406d151095a54d06d7d541cac31b"
 
@@ -10191,6 +10203,10 @@ hash = "1e4abc890d237727cad14e58dab2b8f140afc38b9fdbd3035b2467e5bae3c2bf"
 [[files]]
 file = "kubejs/startup_scripts/policy/crafting_policy_contract.js"
 hash = "65d7a840b635518f6420c0ce8c05747360fd2ba6b573f785404b39369ed6c15d"
+
+[[files]]
+file = "kubejs/startup_scripts/policy/disable_jumbo_furnace.js"
+hash = "dcc6dc3e3b0d4e5fc6c1ee985470c8412fce3a8c40546cf58cd6c6ea7125df74"
 
 [[files]]
 file = "kubejs/startup_scripts/policy/disable_trickster_weight.js"
