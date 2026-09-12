@@ -105,9 +105,11 @@ class HarnessFastTest {
         assertEquals(
             listOf(
                 "arcane-chunk-loaders", "better-content-economy", "better-content-fixes",
-                "dimension-drink", "downed-player-revival", "heat-sync", "pillager-campaigns",
-                "player-traces", "realistic-ores", "rpg-stats", "settlement-roads",
-                "systemic-salience", "water-survival", "world-lifecycle-manager",
+                "bumblezone-cultivars", "create-train-fuel-scaling", "create-transmission-loss",
+                "depth-director", "dimension-drink", "downed-player-revival", "heat-sync",
+                "latent-chemlib", "oc2r-create-bridge", "oc2r-wireless-pubsub", "pillager-campaigns",
+                "player-traces", "rail-beetle", "realistic-ores", "rpg-stats", "settlement-roads",
+                "systemic-salience", "tinkers-construct-affixes", "water-survival", "world-lifecycle-manager",
             ),
             dependencies("better-content-threads"),
         )

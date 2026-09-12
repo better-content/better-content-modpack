@@ -9,7 +9,9 @@ content. Their tasks and rewards are not transferred into Threads or another sys
 | Surface | Responsibility |
 | --- | --- |
 | Loading lessons and Threads Lessons | Spoiler-free fundamentals and changed mental models, available before the relevant event |
-| Death and Esc-menu tips | Recovery advice and whole-pack discovery, with separate stable tips that rotate on death |
+| Main-menu tips | One stable preparation or possibility tip per application launch |
+| Esc-menu tips | Practical advice selected from actual current conditions, stable while open |
+| Death tips and native recap | Final-cause advice plus the current life’s injury and treatment history |
 | Contextual Thread cards | A broader rule discovered through actual play evidence and remembered across the lineage |
 | Item-hover annotations | Concise item-local facts, identical in inventory and EMI hover |
 | EMI, Ponder, native guides and system screens | Exact recipes, apparatus, multiblocks, operating instructions, and native state |
@@ -33,9 +35,9 @@ copy. Possession must not be described as operating a machine, and intended futu
 behavior must not be presented as implemented.
 
 Preserve stable concept, Thread, and lesson identities when their meaning is unchanged.
-Threads has 52 live cards, four suits of thirteen; the Lessons reference and loading
-rotation share 16 lessons. Follow [Threads](threads.md) for definition schemas,
-correlated reveal/completion episodes, native doorways, and persistence. Domain mods
+Threads has 52 live discoveries across seven topics; the Lessons reference and loading
+rotation share 17 lessons. Follow [Threads](threads.md) for the single-explanation schema,
+committed outcome evidence, native doorways, and lineage persistence. Domain mods
 own their gameplay events; Threads adapters translate those events into card signals.
 
 Annotate pack transition families and curriculum-important systems with a natural
@@ -59,7 +61,7 @@ instructions. Replace internal design terms such as "bootstrap", "authority", an
 "progression branch" with what the player can do or needs. Keep concrete requirements,
 limits, costs, and warnings. Short copy does not need a minimum word count.
 
-Threads use a title, rule, and action; there is no prose or invitation layer. Hover
+Threads use a title, the event experienced, its cause, and a useful next action. Hover
 annotations remain one or two lines totaling at most 24 words. Apply this tone to
 pack-authored guide notices, not to copied third-party guide prose or narrative design
 documents.
@@ -86,6 +88,15 @@ documents.
   a raw resource ID, a guessed key binding, or a vague message for a working guide.
 - Keep player-authored Trace notes distinct from curated instructions. Their usefulness
   depends on what players leave; the pack supplies readable, contextual presentation.
+
+Cards credit owned remote work at its actual successful outcome, including while the owner is
+offline. Setup, inventory possession and proximity do not prove work. No card requires another
+human; the World Condenser remains limited by its current dedicated-server lifecycle support.
+There is no hourly discovery quota or minimum interval.
+
+All card and loading illustrations exclude humans, humanoids, humanlike spirits, body parts,
+silhouettes and mannequins. Use concrete objects, mechanisms, environments, and nonhumanoid
+creatures to explain the event.
 
 ## Review and validation
 
