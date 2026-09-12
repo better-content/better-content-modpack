@@ -88,7 +88,8 @@ unrelated fundamentals retain their own stable concepts. Existing schema-2
 client rotation files remain readable because their stable lesson IDs did not
 change.
 
-Bounded packet protocol 9 validates card and concept IDs, title, suit, order,
+Bounded packet protocol 10 adds a player UUID and bounded death-context category for
+death-screen hints; it also validates card and concept IDs, title, suit, order,
 aspect, resource locations, rule/action bounds, state, history, unique identities,
 and list sizes no larger than 52. Unknown cards leak no rule or action copy. Protocol 9 removes prose and invitation fields; matching client/server versions are required. Card identities and player-state schema 4 are unchanged.
 Automatic notices contain only notice kind, card ID, bounded title, suit, and

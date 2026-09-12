@@ -9,6 +9,7 @@ content. Their tasks and rewards are not transferred into Threads or another sys
 | Surface | Responsibility |
 | --- | --- |
 | Loading lessons and Threads Lessons | Spoiler-free fundamentals and changed mental models, available before the relevant event |
+| Death-screen hints | Brief recovery advice and whole-pack discovery after death, with occasional late-game teasers |
 | Contextual Thread cards | A broader rule discovered through actual play evidence and remembered across the lineage |
 | Item-hover annotations | Concise item-local facts, identical in inventory and EMI hover |
 | EMI, Ponder, native guides and system screens | Exact recipes, apparatus, multiblocks, operating instructions, and native state |
@@ -93,3 +94,24 @@ documents.
 
 Do not recreate a quest compiler, layout harness, atlas exporter, or parallel validation
 framework. Durable guidance belongs here; raw evidence belongs outside living docs.
+
+## Death-screen hints
+
+Threads owns a 96-entry death-hint catalogue alongside its loading lessons: 40 survival/recovery
+tips, 44 broader pack tips, and 12 light late-game teasers. Hints use shared concept IDs and record
+mechanical source references. Teasers may introduce an undiscovered possibility without revealing
+its complete recipe, unlocking a Thread, or claiming progression credit.
+
+Show one stable hint beneath the existing death controls. Prefer reliable cause-specific advice
+on three of four recognized deaths; otherwise choose general advice, with teasers weighted at
+one in eight general selections. Unknown damage gets general advice rather than a guessed diagnosis.
+Downed episodes retain their original cause until revival or final death. Require relevant mods,
+avoid the last twelve displayed hints when possible, and keep this client-local history separate
+from loading exposure and lineage progress.
+
+Keep the text concise, neutral, and actionable. Mention actual current bindings where needed.
+Wrap without shrinking, and omit the hint when the space beneath native controls is too small.
+Hints never delay respawning or change normal/hardcore death controls. Resource packs can replace
+`assets/better_content_threads/death_hints/catalogue.json`; invalid catalogues log an error and use
+built-in general advice. Validate content and selection locally, and inspect the existing visual
+fixture; pack suites still require an explicit user order.
