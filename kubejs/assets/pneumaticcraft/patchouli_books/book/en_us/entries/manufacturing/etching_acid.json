@@ -1,0 +1,17 @@
+{
+  "name": "Nitric Acid Etching",
+  "icon": "chemlib:nitric_acid_bucket",
+  "category": "pneumaticcraft:manufacturing",
+  "advancement": "pneumaticcraft:pressure_chamber",
+  "pages": [
+    {
+      "type": "text",
+      "text": "ChemLib Nitric Acid develops $(l:components/pcb)PCB's/$ in an $(l:manufacturing/etching_tank)Etching Tank/$. Make it from saltpeter and sulfuric acid in an airtight Thermopneumatic Processing Plant.$(p)The former PneumaticCraft Etching Acid is not used."
+    },
+    {
+      "type": "spotlight",
+      "item": "chemlib:nitric_acid_bucket",
+      "text": "Fill the Etching Tank with Nitric Acid, then add an Empty PCB. The tank consumes acid as the board develops."
+    }
+  ]
+}

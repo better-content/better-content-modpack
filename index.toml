@@ -1518,15 +1518,15 @@ hash = "1fb01fb706e8b4e12726a4306b802cc87f1091b30c7b9c025bbe2bfb9118dc39"
 
 [[files]]
 file = "config/adpother/Pollutants/acetylene.cfg"
-hash = "ea09ea2fef600b76adef4cbe75d4df889ba35ba0da692ac2593f92af89c2bb42"
+hash = "24a70c399442101382443b3acdd05d78e17207f9dbda3fe39e13eea723a5d306"
 
 [[files]]
 file = "config/adpother/Pollutants/ammonia.cfg"
-hash = "5ba9e693451aed332ca312d043ee097d037a9992d7444ca7eb64891db00cc53e"
+hash = "605290aa9fada08db92bf4e8148b313d4fc096b00010dbdaf668bd5d9b43ab39"
 
 [[files]]
 file = "config/adpother/Pollutants/ammonium.cfg"
-hash = "e7da210f2e82d5891a8dc002106a60087bd71f9e67da537e401b46eaae872aed"
+hash = "25bba44874d65913a59615ac6849353344151ae3104672bc73467bee9e226502"
 
 [[files]]
 file = "config/adpother/Pollutants/argon.cfg"
@@ -1534,7 +1534,7 @@ hash = "cc0edf8b7f3df598112a0c8280f8c2ca184e76e2972938800290086d0ff9a697"
 
 [[files]]
 file = "config/adpother/Pollutants/butane.cfg"
-hash = "288584880c77f6fb9fa6b2caa7b70e144b8166c7bc834b0f56aa27909910ea97"
+hash = "99f13629f87229ad083e4d2d67ac01b04505370e84e81ff96dacb48b147f9a9d"
 
 [[files]]
 file = "config/adpother/Pollutants/carbon.cfg"
@@ -1542,15 +1542,15 @@ hash = "88c53c421b434b8e7d7919cb12c9e9918e9e391743072f374032e5d468e887e5"
 
 [[files]]
 file = "config/adpother/Pollutants/carbon_dioxide.cfg"
-hash = "687a497d23839bdba1d421d4f1fb7774f9200cf454b086a5e66052beca61e131"
+hash = "36f054c567a895293bfd18f9e3b749404ce21063ba5cdf348d6250299405813e"
 
 [[files]]
 file = "config/adpother/Pollutants/carbon_monoxide.cfg"
-hash = "05145da610f7959d53cc9808734fb22670954d549179eca7bf1001e3e9f22e88"
+hash = "3fc17c0abc422a4ddc23ef25a575bf2f08da4f1fa56bdf7bcb82f511dc53aa6e"
 
 [[files]]
 file = "config/adpother/Pollutants/chlorine.cfg"
-hash = "50a37fdb1fdbbe3a2398f8c880bf6064aa90db8ee2d9426ccd59c1410f26e560"
+hash = "a6502b06c099fabc62cce9d9b914c4cd1b54188059feb16c9acdfcca338e705f"
 
 [[files]]
 file = "config/adpother/Pollutants/dust.cfg"
@@ -1558,15 +1558,15 @@ hash = "4119c6d58b6ee1f594a2a89e1bcfe9a8b2db48764046760faa092ae051cbeb76"
 
 [[files]]
 file = "config/adpother/Pollutants/ethane.cfg"
-hash = "8640ff66b0e9cf4da89de8486ae045f8068566c59431531015d134aa57633d60"
+hash = "56b519549a0689c94f55ac7681658fa85c39e6f4c86b60f9763ad4dabc2854ea"
 
 [[files]]
 file = "config/adpother/Pollutants/ethylene.cfg"
-hash = "fadc9baa9dc65cfaae743dc323e2e80db4db56bf82476d64444c2dfe17e293af"
+hash = "84a6f0e3fe9912de27169d5f87170cbc0a0963157f418bb710a15dff49e12f15"
 
 [[files]]
 file = "config/adpother/Pollutants/fluorine.cfg"
-hash = "2b67c6835367a07142d1aa57df56e6d571940cc46c4656f0817c92cbd87ba17f"
+hash = "a009a0c2468354b0773e242fce7bce0900f212b68dd873c107f478e9356372e7"
 
 [[files]]
 file = "config/adpother/Pollutants/helium.cfg"
@@ -1578,7 +1578,7 @@ hash = "b0fda9e8013ec2e53788e4350385feaf200f0fcabf0c1450aee5951030e6c184"
 
 [[files]]
 file = "config/adpother/Pollutants/hydrogen_sulfide.cfg"
-hash = "6cfd3f6bdc65999bc6fefc88e383a7d96bc10e55229a3e46b4589c81fc5131f8"
+hash = "3c6de851493bbd3da10c7d75c6ab144c2e04437b74b1f5c5a63112d24960b980"
 
 [[files]]
 file = "config/adpother/Pollutants/krypton.cfg"
@@ -1586,7 +1586,7 @@ hash = "d825e1b7923c3b64a5a3d757045797dc992d8e881e07af0deaf3f6bb12e1dd2b"
 
 [[files]]
 file = "config/adpother/Pollutants/methane.cfg"
-hash = "f11611870e3b9a771bbc027744afc16dcc93d4ad615fbfa5fd8c949afe47eb92"
+hash = "01cc74fdefebe1d4c749f54df87024291e95a06abece52697305a3275bab3009"
 
 [[files]]
 file = "config/adpother/Pollutants/neon.cfg"
@@ -1594,7 +1594,7 @@ hash = "fc366863e40dede3b1e808b06d78106507a8c60863a949b27da81ddf1c469010"
 
 [[files]]
 file = "config/adpother/Pollutants/nitric_oxide.cfg"
-hash = "ae573728db3becfa0454dc5d73ad001668081f1c4b607b6fc0cc7eb5ef5a52cb"
+hash = "37341e56c8699fa5e50d92c409c40fc62031886704e2319fa59629be10b6eed3"
 
 [[files]]
 file = "config/adpother/Pollutants/nitrogen.cfg"
@@ -1602,7 +1602,7 @@ hash = "b4d9c1b604891a742472e1270d00ad3974a6544f1e24513c46d7b1d225713b3d"
 
 [[files]]
 file = "config/adpother/Pollutants/nitrogen_dioxide.cfg"
-hash = "25fabf62046849661a21de3d579870440a2aaf2d184e95144edb949e89332984"
+hash = "aea7b18657e8f9b7749baff2ca11cb8ab713c6a9dc7c6f8d6035a3c91441e533"
 
 [[files]]
 file = "config/adpother/Pollutants/oxygen.cfg"
@@ -1610,11 +1610,11 @@ hash = "f61beed81e81089016bca075f4f9582bad5557aa96213b7b71bf74ac48e94278"
 
 [[files]]
 file = "config/adpother/Pollutants/propane.cfg"
-hash = "47083c6d14a47872387920f782d297c6388aefce27dbb1a1a26d56e5bf6f4682"
+hash = "c3b083b7761c396a179a590b2986b1a845f18730e7bd8b26f924d7bde27f5cd3"
 
 [[files]]
 file = "config/adpother/Pollutants/radon.cfg"
-hash = "0996738e422fd2ce327fb962b8f1f2e176ad93a68ddafebe19a8ad1c33a5b4f5"
+hash = "bf3c0fa001b95b4a2a51ccc83e752ad06517a184ca0ace03796bcc8ca0a3dc08"
 
 [[files]]
 file = "config/adpother/Pollutants/sulfur.cfg"
@@ -1622,7 +1622,7 @@ hash = "e5c114db3ce66d0bb06a144ae77d753b67a18ee34421dfd9feed6c0f811d70c7"
 
 [[files]]
 file = "config/adpother/Pollutants/sulfur_dioxide.cfg"
-hash = "45aa178854af160431e301761da8610e16c3184e72a7e17c50680c60a77e91b3"
+hash = "4af6565ecc6f15a2566e6689de0681db17ef54c9a40e217f355bb534761cd798"
 
 [[files]]
 file = "config/adpother/Pollutants/xenon.cfg"
@@ -5481,6 +5481,10 @@ file = "kubejs/assets/kubejs/models/block/space_machine_block.json"
 hash = "80a405910af125bf13afb2de428088b54ce98027501b3514c95dddedcc473245"
 
 [[files]]
+file = "kubejs/assets/kubejs/models/item/acetate_membrane.json"
+hash = "553e8695a1881deb6d51a235bd96c2b09c86b2e2d1dd7b1d746f5fa36f110756"
+
+[[files]]
 file = "kubejs/assets/kubejs/models/item/ae_logic_package.json"
 hash = "7f3d758869610ab4f7b27e8aee6fcee8fca615fbacb70fafdcc80a2901d4ef4c"
 
@@ -5489,16 +5493,8 @@ file = "kubejs/assets/kubejs/models/item/aether_font_grout.json"
 hash = "412d7055b1bf1129bbdc7c31f14f0369194d15d97acd7b33c36f1c07b267e431"
 
 [[files]]
-file = "kubejs/assets/kubejs/models/item/airtight_fluid_module.json"
-hash = "bf4a9de9b60e8f911d5b65c56f7821a299589e43656f59d051c9b0d3859b899a"
-
-[[files]]
 file = "kubejs/assets/kubejs/models/item/airtight_machine_block.json"
 hash = "bafa703344009239b188013c090553d3830e6bea4ca7186a0b0a34f889a479f4"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/airtight_service_module.json"
-hash = "f1957a8010938af43b35ce3027e6bc6c72f7c64ed1617f44588e5a4d85e305dd"
 
 [[files]]
 file = "kubejs/assets/kubejs/models/item/andesite_machine_block.json"
@@ -5599,10 +5595,6 @@ hash = "412d7055b1bf1129bbdc7c31f14f0369194d15d97acd7b33c36f1c07b267e431"
 [[files]]
 file = "kubejs/assets/kubejs/models/item/oxygenated_vanadium_contact_catalyst.json"
 hash = "a76fa50ebeefc6217ab582262a235e00378095e495fe9ba2ef96bdb51ba35909"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/phosphoric_acid_fluid_bucket.json"
-hash = "c028f6e68ba05592d7754bf463e1c246465c840f6f097d7786a2b4012762afdd"
 
 [[files]]
 file = "kubejs/assets/kubejs/models/item/platinum_group_residue.json"
@@ -5889,14 +5881,6 @@ file = "kubejs/assets/kubejs/textures/item/ae_logic_package.png"
 hash = "b24f61e157a6579231552fc04d6b05eec456d45ab0140bfae778dc0513c7c6a6"
 
 [[files]]
-file = "kubejs/assets/kubejs/textures/item/airtight_fluid_module.png"
-hash = "24b00b6eb351b3984f989acbd26c403f6140b3d037dc987e6e9e33766fb9eb15"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/airtight_service_module.png"
-hash = "2bd91f72e21278aead4d7e32127c351d2df453e7b9a76460c58467ff5b81c60a"
-
-[[files]]
 file = "kubejs/assets/kubejs/textures/item/andesite_utility_frame.png"
 hash = "509994bddff3803ffcf3cd6c533c3115752fdf26c2542ae06c82d61e634ea644"
 
@@ -5939,10 +5923,6 @@ hash = "7c4c0122b8ece6d9728ebe64696a38fa7bba8d258be0d425e626d9d90ec9295b"
 [[files]]
 file = "kubejs/assets/kubejs/textures/item/oxygenated_vanadium_contact_catalyst.png"
 hash = "d60c3023ce0229db8dce78c952585eee37c72bd9ec6f6700a296aa2477556c85"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/phosphoric_acid_fluid_bucket.png"
-hash = "ffb6abd8aee6ade11440e7c4cf581905ad053e3adeb4e848db0bbd95da5a1361"
 
 [[files]]
 file = "kubejs/assets/kubejs/textures/item/platinum_group_residue.png"
@@ -6733,6 +6713,10 @@ file = "kubejs/assets/occultism/models/item/lighted_air.json"
 hash = "d04fdef30d6d12b3d258b9a2f4cf419ba19afacec62aca5c89a20d858e86252b"
 
 [[files]]
+file = "kubejs/assets/pneumaticcraft/lang/en_us.json"
+hash = "2601cf3a8eb56772f693220614e0a6a888ff38707f62ea7687a59de6b7066949"
+
+[[files]]
 file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/categories/compressors.json"
 hash = "f1f838e9b18720564229a0edd9d502319d0831eb31c7b6aaccd8d1ba2adce9a8"
 
@@ -6787,6 +6771,10 @@ hash = "035ccb4c0ed7cdb471f514c8eb38fb3ac077b4066cde8e9e0116b5e8df7e97c1"
 [[files]]
 file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/entries/machines/pneumatic_generator.json"
 hash = "c62d857cd3b65eb84505d881f2aea9be18fb6597f5569a9b300509445e70f6d6"
+
+[[files]]
+file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/entries/manufacturing/etching_acid.json"
+hash = "d377d1a88777f00d5ad573b3f1e5457e49b26675e7a76472007757ae9f370dc1"
 
 [[files]]
 file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/entries/manufacturing/pressure_chamber.json"
@@ -7242,7 +7230,7 @@ hash = "7e13ba7b4324b11b4667129f85e7fdbd14b7ca52868dc8e59d3ea7b533b61654"
 
 [[files]]
 file = "kubejs/client_scripts/compat/retained/remove__40_hide_quarantined_systems.js"
-hash = "7df71f2749b169fdf3236f532b2fbe1b8403efac205e6b3d9fcbca087a466228"
+hash = "0cdcd842a9aa30424f258210359023a6cd9002960ae97e265fd27f659fe10116"
 
 [[files]]
 file = "kubejs/client_scripts/guidance/10_hover_annotations.js"
@@ -7274,7 +7262,7 @@ hash = "456d49c17c73171990b006e7336d6c2bf1206c573c353e788a9db85224875583"
 
 [[files]]
 file = "kubejs/config/chemlib_form_policy.json"
-hash = "ad77584f8be4a785c2d2540c7ed1cd7a67ef5dd24a0aaa00e589de092e827588"
+hash = "d477cf5533dc6d646b43070fe7106b34ed48923a7caee2eda2f8468b47e74014"
 
 [[files]]
 file = "kubejs/config/client.properties"
@@ -7298,7 +7286,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "e5090ca088974370c30d65cbf40a1fc894ad5d039746488457bd74aad30bacbb"
+hash = "ad10a8d5d2b8d6feba65f8261979c28dab7843946b824aceb78a70db413f34cc"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -9221,6 +9209,18 @@ file = "kubejs/data/parcool/advancements/grant_parcool_guide.json"
 hash = "c57ab6bb6fb8d5659e33a3775af423168a5535ad7abf64cb609c546828a91b44"
 
 [[files]]
+file = "kubejs/data/pneumaticcraft/advancements/etchacid_bucket.json"
+hash = "217aed68a33866a15505abf5567b2715b64d1e28da9a46ba1df428c988611604"
+
+[[files]]
+file = "kubejs/data/pneumaticcraft/advancements/recipes/misc/etching_tank.json"
+hash = "c00fac496ed46522f72d795f58dfe6596997b2c2eceb04a2cc8040e47d5c33f4"
+
+[[files]]
+file = "kubejs/data/pneumaticcraft/tags/fluids/etching_acid.json"
+hash = "caa71db03009d605fc31b477ac262367bd1a0c314e43199b8698d1656755e684"
+
+[[files]]
 file = "kubejs/data/projectvibrantjourneys/loot_tables/blocks/ice_chunks.json"
 hash = "59dae689131d98ad3d82dc0abeec43b1922e7462d48a2020b772ccec1de77ecb"
 
@@ -10018,7 +10018,7 @@ hash = "46d53c813d67b3325266e78592faaa8b54e8e54a42a92445c245466555e2c469"
 
 [[files]]
 file = "kubejs/server_scripts/progression/45_acid_chemistry.js"
-hash = "9361ea2c178c9e14ba5218969038c718006071da8206dd36e90eb142a3ece771"
+hash = "16fda906f63dcb836967475ae816aca2da54989b8e86f6a45168634aff2286f9"
 
 [[files]]
 file = "kubejs/server_scripts/progression/50_electrical_control.js"

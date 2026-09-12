@@ -40,6 +40,7 @@ function bcAcidMixer(event, id, input1, input2, itemOutput, fluidOutput, pressur
 ServerEvents.recipes(function (event) {
     // Diamonds come from Realistic Ores' Tin Quartz assay, never coal compression.
     event.remove({ id: 'pneumaticcraft:pressure_chamber/coal_to_diamond' })
+    event.remove({ id: 'pneumaticcraft:pressure_chamber/etching_acid' })
 
     event.custom({
         type: 'create:mixing',
@@ -58,7 +59,7 @@ ServerEvents.recipes(function (event) {
     event.custom({
         type: 'pneumaticcraft:pressure_chamber',
         inputs: [
-            { type: 'pneumaticcraft:stacked_item', item: 'realistic_ores:crushed_ironstone', count: 4 },
+            { item: 'chemlib:vanadium' },
             { type: 'pneumaticcraft:stacked_item', item: 'minecraft:quartz', count: 2 },
             { item: 'pneumaticcraft:pressure_chamber_glass' }
         ],
@@ -87,9 +88,13 @@ ServerEvents.recipes(function (event) {
         bcAcidFluid('chemlib:sulfur_trioxide_fluid', 250), bcAcidFluid('minecraft:water', 250),
         null, bcAcidFluid('chemlib:sulfuric_acid_fluid', 250), 2.0, 180)
 
-    bcAcidMixer(event, 'acetic_acid_oxidation',
-        bcAcidFluidTag('forge:ethanol', 250), bcAcidFluid('chemlib:oxygen_fluid', 250),
-        null, bcAcidFluid('chemlib:acetic_acid_fluid', 250), 2.5, 220)
+    // An open basin supplies atmospheric oxygen for renewable vinegar production.
+    event.custom({
+        type: 'create:mixing',
+        ingredients: [{ fluidTag: 'forge:ethanol', amount: 250 }],
+        results: [{ fluid: 'chemlib:acetic_acid_fluid', amount: 250 }],
+        processingTime: 220
+    }).id('kubejs:chemistry/acids/acetic_acid_oxidation')
 
     event.custom({
         type: 'create:mixing',
@@ -108,6 +113,44 @@ ServerEvents.recipes(function (event) {
         processingTime: 200
     }).id('kubejs:chemistry/acids/kelp_salt_wash')
 
+    event.custom({
+        type: 'create:mixing',
+        heatRequirement: 'heated',
+        ingredients: [
+            { item: 'chemlib:cellulose' },
+            { item: 'chemlib:cellulose' },
+            { fluid: 'chemlib:acetic_acid_fluid', amount: 250 }
+        ],
+        results: [{ item: 'kubejs:acetate_membrane', count: 4 }],
+        processingTime: 200
+    }).id('kubejs:chemistry/acids/acetate_membrane')
+
+    event.shaped('better_content_fixes:airtight_upgrade', [
+        ' S ',
+        'MIM',
+        ' S '
+    ], {
+        S: 'kubejs:pressure_seal',
+        M: 'kubejs:acetate_membrane',
+        I: 'pneumaticcraft:ingot_iron_compressed'
+    }).id('kubejs:chemistry/acids/airtight_upgrade')
+
+    event.remove({ id: 'brewinandchewin:fermenting/pickled_pickles' })
+    event.custom({
+        type: 'brewinandchewin:fermenting',
+        basefluid: { fluid: 'chemlib:acetic_acid_fluid', count: 250 },
+        experience: 1.0,
+        fermentingtime: 9600,
+        ingredients: [
+            { item: 'minecraft:sea_pickle' },
+            { item: 'minecraft:sea_pickle' },
+            { item: 'minecraft:glow_berries' }
+        ],
+        recipe_book_tab: 'meals',
+        result: { item: 'brewinandchewin:pickled_pickles', count: 2 },
+        temperature: 2
+    }).id('brewinandchewin:fermenting/pickled_pickles')
+
     bcAcidThermo(event, 'hydrochloric_acid_mannheim',
         { type: 'pneumaticcraft:stacked_item', item: 'chemlib:sodium_chloride', count: 2 },
         bcAcidFluid('chemlib:sulfuric_acid_fluid', 250), { item: 'chemlib:sodium_sulfate' },
@@ -117,5 +160,4 @@ ServerEvents.recipes(function (event) {
         { type: 'pneumaticcraft:stacked_item', tag: 'forge:dusts/saltpeter', count: 2 },
         bcAcidFluid('chemlib:sulfuric_acid_fluid', 250), { item: 'chemlib:potassium_sulfate' },
         bcAcidFluid('chemlib:nitric_acid_fluid', 500), 2.75, 623)
-
 })

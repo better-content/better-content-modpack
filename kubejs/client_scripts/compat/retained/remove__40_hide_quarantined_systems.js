@@ -50,7 +50,8 @@ var BC_HIDDEN_ITEMS = (BC_QUARANTINE_POLICY.items || [])
         'ae2:debug_chunk_loader',
         'createsifter:advanced_brass_mesh',
         'createsifter:custom_mesh',
-        'createsifter:advanced_custom_mesh'
+        'createsifter:advanced_custom_mesh',
+        'pneumaticcraft:etching_acid_bucket'
     ])
 
 function bcHideRegisteredItems(event) {
@@ -61,6 +62,11 @@ function bcHideRegisteredItems(event) {
     })
 }
 
+var BC_HIDDEN_FLUIDS = [
+    'chemlib:phosphoric_acid_fluid',
+    'pneumaticcraft:etching_acid'
+]
+
 JEIEvents.hideItems(function (event) {
     bcHideRegisteredItems(event)
 })
@@ -68,5 +74,15 @@ JEIEvents.hideItems(function (event) {
 if (Platform.isLoaded('emi') && typeof EMIEvents !== 'undefined') {
     EMIEvents.hideItems(function (event) {
         bcHideRegisteredItems(event)
+    })
+}
+
+JEIEvents.hideFluids(function (event) {
+    BC_HIDDEN_FLUIDS.forEach(function (fluid) { event.hide(fluid) })
+})
+
+if (Platform.isLoaded('emi') && typeof EMIEvents !== 'undefined') {
+    EMIEvents.hideFluids(function (event) {
+        BC_HIDDEN_FLUIDS.forEach(function (fluid) { event.hide(fluid) })
     })
 }

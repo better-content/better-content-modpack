@@ -124,10 +124,23 @@ seals keep the pressure entry reachable. Mechanically craft
 ingots, two pressure tubes, and two seals. It directly roots the Rotational
 Compressor and the first Pressure Chamber interface.
 
-Contained PneumaticCraft processes establish sulfuric, hydrochloric, and nitric
-acid. Saltpeter and sulfuric acid make nitric acid in the heated pressure process;
-gold concentrate with hydrochloric and nitric acid yields Platinum Group Residue
-in Create mixing. These routes have no Electrical Machine Block or PowerGrid gate.
+Sugar fermentation supplies renewable ethanol, and an open Create Basin oxidizes
+it into canonical ChemLib acetic acid. Acetic acid preserves Pickled Pickles and,
+with kelp-derived cellulose, makes reusable-capacity Acetate Membranes for hazardous
+ChemLib pollutants. Two membranes, two pressure seals, and compressed iron make an
+Airtight Upgrade. Use it on a Basin, Fluid Mixer, or Thermopneumatic Processing Plant
+before processing gas-state ChemLib inputs or outputs; sneak-use empty-handed to
+recover it.
+
+The sealed pressure chain electrolyzes water, oxidizes Black Shale sulfur through
+the vanadium contact process, and hydrates sulfur trioxide into sulfuric acid. The
+full Black Shale pressure assay supplies the catalyst's vanadium. Sulfuric acid then
+converts kelp-derived sodium chloride into hydrochloric acid and saltpeter into
+nitric acid. Nitric acid is PneumaticCraft's sole PCB etchant; its native etching
+acid is hidden and has no recipe. Registered phosphoric acid forms remain outside
+the survival chemistry surface until they have a distinct supported purpose. Gold
+concentrate with hydrochloric and nitric acid yields Platinum Group Residue in
+Create mixing. These routes have no Electrical Machine Block or PowerGrid gate.
 Heat Sync stores and moves process heat; its Boiler Heater consumes exactly
 1/2/3 heat for an active Create boiler's 1/2/3 heat level.
 

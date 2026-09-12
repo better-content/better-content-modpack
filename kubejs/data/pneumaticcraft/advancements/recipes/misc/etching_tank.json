@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_nitric_acid_bucket": {
+      "conditions": {
+        "items": [
+          { "items": ["chemlib:nitric_acid_bucket"] }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": { "recipe": "pneumaticcraft:etching_tank" },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [["has_nitric_acid_bucket", "has_the_recipe"]],
+  "rewards": { "recipes": ["pneumaticcraft:etching_tank"] },
+  "sends_telemetry_event": false
+}

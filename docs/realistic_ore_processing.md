@@ -108,7 +108,7 @@ Systemic Salience does not turn ores into neon aspect tokens.
 | Gold, redstone, quartz, lapis | familiar technical and magical crafting economies |
 | Diamond, emerald, amethyst | deeper Tin Quartz assays and ordinary gem uses; no diamond ore generates |
 | Rock salt, sodium chloride, saltpeter | cooking/preservation first; chemical and nitrate depth later |
-| Soul sand, sulfur | immediate Black Shale/soul utility; soul, reagent, and pollution chemistry |
+| Soul sand, sulfur, vanadium | immediate Black Shale/soul utility; sulfur and vanadium supply the supported contact-process acid chain |
 | Aluminum, cobalt, osmium, silver | live TConstruct materials and pack metallurgy/electrum routes |
 | Nickel | Creating Space alloy routes and molten material |
 | Titanium | Space Machine Block, aerospace recipes, and molten material |

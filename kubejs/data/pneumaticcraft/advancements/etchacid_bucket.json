@@ -1,0 +1,25 @@
+{
+  "parent": "pneumaticcraft:pressure_chamber",
+  "criteria": {
+    "nitric_acid": {
+      "conditions": {
+        "items": [
+          { "items": ["chemlib:nitric_acid_bucket"] }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "pneumaticcraft:textures/gui/advancement_bg.png",
+    "description": { "translate": "pneumaticcraft.advancement.etchacid_bucket.desc" },
+    "frame": "task",
+    "hidden": false,
+    "icon": { "item": "chemlib:nitric_acid_bucket" },
+    "show_toast": true,
+    "title": { "translate": "pneumaticcraft.advancement.etchacid_bucket" }
+  },
+  "requirements": [["nitric_acid"]],
+  "sends_telemetry_event": true
+}

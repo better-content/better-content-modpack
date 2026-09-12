@@ -68,7 +68,7 @@ Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 - `kubejs/server_scripts/progression/20_powered_works.js` — Authors the Powered Works Machine Block roots and early kinetic machinery.
 - `kubejs/server_scripts/progression/30_precision_factory.js` — Authors the Precision Factory brass, deployment, and mechanical-crafting roots.
 - `kubejs/server_scripts/progression/40_thermal_pressure.js` — Authors processed-geology Scorched Brick production, compressed-air entry, and airtight machinery while disabling native Nether grout.
-- `kubejs/server_scripts/progression/45_acid_chemistry.js` — Authors bounded PneumaticCraft acid chemistry while removing the coal-compression diamond bypass.
+- `kubejs/server_scripts/progression/45_acid_chemistry.js` — Authors canonical acid acquisition, renewable acetic uses, airtight gas containment, and removes native etching acid and coal-compression diamonds.
 - `kubejs/server_scripts/progression/50_electrical_control.js` — Authors Electrical Control generation, circuits, sensors, and advanced chemistry roots.
 - `kubejs/server_scripts/progression/60_aerospace.js` — Authors Aerospace engineering, atmosphere-processing, and rocket roots.
 - `kubejs/server_scripts/progression/70_transition_components.js` — Authors reachable cross-mod components used by factory, electrical, aerospace, AE2, geology, and post-AE2 transitions.
