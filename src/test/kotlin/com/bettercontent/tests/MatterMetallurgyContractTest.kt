@@ -14,6 +14,7 @@ class MatterMetallurgyContractTest {
     private val handWorkshop = read("kubejs/server_scripts/progression/10_hand_workshop.js")
     private val thermalPressure = read("kubejs/server_scripts/progression/40_thermal_pressure.js")
     private val acidChemistry = read("kubejs/server_scripts/progression/45_acid_chemistry.js")
+    private val oreSifting = read("kubejs/server_scripts/processing/ore_sifting_and_spouting.js")
     private val magicSynthesis = read(
         "kubejs/server_scripts/compat/retained/" +
             "refactor__cross_mod_progression__59_formulaic_synthesis_magic_routes.js",
@@ -74,6 +75,19 @@ class MatterMetallurgyContractTest {
         assertTrue(thermalPressure.contains("realistic_ores:rinsed_black_shale"))
         assertTrue(thermalPressure.contains("results: [{ item: 'tconstruct:scorched_brick', count: 2 }]"))
         assertFalse(thermalPressure.contains("foundry/nether_grout"))
+    }
+
+    @Test
+    fun `outputless sugar cube washing is not migrated into a spout recipe`() {
+        assertTrue(oreSifting.contains("input === 'supplementaries:sugar_cube'"))
+    }
+
+    @Test
+    fun `raw metal routes require a populated tag before recipe creation`() {
+        assertTrue(oreSifting.contains("function tagHasItems(tag)"))
+        assertTrue(oreSifting.contains("Ingredient.of('#' + tag).itemIds"))
+        assertTrue(oreSifting.contains("if (!tagHasItems(rawTag))"))
+        assertTrue(oreSifting.indexOf("if (!tagHasItems(rawTag))") < oreSifting.indexOf("var raw = { tag: rawTag }"))
     }
 
     @Test

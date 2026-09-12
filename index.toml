@@ -5097,6 +5097,10 @@ file = "kubejs/assets/ars_nouveau/patchouli_books/worn_notebook/en_us/entries/ri
 hash = "b263fc46822bf3caf9b8af08f64b3062999f1eb2027771c5663102eff69c893c"
 
 [[files]]
+file = "kubejs/assets/ars_nouveau/patchouli_books/worn_notebook/en_us/entries/source/alchemical_sourcelink.json"
+hash = "f215d1e8134236e617309f31861dabedeb1855214d83063945881639c58af56b"
+
+[[files]]
 file = "kubejs/assets/ars_nouveau/textures/block/stripped_blue_archwood_log_top.png"
 hash = "701d61ea01d30df88c4df696f5bd8c705769e5ad512c29e12cbe8d7006b28814"
 
@@ -6789,6 +6793,10 @@ file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/entries/rotation
 hash = "9e51ea543ee09dd7aa32e571f85158fd7adac5558a670b3819ccb4b2850f37b4"
 
 [[files]]
+file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/entries/tools/minigun_ammo.json"
+hash = "e865567ca04263ee34330df450500a4e4701740e9f8aa687c46128528edac9c4"
+
+[[files]]
 file = "kubejs/assets/pneumaticcraft/patchouli_books/book/fr_fr/entries/rotational_compressor.json"
 hash = "c59eef588ab934e7f2abca6f7098c24a33e9e237f4ad4863386a07af5cec5856"
 
@@ -7278,7 +7286,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "0ac0d5eaeddeff62a79df4e5f84fc172ad12a844c9972a57586725260357c270"
+hash = "22cc18a078c4650235257605c552a8089a70d286311ef845556700ab06a9cd29"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -9990,7 +9998,7 @@ hash = "8b55ea75834053d2d6da166fb29faf0dd19b7f898f0ed85da07e0f40c0f6aa39"
 
 [[files]]
 file = "kubejs/server_scripts/processing/ore_sifting_and_spouting.js"
-hash = "8f129d3cbac193a7c932f7941d9a2bc1a1335c1926ccaa9fbfc32e7d21dcfd11"
+hash = "cb79aac5fbc73820a1c6c7bfeb55974f26222666948e15b637c090a487c2b539"
 
 [[files]]
 file = "kubejs/server_scripts/progression/00_primitive_workshop.js"
@@ -10188,15 +10196,15 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.1.jar"
-hash = "7ac60a99ad014b35507adbb256de9cf986f38a16416bc9f7b061e74750f2f965"
+hash = "43941912985620a89fcf181aaf7a641e97bfaa69395bd13f51840b0b440a7ade"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.8.jar"
-hash = "65594dccee2b5e59ebd3be47bda88ea7e8b7050993a794ab6a8844c3a83c5d8f"
+hash = "2f4534439da361663827bf7376c92f9af2ceeb53826d47480779a48adfbe7ae3"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
-hash = "669c1f7fe0a3577f26506e680c4e2821c2314578e22a5a11bf46251a3b9454aa"
+hash = "280cee757fcefb1bcdd132a51e1c35bdf0a76a6a85f0bc7e5a3429c76c29f3a1"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -10235,7 +10243,7 @@ metafile = true
 
 [[files]]
 file = "mods/bumblezone-cultivars-0.1.0.jar"
-hash = "11a786a4e606b42fd07b3cebcccdbdde2c0ccaea9e638259a4a5310aa4300ba3"
+hash = "023db55c1574bd921f68a8ebb195259b414df09c2e146924f69c343a3e407053"
 
 [[files]]
 file = "mods/burnt-basic.pw.toml"
@@ -10254,7 +10262,7 @@ metafile = true
 
 [[files]]
 file = "mods/class-selector-1.0.0.jar"
-hash = "f5a06cc87e5ea86c5f8ddcc6f94f949890ab584fb90f2107d9c6925563d6a287"
+hash = "ee58e6d55284fa66d1606acf7c5bae38be627eaf0e43168e8f7cb4080b0de31b"
 
 [[files]]
 file = "mods/cloth-config.pw.toml"
@@ -10389,7 +10397,7 @@ metafile = true
 
 [[files]]
 file = "mods/downed-player-revival-1.0.0.jar"
-hash = "76fff815a66ab8f4f530299d633814c403e73db74070b0473710c1250beb5ea8"
+hash = "b875fd7da8dc9064db7f222357f825ae9d3f63b469c691d985506fbecc943434"
 
 [[files]]
 file = "mods/dynamic-asset-generator.pw.toml"
@@ -10398,7 +10406,7 @@ metafile = true
 
 [[files]]
 file = "mods/dynamic-survival-hud-1.0.0.jar"
-hash = "d386ffcbbf59a5bf8d2035986b0bd35056d4ce616d0a43c8af8126d439a22a99"
+hash = "69f976305e107e2920ec99d8b9eeab887effaaa0193486b5c37b9ccbc69693e3"
 
 [[files]]
 file = "mods/dynamic-trees-ars-nouveau.pw.toml"
@@ -10676,7 +10684,7 @@ metafile = true
 
 [[files]]
 file = "mods/heat-sync-0.1.0.jar"
-hash = "6f1d990b2753f01ac87c3279fd6657e1b32a11148a249c9968c44fd3b1964ea9"
+hash = "9d63e9061f8202c64ef317ffed31b5f9a113c495e9766f153a8325239637de22"
 
 [[files]]
 file = "mods/hexerei.pw.toml"
@@ -10784,7 +10792,7 @@ metafile = true
 
 [[files]]
 file = "mods/latent-chemlib-0.2.0.jar"
-hash = "3bf5f06b06d9b7ca0df8024a982049136bccffce21df895c1830bf049068ab39"
+hash = "d43d2898ff0d54374a46910ae80b90fd5ef3cea94bfa6aee52af79f7c8ddfd12"
 
 [[files]]
 file = "mods/lithostitched.pw.toml"
@@ -11027,7 +11035,7 @@ metafile = true
 
 [[files]]
 file = "mods/rail-beetle-0.1.0.jar"
-hash = "ee16829275e6ae3691d4681175e48fe4be5313015c7cc1ac80a8fa8fb0db65a1"
+hash = "6b63c160f96ab402fa9ed7070d0c8e70f46e5ebdcda53d9dd6e0782e91040e92"
 
 [[files]]
 file = "mods/ratlantis-logistics-0.1.0.jar"
@@ -11045,7 +11053,7 @@ metafile = true
 
 [[files]]
 file = "mods/realistic-ores-0.2.0.jar"
-hash = "c7c0fa69c582e97c35ce8159bc6bfff6820e699a956ccee9670ba8893e4aab45"
+hash = "df7b548a112ca1e16b35f0a7f1ea56a48c7b0aabea7b24c00071dc88efd4cc06"
 
 [[files]]
 file = "mods/realistic-physics.pw.toml"
@@ -11084,7 +11092,7 @@ metafile = true
 
 [[files]]
 file = "mods/rpg-stats-1.0.1.jar"
-hash = "69559c65af88d480b5e62ee87090a5ef49f89dfd3b6f37deefbb893558e30b37"
+hash = "9564c6a91335370611b96ff3e783016ff0b74faee083ea65bbf40370fe37b718"
 
 [[files]]
 file = "mods/runtime-data-dumper-0.1.0.jar"

@@ -54,6 +54,13 @@
         return 100
     }
 
+    function tagHasItems(tag) {
+        try {
+            var ids = Ingredient.of('#' + tag).itemIds
+            return ids && ids.length > 0
+        } catch (ignored) { return false }
+    }
+
     function safePath(id) {
         return String(id).replace(/[^a-z0-9_./-]/g, '_').replace(/[:/]/g, '_')
     }
@@ -102,6 +109,7 @@
             var results = canonicalizeLegacyResults(input, copiedArray(json, 'results'))
 
             if (!input || SKIP_SPLASHING[id] || input === 'create_confectionery:sugar_cube'
+                    || input === 'supplementaries:sugar_cube'
                     || (input === 'minecraft:ice' && results.length === 1
                         && results[0].item === 'minecraft:packed_ice')) {
                 skipped++
@@ -144,7 +152,12 @@
         // The recipes use raw-material tags, so native world sources can vary while
         // their processing result remains stable.
         SHARED_METALS.forEach(function (material) {
-            var raw = { tag: 'forge:raw_materials/' + material }
+            var rawTag = 'forge:raw_materials/' + material
+            if (!tagHasItems(rawTag)) {
+                skipped++
+                return
+            }
+            var raw = { tag: rawTag }
             var concentrate = { item: 'realistic_ores:' + material + '_concentrate' }
             ;[false, true].forEach(function (wet) {
                 var recipe = {

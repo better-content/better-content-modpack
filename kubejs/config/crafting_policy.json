@@ -367,6 +367,10 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
+    "createsifter": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
     "create_train_fuel_scaling": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
@@ -1157,6 +1161,10 @@
     },
     "rhino": {
       "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "rotavision": {
+      "primary_role": "presentation",
       "support_state": "not_applicable"
     },
     "rpg_stats": {

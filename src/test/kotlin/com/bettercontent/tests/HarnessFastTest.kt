@@ -94,7 +94,10 @@ class HarnessFastTest {
             .path("dependsOn").map { it.asText() }
         assertEquals(listOf("heat-sync"), dependencies("latent-chemlib"))
         assertEquals(listOf("dimension-drink"), dependencies("better-content-economy"))
-        assertEquals(listOf("dynamic-survival-hud"), dependencies("better-content-fixes"))
+        assertEquals(
+            listOf("dynamic-survival-hud", "heat-sync", "latent-chemlib"),
+            dependencies("better-content-fixes"),
+        )
         assertEquals(listOf("world-lifecycle-manager"), dependencies("class-selector"))
         assertEquals(listOf("downed-player-revival"), dependencies("depth-director"))
         assertEquals(listOf("downed-player-revival"), dependencies("pillager-campaigns"))

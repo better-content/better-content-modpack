@@ -175,7 +175,7 @@ class HoverAnnotationLearningSurfaceTest {
             val entry = zip.getEntry("com/bettercontent/threads/ThreadClient.class")
             zip.getInputStream(entry).readBytes().toString(Charsets.ISO_8859_1)
         }
-        assertTrue(client.contains("keepReading"))
+        assertTrue(!client.contains("keepReading"))
     }
 
     private fun exactTargets(): Set<String> = registry.path("annotations").flatMap { row ->
