@@ -58,8 +58,8 @@ def materialize(source, destination):
 
 manifest_files = []
 for folder in ('mods','resourcepacks','shaderpacks','tacz'):
-    manifest_files.extend(sorted((root / folder).glob('*.pw.toml')))
-classified_paths = set(manifest_files)
+    manifest_files.extend((folder, manifest) for manifest in sorted((root / folder).glob('*.pw.toml')))
+classified_paths = {manifest for _, manifest in manifest_files}
 ignored_roots = tuple(root / folder for folder in ('build', 'dist', 'generated', '.gradle', '.git'))
 unclassified = sorted(
     path for path in root.rglob('*.pw.toml')
@@ -68,7 +68,7 @@ unclassified = sorted(
 if unclassified:
     raise SystemExit("unclassified Packwiz manifests: " + ', '.join(str(path) for path in unclassified))
 
-for manifest in manifest_files:
+for folder, manifest in manifest_files:
         data = tomllib.loads(manifest.read_text())
         if data.get('side', 'both') not in ('both', side):
             continue
