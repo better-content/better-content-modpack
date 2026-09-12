@@ -37,6 +37,11 @@ magic-themed content remains tied to its own material.
 
 ## Era 1 — Hand Workshop and Tinkers' Construct
 
+Ore separation starts here rather than at the furnace. Use a String Mesh by hand
+on a geological chunk to recover one canonical primary unit. Heat remains a
+four-nugget emergency exit for metal chunks, but nonmetals emerge directly from
+separation and never require ceremonial smelting.
+
 Build native Tinkers' Construct tools and reach the Nether, Aether, Bumblezone,
 or Ratlantis Dimension Font. Each origin material makes its own named Font grout,
 and all four grouts smelt to the same Seared Brick. Seared metallurgy owns alloy
@@ -64,6 +69,11 @@ wheat or sage seed into the Overworld.
 
 ## Era 2 — Create Powered Works
 
+The standard Sifter automates the same recipe language used by hand sifting.
+Milling a chunk into two feeds improves primary recovery; Crushing Wheels later
+produce three. Dry Sifting returns the primary product, while a waterlogged
+Sifter can expose coproducts appropriate to its installed mesh.
+
 Ratlantis is also the origin of scalable logistics. Courier lattices root bulk
 rat, Pretty Pipes, and portable-storage infrastructure; oratchalcum mechanisms
 root ordinary modules and Create's request network; arcane logistics cores root
@@ -86,6 +96,12 @@ Bearing, the Mechanical Pump, and the first optional primitive transport roots.
 
 ## Era 3 — Create Precision and Steam
 
+Brass Sifters provide the high-throughput physical separation route and expose
+all authored coproduct grades when waterlogged. A Spout is not a separator: it
+uses water to prepare crushed geology for the later pressure route and performs
+direct hydration, cleaning, stripping, and rusting operations formerly assigned
+to Bulk Washing.
+
 TCon alloying is the only brass composition route. Compact the Copper block,
 Brass Casing, four brass plates, two electron tubes, and polished rose quartz
 into `kubejs:brass_machine_block`. It directly unlocks the Deployer, Mechanical
@@ -94,6 +110,10 @@ components carry all later recipes. Quark's automatic Crafter is downstream of
 the Create Mechanical Crafter rather than an independent iron-and-redstone bypass.
 
 ## Era 4 — PneumaticCraft and Heat Sync
+
+Four matching rinsed feeds at 2 bar yield four primary units plus the complete
+deterministic geological assay. This is the maximum-recovery route, especially
+for trace and precious coproducts.
 
 Native Nether grout is disabled. Foundry access instead uses a heated Create
 Mixer to combine rinsed Hotstone, rinsed Black Shale, and gravel into Scorched

@@ -47,7 +47,10 @@ var BC_HIDDEN_ITEMS = (BC_QUARANTINE_POLICY.items || [])
     .concat(BC_HIDDEN_VS_TECHNICAL_ITEMS)
     .concat([
         'pneumaticcraft:chunkloader_upgrade',
-        'ae2:debug_chunk_loader'
+        'ae2:debug_chunk_loader',
+        'createsifter:advanced_brass_mesh',
+        'createsifter:custom_mesh',
+        'createsifter:advanced_custom_mesh'
     ])
 
 function bcHideRegisteredItems(event) {

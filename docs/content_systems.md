@@ -7,7 +7,7 @@ runtime logic.
 
 | System | Owner | Pack boundary |
 | --- | --- | --- |
-| Deposits, chunks, samples, processing, canonical outputs | Realistic Ores | Supplies acid/era inputs only; no duplicate ore registration |
+| Deposits, chunks, samples, Sifting/Spouting/pressure processing, canonical outputs | Realistic Ores | Physical and magical routes converge on shared products; no duplicate ore registration |
 | Radioactive profiles, disturbance persistence, emissions | Latent ChemLib | Provides progression recipes; the mod owns physical behavior and its gameplay events |
 | Heat storage/transport and Create Boiler Heater | Heat Sync | Provides era placement; native UI and hover own operating facts |
 | Dimension Font obelisks, travel sessions, charge, and arrival sites | Dimension Drink | Pack recipes and learning surfaces may point to Fonts; the mod owns neutral charge generation/drain, session lifecycle, chunk tickets, and destination placement |

@@ -37,20 +37,23 @@ yield remains within 1% of the prior configuration for every family.
 
 1. Ordinary mining yields one host-independent chunk; Silk Touch preserves the
    exact ore block. Nine small chunks combine into one full chunk.
-2. A Millstone produces two crushed feeds and Crushing Wheels produce three.
-   A full chunk cooks to two primary units; one crushed feed cooks to one.
-3. The main technical route fills each crushed feed with 250 mB of water, then
+2. A String Mesh can hand-sift a chunk for one primary recovery unit before
+   rotational power. A Millstone produces two crushed feeds and Crushing Wheels
+   produce three, which makes comminution the first recovery multiplier.
+3. Dry Sifting recovers the primary product. Waterlogged Zinc Sifting adds major
+   and minor coproducts at 12.5% and 6.25% per feed. Waterlogged Brass Sifting
+   exposes major, minor, trace, and precious grades at 25%, 12.5%, 5%, and 1.25%.
+4. The maximum-recovery technical route fills each crushed feed with 250 mB of water, then
    pressure-separates four matching rinsed feeds at 2 bar. It returns four primary
-   concentrates plus the family's small, curated coproduct set. PneumaticCraft's
+   recovery units plus the family's complete curated coproduct set. PneumaticCraft's
    result format has no chance field, so listed technical coproducts are deliberate
    deterministic outputs rather than misleading pseudo-probabilities.
-4. Three optional transformations give crushed geology a legible magical use
-   without pretending to be higher-yield ore multiplication: Blood Magic spends
-   LP for one thematic material, Hexerei combines four feeds with all four
-   dimension catalysts, and Ars crushing offers one low-chance elemental essence.
-5. Furnace exits resolve to canonical native or ChemLib forms. TConstruct molten
-   exits are metal-only; quartz, gems, salts, carbon, and other nonmetals remain
-   item-form outputs.
+5. Blood Magic, Hexerei, Ars Nouveau, and Occultism process unsplit chunks into
+   the same canonical primary products. Their apparatus costs and side bonuses
+   differ, but they cannot stack with Create's comminution multiplier.
+6. Heat is a low-yield fallback and finishing operation for metals only. One metal
+   chunk or concentrate yields four nuggets. Quartz, gems, salts, carbon, sulfur,
+   redstone, lapis, and other nonmetals leave separation in their usable item form.
 
 Tin Quartz folds gem-bearing pegmatite assays into its industrial depth, while
 Hotstone uses route-specific assay variants, so legible deposits can reveal
@@ -64,40 +67,31 @@ or hidden "best ball" ladder to memorize.
 
 ## Immediate utility
 
-The processing backend is intentionally deep, but every family must communicate
-something before that backend is required. Coal chunks burn directly. Evaporite
-material yields Rock Salt for cooking and preservation. Black Shale supports soul
-fire, yields soul sand, and supplies redstone. Tin Quartz later separates gems.
-Hotstone emits light,
-hurts on contact, and can be consolidated into magma.
+The processing backend is deep but begins without machinery: every chunk can be
+hand-sifted with a String Mesh. Coal chunks also burn directly, Black Shale blocks
+support soul fire, and Hotstone emits light, hurts on contact, and can be consolidated
+into magma. Direct Rock Salt and Soul Sand crafting shortcuts are intentionally gone;
+their recovery now teaches the shared separation system.
 
 ## Four salient routes
 
 | Route | Input | Outcome |
 | --- | --- | --- |
-| Technical | four rinsed feeds at 2 bar | primary concentrate plus a compact deterministic assay |
-| Blood | four crushed feeds and LP | one family-themed material, as listed below; no Malum spirits |
-| Hexerei | four crushed feeds and four dimension catalysts | one family-themed occult material |
-| Ars | one crushed feed | a 25% elemental-essence chance, with Tin Quartz's small Source Gem bonus |
+| Technical | four rinsed feeds at 2 bar | four primary units plus the complete deterministic assay |
+| Blood | one chunk and ARC cutting fluid | two primary units plus a 25% corrupted tiny-dust chance |
+| Hexerei | four chunks, four selenite shards, water, and heat | eight primary units |
+| Ars | one chunk | two primary units plus a 25% family essence chance; Tin Quartz may also yield Source Gem |
+| Occultism | one chunk | two primary units, modified by the summoned crusher's tier |
 
-These are different uses, not eight media tiers multiplying the same output.
-Recipe viewers show exact outputs and apparatus costs; the processing manifest
-records the shared intent.
+These are alternative approaches to shared resource results, not isolated resource
+economies. Recipe viewers show exact outputs and apparatus costs; the version-3
+processing manifest records the common units and route-specific bonuses.
 
-The Blood Magic alchemy-table route consumes four matching crushed feeds. Ordinary
-families cost 2,000 LP at upgrade level 2 and take 200 ticks; Black Shale and Hotstone
-cost 5,000 LP at upgrade level 3 and take 400 ticks. Its exact one-item outputs are:
-
-| Deposit | Blood output |
-| --- | --- |
-| Coal Measures | `minecraft:blaze_powder` |
-| Ironstone | `minecraft:clay_ball` |
-| Copper Bloom | `minecraft:phantom_membrane` |
-| Tin Quartz | `minecraft:lapis_lazuli` |
-| Brassroot | `minecraft:phantom_membrane` |
-| Evaporite Beds | `minecraft:prismarine_crystals` |
-| Black Shale | `bloodmagic:corrupted_dust` |
-| Hotstone | `bloodmagic:destructivecrystal` |
+Create Bulk Washing is disabled. Granular legacy washing recipes use waterlogged
+Sifting, while direct hydration, cleaning, stripping, and rusting operations use a
+Spout. Flour and cleaning operations consume 100 mB, concrete consumes 250 mB, and
+magma-to-obsidian consumes 1,000 mB. The outputless sugar-cube recipe and direct
+ice-to-packed-ice shortcut are removed.
 
 ## Design contract
 

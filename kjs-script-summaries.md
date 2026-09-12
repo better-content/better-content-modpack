@@ -2,15 +2,15 @@
 
 This index is generated from the three executable KubeJS roots. Every listed JavaScript file is active; directory names such as `retained` and `reviewed` describe review history, not load state. `kubejs/inactive_review` is deliberately excluded because it is outside the executable roots.
 
-Current inventory: **72 active scripts** — 6 client, 58 server, and 8 startup.
+Current inventory: **75 active scripts** — 6 client, 60 server, and 9 startup.
 
 ## Client scripts
 
 - `kubejs/client_scripts/compat/retained/check__46_hide_hexerei_mahogany_tree_products.js` — Hides Hexerei’s superseded mahogany tree products from recipe viewers.
-- `kubejs/client_scripts/compat/retained/check__47_hide_ae2_facades_from_emi.js` — Hides AE2 cable facades from EMI while leaving JEI unchanged.
 - `kubejs/client_scripts/compat/retained/check__48_hide_replaced_fishing_rods.js` — Hides native fishing rods superseded by the pack’s Starcatcher fishing route.
 - `kubejs/client_scripts/compat/retained/remove__40_hide_quarantined_systems.js` — Hides quarantined chemistry, transport, test, legacy, and unsupported items from recipe viewers.
 - `kubejs/client_scripts/guidance/10_hover_annotations.js` — Adds the pack's item-local hover annotations through the normal tooltip pipeline.
+- `kubejs/client_scripts/policy/hide_excavated_variants.js` — Hides Excavated Variants’ host-stone permutations from recipe viewers without removing their recipes or world content.
 - `kubejs/client_scripts/policy/hide_vanilla_tools.js` — Hides vanilla-style tools whose reachable native-system replacements own progression.
 
 ## Server scripts
@@ -58,6 +58,7 @@ Current inventory: **72 active scripts** — 6 client, 58 server, and 8 startup.
 - `kubejs/server_scripts/policy/global_loot_progression.js` — Removes progression-breaking materials from broad loot injection surfaces.
 - `kubejs/server_scripts/policy/removed_items.js` — Applies the exact deny list for intentionally unavailable outputs.
 - `kubejs/server_scripts/policy/tnt_recipe.js` — Restricts TNT to the two vanilla sand inputs instead of broad sand tags.
+- `kubejs/server_scripts/processing/ore_sifting_and_spouting.js` — Disables Bulk Washing, migrates granular separations to waterlogged Sifting, and assigns direct water treatments to Spouting.
 - `kubejs/server_scripts/progression/00_primitive_workshop.js` — Establishes the pre-Font fiber, fired-goods, and simple-fittings recipe layer for local handling and homestead utilities.
 - `kubejs/server_scripts/progression/10_hand_workshop.js` — Authors four named Font grouts, automated and Melter-scale Andesite Alloy casting, and hand-cranked Create entry.
 - `kubejs/server_scripts/progression/20_ratlantis_logistics.js` — Removes direct Ratlantis access and gives Pretty Pipes, Sophisticated automation, Create requests, Rats, AE2, and Little Logistics visible Ratlantis-rooted recipes.

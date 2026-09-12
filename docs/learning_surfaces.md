@@ -20,6 +20,11 @@ each surface's depth. Hover stays one or two concise lines; a lesson does not re
 an unknown Thread. Native tooltips that already explain the pack model need no duplicate
 annotation. No primary surface sends players to an achievement ledger for instruction.
 
+Ore processing uses three contextual hover anchors. Chunks introduce String-Mesh
+hand Sifting, crushed feeds contrast dry and waterlogged Sifting with Spouting,
+and rinsed feeds state the four-at-2-bar pressure batch. The Encased Fan explicitly
+corrects the retired Bulk Washing model; EMI owns exact chances and recipe layouts.
+
 ## Authoring contract
 
 Start with the player action or misconception and identify the implementing recipe,

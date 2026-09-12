@@ -7394,11 +7394,15 @@ hash = "7e13ba7b4324b11b4667129f85e7fdbd14b7ca52868dc8e59d3ea7b533b61654"
 
 [[files]]
 file = "kubejs/client_scripts/compat/retained/remove__40_hide_quarantined_systems.js"
-hash = "4f2f2478ef0d685df6e70080193ec2f4e1e2b256327cfb8ad8eec62804894568"
+hash = "7df71f2749b169fdf3236f532b2fbe1b8403efac205e6b3d9fcbca087a466228"
 
 [[files]]
 file = "kubejs/client_scripts/guidance/10_hover_annotations.js"
 hash = "6458b711eb208ab70b0b2d80f57eec64bb9c487a070ceafc9207c0945d2c0b2d"
+
+[[files]]
+file = "kubejs/client_scripts/policy/hide_excavated_variants.js"
+hash = "869d510c4d93e1bb639d494492128414ad9c082c29bde45261573a265887d4eb"
 
 [[files]]
 file = "kubejs/client_scripts/policy/hide_vanilla_tools.js"
@@ -7442,7 +7446,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "f2c9580e2f21da5c6f8e1e176865b82a37d268e9c5fc721243b8b2db44eda412"
+hash = "e4bf2cddb97dcd0a3a33bc1a5727a928538f7935cdfb40e0924082ea89b2ad32"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -10133,6 +10137,10 @@ file = "kubejs/server_scripts/policy/tnt_recipe.js"
 hash = "8b55ea75834053d2d6da166fb29faf0dd19b7f898f0ed85da07e0f40c0f6aa39"
 
 [[files]]
+file = "kubejs/server_scripts/processing/ore_sifting_and_spouting.js"
+hash = "8f129d3cbac193a7c932f7941d9a2bc1a1335c1926ccaa9fbfc32e7d21dcfd11"
+
+[[files]]
 file = "kubejs/server_scripts/progression/00_primitive_workshop.js"
 hash = "bee03edac6c9be40893b394e6fef8d127ca76d3762b83e274fb65daf729ec1f8"
 
@@ -10469,6 +10477,11 @@ metafile = true
 [[files]]
 file = "mods/create-diesel-generators.pw.toml"
 hash = "71918d13bde877a24fbe2be5a7cf93514c70ce170c50cd4c96eef0f36841a89a"
+metafile = true
+
+[[files]]
+file = "mods/create-sifting.pw.toml"
+hash = "17e93f85f6283fc79c9b6a41b2ba72ecf5bf9471a343198a87370b7d22fb7aa4"
 metafile = true
 
 [[files]]

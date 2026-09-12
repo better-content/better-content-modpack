@@ -41,6 +41,11 @@ set. Quickstack's global `C` and `X` shortcuts remain unbound; its inventory but
 deliberate transfer surface. The maintained `config/adchimneys/` definitions cover active furnace,
 burner, smeltery, and generator emitters.
 
+Create Sifting 1.8.6 is active with Create 6.0.8. String-mesh hand sifting is the
+pre-power ore separation path; standard and Brass Sifters automate the same recipe
+language. Advanced and custom meshes are hidden and unobtainable. Create fan-based
+Bulk Washing has no recipes; water treatment belongs to Spouting.
+
 Claustrophobic Dungeons, Dungeon Crawl, Create Big Cannons, Reliquary, Undergarden, Deeper Darker,
 Temperature Bands, the standalone coolant mod, the redundant fission-reactor mod, and Create New Age remain retired.
 Forbidden and Arcanus, Roots Classic, Mahoutsukai, Eidolon, Theurgy, Psi, and Hex Casting have no
