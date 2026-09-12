@@ -1,0 +1,7 @@
+{
+  "name": "underworld",
+  "absolute-height": {
+    "max": -64,
+    "fade": 5
+  }
+}

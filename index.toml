@@ -5025,6 +5025,10 @@ file = "kubejs/assets/aether/sounds.json"
 hash = "11769efaa4febd55e9c203ea622cb91b6f7afcda5fdc54bd489f37e4e3ea39a0"
 
 [[files]]
+file = "kubejs/assets/ambientsounds/basic/regions/underworld.json"
+hash = "afc73b8214df41e5291fa85f29de28d272c488a61e37e9c741844db6086ba1d0"
+
+[[files]]
 file = "kubejs/assets/amendments/textures/block/music_discs/music_disc_mask.png"
 hash = "21f8945de4b9aa4f60863f16862c09f95fa486af8be7b36e3ce1e91d2ab8cf02"
 
