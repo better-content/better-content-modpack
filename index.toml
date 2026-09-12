@@ -2438,7 +2438,7 @@ hash = "1596ad785991844102c79d912fbaf1cb63a348c302f6f60d7c2c003c411f31f5"
 
 [[files]]
 file = "config/epicfight-common.toml"
-hash = "908f883bcd038c6049a5f0a609756b53b0ce922de635ce6189632fd6dd055506"
+hash = "6b1fd54111bebb5e9e2efe005cf90f286640487d601eac5758a778f330fa253b"
 
 [[files]]
 file = "config/etstlib-common.toml"
