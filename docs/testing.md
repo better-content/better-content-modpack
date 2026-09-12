@@ -1,7 +1,16 @@
 # Testing and fresh distributions
 
 Pack-level tests are intentionally expensive and run only when explicitly requested. Ordinary
-changes use focused inspection or the owning format/tool. Changes to the test harness itself use:
+tracked pack-content and metadata changes use the mutating frugal phase:
+
+```sh
+./test.main.kts frugal
+```
+
+This is the exclusive owner of `packwiz refresh`; it updates Packwiz hashes and then runs
+`git diff --check`. Authoring, deployment, and packaging do not update hashes themselves.
+Other ordinary changes use focused inspection or the owning format/tool. Changes to the test
+harness itself additionally use:
 
 ```sh
 ./test.main.kts fast
@@ -117,13 +126,14 @@ compares each local source `HEAD` with the revision embedded in its currently bu
 records that local-only update check in release evidence. It never fetches or modifies remotes.
 It reuses unchanged bundled runtime JARs whose embedded source revision matches the clean checkout,
 and runs the documented verification only for changed repositories. It annotates and deploys all
-staged runtime JARs together, refreshes Packwiz, runs `dist.sh` exactly once, and finally invokes the
+staged runtime JARs together, invokes the frugal phase to refresh Packwiz hashes, runs `dist.sh`
+exactly once, and finally invokes the
 full pack suite. It records each mod's `reused` or `rebuilt` mode and JAR hash before testing the
 unchanged ZIP pair.
 Legacy JARs without source metadata are replaced during this bootstrap run.
 
 `--skip-tests` is the explicit untested-release path. It still reuses valid source-identical
 bundled JARs. Changed or unannotated sources build through `stageRuntimeJar` without the custom-mod
-verification tasks; the complete staged set is deployed, Packwiz refreshed, and packaging runs
+verification tasks; the complete staged set is deployed, the frugal phase refreshes Packwiz, and packaging runs
 exactly once. It skips the full pack suite. Release evidence and provenance record that tests
 were skipped; use this only when the fresh-dist request explicitly prohibits tests.

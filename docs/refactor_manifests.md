@@ -76,5 +76,6 @@ dormant scaffolding and do not establish supported pack behavior.
 Custom-mod repository, artifact, and command ownership is canonical in
 [`custom-mod-workspace.md`](custom-mod-workspace.md). A source change is complete
 only after that repository's documented validation passes. Deployment uses the
-reobfuscated runtime JAR from `build/libs/`, followed by `packwiz refresh` and
+reobfuscated runtime JAR from `build/libs/`, followed by `./test.main.kts frugal` (the
+exclusive Packwiz hash-update owner) and
 the explicitly ordered granular pack suites exposed by `./test.main.kts`.

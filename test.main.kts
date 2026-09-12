@@ -15,19 +15,33 @@ val taskBySelector = mapOf(
 )
 
 fun usage(): Nothing {
-    System.err.println("usage: ./test.main.kts <fast|candidate|server|multiplayer|singleplayer|all>")
+    System.err.println("usage: ./test.main.kts <frugal|fast|candidate|server|multiplayer|singleplayer|all>")
     exitProcess(2)
 }
 
-if (selector == null || (selector !in taskBySelector && selector != "all") || args.size != 1) usage()
+if (selector == null || (selector !in taskBySelector && selector !in setOf("frugal", "all")) || args.size != 1) usage()
 val selected = selector ?: usage()
 
-if (selected != "fast" && System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
+if (selected !in setOf("frugal", "fast") && System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
     val status = ProcessBuilder(
         root.resolve("pack-test-lock.main.kts").absolutePath,
         "run", "test", selected, "--", __FILE__.absolutePath, selected,
     ).directory(root).inheritIO().start().waitFor()
     exitProcess(status)
+}
+
+if (selected == "frugal") {
+    fun run(vararg command: String): Int = ProcessBuilder(*command)
+        .directory(root)
+        .inheritIO()
+        .start()
+        .waitFor()
+
+    println("frugal validation: refreshing Packwiz hashes")
+    val refresh = run("packwiz", "refresh")
+    if (refresh != 0) exitProcess(refresh)
+    println("frugal validation: checking diff whitespace")
+    exitProcess(run("git", "diff", "--check"))
 }
 
 val runId = if (selected == "fast") null else {

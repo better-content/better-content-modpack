@@ -33,7 +33,9 @@ for one, and must use `release.main.kts`; never rebuild between testing and publ
 ## Frugal testing policy
 
 Use the smallest relevant focused validation for ordinary work: format parsing, targeted inspection,
-`packwiz refresh` when metadata changed, hashes, and `git diff --check`. Harness changes run
+and `./test.main.kts frugal` when tracked pack content or metadata changed. The frugal selector is
+the exclusive owner of Packwiz hash updates and finishes with `git diff --check`; authoring,
+deployment, and packaging steps must not run `packwiz refresh` directly. Harness changes also run
 `./test.main.kts fast`. Do not build a distribution or run `candidate`, `server`, `multiplayer`,
 `singleplayer`, or `all` because a change appears runtime-sensitive. Pack-level testing runs only
 when the user explicitly orders it or names a pack suite. Fresh distributions run only when the

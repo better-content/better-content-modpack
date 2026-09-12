@@ -54,6 +54,19 @@ class HarnessFastTest {
     }
 
     @Test
+    fun packwizHashRefreshBelongsOnlyToTheFrugalPhase() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val facade = Files.readString(root.resolve("test.main.kts"))
+        val packager = Files.readString(root.resolve("package.sh"))
+        val release = Files.readString(root.resolve("src/main/kotlin/com/bettercontent/tests/release/ReleasePipeline.kt"))
+
+        assertTrue(facade.contains("run(\"packwiz\", \"refresh\")"))
+        assertTrue(!packager.contains("packwiz refresh"))
+        assertTrue(!release.contains("listOf(\"packwiz\", \"refresh\")"))
+        assertTrue(release.contains("root.resolve(\"test.main.kts\").toString(), \"frugal\""))
+    }
+
+    @Test
     fun releaseWarmsTheCanonicalArtifactCacheBeforeModBuilds(@TempDir root: Path) {
         val target = root.resolve("build/release-dependency-warmup/run")
         assertEquals(

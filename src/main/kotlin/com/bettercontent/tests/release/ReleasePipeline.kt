@@ -183,7 +183,7 @@ fun main(args: Array<String>) {
         }
     }
 
-    runLogged(root, listOf("packwiz", "refresh"), evidence.resolve("packwiz-refresh.log"))
+    runLogged(root, listOf(root.resolve("test.main.kts").toString(), "frugal"), evidence.resolve("frugal.log"))
     runLogged(root, listOf(root.resolve("dist.sh").toString()), evidence.resolve("dist.log"))
     val candidates = CandidateLocator.locate(root)
     val provenance = mapOf(

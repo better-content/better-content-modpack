@@ -183,7 +183,6 @@ package_dist() {
   local escaped_version
   escaped_version="$(printf '%s' "$version" | sed 's/[&|\\]/\\&/g')"
   sed -i -E "0,/^version *=/{s|^version *=.*$|version = \"$escaped_version\"|}" "$ROOT/pack.toml"
-  (cd "$ROOT" && packwiz refresh >/dev/null)
   mkdir -p "$client_dir" "$stage"
   (cd "$ROOT" && packwiz curseforge export -o "$client_dir/better-content.zip" -s client -y)
   stage_side server "$stage"

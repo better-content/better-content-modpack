@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "AGENTS.md"
-hash = "9c59c31e05a81e552787bd91bd673605598746793359c419f5dbaf2969c6adb8"
+hash = "53e6076b0273a27be1ef0bb3035ec1c7c15db9300ca35a6a3faf72875adbfa87"
 
 [[files]]
 file = "LICENSE"
@@ -2298,11 +2298,11 @@ hash = "ea5d802ef100270cdba15042e9d24cc85384b404f523f0c4137923212e037a0f"
 
 [[files]]
 file = "config/class_selector/embark.json"
-hash = "324244892b7dd639fb5fc4c755d188450b22901bbcc83664807b1e0bdbb7ff88"
+hash = "0a958688ff1043a8fa0b813f2afc05a3553836606ca5d636fe3d322319323f45"
 
 [[files]]
 file = "config/class_selector/kits.json"
-hash = "160e6cf8305fb0f9a4936330d6a3a094027fd9e70916e1495c17e3296ed30b13"
+hash = "528a81ba2ea97d69cd7da8134fcaa7a8ee8b991e29bbddc834a030ee50f9f1eb"
 
 [[files]]
 file = "config/coldsweat/client.toml"
@@ -5054,15 +5054,15 @@ hash = "71908dae39ea6ab2dea5e6128e8023dbff78a5762405230bfa29540653ae06e5"
 
 [[files]]
 file = "kubejs/assets/ars_nouveau/patchouli_books/worn_notebook/en_us/entries/automation/me_cells.json"
-hash = "81afdf164907a5f2cb023d761a1b7fac30275d1b964e23e11fba4f426cfc0427"
+hash = "673398096eb0cc963fb4a6fa83961c69647d76eb77c60990280fb50496b602db"
 
 [[files]]
 file = "kubejs/assets/ars_nouveau/patchouli_books/worn_notebook/en_us/entries/automation/source_acceptor.json"
-hash = "41ede8a95bf019674a60a48c9199b8b0cae2239a0eaeb6a848a194d0f2932f89"
+hash = "d8e120eac56a35b6f321ef9a84b1a53691a15858f76cb0499aea51caf8e45c1e"
 
 [[files]]
 file = "kubejs/assets/ars_nouveau/patchouli_books/worn_notebook/en_us/entries/equipment/warp_scroll.json"
-hash = "07a4bd4668f9a37b1dbe19b8bb63266fcaaa55a981396cfa78e6ac40c42b1400"
+hash = "886cf904a645563c897c73c1133c077c3c9be40e67f96e4d578c65f2336a2625"
 
 [[files]]
 file = "kubejs/assets/ars_nouveau/patchouli_books/worn_notebook/en_us/entries/getting_started/trinkets.json"
@@ -5078,19 +5078,19 @@ hash = "8dbb6fb60ab44ecc9b9b548693b0208877e13d11cc661c6654b6b8b790888bfe"
 
 [[files]]
 file = "kubejs/assets/ars_nouveau/patchouli_books/worn_notebook/en_us/entries/rituals/ritual_conjure_island_desert.json"
-hash = "1de010045f3e3b5c8260eb7894410a10abfc743af6f9f232686ca9836b4c7091"
+hash = "c4fd54ea4d7eb5ad8473a2f60b9bea94a9fc7092be69cb4976b2504743c14feb"
 
 [[files]]
 file = "kubejs/assets/ars_nouveau/patchouli_books/worn_notebook/en_us/entries/rituals/ritual_conjure_island_plains.json"
-hash = "a2faeb1ba8b9ae22450231e0797359fe321906d4e4c0bb7ead8ebbf7eb397cd0"
+hash = "125faf681e611225d6015c75b054c37aefd6e1e8345ddc39e0d6e1c763936976"
 
 [[files]]
 file = "kubejs/assets/ars_nouveau/patchouli_books/worn_notebook/en_us/entries/rituals/ritual_flight.json"
-hash = "185282b535d75ca8ff670366a33ebfc30e9e89859d57cf30d37215e64f23a33b"
+hash = "7e6dd3753d61f83361cff67216c25fe8f0535e7629fe8609888d6ae0512c96d8"
 
 [[files]]
 file = "kubejs/assets/ars_nouveau/patchouli_books/worn_notebook/en_us/entries/rituals/ritual_warping.json"
-hash = "a2944f21cbf644d686e3a07fe035d9f52589fb6a93490250ffe5e0ca9cf80837"
+hash = "b263fc46822bf3caf9b8af08f64b3062999f1eb2027771c5663102eff69c893c"
 
 [[files]]
 file = "kubejs/assets/ars_nouveau/textures/block/stripped_blue_archwood_log_top.png"
@@ -5238,15 +5238,15 @@ hash = "08127a4678800d0b388b2c94fa71d7514e0c501d5458dcd45af0d57efb2e1dfa"
 
 [[files]]
 file = "kubejs/assets/complicated_bees/patchouli_books/field_guide/en_us/entries/bee_products/honey_droplet.json"
-hash = "b150b2b9f5eb596809dabfe08faa88842d8d6942a1c0710d5a10c69829457015"
+hash = "ad9a67f230aad1aad44d3627ffc9f987f33af7122def5829e399747f25521fe6"
 
 [[files]]
 file = "kubejs/assets/complicated_bees/patchouli_books/field_guide/en_us/entries/machines/furnace_generator.json"
-hash = "5c83cde8470e78bb0d90c93750d3fe9b82d051b0ed989e6343e6724287ef2413"
+hash = "4270016dec7ab4febc6f49f0606bedde0ba77b41795103092e7853724b222979"
 
 [[files]]
 file = "kubejs/assets/complicated_bees/patchouli_books/field_guide/en_us/entries/machines/honey_generator.json"
-hash = "bed9f3783e5c4812146652680008da04b00547d15280989b8ad59a16b20d8ab2"
+hash = "bf4e586c814f9dae920089e730872c64449a23380173ed0ec3e243ed7356bfb5"
 
 [[files]]
 file = "kubejs/assets/complicated_bees/patchouli_books/field_guide/en_us/entries/other/foods.json"
@@ -5254,11 +5254,11 @@ hash = "74048d5ed5cbc9474552fbfe630ccb1bc9ef0710ca4cb72cecbe90a82eadb880"
 
 [[files]]
 file = "kubejs/assets/complicated_bees/patchouli_books/field_guide/en_us/entries/started/combs.json"
-hash = "250f84908497eac8fec5bae67984707b229a23ae8d94e861b38ff4777086b208"
+hash = "f21f985b2b92d2cc8c7f23f27061ba45a97e96ff0251a1fe394d97845d5599e6"
 
 [[files]]
 file = "kubejs/assets/complicated_bees/patchouli_books/field_guide/zh_cn/entries/bee_products/honey_droplet.json"
-hash = "49f7a7ea34498162e03db1b6d36cdf22c35b0a16750e7fcf5c051bca29ca070b"
+hash = "943713d8e556793522c82583ddd5b8e0a25ee48eab14569ec6e414ca29a01892"
 
 [[files]]
 file = "kubejs/assets/complicated_bees/patchouli_books/field_guide/zh_cn/entries/other/foods.json"
@@ -5290,11 +5290,11 @@ hash = "f72953a2cbdb744be7710bdc6c296733a0986991354d90dccc2b466fa7103f1e"
 
 [[files]]
 file = "kubejs/assets/dynamictrees/patchouli_books/guide/en_us/entries/mechanics/dirt_bucket.json"
-hash = "16164a588c4ebed47acfdcfa1ece070381e0d86d3dcb222ba27decf14348ff33"
+hash = "a77721141b00740afedf85f4eb351cdef799870b6012f80f1b626f9b60aca943"
 
 [[files]]
 file = "kubejs/assets/dynamictrees/patchouli_books/guide/ja_jp/entries/mechanics/dirt_bucket.json"
-hash = "60af5b86617e504662ff1b09190497602ee4a1340fdfd40d609bb9dd5c8e4151"
+hash = "899df4803133eae5d06cf24ffc4a07cdb6ab052e9a66aca9a8725477244d15d3"
 
 [[files]]
 file = "kubejs/assets/everythingcopper/sounds.json"
@@ -5370,7 +5370,7 @@ hash = "956ed7445ae6a8085d361fccdbb2f030422515dc67e33e3d17e0dd96c96a9264"
 
 [[files]]
 file = "kubejs/assets/goety/patchouli_books/black_book/en_us/entries/crafts/equipment/ice_axes.json"
-hash = "2019c7d96ecd1b5f785b52107bc7b130f7374a30ee75cf9adfb240d278f70cee"
+hash = "97c89f932b39a437ad4f2b89f3ce02f8ba72ad9516fb9813bffbb4206f4daa6f"
 
 [[files]]
 file = "kubejs/assets/goety/patchouli_books/black_book/en_us/entries/rituals/end_ritual.json"
@@ -6934,7 +6934,7 @@ hash = "d3ab97897c0029c2c742ac047a8c7db5b089867a9a261bb794fb133af4fc11fb"
 
 [[files]]
 file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/entries/machines/pneumatic_dynamo.json"
-hash = "12b6e0948485e563e669ee6092d757ebe4a42bf99cebc01a380e3c865b5f289d"
+hash = "035ccb4c0ed7cdb471f514c8eb38fb3ac077b4066cde8e9e0116b5e8df7e97c1"
 
 [[files]]
 file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/entries/machines/pneumatic_generator.json"
@@ -7398,7 +7398,7 @@ hash = "4f2f2478ef0d685df6e70080193ec2f4e1e2b256327cfb8ad8eec62804894568"
 
 [[files]]
 file = "kubejs/client_scripts/guidance/10_hover_annotations.js"
-hash = "57d279f3e093dc2c37e552740f36cea704aafaf9114365835f24174598a78ef4"
+hash = "6458b711eb208ab70b0b2d80f57eec64bb9c487a070ceafc9207c0945d2c0b2d"
 
 [[files]]
 file = "kubejs/client_scripts/policy/hide_vanilla_tools.js"
@@ -7442,7 +7442,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "837644c8119a7671e7a27881ea2e6c3037e5e3e118eb9e29e129c02903c3f816"
+hash = "f2c9580e2f21da5c6f8e1e176865b82a37d268e9c5fc721243b8b2db44eda412"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -10114,7 +10114,7 @@ hash = "7be7503f21d17ceecf856cbaa33403e0de92b45c940fff9afb07b2cbaf8c38e8"
 
 [[files]]
 file = "kubejs/server_scripts/policy/dimension_access.js"
-hash = "b74321fc28e24513cc9782de3c64ca329373c60d31d35743373152b266baa299"
+hash = "3747d278a36a1e599e87cf66ba4eae35b98ec13849c06cfb0157553802d9e6d9"
 
 [[files]]
 file = "kubejs/server_scripts/policy/disable_jumbo_furnace.js"
@@ -11563,7 +11563,7 @@ hash = "74851df7dab886f679956868011bd64fd92910c9663ad92b68f49cacc18cfe58"
 
 [[files]]
 file = "package.sh"
-hash = "48f6030973f457406a47a80aff74040c1631451f6091c1f845ff12540711a25b"
+hash = "daefc5c6a10ebc6585ebcfb772c03f735691642cec652bdfe2f4e15f4820b2a8"
 
 [[files]]
 file = "recipe-policies.yml"
