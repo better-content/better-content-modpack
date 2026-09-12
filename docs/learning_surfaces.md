@@ -70,7 +70,9 @@ documents.
 - Use readable neutral text on a dark backing. Aspect pigments belong in badges and
   accents; dark pigments must not become the only way to read a label. Ordinary pack
   hover text uses light gray, with explicit wording for warnings.
-- Loading copy fits its actual wrapped height and never delays entering the world.
+- Loading copy fits its actual wrapped height and never delays world generation.
+  Initial joins carry the current lesson into a paused World Ready screen until
+  the player selects Begin or uses Enter, Space, or Escape.
   A lesson needs eight seconds of rendered exposure to advance loading history; quick
   joins and loading stalls do not count as reading. All lessons remain directly available.
 - Movement lessons display the current loaded bindings. Menus must not consume the

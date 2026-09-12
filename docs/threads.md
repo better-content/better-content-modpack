@@ -58,12 +58,11 @@ at the next unseen entry, cycle in manifest order, and retain client-local
 history without becoming progression gates. A loading lesson is recorded only after eight seconds of rendered exposure; fast joins and stalls do not consume unread lessons.
 
 The selected lesson and its 512×256 illustration render over the connection or
-level-loading screen with Previous, Next, and Keep Reading controls. Loading
-never imposes mandatory onboarding: the world opens immediately when ready
-unless the player explicitly selects Keep Reading. That opt-in carries the exact
-page into a voluntary paused World Ready screen; Continue, Enter, Space, or
-Escape enters the world. A disconnected attempt does not consume the lesson,
-and dimension changes do not start a new loading episode.
+level-loading screen with Previous and Next controls. Loading does not wait on
+the lesson, but every initial join carries the exact page into a paused World
+Ready screen when loading finishes. Begin, Enter, Space, or Escape enters the
+world. A disconnected attempt does not consume the lesson, and dimension
+changes do not start a new loading episode.
 
 The Threads reader exposes a separate Lessons mode containing all 16 lessons
 from the start. Opening a lesson there records it in the same client-local
