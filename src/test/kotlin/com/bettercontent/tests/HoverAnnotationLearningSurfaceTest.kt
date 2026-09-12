@@ -155,7 +155,7 @@ class HoverAnnotationLearningSurfaceTest {
             val lessons = json("assets/better_content_threads/loading_briefs/catalogue.json")
             val threads = json("data/better_content_threads/threads/catalogue.json")
             assertEquals("bc.loading_briefs.v3", lessons.path("schema").asText())
-            assertEquals(16, lessons.path("briefs").size())
+            assertEquals(17, lessons.path("briefs").size())
             val concepts = threads.path("threads").associate {
                 it.path("id").asText() to it.path("concept_id").asText()
             }

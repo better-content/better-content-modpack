@@ -51,10 +51,18 @@ class OreProcessingPolicyContractTest {
         val modifier = read(
             "defaultresources/excavated_variants/excavated_variants/modifiers/tag_attachment.json5",
         )
+        val runtimePolicy = read("kubejs/server_scripts/policy/realistic_ores_tag_policy.js")
         assertTrue(modifier.contains("'forge:blocks/ores'"))
         assertTrue(modifier.contains("'c:blocks/ores'"))
         assertFalse(modifier.contains("'forge:items/ores'"))
         assertFalse(modifier.contains("'c:items/ores'"))
+        assertTrue(runtimePolicy.contains("ServerEvents.tags('item'"))
+        assertTrue(runtimePolicy.contains("event.remove('forge:ores', hostedFamily)"))
+        assertTrue(runtimePolicy.contains("event.remove('c:ores', hostedFamily)"))
+        listOf(
+            "black_shale", "brassroot", "coal_measures", "copper_bloom",
+            "evaporite_beds", "hotstone", "ironstone", "tin_quartz",
+        ).forEach { assertTrue(runtimePolicy.contains(it), "missing hosted family $it") }
     }
 
     @Test
