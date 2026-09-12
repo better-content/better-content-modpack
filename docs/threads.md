@@ -91,6 +91,8 @@ Bounded packet protocol 10 adds a player UUID and bounded death-context category
 death-screen hints; it also validates card and concept IDs, title, suit, order,
 aspect, resource locations, rule/action bounds, state, history, unique identities,
 and list sizes no larger than 52. Unknown cards leak no rule or action copy. Protocol 9 removes prose and invitation fields; matching client/server versions are required. Card identities and player-state schema 4 are unchanged.
+Death and Esc-menu tips share client-local display-history schema 2, including the current Esc tip.
+The 192-tip rotation leaves packet protocol 10 and player-state schema 4 unchanged.
 Automatic notices contain only notice kind, card ID, bounded title, suit, and
 aspect—never a game asset, artwork, prose, or trigger data.
 

@@ -9,7 +9,7 @@ content. Their tasks and rewards are not transferred into Threads or another sys
 | Surface | Responsibility |
 | --- | --- |
 | Loading lessons and Threads Lessons | Spoiler-free fundamentals and changed mental models, available before the relevant event |
-| Death-screen hints | Brief recovery advice and whole-pack discovery after death, with occasional late-game teasers |
+| Death and Esc-menu tips | Recovery advice and whole-pack discovery, with separate stable tips that rotate on death |
 | Contextual Thread cards | A broader rule discovered through actual play evidence and remembered across the lineage |
 | Item-hover annotations | Concise item-local facts, identical in inventory and EMI hover |
 | EMI, Ponder, native guides and system screens | Exact recipes, apparatus, multiblocks, operating instructions, and native state |
@@ -97,23 +97,32 @@ documents.
 Do not recreate a quest compiler, layout harness, atlas exporter, or parallel validation
 framework. Durable guidance belongs here; raw evidence belongs outside living docs.
 
-## Death-screen hints
+## Death and Esc-menu tips
 
-Threads owns a 96-entry death-hint catalogue alongside its loading lessons: 40 survival/recovery
-tips, 44 broader pack tips, and 12 light late-game teasers. Hints use shared concept IDs and record
-mechanical source references. Teasers may introduce an undiscovered possibility without revealing
-its complete recipe, unlocking a Thread, or claiming progression credit.
+Threads owns a 192-entry catalogue alongside its loading lessons: 80 survival/recovery tips,
+88 broader pack tips, and 24 light late-game teasers. Hints use shared concept IDs and record
+mechanical source references. Teasers introduce possibilities without revealing their complete
+recipes, unlocking a Thread, or claiming progression credit.
 
-Show one stable hint beneath the existing death controls. Prefer reliable cause-specific advice
-on three of four recognized deaths; otherwise choose general advice, with teasers weighted at
-one in eight general selections. Unknown damage gets general advice rather than a guessed diagnosis.
-Downed episodes retain their original cause until revival or final death. Require relevant mods,
-avoid the last twelve displayed hints when possible, and keep this client-local history separate
-from loading exposure and lineage progress.
+Show separate stable tips on the death screen and Esc menu, sharing one unseen pool. Display every
+eligible entry before repeating; exhausted contextual categories yield to other unseen entries.
+Prefer reliable cause-specific advice on three of four eligible death selections, and weight
+teasers at one in eight general selections while unseen entries remain in both pools. Unknown
+damage gets general advice. Downed episodes retain their cause until revival or final death.
+Require relevant mods and avoid the last death/Esc tips at cycle boundaries when alternatives exist.
 
-Keep the text concise, neutral, and actionable. Mention actual current bindings where needed.
-Wrap without shrinking, and omit the hint when the space beneath native controls is too small.
-Hints never delay respawning or change normal/hardcore death controls. Resource packs can replace
+Choose the Esc tip on first use and retain it across menu openings, resizing, reconnecting, and
+restarts. Rotate it once per confirmed death, choosing its replacement when Esc next opens.
+Respawning does not rotate it again. Record only rendered tips; hidden selections must not consume
+entries or prematurely exhaust the pool. Client-local history schema 2 stores shown IDs, cycle,
+and the current Esc tip; schema 1 preserves its known recent IDs during migration. Keep this
+history independent of loading exposure and lineage progress. Network protocol remains 10.
+
+Keep text concise, neutral, and actionable, with current bindings where needed. Wrap at normal
+font size. Pause controls may move upward to fit a tip, with Threads in the top-right corner;
+all built-in copy fits a 320×240 GUI. Omit tips from smaller or oversized resource-pack layouts
+when space is insufficient, without recording them. Hints never delay respawning or change
+normal/hardcore death controls. Resource packs can replace
 `assets/better_content_threads/death_hints/catalogue.json`; invalid catalogues log an error and use
-built-in general advice. Validate content and selection locally, and inspect the existing visual
-fixture; pack suites still require an explicit user order.
+built-in general advice without erasing history. Validate selection/persistence locally and inspect
+native-client fixtures; pack suites still require an explicit user order.
