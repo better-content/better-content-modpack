@@ -10204,7 +10204,7 @@ hash = "33861fe868ddadef7d8d3427a0e1a5466b865d31a797e2d0eeb7d6e20091c46e"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.8.jar"
-hash = "2f4534439da361663827bf7376c92f9af2ceeb53826d47480779a48adfbe7ae3"
+hash = "6391e9dd9f004e3f8128adbd36680cdfe67fc5ae849c07eb26e0026402fc0932"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
@@ -11445,7 +11445,7 @@ hash = "74851df7dab886f679956868011bd64fd92910c9663ad92b68f49cacc18cfe58"
 
 [[files]]
 file = "package.sh"
-hash = "80e861969d7a2c57d261fe420a694dd0da70292b27dba13e6af6997830866f1a"
+hash = "dc656de0e1693c08c3d0b0bcdf7d31aadacec060f70afaaf3a0ab6555baeaeab"
 
 [[files]]
 file = "recipe-policies.yml"
