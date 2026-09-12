@@ -30,7 +30,7 @@ machine-readable release inventory is `gradle/active-custom-mods.json`; this tab
 same active set for humans. Inventory `dependsOn` edges are release-build order constraints. They
 stage typed Better Content API providers before their consumers: Dimension Drink before Economy,
 Dynamic Survival HUD before Better
-Content Fixes, WLM before Class Selector, Revival before its three consumers, every domain-event
+Content Fixes and Revival, WLM before Class Selector, Revival before its three consumers, every domain-event
 provider before Threads, and Heat Sync before Latent Chemlib.
 This directed build graph is intentionally acyclic; Threads is the downstream event listener and
 no provider depends on it.
@@ -53,7 +53,9 @@ directory, which contains both reused and rebuilt providers in dependency order.
 
 Repository CI checks out the modpack at the immutable commit in its workflow and runs
 `.github/scripts/prepare-provider-jars.py --pack-root PATH --repository NAME --output DIRECTORY`.
-This standard-library Python 3.11+ helper validates the provider closure, Packwiz SHA-256 entries,
+Revival instead stages the HUD provider from an immutable source checkout pinned in its CI
+workflow because the bundled provider baseline predates the injury presentation API.
+The standard-library Python 3.11+ helper validates the provider closure, Packwiz SHA-256 entries,
 and bundled source identities before staging anything. It does not build providers, warm the pack
 cache, deploy JARs, or package the modpack. Update the workflow's pinned baseline deliberately when
 a consumer requires a newer provider API; never substitute a floating branch.

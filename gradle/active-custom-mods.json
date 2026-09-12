@@ -26,7 +26,7 @@
     {"repository":"realistic-ores","modId":"realistic_ores","artifact":"realistic-ores-0.2.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"ratlantis-logistics","modId":"ratlantis_logistics","artifact":"ratlantis-logistics-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"runtime-data-dumper","modId":"runtime_data_dumper","artifact":"runtime-data-dumper-0.1.0.jar","tasks":["build","stageRuntimeJar"]},
-    {"repository":"downed-player-revival","modId":"downed_player_revival","artifact":"downed-player-revival-1.0.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
+    {"repository":"downed-player-revival","modId":"downed_player_revival","artifact":"downed-player-revival-1.0.0.jar","tasks":["verifyFull","stageRuntimeJar"],"dependsOn":["dynamic-survival-hud"]},
     {"repository":"rpg-stats","modId":"rpg_stats","artifact":"rpg-stats-1.0.1.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"settlement-roads","modId":"settlement_roads","artifact":"settlement-roads-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"systemic-salience","modId":"systemic_salience","artifact":"systemic-salience-0.1.1.jar","tasks":["verifyFull","stageRuntimeJar"]},
