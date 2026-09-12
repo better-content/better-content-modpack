@@ -22,6 +22,7 @@
     "ars_nouveau:drygmy_se",
     "ars_nouveau:drygmy_shard",
     "ars_nouveau:drygmy_stone",
+    "ars_nouveau:alchemical_sourcelink",
     "ars_nouveau:familiar_drygmy",
     "ars_nouveau:familiar_whirlisprig",
     "ars_nouveau:glyph_conjure_water",
@@ -105,6 +106,7 @@
     "malum:soul_stained_steel_sword",
     "malum:staff_of_the_auric_flame",
     "minecraft:knowledge_book",
+    "minecraft:brewing_stand",
     "minecraft:petrified_oak_slab",
     "moreartifacts:recall_potion",
     "occultism:dimensional_mineshaft",
@@ -133,6 +135,7 @@
     "relics:spatial_sign",
     "sophisticatedbackpacks:stack_upgrade_omega_tier",
     "sophisticatedstorage:stack_upgrade_omega_tier",
+    "supplementaries:bamboo_spikes_tipped",
     "weather2:wind_turbine"
   ]
 }

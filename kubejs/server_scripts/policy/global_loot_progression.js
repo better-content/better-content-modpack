@@ -113,6 +113,18 @@ BC_LOOT_REMOVE_ITEMS = BC_LOOT_REMOVE_ITEMS.concat(BC_LOOT_QUARANTINE.items || [
 // adding a governed family cannot silently leave chest or entity-drop access.
 var BC_LOOT_POLICY = JsonIO.read('kubejs/config/crafting_policy.json') || { families: [] }
 var BC_LOOT_ITEM_REGISTRY = Java.loadClass('net.minecraft.core.registries.BuiltInRegistries').ITEM
+var BC_LOOT_POTION_UTILS = Java.loadClass('net.minecraft.world.item.alchemy.PotionUtils')
+var BC_LOOT_POTIONS = Java.loadClass('net.minecraft.world.item.alchemy.Potions')
+var BC_LOOT_ITEMS = Java.loadClass('net.minecraft.world.item.Items')
+
+function bcIsDisabledPotionDelivery(stack) {
+    if (stack.is(BC_LOOT_ITEMS.SPLASH_POTION)
+        || stack.is(BC_LOOT_ITEMS.LINGERING_POTION)
+        || stack.is(BC_LOOT_ITEMS.TIPPED_ARROW)) return true
+    return stack.is(BC_LOOT_ITEMS.POTION)
+        && (!BC_LOOT_POTION_UTILS.getPotion(stack).equals(BC_LOOT_POTIONS.WATER)
+            || !BC_LOOT_POTION_UTILS.getCustomEffects(stack).isEmpty())
+}
 
 function bcLootSelectorMatches(id, selector) {
     if (selector.exact_id) return id === selector.exact_id
@@ -148,6 +160,9 @@ LootJS.modifiers(function (event) {
     for (var i = 0; i < BC_LOOT_REMOVE_ITEMS.length; i++) {
         if (bcLootItemExists(BC_LOOT_REMOVE_ITEMS[i])) allLoot.removeLoot(BC_LOOT_REMOVE_ITEMS[i])
     }
+    allLoot.apply(function (context) {
+        context.getLoot().removeIf(function (stack) { return bcIsDisabledPotionDelivery(stack) })
+    })
 
     var chestLoot = event.addLootTableModifier(/.*:chests\/.*/)
     for (var j = 0; j < BC_CHEST_LOOT_REMOVE_SEEDS.length; j++) {

@@ -2958,7 +2958,7 @@ hash = "a5d08b917ef15d63c2be151c5741f52ec8a892027c1dd6b3cf23a88282834229"
 
 [[files]]
 file = "config/quark-common.toml"
-hash = "4d751caa39285dc9885c01bd3e3a23af7494ed193cba84df17704bbf300efbbb"
+hash = "dd261ba459b1fefcb554e92276770e5715066c766035af55834a3c017199370a"
 
 [[files]]
 file = "config/quickstack-client.toml"
@@ -3434,7 +3434,7 @@ hash = "7f9393fffeb8147d26a653e0cd98fd160a3960c243499be270bd96df9f04cce0"
 
 [[files]]
 file = "config/tconstruct-client.toml"
-hash = "3c45675117fb9fdca36f825fbc0fd72b1be887ec17895b17f1052c550b7f0e2f"
+hash = "ea493cb8e1a36ce03cc979c6d24cf518749db0af51b33f1157f81062291f5cd2"
 
 [[files]]
 file = "config/tconstruct-common.toml"
@@ -4622,7 +4622,7 @@ hash = "57fd242c375b41e8281340b7793e82bfd8e5608b070d529e44fc2cb9a972fb91"
 
 [[files]]
 file = "defaultconfigs/create-server.toml"
-hash = "702cb57b0512a13a973e2d81c1d1969e6df226c6a5717b6672603562fbd95351"
+hash = "04213ad2ba1c15c308823defae3af57de4211885a732a686851aac960adbb519"
 
 [[files]]
 file = "defaultconfigs/createdieselgenerators-server.toml"
@@ -5549,20 +5549,8 @@ file = "kubejs/assets/kubejs/models/item/brass_utility_assembly.json"
 hash = "e7071773b8c9c0178b5955784452fef7983b267e9ed0141d5f6abdea4eea0c68"
 
 [[files]]
-file = "kubejs/assets/kubejs/models/item/brine_extract.json"
-hash = "3ecfaa47ccd371ebfa94ae12c153debf15ddd1511fda37f80446fbd0270b9ba0"
-
-[[files]]
 file = "kubejs/assets/kubejs/models/item/bumblezone_font_grout.json"
 hash = "412d7055b1bf1129bbdc7c31f14f0369194d15d97acd7b33c36f1c07b267e431"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/caffeine_extract.json"
-hash = "19851c6579b0f2a1b36236f8dced7c0211526aa8962bdcb2171b57098d09672d"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/charred_blazing_chili.json"
-hash = "3d82d2002f3d59e1d2f4076e9d6c35dcfeaa1b334384d3ea0d8eebe628ef4c4f"
 
 [[files]]
 file = "kubejs/assets/kubejs/models/item/copper_machine_block.json"
@@ -5585,26 +5573,6 @@ file = "kubejs/assets/kubejs/models/item/electrical_machine_block.json"
 hash = "cb68119aafe9e91ec5adb208696fa183595ea3ce33a7c95de18c3171096a416f"
 
 [[files]]
-file = "kubejs/assets/kubejs/models/item/featherlight_extract.json"
-hash = "05133d0c94327f22c269d5fc11b02b4731a5c1ea4556fc54175b0d6a085a7433"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/fermented_pomegranate_extract.json"
-hash = "fca7b053b9f46144d89cee8b4c9dfcbbc772effd053e89ac78d399cd9bbffe48"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/green_tea_extract.json"
-hash = "8d286439c1a9500ab8eb6cdf448eec18bbbb9da2ab1d2f968f54efdc39ae2071"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/harm_extract.json"
-hash = "7d867642aa780a07fb2ebb97b8805e713d95a79fa28656861f9fbcf444cf1c05"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/heatproof_extract.json"
-hash = "df63945c9a0da4a4dabfb74aeb5b2f3228a9de08d44608e0948710faae10daf1"
-
-[[files]]
 file = "kubejs/assets/kubejs/models/item/impossible_circuit.json"
 hash = "19892d00070987ed76385f0811e234d0f65edeb0b4f8a0fde251bd442bf57f36"
 
@@ -5617,20 +5585,8 @@ file = "kubejs/assets/kubejs/models/item/kimberlite_diamond_seed.json"
 hash = "88d86878a7a4a3449461168ad70e4b741db73f73aabd82e9660e25e825434f7e"
 
 [[files]]
-file = "kubejs/assets/kubejs/models/item/leaping_extract.json"
-hash = "24ce3e8590a692b18278331a461d80dd626c9715c40cc3c33f545a1a0a4b0aa5"
-
-[[files]]
 file = "kubejs/assets/kubejs/models/item/living_binding.json"
 hash = "ba067473ffeba747426c9d1e76af47905b9e78dd4495fe4e7cb446875bf971a0"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/mashed_salmonberries.json"
-hash = "96923cc56e48bbe6831aee7130d1cf8c3a6caf818b31c7f3b3dceb5b44c3e88e"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/melon_life_extract.json"
-hash = "535694cb10279a7dfa5db334b3c74e215164462cb2bbb6c060732c720dd13f46"
 
 [[files]]
 file = "kubejs/assets/kubejs/models/item/mountain_beryl_lens.json"
@@ -5677,10 +5633,6 @@ file = "kubejs/assets/kubejs/models/item/raw_impossible_storage_matrix.json"
 hash = "9bf2f8945124fe966914101c7d3b20a58cf3dcc9af653b5e316e31e696e4fcce"
 
 [[files]]
-file = "kubejs/assets/kubejs/models/item/rose_hip_extract.json"
-hash = "5173824523441c8ea5278ab9980689780943f263687773f04c7a68f6ad9dd866"
-
-[[files]]
 file = "kubejs/assets/kubejs/models/item/rotational_compressor_core.json"
 hash = "aaf47e160a41d5a11dbe91e502e549e46ce271c4546ad40420f1b3e593502117"
 
@@ -5689,20 +5641,12 @@ file = "kubejs/assets/kubejs/models/item/seared_service_fitting.json"
 hash = "bb4c5b67b762a390d0ca5f235ad3890f8643750096fac2638063b6edb9cc47ec"
 
 [[files]]
-file = "kubejs/assets/kubejs/models/item/shadow_extract.json"
-hash = "8facf7e4e043d197dcbe9e6070de95001b9859d7c3ac2ade1a6fd5d13e60ece5"
-
-[[files]]
 file = "kubejs/assets/kubejs/models/item/sky_steel_ingot.json"
 hash = "686f432141c8e9cc772bc0cf810ec6a2c0c2e156330cdbc1234413ede4e59808"
 
 [[files]]
 file = "kubejs/assets/kubejs/models/item/sky_steel_sheet.json"
 hash = "b8f6fffab5ea73dbec903f9326de8b7fed64e10f8d17ed84eadd35e993f305d9"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/slowness_extract.json"
-hash = "c919954a5b7157792b978fdea5f336ddf53e454e77d0dc5f14448dbab768e394"
 
 [[files]]
 file = "kubejs/assets/kubejs/models/item/soulstone_carbon_matrix.json"
@@ -5717,36 +5661,16 @@ file = "kubejs/assets/kubejs/models/item/space_machine_block.json"
 hash = "f9ee12612288a3f367bf9e73ce6d4785561966f0c79acaedfb179d9ae5f6e755"
 
 [[files]]
-file = "kubejs/assets/kubejs/models/item/stabilized_reagent.json"
-hash = "33802615758caa07138840f911f2e4ec7f6f6036942b54dff8c9508589b64924"
-
-[[files]]
 file = "kubejs/assets/kubejs/models/item/titanium_thermal_plate.json"
 hash = "7addb2269718b38f9307132201556009fc33da328362beed4015c72c2af55b8b"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/toxic_extract.json"
-hash = "6c2f9c4a4585e87c3e67901482018f5765f1f8a97ef3bef2506452acfa89c951"
 
 [[files]]
 file = "kubejs/assets/kubejs/models/item/tungsten_carbide_insert.json"
 hash = "ee972cced5961c093c7deba43153545cea2fb7ea59a030c5087f6463971f6407"
 
 [[files]]
-file = "kubejs/assets/kubejs/models/item/turtle_guard_extract.json"
-hash = "3096ced1026efa8defbde5bd6c7ea00c3bc07a266e54d7d4e31f7ec61e403159"
-
-[[files]]
 file = "kubejs/assets/kubejs/models/item/vanadium_contact_catalyst.json"
 hash = "ae2610b0a08a293f9d877379bd48ca5c506dbc4e8ef68d430713317c8986feaa"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/vision_extract.json"
-hash = "559e8617b098ab462273c6be2d64f5904b246adef84fcdc9fdc2c396ce9f7ac7"
-
-[[files]]
-file = "kubejs/assets/kubejs/models/item/weakening_extract.json"
-hash = "d18b5bb04a1b62af72ba826e5bdba4c7c8af16aa201a92c531a5c61a17561996"
 
 [[files]]
 file = "kubejs/assets/kubejs/textures/block/airtight_machine_block_bottom.png"
@@ -5985,18 +5909,6 @@ file = "kubejs/assets/kubejs/textures/item/brass_utility_assembly.png"
 hash = "e4ffa1b57c8135a4751a1b07e847de67dbd0359c981144ed7b36f27671c6b367"
 
 [[files]]
-file = "kubejs/assets/kubejs/textures/item/brine_extract.png"
-hash = "7a11056d3073d21df9f57dd0ca2de49a66894fda4dc3f5e7bd41e89c41a3a219"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/caffeine_extract.png"
-hash = "cd25ae73ae8d3571719b83697ffd99f9c1d9c13ac11e5ee6207a6aa0a148f582"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/charred_blazing_chili.png"
-hash = "cf38d531b7dc5559c8aec1c140a8f3275a31aa1f7807e1b4e227896f1157c0a5"
-
-[[files]]
 file = "kubejs/assets/kubejs/textures/item/corundum_lapping_grit.png"
 hash = "9d9a1f2d97109cd7707bc0ac403538f85c4804e62b43947a0da6a9596a0328a1"
 
@@ -6009,26 +5921,6 @@ file = "kubejs/assets/kubejs/textures/item/electrical_instrumentation_module.png
 hash = "12b548c35130f9ae311e5c37026e3ea7583c488e47f389b1e5bfd888040e49cd"
 
 [[files]]
-file = "kubejs/assets/kubejs/textures/item/featherlight_extract.png"
-hash = "71368719bc3e0d90fc05cf388d22098b4f67504219791f947b40710695060790"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/fermented_pomegranate_extract.png"
-hash = "7ed2220e634a526e565e340e92fd08b9ace13dcf272426f1787407bc3b50f3b3"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/green_tea_extract.png"
-hash = "57e97f2c4e626b74eea3e2fb07c1ad38fbf38031ae9afc41855630f847307bd2"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/harm_extract.png"
-hash = "4de2053c3ce1dde39976913bcbf68015d8271e9e977782267b5799829513c6a0"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/heatproof_extract.png"
-hash = "68607c86a8978632626da77facc70f91f1a09906ecb8d01b82e1d0b3a3902ce0"
-
-[[files]]
 file = "kubejs/assets/kubejs/textures/item/impossible_support_matrix.png"
 hash = "06b193ba6f1bb75f24a1313a5d8abbc1599f143f1a43e88b1fee755a8049909d"
 
@@ -6037,20 +5929,8 @@ file = "kubejs/assets/kubejs/textures/item/kimberlite_diamond_seed.png"
 hash = "7a3fb9f91dc873c83d54ef432a91038080c7f6ac743e5d2dbe37447d96267322"
 
 [[files]]
-file = "kubejs/assets/kubejs/textures/item/leaping_extract.png"
-hash = "3e81ec450a539fd00c63eac3c95bcfc51806ca8fffbb7cbea6072129679428a2"
-
-[[files]]
 file = "kubejs/assets/kubejs/textures/item/living_binding.png"
 hash = "a895dfd304bddac94bb911c5e10671eb8be6f26c9d05a1c289e25c81428c30a2"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/mashed_salmonberries.png"
-hash = "7867b517476fa1d954edb4149866b10e71af8350172f31d886dc678786b4a138"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/melon_life_extract.png"
-hash = "6f6d859c65c77910177e2b1d1b83885a5181c036108a873c04019fe21907b687"
 
 [[files]]
 file = "kubejs/assets/kubejs/textures/item/mountain_beryl_lens.png"
@@ -6085,10 +5965,6 @@ file = "kubejs/assets/kubejs/textures/item/raw_impossible_storage_matrix.png"
 hash = "95226f007c32961c22f947a4a4893aedc812d3c1cdaa2898e6a6c736cd6a3e41"
 
 [[files]]
-file = "kubejs/assets/kubejs/textures/item/rose_hip_extract.png"
-hash = "93fd8a108e1a205f7832d6c856202f0b6d049be0dff754be605f170cfae7c57e"
-
-[[files]]
 file = "kubejs/assets/kubejs/textures/item/rotational_compressor_core.png"
 hash = "7e157f10b873fd21cf30ac87163f8f8f7a8862f39f554b2029faac0341bfb9c9"
 
@@ -6117,20 +5993,12 @@ file = "kubejs/assets/kubejs/textures/item/seared_service_fitting.png"
 hash = "33d2f21c16e58d9ea88275af7a1492076284bb3a0f0dc7cc16f2dea333248f70"
 
 [[files]]
-file = "kubejs/assets/kubejs/textures/item/shadow_extract.png"
-hash = "e531779b9845b627d2faa9f159a0d3c58f85711351178bea7c61303c1279c175"
-
-[[files]]
 file = "kubejs/assets/kubejs/textures/item/sky_steel_ingot.png"
 hash = "12cddc300152f7ce495acf532ced333bc262638cf9cfc01e23e64d58c951e0ba"
 
 [[files]]
 file = "kubejs/assets/kubejs/textures/item/sky_steel_sheet.png"
 hash = "71febcc2759e209cbea8cb5c744eb43534eba9042b86cc4aca873a97df0ce5e8"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/slowness_extract.png"
-hash = "1be9d017c0223494eea93a7a971b6d742bf8985e66517dc7fe39e86d01336909"
 
 [[files]]
 file = "kubejs/assets/kubejs/textures/item/soulstone_carbon_matrix.png"
@@ -6141,36 +6009,16 @@ file = "kubejs/assets/kubejs/textures/item/space_expedition_kit.png"
 hash = "37ef7df7ab67922a0fcd156aed5e8eb2eb6c2a6cfca64bb7e0ddb28258414438"
 
 [[files]]
-file = "kubejs/assets/kubejs/textures/item/stabilized_reagent.png"
-hash = "388d33938e2ee0a2e0552fd9ca5f0af212822e5071a61c138382998247154c6c"
-
-[[files]]
 file = "kubejs/assets/kubejs/textures/item/titanium_thermal_plate.png"
 hash = "7dadbce3b84e6a900f8c0ade6aa632cd971812d5b6e961c88884e62903eaca64"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/toxic_extract.png"
-hash = "b66bd6d0d833e92d321499f17f0a6b98e3b3c5062d7797f786d095b7a696fbef"
 
 [[files]]
 file = "kubejs/assets/kubejs/textures/item/tungsten_carbide_insert.png"
 hash = "384115f5dc645d01dd09bd8d387afacc6c4e1b558375965392c28b4d566dcad7"
 
 [[files]]
-file = "kubejs/assets/kubejs/textures/item/turtle_guard_extract.png"
-hash = "32fcb5b1bd82ea51663c64920fc300615466fd10562b9c0d2f01b4d72aa51855"
-
-[[files]]
 file = "kubejs/assets/kubejs/textures/item/vanadium_contact_catalyst.png"
 hash = "a553d4356a0bc5d1d4a4a6d4567941cd71f8b858565836027e01643059e83a42"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/vision_extract.png"
-hash = "a53b1218dec013d39838f612c0196d014bb92c41d05cb3177a42b75f8a8d1152"
-
-[[files]]
-file = "kubejs/assets/kubejs/textures/item/weakening_extract.png"
-hash = "6c862de338354f846c77af5fd7ab325c1d00a364978ae1441ff8749611295f28"
 
 [[files]]
 file = "kubejs/assets/kubejs/tinkering/materials/dragonsteel_fire.json"
@@ -7409,6 +7257,10 @@ file = "kubejs/client_scripts/policy/hide_completed_tcon_tools.js"
 hash = "c0f449eec4223c8a6267b4061e440a4ab8866f287d1cb4e9adc1e12171343a0c"
 
 [[files]]
+file = "kubejs/client_scripts/policy/hide_disabled_potions.js"
+hash = "42e988361a565e7d607322d5ee4ff462f712c5dba0a4566db990af9996ac01e0"
+
+[[files]]
 file = "kubejs/client_scripts/policy/hide_excavated_variants.js"
 hash = "869d510c4d93e1bb639d494492128414ad9c082c29bde45261573a265887d4eb"
 
@@ -7441,20 +7293,12 @@ file = "kubejs/config/cross_mod_boundaries.json"
 hash = "e2e54bd11a880d784559d4344cdfe1228251f6503e0ca52bb89d0b6c8ecb6118"
 
 [[files]]
-file = "kubejs/config/food_effect_progression_candidates.json"
-hash = "e4027172d8c1f1e0c00a568640e6a18ed3d6009e85045fcbf824b7df2fee0e23"
-
-[[files]]
-file = "kubejs/config/food_effect_source_catalog.json"
-hash = "86a4940afdebd28972762d4279f2d8b7431e202d52bc9f296a2dcd6932c7761a"
-
-[[files]]
 file = "kubejs/config/formal_magic_domains.json"
 hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "e4bf2cddb97dcd0a3a33bc1a5727a928538f7935cdfb40e0924082ea89b2ad32"
+hash = "e5090ca088974370c30d65cbf40a1fc894ad5d039746488457bd74aad30bacbb"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -7466,11 +7310,11 @@ hash = "dd5d86a21560f6468d0df679ffe6068a2cf4a6f9c972276fe2d5acc693fb5a85"
 
 [[files]]
 file = "kubejs/config/quarantined_items.json"
-hash = "ca5c668e65a13be6dde5fbef45bbb9208f77e1ad0d90047c6379ad2c85c90a70"
+hash = "646051943ae7450676a1dd92ef59f6fa85a8e6ac2e75da2a8c86255609f15773"
 
 [[files]]
 file = "kubejs/config/surface_registry.json"
-hash = "e25ae945d39a0864e7d2acdd1fb33875092259c5c280eb69617e2280673eedb9"
+hash = "0440d5f0ac6110531786235cecd63e6ba0f9122786cc2d4210ad67417a071dad"
 
 [[files]]
 file = "kubejs/config/tcon_edps_catalogue.json"
@@ -10093,10 +9937,6 @@ file = "kubejs/server_scripts/compat/retained/remove__40_blood_orbs_from_still_b
 hash = "02ef9f87b0c7eb54ef73c64c035ca308f875a13828e97f360fb58b6eb70d4ad1"
 
 [[files]]
-file = "kubejs/server_scripts/compat/retained/remove__70_food_potion_reagents.js"
-hash = "9f52ba4546395d98e0ac0a8f2f5e44e092a02bff4089c05a7aec87921046dc73"
-
-[[files]]
 file = "kubejs/server_scripts/compat/reviewed/chemistry_fluid_compat.js"
 hash = "0871972a2a53c027f0e9f6c9f2ef9cc6227f9ed9c0c1a1539134aa8a2535c12f"
 
@@ -10134,11 +9974,11 @@ hash = "346d0f05c499e3238a83b2c02e7c1a11e9045902bc108c013e2f8e2db30877d7"
 
 [[files]]
 file = "kubejs/server_scripts/policy/global_loot_progression.js"
-hash = "f93fa2c265dc53a671de49ca711a0dbee5fa406d151095a54d06d7d541cac31b"
+hash = "8db438b24b5e216365ba410aab0980dc311dd57af32c545f282bdd49b80dbf38"
 
 [[files]]
 file = "kubejs/server_scripts/policy/removed_items.js"
-hash = "97e0a33af61e46ca2cc46fae384d2ebaf62ab4ed38167c80261bf564c031ec51"
+hash = "5a1ef4c9813838d8fbd726120f2a34bdce20619c9b69d476a4546faaaef0d441"
 
 [[files]]
 file = "kubejs/server_scripts/policy/tnt_recipe.js"
@@ -10217,16 +10057,16 @@ file = "kubejs/startup_scripts/compat/retained/remove__10_ae2_skystone_hardness.
 hash = "75e2d05543db8c5dac81701c327452f62b499f69a3dfd3394e4d036d4d07f469"
 
 [[files]]
-file = "kubejs/startup_scripts/compat/retained/remove__40_potion_brewing_registry.js"
-hash = "1e4abc890d237727cad14e58dab2b8f140afc38b9fdbd3035b2467e5bae3c2bf"
-
-[[files]]
 file = "kubejs/startup_scripts/policy/crafting_policy_contract.js"
 hash = "65d7a840b635518f6420c0ce8c05747360fd2ba6b573f785404b39369ed6c15d"
 
 [[files]]
 file = "kubejs/startup_scripts/policy/disable_jumbo_furnace.js"
 hash = "dcc6dc3e3b0d4e5fc6c1ee985470c8412fce3a8c40546cf58cd6c6ea7125df74"
+
+[[files]]
+file = "kubejs/startup_scripts/policy/disable_potion_brewing.js"
+hash = "1e2fbaa93f971c533c230fa21273b8d3803d81d097421810f8a1064ca4227d1c"
 
 [[files]]
 file = "kubejs/startup_scripts/policy/disable_trickster_weight.js"
@@ -10242,7 +10082,7 @@ hash = "efa4b2a9301b1215d947c97461e5f32aea0841be6865736a12645fcd60460d40"
 
 [[files]]
 file = "kubejs/startup_scripts/progression/20_transition_items.js"
-hash = "bd683ce90cc6df391c0094a6ba48596353649467039b7d56e6a13cebbabe873f"
+hash = "fa4a884c45848822d6f36286df9b57195fda5610d3390500b150ae1414a1c39c"
 
 [[files]]
 file = "maintenance.main.kts"
@@ -10348,7 +10188,7 @@ hash = "7ac60a99ad014b35507adbb256de9cf986f38a16416bc9f7b061e74750f2f965"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.7.jar"
-hash = "fdb36d8e69604c20c8a02e2131026dad3949638efa0a33093baa36467e35231a"
+hash = "34d5151cff9f5c728f60528be34b20655d7b314d6753ebe1093dfb33c85564be"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"

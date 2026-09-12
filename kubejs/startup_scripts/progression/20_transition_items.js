@@ -24,6 +24,7 @@ StartupEvents.registry('item', function (event) {
         ['sky_steel_ingot', 'Sky Steel Ingot'],
         ['sky_steel_sheet', 'Sky Steel Sheet'],
         ['pressure_seal', 'Pressure Seal'],
+        ['acetate_membrane', 'Acetate Membrane'],
         ['brass_utility_assembly', 'Brass Utility Assembly'],
         ['electrical_control_module', 'Electrical Control Module'],
         ['electrical_instrumentation_module', 'Electrical Instrumentation Module'],
@@ -40,26 +41,7 @@ StartupEvents.registry('item', function (event) {
         ['soulstone_carbon_matrix', 'Soulstone Carbon Matrix'],
         ['platinum_group_residue', 'Platinum Group Residue'],
         ['vanadium_contact_catalyst', 'Vanadium Contact Catalyst'],
-        ['oxygenated_vanadium_contact_catalyst', 'Oxygenated Vanadium Contact Catalyst'],
-        ['mashed_salmonberries', 'Mashed Salmonberries'],
-        ['charred_blazing_chili', 'Charred Blazing Chili'],
-        ['green_tea_extract', 'Green Tea Extract'],
-        ['caffeine_extract', 'Caffeine Extract'],
-        ['vision_extract', 'Vision Extract'],
-        ['brine_extract', 'Brine Extract'],
-        ['rose_hip_extract', 'Rose Hip Extract'],
-        ['heatproof_extract', 'Heatproof Extract'],
-        ['fermented_pomegranate_extract', 'Fermented Pomegranate Extract'],
-        ['toxic_extract', 'Toxic Extract'],
-        ['leaping_extract', 'Leaping Extract'],
-        ['featherlight_extract', 'Featherlight Extract'],
-        ['melon_life_extract', 'Melon Life Extract'],
-        ['turtle_guard_extract', 'Turtle Guard Extract'],
-        ['weakening_extract', 'Weakening Extract'],
-        ['shadow_extract', 'Shadow Extract'],
-        ['harm_extract', 'Harm Extract'],
-        ['slowness_extract', 'Slowness Extract'],
-        ['stabilized_reagent', 'Trip Fuel']
+        ['oxygenated_vanadium_contact_catalyst', 'Oxygenated Vanadium Contact Catalyst']
     ].forEach(function (definition) {
         event.create(definition[0]).displayName(definition[1])
     })

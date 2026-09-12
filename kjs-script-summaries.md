@@ -2,7 +2,7 @@
 
 This index is generated from the three executable KubeJS roots. Every listed JavaScript file is active; directory names such as `retained` and `reviewed` describe review history, not load state. `kubejs/inactive_review` is deliberately excluded because it is outside the executable roots.
 
-Current inventory: **77 active scripts** — 8 client, 60 server, and 9 startup.
+Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 
 ## Client scripts
 
@@ -11,6 +11,7 @@ Current inventory: **77 active scripts** — 8 client, 60 server, and 9 startup.
 - `kubejs/client_scripts/compat/retained/remove__40_hide_quarantined_systems.js` — Hides quarantined chemistry, transport, test, legacy, and unsupported items from recipe viewers.
 - `kubejs/client_scripts/guidance/10_hover_annotations.js` — Adds the pack's item-local hover annotations through the normal tooltip pipeline.
 - `kubejs/client_scripts/policy/hide_burnt_content.js` — Hides Burnt’s transient and damaged block-state items from recipe viewers while preserving its world simulation.
+- `kubejs/client_scripts/policy/hide_disabled_potions.js` — Hides disabled vanilla potion-delivery stacks and surfaces from recipe viewers while preserving plain water bottles.
 - `kubejs/client_scripts/policy/hide_completed_tcon_tools.js` — Hides completed TConstruct and extension tools from recipe viewers while retaining wearable armor and construction inputs.
 - `kubejs/client_scripts/policy/hide_excavated_variants.js` — Hides Excavated Variants’ host-stone permutations from recipe viewers without removing their recipes or world content.
 - `kubejs/client_scripts/policy/hide_vanilla_tools.js` — Hides vanilla-style tools whose reachable native-system replacements own progression.
@@ -48,7 +49,6 @@ Current inventory: **77 active scripts** — 8 client, 60 server, and 9 startup.
 - `kubejs/server_scripts/compat/retained/remove__10_ae2_skystone_tier.js` — Adjusts block tags so AE2 skystone occupies the intended mining tier.
 - `kubejs/server_scripts/compat/retained/remove__10_campfire_recipe.js` — Replaces the native campfire recipe with the pack’s explicit crafting route.
 - `kubejs/server_scripts/compat/retained/remove__40_blood_orbs_from_still_beating_hearts.js` — Uses a Still-Beating Heart to gate the Weak Blood Orb while preserving native later-orb recipes.
-- `kubejs/server_scripts/compat/retained/remove__70_food_potion_reagents.js` — Turns foods into processed potion reagents before final brewing.
 - `kubejs/server_scripts/compat/reviewed/chemistry_fluid_compat.js` — Unifies the exact shared chemistry fluids used by installed processing mods.
 - `kubejs/server_scripts/compat/reviewed/furnace_policy.js` — Applies the reviewed furnace recipe and fuel policy.
 - `kubejs/server_scripts/compat/reviewed/ingot_rewrites.js` — Rewrites exact ingot recipes to the pack's canonical material forms.
@@ -81,7 +81,7 @@ Current inventory: **77 active scripts** — 8 client, 60 server, and 9 startup.
 
 - `kubejs/startup_scripts/compat/retained/check__12_unearthed_regolith_hand_mining.js` — Adjusts Unearthed regolith blocks for the intended manual mining behavior.
 - `kubejs/startup_scripts/compat/retained/remove__10_ae2_skystone_hardness.js` — Adjusts AE2 skystone block hardness and mining behavior.
-- `kubejs/startup_scripts/compat/retained/remove__40_potion_brewing_registry.js` — Replaces vanilla reagent discovery with brewing recipes based on food-derived extracts.
+- `kubejs/startup_scripts/policy/disable_potion_brewing.js` — Clears vanilla and modded Brewing Stand registrations so potion delivery has no brewing path.
 - `kubejs/startup_scripts/policy/disable_trickster_weight.js` — Removes the incompatible Trickster Weight effect from the startup registry surface.
 - `kubejs/startup_scripts/policy/hide_vanilla_tools_from_creative.js` — Removes replaced vanilla tools from creative tabs while leaving registry identities intact.
 - `kubejs/startup_scripts/policy/crafting_policy_contract.js` — Loads `bc.crafting_policy.v1` and blocks startup when a loaded namespace has no policy classification.
