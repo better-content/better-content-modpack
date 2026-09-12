@@ -154,11 +154,13 @@ class ClientFixture(private val evidence: EvidenceRun, private val dedicated: De
             client,
             evidence.directory.resolve("client-import.log"),
         )
+        TaczFixtureSupport.reconcileImportedRootManifests(client, config.root)
         Commands.run(
             listOf(config.root.resolve("package.sh").toString(), "resolve", client.toString(), client.toString(), "client"),
             config.root,
             evidence.directory.resolve("client-artifacts.log"),
         )
+        TaczFixtureSupport.assertResolvedArtifacts(client, config.root)
         client.resolve("saves").createDirectories()
         xvfb = ManagedProcess("xvfb", listOf("Xvfb", display, "-screen", "0", "1280x720x24", "-nolisten", "tcp"), client, xvfbLog)
         Thread.sleep(1000)

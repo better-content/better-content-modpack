@@ -56,12 +56,21 @@ def materialize(source, destination):
             destination.unlink()
         shutil.copy2(source, destination)
 
+manifest_files = []
 for folder in ('mods','resourcepacks','shaderpacks','tacz'):
-    for manifest in sorted((root / folder).glob('*.pw.toml')):
+    manifest_files.extend(sorted((root / folder).glob('*.pw.toml')))
+classified_paths = set(manifest_files)
+unclassified = sorted(path for path in root.rglob('*.pw.toml') if path not in classified_paths)
+if unclassified:
+    raise SystemExit("unclassified Packwiz manifests: " + ', '.join(str(path) for path in unclassified))
+
+for manifest in manifest_files:
         data = tomllib.loads(manifest.read_text())
         if data.get('side', 'both') not in ('both', side):
             continue
         name = data.get('filename', '')
+        if not name or pathlib.PurePath(name).name != name:
+            raise SystemExit(f"invalid artifact filename for {manifest}: {name!r}")
         if side == 'server' and any(fnmatch.fnmatch(name.lower(), pattern.lower()) for pattern in client_only):
             continue
         download_data = data.get('download', {})
@@ -70,7 +79,7 @@ for folder in ('mods','resourcepacks','shaderpacks','tacz'):
             cf = data.get('update', {}).get('curseforge', {})
             url = f"https://www.curseforge.com/api/v1/mods/{cf['project-id']}/files/{cf['file-id']}/download"
         if not url:
-            continue
+            raise SystemExit(f"manifest has no resolvable download URL: {manifest}")
         destination = target / folder / name
         destination.parent.mkdir(parents=True, exist_ok=True)
         algorithm = download_data.get('hash-format', '').replace('-', '').lower()
@@ -97,10 +106,19 @@ for folder in ('mods','resourcepacks','shaderpacks','tacz'):
                         temporary.unlink(missing_ok=True)
             materialize(cache, destination)
         else:
-            if destination.exists() or destination.is_symlink():
-                destination.unlink()
-            download(url, destination)
+            temporary = destination.with_name(f'.{destination.name}.tmp')
+            temporary.unlink(missing_ok=True)
+            download(url, temporary)
+            os.replace(temporary, destination)
             stats['uncached'] += 1
+        if not destination.is_file():
+            raise SystemExit(f"resolved artifact is missing beside manifest {manifest}: {destination}")
+        if not algorithm or not expected:
+            raise SystemExit(f"manifest must declare a digest: {manifest}")
+        actual = file_digest(destination, algorithm, manifest)
+        if actual != expected:
+            raise SystemExit(f"resolved artifact hash mismatch for {manifest}: expected {expected}, got {actual}")
+
 print(f"artifact cache: side={side} hits={stats['hits']} downloads={stats['downloads']} uncached={stats['uncached']}")
 PY
 }
