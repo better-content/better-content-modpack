@@ -11433,7 +11433,7 @@ metafile = true
 
 [[files]]
 file = "options.txt"
-hash = "6ec30ea8f9b5b4750a95ca75860c303c5b320895baddd7bc217c9ef628049226"
+hash = "8a0d3a98a8b7c54b2f674950cd4ecf26be1873e23cba986376df2f8b7db3eb9d"
 
 [[files]]
 file = "pack-test-lock.main.kts"

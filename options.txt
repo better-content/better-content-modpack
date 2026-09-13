@@ -377,6 +377,13 @@ key_pneumaticcraft.armor.upgrade.block_tracker.module.hackables:key.keyboard.unk
 key_pneumaticcraft.armor.upgrade.scuba:key.keyboard.unknown
 key_pneumaticcraft.armor.upgrade.block_tracker.module.end_portal:key.keyboard.unknown
 key_pneumaticcraft.armor.upgrade.jet_boots.module.builder_mode:key.keyboard.unknown
+key_key.parcool.Enable:key.keyboard.p:SHIFT
+key_key.parcool.ClingToCliff:key.mouse.5
+key_key.parcool.RideZipline:key.mouse.5
+key_key.parcool.WallSlide:key.mouse.5
+key_key.parcool.Vault:key.mouse.5
+key_key.parcool.HangDown:key.mouse.5
+key_ping-wheel.key.ping-location:key.mouse.4
 soundCategory_master:1.0
 soundCategory_music:0.0
 soundCategory_record:1.0
