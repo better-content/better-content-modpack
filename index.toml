@@ -2746,7 +2746,7 @@ hash = "441957dfd29357d90c26f0c963f063337dcf62a2a0ec2e2fe3f1ef278e7003b4"
 
 [[files]]
 file = "config/logbegone.toml"
-hash = "d130984c75c34c88eb6c461160a251957d1dfa0f2fb7982c9918e813a8692fb1"
+hash = "ec67667c5fd02c46bc0f7684bf8715b941918123b011499ada28cd7f3fe08f5f"
 
 [[files]]
 file = "config/lootr-client.toml"

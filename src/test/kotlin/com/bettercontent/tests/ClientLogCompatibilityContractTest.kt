@@ -18,6 +18,7 @@ class ClientLogCompatibilityContractTest {
             "Received passengers for unknown entity",
             "Stop: Invalid name parameter.",
             "Allocate new source: Invalid name parameter.",
+            "Tried to access a block entity before it was created.",
             "Ignoring chunk since it's not in the view range:",
         )
         phrases.forEach { phrase ->
