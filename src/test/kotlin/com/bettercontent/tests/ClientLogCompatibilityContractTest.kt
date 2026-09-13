@@ -17,6 +17,7 @@ class ClientLogCompatibilityContractTest {
             "Detected ParCool Limitation is not synced. Sending synchronization request...",
             "Received passengers for unknown entity",
             "Stop: Invalid name parameter.",
+            "Allocate new source: Invalid name parameter.",
             "Ignoring chunk since it's not in the view range:",
         )
         phrases.forEach { phrase ->
