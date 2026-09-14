@@ -13,7 +13,10 @@ object DimensionSmokePlan {
     private val resourceLocation = Regex("^[a-z0-9_.-]+:[a-z0-9_./-]+$")
     private val overallTps = Regex("Overall.*?Mean TPS:\\s*([0-9]+(?:\\.[0-9]+)?)", RegexOption.IGNORE_CASE)
 
-    val positions = listOf(1_000_000 to 1_000_000, 1_010_000 to 1_000_000, 1_000_000 to 1_010_000)
+    // Keep probes well clear of spawn while avoiding a multi-second Lost Cities
+    // worldgen stall between successive clients.  The campaign soak has its own
+    // required 0/10,000/20,000 Overworld positions.
+    val positions = listOf(100_000 to 100_000, 100_128 to 100_000, 100_000 to 100_128)
 
     fun discover(dimensions: Path, fonts: Path): List<DimensionTarget> {
         val snapshot = mapper.readTree(dimensions.toFile())

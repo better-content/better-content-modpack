@@ -10952,7 +10952,7 @@ metafile = true
 
 [[files]]
 file = "mods/pillager-campaigns-0.5.4.jar"
-hash = "3b368243cdca1e2b4791c0370de7c87a781ab61774787e7c11ee61c10055d312"
+hash = "ef16e0c6656bb4c37d2acbc5d56d7ec70cf26113a6bdaf1da21b3f1d8a3bd8cd"
 
 [[files]]
 file = "mods/ping-wheel.pw.toml"
@@ -10966,7 +10966,7 @@ metafile = true
 
 [[files]]
 file = "mods/player-traces-0.1.0.jar"
-hash = "6d730a8f2a8d932dafc36eb677162fc9e62a690c9903d2d0d4d402cd6d52d2a8"
+hash = "78d093f4e39c7dd3540c2fa95108b02ee70e1309b2aa7c4a4377dc46904d241e"
 
 [[files]]
 file = "mods/playeranimator.pw.toml"

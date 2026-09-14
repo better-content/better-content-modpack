@@ -81,10 +81,34 @@ The runtime-data-dumper completion schema is `bc.runtime_dump_completion.v3` and
 `dimensions.json` (`bc.dimensions.v1`). Multiplayer smoke discovers targets at run time from the
 loaded Creating Space rocket-accessible-dimension registry and enabled Dimension Drink Font
 configuration; target counts are evidence, not hard-coded assumptions. Every discovered target
-must be loaded. The test traverses three fresh, pairwise-distant locations per target as a
-spectator, requires a post-teleport heartbeat within 90 seconds, then requires three consecutive
-10-second samples at at least 18 mean TPS within 180 seconds. Timeouts retain the command, server
-tail, process state, and fixture for diagnosis. Candidate hashes are checked again after traversal.
+must be loaded. A single full-pack client traverses three fresh, pairwise-distant locations per
+target as a spectator, requires a post-teleport heartbeat within 90 seconds, then requires three
+consecutive 10-second samples at at least 18 mean TPS within 180 seconds. The other two clients
+are not started for this teleport/TPS test; they are started once afterward for the separate
+three-client Survival soak. Timeouts retain the command, server tail, process state, and fixture
+for diagnosis. Candidate hashes are checked again after traversal.
+
+The multiplayer fixture then keeps three real clients connected to that same full-pack dedicated
+server in Survival at linear Overworld checkpoints 10,000 blocks apart. The harness-only
+protection control makes each player invulnerable without changing game mode. A routed scout is
+started for each player with no injected route, then the complete pack runs for a 30-minute
+wall-clock soak while server/client liveness, campaign status, game time, and logs are sampled.
+This is separate from the isolated Pillager Campaigns development harness and is evidence for the
+packaged modpack candidate.
+
+Because the three clients share one headless software-rendered host, the fixture lowers client
+render distance/FPS and bounds Distant Horizons workers. Every candidate mod is still installed,
+loaded, and connected to the same full-pack server; these fixture-only limits prevent rendering
+work from starving the network heartbeats of already-connected clients.
+The dedicated fixture uses view distance 4 and simulation distance 6 while the three Survival
+campaign players are active. This keeps the local 48–72 block campaign approach inside the loaded
+terrain contract while limiting cold-chunk fan-out without changing the production candidate's
+server.properties.
+
+Before the campaign phase, the fixture lays down three bounded 161×161-block grass pads at
+the 0/10,000/20,000 checkpoints and places the players above them. These pads exist only in the
+fresh extracted test world, making the routed local-approach proof deterministic while retaining
+the complete modpack, real server tick, and real campaign materialization path.
 
 The lifecycle smoke verifies one lineage transition, its committed archive, and final clean state.
 It intentionally avoids a second generation; longer persistence matrices require separate explicit

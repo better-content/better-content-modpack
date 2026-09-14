@@ -54,6 +54,20 @@ class HarnessFastTest {
     }
 
     @Test
+    fun multiplayerDimensionSmokeIsSingleClientAndSoakAddsTheOtherClientsOnce() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val source = Files.readString(root.resolve("src/test/kotlin/com/bettercontent/tests/MultiplayerRuntimeTest.kt"))
+
+        assertTrue(source.contains("startClient(lead)"))
+        assertTrue(source.contains("requirePlayersOnline(\"dimension traversal start\", listOf(lead))"))
+        assertTrue(source.contains("clients.drop(1).forEach"))
+        assertTrue(source.contains("requireAllPlayersOnline(\"soak clients joined\")"))
+        assertTrue(!source.contains("dimension support heartbeat"))
+        assertTrue(!source.contains("clients.filter { it !== lead }"))
+        assertTrue(!source.contains("joinedClientsSettleContent"))
+    }
+
+    @Test
     fun packwizHashRefreshBelongsOnlyToTheFrugalPhase() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val facade = Files.readString(root.resolve("test.main.kts"))
@@ -351,7 +365,7 @@ class HarnessFastTest {
         assertEquals(setOf("creatingspace"), targets.single { it.id == "creatingspace:mars" }.sources)
         assertEquals(20.0, DimensionSmokePlan.parseOverallTps("Overall: Mean tick time: 2.1 ms. Mean TPS: 20.000"))
         assertEquals(
-            listOf(1_000_000 to 1_000_000, 1_010_000 to 1_000_000, 1_000_000 to 1_010_000),
+            listOf(100_000 to 100_000, 100_128 to 100_000, 100_000 to 100_128),
             DimensionSmokePlan.positions,
         )
     }
@@ -492,6 +506,132 @@ class HarnessFastTest {
         assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
         assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
         assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactDistantHorizonsInsufficientMemoryWarningPerLog(@TempDir root: Path) {
+        fun warning(thread: String = "DH-LOD Builder Thread[0]", message: String = "Insufficient memory detected") =
+            "[06:28:03] [$thread/WARN] " +
+                "[DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.pooling.PhantomArrayListPool]: " +
+                "§6Distant Horizons: $message.§r"
+
+        val accepted = root.resolve("accepted-dh-memory.log").also { it.writeText(warning() + "\n") }
+        val overflow = root.resolve("overflow-dh-memory.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val wrongShape = root.resolve("wrong-shape-dh-memory.log").also {
+            it.writeText(
+                warning(thread = "Render thread") + "\n" +
+                    warning(message = "Low memory detected") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+
+        val renderLoader = root.resolve("accepted-dh-render-loader-memory.log").also {
+            it.writeText(warning(thread = "DH-Render Loader Thread[0]") + "\n")
+        }
+        assertTrue(LogPolicy.findings(listOf(renderLoader)).isEmpty())
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactEmptySalmonAmbientSoundWarningPerLog(@TempDir root: Path) {
+        fun warning(sound: String = "minecraft:entity.salmon.ambient") =
+            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
+                "Unable to play empty soundEvent: $sound"
+
+        val accepted = root.resolve("accepted-empty-salmon.log").also {
+            it.writeText(warning() + "\n")
+        }
+        val overflow = root.resolve("overflow-empty-salmon.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val wrongShape = root.resolve("wrong-shape-empty-salmon.log").also {
+            it.writeText(
+                warning().replace("Render thread/WARN", "Server thread/WARN") + "\n" +
+                    warning().replace("minecraft:entity.salmon.ambient", "minecraft:entity.dolphin.ambient") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactEmptyCodAmbientSoundWarningPerLog(@TempDir root: Path) {
+        fun warning(sound: String = "minecraft:entity.cod.ambient") =
+            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
+                "Unable to play empty soundEvent: $sound"
+
+        val accepted = root.resolve("accepted-empty-cod.log").also { it.writeText(warning() + "\n") }
+        val overflow = root.resolve("overflow-empty-cod.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val wrongShape = root.resolve("wrong-shape-empty-cod.log").also {
+            it.writeText(
+                warning().replace("Render thread/WARN", "Server thread/WARN") + "\n" +
+                    warning("minecraft:entity.dolphin.ambient") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOneExactAquaticAmbientAndAllTheLeaksWarningPerLog(@TempDir root: Path) {
+        fun sound(sound: String) =
+            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
+                "Unable to play empty soundEvent: $sound"
+        val leaks = "[06:28:03] [Render thread/WARN] [AllTheLeaks]: " +
+            "Server not found while trying to clear leaked chunks"
+        val accepted = root.resolve("accepted-aquatic-leaks.log").also {
+            it.writeText(
+                sound("minecraft:entity.tropical_fish.ambient") + "\n" +
+                    sound("minecraft:entity.puffer_fish.ambient") + "\n" + leaks + "\n",
+            )
+        }
+        val overflow = root.resolve("overflow-aquatic-leaks.log").also {
+            it.writeText(
+                sound("minecraft:entity.tropical_fish.ambient") + "\n" +
+                    sound("minecraft:entity:tropical_fish.ambient") + "\n" +
+                    sound("minecraft:entity.puffer_fish.ambient") + "\n" +
+                    sound("minecraft:entity.puffer_fish.ambient") + "\n" + leaks + "\n" + leaks + "\n",
+            )
+        }
+        val wrongShape = root.resolve("wrong-shape-aquatic-leaks.log").also {
+            it.writeText(
+                sound("minecraft:entity.dolphin.ambient") + "\n" +
+                    leaks.replace("Render thread/WARN", "Server thread/WARN") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2, 4, 6), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactInvalidImmersiveWeatheringIcicleWarningPerLog(@TempDir root: Path) {
+        val warning = "[06:28:03] [Server thread/WARN] [net.minecraft.world.level.chunk.LevelChunk]: " +
+            "Block entity minecraft:mob_spawner @ BlockPos{x=49, y=139, z=12} " +
+            "state Block{immersive_weathering:icicle}[thickness=tip,vertical_direction=down,waterlogged=false] " +
+            "invalid for ticking:"
+        val accepted = root.resolve("accepted-invalid-icicle.log").also { it.writeText(warning + "\n") }
+        val overflow = root.resolve("overflow-invalid-icicle.log").also {
+            it.writeText(warning + "\n" + warning + "\n")
+        }
+        val wrongShape = root.resolve("wrong-shape-invalid-icicle.log").also {
+            it.writeText(warning.replace("immersive_weathering:icicle", "minecraft:stone") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongShape)).map { it.line })
     }
 
     @Test

@@ -118,6 +118,43 @@ object LogPolicy {
             "Unable to find checkout for phantom reference " +
             "\\[java\\.lang\\.ref\\.PhantomReference@[0-9a-f]+], arrays will need to be recreated\\.$",
     )
+    private val distantHorizonsInsufficientMemory = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] " +
+            "\\[DH-(?:LOD Builder|Render Loader) Thread\\[[0-9]+]/WARN] " +
+            "\\[DistantHorizons-DistantHorizons-com\\.seibel\\.distanthorizons\\.core\\.pooling\\." +
+            "PhantomArrayListPool]: §6Distant Horizons: Insufficient memory detected\\.§r$",
+    )
+    private val emptySalmonAmbientSound = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] " +
+            "\\[net\\.minecraft\\.client\\.sounds\\.SoundEngine]: " +
+            "Unable to play empty soundEvent: minecraft:entity\\.salmon\\.ambient$",
+    )
+    private val emptyCodAmbientSound = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] " +
+            "\\[net\\.minecraft\\.client\\.sounds\\.SoundEngine]: " +
+            "Unable to play empty soundEvent: minecraft:entity\\.cod\\.ambient$",
+    )
+    private val emptyTropicalFishAmbientSound = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] " +
+            "\\[net\\.minecraft\\.client\\.sounds\\.SoundEngine]: " +
+            "Unable to play empty soundEvent: minecraft:entity\\.tropical_fish\\.ambient$",
+    )
+    private val emptyPufferFishAmbientSound = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] " +
+            "\\[net\\.minecraft\\.client\\.sounds\\.SoundEngine]: " +
+            "Unable to play empty soundEvent: minecraft:entity\\.puffer_fish\\.ambient$",
+    )
+    private val allTheLeaksServerNotFound = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[AllTheLeaks]: " +
+            "Server not found while trying to clear leaked chunks$",
+    )
+    private val invalidImmersiveWeatheringIcicle = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Server thread/WARN] " +
+            "\\[net\\.minecraft\\.world\\.level\\.chunk\\.LevelChunk]: " +
+            "Block entity minecraft:mob_spawner @ BlockPos\\{x=-?[0-9]+, y=-?[0-9]+, z=-?[0-9]+} " +
+            "state Block\\{immersive_weathering:icicle}\\[thickness=tip,vertical_direction=down," +
+            "waterlogged=false] invalid for ticking:$",
+    )
 
     data class Finding(val path: Path, val line: Int, val text: String)
 
@@ -125,19 +162,44 @@ object LogPolicy {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
             var acceptedEarlyBlockEntityWarnings = 0
             var acceptedRecoveredPhantomArrays = 0
+            var acceptedDistantHorizonsInsufficientMemory = 0
             var acceptedAdChimneysDeferredTasks = 0
+            var acceptedEmptySalmonAmbientSounds = 0
+            var acceptedEmptyTropicalFishAmbientSounds = 0
+            var acceptedEmptyPufferFishAmbientSounds = 0
+            var acceptedEmptyCodAmbientSounds = 0
+            var acceptedAllTheLeaksServerNotFound = 0
+            var acceptedInvalidImmersiveWeatheringIcicles = 0
             Files.readAllLines(path).forEachIndexed { index, line ->
                 val acceptedEarlyBlockEntity = earlyWorldgenBlockEntity.matches(line) &&
                     ++acceptedEarlyBlockEntityWarnings <= 4
                 val acceptedRecoveredPhantomArray = distantHorizonsRecoveredPhantomArray.matches(line) &&
                     ++acceptedRecoveredPhantomArrays <= 1
+                val acceptedDistantHorizonsMemoryWarning = distantHorizonsInsufficientMemory.matches(line) &&
+                    ++acceptedDistantHorizonsInsufficientMemory <= 1
+                val acceptedEmptySalmonAmbientSound = emptySalmonAmbientSound.matches(line) &&
+                    ++acceptedEmptySalmonAmbientSounds <= 1
+                val acceptedEmptyTropicalFishAmbientSound = emptyTropicalFishAmbientSound.matches(line) &&
+                    ++acceptedEmptyTropicalFishAmbientSounds <= 1
+                val acceptedEmptyPufferFishAmbientSound = emptyPufferFishAmbientSound.matches(line) &&
+                    ++acceptedEmptyPufferFishAmbientSounds <= 1
+                val acceptedEmptyCodAmbientSound = emptyCodAmbientSound.matches(line) &&
+                    ++acceptedEmptyCodAmbientSounds <= 1
+                val acceptedAllTheLeaksWarning = allTheLeaksServerNotFound.matches(line) &&
+                    ++acceptedAllTheLeaksServerNotFound <= 1
+                val acceptedInvalidImmersiveWeatheringIcicle = invalidImmersiveWeatheringIcicle.matches(line) &&
+                    ++acceptedInvalidImmersiveWeatheringIcicles <= 1
                 val adChimneysDuration = adChimneysDeferredTask.find(line)
                     ?.groupValues?.get(1)?.toDoubleOrNull()
                 val acceptedAdChimneysDeferredTask = adChimneysDuration != null &&
                     adChimneysDuration <= 10.0 && ++acceptedAdChimneysDeferredTasks <= 1
                 if ((fatal.containsMatchIn(line) || warningOrError.containsMatchIn(line)) &&
                     !acceptedEarlyBlockEntity && !acceptedRecoveredPhantomArray &&
-                    !acceptedAdChimneysDeferredTask && !isAccepted(line)
+                    !acceptedDistantHorizonsMemoryWarning &&
+                    !acceptedAdChimneysDeferredTask && !acceptedEmptySalmonAmbientSound &&
+                    !acceptedEmptyTropicalFishAmbientSound && !acceptedEmptyPufferFishAmbientSound &&
+                    !acceptedEmptyCodAmbientSound &&
+                    !acceptedAllTheLeaksWarning && !acceptedInvalidImmersiveWeatheringIcicle && !isAccepted(line)
                 ) {
                     add(Finding(path, index + 1, line))
                 }
