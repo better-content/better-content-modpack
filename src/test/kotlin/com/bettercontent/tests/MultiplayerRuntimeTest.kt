@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.time.Duration
+import java.time.Instant
 
 @Tag("multiplayer")
 @TestMethodOrder(OrderAnnotation::class)
@@ -31,7 +32,16 @@ class MultiplayerRuntimeTest {
             20_000 to 0,
         )
         private const val SOAK_TICKS = 36_000L
-        private const val SOAK_SECONDS = 30 * 60L
+        private const val DEFAULT_SOAK_SECONDS = 30 * 60L
+        private val soakSecondsOverride = System.getenv("BC_PILLAGER_SOAK_SECONDS")?.let { raw ->
+            raw.toLongOrNull()?.also { require(it >= 30) { "BC_PILLAGER_SOAK_SECONDS must be at least 30" } }
+                ?: error("BC_PILLAGER_SOAK_SECONDS must be an integer number of seconds")
+        }
+        private val soakDeadlineOverride = System.getenv("BC_PILLAGER_SOAK_UNTIL_UTC")?.let { raw ->
+            runCatching { Instant.parse(raw) }.getOrElse {
+                error("BC_PILLAGER_SOAK_UNTIL_UTC must be an ISO-8601 UTC timestamp")
+            }
+        }
         // A full-pack client can otherwise drive the shared smoke-test host into its
         // memory ceiling during Lost Cities reloads. Four GiB clears TACZ's initial
         // model reload while leaving headroom for the server during the single-client
@@ -208,12 +218,17 @@ class MultiplayerRuntimeTest {
                 )
             }
 
+            val soakSeconds = soakSecondsAtStart()
+            evidence.run.event("pillager_soak_started", mapOf(
+                "duration_seconds" to soakSeconds,
+                "deadline_utc" to soakDeadlineOverride?.toString(),
+            ))
             val startedAt = System.nanoTime()
             val startedGameTime = gameTime()
             var nextSample = 0L
-            while (System.nanoTime() - startedAt < Duration.ofSeconds(SOAK_SECONDS).toNanos()) {
+            while (System.nanoTime() - startedAt < Duration.ofSeconds(soakSeconds).toNanos()) {
                 Thread.sleep(30_000)
-                val elapsed = ((System.nanoTime() - startedAt) / 1_000_000_000L).coerceAtMost(SOAK_SECONDS)
+                val elapsed = ((System.nanoTime() - startedAt) / 1_000_000_000L).coerceAtMost(soakSeconds)
                 if (elapsed < nextSample) continue
                 nextSample += 30
                 check(serverAlive()) { "server exited during three-player soak; see ${server.log}" }
@@ -235,12 +250,24 @@ class MultiplayerRuntimeTest {
             val elapsedTicks = gameTime() - startedGameTime
             require(elapsedTicks > 0) { "three-player soak did not advance the Overworld game clock" }
             evidence.run.event("pillager_soak_complete", mapOf(
-                "duration_seconds" to SOAK_SECONDS,
+                "duration_seconds" to soakSeconds,
                 "game_ticks" to elapsedTicks,
                 "nominal_game_ticks" to SOAK_TICKS,
             ))
             campaignSoak = true
         }
+    }
+
+    private fun soakSecondsAtStart(): Long {
+        require(soakSecondsOverride == null || soakDeadlineOverride == null) {
+            "set only one of BC_PILLAGER_SOAK_SECONDS and BC_PILLAGER_SOAK_UNTIL_UTC"
+        }
+        if (soakDeadlineOverride != null) {
+            val remaining = Duration.between(Instant.now(), soakDeadlineOverride).seconds
+            require(remaining >= 30) { "BC_PILLAGER_SOAK_UNTIL_UTC must be at least 30 seconds in the future" }
+            return remaining
+        }
+        return soakSecondsOverride ?: DEFAULT_SOAK_SECONDS
     }
 
     @Test @Order(4)

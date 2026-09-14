@@ -6809,6 +6809,10 @@ file = "kubejs/assets/pneumaticcraft/patchouli_books/book/zh_cn/entries/rotation
 hash = "51c3970bb82706e64d018d6bdf78ec11bd37349fbdb8cf44110021f5fa80d765"
 
 [[files]]
+file = "kubejs/assets/presencefootstepsmono/sounds.json"
+hash = "638e733263cd018c5b3d8b52cf0e6fea2633bf9447080ebb11916cb2ad7733cc"
+
+[[files]]
 file = "kubejs/assets/starcatcher/lang/en_us.json"
 hash = "718c8098202e12e15c11d25f6c3872afe91d948e3bf6c088d49c5608bb226737"
 
@@ -10952,7 +10956,7 @@ metafile = true
 
 [[files]]
 file = "mods/pillager-campaigns-0.5.4.jar"
-hash = "ef16e0c6656bb4c37d2acbc5d56d7ec70cf26113a6bdaf1da21b3f1d8a3bd8cd"
+hash = "c388659899665d0df020c8ece3e18bf06c7b7f9160d45cd4a39568989bb0b344"
 
 [[files]]
 file = "mods/ping-wheel.pw.toml"
