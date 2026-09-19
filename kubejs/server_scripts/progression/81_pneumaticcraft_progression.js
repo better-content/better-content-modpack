@@ -38,4 +38,26 @@ ServerEvents.recipes(function (event) {
         P: 'pneumaticcraft:plastic', S: 'pneumaticcraft:printed_circuit_board',
         I: 'powergrid:integrated_circuit', C: 'pneumaticcraft:compressed_iron_gear'
     }).id('kubejs:tech/pneumatic/armor_upgrade_sensors')
+
+    // TECH-07 service surfaces: programming and Amadron become available only
+    // after pressure electronics exist, while the native programmable behavior
+    // and Amadron trade data remain untouched.
+    event.remove({ output: 'pneumaticcraft:programmer' })
+    event.shaped('pneumaticcraft:programmer', ['RGR', 'TBT', 'P P'], {
+        R: '#forge:dyes/red', G: '#forge:glass_panes/black',
+        T: 'pneumaticcraft:turbine_rotor', B: 'pneumaticcraft:printed_circuit_board',
+        P: 'kubejs:electrical_instrumentation_module'
+    }).id('kubejs:tech/pneumatic/programmer_electrical_control')
+
+    event.remove({ output: 'pneumaticcraft:programmable_controller' })
+    event.shaped('pneumaticcraft:programmable_controller', ['IRI', 'CDP', 'INI'], {
+        I: '#forge:ingots/compressed_iron', R: 'pneumaticcraft:remote',
+        C: 'pneumaticcraft:printed_circuit_board', D: 'pneumaticcraft:drone',
+        P: 'pneumaticcraft:advanced_pressure_tube', N: 'kubejs:ae_logic_package'
+    }).id('kubejs:tech/pneumatic/programmable_controller_ae_logic')
+
+    event.remove({ output: 'pneumaticcraft:amadron_tablet' })
+    event.shaped('pneumaticcraft:amadron_tablet', ['PPP', 'PGP', 'PCP'], {
+        P: 'pneumaticcraft:plastic', G: 'pneumaticcraft:gps_tool', C: 'pneumaticcraft:air_canister'
+    }).id('kubejs:tech/pneumatic/amadron_tablet_pressure_service')
 })
