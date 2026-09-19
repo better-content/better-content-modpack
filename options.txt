@@ -216,7 +216,7 @@ key_key.explosionoverhaul.info_scan:key.keyboard.unknown
 key_key.ars_nouveau.open_book:key.keyboard.c
 key_key.ars_nouveau.selection_hud:key.keyboard.v
 key_key.ars_nouveau.next_slot:key.keyboard.x
-key_key.ars_nouveau.previous_slot:key.keyboard.z
+key_key.ars_nouveau.previous_slot:key.keyboard.semicolon
 key_key.ars_nouveau.head_curio_hotkey:key.keyboard.unknown
 key_key.ars_nouveau.qc1:key.keyboard.unknown
 key_key.ars_nouveau.qc2:key.keyboard.unknown
@@ -327,7 +327,8 @@ key_key.buildinggadgets2.undo:key.keyboard.u
 key_key.buildinggadgets2.anchor:key.keyboard.h
 key_key.buildinggadgets2.range:key.keyboard.r:SHIFT
 key_key.presencefootsteps.settings:key.keyboard.unknown
-key_key.goety.wand:key.keyboard.z
+key_key.tacz.crawl.desc:key.keyboard.z
+key_key.goety.wand:key.keyboard.grave.accent
 key_key.goety.focusCircle:key.keyboard.x
 key_key.goety.bag:key.keyboard.c:ALT
 key_key.goety.witch.robe:key.keyboard.v:ALT
