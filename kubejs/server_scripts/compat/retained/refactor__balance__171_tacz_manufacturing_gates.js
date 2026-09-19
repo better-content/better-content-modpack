@@ -20,10 +20,6 @@ function bcTaczWorkbench(event, nativeId, recipeId, item, blockId, pattern, key)
 
 ServerEvents.recipes(function (event) {
     if (!Platform.isLoaded('tacz')) return
-    // All active TaCZ and armorer ZIP recipes use this shared recipe type.
-    event.replaceInput({ type: 'tacz:gun_smith_table_crafting' }, '#forge:rods/blaze', 'kubejs:electrical_instrumentation_module')
-    event.replaceInput({ type: 'tacz:gun_smith_table_crafting' }, '#forge:gems/diamond', 'ae2:engineering_processor')
-    event.replaceInput({ type: 'tacz:gun_smith_table_crafting' }, '#forge:ingots/gold', 'kubejs:brass_utility_assembly')
     // The general gunsmith is the entry gate for TaCZ's bundled gun catalog.
     event.remove({ id: 'tacz:gun_smith_table' })
     global.bcFactoryCrafting(event, 'kubejs:tacz/gun_smith_table_factory_gate', 'tacz:gun_smith_table', 1, [
@@ -141,4 +137,40 @@ ServerEvents.recipes(function (event) {
         ],
         result: { type: 'attachment', id: 'tacz:scope_vudu' }
     }).id('kubejs:tacz/attachments/scope_vudu_ae_optics')
+
+    // Explicit external-pack overrides. Their ZIP JSON uses nested `materials`
+    // entries, so each override names the exact recipe and keeps the native
+    // TaCZ result type/count while introducing manufactured stage components.
+    event.remove({ id: 'create_armorer:ammo/40mmhe' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:electrical_instrumentation_module' }, count: 1 },
+            { item: { tag: 'forge:ingots/copper' }, count: 8 },
+            { item: { tag: 'forge:gunpowder' }, count: 12 },
+            { item: { item: 'powergrid:integrated_circuit' }, count: 1 }
+        ],
+        result: { type: 'ammo', id: 'create_armorer:40mmhe', count: 12 }
+    }).id('kubejs:tacz/create_armorer/40mmhe_manufactured')
+
+    event.remove({ id: 'applied_armorer:ammo/fluix_battery' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:ae_logic_package' }, count: 1 },
+            { item: { tag: 'forge:dusts/redstone' }, count: 16 }
+        ],
+        result: { type: 'ammo', id: 'applied_armorer:fluix_battery', count: 4 }
+    }).id('kubejs:tacz/applied_armorer/fluix_battery_ae_package')
+
+    event.remove({ id: 'immersive_armorer:ammo/burst_capacitor' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { tag: 'forge:glass' }, count: 4 },
+            { item: { item: 'powergrid:integrated_circuit' }, count: 1 },
+            { item: { tag: 'forge:ingots/copper' }, count: 3 }
+        ],
+        result: { type: 'ammo', id: 'immersive_armorer:burst_capacitor', count: 5 }
+    }).id('kubejs:tacz/immersive_armorer/burst_capacitor_control')
 })
