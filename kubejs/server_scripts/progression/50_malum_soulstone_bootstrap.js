@@ -24,3 +24,22 @@ ServerEvents.recipes(function (event) {
         heatRequirement: 'heated'
     }).id('kubejs:malum/black_shale_to_raw_soulstone')
 })
+
+// MALUM-07: a process substrate route for Brilliance. The inspected alternative
+// was Realistic Ores' diamond chip; crushed Soulstone keeps this route inside
+// Malum's material line while Create's experience nugget supplies the pulse.
+ServerEvents.recipes(function (event) {
+    if (!Platform.isLoaded('malum') || !Platform.isLoaded('create')) return
+
+    event.custom({
+        type: 'create:mixing',
+        heatRequirement: 'heated',
+        ingredients: [
+            { item: 'malum:crushed_soulstone' },
+            { item: 'malum:crushed_soulstone' },
+            { item: 'create:experience_nugget' }
+        ],
+        results: [{ item: 'malum:crushed_brilliance', count: 1 }],
+        processingTime: 240
+    }).id('kubejs:malum/brilliance/from_crushed_soulstone')
+})
