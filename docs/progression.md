@@ -176,11 +176,14 @@ Thermal & Pressure; sensors and gyros in Electrical Control. Aether materials
 gate stable high-performance flight, never primitive ships, basic Trackwork, or
 low-performance aircraft. The Rail Beetle joins the Precision Factory branch by
 combining a Railway Casing, a Barrel, a Minecart, and two Electron Tubes. Its
+found example can also appear in an abandoned mineshaft chest; placing that marked
+item supplies 32 rails, 16 cobblestone supports, and 8 coal without advanced modules.
 baseline coal firebox, 4-block/second drive, 64-rail survey, two-cart drawgear,
 and one-wide/four-deep bridge work remain complete and practical. One engine
 cradle accepts conditional Create steam, PowerGrid flux, Ars Source, Blood
 lifeforce, Pneumatic air, Goety soul, or Malum spirit drives; an empty alternate
-drive falls back to cargo fuel. Six module bays accept one module per family.
+drive falls back to fuel in the Beetle's working inventory. Freight belongs in the
+consist. Six module bays accept one module per family.
 Tier-I machinery begins in Precision Factory, mechanical and civil Tier-II
 modules mature in Thermal & Pressure, and efficiency, survey, and dispatch
 Tier-II modules require Electrical Control. Every Tier-II recipe consumes its
