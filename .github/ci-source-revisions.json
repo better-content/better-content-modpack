@@ -43,7 +43,7 @@
     },
     {
       "repository": "downed-player-revival",
-      "commit": "d900395daffdc9ca0abb767b905e9faaa6a8f7cb"
+      "commit": "9e94c1cefcbc6b11750df35d2fd930b923a5085f"
     },
     {
       "repository": "dynamic-survival-hud",
@@ -111,7 +111,7 @@
     },
     {
       "repository": "rpg-stats",
-      "commit": "d2cc99def7e2a68f6754e93708f1ba4bedb8c14e"
+      "commit": "c04a8dabd6aed0bec0c72eb93aef285afd90dcc3"
     },
     {
       "repository": "runtime-data-dumper",
