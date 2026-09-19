@@ -10070,7 +10070,7 @@ hash = "5a1ef4c9813838d8fbd726120f2a34bdce20619c9b69d476a4546faaaef0d441"
 
 [[files]]
 file = "kubejs/server_scripts/policy/storage_barrel_recipe.js"
-hash = "0e162203e1b8acbb3180a9f04788c6898cab3462da5060e8eec89bfbd08f4e0c"
+hash = "86f74e45247dbcb3ee6a53d9b0557449335fa44c0e6ec5d41416ec6cc854286a"
 
 [[files]]
 file = "kubejs/server_scripts/policy/tnt_recipe.js"
