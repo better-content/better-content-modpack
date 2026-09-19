@@ -173,4 +173,41 @@ ServerEvents.recipes(function (event) {
         ],
         result: { type: 'ammo', id: 'immersive_armorer:burst_capacitor', count: 5 }
     }).id('kubejs:tacz/immersive_armorer/burst_capacitor_control')
+
+    event.remove({ id: 'create_armorer:gun/pistol_auto_stress' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:brass_utility_assembly' }, count: 2 },
+            { item: { item: 'create:precision_mechanism' }, count: 1 },
+            { item: { tag: 'forge:ingots/copper' }, count: 12 },
+            { item: { tag: 'minecraft:logs' }, count: 5 }
+        ],
+        result: { type: 'gun', id: 'create_armorer:pistol_auto_stress' }
+    }).id('kubejs:tacz/create_armorer/pistol_auto_stress_precision_frame')
+
+    event.remove({ id: 'applied_armorer:ammo/cluster_quartz_bullet' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:ae_logic_package' }, count: 1 },
+            { item: { tag: 'forge:ingots/copper' }, count: 12 },
+            { item: { tag: 'forge:gems/lapis' }, count: 2 },
+            { item: { tag: 'forge:gunpowder' }, count: 4 }
+        ],
+        result: { type: 'ammo', id: 'applied_armorer:cluster_quartz_bullet', count: 24 }
+    }).id('kubejs:tacz/applied_armorer/cluster_quartz_bullet_ae_loading')
+
+    event.remove({ id: 'immersive_armorer:attachments/muzzle_refit_electromagnetic_accelerator' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:electrical_instrumentation_module' }, count: 1 },
+            { item: { item: 'powergrid:electric_motor' }, count: 1 },
+            { item: { tag: 'forge:ingots/iron' }, count: 4 },
+            { item: { tag: 'forge:ingots/gold' }, count: 8 }
+        ],
+        result: { type: 'attachment', id: 'immersive_armorer:muzzle_refit_electromagnetic_accelerator' }
+    }).id('kubejs:tacz/immersive_armorer/electromagnetic_accelerator_powergrid')
+
 })
