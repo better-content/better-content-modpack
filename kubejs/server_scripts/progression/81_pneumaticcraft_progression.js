@@ -5,7 +5,9 @@ ServerEvents.recipes(function (event) {
     event.remove({ output: 'pneumaticcraft:air_compressor' })
     event.shaped('pneumaticcraft:air_compressor', ['IPI', 'CMC', 'IRI'], {
         I: '#forge:plates/iron', P: 'pneumaticcraft:pressure_tube', C: 'pneumaticcraft:ingot_iron_compressed',
-        M: 'kubejs:airtight_machine_block', R: 'create:cogwheel'
+        // Basic air starts the pressure era. Airtight Machine Blocks belong
+        // to the later thermopneumatic and electrical roots.
+        M: 'pneumaticcraft:pressure_seal', R: 'create:cogwheel'
     }).id('kubejs:tech/pneumatic/air_compressor_pressure_root')
 
     event.remove({ output: 'pneumaticcraft:thermopneumatic_processing_plant' })
