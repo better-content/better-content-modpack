@@ -25,6 +25,35 @@ ServerEvents.recipes(function (event) {
         results: [{ item: 'ae2:controller' }]
     }).id('kubejs:tech/ae2/controller_meteor_core')
 
+
+    // Parallel smart-component roots: processors are pressure-built from the
+    // meteor/certus palette and PowerGrid controls, with no ME network access.
+    event.remove({ output: 'ae2:logic_processor' })
+    event.custom({
+        type: 'pneumaticcraft:pressure_chamber', pressure: 3.0,
+        inputs: [
+            global.bcPncrStack('ae2:printed_silicon', 1),
+            global.bcPncrStack('minecraft:gold_ingot', 1),
+            global.bcPncrStack('minecraft:redstone', 1),
+            global.bcPncrStack('create:electron_tube', 1),
+            global.bcPncrStack('powergrid:integrated_circuit', 1)
+        ],
+        results: [{ item: 'ae2:logic_processor' }]
+    }).id('kubejs:tech/ae2/logic_processor_pressure_palette')
+
+    event.remove({ output: 'ae2:engineering_processor' })
+    event.custom({
+        type: 'pneumaticcraft:pressure_chamber', pressure: 4.0,
+        inputs: [
+            global.bcPncrStack('ae2:printed_silicon', 1),
+            global.bcPncrStack('minecraft:diamond', 1),
+            global.bcPncrStack('minecraft:redstone', 1),
+            global.bcPncrStack('create:electron_tube', 1),
+            global.bcPncrStack('powergrid:integrated_circuit', 1)
+        ],
+        results: [{ item: 'ae2:engineering_processor' }]
+    }).id('kubejs:tech/ae2/engineering_processor_meteor_palette')
+
     event.remove({ output: 'ae2:cell_workbench' })
     event.shaped('ae2:cell_workbench', ['QGQ', 'CPC', 'QGQ'], {
         Q: 'ae2:quartz_glass', G: '#forge:glass', C: 'ae2:calculation_processor',
