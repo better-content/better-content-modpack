@@ -95,4 +95,45 @@ ServerEvents.recipes(function (event) {
             C: 'powergrid:conductive_casing',
             I: 'tacz:gun_smith_table'
         })
+
+    // The active TaCZ ZIPs use the tacz:gun_smith_table_crafting data type.
+    // These exact IDs are the default pack's representative gun, ammunition,
+    // and optic surfaces; manufactured components carry the stage into the
+    // workbench instead of turning the bench into a universal hand-grid gate.
+    if (!Platform.isLoaded('tacz')) return
+    event.remove({ id: 'tacz:gun/deagle' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:electrical_instrumentation_module' }, count: 1 },
+            { item: { item: 'kubejs:brass_utility_assembly' }, count: 2 },
+            { item: { tag: 'forge:ingots/steel' }, count: 6 },
+            { item: { item: 'ae2:engineering_processor' }, count: 1 }
+        ],
+        result: { type: 'gun', id: 'tacz:deagle' }
+    }).id('kubejs:tacz/gun/deagle_manufactured_frame')
+
+    event.remove({ id: 'tacz:ammo/338' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:brass_utility_assembly' }, count: 1 },
+            { item: { tag: 'forge:plates/copper' }, count: 8 },
+            { item: { tag: 'forge:gunpowder' }, count: 8 },
+            { item: { item: 'powergrid:integrated_circuit' }, count: 1 }
+        ],
+        result: { type: 'ammo', group: 'lc_specialized', id: 'tacz:338', count: 18 }
+    }).id('kubejs:tacz/ammo/338_electrical_loading')
+
+    event.remove({ id: 'tacz:attachments/scope_vudu' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:ae_logic_package' }, count: 1 },
+            { item: { item: 'kubejs:mountain_beryl_lens' }, count: 1 },
+            { item: { item: 'powergrid:integrated_circuit' }, count: 1 },
+            { item: { tag: 'forge:dusts/glowstone' }, count: 4 }
+        ],
+        result: { type: 'attachment', id: 'tacz:scope_vudu' }
+    }).id('kubejs:tacz/attachments/scope_vudu_ae_optics')
 })
