@@ -3,8 +3,8 @@
 // Keep explicit NBT results: TaCZ uses one workbench item for several blocks.
 
 function bcTaczWorkbench(event, nativeId, recipeId, item, blockId, pattern, key) {
-    var namespace = blockId.split(':')[0]
-    if (!Platform.isLoaded(namespace)) return
+    // Armorer namespaces come from TaCZ gun-pack ZIPs, not Forge mod IDs.
+    if (!Platform.isLoaded('tacz')) return
     event.remove({ id: nativeId })
     event.custom({
         type: 'minecraft:crafting_shaped',

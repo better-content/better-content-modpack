@@ -18,6 +18,8 @@ extension.
 TaCZ 1.1.8 is active with playerAnimator and client-only Accelerated Rendering. Create Armorer,
 Applied Armorer, and Immersive Armorer remain external gun-pack ZIPs under `tacz/`. Their benches
 progress from brass factory manufacture through post-AE2 Impossible and Electrical milestones.
+Their content namespaces are TaCZ pack IDs, not Forge mod IDs; recipe guards use the loaded TaCZ
+mod, while candidate validation checks that the three packaged ZIPs match their manifests.
 
 The pinned Valkyrien Skies transport family is active on both sides:
 

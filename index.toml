@@ -7302,7 +7302,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "ad10a8d5d2b8d6feba65f8261979c28dab7843946b824aceb78a70db413f34cc"
+hash = "87685fee5795eb0fef7d8813ba3406a6620e6ce26bfaa4e34b917ee1ca3fae44"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -9898,7 +9898,7 @@ hash = "301cf6a050f4a34ec425cf8e9893618fac74343ad2c994dfc431cf1aad4f1333"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__171_tacz_manufacturing_gates.js"
-hash = "35e8cbdebd0e97fc85e3719d77924fec29bf54089086f8d61cbd6975ff7a7fa1"
+hash = "fbf4f6fad3eb34f0f963f711768f124e148ad4d9cb73904d633f9cf4c2cec677"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__63_fonts_hexerei_occultism_chalk.js"
