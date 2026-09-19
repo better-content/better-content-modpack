@@ -80,7 +80,11 @@ ServerEvents.recipes(function (event) {
         ['pneumaticcraft:jet_boots_upgrade_3', 4.0, ['pneumaticcraft:jet_boots_upgrade_2', 'pneumaticcraft:vortex_cannon', 'minecraft:blaze_rod', 'minecraft:ghast_tear']],
         ['pneumaticcraft:minigun_upgrade', 3.5, ['pneumaticcraft:minigun', 'pneumaticcraft:printed_circuit_board', '#forge:gunpowder', 'kubejs:electrical_instrumentation_module']],
         ['pneumaticcraft:entity_tracker_upgrade', 3.5, ['minecraft:fermented_spider_eye', 'pneumaticcraft:printed_circuit_board', '#forge:bones', 'kubejs:ae_logic_package']],
-        ['pneumaticcraft:charging_upgrade', 3.0, ['pneumaticcraft:charging_module', 'pneumaticcraft:pressure_tube', 'pneumaticcraft:printed_circuit_board', 'powergrid:integrated_circuit']]
+        ['pneumaticcraft:charging_upgrade', 3.0, ['pneumaticcraft:charging_module', 'pneumaticcraft:pressure_tube', 'pneumaticcraft:printed_circuit_board', 'powergrid:integrated_circuit']],
+        ['pneumaticcraft:jet_boots_upgrade_4', 4.5, ['pneumaticcraft:jet_boots_upgrade_3', 'pneumaticcraft:vortex_cannon', 'minecraft:phantom_membrane', 'minecraft:nether_star']],
+        ['pneumaticcraft:jet_boots_upgrade_5', 5.0, ['pneumaticcraft:jet_boots_upgrade_4', 'pneumaticcraft:vortex_cannon', 'minecraft:elytra', 'minecraft:dragon_breath']],
+        ['pneumaticcraft:magnet_upgrade', 3.5, ['pneumaticcraft:printed_circuit_board', 'pneumaticcraft:plastic', 'powergrid:integrated_circuit', '#forge:ingots/compressed_iron']],
+        ['pneumaticcraft:range_upgrade', 3.5, ['pneumaticcraft:printed_circuit_board', 'minecraft:bow', 'powergrid:integrated_circuit', '#minecraft:arrows']]
     ]
     BC_ADVANCED_UPGRADES.forEach(function (entry) {
         event.remove({ output: entry[0] })
