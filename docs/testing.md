@@ -142,6 +142,7 @@ Only an explicit fresh-dist request authorizes:
 ```sh
 ./release.main.kts
 ./release.main.kts --jobs 4
+./release.main.kts --jobs 2 --suite multiplayer
 ./release.main.kts --jobs 4 --skip-tests
 ```
 
@@ -151,12 +152,13 @@ records that local-only update check in release evidence. It never fetches or mo
 It reuses unchanged bundled runtime JARs whose embedded source revision matches the clean checkout,
 and runs the documented verification only for changed repositories. It annotates and deploys all
 staged runtime JARs together, invokes the frugal phase to refresh Packwiz hashes, runs `dist.sh`
-exactly once, and finally invokes the
-full pack suite. It records each mod's `reused` or `rebuilt` mode and JAR hash before testing the
+exactly once, and finally invokes the selected pack suite. The default is `all`; `--suite multiplayer`
+selects the connection smoke, dimension teleport traversal, and 30 minute protected-player soak
+when those are the explicitly requested stability gate. It records each mod's `reused` or `rebuilt` mode and JAR hash before testing the
 unchanged ZIP pair.
 Legacy JARs without source metadata are replaced during this bootstrap run.
 
-`--skip-tests` is the explicit untested-release path. It still reuses valid source-identical
+`--skip-tests` is the explicit untested-release path and cannot be combined with `--suite multiplayer`. It still reuses valid source-identical
 bundled JARs. Changed or unannotated sources build through `stageRuntimeJar` without the custom-mod
 verification tasks; the complete staged set is deployed, the frugal phase refreshes Packwiz, and packaging runs
 exactly once. It skips the full pack suite. Release evidence and provenance record that tests

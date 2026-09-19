@@ -10,7 +10,8 @@ This repository is the Better Content Forge 1.20.1 modpack content layer.
   `fast`, `candidate`, `server`, `multiplayer`, `singleplayer`, or `all` selector.
 - `./release.main.kts` is the only fresh-dist workflow. By default it reuses unchanged bundled
   runtime JARs whose source revision matches and validates/rebuilds changed repositories, then
-  packages exactly once and runs `all`.
+  packages exactly once and runs `all`. An explicit `--suite multiplayer` packages the same way
+  and runs only the multiplayer smoke, teleport, and soak suite.
   `--skip-tests` is allowed only when the explicit fresh-dist request prohibits tests; it still
   reuses unchanged JARs, builds/stages changed sources without verification, and packages exactly once.
 - `./maintenance.main.kts audit` reports evidence retention decisions without changing the

@@ -113,7 +113,8 @@ class HarnessFastTest {
             dependencies("better-content-fixes"),
         )
         assertEquals(listOf("world-lifecycle-manager"), dependencies("class-selector"))
-        assertEquals(listOf("downed-player-revival"), dependencies("depth-director"))
+        assertEquals(listOf("better-content-fixes", "downed-player-revival"), dependencies("depth-director"))
+        assertEquals(listOf("better-content-fixes"), dependencies("dimension-drink"))
         assertEquals(listOf("downed-player-revival"), dependencies("pillager-campaigns"))
         assertEquals(listOf("downed-player-revival"), dependencies("player-traces"))
         assertEquals(
