@@ -100,7 +100,7 @@ ServerEvents.recipes(function (event) {
         railBeetleTierOne('high_speed_governor_1', 'create:speedometer', 'create:cogwheel')
         railBeetleTierOne('exhaust_recuperator_1', 'create:fluid_tank', '#forge:plates/copper')
         railBeetleTierOne('brake_manifold_1', 'create:fluid_pipe', '#forge:plates/iron')
-        railBeetleTierOne('adhesion_sanders_1', 'minecraft:sand', 'create:chute')
+        railBeetleTierOne('adhesion_sanders_1', '#kubejs:ordinary_sand', 'create:chute')
         railBeetleTierOne('compound_torque_clutch_1', 'create:clutch', 'create:large_cogwheel')
         railBeetleTierOne('reinforced_drawgear_1', 'create:minecart_coupling', '#forge:plates/iron')
         railBeetleTierOne('telescopic_survey_array_1', 'minecraft:spyglass', 'create:electron_tube')

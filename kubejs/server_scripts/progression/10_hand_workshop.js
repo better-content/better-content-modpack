@@ -10,9 +10,9 @@ var BC_FONT_BINDERS = [
 ServerEvents.recipes(function (event) {
     event.remove({ output: 'tconstruct:grout' })
     BC_FONT_BINDERS.forEach(function (font) {
-        event.shapeless('2x ' + font[2], [font[1], '#minecraft:sand', 'minecraft:gravel'])
+        event.shapeless('2x ' + font[2], [font[1], '#kubejs:ordinary_sand', 'minecraft:gravel'])
             .id('kubejs:hand_workshop/font_grout/' + font[0])
-        event.shapeless('8x ' + font[2], [font[1], '#minecraft:sand', '#minecraft:sand', '#minecraft:sand', '#minecraft:sand', 'minecraft:gravel', 'minecraft:gravel', 'minecraft:gravel', 'minecraft:gravel'])
+        event.shapeless('8x ' + font[2], [font[1], '#kubejs:ordinary_sand', '#kubejs:ordinary_sand', '#kubejs:ordinary_sand', '#kubejs:ordinary_sand', 'minecraft:gravel', 'minecraft:gravel', 'minecraft:gravel', 'minecraft:gravel'])
             .id('kubejs:hand_workshop/font_grout/' + font[0] + '_bulk')
         event.smelting('tconstruct:seared_brick', font[2])
             .id('kubejs:hand_workshop/font_grout/' + font[0] + '_smelting')

@@ -9,6 +9,7 @@
         'minecraft:gravel': true,
         'minecraft:sand': true,
         'minecraft:red_sand': true,
+        'natures_spirit:pink_sand': true,
         'minecraft:soul_sand': true,
         'create:crushed_raw_copper': true,
         'create:crushed_raw_gold': true,
