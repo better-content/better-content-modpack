@@ -4,6 +4,10 @@
 	#When disabled, vanilla hold-to-sneak input remains active and the custom toggle handler is inert.
 	toggleSneak = false
 
+[creativeInventory]
+	#Hides only Minecraft's Creative inventory search tab. JEI, EMI, item contents, and every other Creative tab remain available.
+	hideSearchTab = true
+
 [sleepingOverhaul]
 	#Paces Sleeping Overhaul's simulated ticks instead of allowing an effectively instant night.
 	paceTimelapse = true
