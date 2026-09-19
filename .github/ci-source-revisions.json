@@ -3,19 +3,19 @@
   "repositories": [
     {
       "repository": "arcane-chunk-loaders",
-      "commit": "22d5b642c8d4fa61f3655fd86a0cebdaa09c165c"
+      "commit": "5bce7d139c8d9405b9150d7cf86744e9c3d18b7b"
     },
     {
       "repository": "better-content-economy",
-      "commit": "fe1b3892032b77a0cf0f49d0bf19c7b52616a2f3"
+      "commit": "6b661f3dc004b6e5bf1a0fe5d55e6bfc4031ca11"
     },
     {
       "repository": "better-content-fixes",
-      "commit": "6890e8ed38b07f53b55c2a1579835b4bdbf8da0a"
+      "commit": "7990363c556ba551252d240a89135d14377b736e"
     },
     {
       "repository": "better-content-threads",
-      "commit": "e767cff8ef378f26fa9f5656f2e9d2c6da9b20ad"
+      "commit": "d59ea6dc80f0747701eeed38e20e855d9e4e0c59"
     },
     {
       "repository": "bumblezone-cultivars",
@@ -27,19 +27,19 @@
     },
     {
       "repository": "create-train-fuel-scaling",
-      "commit": "f7a8fd15ea64d0cfe362b552e75f1ddc99f865c4"
+      "commit": "153d0f76a09739b3f36266e4bd8162202bd25b26"
     },
     {
       "repository": "create-transmission-loss",
-      "commit": "620f0091b5bde9b321949a84fae36f4d599f188f"
+      "commit": "805814133478e9eb6c34af7d0566413d89e96ac7"
     },
     {
       "repository": "depth-director",
-      "commit": "4f4a784f0f0dcd125f5b85fbad4d9f036e950d9f"
+      "commit": "ef4facff07828df7d0a963b8bead3c2301447507"
     },
     {
       "repository": "dimension-drink",
-      "commit": "f46ba885258c743aecc4b453c7d49000d693e2f1"
+      "commit": "8077b803f338bd4b67f1614961ebd8c309e0e9f4"
     },
     {
       "repository": "downed-player-revival",
@@ -59,15 +59,15 @@
     },
     {
       "repository": "dynamic-trees-malum",
-      "commit": "bb2c2304305c54205dac8898f958e64b7ab3bb65"
+      "commit": "006a9e0ef9a10e9b3057538ff5f4ac0aa07b8b58"
     },
     {
       "repository": "heat-sync",
-      "commit": "b224aa098a92fd8e30baa1b798cbc4609f0bdaa9"
+      "commit": "d538e2d8b2a86766943076fe909efa6e1baaba43"
     },
     {
       "repository": "immersive-weathering-sampler",
-      "commit": "71b1934b55eadc620209cba20fd97827b45935cf"
+      "commit": "1b112342393b61502157fc34f6b4e2ee32f01fdc"
     },
     {
       "repository": "latent-chemlib",
@@ -91,7 +91,7 @@
     },
     {
       "repository": "player-traces",
-      "commit": "efee973c4a45d86bd2f05f50615175075e48d266"
+      "commit": "28b1a2fa8e3fcfb794952fc58ae2ba88f10ae7e2"
     },
     {
       "repository": "procedural-bouquets",
@@ -99,7 +99,7 @@
     },
     {
       "repository": "rail-beetle",
-      "commit": "3883995fd01a8f3c3f8ec662de562ee2d7d24353"
+      "commit": "95c9c16d439836f37c8f917441acf0ca13d60922"
     },
     {
       "repository": "ratlantis-logistics",
@@ -107,11 +107,11 @@
     },
     {
       "repository": "realistic-ores",
-      "commit": "f30497d24d347099b617c61f0cbf444d7e0ecd52"
+      "commit": "f8ed20190151ec8bb4f7bc69b7c4101d6f4b14f1"
     },
     {
       "repository": "rpg-stats",
-      "commit": "c04a8dabd6aed0bec0c72eb93aef285afd90dcc3"
+      "commit": "82ab244f7970adb18d5b572390a320a40fedc39e"
     },
     {
       "repository": "runtime-data-dumper",
@@ -119,15 +119,15 @@
     },
     {
       "repository": "settlement-roads",
-      "commit": "5555345ae885ae5ab974fc6e9ee490ee4282f9af"
+      "commit": "6a6723c0e3b71dc168ad21b8fe13b999cb2455a9"
     },
     {
       "repository": "systemic-salience",
-      "commit": "81a4553b96d1d22e7cdf69fdea5e3b622efbc527"
+      "commit": "cb8d929517a163cd84f834141f36c5ddb9f6764e"
     },
     {
       "repository": "tinkers-construct-affixes",
-      "commit": "7ac40017db96bfe6ff210a8730ef2f7eafe40c07"
+      "commit": "9087e36ac171ae5cca76fae4496f73b7afac7192"
     },
     {
       "repository": "village-walls",
@@ -135,7 +135,7 @@
     },
     {
       "repository": "water-survival",
-      "commit": "ebb39f53fdc324e0420f9b3c41deadf2038bf3c2"
+      "commit": "603de4d2c1df7acf19d66cd925f624d1cd035b91"
     },
     {
       "repository": "world-lifecycle-manager",
