@@ -9,7 +9,7 @@
     {"repository":"class-selector","modId":"class_selector","artifact":"class-selector-1.0.0.jar","tasks":["verifyFull","stageRuntimeJar"],"dependsOn":["world-lifecycle-manager"]},
     {"repository":"create-train-fuel-scaling","modId":"create_train_fuel_scaling","artifact":"create-train-fuel-scaling-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"create-transmission-loss","modId":"create_transmission_loss","artifact":"create-transmission-loss-0.1.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
-    {"repository":"depth-director","modId":"depth_director","artifact":"depth-director-0.2.1.jar","tasks":["verifyFull","stageRuntimeJar"],"dependsOn":["downed-player-revival"]},
+    {"repository":"depth-director","modId":"depth_director","artifact":"depth-director-0.2.1.jar","tasks":["verifyFull","stageRuntimeJar"],"dependsOn":["better-content-fixes","downed-player-revival"]},
     {"repository":"dimension-drink","modId":"dimension_drink","artifact":"dimension-drink-1.0.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"dynamic-survival-hud","modId":"dynamic_survival_hud","artifact":"dynamic-survival-hud-1.0.0.jar","tasks":["verifyFull","stageRuntimeJar"]},
     {"repository":"dynamic-trees-malum","modId":"dynamic_trees_malum","artifact":"dynamic-trees-malum-1.0.1.jar","tasks":["verifyFull","stageRuntimeJar"]},
