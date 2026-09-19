@@ -24,6 +24,14 @@ Oil Seep remains a separate fluid surface feature. Technical materials survive
 as assay depth where they have an audited pack use; they do not create additional
 worldgen families merely to preserve chemical taxonomy.
 
+The Aether has rare ironstone in Holystone. Twilight Forest has rare Coal Measures,
+Ironstone, Copper Bloom, and Tin Quartz in ordinary stone. The pack removes
+Twilight's legacy coal, iron, and copper placed features only in its own biomes;
+the matching Realistic Ores deposits provide their ordinary material routes in
+new chunks. Twilight gold remains until an authored gold-bearing replacement is
+available. Create zinc and Occultism silver add modifiers are already scoped to
+the deliberately empty `#kubejs:no_biomes` tag; their processing outputs remain.
+
 Each family exposes authored stone and deepslate blocks, a surface sample whose
 item identity is `small_ore_chunk_<family>`, a full `ore_chunk_<family>`, and a
 `crushed_<family>` processing feed. Native and Excavated Variants hosts separate
