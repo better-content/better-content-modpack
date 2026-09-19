@@ -8401,6 +8401,10 @@ file = "kubejs/data/forge/tags/items/feasts.json"
 hash = "8aa2abf29475cb09032249848fe57652c51a55785a9d45db1b574aa31cda4799"
 
 [[files]]
+file = "kubejs/data/forge/tags/items/gems/quartz.json"
+hash = "76956efc2507b2caeabdc651279365cde70efddb71109f7af46b958558f5e6b4"
+
+[[files]]
 file = "kubejs/data/forge/tags/items/hearts/dragon.json"
 hash = "9adabd366fd5e323a0704f8df90ee0500725285874baab867b68cc4dec06fa2c"
 
