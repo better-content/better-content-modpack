@@ -10284,7 +10284,7 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.1.jar"
-hash = "afe43e88a47c33da516e7713933bff3f5f620c10ac2651148a99c52c0ce5fa62"
+hash = "f0973364338348c5e9ccfb5cbd51ed1b0b85712df034399c48e849dfe77d686f"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.8.jar"
@@ -10467,7 +10467,7 @@ metafile = true
 
 [[files]]
 file = "mods/depth-director-0.2.1.jar"
-hash = "22438b0064fce873cfde8effe8abefeb68fa11a1c2ec24d8a0105504389f05be"
+hash = "74594087f50cf0cff229484208faaa0725f72254731ae4520ad1f3743c03193c"
 
 [[files]]
 file = "mods/diet.pw.toml"
@@ -11128,7 +11128,7 @@ metafile = true
 
 [[files]]
 file = "mods/rail-beetle-0.1.0.jar"
-hash = "8cc01280e7f090c872d35a977414e1b48ca10b5ae228d4738bee751688d36a9f"
+hash = "978daa6dbde4d5dfcd52d71d1f6b266144be4bb96dc731b1b00011e416583815"
 
 [[files]]
 file = "mods/ratlantis-logistics-0.1.0.jar"
