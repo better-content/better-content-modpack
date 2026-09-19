@@ -248,4 +248,31 @@ ServerEvents.recipes(function (event) {
         result: { type: 'ammo', id: 'immersive_armorer:20mm', count: 24 }
     }).id('kubejs:tacz/immersive_armorer/20mm_electrical_loading')
 
+
+    event.remove({ id: 'applied_armorer:gun/moritz_gernade_gl3' })
+    event.custom({ type: 'tacz:gun_smith_table_crafting', materials: [
+        { item: { item: 'kubejs:ae_logic_package' }, count: 1 },
+        { item: { tag: 'forge:ingots/iron' }, count: 48 },
+        { item: { tag: 'forge:gems/quartz' }, count: 16 },
+        { item: { tag: 'forge:gems/diamond' }, count: 2 }
+    ], result: { type: 'gun', id: 'applied_armorer:moritz_gernade_gl3' } }).id('kubejs:tacz/applied_armorer/moritz_gernade_gl3_ae_frame')
+
+    event.remove({ id: 'create_armorer:gun/gl_revolver_devastator' })
+    event.custom({ type: 'tacz:gun_smith_table_crafting', materials: [
+        { item: { item: 'kubejs:brass_utility_assembly' }, count: 2 },
+        { item: { item: 'create:precision_mechanism' }, count: 1 },
+        { item: { tag: 'forge:ingots/iron' }, count: 36 },
+        { item: { tag: 'forge:ingots/copper' }, count: 12 },
+        { item: { tag: 'minecraft:logs' }, count: 8 }
+    ], result: { type: 'gun', id: 'create_armorer:gl_revolver_devastator' } }).id('kubejs:tacz/create_armorer/gl_revolver_devastator_precision_frame')
+
+    event.remove({ id: 'immersive_armorer:gun/assult_rifle' })
+    event.custom({ type: 'tacz:gun_smith_table_crafting', materials: [
+        { item: { item: 'kubejs:electrical_instrumentation_module' }, count: 1 },
+        { item: { item: 'powergrid:integrated_circuit' }, count: 1 },
+        { item: { tag: 'forge:ingots/iron' }, count: 48 },
+        { item: { tag: 'forge:ingots/copper' }, count: 16 },
+        { item: { tag: 'minecraft:planks' }, count: 16 }
+    ], result: { type: 'gun', id: 'immersive_armorer:assult_rifle' } }).id('kubejs:tacz/immersive_armorer/assult_rifle_electrical_frame')
+
 })
