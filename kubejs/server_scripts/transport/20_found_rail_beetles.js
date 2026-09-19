@@ -5,4 +5,7 @@ LootJS.modifiers(event => {
     event.addLootTableModifier('minecraft:chests/abandoned_mineshaft')
         .addLoot(Item.of('rail_beetle:rail_beetle', '{RailBeetleStarterPackage:1b}'))
         .randomChance(0.08)
+    event.addLootTableModifier('minecraft:chests/village/village_toolsmith')
+        .addLoot(Item.of('rail_beetle:rail_beetle', '{RailBeetleStarterPackage:1b}'))
+        .randomChance(0.04)
 })
