@@ -345,6 +345,7 @@ key_key.goety.lich.laugh:key.keyboard.l:CONTROL
 key_key.goety.activate_curio:key.keyboard.unknown
 key_key.traces.reveal:key.keyboard.g
 key_key.traces.annotation:key.keyboard.n
+key_key.rail_beetle.select_route:key.keyboard.j
 key_key.goety.dismiss:key.keyboard.keypad.decimal
 key_pneumaticcraft.armor.upgrade.fall_protection:key.keyboard.unknown
 key_pneumaticcraft.armor.upgrade.jet_boots.module.hover:key.keyboard.unknown
