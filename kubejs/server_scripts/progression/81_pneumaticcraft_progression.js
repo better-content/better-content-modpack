@@ -7,7 +7,7 @@ ServerEvents.recipes(function (event) {
         I: '#forge:plates/iron', P: 'pneumaticcraft:pressure_tube', C: 'pneumaticcraft:ingot_iron_compressed',
         // Basic air starts the pressure era. Airtight Machine Blocks belong
         // to the later thermopneumatic and electrical roots.
-        M: 'pneumaticcraft:pressure_seal', R: 'create:cogwheel'
+        M: 'kubejs:pressure_seal', R: 'create:cogwheel'
     }).id('kubejs:tech/pneumatic/air_compressor_pressure_root')
 
     event.remove({ output: 'pneumaticcraft:thermopneumatic_processing_plant' })

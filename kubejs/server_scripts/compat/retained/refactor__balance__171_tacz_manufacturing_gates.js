@@ -6,14 +6,6 @@ function bcTaczWorkbench(event, nativeId, recipeId, item, blockId, pattern, key)
     // Armorer namespaces come from TaCZ gun-pack ZIPs, not Forge mod IDs.
     if (!Platform.isLoaded('tacz')) return
 
-    // TaCZ and the three active external armorer ZIPs all register their gun,
-    // ammo, and attachment JSON through the shared recipe manager. Replace the
-    // common raw-material anchors across that recipe family so every loaded
-    // pack inherits manufactured progression, while native tiers and result
-    // NBT remain owned by the ZIP data.
-    event.replaceInput({ type: 'tacz:gun_smith_table_crafting' }, '#forge:rods/blaze', 'kubejs:electrical_instrumentation_module')
-    event.replaceInput({ type: 'tacz:gun_smith_table_crafting' }, '#forge:gems/diamond', 'ae2:engineering_processor')
-    event.replaceInput({ type: 'tacz:gun_smith_table_crafting' }, '#forge:ingots/gold', 'kubejs:brass_utility_assembly')
     event.remove({ id: nativeId })
     event.custom({
         type: 'minecraft:crafting_shaped',
@@ -27,6 +19,11 @@ function bcTaczWorkbench(event, nativeId, recipeId, item, blockId, pattern, key)
 }
 
 ServerEvents.recipes(function (event) {
+    if (!Platform.isLoaded('tacz')) return
+    // All active TaCZ and armorer ZIP recipes use this shared recipe type.
+    event.replaceInput({ type: 'tacz:gun_smith_table_crafting' }, '#forge:rods/blaze', 'kubejs:electrical_instrumentation_module')
+    event.replaceInput({ type: 'tacz:gun_smith_table_crafting' }, '#forge:gems/diamond', 'ae2:engineering_processor')
+    event.replaceInput({ type: 'tacz:gun_smith_table_crafting' }, '#forge:ingots/gold', 'kubejs:brass_utility_assembly')
     // The general gunsmith is the entry gate for TaCZ's bundled gun catalog.
     event.remove({ id: 'tacz:gun_smith_table' })
     global.bcFactoryCrafting(event, 'kubejs:tacz/gun_smith_table_factory_gate', 'tacz:gun_smith_table', 1, [
@@ -109,7 +106,6 @@ ServerEvents.recipes(function (event) {
     // These exact IDs are the default pack's representative gun, ammunition,
     // and optic surfaces; manufactured components carry the stage into the
     // workbench instead of turning the bench into a universal hand-grid gate.
-    if (!Platform.isLoaded('tacz')) return
     event.remove({ id: 'tacz:gun/deagle' })
     event.custom({
         type: 'tacz:gun_smith_table_crafting',
