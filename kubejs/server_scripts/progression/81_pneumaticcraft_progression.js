@@ -56,6 +56,23 @@ ServerEvents.recipes(function (event) {
         I: 'kubejs:electrical_instrumentation_module', T: 'pneumaticcraft:pressure_tube'
     }).id('kubejs:tech/pneumatic/universal_sensor_instrumentation')
 
+
+    // High impact logistics upgrades use the authored pressure/electrical
+    // family instead of the native wood-and-upgrade-component shortcut.
+    event.remove({ output: 'pneumaticcraft:inventory_upgrade' })
+    global.bcPncrPressure(event, 'kubejs:tech/pneumatic/inventory_upgrade',
+        'pneumaticcraft:inventory_upgrade', 1, 3.5, [
+            'pneumaticcraft:printed_circuit_board', 'pneumaticcraft:plastic',
+            'kubejs:electrical_instrumentation_module', '#forge:chests/wooden'
+        ])
+
+    event.remove({ output: 'pneumaticcraft:coordinate_tracker_upgrade' })
+    global.bcPncrPressure(event, 'kubejs:tech/pneumatic/coordinate_tracker_upgrade',
+        'pneumaticcraft:coordinate_tracker_upgrade', 1, 4.0, [
+            'pneumaticcraft:gps_tool', 'pneumaticcraft:printed_circuit_board',
+            'kubejs:ae_logic_package', '#forge:dusts/redstone'
+        ])
+
     // TECH-07 service surfaces: programming and Amadron become available only
     // after pressure electronics exist, while the native programmable behavior
     // and Amadron trade data remain untouched.
