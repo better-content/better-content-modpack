@@ -17,7 +17,7 @@ directionalAudio:false
 touchscreen:false
 fullscreen:false
 bobView:true
-toggleCrouch:false
+toggleCrouch:true
 toggleSprint:false
 darkMojangStudiosBackground:false
 hideLightningFlashes:false
