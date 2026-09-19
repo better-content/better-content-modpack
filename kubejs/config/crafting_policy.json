@@ -63,6 +63,10 @@
       "primary_role": "content",
       "support_state": "full"
     },
+    "plonk": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
     "mousetweaks": {
       "primary_role": "presentation",
       "support_state": "not_applicable"
