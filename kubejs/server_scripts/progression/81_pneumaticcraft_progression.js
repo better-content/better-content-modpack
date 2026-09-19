@@ -73,6 +73,20 @@ ServerEvents.recipes(function (event) {
             'kubejs:ae_logic_package', '#forge:dusts/redstone'
         ])
 
+
+    // Advanced movement, weapon, sensing, and charging upgrades all retain
+    // their native item progression while crossing the authored pressure gate.
+    var BC_ADVANCED_UPGRADES = [
+        ['pneumaticcraft:jet_boots_upgrade_3', 4.0, ['pneumaticcraft:jet_boots_upgrade_2', 'pneumaticcraft:vortex_cannon', 'minecraft:blaze_rod', 'minecraft:ghast_tear']],
+        ['pneumaticcraft:minigun_upgrade', 3.5, ['pneumaticcraft:minigun', 'pneumaticcraft:printed_circuit_board', '#forge:gunpowder', 'kubejs:electrical_instrumentation_module']],
+        ['pneumaticcraft:entity_tracker_upgrade', 3.5, ['minecraft:fermented_spider_eye', 'pneumaticcraft:printed_circuit_board', '#forge:bones', 'kubejs:ae_logic_package']],
+        ['pneumaticcraft:charging_upgrade', 3.0, ['pneumaticcraft:charging_module', 'pneumaticcraft:pressure_tube', 'pneumaticcraft:printed_circuit_board', 'powergrid:integrated_circuit']]
+    ]
+    BC_ADVANCED_UPGRADES.forEach(function (entry) {
+        event.remove({ output: entry[0] })
+        global.bcPncrPressure(event, 'kubejs:tech/pneumatic/advanced/' + entry[0].substring('pneumaticcraft:'.length), entry[0], 1, entry[1], entry[2])
+    })
+
     // TECH-07 service surfaces: programming and Amadron become available only
     // after pressure electronics exist, while the native programmable behavior
     // and Amadron trade data remain untouched.
