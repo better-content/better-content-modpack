@@ -39,6 +39,23 @@ ServerEvents.recipes(function (event) {
         I: 'powergrid:integrated_circuit', C: 'pneumaticcraft:compressed_iron_gear'
     }).id('kubejs:tech/pneumatic/armor_upgrade_sensors')
 
+
+    // Assembly tooling is a pressure-era capability, with electrical
+    // instrumentation replacing the native raw PCB-only shortcut.
+    event.remove({ output: 'pneumaticcraft:assembly_drill' })
+    event.shaped('pneumaticcraft:assembly_drill', ['DPP', '  P', 'IEI'], {
+        D: '#forge:gems/diamond', P: 'pneumaticcraft:pneumatic_cylinder',
+        I: '#forge:ingots/compressed_iron', E: 'kubejs:electrical_instrumentation_module'
+    }).id('kubejs:tech/pneumatic/assembly_drill_instrumented')
+
+    // Universal sensing remains pneumatic, but enters through the authored
+    // instrumentation family rather than a free vanilla repeater recipe.
+    event.remove({ output: 'pneumaticcraft:universal_sensor' })
+    event.shaped('pneumaticcraft:universal_sensor', [' S ', 'PIP', 'PTP'], {
+        S: 'pneumaticcraft:seismic_sensor', P: 'pneumaticcraft:plastic',
+        I: 'kubejs:electrical_instrumentation_module', T: 'pneumaticcraft:pressure_tube'
+    }).id('kubejs:tech/pneumatic/universal_sensor_instrumentation')
+
     // TECH-07 service surfaces: programming and Amadron become available only
     // after pressure electronics exist, while the native programmable behavior
     // and Amadron trade data remain untouched.
