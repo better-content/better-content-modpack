@@ -210,4 +210,42 @@ ServerEvents.recipes(function (event) {
         result: { type: 'attachment', id: 'immersive_armorer:muzzle_refit_electromagnetic_accelerator' }
     }).id('kubejs:tacz/immersive_armorer/electromagnetic_accelerator_powergrid')
 
+
+    event.remove({ id: 'create_armorer:ammo/gas_pistol_ammo' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:brass_utility_assembly' }, count: 1 },
+            { item: { tag: 'forge:ingots/copper' }, count: 8 },
+            { item: { tag: 'forge:gunpowder' }, count: 2 }
+        ],
+        result: { type: 'ammo', id: 'create_armorer:gas_pistol_ammo', count: 60 }
+    }).id('kubejs:tacz/create_armorer/gas_pistol_ammo_brass_loading')
+
+    event.remove({ id: 'applied_armorer:ammo/etched_quartz_bullet' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:ae_logic_package' }, count: 1 },
+            { item: { tag: 'forge:ingots/copper' }, count: 8 },
+            { item: { tag: 'forge:gems/lapis' }, count: 2 },
+            { item: { tag: 'forge:gunpowder' }, count: 2 }
+        ],
+        result: { type: 'ammo', id: 'applied_armorer:etched_quartz_bullet', count: 60 }
+    }).id('kubejs:tacz/applied_armorer/etched_quartz_bullet_ae_loading')
+
+    event.remove({ id: 'immersive_armorer:ammo/20mm' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:electrical_instrumentation_module' }, count: 1 },
+            { item: { item: 'powergrid:integrated_circuit' }, count: 1 },
+            { item: { tag: 'forge:ingots/copper' }, count: 24 },
+            { item: { tag: 'forge:ingots/gold' }, count: 8 },
+            { item: { tag: 'forge:gunpowder' }, count: 12 },
+            { item: { item: 'minecraft:netherite_scrap' }, count: 1 }
+        ],
+        result: { type: 'ammo', id: 'immersive_armorer:20mm', count: 24 }
+    }).id('kubejs:tacz/immersive_armorer/20mm_electrical_loading')
+
 })
