@@ -594,6 +594,19 @@ rollback_archive_failure() {
   restart_supervisor "$@"
 }
 
+require_uninhabited_candidate() {
+  local world="$1" directory evidence
+  [[ -d "$world" ]] || return 0
+  evidence="$world/data/world_lifecycle_manager/successor-candidate-inhabited-v1.tsv"
+  [[ ! -e "$evidence" && ! -L "$evidence" ]] \
+    || die "successor candidate has a login marker ($evidence); refusing seed rotation or rollback"
+  for directory in playerdata stats advancements; do
+    [[ -d "$world/$directory" ]] || continue
+    evidence="$(find "$world/$directory" -mindepth 1 -maxdepth 1 -type f -print -quit)"
+    [[ -z "$evidence" ]] || die "successor candidate has player evidence ($evidence); refusing seed rotation or rollback"
+  done
+}
+
 run_successor_attempt() {
   local attempt="$1" seed="$2"; shift 2
   rm -f -- "$HEALTH_FILE" "$HEALTH_FILE.partial" "$PERK_HEALTH_FILE" "$PERK_HEALTH_FILE.partial" \
@@ -801,11 +814,15 @@ if [[ "$CURRENT_PHASE" =~ ^attempt-([1-8])-(prepared|running)$ ]]; then
   if [[ "$interrupted_state" == running ]]; then START_ATTEMPT=$((interrupted_attempt+1)); else START_ATTEMPT="$interrupted_attempt"; fi
 fi
 if [[ -d "$ACTIVE_WORLD" ]]; then
+  require_uninhabited_candidate "$ACTIVE_WORLD"
   quarantine="$TRANSACTION_ROOT/interrupted-successor-$(date +%s%N)"; mv -T -- "$ACTIVE_WORLD" "$quarantine"
 fi
 
 for ((attempt=START_ATTEMPT; attempt<=MAX_ATTEMPTS; attempt++)); do
-  if [[ -d "$ACTIVE_WORLD" ]]; then mv -T -- "$ACTIVE_WORLD" "$TRANSACTION_ROOT/failed-attempt-$((attempt-1))"; fi
+  if [[ -d "$ACTIVE_WORLD" ]]; then
+    require_uninhabited_candidate "$ACTIVE_WORLD"
+    mv -T -- "$ACTIVE_WORLD" "$TRANSACTION_ROOT/failed-attempt-$((attempt-1))"
+  fi
   ATTEMPT_SEED="$(random_seed)"
   if run_successor_attempt "$attempt" "$ATTEMPT_SEED" "$@"; then
     finalize_success
@@ -819,9 +836,13 @@ for ((attempt=START_ATTEMPT; attempt<=MAX_ATTEMPTS; attempt++)); do
   if [[ -f "$PERK_HEALTH_FILE" ]]; then cp -- "$PERK_HEALTH_FILE" "$TRANSACTION_ROOT/failed-attempt-$attempt-perk-health-v3.tsv"; fi
   cp -- "$SUCCESSOR_FILE" "$TRANSACTION_ROOT/failed-attempt-$attempt-request-v5.tsv"
   stop_failed_server; stop_console_relay
+  require_uninhabited_candidate "$ACTIVE_WORLD"
 done
 
-if [[ -d "$ACTIVE_WORLD" ]]; then mv -T -- "$ACTIVE_WORLD" "$TRANSACTION_ROOT/failed-attempt-$MAX_ATTEMPTS"; fi
+if [[ -d "$ACTIVE_WORLD" ]]; then
+  require_uninhabited_candidate "$ACTIVE_WORLD"
+  mv -T -- "$ACTIVE_WORLD" "$TRANSACTION_ROOT/failed-attempt-$MAX_ATTEMPTS"
+fi
 cp -- "$TRANSACTION_ROOT/server.properties.before" "$SCRIPT_DIR/server.properties"
 mv -T -- "$ARCHIVE_INPUT/world" "$ACTIVE_WORLD"
 sync -f -- "$SCRIPT_DIR"

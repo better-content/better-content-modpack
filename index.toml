@@ -3574,7 +3574,7 @@ hash = "d18d0e25a28ca42341b94f52b5248d0d449b9af4b85c30d355dd40c2b1555609"
 
 [[files]]
 file = "config/world_lifecycle_manager-biomes.txt"
-hash = "a0b2472d01a16590ca210dedfd69e01007de7bfa5a9c52c9d4184d25e4ad00fb"
+hash = "e0cf54035b60c12f46bd6412d3dff346c69d2ad72418e2f401c767eb84658b5b"
 
 [[files]]
 file = "config/zeta-common.toml"
@@ -11492,4 +11492,4 @@ hash = "380a3105e0739f6bbae202352d29d68a7a1e88bab8912c95cd9204492c7d48ae"
 
 [[files]]
 file = "world-lifecycle-manager-server.sh"
-hash = "dd304bbf8c791485466e7cbff1b1b87517e5791aa680e76356c8320ba20de5dc"
+hash = "ffc8310670f76ebe157a29fd9cf6f023c1c6e63f36d40b104d8e5633db60df78"

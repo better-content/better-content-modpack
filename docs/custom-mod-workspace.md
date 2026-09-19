@@ -31,7 +31,8 @@ same active set for humans. Inventory `dependsOn` edges are release-build order 
 stage typed Better Content API providers before their consumers: Dimension Drink before Economy,
 Dynamic Survival HUD before Better
 Content Fixes and Revival, WLM before Class Selector, Revival before its three consumers, every domain-event
-provider before Threads, and Heat Sync before Latent Chemlib.
+provider before Threads, Heat Sync before Latent Chemlib, and Bumblezone Cultivars
+before Ratlantis Logistics so rats use the typed propagule catalogue.
 This directed build graph is intentionally acyclic; Threads is the downstream event listener and
 no provider depends on it.
 

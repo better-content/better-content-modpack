@@ -178,6 +178,11 @@ permanent spawn locking. Its active `progression` embark mode asks World Lifecyc
 current lineage policy: new lineages receive site-only onboarding, class perks expose only their
 unlocked classes, and unlocking all six classes exposes the bounded Embark point-buy. World
 Lifecycle Manager separately owns ordered successor spawn-biome preferences.
+The pack's default preference list contains the same six safe temperate biomes as first-join
+onboarding. A successor attempt checks the final shared-spawn feet biome before publication.
+Once a player joins a candidate, Lifecycle Manager writes an inhabited marker in that world;
+the supervisor preserves the candidate and transaction if the marker or saved player data is
+present, including after a failed health check or interrupted retry.
 
 ## Heat and pollution authority
 

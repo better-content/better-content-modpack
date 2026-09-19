@@ -3,51 +3,51 @@
   "repositories": [
     {
       "repository": "arcane-chunk-loaders",
-      "commit": "2fa0d95a84f55a6b50d87b41c8bd2c79b349f331"
+      "commit": "22d5b642c8d4fa61f3655fd86a0cebdaa09c165c"
     },
     {
       "repository": "better-content-economy",
-      "commit": "f574041fff37128540f84342c063be09d1630b94"
+      "commit": "fe1b3892032b77a0cf0f49d0bf19c7b52616a2f3"
     },
     {
       "repository": "better-content-fixes",
-      "commit": "65beec3dc2dd6bfa3dabf331761f22bf15e94ad1"
+      "commit": "6890e8ed38b07f53b55c2a1579835b4bdbf8da0a"
     },
     {
       "repository": "better-content-threads",
-      "commit": "a0767f1c7c357f56e2f0b39dcc14a95cf949d40a"
+      "commit": "e767cff8ef378f26fa9f5656f2e9d2c6da9b20ad"
     },
     {
       "repository": "bumblezone-cultivars",
-      "commit": "656ac5b8bfba8fb5765f0b02cd04be09397a7821"
+      "commit": "35fb49328c9f13630d8efde428ea668b60c08b14"
     },
     {
       "repository": "class-selector",
-      "commit": "fcd4f934fb9a249b0ca9708f9d774e802770a6b0"
+      "commit": "f410abb44f7df3376633a2a0311edf85be380664"
     },
     {
       "repository": "create-train-fuel-scaling",
-      "commit": "04187541124f1e2f8fa7fff5993c6eb5b1bf8a63"
+      "commit": "f7a8fd15ea64d0cfe362b552e75f1ddc99f865c4"
     },
     {
       "repository": "create-transmission-loss",
-      "commit": "fbc56c2f775caec1b40e61e98705c7a8e3dc8e53"
+      "commit": "620f0091b5bde9b321949a84fae36f4d599f188f"
     },
     {
       "repository": "depth-director",
-      "commit": "34dd6b329ed9696a4ef2e2f0d6ee683a2ece0ff7"
+      "commit": "4f4a784f0f0dcd125f5b85fbad4d9f036e950d9f"
     },
     {
       "repository": "dimension-drink",
-      "commit": "2660fd248e0a95d62b8cb3560cc0a4f1c5783c36"
+      "commit": "f46ba885258c743aecc4b453c7d49000d693e2f1"
     },
     {
       "repository": "downed-player-revival",
-      "commit": "8d76eadee60e2640b37c12a7ef4a4bb96701729f"
+      "commit": "d900395daffdc9ca0abb767b905e9faaa6a8f7cb"
     },
     {
       "repository": "dynamic-survival-hud",
-      "commit": "e7934c699b767d261fda5b4a80aefcd7d229534a"
+      "commit": "d3822667f74883052f1521c2c03ec86d1c26311f"
     },
     {
       "repository": "dynamic-trees-dimension-compat",
@@ -63,7 +63,7 @@
     },
     {
       "repository": "heat-sync",
-      "commit": "95dbfd39eadc9435d166d725ee45ac4f42dc8721"
+      "commit": "b224aa098a92fd8e30baa1b798cbc4609f0bdaa9"
     },
     {
       "repository": "immersive-weathering-sampler",
@@ -71,7 +71,7 @@
     },
     {
       "repository": "latent-chemlib",
-      "commit": "67d1c9e00694c537325158187f874232a5dc8b84"
+      "commit": "bcfb50770b24a09132c732a9e0429cbe3501f8fc"
     },
     {
       "repository": "mining-helmet",
@@ -79,19 +79,19 @@
     },
     {
       "repository": "oc2r-create-bridge",
-      "commit": "22330b2d037c2368124d4b1f8e1ecd32e8b93498"
+      "commit": "6f62a90c33f2bcc51e3cdf1c7b95f4c6e78c3f38"
     },
     {
       "repository": "oc2r-wireless-pubsub",
-      "commit": "995fa8f8cb55de0f08246eb7b5746da22732a38a"
+      "commit": "4ae3eb985c5c21b2805798f71ef4c0c27341bf22"
     },
     {
       "repository": "pillager-campaigns",
-      "commit": "0cd7837039a8c560efac7ca24bad56abf8246863"
+      "commit": "dc85c00018188f0fbabcbc159e2992bf95228473"
     },
     {
       "repository": "player-traces",
-      "commit": "5837305cd9fbaab98954d468063e5ecd0bdcd02f"
+      "commit": "efee973c4a45d86bd2f05f50615175075e48d266"
     },
     {
       "repository": "procedural-bouquets",
@@ -99,23 +99,23 @@
     },
     {
       "repository": "rail-beetle",
-      "commit": "2e56e3682e8fc0eee658788f9f62b6349fadbccf"
+      "commit": "3883995fd01a8f3c3f8ec662de562ee2d7d24353"
     },
     {
       "repository": "ratlantis-logistics",
-      "commit": "849b3edcd0cc0307dec2c62234dba858e00bb6da"
+      "commit": "ae7f36ee05d3873d1a80c87cb5f0c789c68acec4"
     },
     {
       "repository": "realistic-ores",
-      "commit": "b9d175ce6146a0acdb7dd90b7229b6e6a2a4559c"
+      "commit": "f30497d24d347099b617c61f0cbf444d7e0ecd52"
     },
     {
       "repository": "rpg-stats",
-      "commit": "a18305d9ca83537edd9becf6fac8b1b735b65c25"
+      "commit": "d2cc99def7e2a68f6754e93708f1ba4bedb8c14e"
     },
     {
       "repository": "runtime-data-dumper",
-      "commit": "405f84398aed7749043d6882a7a8d3f96e9f8e78"
+      "commit": "14880ebfda92d3f25cb40b277ef667d44e0349ab"
     },
     {
       "repository": "settlement-roads",
@@ -123,11 +123,11 @@
     },
     {
       "repository": "systemic-salience",
-      "commit": "58b4ad7d46d6168c93e2e6c811aa13ea8869dceb"
+      "commit": "81a4553b96d1d22e7cdf69fdea5e3b622efbc527"
     },
     {
       "repository": "tinkers-construct-affixes",
-      "commit": "eb4ed4ee0e6b1e94f3009254a5e6e0f16505d75a"
+      "commit": "7ac40017db96bfe6ff210a8730ef2f7eafe40c07"
     },
     {
       "repository": "village-walls",
@@ -139,7 +139,7 @@
     },
     {
       "repository": "world-lifecycle-manager",
-      "commit": "76ae17416a8e67e83067272f5882e41c00f68365"
+      "commit": "54a1d93f6b453c8ef23914fa7a3e3b336b6d4be9"
     }
   ]
 }
