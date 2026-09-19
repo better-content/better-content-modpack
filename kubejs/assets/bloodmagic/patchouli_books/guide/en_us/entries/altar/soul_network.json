@@ -22,7 +22,7 @@
     {
       "type": "bloodmagic:2x_crafting_altar",
       "a.heading": "Weak Blood Orb",
-      "a.recipe": "kubejs:bloodmagic/still_beating_heart_to_weak_orb",
+      "a.recipe": "bloodmagic:altar/weakbloodorb",
       "b.heading": "Apprentice Blood Orb",
       "b.recipe": "bloodmagic:altar/apprenticebloodorb"
     },

@@ -11,7 +11,7 @@ runtime logic.
 | Radioactive profiles, disturbance persistence, emissions | Latent ChemLib | Provides progression recipes; the mod owns physical behavior and its gameplay events |
 | Heat storage/transport and Create Boiler Heater | Heat Sync | Provides era placement; native UI and hover own operating facts |
 | Dimension Font obelisks, travel sessions, charge, and arrival sites | Dimension Drink | Pack recipes and learning surfaces may point to Fonts; the mod owns neutral charge generation/drain, session lifecycle, chunk tickets, and destination placement |
-| Blood Altar bootstrap and tier reference | Blood Magic | Still-Beating Heart plus overworld materials opens the altar; Blood Magic's in-game guide remains the authoritative Tier 1-5 multiblock reference |
+| Blood Altar bootstrap and tier reference | Blood Magic | Ordinary materials open the altar; a Heart Block made with one final-death fragment supplies 1 LP/t per installed fragment beside it. Blood Magic's in-game guide remains the authoritative Tier 1-5 multiblock reference. |
 | Occult physical components | Hexerei | The mixing cauldron uses iron and a vanilla cauldron; impure chalk requires Aether, Nether, Bumblezone, and Ratlantis trophies equally. Occultism retains rituals, spirit fire, bindings, servants, and the finite dimensional matrix |
 | Occult storage | None | Controllers, stabilizers, remotes, satchel, wormholes, mineshaft, and miners are closed; finite AE2 storage and visible Ratlantis-rooted logistics remain |
 | Vanilla boat durability, vessel-drop suppression, reinforced recipes | Better Content Fixes | No boat mutation or hiding scripts |
