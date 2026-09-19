@@ -32,7 +32,7 @@ ServerEvents.recipes(function (event) {
     // inventory costs after crafting.
     event.remove({ output: 'prettypipes:blank_module' })
     event.shaped('prettypipes:blank_module', ['QMQ', 'SPS', 'QRQ'], {
-        Q: 'minecraft:quartz', M: 'ratlantis_logistics:oratchalcum_mechanism',
+        Q: '#forge:gems/quartz', M: 'ratlantis_logistics:oratchalcum_mechanism',
         S: 'minecraft:stone_slab', P: 'prettypipes:pipe', R: 'minecraft:redstone'
     }).id('kubejs:ratlantis_logistics/tier/oratchalcum_blank_module')
 
