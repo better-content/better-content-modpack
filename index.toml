@@ -2413,6 +2413,10 @@ file = "config/embeddium-options.json"
 hash = "18b453ebd91dfaa8e6e50b68453f8445e5477c81f926c5a5c539fd35d10f46cc"
 
 [[files]]
+file = "config/emi_ores-client.json"
+hash = "bd0181b4bd21e38255e41f96d789d660c25c1bc90a51b7589b5390d266cdedfb"
+
+[[files]]
 file = "config/endermanoverhaul.json"
 hash = "90eddc876d428a4b96df81f23ed8d8b2cbdb3d2c284ff85cd2278f5464f13a2b"
 
