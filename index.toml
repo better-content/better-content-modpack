@@ -7310,7 +7310,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "61943405b5dd725df05501e25fd5a45d5094d1dd5b4ac89e574e16e1b7fff2d6"
+hash = "250af7abced92be8201aa53c23bc0197e09f61ec0ddbcac0c7f41c780e4375f3"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
