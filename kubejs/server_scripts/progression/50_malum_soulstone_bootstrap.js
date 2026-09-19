@@ -3,7 +3,7 @@
 // This route is available before the first Spirit Altar and does not replace
 // Malum's other Soulstone processing recipes.
 ServerEvents.recipes(function (event) {
-    if (!Platform.isLoaded('malum') || !Platform.isLoaded('hexerei')) return
+    if (!Platform.isLoaded('malum') || !Platform.isLoaded('hexerei') || !Platform.isLoaded('realistic_ores')) return
 
     event.custom({
         type: 'hexerei:mixingcauldron',
