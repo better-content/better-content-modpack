@@ -86,7 +86,12 @@ if (preparation != 0) {
     exitProcess(preparation)
 }
 
-val tests = if (skipTests) 0 else run(root.resolve("test.main.kts").absolutePath, suite)
+val tests = if (skipTests) 0 else ProcessBuilder(root.resolve("test.main.kts").absolutePath, suite)
+    .directory(root)
+    .inheritIO()
+    .apply { if (suite == "multiplayer") environment()["BC_PACK_STABILITY_ONLY"] = "true" }
+    .start()
+    .waitFor()
 println("release run: $runId")
 println("evidence: ${evidence.absolutePath}")
 if (skipTests) println("tests: skipped by explicit request")

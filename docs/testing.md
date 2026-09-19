@@ -154,7 +154,9 @@ and runs the documented verification only for changed repositories. It annotates
 staged runtime JARs together, invokes the frugal phase to refresh Packwiz hashes, runs `dist.sh`
 exactly once, and finally invokes the selected pack suite. The default is `all`; `--suite multiplayer`
 selects the connection smoke, dimension teleport traversal, and 30 minute protected-player soak
-when those are the explicitly requested stability gate. It records each mod's `reused` or `rebuilt` mode and JAR hash before testing the
+when those are the explicitly requested stability gate. That release mode still records log-audit findings
+but does not use them as an additional pass gate; candidate hash checks remain required. A direct
+`./test.main.kts multiplayer` retains the strict log audit. It records each mod's `reused` or `rebuilt` mode and JAR hash before testing the
 unchanged ZIP pair.
 Legacy JARs without source metadata are replaced during this bootstrap run.
 
