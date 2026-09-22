@@ -5049,6 +5049,38 @@ file = "kubejs/assets/amendments/textures/block/music_discs/music_disc_mask.png.
 hash = "e4b5cce019fc5a41d76dd2a70b5ab4ee447468b92b699c211a2dc85ab5a94bce"
 
 [[files]]
+file = "kubejs/assets/applied_armorer/geo_models/gun/lod/moritz_gernade_gl3_lod.json"
+hash = "364a88a746d0ce404e9a669f90e59e6241c545984d2f7ff2349df045729982f2"
+
+[[files]]
+file = "kubejs/assets/applied_armorer/geo_models/gun/lod/moritz_mg_emg_prototype_lod.json"
+hash = "5587d82db0ab7eb7863ca71ff829377a6b7739a85df34a7c6cdab72334bd6990"
+
+[[files]]
+file = "kubejs/assets/applied_armorer/geo_models/gun/lod/niklas_pistol_semi_pride_lod.json"
+hash = "a5d1e3ebb30b8231921fdbaa4b6cc6939bb04af8ddf99786d2adc96168638ecb"
+
+[[files]]
+file = "kubejs/assets/applied_armorer/geo_models/gun/lod/special_melee_task_manager_lod.json"
+hash = "87dae5cb30e8e8420040887ccd3c1556f9e3482a393113e3f3619e82b2727705"
+
+[[files]]
+file = "kubejs/assets/applied_armorer/textures/gun/lod/moritz_gernade_gl3_lod.png"
+hash = "352093803e8e68b6911673e9f41d33d8cb5a7fa9bbee5b5d01b9f24318a52bdd"
+
+[[files]]
+file = "kubejs/assets/applied_armorer/textures/gun/lod/moritz_mg_emg_prototype_lod.png"
+hash = "07f84dd5087b6d88d1eb8d0295bc996d9acfbc28b439b352950957268583b5a7"
+
+[[files]]
+file = "kubejs/assets/applied_armorer/textures/gun/lod/niklas_pistol_semi_pride_lod.png"
+hash = "2ef246fb0e9e2801b2fa314bac48a326cefe26d3f8c030c30501a7a0398ca15e"
+
+[[files]]
+file = "kubejs/assets/applied_armorer/textures/gun/lod/special_melee_task_manager_lod.png"
+hash = "760cfa10c54be7f6e1f969399fb3d007ed4165fd91f2d4c45c67c9d9e37461ae"
+
+[[files]]
 file = "kubejs/assets/ars_elemental/textures/block/stripped_yellow_archwood_log_top.png"
 hash = "701d61ea01d30df88c4df696f5bd8c705769e5ad512c29e12cbe8d7006b28814"
 
@@ -5293,6 +5325,70 @@ file = "kubejs/assets/create/textures/block/copper_plating.png"
 hash = "c0fc185958e4f94a651b21477aa0777d5b3cab95ab6446a456eef17c8b59859c"
 
 [[files]]
+file = "kubejs/assets/create_armorer/geo_models/gun/lod/cannon_40mm_salamander_lod.json"
+hash = "6dbf05bb3314730f7b2d3e7b6da97d432e99d563096a4b689bb8f2896e492339"
+
+[[files]]
+file = "kubejs/assets/create_armorer/geo_models/gun/lod/gl_revolver_devastator_lod.json"
+hash = "dac2c527493ca0a2c9c26ad3b229471b9b4c9b71ed9cdc1175267bef897ffb75"
+
+[[files]]
+file = "kubejs/assets/create_armorer/geo_models/gun/lod/pistol_auto_stress_lod.json"
+hash = "7c917d7140797171a34c9358c1ba96ec2eeb01d015d1d940192958109c25cada"
+
+[[files]]
+file = "kubejs/assets/create_armorer/geo_models/gun/lod/rifle_assult_crane_lod.json"
+hash = "fcc4fcebb5e5cdcd85fa2084616d5b940615b2e24fa38e277203fe58ae2468e8"
+
+[[files]]
+file = "kubejs/assets/create_armorer/geo_models/gun/lod/shotgun_db_stone_lod.json"
+hash = "f1dbf4534df5223b27d1318efea3a33157ab741f7bdda07c3118f7e908ce303d"
+
+[[files]]
+file = "kubejs/assets/create_armorer/geo_models/gun/lod/sniper_semi_clockwork_lod.json"
+hash = "559f5389ed66b3bcfd6edf2884e09708daaa98488bb6f2819162707d0eb4f17a"
+
+[[files]]
+file = "kubejs/assets/create_armorer/geo_models/gun/lod/sniper_semi_m1_lod.json"
+hash = "d1516621ad80f4a07254a9de2892c34e9ac95b2b9bb464e95d790f7acbd20693"
+
+[[files]]
+file = "kubejs/assets/create_armorer/geo_models/gun/lod/special_melee_wrench_lod.json"
+hash = "8d1c254ae61a15d4c8806be8d48a0b23f1d7fbc9c58487273a762c3177aac1d6"
+
+[[files]]
+file = "kubejs/assets/create_armorer/textures/gun/lod/cannon_40mm_salamander_lod.png"
+hash = "64720c581a4b64eeb5d7fefa9f24bc810aae7982934d13f6544a6e1b57a4ca67"
+
+[[files]]
+file = "kubejs/assets/create_armorer/textures/gun/lod/gl_revolver_devastator_lod.png"
+hash = "63f4749b84b27e66d96e3dd5f39faf8b96e68694b244ccbd306ce9095df63f66"
+
+[[files]]
+file = "kubejs/assets/create_armorer/textures/gun/lod/pistol_auto_stress_lod.png"
+hash = "19f92172408c45c30d5abccb025e6660f49d4faec1e608f352c7beb18820eac1"
+
+[[files]]
+file = "kubejs/assets/create_armorer/textures/gun/lod/rifle_assult_crane_lod.png"
+hash = "7e9bfdc859f9adf4d03657aabab1f22574bff8058cd610c0affcede7aa4b2dd9"
+
+[[files]]
+file = "kubejs/assets/create_armorer/textures/gun/lod/shotgun_db_stone_lod.png"
+hash = "8eb6c6a3b7034eddfa8e9943a9bdba8b76ee56915ad75fd9cb550d57023b92f7"
+
+[[files]]
+file = "kubejs/assets/create_armorer/textures/gun/lod/sniper_semi_clockwork_lod.png"
+hash = "9a35f404e0dc64c58d9677c3d1bfd135a058b769d049d5e965cf78fcf7446c3b"
+
+[[files]]
+file = "kubejs/assets/create_armorer/textures/gun/lod/sniper_semi_m1_lod.png"
+hash = "2d986500ea235a1414b02a367829795c86407d024d239547d3a403271c34d9ed"
+
+[[files]]
+file = "kubejs/assets/create_armorer/textures/gun/lod/special_melee_wrench_lod.png"
+hash = "c3364e2b4a4136a65151a98b073b0ab2b9fbfb826df0127e1cdbe4243b38112e"
+
+[[files]]
 file = "kubejs/assets/dawnoftimebuilder/models/item/paper_wall_flat.json"
 hash = "0a0be8ea3f23829760104a2fb49348f3a9920cbc1983337c146b73692452dbea"
 
@@ -5403,6 +5499,22 @@ hash = "317eebbeaaeb1ceb8b63e5619e9c86fcfaaf9754875afe9fb48a0bf10f43fea2"
 [[files]]
 file = "kubejs/assets/hexerei/textures/particle/cauldron_particle.png"
 hash = "fe4caf29060ab9d23a44e66662f4792676f28fefda584c3e018e058a002e18d4"
+
+[[files]]
+file = "kubejs/assets/immersive_armorer/geo_models/gun/lod/pistol_9mm_lod.json"
+hash = "1d500e857a16a9c0dbd5b905bd104fd1a21cf3626e8d1b84d4393b4f9c92e86c"
+
+[[files]]
+file = "kubejs/assets/immersive_armorer/geo_models/gun/lod/short_smg_lod.json"
+hash = "0ba588284cd1c6455f8c0a8baddb12927d6e5d20e154fd62e05394d7048e8b41"
+
+[[files]]
+file = "kubejs/assets/immersive_armorer/textures/gun/lod/pistol_9mm_lod.png"
+hash = "85108bca54baad25cf47c851010a0aba78f6cc87988edf0d70f2ea8ba1897093"
+
+[[files]]
+file = "kubejs/assets/immersive_armorer/textures/gun/lod/short_smg_lod.png"
+hash = "1d1598879638d229c9d7c3afaf32a9bdc19aad1828cc97243aad472bae0a5a1c"
 
 [[files]]
 file = "kubejs/assets/immersive_weathering/textures/block/twilightforest/heavy_beanstalk_leaf_pile.png"
@@ -7310,7 +7422,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "250af7abced92be8201aa53c23bc0197e09f61ec0ddbcac0c7f41c780e4375f3"
+hash = "40a23ae900dbccb97f86539039e42739535f1ac47d965745ec55107d562c3749"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -7717,6 +7829,10 @@ file = "kubejs/data/c/tags/blocks/farmland.json"
 hash = "48148d7deaee6359562a87cdcd268a2640c598353a9748c0567ea7a2b552de49"
 
 [[files]]
+file = "kubejs/data/c/tags/items/hidden_from_recipe_viewers.json"
+hash = "4734d37403089d93392ce170e4c44cf11990ee82925e68913fd6358187722a84"
+
+[[files]]
 file = "kubejs/data/c/tags/items/knives.json"
 hash = "4ab403f039ef563c3f95eb80b5f5d24aec32957b8c9ddbe076058845cd7c91ab"
 
@@ -7798,7 +7914,7 @@ hash = "bc16fb9b5b49bade7da6c0f0cbcf46aa46c655be93519bef5fce09e58cca0619"
 
 [[files]]
 file = "kubejs/data/diet/tags/items/proteins.json"
-hash = "e4b47772afb201b9441f93545daf708388dd6333ade52d05d24803c53c4f4add"
+hash = "ef4dd877a01e5d1e70af9de07f5057569f16bea19135d20ecc1de062611f95ca"
 
 [[files]]
 file = "kubejs/data/dtaether/loot_tables/blocks/aerfin_leaves.json"
@@ -9930,7 +10046,7 @@ hash = "37cd9d378b8b21d8ad8af376e15ea0e9e18180118f568f59bd4db0f9e85cedc8"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/check__90_sand_tag_compat.js"
-hash = "57ac6e5cb2eee4a8c6abd44e2c7be10ed71a4a31e95c748694cadda88d142949"
+hash = "53f130c94fa81cf4873be815a09e62e0bfca67a77c8d91c59beaeda9a2b8ca8e"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/check__95_remove_native_chunkloaders.js"
@@ -9970,7 +10086,11 @@ hash = "301cf6a050f4a34ec425cf8e9893618fac74343ad2c994dfc431cf1aad4f1333"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__171_tacz_manufacturing_gates.js"
-hash = "fbf4f6fad3eb34f0f963f711768f124e148ad4d9cb73904d633f9cf4c2cec677"
+hash = "4b03871533ab5368f099032d13aefbc83e4b20224822a0930560b309a0120bf1"
+
+[[files]]
+file = "kubejs/server_scripts/compat/retained/refactor__balance__172_storage_recipe_distinction.js"
+hash = "23240eb5c17bd37ccc80c7a166e40bffc41dff7ac99592045e2dc32920ad99d4"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__63_fonts_hexerei_occultism_chalk.js"
@@ -10057,6 +10177,10 @@ file = "kubejs/server_scripts/policy/disable_jumbo_furnace.js"
 hash = "346d0f05c499e3238a83b2c02e7c1a11e9045902bc108c013e2f8e2db30877d7"
 
 [[files]]
+file = "kubejs/server_scripts/policy/disable_sophisticatedbackpack_jukebox.js"
+hash = "93977064d27b211cfff591179b38933fbd01188d764da5e596e5b1fb000d3184"
+
+[[files]]
 file = "kubejs/server_scripts/policy/global_loot_progression.js"
 hash = "8db438b24b5e216365ba410aab0980dc311dd57af32c545f282bdd49b80dbf38"
 
@@ -10086,7 +10210,7 @@ hash = "bee03edac6c9be40893b394e6fef8d127ca76d3762b83e274fb65daf729ec1f8"
 
 [[files]]
 file = "kubejs/server_scripts/progression/10_hand_workshop.js"
-hash = "8968cceba5b277946eff6d881a87f614bec7abcdac5f32f8775ab5ef59ef773f"
+hash = "ee52b42cca4b75945de8c42fe1ce09e96a5c58d848c6107532629ec348bf7453"
 
 [[files]]
 file = "kubejs/server_scripts/progression/20_powered_works.js"
@@ -10094,7 +10218,7 @@ hash = "2ecca2c42d2f3897372519cc70a1a1f66dc241a703280259fbb15288213aa2f3"
 
 [[files]]
 file = "kubejs/server_scripts/progression/20_ratlantis_logistics.js"
-hash = "0442dffa2d84df99808cd6a087d2f8539a3a55f725ce2ccd421d365546343833"
+hash = "167a6f764ced8e17a670a087def3e0efc46cb6544cf56741e7849eb7a5b4e7da"
 
 [[files]]
 file = "kubejs/server_scripts/progression/21_bumblezone_cultivars.js"
@@ -10118,7 +10242,7 @@ hash = "9c73d18dc69967d9c0b787fb9606320a747556f35b5bda8869c24a60fb7d2927"
 
 [[files]]
 file = "kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js"
-hash = "bd15b49815d9e0dd11c90545ac28d7f57e849ac1fbf9eccddc6ce3696f8f1ea5"
+hash = "ba74cdfe106d18eab970a6d961cd1f8d018d75e01cf8e22e4a06168207ee2a9d"
 
 [[files]]
 file = "kubejs/server_scripts/progression/60_aerospace.js"
@@ -10129,12 +10253,28 @@ file = "kubejs/server_scripts/progression/70_transition_components.js"
 hash = "a95c80855c0b079f8b2764f38ea49214f56554ec19ad42c510f84a1e8249a5c6"
 
 [[files]]
+file = "kubejs/server_scripts/progression/80_tech_palette.js"
+hash = "4066b8d639723aefb58081aba5bd4bfb99ae10757ce48a9edd5238bba1e53186"
+
+[[files]]
+file = "kubejs/server_scripts/progression/81_pneumaticcraft_progression.js"
+hash = "b342912660339b2d4e372372c9f74b1f21d5e48e697a30d56d71ff98f8e11f9b"
+
+[[files]]
+file = "kubejs/server_scripts/progression/82_food_drying.js"
+hash = "516dff65ec1856932699cc71b330d9a26fbd3765c96ac3cb85fbbddc8b428a2d"
+
+[[files]]
+file = "kubejs/server_scripts/progression/83_station_crafting.js"
+hash = "89627cad28875102f4c813579f1a20577370c995c38342457736ea41e969f24a"
+
+[[files]]
 file = "kubejs/server_scripts/transport/10_optional_engineering_roots.js"
 hash = "2411228044c6ac72443e0eb807bf86b87d9d89e57bed2e8027ee4f5feb9efe7b"
 
 [[files]]
 file = "kubejs/server_scripts/transport/20_found_rail_beetles.js"
-hash = "8c21276dd47e3f4e48958ccc0937f0d556e0b65be4b1d94d02cd6dd198c59093"
+hash = "1a883ae7fcc38bc1bf600ebcdbbc84e406387e3dc32f81fc4d70bb1ce6399953"
 
 [[files]]
 file = "kubejs/server_scripts/utility/10_recipe_surface_helpers.js"
@@ -10240,7 +10380,7 @@ metafile = true
 
 [[files]]
 file = "mods/arcane-chunk-loaders-0.1.0.jar"
-hash = "615e071000831538a1d709bc41e7d213197923fcd299626ab32ed649fe21dd57"
+hash = "7ed1318e193b1e508f119324612c54faeb079f7567a4817cc08474490934e3e6"
 
 [[files]]
 file = "mods/architectury-api.pw.toml"
@@ -10284,7 +10424,7 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.1.jar"
-hash = "f0973364338348c5e9ccfb5cbd51ed1b0b85712df034399c48e849dfe77d686f"
+hash = "1856ab094ad6f3e98ad831c122ac8877cfa78fd6aa2b7ac588336545ccafb603"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.8.jar"
@@ -10292,7 +10432,7 @@ hash = "ecc8569ff0b249574b925d9c0ff464a34f6b1ae26bcd0df8598da477cdd37e6f"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
-hash = "91838f76cdb94515427dc42583add8c7ed191cb8f3ee6fdc1e486527d684f545"
+hash = "bc7fe4867705fa0552280aaabc6870036da83fa26b40c26a2d15705eb7dfafe6"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -10467,7 +10607,7 @@ metafile = true
 
 [[files]]
 file = "mods/depth-director-0.2.1.jar"
-hash = "74594087f50cf0cff229484208faaa0725f72254731ae4520ad1f3743c03193c"
+hash = "a3b4beb614169402535be678cdff1cd1f4a8f30d7ac9a774c34061cfcc6b661b"
 
 [[files]]
 file = "mods/diet.pw.toml"
@@ -10476,7 +10616,7 @@ metafile = true
 
 [[files]]
 file = "mods/dimension-drink-1.0.0.jar"
-hash = "013c14fd8cf1e1a4d19f57e29d5973c09b735b01de7975befea5f59acb4b6087"
+hash = "dc970cedadea8dc09b87aab1a76a1ee685f8a2d37a3927b79fe6813997be8db1"
 
 [[files]]
 file = "mods/distant-horizons.pw.toml"
@@ -10485,7 +10625,7 @@ metafile = true
 
 [[files]]
 file = "mods/downed-player-revival-1.0.0.jar"
-hash = "d30f1f2b964088451ceaf1abf32abd72a362130026a9b8b3f4dfe91c74919d97"
+hash = "ba1e28ff287961eaa853fa4a83dbe4f3ba1eed3b3eccf5010922995d56b77877"
 
 [[files]]
 file = "mods/dynamic-asset-generator.pw.toml"
@@ -10494,7 +10634,7 @@ metafile = true
 
 [[files]]
 file = "mods/dynamic-survival-hud-1.0.0.jar"
-hash = "33989bf1c08e7e627ae9d6559c052653c576afbc787be141ecb353e7b800413a"
+hash = "cb0da665a8009926b79e606e9d29dfa3bcf9251df6b60670385fff91430781cb"
 
 [[files]]
 file = "mods/dynamic-trees-ars-nouveau.pw.toml"
@@ -10772,7 +10912,7 @@ metafile = true
 
 [[files]]
 file = "mods/heat-sync-0.1.0.jar"
-hash = "acfdd3be4e11849a32fbb5e4e6187c621e7fd2cde0da9b2956f7d35fe9c5477a"
+hash = "b2cdf5f49f291a3294cdae5943c9a0536ace3ef4bab8ff752ba296bd005a10d4"
 
 [[files]]
 file = "mods/hexerei.pw.toml"
@@ -10880,7 +11020,7 @@ metafile = true
 
 [[files]]
 file = "mods/latent-chemlib-0.2.0.jar"
-hash = "5ffe3d4474e6dde900d4c2cd3c724862b52366117b54e6a9eabd992c22e6dc5c"
+hash = "3f36664dff8d25d10ccfab1d9965d8f161566bf6650df1a825d25c4e15c608d9"
 
 [[files]]
 file = "mods/lithostitched.pw.toml"
@@ -11050,7 +11190,7 @@ metafile = true
 
 [[files]]
 file = "mods/player-traces-0.1.0.jar"
-hash = "b890fc74c63247b550e7fb6a71cd9c37b0862aff1ac0e756d7a1e97ca5ee0080"
+hash = "a7f8e9873b78a0fd299fd741ea47aa2b205abf2d75fd0556b8af08f21e7129d5"
 
 [[files]]
 file = "mods/playeranimator.pw.toml"
@@ -11128,11 +11268,11 @@ metafile = true
 
 [[files]]
 file = "mods/rail-beetle-0.1.0.jar"
-hash = "978daa6dbde4d5dfcd52d71d1f6b266144be4bb96dc731b1b00011e416583815"
+hash = "339b00cf4e11c4950d4faf907c8c7625e0e4f2b6bf223a1c468915b8d68c5854"
 
 [[files]]
 file = "mods/ratlantis-logistics-0.1.0.jar"
-hash = "2dbd8b11921f205fdef3cd855bf8ec6dd19f4131e694651ba93a8bfe78ef047f"
+hash = "d45c58a5a5412c7c756d9f0f275670a40eb33ff7988d45ff4ad0a285384476ee"
 
 [[files]]
 file = "mods/rats.pw.toml"
@@ -11185,7 +11325,7 @@ metafile = true
 
 [[files]]
 file = "mods/rpg-stats-1.0.1.jar"
-hash = "7fca6d95f882ee7355cce5ca1fba1baed077c87bbc6016d39362838773a455f9"
+hash = "c7da8df659b5857fd1031196e3206b5cbf839c1e658cb816caea6fe52a1c1c58"
 
 [[files]]
 file = "mods/runtime-data-dumper-0.1.0.jar"
@@ -11493,7 +11633,7 @@ metafile = true
 
 [[files]]
 file = "mods/world-lifecycle-manager-0.1.0.jar"
-hash = "f107f1e74713ccb12c0a8e4a738a2fe3362a3ea3f11e3aeb58c5e688ce3d251f"
+hash = "f9c66fdf8233e9b6c97c09302ab0760e843a05169ed448b4fea00c73881ce7af"
 
 [[files]]
 file = "mods/xl-packets.pw.toml"
