@@ -7513,6 +7513,10 @@ file = "kubejs/client_scripts/policy/hide_excavated_variants.js"
 hash = "869d510c4d93e1bb639d494492128414ad9c082c29bde45261573a265887d4eb"
 
 [[files]]
+file = "kubejs/client_scripts/policy/hide_native_ordinary_spirits.js"
+hash = "c2c33410ac811ab439f61abfafed3b972b29647a45f1c1fb4f2efbd8e9b0a120"
+
+[[files]]
 file = "kubejs/client_scripts/policy/hide_vanilla_tools.js"
 hash = "0da12b94112b647d4c9a68ed719d0458a5e3b9c85d8d2f4d3baf80adb18f9082"
 
@@ -7542,11 +7546,11 @@ hash = "e2e54bd11a880d784559d4344cdfe1228251f6503e0ca52bb89d0b6c8ecb6118"
 
 [[files]]
 file = "kubejs/config/formal_magic_domains.json"
-hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
+hash = "44bfb3367e89c9be6b49acec305163f7018fa7aa8e0fdf22ea4e101f7a6c3bb3"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "aa3387e27f5690210ca0388dde785a3888ecbbae8767f7fb9b9016d91520b28f"
+hash = "983c6e905be5cdb67269b05eec73121c79cfb7391bcd340c71ab02b801b0554b"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -10784,7 +10788,7 @@ hash = "ac29430442d013fd2674a74a409975c0192dfa0072d79bdef518928accd221b8"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.9.jar"
-hash = "8fc3549fee5c8093584352008a0a9db01544470862d10f9ab76663e4cf9f2de1"
+hash = "c6f8ff81aa7db0e1f732aaa7bb6089d66ec702d7603cd1a2325e1cf24e35920b"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
