@@ -748,7 +748,6 @@ Blocks = [
 	"immersive_weathering:waxed_weathered_plate_iron",
 	"immersive_weathering:weathered_cut_iron",
 	"immersive_weathering:weathered_plate_iron",
-	"k_turrets:reloader",
 	"latent_chemlib:gas_capture",
 	"latent_chemlib:gas_reaction_chamber",
 	"latent_chemlib:gas_release",

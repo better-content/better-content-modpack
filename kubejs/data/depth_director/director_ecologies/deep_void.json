@@ -1,0 +1,50 @@
+{
+  "noise_scale": 768,
+  "cadence_seconds": {
+    "minimum": 240,
+    "maximum": 420
+  },
+  "warning_seconds": {
+    "minimum": 10,
+    "maximum": 24
+  },
+  "surge_seconds": 90,
+  "recovery_seconds": 90,
+  "deep_budget_per_player": 64,
+  "deep_active_target_per_player": 36,
+  "packet_interval_ticks": 100,
+  "warning_sounds": [
+    "minecraft:entity.zombie.ambient"
+  ],
+  "roster": [
+    {
+      "entity": "the_deep_void:bone_crawler",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "the_deep_void:mourner",
+      "role": "common",
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8
+    },
+    {
+      "entity": "the_deep_void:damned",
+      "role": "line",
+      "cost": 3,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 6
+    },
+    {
+      "entity": "cataclysm:kobolediator",
+      "role": "heavy",
+      "minimum_depth": 0.82,
+      "cost": 12,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1
+    }
+  ]
+}

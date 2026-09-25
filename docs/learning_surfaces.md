@@ -36,7 +36,7 @@ behavior must not be presented as implemented.
 
 Preserve stable concept, Thread, and lesson identities when their meaning is unchanged.
 Threads has 52 live discoveries across seven topics; the Lessons reference and loading
-rotation share 17 lessons. Follow [Threads](threads.md) for the single-explanation schema,
+rotation share 18 lessons. Follow [Threads](threads.md) for the single-explanation schema,
 committed outcome evidence, native doorways, and lineage persistence. Domain mods
 own their gameplay events; Threads adapters translate those events into card signals.
 

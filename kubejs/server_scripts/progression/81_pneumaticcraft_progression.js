@@ -93,7 +93,8 @@ ServerEvents.recipes(function (event) {
 
     // TECH-07 service surfaces: programming and Amadron become available only
     // after pressure electronics exist, while the native programmable behavior
-    // and Amadron trade data remain untouched.
+    // and unrelated Amadron trade data remain untouched; targeted program/blueprint
+    // purchase bypasses are removed by progression/82_pneumaticcraft_acquisition.js.
     event.remove({ output: 'pneumaticcraft:programmer' })
     event.shaped('pneumaticcraft:programmer', ['RGR', 'TBT', 'P P'], {
         R: '#forge:dyes/red', G: '#forge:glass_panes/black',

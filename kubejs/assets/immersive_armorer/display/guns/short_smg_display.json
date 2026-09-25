@@ -1,0 +1,54 @@
+{
+    "model": "immersive_armorer:gun/short_smg_geo",
+    "texture": "immersive_armorer:gun/uv/short_smg",
+    "hud": "immersive_armorer:gun/hud/short_smg",
+    "slot": "immersive_armorer:gun/slot/short_smg",
+    "animation": "immersive_armorer:short_smg",
+    "use_default_animation": "pistol",
+    "third_person_animation": "default",
+    "state_machine": "immersive_armorer:short_smg_state_machine",
+    "transform": {
+        "scale": {
+            "thirdperson": [
+                0.6,
+                0.6,
+                0.6
+            ],
+            "ground": [
+                0.6,
+                0.6,
+                0.6
+            ],
+            "fixed": [
+                1.2,
+                1.2,
+                1.2
+            ]
+        }
+    },
+    "muzzle_flash": {
+        "texture": "tacz:flash/common_muzzle_flash",
+        "scale": 1
+    },
+    "shell": {
+        "initial_velocity": [5, 2, 1],
+        "random_velocity": [1, 1, 0.25],
+        "acceleration": [0.0, -10, 0.0],
+        "angular_velocity": [360, -1200, 90],
+        "living_time": 1.0
+    },
+    "sounds": {
+        "shoot": "immersive_armorer:short_smg/short_smg_shoot",
+        "shoot_3p": "immersive_armorer:short_smg/short_smg_shoot_3p",
+        "reload_empty": "immersive_armorer:short_smg/short_smg_reload_empty",
+        "reload_tactical": "immersive_armorer:short_smg/short_smg_reload_tactical",
+        "inspect": "immersive_armorer:short_smg/short_smg_inspect",
+        "inspect_empty": "immersive_armorer:short_smg/short_smg_inspect",
+        "draw": "immersive_armorer:short_smg/short_smg_draw",
+        "melee_bayonet": "immersive_armorer:attachment_bayonet/bayonet_attack_short_smg",
+        "dry_fire": "immersive_armorer:dry_fire/dry_fire",
+        "put_away": "immersive_armorer:short_smg/short_smg_put_away",
+        "silence": "immersive_armorer:short_smg/short_smg_silence",
+        "silence_3p": "immersive_armorer:short_smg/short_smg_silence_3p"
+    }
+}

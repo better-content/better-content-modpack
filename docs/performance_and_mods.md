@@ -128,10 +128,13 @@ profiles, measurements, and sorted SHA-256 manifest under
 commands, or the pre-event-driven Heat Sync profile as a gameplay baseline.
 
 Lost Cities, Twilight Forest, and Fallout Wastelands are Creating Space destinations declared under
-`kubejs/data/*/creatingspace/rocket_accessible_dimension/`. The Flesh That Hates is active, but its
-six Mushroom Fields structures are disabled by `datapacks/worldgen_compat_fixes`, and
-`better_content_fixes` disables its unconditional client proximity-music scan. Its entities,
-combat, evolution, and ordinary Records-channel sounds remain active.
+`kubejs/data/*/creatingspace/rocket_accessible_dimension/`. The Flesh That Hates belongs exclusively
+to the Lost Cities planet. Its mobs and ecology are planet-scoped: do not add them to the Overworld,
+Depth Director regions or encounters, or any other dimension, including as repurposed minibosses.
+The mod remains active on its intended planet; its six Mushroom Fields structures are disabled by
+`datapacks/worldgen_compat_fixes`, and `better_content_fixes` disables its unconditional client
+proximity-music scan. Its entities, combat, evolution, and ordinary Records-channel sounds remain
+active there.
 
 `datapacks/hyle_deep` owns the exhaustive Hyle/Unearthed deep-stone pass beginning at Y -64.
 `better_content_fixes` moves Hyle and SGI terrain conforming to decoration tail, completes only

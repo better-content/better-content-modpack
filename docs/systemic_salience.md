@@ -45,6 +45,19 @@ There is deliberately no explicit comparison screen. Discovery is reinforced thr
 
 RPG point increments provide a quiet preview pulse and motif. A successful server-confirmed allocation produces a short recap. Nutrition threshold crossings and discrete abilities use the corresponding motion and motif, while the meal recap explains which bodily state changed and for approximately how long. Recap labels wrap within the viewport and use bright neutral text beside the aspect badge. Four to ten seconds of display time scale with the number of changed states; menus and a hidden HUD pause that timer. Ore tooltips formally name the identity and preserve Shift for the assay summary; ore discovery never interrupts play with a toast or action-bar message.
 
+## Pulse pacing
+
+For systems whose salience fades under constant trickle, use **accumulate → discharge → recover**. Accumulation should have a meaningful input and a visible limit; discharge should be a discrete event with enough warning and bounded output to read; recovery should provide a real interval before the same pressure can build again. Preserve owner-specific clocks and consequences instead of forcing one shared timer onto every system.
+
+| Owner surface | Accumulation and discharge | Recovery or quiet interval |
+| --- | --- | --- |
+| Depth Director | Eligible underground time builds encounter pressure. Each ecology has a warning, bounded surge and packet budget. | Ecology profiles specify a recovery phase; pressure also decays while on the surface. New injury relief is a separate one-time signal, not an encounter reset. |
+| Pillager Campaigns | Eligible play schedules scouts or three-wave assaults; assault arrival receives a two-minute surface warning and spawn work is capped per tick and second. | Resolving a campaign schedules the next eligible window. A stalled wave has a finite progress timeout. Do not add a second encounter in the same track while an invasion remains active. |
+| Spirit economy | Credited kill values accumulate in a persistent player ledger until its release cadence; one delivery receipt owns the whole batch. | Successful delivery starts the next cadence only when more credit is pending. Failures retry the same receipt and amount, not a fresh reward. The cadence is an economic batching interval, not an encounter-recovery timer. |
+| Injury-pressure relief | A newly observed maim creates a temporary director-relief signal. | The saved signal decays each second on the configured curve (180 seconds by default), whether the injury remains or is treated; encounter budget and target state remain intact. |
+
+These owners already implement meaningful pauses at their own scopes. Keep ordinary hunger, hydration, temperature, machine throughput and other continuous simulations continuous; report discrete threshold changes or milestones without turning every tick into a pulse. Do not add periodic drops, automatic reset, or an all-systems wave scheduler merely to make the doctrine look uniform.
+
 ## RPG development
 
 RPG allocations use `cap × points / (points + 20)`: twenty committed points reach half the cap, allocation cannot be refunded during the life, and death wipes the ledger. Each visible category is singular and mechanically coherent:

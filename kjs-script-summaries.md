@@ -35,7 +35,6 @@ Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 - `kubejs/server_scripts/compat/retained/refactor__balance__165_protection_pixel_post_ae2_gates.js` — Makes Protection Pixel armor a post-AE2 branch requiring advanced manufacturing and chemistry.
 - `kubejs/server_scripts/compat/retained/refactor__balance__166_tome_of_blood_post_ae2_gates.js` — Makes Tome of Blood a post-AE2 hybrid combat-magic progression branch.
 - `kubejs/server_scripts/compat/retained/refactor__balance__169_backpack_post_ae2_utility_gates.js` — Gates backpack automation and body-logistics upgrades behind AE2-era components.
-- `kubejs/server_scripts/compat/retained/refactor__balance__171_k_turrets_electrical_gates.js` — Reauthors K-Turrets as advanced electrical-era autonomous defenses.
 - `kubejs/server_scripts/compat/retained/refactor__balance__171_tacz_manufacturing_gates.js` — Gates TaCZ workbenches and weapon packs behind appropriate manufacturing milestones.
 - `kubejs/server_scripts/compat/retained/refactor__balance__63_fonts_hexerei_occultism_chalk.js` — Connects Hexerei chalk preparation to dimension materials while preserving Occultism’s ritual hierarchy.
 - `kubejs/server_scripts/compat/retained/refactor__balance__80_magic_progression_blood_slate_gates.js` — Gates native magic systems and Ars depth crossings behind Blood Magic slates and other magical proofs.

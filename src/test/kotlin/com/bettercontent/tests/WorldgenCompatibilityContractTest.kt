@@ -20,6 +20,33 @@ import kotlin.io.path.writeText
 @Tag("fast")
 class WorldgenCompatibilityContractTest {
     @Test
+    fun cursedPyramidRemainsInItsNativeDesertBiomeAndAvoidsFarWritingWastelands() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val tag = jacksonObjectMapper().readTree(
+            root.resolve("kubejs/data/cataclysm/tags/worldgen/biome/has_structure/cursed_pyramid_biomes.json")
+                .toFile(),
+        )
+
+        assertTrue(tag.path("replace").asBoolean())
+        assertEquals(setOf("minecraft:desert"), tag.path("values").map { it.asText() }.toSet())
+    }
+
+    @Test
+    fun ruinedCitadelRetainsNativeEndBiomesAndAvoidsCrossChunkSpaceWrites() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val tag = jacksonObjectMapper().readTree(
+            root.resolve("kubejs/data/cataclysm/tags/worldgen/biome/has_structure/ruined_citadel_biomes.json")
+                .toFile(),
+        )
+
+        assertTrue(tag.path("replace").asBoolean())
+        assertEquals(
+            setOf("minecraft:end_highlands", "minecraft:end_midlands"),
+            tag.path("values").map { it.asText() }.toSet(),
+        )
+    }
+
+    @Test
     fun relocatedIchorGeodeKeepsItsMaterialsInsideTheWritableChunkNeighborhood() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val mapper = jacksonObjectMapper()

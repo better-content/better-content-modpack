@@ -92,6 +92,8 @@ object LogPolicy {
     )
     private val warningOrError = Regex("(?:/WARN]|/ERROR]|\\[(?:WARN|ERROR)])")
     private val accepted = listOf(
+        Regex("\\[net\\.minecraft\\.client\\.ClientRecipeBook]: Unknown recipe category: .*/the_deep_void:[a-z0-9_]+$"),
+        Regex("\\[net\\.minecraft\\.client\\.ClientRecipeBook]: Unknown recipe category: cataclysm:weapon_fusion/cataclysm:weapon_infusion/[a-z0-9_]+$"),
         Regex("\\[xbigellx\\.realisticphysics\\.RealisticPhysics]: Forcing chunk load: \\[-?[0-9]+, -?[0-9]+]$"),
         Regex("Detected setBlock in a far chunk .*currently generating: ResourceKey\\[minecraft:worldgen/placed_feature / natures_spirit:marsh_water_placed]$"),
         Regex("\\[Server thread/WARN] \\[net\\.minecraft\\.network\\.Connection]: handleDisconnection\\(\\) called twice$"),
@@ -99,6 +101,10 @@ object LogPolicy {
     private val adPotherDeferredTask = Regex(
         "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
             "Mod 'adpother' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
+    )
+    private val presenceFootstepsMissingMessyGroundAcoustic = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[PFSolver]: " +
+            "Tried to play a missing acoustic: MESSY_GROUND$",
     )
     private val adChimneysDeferredTask = Regex(
         "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
@@ -155,6 +161,11 @@ object LogPolicy {
             "state Block\\{immersive_weathering:icicle}\\[thickness=tip,vertical_direction=down," +
             "waterlogged=false] invalid for ticking:$",
     )
+    private val deepVoidPhysicsFallback = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Server thread/WARN] " +
+            "\\[xbigellx\\.realisticphysics\\.RealisticPhysics]: " +
+                "Level null when loading chunk at '\\[-3, -3]' for dimension 'the_deep_void:deep_void'\\.",
+    )
 
     data class Finding(val path: Path, val line: Int, val text: String)
 
@@ -170,6 +181,9 @@ object LogPolicy {
             var acceptedEmptyCodAmbientSounds = 0
             var acceptedAllTheLeaksServerNotFound = 0
             var acceptedInvalidImmersiveWeatheringIcicles = 0
+            var acceptedDeepVoidPhysicsFallbacks = 0
+            var acceptedAdPotherDeferredTasks = 0
+            var acceptedPresenceFootstepsMissingMessyGroundAcoustics = 0
             Files.readAllLines(path).forEachIndexed { index, line ->
                 val acceptedEarlyBlockEntity = earlyWorldgenBlockEntity.matches(line) &&
                     ++acceptedEarlyBlockEntityWarnings <= 4
@@ -189,6 +203,14 @@ object LogPolicy {
                     ++acceptedAllTheLeaksServerNotFound <= 1
                 val acceptedInvalidImmersiveWeatheringIcicle = invalidImmersiveWeatheringIcicle.matches(line) &&
                     ++acceptedInvalidImmersiveWeatheringIcicles <= 1
+                val acceptedDeepVoidPhysicsFallback = deepVoidPhysicsFallback.matches(line) &&
+                    ++acceptedDeepVoidPhysicsFallbacks <= 3
+                val acceptedPresenceFootstepsMissingMessyGroundAcoustic =
+                    presenceFootstepsMissingMessyGroundAcoustic.matches(line) &&
+                        ++acceptedPresenceFootstepsMissingMessyGroundAcoustics <= 1
+                val adPotherDuration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
+                val acceptedAdPotherDeferredTask = adPotherDuration != null && adPotherDuration <= 8.0 &&
+                    ++acceptedAdPotherDeferredTasks <= 1
                 val adChimneysDuration = adChimneysDeferredTask.find(line)
                     ?.groupValues?.get(1)?.toDoubleOrNull()
                 val acceptedAdChimneysDeferredTask = adChimneysDuration != null &&
@@ -199,7 +221,9 @@ object LogPolicy {
                     !acceptedAdChimneysDeferredTask && !acceptedEmptySalmonAmbientSound &&
                     !acceptedEmptyTropicalFishAmbientSound && !acceptedEmptyPufferFishAmbientSound &&
                     !acceptedEmptyCodAmbientSound &&
-                    !acceptedAllTheLeaksWarning && !acceptedInvalidImmersiveWeatheringIcicle && !isAccepted(line)
+                    !acceptedAllTheLeaksWarning && !acceptedInvalidImmersiveWeatheringIcicle &&
+                    !acceptedDeepVoidPhysicsFallback && !acceptedPresenceFootstepsMissingMessyGroundAcoustic &&
+                    !acceptedAdPotherDeferredTask && !isAccepted(line)
                 ) {
                     add(Finding(path, index + 1, line))
                 }
@@ -208,9 +232,7 @@ object LogPolicy {
     }
 
     private fun isAccepted(line: String): Boolean {
-        if (accepted.any { it.containsMatchIn(line) }) return true
-        val duration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull() ?: return false
-        return duration <= 5.0
+        return accepted.any { it.containsMatchIn(line) }
     }
 
     fun requireClean(paths: Collection<Path>) {

@@ -205,17 +205,58 @@ ServerEvents.recipes(function (event) {
         event.remove({ id: replacement.id })
         event.custom(replacement.json).id(replacement.id)
     })
+    // Occultism's generic miner includes a direct Sky Stone result that bypasses AE2's authored meteor route.
     event.remove({ type: 'occultism:miner' })
+    // The AE2 Blood Magic meteor consumes Certus from an initial meteor and otherwise repeats Sky Stone generation.
+    event.remove({ id: 'bloodmagic:meteor/ae2' })
+    // Deep Void access is one-way by design. Its Void Pendant/Void Mirror use provider-linked
+    // Void Cores to return to the Overworld; remove all three recipe roots for that exit path.
+    if (Platform.isLoaded('the_deep_void')) {
+        ;['the_deep_void:void_pendant', 'the_deep_void:void_mirror', 'the_deep_void:void_core_recipe']
+            .forEach(function (id) { event.remove({ id: id }) })
+    }
     event.remove({ type: 'bloodmagic:dimension_drink' })
     event.replaceInput({ id: 'bloodmagic:alchemytable/reagent_suppression' },
         'bloodmagic:teleposer', 'minecraft:sponge')
     BC_DISABLED_ITEMS.forEach(function (item) { event.remove({ output: item }) })
 })
 
+// Existing or externally granted Deep Void return items must not bypass the
+// one-way policy. Cover both item use in air and use-on-block interactions.
+if (Platform.isLoaded('the_deep_void')) {
+    var BC_DEEP_VOID_RETURN_ITEMS = ['the_deep_void:void_pendant', 'the_deep_void:void_mirror']
+    BC_DEEP_VOID_RETURN_ITEMS.forEach(function (item) {
+        ItemEvents.rightClicked(item, function (event) { event.cancel() })
+    })
+    BlockEvents.rightClicked(function (event) {
+        if (BC_DEEP_VOID_RETURN_ITEMS.indexOf(event.item.id) >= 0) event.cancel()
+    })
+}
+
 // Remove every registered offer that produces a disabled potion-delivery item.
 // Regular potion filters are NBT-specific so plain water offers remain legal.
 var BC_TRADE_REGISTRIES = Java.loadClass('net.minecraft.core.registries.BuiltInRegistries')
 var BC_TRADE_POTIONS = Java.loadClass('net.minecraft.world.item.alchemy.Potions')
+// TECH-01: these exact meteor materials and authored AE2 palette outputs must
+// come through world discovery or their gated recipes, not villager offers.
+// Keep ordinary Create/PowerGrid components tradable; they are parallel roots.
+var BC_TECH01_RESTRICTED_TRADE_OUTPUTS = [
+    'ae2:sky_stone_block',
+    'ae2:certus_quartz_crystal',
+    'ae2:charged_certus_quartz_crystal',
+    'ae2:quartz_glass',
+    'ae2:logic_processor',
+    'ae2:engineering_processor',
+    'ae2:controller',
+    'ae2:cell_workbench',
+    'ae2:energy_acceptor'
+]
+
+function bcRemoveTech01Trades(event) {
+    BC_TECH01_RESTRICTED_TRADE_OUTPUTS.forEach(function (output) {
+        event.removeTrades(MoreJS.ofTradeFilter({ firstItem: '*', secondItem: '*', outputItem: output }))
+    })
+}
 
 function bcRemovePotionTrades(event) {
     ;['minecraft:splash_potion', 'minecraft:lingering_potion', 'minecraft:tipped_arrow']
@@ -239,5 +280,11 @@ function bcRemovePotionTrades(event) {
     }
 }
 
-MoreJSEvents.villagerTrades(function (event) { bcRemovePotionTrades(event) })
-MoreJSEvents.wandererTrades(function (event) { bcRemovePotionTrades(event) })
+MoreJSEvents.villagerTrades(function (event) {
+    bcRemovePotionTrades(event)
+    bcRemoveTech01Trades(event)
+})
+MoreJSEvents.wandererTrades(function (event) {
+    bcRemovePotionTrades(event)
+    bcRemoveTech01Trades(event)
+})

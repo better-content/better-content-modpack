@@ -1,0 +1,78 @@
+{
+  "noise_scale": 768,
+  "cadence_seconds": {
+    "minimum": 270,
+    "maximum": 480
+  },
+  "warning_seconds": {
+    "minimum": 10,
+    "maximum": 22
+  },
+  "surge_seconds": 75,
+  "recovery_seconds": 120,
+  "deep_budget_per_player": 84,
+  "deep_active_target_per_player": 34,
+  "packet_interval_ticks": 100,
+  "maximize_directions": true,
+  "warning_sounds": [
+    "born_in_chaos_v1:restless_spirit_idle",
+    "born_in_chaos_v1:vortex_idle1"
+  ],
+  "roster": [
+    {
+      "entity": "born_in_chaos_v1:restless_spirit",
+      "role": "common",
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "goety:wraith",
+      "role": "common",
+      "minimum_depth": 0.25,
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8
+    },
+    {
+      "entity": "goety:muck_wraith",
+      "role": "line",
+      "minimum_depth": 0.35,
+      "cost": 3,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 7
+    },
+    {
+      "entity": "born_in_chaos_v1:dark_vortex",
+      "role": "line",
+      "minimum_depth": 0.42,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 4
+    },
+    {
+      "entity": "goety:reaper",
+      "role": "line",
+      "minimum_depth": 0.55,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 3
+    },
+    {
+      "entity": "born_in_chaos_v1:seared_spirit",
+      "role": "heavy",
+      "minimum_depth": 0.72,
+      "cost": 8,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1
+    },
+    {
+      "entity": "cataclysm:ignited_revenant",
+      "role": "heavy",
+      "minimum_depth": 0.8,
+      "cost": 11,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1
+    }
+  ]
+}

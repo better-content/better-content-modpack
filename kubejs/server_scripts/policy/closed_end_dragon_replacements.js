@@ -1,6 +1,6 @@
-// The vanilla dragon boss is not an acquisition route. Legitimate consumers
-// accept finite Ice and Fire ecology products; consumers of cut features have
-// already been removed by the quarantine policy.
+// Repeated vanilla dragon damage drops are disabled; one Quark scale per
+// Ender Dragon defeat supplies TConstruct material progression. Elytra duplication
+// spends Ice and Fire dragon scales, and cut-feature consumers stay removed.
 ServerEvents.recipes(function (event) {
     event.replaceInput({}, 'minecraft:dragon_breath', '#forge:bloods/dragon')
     event.replaceInput({}, 'minecraft:dragon_head', '#forge:skulls/dragon')
@@ -71,6 +71,11 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:dragon_ecology/moreartifacts_hero_shield')
 
     event.remove({ output: 'minecraft:elytra' })
+    // Quark drops one scale when the Ender Dragon's death animation completes.
+    // Keep that finite boss reward as TConstruct's scale source while its
+    // repeatable explosion-hit drop is disabled in the pack config.
+    event.shapeless('tconstruct:dragon_scale', ['quark:dragon_scale'])
+        .id('kubejs:dragon_ecology/tconstruct_scale_from_quark')
     event.custom({
         type: 'create:mechanical_crafting',
         pattern: ['ASA', 'PCP', 'ASA'],

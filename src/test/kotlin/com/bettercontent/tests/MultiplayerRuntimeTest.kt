@@ -127,6 +127,24 @@ class MultiplayerRuntimeTest {
             ))
             server.send("gamemode spectator ${lead.username}")
             targets.forEach { target ->
+                if (DimensionSmokePlan.requiresFontTravel(target.id)) {
+                    val marker = "BC_FONT_ONLY_DIRECT_TRAVEL_DENIED_${target.id.replace(':', '_').replace('/', '_')}_${lead.username}"
+                    evidence.run.event("font_only_dimension_guard_started", mapOf(
+                        "dimension" to target.id,
+                        "sources" to target.sources.sorted(),
+                        "direct_command" to "execute in ${target.id} run tp ${lead.username} 100000 200 100000",
+                        "reason" to "Dimension Drink requires a Font authorization for this destination",
+                    ))
+                    server.send("execute in ${target.id} run tp ${lead.username} 100000 200 100000")
+                    server.commandResult(
+                        "execute as ${lead.username} at @s unless dimension ${target.id} run say $marker",
+                        Regex(Regex.escape(marker)),
+                        "Font-only travel authorization guard ${target.id} ${lead.username}",
+                        Duration.ofSeconds(30),
+                    )
+                    evidence.run.event("font_only_dimension_guard_passed", mapOf("dimension" to target.id))
+                    return@forEach
+                }
                 DimensionSmokePlan.positions.forEachIndexed { index, (x, z) ->
                     val marker = "BC_DIMENSION_HEARTBEAT_${target.id.replace(':', '_').replace('/', '_')}_${index}_${lead.username}"
                     evidence.run.event("dimension_teleport_started", mapOf(
@@ -136,9 +154,9 @@ class MultiplayerRuntimeTest {
                     ))
                     server.send("execute in ${target.id} run tp ${lead.username} $x 200 $z")
                     server.commandResult(
-                        "execute as ${lead.username} at @s run say $marker",
+                        "execute as ${lead.username} at @s if dimension ${target.id} if entity @s[x=$x,y=200,z=$z,distance=..1] run say $marker",
                         Regex(Regex.escape(marker)),
-                        "dimension heartbeat ${target.id} location $index ${lead.username}",
+                        "dimension and destination verification ${target.id} location $index ${lead.username}",
                         Duration.ofSeconds(90),
                     )
                     waitForStableTps(target, index)
@@ -196,7 +214,7 @@ class MultiplayerRuntimeTest {
                     "protect ${client.username}",
                     Duration.ofSeconds(30),
                 )
-                server.send("execute in minecraft:overworld run tp ${client.username} $x 256 $z")
+                server.send("execute in minecraft:overworld run tp ${client.username} $x 320 $z")
                 server.commandResult(
                     "execute as ${client.username} at @s run say BC_PILLAGER_POSITION_${index + 1}",
                     Regex("BC_PILLAGER_POSITION_${index + 1}"),
@@ -355,9 +373,9 @@ class MultiplayerRuntimeTest {
             "forceload campaign platform $index",
             Duration.ofMinutes(2),
         )
-        server.send("execute in minecraft:overworld run fill ${x - 72} 255 ${z - 5} $x 255 ${z + 5} minecraft:grass_block")
-        server.send("execute in minecraft:overworld run fill ${x - 72} 256 ${z - 5} $x 256 ${z + 5} minecraft:air")
-        server.send("execute in minecraft:overworld run fill ${x - 72} 257 ${z - 5} $x 257 ${z + 5} minecraft:air")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 319 ${z - 5} $x 319 ${z + 5} minecraft:grass_block")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 320 ${z - 5} $x 320 ${z + 5} minecraft:air")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 321 ${z - 5} $x 321 ${z + 5} minecraft:air")
         server.commandResult(
             "execute in minecraft:overworld run say BC_PILLAGER_PLATFORM_$index",
             Regex("BC_PILLAGER_PLATFORM_$index"),

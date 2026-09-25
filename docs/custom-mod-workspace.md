@@ -148,3 +148,4 @@ explicitly activated.
 |---|---|---|
 | [dynamic-trees-dimension-compat](https://github.com/better-content/dynamic-trees-dimension-compat) | The addon requires The Undergarden, which the pack retired. | `./gradlew runData verifyFull` |
 | [dynamic-trees-hexerei](https://github.com/better-content/dynamic-trees-hexerei) | Nature's Spirit owns mahogany ecology; the redundant Hexerei tree addon is retired. | `./gradlew runData verifyFull` |
+| [scalable-tnt](https://github.com/better-content/scalable-tnt) | TNT-01 source prototype; validation-only until unit-only authoring is reviewed and runtime/integration/balance acceptance is authorized. | `./gradlew test` |

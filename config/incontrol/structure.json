@@ -138,5 +138,45 @@
     "dimension": "minecraft:overworld",
     "structure": "minecraft:ancient_city",
     "result": "deny"
+  },
+  {
+    "dimension": "lostcities:lostcity",
+    "structure": "cataclysm:sunken_city",
+    "result": "deny"
+  },
+  {
+    "dimension": "lostcities:lostcity",
+    "structure": "cataclysm:soul_black_smith",
+    "result": "deny"
+  },
+  {
+    "dimension": "lostcities:lostcity",
+    "structure": "cataclysm:burning_arena",
+    "result": "deny"
+  },
+  {
+    "dimension": "lostcities:lostcity",
+    "structure": "cataclysm:ruined_citadel",
+    "result": "deny"
+  },
+  {
+    "dimension": "lostcities:lostcity",
+    "structure": "cataclysm:ancient_factory",
+    "result": "deny"
+  },
+  {
+    "dimension": "lostcities:lostcity",
+    "structure": "cataclysm:cursed_pyramid",
+    "result": "deny"
+  },
+  {
+    "dimension": "lostcities:lostcity",
+    "structure": "cataclysm:acropolis",
+    "result": "deny"
+  },
+  {
+    "dimension": "lostcities:lostcity",
+    "structure": "cataclysm:frosted_prison",
+    "result": "deny"
   }
 ]

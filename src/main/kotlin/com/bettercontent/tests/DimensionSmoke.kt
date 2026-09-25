@@ -18,6 +18,12 @@ object DimensionSmokePlan {
     // required 0/10,000/20,000 Overworld positions.
     val positions = listOf(100_000 to 100_000, 100_128 to 100_000, 100_000 to 100_128)
 
+    // Dimension Drink explicitly requires its own one-call authorization for these
+    // destinations. A console `execute in ... run tp` is meant to be denied.
+    private val fontOnlyDimensions = setOf("rats:ratlantis", "the_bumblezone:the_bumblezone")
+
+    fun requiresFontTravel(id: String): Boolean = id in fontOnlyDimensions
+
     fun discover(dimensions: Path, fonts: Path): List<DimensionTarget> {
         val snapshot = mapper.readTree(dimensions.toFile())
         require(snapshot.path("schema").asText() == "bc.dimensions.v1") { "unexpected dimension inventory schema" }
@@ -39,10 +45,13 @@ object DimensionSmokePlan {
                 }
             }
         }
-        require(sources.isNotEmpty()) { "no Font or Creating Space dimension targets were discovered" }
         val unavailable = sources.keys - loaded
         require(unavailable.isEmpty()) { "configured dimension targets are not loaded: ${unavailable.sorted()}" }
-        return sources.entries.sortedBy(Map.Entry<String, *>::key).map { DimensionTarget(it.key, it.value.toSet()) }
+        require(loaded.isNotEmpty()) { "runtime dimension inventory contains no loaded dimensions" }
+        // Route metadata identifies how a dimension is reached in normal play. The
+        // teleport smoke intentionally covers the complete runtime registry, including
+        // dimensions without a Font or Creating Space route.
+        return loaded.sorted().map { id -> DimensionTarget(id, sources[id]?.toSet().orEmpty()) }
     }
 
     fun parseOverallTps(line: String): Double = overallTps.find(line)?.groupValues?.get(1)?.toDouble()

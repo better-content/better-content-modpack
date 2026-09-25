@@ -3,7 +3,7 @@
 Threads answers “what just happened to me?” through 52 discoveries. Each card gives the
 experienced event, its cause, and a useful next step. Gameplay does not have separate
 reveal and completion stages. Exact recipes and apparatus remain in EMI, Ponder, and
-native guides; survival fundamentals remain in the 17 loading/Lessons entries.
+native guides; survival fundamentals remain in the 18 loading/Lessons entries.
 
 The canonical definitions, trigger routes, and art scene specifications live in
 [`better-content-threads/authoring/discoveries.json`](../../mod_source/better-content-threads/authoring/discoveries.json).

@@ -37,6 +37,41 @@ class ServerRuntimeTest {
     @Test @Order(1)
     fun packagedServerReachesReadiness() = evidence.run.checkpoint("server readiness") {
         fixture.waitReady()
+        val logOffset = Files.size(fixture.log).toInt()
+        val report = fixture.commandResult(
+            "font find",
+            Regex("Found (\\d+)/4 Font types\\."),
+            "full-pack natural Font finder command",
+            Duration.ofSeconds(30),
+        )
+        val output = Files.readString(fixture.log).drop(logOffset)
+        val fontTypes = listOf("aether", "bumblezone", "nether", "ratlantis")
+        fontTypes.forEach { id ->
+            assertTrue(output.contains("[$id]"), "font find omitted configured type $id")
+        }
+        val generated = Regex("\\[([a-z]+)] in ([a-z0-9_.-]+:[a-z0-9_./-]+) at (-?\\d+), (-?\\d+), (-?\\d+)")
+            .findAll(output)
+            .toList()
+        generated.forEachIndexed { index, match ->
+            val id = match.groupValues[1]
+            val dimension = match.groupValues[2]
+            val x = match.groupValues[3]
+            val y = match.groupValues[4]
+            val z = match.groupValues[5]
+            val marker = "BC_NATURAL_FONT_COORDINATE_${id.uppercase()}_$index"
+            fixture.commandResult(
+                "execute in $dimension if block $x $y $z dimension_drink:dimensional_font run say $marker",
+                Regex(Regex.escape(marker)),
+                "verify generated $id Font coordinate",
+                Duration.ofSeconds(30),
+            )
+        }
+        evidence.run.event("natural_font_finder_runtime", mapOf(
+            "types_found" to report.groupValues[1].toInt(),
+            "types_configured" to fontTypes,
+            "generated_coordinates_verified" to generated.map { it.groupValues[1] },
+            "output" to output.lines().filter { "[" in it && (" at " in it || "NOT FOUND" in it) },
+        ))
         ready = true
     }
 
@@ -84,6 +119,11 @@ class ServerRuntimeTest {
     fun serverEvidenceIsCleanAndCandidatesAreUnchanged() {
         assumeTrue(first, "lineage transition prerequisite failed")
         evidence.run.checkpoint("server log and hash audit") {
+            // The successor startup can leave asynchronous Lost Cities feature work
+            // queued after its readiness marker. Let the new world tick before the
+            // graceful stop so C2ME does not finish that work after Lost Cities clears
+            // its static dimension profile cache during shutdown.
+            Thread.sleep(Duration.ofSeconds(30).toMillis())
             fixture.stopGracefully()
             fixture.auditLogs()
             fixture.assertHashes()

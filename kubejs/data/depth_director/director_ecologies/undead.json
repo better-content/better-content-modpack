@@ -1,0 +1,133 @@
+{
+  "noise_scale": 768,
+  "cadence_seconds": {
+    "minimum": 180,
+    "maximum": 300
+  },
+  "warning_seconds": {
+    "minimum": 10,
+    "maximum": 24
+  },
+  "surge_seconds": 90,
+  "recovery_seconds": 75,
+  "deep_budget_per_player": 72,
+  "deep_active_target_per_player": 36,
+  "packet_interval_ticks": 100,
+  "warning_sounds": [
+    "born_in_chaos_v1:hound_ambient",
+    "born_in_chaos_v1:skeleton_trasher_step",
+    "born_in_chaos_v1:zombie_brute_idle"
+  ],
+  "roster": [
+    {
+      "entity": "born_in_chaos_v1:baby_skeleton",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8
+    },
+    {
+      "entity": "born_in_chaos_v1:decrepit_skeleton",
+      "role": "common",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "goety:rattled",
+      "role": "common",
+      "minimum_depth": 0.05,
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "goety:frayed",
+      "role": "common",
+      "minimum_depth": 0.15,
+      "cost": 2,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 10
+    },
+    {
+      "entity": "born_in_chaos_v1:dread_hound",
+      "role": "line",
+      "minimum_depth": 0.22,
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8
+    },
+    {
+      "entity": "born_in_chaos_v1:skeleton_demoman",
+      "role": "line",
+      "minimum_depth": 0.3,
+      "cost": 3,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 3
+    },
+    {
+      "entity": "born_in_chaos_v1:barrel_zombie",
+      "role": "line",
+      "minimum_depth": 0.32,
+      "cost": 3,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 5
+    },
+    {
+      "entity": "born_in_chaos_v1:door_knight",
+      "role": "line",
+      "minimum_depth": 0.4,
+      "cost": 4,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 4
+    },
+    {
+      "entity": "born_in_chaos_v1:zombie_clown",
+      "role": "line",
+      "minimum_depth": 0.48,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 3
+    },
+    {
+      "entity": "born_in_chaos_v1:zombie_lumberjack",
+      "role": "line",
+      "minimum_depth": 0.55,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 3
+    },
+    {
+      "entity": "born_in_chaos_v1:skeleton_thrasher",
+      "role": "heavy",
+      "minimum_depth": 0.68,
+      "cost": 7,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 2
+    },
+    {
+      "entity": "born_in_chaos_v1:zombie_bruiser",
+      "role": "heavy",
+      "minimum_depth": 0.72,
+      "cost": 8,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 2
+    },
+    {
+      "entity": "quark:forgotten",
+      "role": "heavy",
+      "minimum_depth": 0.82,
+      "cost": 7,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1
+    },
+    {
+      "entity": "cataclysm:aptrgangr",
+      "role": "heavy",
+      "minimum_depth": 0.78,
+      "cost": 10,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1
+    }
+  ]
+}

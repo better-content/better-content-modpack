@@ -104,6 +104,21 @@ var BC_CHEST_LOOT_REMOVE_SEEDS = [
     'ubesdelight:lemongrass_seeds'
 ]
 
+// TECH-01 meteor materials and outputs of the authored palette cannot be
+// supplied by loot; native Create/PowerGrid parallel components stay available.
+var BC_TECH01_LOOT_REMOVE_ITEMS = [
+    'ae2:sky_stone_block',
+    'ae2:certus_quartz_crystal',
+    'ae2:charged_certus_quartz_crystal',
+    'ae2:quartz_glass',
+    'ae2:logic_processor',
+    'ae2:engineering_processor',
+    'ae2:controller',
+    'ae2:cell_workbench',
+    'ae2:energy_acceptor'
+]
+BC_LOOT_REMOVE_ITEMS = BC_LOOT_REMOVE_ITEMS.concat(BC_TECH01_LOOT_REMOVE_ITEMS)
+
 // Family cuts apply to loot as well as recipes; do not maintain a second list.
 var BC_LOOT_QUARANTINE = JsonIO.read('kubejs/config/quarantined_items.json') || { items: [] }
 BC_LOOT_REMOVE_ITEMS = BC_LOOT_REMOVE_ITEMS.concat(BC_LOOT_QUARANTINE.items || [])

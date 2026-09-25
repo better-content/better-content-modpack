@@ -33,7 +33,7 @@
 	#non-natural blocks can burn
 	craftedBlocksBurn = true
 	# wooden barrels and their contents can burn
-	burnBarrels = true
+	burnBarrels = false
 	#wool can burn
 	woolBurn = true
 	#some blocks adjacent to fire become sooty blocks
@@ -64,4 +64,3 @@
 	groundSmoke = true
 	#distant smoke particles on/off
 	distantSmoke = true
-

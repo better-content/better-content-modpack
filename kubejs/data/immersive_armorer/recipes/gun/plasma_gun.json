@@ -1,0 +1,45 @@
+{
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 64
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/gold"
+      },
+      "count": 16
+    },
+    {
+      "item": {
+        "tag": "forge:glass"
+      },
+      "count": 16
+    },
+    {
+      "item": {
+        "tag": "forge:dusts/redstone"
+      },
+      "count": 8
+    },
+    {
+      "item": {
+        "tag": "minecraft:planks"
+      },
+      "count": 16
+    },
+    {
+      "item": {
+        "item": "kubejs:electrical_instrumentation_module"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "gun",
+    "id": "immersive_armorer:plasma_gun"
+  },
+  "type": "tacz:gun_smith_table_crafting"
+}

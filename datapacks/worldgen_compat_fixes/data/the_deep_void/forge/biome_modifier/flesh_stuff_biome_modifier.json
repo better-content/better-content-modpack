@@ -1,0 +1,8 @@
+{
+  "type": "forge:remove_features",
+  "biomes": "the_deep_void:gloomy_deathgrounds",
+  "features": [
+    "the_deep_void:flesh_stuff"
+  ],
+  "step": "vegetal_decoration"
+}

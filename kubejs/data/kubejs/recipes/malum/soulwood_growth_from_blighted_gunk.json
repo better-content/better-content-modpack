@@ -1,0 +1,13 @@
+{
+  "type": "bloodmagic:altar",
+  "altarSyphon": 2000,
+  "consumptionRate": 5,
+  "drainRate": 1,
+  "input": {
+    "item": "malum:blighted_gunk"
+  },
+  "output": {
+    "item": "malum:soulwood_growth"
+  },
+  "upgradeLevel": 0
+}

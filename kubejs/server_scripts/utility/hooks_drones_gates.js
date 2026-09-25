@@ -1,6 +1,6 @@
 // Mobility and autonomous helper tools are powerful route-editing utilities.
 // Keep them off the hand grid; tier hooks and Create Stuff & Additions drones
-// through mechanical assembly.
+// through mechanical assembly. The Soap on a Rope prototype is supplied only as early loot.
 
 function bcMobilityExists(id) {
     try { return Item.exists(id) } catch (e) { return false }
@@ -22,16 +22,7 @@ ServerEvents.recipes(function (event) {
         C: 'tconstruct:seared_bricks'
     }, 'kubejs:rehooked/wood_chain_post_seared')
 
-     bcMobilityMechanical(event, 'rehooked:wood_hook', [
-        'RRC',
-        ' WH',
-        'W H'
-    ], {
-        R: 'farmersdelight:rope',
-        C: 'tconstruct:seared_bricks',
-        W: 'rehooked:wood_chain',
-        H: '#forge:rods/wooden'
-    }, 'kubejs:rehooked/wood_hook_post_seared')
+     if (bcMobilityExists('rehooked:wood_hook')) event.remove({ output: 'rehooked:wood_hook' })
 
      bcMobilityMechanical(event, 'rehooked:iron_hook', [
         'IIC',
@@ -40,7 +31,7 @@ ServerEvents.recipes(function (event) {
     ], {
         I: '#forge:plates/iron',
         C: 'create:andesite_casing',
-        H: 'rehooked:wood_hook',
+        H: 'better_content_fixes:soap_on_a_rope',
         L: 'minecraft:chain'
     }, 'kubejs:rehooked/iron_hook_post_create')
 

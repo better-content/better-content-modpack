@@ -107,7 +107,7 @@ class HarnessFastTest {
         fun dependencies(repository: String) = mods.single { it.path("repository").asText() == repository }
             .path("dependsOn").map { it.asText() }
         assertEquals(listOf("heat-sync"), dependencies("latent-chemlib"))
-        assertEquals(listOf("dimension-drink"), dependencies("better-content-economy"))
+        assertEquals(listOf("better-content-fixes", "dimension-drink"), dependencies("better-content-economy"))
         assertEquals(
             listOf("dynamic-survival-hud", "heat-sync", "latent-chemlib"),
             dependencies("better-content-fixes"),
@@ -177,6 +177,20 @@ class HarnessFastTest {
                     assertTrue(!text.contains("$namespace:"), "retired block definition in $definition: $namespace")
                 }
             }
+        }
+    }
+
+    @Test
+    fun newlyIntegratedArenaNamespacesAreClassified() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val namespaces = jacksonObjectMapper().readTree(root.resolve("kubejs/config/crafting_policy.json").toFile())
+            .path("namespaces")
+        assertEquals("content", namespaces.path("cataclysm").path("primary_role").asText())
+        assertEquals("infrastructure", namespaces.path("lionfishapi").path("primary_role").asText())
+        assertEquals("world", namespaces.path("the_deep_void").path("primary_role").asText())
+        listOf("cataclysm", "lionfishapi", "the_deep_void").forEach { namespace ->
+            assertTrue(namespaces.path(namespace).path("support_state").isTextual,
+                "$namespace lacks a crafting policy support state")
         }
     }
 
@@ -356,14 +370,17 @@ class HarnessFastTest {
         dimensions.writeText("""{
           "schema": "bc.dimensions.v1",
           "complete": true,
-          "loaded_dimensions": ["aether:the_aether", "creatingspace:mars", "minecraft:overworld"],
+          "loaded_dimensions": ["aether:the_aether", "ae2:spatial_storage", "bloodmagic:dungeon", "creatingspace:mars", "minecraft:overworld", "minecraft:the_end"],
           "rocket_accessible_dimensions": ["minecraft:overworld", "creatingspace:mars"]
         }""")
         val fonts = root.resolve("fonts").also { it.createDirectories() }
         fonts.resolve("aether.json").writeText("""{"enabled":true,"targetDimension":"aether:the_aether"}""")
         val targets = DimensionSmokePlan.discover(dimensions, fonts)
-        assertEquals(listOf("aether:the_aether", "creatingspace:mars", "minecraft:overworld"), targets.map { it.id })
+        assertEquals(listOf("ae2:spatial_storage", "aether:the_aether", "bloodmagic:dungeon", "creatingspace:mars", "minecraft:overworld", "minecraft:the_end"), targets.map { it.id })
         assertEquals(setOf("creatingspace"), targets.single { it.id == "creatingspace:mars" }.sources)
+        assertTrue(DimensionSmokePlan.requiresFontTravel("rats:ratlantis"))
+        assertTrue(DimensionSmokePlan.requiresFontTravel("the_bumblezone:the_bumblezone"))
+        assertTrue(!DimensionSmokePlan.requiresFontTravel("minecraft:the_nether"))
         assertEquals(20.0, DimensionSmokePlan.parseOverallTps("Overall: Mean tick time: 2.1 ms. Mean TPS: 20.000"))
         assertEquals(
             listOf(100_000 to 100_000, 100_128 to 100_000, 100_000 to 100_128),
@@ -410,22 +427,77 @@ class HarnessFastTest {
     }
 
     @Test
+    fun logPolicyAcceptsOnlyKnownCustomRecipeBookCategoryWarnings(@TempDir root: Path) {
+        val known = root.resolve("known-recipe-categories.log").also {
+            it.writeText(
+                "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
+                    "Unknown recipe category: [!!!supplier!!!]/the_deep_void:glutton_jei_wheat\n" +
+                    "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
+                    "Unknown recipe category: cataclysm:weapon_fusion/cataclysm:weapon_infusion/brontes\n",
+            )
+        }
+        val unknown = root.resolve("unknown-recipe-category.log").also {
+            it.writeText(
+                "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
+                    "Unknown recipe category: other_mod:broken\n" +
+                    "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
+                    "Unknown recipe category: cataclysm:other_custom_type/brontes\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(known)).isEmpty())
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(unknown)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyThreeExactDeepVoidPhysicsFallbackWarningsPerLog(@TempDir root: Path) {
+        val warning =
+            "[09:46:22] [Server thread/WARN] [xbigellx.realisticphysics.RealisticPhysics]: " +
+                "Level null when loading chunk at '[-3, -3]' for dimension 'the_deep_void:deep_void'.\n"
+        val accepted = root.resolve("deep-void-physics-fallback.log").also { it.writeText(warning.repeat(3)) }
+        val overflow = root.resolve("deep-void-physics-fallback-overflow.log").also { it.writeText(warning.repeat(4)) }
+        val wrongDimension = root.resolve("deep-void-physics-fallback-wrong-dimension.log").also {
+            it.writeText(warning.replace("the_deep_void:deep_void", "minecraft:overworld"))
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(4), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongDimension)).map { it.line })
+    }
+
+    @Test
     fun logPolicyAcceptsOnlyBoundedAdPotherDeferredTasks(@TempDir root: Path) {
         val accepted = root.resolve("accepted-deferred.log").also {
             it.writeText(
-                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 1.533 s to run a deferred task.\n" +
-                    "[12:56:48] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 2.876 s to run a deferred task.\n",
+                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 6.830 s to run a deferred task.\n",
             )
         }
         val rejected = root.resolve("rejected-deferred.log").also {
             it.writeText(
-                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 5.001 s to run a deferred task.\n" +
-                    "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'othermod' took 1.533 s to run a deferred task.\n",
+                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 8.001 s to run a deferred task.\n" +
+                    "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'othermod' took 1.533 s to run a deferred task.\n" +
+                    "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 6.577 s to run a deferred task.\n" +
+                    "[13:55:28] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 6.500 s to run a deferred task.\n",
             )
         }
 
         assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(rejected)).map { it.line })
+        assertEquals(listOf(1, 2, 4), LogPolicy.findings(listOf(rejected)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactPresenceFootstepsMissingAcoustic(@TempDir root: Path) {
+        val known = "[21:04:01] [Render thread/WARN] [PFSolver]: Tried to play a missing acoustic: MESSY_GROUND\n"
+        val accepted = root.resolve("known-missing-acoustic.log").also { it.writeText(known) }
+        val rejected = root.resolve("other-missing-acoustic.log").also {
+            it.writeText(
+                known + known +
+                    known.replace("MESSY_GROUND", "UNKNOWN_SURFACE"),
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(rejected)).map { it.line })
     }
 
     @Test

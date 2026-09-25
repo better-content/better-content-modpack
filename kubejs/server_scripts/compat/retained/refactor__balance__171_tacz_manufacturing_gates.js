@@ -210,6 +210,59 @@ ServerEvents.recipes(function (event) {
         result: { type: 'attachment', id: 'immersive_armorer:muzzle_refit_electromagnetic_accelerator' }
     }).id('kubejs:tacz/immersive_armorer/electromagnetic_accelerator_powergrid')
 
+    // These two visible ZIP-indexed muzzles have real combat modifiers and are
+    // allowlisted on authored guns, but the pinned Armorer packs ship no recipe.
+    event.remove({ id: 'applied_armorer:attachments/muzzle_commander' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:ae_logic_package' }, count: 1 },
+            { item: { item: 'ae2:engineering_processor' }, count: 1 },
+            { item: { tag: 'forge:ingots/gold' }, count: 8 },
+            { item: { tag: 'forge:gems/amethyst' }, count: 4 }
+        ],
+        result: { type: 'attachment', id: 'applied_armorer:muzzle_commander' }
+    }).id('kubejs:tacz/applied_armorer/muzzle_commander_ae_control')
+
+    // Both visible Armorer melee guns declare these ammo IDs in their gun data.
+    // TaCZ consumes them on its shoot path even though the separate melee action
+    // does not require ammunition.
+    event.remove({ id: 'applied_armorer:ammo/melee' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:ae_logic_package' }, count: 1 },
+            { item: { tag: 'forge:ingots/iron' }, count: 2 },
+            { item: { tag: 'forge:gems/amethyst' }, count: 1 }
+        ],
+        result: { type: 'ammo', id: 'applied_armorer:melee', count: 1 }
+    }).id('kubejs:tacz/applied_armorer/melee_ammo_ae_package')
+
+    event.remove({ id: 'create_armorer:attachments/muzzle_refit_ap_grenade' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:electrical_instrumentation_module' }, count: 1 },
+            { item: { item: 'kubejs:brass_utility_assembly' }, count: 1 },
+            { item: { item: 'create:precision_mechanism' }, count: 2 },
+            { item: { tag: 'forge:ingots/iron' }, count: 8 },
+            { item: { tag: 'forge:gunpowder' }, count: 8 },
+            { item: { item: 'minecraft:netherite_scrap' }, count: 1 }
+        ],
+        result: { type: 'attachment', id: 'create_armorer:muzzle_refit_ap_grenade' }
+    }).id('kubejs:tacz/create_armorer/muzzle_refit_ap_grenade_electrical')
+
+    event.remove({ id: 'create_armorer:ammo/melee_weapon' })
+    event.custom({
+        type: 'tacz:gun_smith_table_crafting',
+        materials: [
+            { item: { item: 'kubejs:brass_utility_assembly' }, count: 1 },
+            { item: { tag: 'forge:ingots/iron' }, count: 2 },
+            { item: { item: 'create:andesite_alloy' }, count: 1 }
+        ],
+        result: { type: 'ammo', id: 'create_armorer:melee_weapon', count: 1 }
+    }).id('kubejs:tacz/create_armorer/melee_weapon_ammo_assembly')
+
 
     event.remove({ id: 'create_armorer:ammo/gas_pistol_ammo' })
     event.custom({

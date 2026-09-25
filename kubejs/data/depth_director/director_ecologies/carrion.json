@@ -1,0 +1,61 @@
+{
+  "noise_scale": 768,
+  "cadence_seconds": {
+    "minimum": 210,
+    "maximum": 390
+  },
+  "warning_seconds": {
+    "minimum": 8,
+    "maximum": 18
+  },
+  "surge_seconds": 75,
+  "recovery_seconds": 90,
+  "deep_budget_per_player": 60,
+  "deep_active_target_per_player": 40,
+  "packet_interval_ticks": 80,
+  "maximize_directions": true,
+  "warning_sounds": [
+    "born_in_chaos_v1:corpse_fly_ambient",
+    "born_in_chaos_v1:gadfly_idle"
+  ],
+  "roster": [
+    {
+      "entity": "born_in_chaos_v1:corpse_fly",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "born_in_chaos_v1:baby_spider",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "goety:web_spider",
+      "role": "common",
+      "minimum_depth": 0.2,
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8
+    },
+    {
+      "entity": "born_in_chaos_v1:bloody_gadfly",
+      "role": "line",
+      "minimum_depth": 0.38,
+      "cost": 3,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 5
+    },
+    {
+      "entity": "cataclysm:coralssus",
+      "role": "heavy",
+      "minimum_depth": 0.82,
+      "cost": 12,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1
+    }
+  ]
+}

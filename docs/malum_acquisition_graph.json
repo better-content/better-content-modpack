@@ -1,0 +1,740 @@
+{
+  "schema": "bc.malum_acquisition_graph.v1",
+  "scope": "MALUM-17 source audit; candidate/runtime reachability is not asserted",
+  "malum08LegacyRoutesExcluded": true,
+  "externalRoots": [
+    {
+      "id": "minecraft:stone",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:water",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:soul_sand",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:bone_meal",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:amethyst_shard",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:charcoal",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:iron_ingot",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:stick",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla tree/plank crafting access"
+    },
+    {
+      "id": "minecraft:gold_ingot",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:gold_block",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:obsidian",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:bone_block",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:furnace",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:deepslate",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:cauldron",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "minecraft:gunpowder",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla hostile-mob drops"
+    },
+    {
+      "id": "minecraft:blaze_powder",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "realistic_ores:black_shale",
+      "status": "native-runtime-dependent-root",
+      "evidence": "../mod_source/realistic-ores/tools/geological_worldgen.json"
+    },
+    {
+      "id": "player:positive_xp_level",
+      "status": "conditional-world-root",
+      "evidence": "Ordinary XP earning; final-death reward is zero at level zero"
+    },
+    {
+      "id": "player:confirmed_final_death",
+      "status": "conditional-world-root",
+      "evidence": "../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/event/CommonForgeEvents.kt"
+    },
+    {
+      "id": "malum:cursed_grit",
+      "status": "unresolved-root",
+      "evidence": "Pinned Malum ritual consumes this item; no world-accessible producer route is established by the inspected pack sources"
+    },
+    {
+      "id": "the_deep_void:dimension_access",
+      "status": "runtime-dependent-root",
+      "evidence": "mods/the-deep-void.pw.toml; datapacks/dimension_drink_ore_relocation/data/kubejs/tags/worldgen/biome/dimension_drink_ore_targets/deep.json"
+    },
+    {
+      "id": "overworld:rare_blight_locus",
+      "status": "runtime-dependent-root",
+      "evidence": "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/BlightLocusBootstrap.java"
+    },
+    {
+      "id": "overworld:district_candidate",
+      "status": "runtime-dependent-root",
+      "evidence": "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/WeepingWellDistrictPolicy.java"
+    },
+    {
+      "id": "minecraft:skeleton",
+      "status": "world-root",
+      "evidence": "Minecraft vanilla source"
+    },
+    {
+      "id": "player:combat_action",
+      "status": "conditional-world-root",
+      "evidence": "Ordinary survival combat using the crafted Crude Scythe"
+    }
+  ],
+  "routes": [
+    {
+      "id": "runewood.native_worldgen",
+      "outputs": [
+        "malum:runewood_planks"
+      ],
+      "requiresAnyOf": [],
+      "status": "native-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "mods/malum.pw.toml",
+        "../mod_source/dynamic-trees-malum/src/main/resources/trees/dynamic_trees_malum/species/runewood.json",
+        "../mod_source/dynamic-trees-malum/src/main/resources/trees/dynamic_trees_malum/families/runewood.json"
+      ],
+      "boundary": "The addon binds Dynamic Trees to Malum Runewood; Malum native worldgen and candidate placement are runtime gates."
+    },
+    {
+      "id": "malum.legacy.soulstone_ore",
+      "outputs": [
+        "malum:soulstone_ore"
+      ],
+      "requiresAnyOf": [],
+      "status": "excluded-by-MALUM-08",
+      "malum08Legacy": true,
+      "evidence": [
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Native vein route intentionally excluded in this closure check."
+    },
+    {
+      "id": "malum.legacy.brilliant_ore",
+      "outputs": [
+        "malum:brilliant_stone"
+      ],
+      "requiresAnyOf": [],
+      "status": "excluded-by-MALUM-08",
+      "malum08Legacy": true,
+      "evidence": [
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Native vein route intentionally excluded in this closure check."
+    },
+    {
+      "id": "malum.legacy.cthonic_gold_ore",
+      "outputs": [
+        "malum:cthonic_gold"
+      ],
+      "requiresAnyOf": [],
+      "status": "excluded-by-MALUM-08",
+      "malum08Legacy": true,
+      "evidence": [
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Native vein route intentionally excluded in this closure check."
+    },
+    {
+      "id": "malum.legacy.natural_quartz_ore",
+      "outputs": [
+        "malum:natural_quartz"
+      ],
+      "requiresAnyOf": [],
+      "status": "excluded-by-MALUM-08",
+      "malum08Legacy": true,
+      "evidence": [
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Native vein route intentionally excluded in this closure check."
+    },
+    {
+      "id": "soulstone.black_shale_bootstrap",
+      "outputs": [
+        "malum:raw_soulstone"
+      ],
+      "requiresAnyOf": [
+        [
+          "realistic_ores:black_shale"
+        ],
+        [
+          "minecraft:water"
+        ],
+        [
+          "minecraft:soul_sand"
+        ],
+        [
+          "minecraft:bone_meal"
+        ],
+        [
+          "minecraft:amethyst_shard"
+        ],
+        [
+          "minecraft:charcoal"
+        ]
+      ],
+      "status": "source-authored-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js",
+        "../mod_source/realistic-ores/tools/geological_worldgen.json"
+      ],
+      "boundary": "Recipe source exists and Black Shale is a Realistic Ores worldgen material; recipe registration and generated deposits are runtime gates."
+    },
+    {
+      "id": "soulstone.crushed_from_raw",
+      "outputs": [
+        "malum:crushed_soulstone"
+      ],
+      "requiresAnyOf": [
+        [
+          "malum:raw_soulstone"
+        ]
+      ],
+      "status": "pinned-native-create-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Pinned Malum Create integration has a conditional Create crushing recipe from malum:raw_soulstone; this keeps the MALUM-07 input route independent of retired Soulstone ore.",
+      "pinnedProviderResources": [
+        "data/malum/recipes/create/crushing/crush_raw_soulstone.json"
+      ]
+    },
+    {
+      "id": "soulstone.native_processing",
+      "outputs": [
+        "malum:processed_soulstone"
+      ],
+      "requiresAnyOf": [
+        [
+          "malum:raw_soulstone"
+        ]
+      ],
+      "status": "pinned-native-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "mods/malum.pw.toml",
+        "kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js"
+      ],
+      "boundary": "Pinned Malum 1.6.7 native smelting/blasting recipes are the authored continuation; in-game recipe registration is unobserved.",
+      "pinnedProviderResources": [
+        "data/malum/recipes/soulstone_from_blasting.json",
+        "data/malum/recipes/soulstone_from_smelting.json"
+      ]
+    },
+    {
+      "id": "bloodmagic.altar_craft",
+      "outputs": [
+        "bloodmagic:altar"
+      ],
+      "requiresAnyOf": [
+        [
+          "minecraft:obsidian"
+        ],
+        [
+          "minecraft:gold_block"
+        ],
+        [
+          "minecraft:bone_block"
+        ],
+        [
+          "minecraft:furnace"
+        ],
+        [
+          "minecraft:deepslate"
+        ],
+        [
+          "minecraft:cauldron"
+        ]
+      ],
+      "status": "source-authored",
+      "malum08Legacy": false,
+      "evidence": [
+        "kubejs/server_scripts/compat/retained/refactor__balance__82_blood_magic_lifeforce_rework.js"
+      ],
+      "boundary": "This route establishes only the altar block craft. Initial LP is a separate conditional Heart Fragment route below."
+    },
+    {
+      "id": "bloodmagic.heart_fragment_death_reward",
+      "outputs": [
+        "rpg_stats:heart_fragment"
+      ],
+      "requiresAnyOf": [
+        [
+          "player:positive_xp_level"
+        ],
+        [
+          "player:confirmed_final_death"
+        ]
+      ],
+      "status": "source-backed-conditional-on-positive-xp-final-death",
+      "malum08Legacy": false,
+      "evidence": [
+        "../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/event/CommonForgeEvents.kt",
+        "../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/item/HeartFragmentData.kt",
+        "../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/item/HeartFragmentEntitlements.kt"
+      ],
+      "boundary": "The checked-in handler captures level at final death; the fragment formula returns zero at level zero and a positive entitlement for a positive level. This is not a guaranteed first-life resource."
+    },
+    {
+      "id": "bloodmagic.initial_altar_lp",
+      "outputs": [
+        "bloodmagic:altar_lp_capability"
+      ],
+      "requiresAnyOf": [
+        [
+          "bloodmagic:altar"
+        ],
+        [
+          "rpg_stats:heart_block_with_fragment"
+        ]
+      ],
+      "status": "source-backed-conditional-on-heart-fragment",
+      "malum08Legacy": false,
+      "evidence": [
+        "kubejs/server_scripts/compat/retained/refactor__balance__82_blood_magic_lifeforce_rework.js",
+        "../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/block/entity/HeartBlockEntity.kt"
+      ],
+      "boundary": "The pack crafts a Blood Altar from ordinary blocks and a Heart Block with one installed fragment; that block transfers LP to an adjacent Blood Altar. Positive-XP final-death access remains conditional."
+    },
+    {
+      "id": "bloodmagic.tier_zero_blank_slate",
+      "outputs": [
+        "bloodmagic:blankslate"
+      ],
+      "requiresAnyOf": [
+        [
+          "bloodmagic:altar_lp_capability"
+        ],
+        [
+          "minecraft:stone"
+        ]
+      ],
+      "status": "pinned-native-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Pinned Blood Magic 3.3.7 recipe accepts Forge stone at upgradeLevel 0 for 1,000 LP; this route depends on the conditional initial altar LP path above.",
+      "pinnedProviderResources": [
+        "data/bloodmagic/recipes/altar/slate.json"
+      ]
+    },
+    {
+      "id": "bloodmagic.heart_block_with_fragment",
+      "outputs": [
+        "rpg_stats:heart_block_with_fragment"
+      ],
+      "requiresAnyOf": [
+        [
+          "rpg_stats:heart_fragment"
+        ],
+        [
+          "minecraft:bone_block"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ]
+      ],
+      "status": "source-backed",
+      "malum08Legacy": false,
+      "evidence": [
+        "kubejs/server_scripts/compat/retained/refactor__balance__82_blood_magic_lifeforce_rework.js"
+      ],
+      "boundary": "Recipe stores one fragment in the Heart Block's BlockEntityTag; block placement/ticking remains runtime-dependent."
+    },
+    {
+      "id": "malum.spirit_altar_craft",
+      "outputs": [
+        "malum:spirit_altar"
+      ],
+      "requiresAnyOf": [
+        [
+          "malum:processed_soulstone"
+        ],
+        [
+          "malum:runewood_planks"
+        ],
+        [
+          "bloodmagic:blankslate"
+        ]
+      ],
+      "status": "source-backed-conditional-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "mods/malum.pw.toml",
+        "kubejs/server_scripts/compat/retained/refactor__balance__80_magic_progression_blood_slate_gates.js"
+      ],
+      "boundary": "Pinned native altar recipe plus the source-authored gold-to-Blank-Slate gate; conditional first LP/Blank Slate path is represented above. Recipe registration and in-world crafting remain runtime gates.",
+      "pinnedProviderResources": [
+        "data/malum/recipes/spirit_altar.json"
+      ]
+    },
+    {
+      "id": "malum.crude_scythe",
+      "outputs": [
+        "malum:crude_scythe"
+      ],
+      "requiresAnyOf": [
+        [
+          "malum:processed_soulstone"
+        ],
+        [
+          "minecraft:iron_ingot"
+        ],
+        [
+          "minecraft:stick"
+        ]
+      ],
+      "status": "pinned-native-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Pinned native shaped recipe makes the Crude Scythe from processed Soulstone, Forge iron ingots and Forge wooden rods. The nested Malum Soul Hunter weapon/scythe tags include Crude Scythe, so the native exposure handler applies to its ordinary positive melee hits.",
+      "pinnedProviderResources": [
+        "data/malum/recipes/crude_scythe.json",
+        "data/malum/tags/items/soul_hunter_weapon.json",
+        "data/malum/tags/items/scythe.json",
+        "com/sammy/malum/core/handlers/SoulDataHandler.class"
+      ]
+    },
+    {
+      "id": "malum.spirit_harvest_on_exposed_death",
+      "outputs": [
+        "malum:native_spirits",
+        "malum:arcane_spirit",
+        "malum:wicked_spirit"
+      ],
+      "requiresAnyOf": [
+        [
+          "malum:crude_scythe"
+        ],
+        [
+          "minecraft:skeleton"
+        ],
+        [
+          "player:combat_action"
+        ]
+      ],
+      "status": "pinned-native-survival-route-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Pinned SoulDataHandler sets positive exposedSoulDuration on a positive non-canceled hit when the attacker holds a Soul Hunter weapon. The Soul Hunter weapon tag includes #malum:scythe and the scythe tag includes malum:crude_scythe. The ordinary Crude Scythe recipe needs only processed Soulstone, iron and wooden rods. On non-player death, SpiritHarvestHandler drops the target data if the target is not already soulless; natural skeletons have explicit pinned data for 2 Arcane and 1 Wicked spirits. The exact survival route is source-backed; loot/event registration and in-world pickup remain runtime gates.",
+      "pinnedProviderResources": [
+        "data/malum/recipes/crude_scythe.json",
+        "data/malum/tags/items/soul_hunter_weapon.json",
+        "data/malum/tags/items/scythe.json",
+        "data/malum/spirit_data/entity/skeleton.json",
+        "com/sammy/malum/core/handlers/SoulDataHandler.class",
+        "com/sammy/malum/core/handlers/SpiritHarvestHandler.class",
+        "com/sammy/malum/core/listeners/SpiritDataReloadListener.class",
+        "com/sammy/malum/core/events/RuntimeEvents.class"
+      ]
+    },
+    {
+      "id": "brilliance.deep_ore",
+      "outputs": [
+        "malum:brilliant_stone"
+      ],
+      "requiresAnyOf": [
+        [
+          "the_deep_void:dimension_access"
+        ]
+      ],
+      "status": "configured-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "datapacks/dimension_drink_ore_relocation/data/kubejs/worldgen/configured_feature/dimension_drink_brilliant_ore.json",
+        "datapacks/dimension_drink_ore_relocation/data/kubejs/forge/biome_modifier/dimension_drink_brilliant_ore.json",
+        "datapacks/dimension_drink_ore_relocation/data/kubejs/tags/worldgen/biome/dimension_drink_ore_targets/deep.json"
+      ],
+      "boundary": "Replacement feature is configured against the Deep Void target tag; distribution and drops need candidate observation."
+    },
+    {
+      "id": "brilliance.processing",
+      "outputs": [
+        "malum:crushed_brilliance"
+      ],
+      "requiresAnyOf": [
+        [
+          "malum:crushed_soulstone"
+        ],
+        [
+          "malum:hex_ash"
+        ]
+      ],
+      "status": "source-authored-conditional-native-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js",
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Create mixing source consumes crushed Soulstone plus Hex Ash. Crushed Soulstone is available by Create-crushing raw Soulstone; Hex Ash is available through the pinned infusion route when the Spirit Altar and Arcane Spirit are reached. Recipe registration/runtime output remains unobserved."
+    },
+    {
+      "id": "malum.hex_ash.spirit_infusion",
+      "outputs": [
+        "malum:hex_ash"
+      ],
+      "requiresAnyOf": [
+        [
+          "minecraft:gunpowder"
+        ],
+        [
+          "malum:arcane_spirit"
+        ],
+        [
+          "malum:spirit_altar"
+        ]
+      ],
+      "status": "pinned-native-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Pinned Spirit Infusion consumes one ordinary gunpowder and one Arcane Spirit; the graph represents Arcane Spirit from the source-closed crude-scythe/skeleton route above. Spirit Infusion recipe execution remains runtime-dependent.",
+      "pinnedProviderResources": [
+        "data/malum/recipes/spirit_infusion/hex_ash.json"
+      ]
+    },
+    {
+      "id": "cthonic_gold.deep_ore",
+      "outputs": [
+        "malum:cthonic_gold"
+      ],
+      "requiresAnyOf": [
+        [
+          "the_deep_void:dimension_access"
+        ]
+      ],
+      "status": "configured-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "datapacks/dimension_drink_ore_relocation/data/kubejs/worldgen/configured_feature/dimension_drink_cthonic_gold_ore.json",
+        "datapacks/dimension_drink_ore_relocation/data/kubejs/forge/biome_modifier/dimension_drink_cthonic_gold_ore.json",
+        "datapacks/dimension_drink_ore_relocation/data/kubejs/tags/worldgen/biome/dimension_drink_ore_targets/deep.json"
+      ],
+      "boundary": "New target-tag replacement route; candidate ore placement is unobserved."
+    },
+    {
+      "id": "cthonic_gold.ritual",
+      "outputs": [
+        "malum:cthonic_gold"
+      ],
+      "requiresAnyOf": [
+        [
+          "minecraft:gold_block"
+        ],
+        [
+          "minecraft:gold_ingot"
+        ],
+        [
+          "minecraft:blaze_powder"
+        ],
+        [
+          "malum:cursed_grit"
+        ]
+      ],
+      "status": "source-authored-unresolved-prerequisite",
+      "malum08Legacy": false,
+      "evidence": [
+        "kubejs/data/malum/ritual_recipes/cthonic_conversion.json"
+      ],
+      "boundary": "Ritual is authored from ordinary gold and exact native catalysts; Cursed Grit source remains unresolved."
+    },
+    {
+      "id": "quartz.deep_ore",
+      "outputs": [
+        "malum:natural_quartz"
+      ],
+      "requiresAnyOf": [
+        [
+          "the_deep_void:dimension_access"
+        ]
+      ],
+      "status": "configured-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "datapacks/dimension_drink_ore_relocation/data/kubejs/worldgen/configured_feature/dimension_drink_natural_quartz_ore.json",
+        "datapacks/dimension_drink_ore_relocation/data/kubejs/forge/biome_modifier/dimension_drink_natural_quartz_ore.json",
+        "datapacks/dimension_drink_ore_relocation/data/kubejs/tags/worldgen/biome/dimension_drink_ore_targets/deep.json",
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Native Malum gem-tag compatibility is declared; relocated target generation is not runtime-observed."
+    },
+    {
+      "id": "soulwood.native_blight",
+      "outputs": [
+        "malum:soulwood_growth"
+      ],
+      "requiresAnyOf": [
+        [
+          "overworld:rare_blight_locus"
+        ]
+      ],
+      "status": "source-authored-native-probabilistic-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/BlightLocusBootstrap.java",
+        "../mod_source/dynamic-trees-malum/src/test/java/com/bettercontent/dynamictreesmalum/BlightLocusBootstrapSourceTest.java"
+      ],
+      "boundary": "Locus bootstrap starts native finite blight; Malum may probabilistically add Growth. Never assert a guaranteed starter at each site."
+    },
+    {
+      "id": "soulwood.native_blight_material",
+      "outputs": [
+        "malum:blighted_gunk"
+      ],
+      "requiresAnyOf": [
+        [
+          "overworld:rare_blight_locus"
+        ]
+      ],
+      "status": "pinned-native-loot-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "mods/malum.pw.toml",
+        "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/BlightLocusBootstrap.java"
+      ],
+      "boundary": "Pinned Malum 1.6.7 Blighted Soil loot yields Gunk without Silk Touch; actual site materialization and mining are runtime-dependent.",
+      "pinnedProviderResources": [
+        "data/malum/loot_tables/blocks/blighted_soil.json"
+      ]
+    },
+    {
+      "id": "soulwood.blood_altar",
+      "outputs": [
+        "malum:soulwood_growth"
+      ],
+      "requiresAnyOf": [
+        [
+          "malum:blighted_gunk"
+        ],
+        [
+          "bloodmagic:altar"
+        ],
+        [
+          "bloodmagic:altar_lp_capability"
+        ]
+      ],
+      "status": "source-authored-conditional-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "kubejs/data/kubejs/recipes/malum/soulwood_growth_from_blighted_gunk.json",
+        "docs/malum_soulwood_acquisition.md"
+      ],
+      "boundary": "The checked-in tier-zero recipe uses Blighted Gunk for 2,000 LP. Gunk is reachable through native blight at rare loci and first LP through the conditional heart-fragment path; neither locus materialization nor altar execution is runtime-qualified."
+    },
+    {
+      "id": "weeping_well.native_structure",
+      "outputs": [
+        "malum:primordial_soup"
+      ],
+      "requiresAnyOf": [
+        [
+          "overworld:district_candidate"
+        ]
+      ],
+      "status": "source-gated-native-runtime-dependent",
+      "malum08Legacy": false,
+      "evidence": [
+        "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/WeepingWellDistrictPolicy.java",
+        "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/mixin/WeepingWellStructureMixin.java",
+        "../mod_source/dynamic-trees-malum/src/main/resources/dynamic_trees_malum.mixins.json",
+        "mods/malum.pw.toml",
+        "mods/malum.pw.toml"
+      ],
+      "boundary": "Pinned native structure template includes primordial_soup blocks and their loot table returns malum:primordial_soup. Dynamic Trees policy admits sparse candidates to Malum native checks; exact placement and candidate generation remain runtime-dependent.",
+      "pinnedProviderResources": [
+        "data/malum/structures/weeping_well.nbt",
+        "data/malum/loot_tables/blocks/primordial_soup.json"
+      ]
+    }
+  ],
+  "requiredOutcomes": [
+    "malum:runewood_planks",
+    "malum:processed_soulstone",
+    "malum:spirit_altar",
+    "malum:native_spirits",
+    "malum:wicked_spirit",
+    "malum:arcane_spirit",
+    "malum:brilliant_stone",
+    "malum:crushed_brilliance",
+    "malum:cthonic_gold",
+    "malum:natural_quartz",
+    "malum:soulwood_growth",
+    "malum:primordial_soup"
+  ],
+  "unresolvedRoots": [
+    "malum:cursed_grit"
+  ],
+  "knownConditionalRoots": [
+    "player:positive_xp_level",
+    "player:confirmed_final_death"
+  ],
+  "excludedLegacyRouteIds": [
+    "malum.legacy.soulstone_ore",
+    "malum.legacy.brilliant_ore",
+    "malum.legacy.cthonic_gold_ore",
+    "malum.legacy.natural_quartz_ore"
+  ],
+  "graphSemantics": "Each route is an alternative producer (OR across routes). requiresAnyOf is an AND-list of groups; each group is an OR of acceptable inputs."
+}

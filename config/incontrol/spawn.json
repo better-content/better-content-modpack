@@ -39,5 +39,20 @@
     "maxheight": 62,
     "spawntype": "natural",
     "result": "deny"
+  },
+  {
+    "mob": [
+      "cataclysm:aptrgangr",
+      "cataclysm:coralssus",
+      "cataclysm:ignited_revenant",
+      "cataclysm:the_prowler",
+      "cataclysm:ender_golem",
+      "cataclysm:kobolediator",
+      "cataclysm:wadjet",
+      "cataclysm:amethyst_crab",
+      "cataclysm:clawdian"
+    ],
+    "spawntype": "natural",
+    "result": "deny"
   }
 ]

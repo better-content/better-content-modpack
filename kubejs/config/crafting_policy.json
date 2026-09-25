@@ -339,6 +339,10 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
+    "cataclysm": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
     "class_selector": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
@@ -887,10 +891,6 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "k_turrets": {
-      "primary_role": "content",
-      "support_state": "not_applicable"
-    },
     "keepcuriosinventory": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
@@ -928,6 +928,10 @@
       "support_state": "not_applicable"
     },
     "lithostitched": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "lionfishapi": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
@@ -1291,6 +1295,10 @@
       "primary_role": "content",
       "support_state": "full"
     },
+    "tacz_turrets": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
     "takesapillage": {
       "primary_role": "world",
       "support_state": "full"
@@ -1318,6 +1326,10 @@
     "the_bumblezone": {
       "primary_role": "world",
       "support_state": "full"
+    },
+    "the_deep_void": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
     },
     "the_flesh_that_hates": {
       "primary_role": "content",

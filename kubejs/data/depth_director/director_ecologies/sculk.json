@@ -1,0 +1,68 @@
+{
+  "noise_scale": 768,
+  "cadence_seconds": {
+    "minimum": 420,
+    "maximum": 660
+  },
+  "warning_seconds": {
+    "minimum": 15,
+    "maximum": 30
+  },
+  "surge_seconds": 120,
+  "recovery_seconds": 180,
+  "deep_budget_per_player": 90,
+  "deep_active_target_per_player": 40,
+  "packet_interval_ticks": 120,
+  "warning_sounds": [
+    "minecraft:block.sculk_shrieker.shriek",
+    "minecraft:entity.warden.heartbeat"
+  ],
+  "roster": [
+    {
+      "entity": "minecraft:silverfish",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "minecraft:spider",
+      "role": "common",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "minecraft:cave_spider",
+      "role": "line",
+      "minimum_depth": 0.25,
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8
+    },
+    {
+      "entity": "minecraft:stray",
+      "role": "line",
+      "minimum_depth": 0.45,
+      "cost": 3,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 6
+    },
+    {
+      "entity": "minecraft:drowned",
+      "role": "heavy",
+      "minimum_depth": 0.75,
+      "cost": 7,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 2
+    },
+    {
+      "entity": "cataclysm:the_prowler",
+      "role": "heavy",
+      "minimum_depth": 0.84,
+      "cost": 12,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1
+    }
+  ]
+}

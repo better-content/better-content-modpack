@@ -1,1 +1,1 @@
-{"placement":{"type":"minecraft:random_spread","salt":76489509,"separation":4095,"spacing":4096},"structures":[{"structure":"iceandfire:gorgon_temple","weight":1}]}
+{"placement":{"type":"settlement_roads:clustered_spread","salt":76489509,"cluster_spacing":128,"cluster_radius":12,"baseline_spacing":4096},"structures":[{"structure":"iceandfire:gorgon_temple","weight":1}]}

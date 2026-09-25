@@ -20,9 +20,9 @@
       "text": "Crafting a Dispenser Upgrade"
     },
     {
-      "type": "crafting",
+      "type": "pneumaticcraft:pressure_chamber",
       "anchor": "inventory",
-      "recipe": "pneumaticcraft:inventory_upgrade",
+      "recipe": "kubejs:tech/pneumatic/inventory_upgrade",
       "text": "Crafting an Inventory Upgrade"
     },
     {
@@ -32,9 +32,9 @@
       "text": "Crafting a Item Life Upgrade"
     },
     {
-      "type": "crafting",
+      "type": "pneumaticcraft:pressure_chamber",
       "anchor": "entity_tracker",
-      "recipe": "pneumaticcraft:entity_tracker_upgrade",
+      "recipe": "kubejs:tech/pneumatic/advanced/entity_tracker_upgrade",
       "text": "Crafting a Entity Tracker Upgrade"
     },
     {
@@ -62,15 +62,15 @@
       "text": "Crafting a Search Upgrade"
     },
     {
-      "type": "crafting",
+      "type": "pneumaticcraft:pressure_chamber",
       "anchor": "coordinate_tracker",
-      "recipe": "pneumaticcraft:coordinate_tracker_upgrade",
+      "recipe": "kubejs:tech/pneumatic/coordinate_tracker_upgrade",
       "text": "Crafting a Coordinate Tracker Upgrade"
     },
     {
-      "type": "crafting",
+      "type": "pneumaticcraft:pressure_chamber",
       "anchor": "range",
-      "recipe": "pneumaticcraft:range_upgrade",
+      "recipe": "kubejs:tech/pneumatic/advanced/range_upgrade",
       "text": "Crafting a Range Upgrade"
     },
     {
@@ -80,9 +80,9 @@
       "text": "Crafting a Security Upgrade"
     },
     {
-      "type": "crafting",
+      "type": "pneumaticcraft:pressure_chamber",
       "anchor": "magnet",
-      "recipe": "pneumaticcraft:magnet_upgrade",
+      "recipe": "kubejs:tech/pneumatic/advanced/magnet_upgrade",
       "text": "Crafting a Magnet Upgrade"
     },
     {
@@ -93,15 +93,15 @@
       "text": "Crafting a Thaumcraft Upgrade"
     },
     {
-      "type": "crafting",
+      "type": "pneumaticcraft:pressure_chamber",
       "anchor": "charging",
-      "recipe": "pneumaticcraft:charging_upgrade",
+      "recipe": "kubejs:tech/pneumatic/advanced/charging_upgrade",
       "text": "Crafting a Charging Upgrade"
     },
     {
       "type": "crafting",
       "anchor": "armor",
-      "recipe": "pneumaticcraft:armor_upgrade",
+      "recipe": "kubejs:tech/pneumatic/armor_upgrade_sensors",
       "text": "Crafting a Armor Upgrade"
     },
     {
@@ -117,9 +117,9 @@
       "text": "Crafting a Jet Boots Upgrade: Tier II"
     },
     {
-      "type": "crafting",
+      "type": "pneumaticcraft:pressure_chamber",
       "anchor": "jet_boots_3",
-      "recipe": "pneumaticcraft:jet_boots_upgrade_3",
+      "recipe": "kubejs:tech/pneumatic/advanced/jet_boots_upgrade_3",
       "text": "Crafting a Jet Boots Upgrade: Tier III"
     },
     {
@@ -181,9 +181,9 @@
       "text": "Crafting a Standby Upgrade"
     },
     {
-      "type": "crafting",
+      "type": "pneumaticcraft:pressure_chamber",
       "anchor": "minigun",
-      "recipe": "pneumaticcraft:minigun_upgrade",
+      "recipe": "kubejs:tech/pneumatic/advanced/minigun_upgrade",
       "text": "Crafting a Minigun Upgrade"
     },
     {

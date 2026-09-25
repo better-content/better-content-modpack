@@ -91,7 +91,7 @@
 	#Adds slimy saplings and seeds into various loot chests. Helps for worlds without slime islands
 	slimy_loot = true
 	#If true, ender dragons will drop scales when damaged by explosions
-	drop_dragon_Scales = true
+	drop_dragon_Scales = false
 	#Weight of the ancient tool trade for the wandering trader. All traders randomly choose 1 rare trade, so this is roughly the chance the trade occurs compared to the vanilla options (of which there are 6).
 	#Range: 0 ~ 100
 	wanderer_ancient_tool_weight = 6
@@ -125,4 +125,3 @@
 	#If STACKTRACE, logs the stacktrace whenever a tool stack is created from a non-modifiable item. If WARNING (default), logs a shorter but more efficient error. If IGNORE, disables logging (useful for modpacks/players *after* they reported the issue). The stacktrace helps debug which mod is causing it, but is rather expensive on the chance they are doing it a lot.
 	#Allowed Values: STACKTRACE, WARNING, IGNORED
 	logInvalidToolStack = "WARNING"
-

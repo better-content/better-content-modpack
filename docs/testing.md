@@ -61,8 +61,8 @@ run ID and write structured evidence beneath `generated/test-evidence/<run-id>/`
 events, a `bc.modpack_test_run.v1` summary, candidate hashes, logs, runtime data, and timeout
 diagnostics. The single-player group also records the customized title screen without injecting
 input. Failed fixtures are retained. Automated tests must not synthesize mouse movement or mouse
-clicks. Threads reader development, the World Condenser configuration screen, and single-player
-world creation are manual visual gates. Before rerunning, inspect the existing run and report its
+clicks. Threads reader development, the Quark chat emote picker, the World Condenser configuration
+screen, and single-player world creation are manual visual gates. Before rerunning, inspect the existing run and report its
 ID, hashes, failed or aborted cases, evidence path, retained fixture, and process cleanup state.
 Cleanup retains observed process descendants after their parent exits and checks termination after
 graceful and forced shutdown. Every fixture is closed even when an earlier close fails. The

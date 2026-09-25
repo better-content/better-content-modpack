@@ -7,11 +7,6 @@ ServerEvents.recipes(function (event) {
         Q: 'ae2:certus_quartz_crystal', G: '#forge:glass', C: 'create:electron_tube'
     }).id('kubejs:tech/ae2/quartz_glass_native_palette')
 
-    event.remove({ output: 'ae2:energy_acceptor' })
-    event.shaped('ae2:energy_acceptor', ['CPC', 'PEP', 'CPC'], {
-        C: 'ae2:certus_quartz_crystal', P: 'powergrid:conductive_casing', E: 'powergrid:integrated_circuit'
-    }).id('kubejs:tech/ae2/energy_acceptor_powergrid')
-
     event.remove({ output: 'ae2:controller' })
     event.custom({
         type: 'pneumaticcraft:pressure_chamber', pressure: 4.0,
@@ -59,4 +54,12 @@ ServerEvents.recipes(function (event) {
         Q: 'ae2:quartz_glass', G: '#forge:glass', C: 'ae2:calculation_processor',
         P: 'powergrid:integrated_circuit'
     }).id('kubejs:tech/ae2/cell_workbench_native_components')
+
+    // World reset authority remains in WLM's operator-gated interface. Its
+    // authored recipe is replaced so that the interface itself also requires
+    // material recovered from AE2 meteorites.
+    event.remove({ output: 'world_lifecycle_manager:world_condenser_interface' })
+    event.shaped('world_lifecycle_manager:world_condenser_interface', ['SBS', 'BOB', 'SBS'], {
+        S: 'ae2:sky_stone_block', B: 'create:brass_sheet', O: 'minecraft:obsidian'
+    }).id('kubejs:tech/world_condenser_interface_meteor_gate')
 })
