@@ -2,7 +2,7 @@
   "schema": "bc.formal_magic_domains.v3",
   "description": "Exhaustive Ars glyph provenance. Ars owns formal grammar; active dirty-magic disciplines originate observable effects. A glyph may accept any listed origin independently.",
   "proofs": {
-    "common": ["hexerei:moon_dust", "occultism:burnt_otherstone", "bloodmagic:blankslate", "malum:arcane_spirit", "goety:cursed_ingot"],
+    "common": ["hexerei:moon_dust", "occultism:burnt_otherstone", "bloodmagic:blankslate", "better_content_economy:work_spirit", "goety:cursed_ingot"],
     "uncommon": ["hexerei:blood_bottle", "occultism:otherworld_essence", "bloodmagic:reinforcedslate", "malum:processed_soulstone", "goety:magic_emerald"],
     "rare": ["hexerei:mandrake_root", "occultism:spirit_attuned_gem", "bloodmagic:infusedslate", "malum:hallowed_gold_ingot", "goety:cursed_bars"],
     "epic": ["hexerei:blood_sigil", "occultism:spirit_attuned_crystal", "bloodmagic:demonslate", "malum:eldritch_spirit", "goety:dark_scroll"],
@@ -13,7 +13,7 @@
     "hexerei": ["hexerei:moon_dust", "hexerei:blood_bottle", "hexerei:mandrake_root", "hexerei:blood_sigil"],
     "occultism": ["occultism:burnt_otherstone", "occultism:otherworld_essence", "occultism:spirit_attuned_gem", "occultism:spirit_attuned_crystal"],
     "blood_magic": ["bloodmagic:blankslate", "bloodmagic:reinforcedslate", "bloodmagic:infusedslate", "bloodmagic:demonslate", "bloodmagic:etherealslate"],
-    "malum": ["malum:arcane_spirit", "malum:processed_soulstone", "malum:hallowed_gold_ingot", "malum:eldritch_spirit"],
+    "malum": ["better_content_economy:work_spirit", "malum:processed_soulstone", "malum:hallowed_gold_ingot", "malum:eldritch_spirit"],
     "goety": ["goety:cursed_ingot", "goety:magic_emerald", "goety:cursed_bars", "goety:dark_scroll", "goety:soul_emerald"]
   },
   "origin_milestones": {

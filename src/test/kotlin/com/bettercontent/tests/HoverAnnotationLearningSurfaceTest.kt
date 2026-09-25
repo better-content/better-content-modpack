@@ -93,7 +93,7 @@ class HoverAnnotationLearningSurfaceTest {
             "arcane_chunk_loaders:lifeforce_chunk_anchor" to listOf("Accepts Blood Magic life essence from any side."),
             "arcane_chunk_loaders:pressure_chunk_anchor" to listOf("Accepts PneumaticCraft air through pressure tubes."),
             "arcane_chunk_loaders:soul_chunk_anchor" to listOf("Sneak-use empty-handed to transfer Goety soul energy."),
-            "arcane_chunk_loaders:spirit_chunk_anchor" to listOf("Accepts Malum spirits manually or through automation."),
+            "arcane_chunk_loaders:spirit_chunk_anchor" to listOf("Accepts Better Content spirits and exotic Malum spirits manually or through automation."),
         )
         expectations.forEach { (id, expectedLines) ->
             val row = sourceRows.single { it.path("selector").path("item").asText() == id }
@@ -673,7 +673,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
-    fun `native Malum spirit hover distinguishes recipe reagents from Economy currencies`() {
+    fun `economy spirit hover explains direct drops and Malum reagents`() {
         val acquisition = Files.readString(
             root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/spirit/SpiritAcquisition.java").normalize(),
         )
@@ -684,18 +684,17 @@ class HoverAnnotationLearningSurfaceTest {
             root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/spirit/CurrencyIdentity.java").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("items").any { it.asText() == "malum:aerial_spirit" }
+            annotation.path("selector").path("items").any { it.asText() == "better_content_economy:mobility_spirit" }
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
         assertTrue(acquisition.contains("SpiritCreditAllocation.fromNative(nativeDrops"))
-        assertTrue(acquisition.contains("CurrencyItems.item(grant.identity())"))
-        assertTrue(acquisition.contains("CurrencyIdentity.fromLegacyNativeSpirit(id) == null"))
+        assertTrue(acquisition.contains("SpiritHarvestHandler.spawnItemsAsSpirits(physicalDrops, victim, recipient)"))
+        assertTrue(acquisition.contains("CurrencyItems.item(entry.getKey()).get()"))
         assertTrue(allocation.contains("Maps Malum's ordinary drops"))
-        assertTrue(identity.contains("Native Malum spirits remain crafting reagents"))
-        assertTrue(copy.contains("These Malum spirits remain recipe reagents"))
-        assertTrue(copy.contains("credited kills issue separate Better Content currencies"))
-        assertTrue(copy.contains("Eldritch and Umbral do not map to village-market currencies"))
-        assertTrue(!copy.contains("Matching village markets accept this color"))
+        assertTrue(identity.contains("fromLegacyNativeSpirit"))
+        assertTrue(copy.contains("release stackable Better Content spirits from the dying mob"))
+        assertTrue(copy.contains("serve as currency and ordinary Malum reagents"))
+        assertTrue(copy.contains("Eldritch and Umbral remain separate"))
         assertEquals("better_content_economy", row.path("required_mod").asText())
         assertTrue(row.path("owner").asText().contains("SpiritCreditAllocation.java"))
         assertTrue(row.path("owner").asText().contains("CurrencyIdentity.java"))

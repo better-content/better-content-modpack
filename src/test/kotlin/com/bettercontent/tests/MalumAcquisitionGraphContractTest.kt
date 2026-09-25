@@ -39,7 +39,8 @@ class MalumAcquisitionGraphContractTest {
         val ritual = routes.getValue("cthonic_gold.ritual")
         assertEquals(4, ritual.path("requiresAnyOf").size())
         assertTrue(routes.getValue("soulstone.crushed_from_raw").path("outputs").any { it.asText() == "malum:crushed_soulstone" })
-        assertTrue(routes.getValue("malum.hex_ash.spirit_infusion").path("requiresAnyOf").any { group -> group.any { it.asText() == "malum:arcane_spirit" } })
+        assertTrue(routes.getValue("malum.hex_ash.spirit_infusion").path("requiresAnyOf").any { group -> group.any { it.asText() == "better_content_economy:work_spirit" } })
+        assertTrue(routes.getValue("malum.crude_scythe").path("excludedByEconomy").asBoolean())
         assertEquals(
             setOf("data/malum/recipes/create/crushing/crush_raw_soulstone.json"),
             routes.getValue("soulstone.crushed_from_raw").path("pinnedProviderResources").map { it.asText() }.toSet(),
@@ -55,14 +56,9 @@ class MalumAcquisitionGraphContractTest {
         )
         assertEquals(
             setOf(
-                "data/malum/recipes/crude_scythe.json",
-                "data/malum/tags/items/soul_hunter_weapon.json",
-                "data/malum/tags/items/scythe.json",
                 "data/malum/spirit_data/entity/skeleton.json",
-                "com/sammy/malum/core/handlers/SoulDataHandler.class",
                 "com/sammy/malum/core/handlers/SpiritHarvestHandler.class",
                 "com/sammy/malum/core/listeners/SpiritDataReloadListener.class",
-                "com/sammy/malum/core/events/RuntimeEvents.class",
             ),
             routes.getValue("malum.spirit_harvest_on_exposed_death").path("pinnedProviderResources").map { it.asText() }.toSet(),
         )
@@ -84,7 +80,7 @@ class MalumAcquisitionGraphContractTest {
         val required = graph.path("requiredOutcomes").map { it.asText() }.toSet()
         assertEquals(emptySet<String>(), required - reachable)
         assertTrue(reachable.containsAll(setOf(
-            "malum:native_spirits", "malum:arcane_spirit", "malum:wicked_spirit", "malum:hex_ash",
+            "better_content_economy:ordinary_spirits", "better_content_economy:work_spirit", "better_content_economy:control_spirit", "malum:hex_ash",
             "malum:runewood_planks", "malum:processed_soulstone", "malum:spirit_altar",
             "malum:brilliant_stone", "malum:cthonic_gold", "malum:natural_quartz",
             "malum:soulwood_growth", "malum:primordial_soup",
@@ -103,7 +99,7 @@ class MalumAcquisitionGraphContractTest {
     @Test
     fun `documented routes cite checked-in source or exact pinned resources and graph has no cycles`() {
         val graph = graph()
-        val activeRoutes = graph.path("routes").filterNot { it.path("malum08Legacy").asBoolean() }
+        val activeRoutes = graph.path("routes").filterNot { it.path("malum08Legacy").asBoolean() || it.path("excludedByEconomy").asBoolean() }
         val dependencyEdges = mutableMapOf<String, MutableSet<String>>()
         for (route in activeRoutes) {
             assertTrue(route.path("evidence").isArray && route.path("evidence").size() > 0,
@@ -135,7 +131,7 @@ class MalumAcquisitionGraphContractTest {
     private fun reachableWithoutLegacy(graph: com.fasterxml.jackson.databind.JsonNode): MutableSet<String> {
         val roots = graph.path("externalRoots").associate { it.path("id").asText() to it.path("status").asText() }
         val reachable = roots.filterValues { it != "unresolved-root" }.keys.toMutableSet()
-        val enabledRoutes = graph.path("routes").filterNot { it.path("malum08Legacy").asBoolean() }
+        val enabledRoutes = graph.path("routes").filterNot { it.path("malum08Legacy").asBoolean() || it.path("excludedByEconomy").asBoolean() }
         var changed: Boolean
         do {
             changed = false

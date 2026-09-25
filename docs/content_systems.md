@@ -97,21 +97,24 @@ active achievement ledger or replacement reward system.
 
 ## Spirit commerce
 
-The seven ordinary village professions correspond one-to-one with sacred,
-wicked, arcane, aerial, aqueous, earthen, and infernal spirits. Each has a
+The eight village professions correspond to sacred, wicked, arcane, aerial,
+aqueous, earthen, infernal, and Tempo spirits. Each has a
 matching coloured workstation, outfit, local utility behaviour, and 35-offer
 catalogue priced only in its own spirit at 1–8. Other employed villager
-professions are normalized into these seven; raw vanilla and third-party offers
+professions are normalized into these eight; raw vanilla and third-party offers
 are removed. Eldritch and umbral spirits never appear in commerce.
 
-Wandering traders use the same seven identities, colours, and matching payment
+Wandering traders use the same eight identities, colours, and matching payment
 spirits. Every identity carries 13 themed goods plus one one-use offer of two
 matching spirits for two villager eggs already assigned to the corresponding
-profession. Player-credited kills release spirits through Malum's floating, homing
-item entities. Malum-native mappings remain authoritative, including mapped passive
+profession. Player-credited kills immediately release Better Content spirits at the
+dying mob through Malum's floating, homing item entities. Malum-native mappings remain authoritative, including mapped passive
 animals such as cows, pigs, sheep, and chickens. Only the unmapped fallback is
 hostile-only: it deterministically releases two ordinary spirits. Spawner-origin
-mobs, already-soulless victims, and economy actors release none. The native Spirit Pouch is
+mobs, already-soulless victims, and economy actors release none. The seven ordinary
+Better Content spirits replace Malum's ordinary spirit items in recipes and other
+pack uses; Eldritch and Umbral remain Malum items. Currency stacks to 64 without
+delivery receipts. The native Spirit Pouch is
 the sole supported specialist storage surface. Create Deco coins, coin stacks,
 wallets, coin recipes, emerald-priced offers, Wares/Font adapters, and specialist
 harvesting tools are inert or hidden.

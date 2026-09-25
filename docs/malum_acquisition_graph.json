@@ -441,12 +441,13 @@
           "minecraft:stick"
         ]
       ],
-      "status": "pinned-native-runtime-dependent",
+      "status": "excluded-by-spirit-economy",
       "malum08Legacy": false,
+      "excludedByEconomy": true,
       "evidence": [
         "mods/malum.pw.toml"
       ],
-      "boundary": "Pinned native shaped recipe makes the Crude Scythe from processed Soulstone, Forge iron ingots and Forge wooden rods. The nested Malum Soul Hunter weapon/scythe tags include Crude Scythe, so the native exposure handler applies to its ordinary positive melee hits.",
+      "boundary": "The pinned native Crude Scythe route is retired by Better Content Economy. Credited player kills release physical economy spirits without a Soul Hunter weapon.",
       "pinnedProviderResources": [
         "data/malum/recipes/crude_scythe.json",
         "data/malum/tags/items/soul_hunter_weapon.json",
@@ -457,14 +458,11 @@
     {
       "id": "malum.spirit_harvest_on_exposed_death",
       "outputs": [
-        "malum:native_spirits",
-        "malum:arcane_spirit",
-        "malum:wicked_spirit"
+        "better_content_economy:ordinary_spirits",
+        "better_content_economy:work_spirit",
+        "better_content_economy:control_spirit"
       ],
       "requiresAnyOf": [
-        [
-          "malum:crude_scythe"
-        ],
         [
           "minecraft:skeleton"
         ],
@@ -472,21 +470,18 @@
           "player:combat_action"
         ]
       ],
-      "status": "pinned-native-survival-route-runtime-dependent",
+      "status": "economy-source-backed-runtime-dependent",
       "malum08Legacy": false,
       "evidence": [
-        "mods/malum.pw.toml"
+        "mods/malum.pw.toml",
+        "../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/spirit/SpiritAcquisition.java",
+        "../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/spirit/SpiritCreditAllocation.java"
       ],
-      "boundary": "Pinned SoulDataHandler sets positive exposedSoulDuration on a positive non-canceled hit when the attacker holds a Soul Hunter weapon. The Soul Hunter weapon tag includes #malum:scythe and the scythe tag includes malum:crude_scythe. The ordinary Crude Scythe recipe needs only processed Soulstone, iron and wooden rods. On non-player death, SpiritHarvestHandler drops the target data if the target is not already soulless; natural skeletons have explicit pinned data for 2 Arcane and 1 Wicked spirits. The exact survival route is source-backed; loot/event registration and in-world pickup remain runtime gates.",
+      "boundary": "Better Content Economy uses Malum's pinned skeleton spirit vector but releases physical economy spirits immediately from a credited player kill. Region allocation changes the aspect mix while conserving unit count; Work and Control are possible outputs, not guaranteed for each skeleton. Spawner-origin and soulless victims release none. In-world pickup remains a runtime gate.",
       "pinnedProviderResources": [
-        "data/malum/recipes/crude_scythe.json",
-        "data/malum/tags/items/soul_hunter_weapon.json",
-        "data/malum/tags/items/scythe.json",
         "data/malum/spirit_data/entity/skeleton.json",
-        "com/sammy/malum/core/handlers/SoulDataHandler.class",
         "com/sammy/malum/core/handlers/SpiritHarvestHandler.class",
-        "com/sammy/malum/core/listeners/SpiritDataReloadListener.class",
-        "com/sammy/malum/core/events/RuntimeEvents.class"
+        "com/sammy/malum/core/listeners/SpiritDataReloadListener.class"
       ]
     },
     {
@@ -539,7 +534,7 @@
           "minecraft:gunpowder"
         ],
         [
-          "malum:arcane_spirit"
+          "better_content_economy:work_spirit"
         ],
         [
           "malum:spirit_altar"
@@ -550,7 +545,7 @@
       "evidence": [
         "mods/malum.pw.toml"
       ],
-      "boundary": "Pinned Spirit Infusion consumes one ordinary gunpowder and one Arcane Spirit; the graph represents Arcane Spirit from the source-closed crude-scythe/skeleton route above. Spirit Infusion recipe execution remains runtime-dependent.",
+      "boundary": "Pinned Spirit Infusion consumes ordinary gunpowder and an Arcane-aspect spirit. Better Content's Work Spirit replaces the ordinary Malum item in the loaded recipe, with player-credited kills as its source. Spirit Infusion execution remains runtime-dependent.",
       "pinnedProviderResources": [
         "data/malum/recipes/spirit_infusion/hex_ash.json"
       ]
@@ -713,9 +708,9 @@
     "malum:runewood_planks",
     "malum:processed_soulstone",
     "malum:spirit_altar",
-    "malum:native_spirits",
-    "malum:wicked_spirit",
-    "malum:arcane_spirit",
+    "better_content_economy:ordinary_spirits",
+    "better_content_economy:control_spirit",
+    "better_content_economy:work_spirit",
     "malum:brilliant_stone",
     "malum:crushed_brilliance",
     "malum:cthonic_gold",

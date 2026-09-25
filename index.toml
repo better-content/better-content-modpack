@@ -10732,7 +10732,7 @@ metafile = true
 
 [[files]]
 file = "mods/arcane-chunk-loaders-0.1.0.jar"
-hash = "7ed1318e193b1e508f119324612c54faeb079f7567a4817cc08474490934e3e6"
+hash = "6199021cc7b6373756f7ad0dacc146719db5bc70cada7af181809c1ff7f1f186"
 
 [[files]]
 file = "mods/architectury-api.pw.toml"
@@ -10780,7 +10780,7 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.1.jar"
-hash = "3f4327b23e72244e39ab91c288fe0c3e4b10c9fe4285fadffa6e9d88ced23cc7"
+hash = "ac29430442d013fd2674a74a409975c0192dfa0072d79bdef518928accd221b8"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.9.jar"
@@ -11641,7 +11641,7 @@ metafile = true
 
 [[files]]
 file = "mods/rail-beetle-0.1.0.jar"
-hash = "339b00cf4e11c4950d4faf907c8c7625e0e4f2b6bf223a1c468915b8d68c5854"
+hash = "51847448e2a377f5b61c1324cd7a67d6fedc92802f41874dc3806d0b3f0d541d"
 
 [[files]]
 file = "mods/ratlantis-logistics-0.1.0.jar"
