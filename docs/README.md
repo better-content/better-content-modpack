@@ -10,6 +10,7 @@ This directory contains the pack's living documentation. Add another focused liv
 - `crafting_policy.md`: enforceable crafting-graph definition, selector rules, invariants, and known debt.
 - `balance_policy.md`: canonical register of upstream departures, owners, acquisition channels, rationale, and verification.
 - `learning_surfaces.md`: learning-surface ownership, authoring, evidence, and review policy.
+- `death_system.md`: death-tension intent, player lifecycle, current pack rules, ownership, third-party surfaces, and integration seams.
 - `realistic_ore_processing.md`: theory, invariants, yield semantics, authoring rules, and maintenance contract for geological deposit processing.
 - `refactor_manifests.md`: current executable-script, progression, and custom-system ownership manifests.
 - `weapon_balance_philosophy.md`: cross-system weapon balance doctrine, measurement rules, exceptions, and the current TCon/Epic Fight implementation.
