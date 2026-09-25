@@ -159,6 +159,14 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
+    "arena_challenges": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "buried_encounters": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
     "armoroftheages": {
       "primary_role": "content",
       "support_state": "full"

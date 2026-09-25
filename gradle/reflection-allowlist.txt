@@ -4,3 +4,4 @@ runtime-data-dumper	src/main/java/com/bettercontent/runtimedatadumper/Reflective
 runtime-data-dumper	src/main/java/com/bettercontent/runtimedatadumper/ReflectivePneumaticRecipeAdapter.java
 runtime-data-dumper	src/main/java/com/bettercontent/runtimedatadumper/ReflectiveRecipeFamilyAdapter.java
 runtime-data-dumper	src/test/java/com/bettercontent/runtimedatadumper/RecipeGraphExporterTest.java
+arena-challenges	src/main/java/com/bettercontent/arenachallenges/server/ArenaTraceBridge.java

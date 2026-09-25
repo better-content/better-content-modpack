@@ -10383,6 +10383,10 @@ file = "mods/arcane-chunk-loaders-0.1.0.jar"
 hash = "7ed1318e193b1e508f119324612c54faeb079f7567a4817cc08474490934e3e6"
 
 [[files]]
+file = "mods/arena-challenges-0.1.0.jar"
+hash = "becca3d317283ba7a8f9ef635436652fa0ece46d47a774bee7ce3a16f46b699f"
+
+[[files]]
 file = "mods/architectury-api.pw.toml"
 hash = "5e9edd1fd2395f14a0c8a4acbdbdd61e1047be1f0033deb3140d2ce0d093e9d8"
 metafile = true
@@ -10472,6 +10476,10 @@ metafile = true
 [[files]]
 file = "mods/bumblezone-cultivars-0.1.0.jar"
 hash = "a0bd89b9c3c6b7681a477805534998d8f6d4891ec77ca67fa18930613191e0e7"
+
+[[files]]
+file = "mods/buried-encounters-0.1.0.jar"
+hash = "c8967ec54209b73fd97f7ad0a75489e75ebc560133051100db2824021431a693"
 
 [[files]]
 file = "mods/burnt-basic.pw.toml"
