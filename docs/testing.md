@@ -16,13 +16,13 @@ Pack-level tiers are expensive and run only when explicitly requested:
 ./test.main.kts debug
 ```
 
-Dist includes Dev, candidate contracts, server startup/snapshot, singleplayer title,
-multiplayer join, travel to one fresh location in each reachable dimension, one 10-second TPS
-sample there, strict logs, and candidate hashes. A sample below 18 TPS switches that location
-to three consecutive passing samples within 180 seconds. Debug uses unchanged candidate hashes
-and adds three fresh locations per dimension with strict three-sample TPS, one lineage transition
-and archive, the 30-minute three-client campaign soak, server restart/client reconnect, native
-Font travel, and singleplayer world boot/save/reopen.
+Dist includes Dev, candidate contracts, multiplayer join, travel to one fresh location in each
+reachable dimension, one 10-second TPS sample there, strict logs, and candidate hashes. A sample
+below 18 TPS switches that location to three consecutive passing samples within 180 seconds.
+Debug uses unchanged candidate hashes and adds dedicated-server startup/runtime snapshot, three
+fresh locations per dimension with strict three-sample TPS, one lineage transition and archive,
+the 30-minute three-client campaign soak, server restart/client reconnect, native Font travel,
+and singleplayer startup/world boot/save/reopen.
 
 Dist, Debug, and `release.main.kts` share one kernel-backed runner mutex. The
 supported entry points acquire it automatically and publish current ownership at
@@ -49,10 +49,9 @@ Admission copies the document into the queue, rejects duplicate request IDs, and
 revalidates the exact candidate paths and hashes before use.
 
 The tiers run internal Gradle tasks `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
-`singleplayerTest`. The facade sequences fast checks, the candidate gate, and three runtime groups.
-Dist stops after the first failed gate or runtime group to shorten failed candidate loops; Debug
-continues through independent runtime groups to collect diagnostic evidence. Each runtime group
-uses a fresh fixture.
+`singleplayerTest`. Dist sequences fast checks, the candidate gate, and the multiplayer runtime
+group. Debug runs the same gates and all three runtime groups to collect diagnostic evidence.
+Each runtime group uses a fresh fixture.
 
 Dev writes ordinary Gradle XML and HTML reports only. Dist and Debug runs share a
 run ID and write structured evidence beneath `generated/test-evidence/<run-id>/`: incremental JSON
