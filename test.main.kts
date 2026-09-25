@@ -88,14 +88,10 @@ if (selected == "dev") {
     if (statuses.values.all { it == 0 }) {
         statuses["candidate"] = gradle("candidate", "candidateTest")
         if (statuses.getValue("candidate") == 0) {
-            val runtimeSuites = if (selected == "dist") listOf("multiplayer")
-                else listOf("server", "multiplayer", "singleplayer")
+            val runtimeSuites = if (selected == "debug") listOf("server", "multiplayer", "singleplayer")
+                else emptyList()
             for (name in runtimeSuites) {
                 statuses[name] = gradle(name, taskBySelector.getValue(name))
-                if (selected == "dist" && statuses.getValue(name) != 0) {
-                    println("$name failed; remaining Dist suites were not started")
-                    break
-                }
             }
         } else {
             println("candidate validation failed; heavyweight suites were not started")

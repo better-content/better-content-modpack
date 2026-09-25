@@ -66,11 +66,11 @@ Superseded evidence may be pruned only through the guarded maintenance command. 
 matching the current candidate, the newest passed evidence for any suite missing from that run, and
 failures with no later passing result.
 
-Dist checks package contracts, multiplayer connection, and one fresh location per reachable
-dimension with adaptive TPS recovery, strict logs, and candidate hashes. Debug runs against the
-same candidate hashes and adds dedicated-server runtime data and lifecycle, single-player startup
-and world save/reopen, three fresh locations with three-sample TPS, the 30-minute three-client
-campaign soak, restart/reconnect, and native Font round-trip scenarios.
+Dist runs Dev checks and validates the exact packaged client/server candidate pair without
+starting Minecraft. Debug runs against the same candidate hashes and adds dedicated-server
+runtime data and lifecycle, multiplayer connection and all loaded dimensions at three fresh
+locations with three-sample TPS, single-player startup and world save/reopen, the 30-minute
+three-client campaign soak, restart/reconnect, strict logs, and native Font round-trip scenarios.
 Further scenario expansion still requires an explicit user order.
 
 Automated tests must not synthesize mouse movement or mouse clicks. UI flows that require pointer
