@@ -16,12 +16,14 @@ Pack-level tiers run only when explicitly requested:
 ./test.main.kts debug
 ```
 
-Dist includes Dev and validates the exact packaged client/server ZIP pair without starting
-Minecraft. Debug uses unchanged candidate hashes and runs dedicated-server startup/runtime
-snapshot, multiplayer join and travel through all loaded dimensions at three fresh locations
-with strict three-sample TPS, one lineage transition and archive, the 30-minute three-client
-campaign soak, server restart/client reconnect, native Font travel, strict logs, and singleplayer
-startup/world boot/save/reopen.
+Dist includes Dev, candidate contracts, a real full-pack multiplayer join, travel to one fresh
+location in every directly teleportable loaded dimension, one 10-second TPS sample per visit,
+Font-only direct-travel guards, strict logs, and candidate hashes. A sample below 18 TPS triggers
+three consecutive passing samples within 180 seconds.
+Debug uses unchanged candidate hashes and adds dedicated-server startup/runtime snapshot, three
+fresh locations per directly teleportable dimension with strict three-sample TPS, one lineage
+transition and archive, the 30-minute three-client campaign soak, server restart/client reconnect, native Font travel,
+and singleplayer startup/world boot/save/reopen.
 
 Dist, Debug, and `release.main.kts` share one kernel-backed runner mutex. The
 supported entry points acquire it automatically and publish current ownership at
@@ -48,14 +50,14 @@ Admission copies the document into the queue, rejects duplicate request IDs, and
 revalidates the exact candidate paths and hashes before use.
 
 The tiers run internal Gradle tasks `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
-`singleplayerTest`. Dist sequences fast checks and the candidate gate. Debug runs the same gates
-and all three runtime groups to collect diagnostic evidence. Each runtime group uses a fresh
-fixture.
+`singleplayerTest`. Dist sequences fast checks, the candidate gate, and the multiplayer runtime
+group. Debug runs the same gates and all three runtime groups to collect diagnostic evidence.
+Each runtime group uses a fresh fixture.
 
 Dev writes ordinary Gradle XML and HTML reports only. Dist and Debug use a run ID and write
 structured evidence beneath `generated/test-evidence/<run-id>/`: incremental JSON events, a
-`bc.modpack_test_run.v1` summary, and candidate hashes. Debug's runtime groups add logs, runtime
-data, and timeout diagnostics. The single-player group also records the customized title screen without injecting
+`bc.modpack_test_run.v1` summary, and candidate hashes. Runtime groups add logs, runtime data,
+and timeout diagnostics. The single-player group also records the customized title screen without injecting
 input. Failed fixtures are retained. Automated tests must not synthesize mouse movement or mouse
 clicks. Threads reader development, the Quark chat emote picker, the World Condenser configuration
 screen, and the Create World menu are manual visual gates. Debug's non-pointer world probe tests
@@ -78,10 +80,13 @@ The runtime-data-dumper completion schema is `bc.runtime_dump_completion.v3` and
 `dimensions.json` (`bc.dimensions.v1`). Multiplayer smoke discovers targets at run time from the
 loaded Creating Space rocket-accessible-dimension registry and enabled Dimension Drink Font
 configuration; target counts are evidence, not hard-coded assumptions. Every discovered target
-must be loaded. In Debug, a single full-pack client travels as a spectator and requires a
-post-teleport heartbeat within 90 seconds. It visits three fresh, pairwise-distant locations per
-target and always requires three consecutive samples at at least 18 mean TPS. The other two
-clients start only for Debug's three-client Survival soak.
+must be loaded. A single full-pack client travels as a spectator and requires a post-teleport
+heartbeat within 90 seconds. Dist visits one fresh location per directly teleportable target and
+takes one 10-second TPS sample, expanding low-TPS results to three consecutive passing samples.
+Font-only destinations require a direct-travel denial guard. Debug visits three
+fresh, pairwise-distant locations per directly teleportable target and always requires three
+consecutive samples at at least 18 mean TPS. The other two clients start only for Debug's
+three-client Survival soak.
 Timeouts retain the command, server tail, process state, and fixture
 for diagnosis. Candidate hashes are checked again after traversal.
 
