@@ -48,9 +48,10 @@ Admission copies the document into the queue, rejects duplicate request IDs, and
 revalidates the exact candidate paths and hashes before use.
 
 The tiers run internal Gradle tasks `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
-`singleplayerTest`. The facade sequences fast checks, the candidate gate, and three runtime groups so a
-candidate failure prevents Minecraft startup while a later runtime-group failure does not hide the
-other groups' evidence. Each runtime group uses a fresh fixture.
+`singleplayerTest`. The facade sequences fast checks, the candidate gate, and three runtime groups.
+Dist stops after the first failed gate or runtime group to shorten failed candidate loops; Debug
+continues through independent runtime groups to collect diagnostic evidence. Each runtime group
+uses a fresh fixture.
 
 Dev writes ordinary Gradle XML and HTML reports only. Dist and Debug runs share a
 run ID and write structured evidence beneath `generated/test-evidence/<run-id>/`: incremental JSON
