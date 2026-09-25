@@ -1,35 +1,32 @@
 # Testing and fresh distributions
 
-Pack-level tests are intentionally expensive and run only when explicitly requested. Ordinary
-tracked pack-content and metadata changes use the mutating frugal phase:
+The public test interface has three cumulative tiers. Dev needs no packaged candidate and can
+run while other developers share the workspace:
 
 ```sh
-./test.main.kts frugal
+./test.main.kts dev
 ```
 
-This is the exclusive owner of `packwiz refresh`; it updates Packwiz hashes and then runs
-`git diff --check`. Authoring, deployment, and packaging do not update hashes themselves.
-Other ordinary changes use focused inspection or the owning format/tool. Changes to the test
-harness itself additionally use:
+Dev runs the fast Minecraft-free contracts and `git diff --check`; it does not refresh Packwiz
+hashes. Fresh-dist preparation refreshes them once after source and pack changes settle.
+Pack-level tiers are expensive and run only when explicitly requested:
 
 ```sh
-./test.main.kts fast
+./test.main.kts dist
+./test.main.kts debug
 ```
 
-An explicit pack-test request selects one existing candidate group:
+Dist includes Dev, candidate contracts, server startup/snapshot/one lineage transition,
+singleplayer title, multiplayer join, all-dimension travel with one TPS sample per location,
+a two-minute three-client campaign, strict logs, and candidate hashes. A sample below 18 TPS
+switches its location to three consecutive passing samples within 180 seconds. Debug uses
+unchanged candidate hashes and adds strict three-sample travel, the 30-minute campaign soak,
+server restart/client reconnect, native Font travel, and singleplayer world boot/save/reopen.
 
-```sh
-./test.main.kts candidate
-./test.main.kts server
-./test.main.kts multiplayer
-./test.main.kts singleplayer
-./test.main.kts all
-```
-
-All heavyweight selectors and `release.main.kts` share one kernel-backed runner mutex. The
+Dist, Debug, and `release.main.kts` share one kernel-backed runner mutex. The
 supported entry points acquire it automatically and publish current ownership at
 `$HOME/.local/share/worklane/pack-tests/owner.json`; contention fails immediately with exit code
-75 and that ownership record. `fast` and custom-mod repository-local checks do not use this mutex.
+75 and that ownership record. Dev and custom-mod repository-local checks do not use this mutex.
 Do not invoke the heavyweight Gradle tasks directly: they require the inherited lock token.
 
 Only `workspace_coord` admits work to the persistent queue. It supplies an immutable-candidate
@@ -50,25 +47,25 @@ producer validations; artifacts; ordered dependencies; requested scenarios; and 
 Admission copies the document into the queue, rejects duplicate request IDs, and the harness
 revalidates the exact candidate paths and hashes before use.
 
-The selectors map exactly to `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
-`singleplayerTest`. Gradle also exposes the aggregate `modpackTest`, but `test.main.kts all`
-deliberately sequences `test`, the candidate gate, and the three independent runtime groups so a
+The tiers run internal Gradle tasks `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
+`singleplayerTest`. The facade sequences fast checks, the candidate gate, and three runtime groups so a
 candidate failure prevents Minecraft startup while a later runtime-group failure does not hide the
 other groups' evidence. Each runtime group uses a fresh fixture.
 
-`fast` writes ordinary Gradle XML and HTML reports only. Candidate, runtime, and `all` runs share a
+Dev writes ordinary Gradle XML and HTML reports only. Dist and Debug runs share a
 run ID and write structured evidence beneath `generated/test-evidence/<run-id>/`: incremental JSON
 events, a `bc.modpack_test_run.v1` summary, candidate hashes, logs, runtime data, and timeout
 diagnostics. The single-player group also records the customized title screen without injecting
 input. Failed fixtures are retained. Automated tests must not synthesize mouse movement or mouse
 clicks. Threads reader development, the Quark chat emote picker, the World Condenser configuration
-screen, and single-player world creation are manual visual gates. Before rerunning, inspect the existing run and report its
+screen, and the Create World menu are manual visual gates. Debug's non-pointer world probe tests
+fresh save boot and reopen, not the menu. Before rerunning, inspect the existing run and report its
 ID, hashes, failed or aborted cases, evidence path, retained fixture, and process cleanup state.
 Cleanup retains observed process descendants after their parent exits and checks termination after
 graceful and forced shutdown. Every fixture is closed even when an earlier close fails. The
 `process_cleanup` event reports `complete=false`, surviving PIDs, and an error when cleanup fails;
 the suite then fails and retains its fixture and original failure evidence. `complete=true` means
-all tracked processes have exited. The fast suite tests ordinary, forced, and orphaned-child
+all tracked processes have exited. Dev tests ordinary, forced, and orphaned-child
 shutdown without launching Minecraft.
 
 A runtime snapshot is evidence for a target only when its snapshot ID appears in that run's server
@@ -82,8 +79,9 @@ The runtime-data-dumper completion schema is `bc.runtime_dump_completion.v3` and
 loaded Creating Space rocket-accessible-dimension registry and enabled Dimension Drink Font
 configuration; target counts are evidence, not hard-coded assumptions. Every discovered target
 must be loaded. A single full-pack client traverses three fresh, pairwise-distant locations per
-target as a spectator, requires a post-teleport heartbeat within 90 seconds, then requires three
-consecutive 10-second samples at at least 18 mean TPS within 180 seconds. The other two clients
+target as a spectator and requires a post-teleport heartbeat within 90 seconds. Dist takes one
+10-second sample per location and expands low-TPS results to three consecutive passing samples;
+Debug always requires three consecutive samples at at least 18 mean TPS. The other two clients
 are not started for this teleport/TPS test; they are started once afterward for the separate
 three-client Survival soak. Timeouts retain the command, server tail, process state, and fixture
 for diagnosis. Candidate hashes are checked again after traversal.
@@ -91,7 +89,8 @@ for diagnosis. Candidate hashes are checked again after traversal.
 The multiplayer fixture then keeps three real clients connected to that same full-pack dedicated
 server in Survival at linear Overworld checkpoints 10,000 blocks apart. The harness-only
 protection control makes each player invulnerable without changing game mode. A routed scout is
-started for each player with no injected route, then the complete pack runs for a 30-minute
+started for each player with no injected route, then the complete pack runs for a two-minute Dist
+or 30-minute Debug
 wall-clock soak while server/client liveness, campaign status, game time, and logs are sampled.
 This is separate from the isolated Pillager Campaigns development harness and is evidence for the
 packaged modpack candidate.
@@ -142,7 +141,6 @@ Only an explicit fresh-dist request authorizes:
 ```sh
 ./release.main.kts
 ./release.main.kts --jobs 4
-./release.main.kts --jobs 2 --suite multiplayer
 ./release.main.kts --jobs 4 --skip-tests
 ```
 
@@ -151,17 +149,14 @@ compares each local source `HEAD` with the revision embedded in its currently bu
 records that local-only update check in release evidence. It never fetches or modifies remotes.
 It reuses unchanged bundled runtime JARs whose embedded source revision matches the clean checkout,
 and runs the documented verification only for changed repositories. It annotates and deploys all
-staged runtime JARs together, invokes the frugal phase to refresh Packwiz hashes, runs `dist.sh`
-exactly once, and finally invokes the selected pack suite. The default is `all`; `--suite multiplayer`
-selects the connection smoke, dimension teleport traversal, and 30 minute protected-player soak
-when those are the explicitly requested stability gate. That release mode still records log-audit findings
-but does not use them as an additional pass gate; candidate hash checks remain required. A direct
-`./test.main.kts multiplayer` retains the strict log audit. It records each mod's `reused` or `rebuilt` mode and JAR hash before testing the
-unchanged ZIP pair.
+staged runtime JARs together, refreshes Packwiz hashes and checks the diff, runs `dist.sh`
+exactly once, and then runs the complete Dist tier. Debug is run separately against the unchanged
+ZIP pair when explicitly requested. Release evidence records each mod's `reused` or `rebuilt`
+mode and JAR hash.
 Legacy JARs without source metadata are replaced during this bootstrap run.
 
-`--skip-tests` is the explicit untested-release path and cannot be combined with `--suite multiplayer`. It still reuses valid source-identical
+`--skip-tests` is the explicit untested-release path. It still reuses valid source-identical
 bundled JARs. Changed or unannotated sources build through `stageRuntimeJar` without the custom-mod
-verification tasks; the complete staged set is deployed, the frugal phase refreshes Packwiz, and packaging runs
+verification tasks; the complete staged set is deployed, release preparation refreshes Packwiz, and packaging runs
 exactly once. It skips the full pack suite. Release evidence and provenance record that tests
 were skipped; use this only when the fresh-dist request explicitly prohibits tests.

@@ -68,16 +68,16 @@ class HarnessFastTest {
     }
 
     @Test
-    fun packwizHashRefreshBelongsOnlyToTheFrugalPhase() {
+    fun packwizHashRefreshBelongsOnlyToFreshDistPreparation() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val facade = Files.readString(root.resolve("test.main.kts"))
         val packager = Files.readString(root.resolve("package.sh"))
         val release = Files.readString(root.resolve("src/main/kotlin/com/bettercontent/tests/release/ReleasePipeline.kt"))
 
-        assertTrue(facade.contains("run(\"packwiz\", \"refresh\")"))
+        assertTrue(!facade.contains("packwiz refresh"))
         assertTrue(!packager.contains("packwiz refresh"))
-        assertTrue(!release.contains("listOf(\"packwiz\", \"refresh\")"))
-        assertTrue(release.contains("root.resolve(\"test.main.kts\").toString(), \"frugal\""))
+        assertTrue(release.contains("listOf(\"packwiz\", \"refresh\")"))
+        assertTrue(release.contains("listOf(\"git\", \"diff\", \"--check\")"))
     }
 
     @Test
@@ -779,7 +779,7 @@ class HarnessFastTest {
           "dependencies": [],
           "scenarios": [],
           "prior_evidence": [],
-          "selector": "server",
+          "selector": "dist",
           "candidate": {
             "client": {"path": "/candidate/client.zip", "sha256": "${"a".repeat(64)}"},
             "server": {"path": "/candidate/server.zip", "sha256": "${"b".repeat(64)}"}

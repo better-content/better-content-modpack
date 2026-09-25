@@ -183,12 +183,14 @@ fun main(args: Array<String>) {
         }
     }
 
-    runLogged(root, listOf(root.resolve("test.main.kts").toString(), "frugal"), evidence.resolve("frugal.log"))
+    runLogged(root, listOf("packwiz", "refresh"), evidence.resolve("packwiz-refresh.log"))
+    runLogged(root, listOf("git", "diff", "--check"), evidence.resolve("diff-check.log"))
     runLogged(root, listOf(root.resolve("dist.sh").toString()), evidence.resolve("dist.log"))
     val candidates = CandidateLocator.locate(root)
     val provenance = mapOf(
         "schema" to "bc.fresh_dist_provenance.v1",
         "created_at" to Instant.now().toString(),
+        "test_tier" to if (skipTests) "none" else "dist",
         "tests_skipped" to skipTests,
         "candidates" to mapOf(
             "client" to candidates.client.toString(),

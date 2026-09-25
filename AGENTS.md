@@ -6,14 +6,11 @@ This repository is the Better Content Forge 1.20.1 modpack content layer.
 ## Active scripts
 - `./dist.sh` creates versioned CurseForge/client and server-content ZIPs under the
   canonical ignored `dist/` directory. It accepts no output-directory override.
-- `./test.main.kts` is the supported granular evaluation facade. It requires an explicit
-  `fast`, `candidate`, `server`, `multiplayer`, `singleplayer`, or `all` selector.
+- `./test.main.kts` is the supported three-tier evaluation facade. It requires an explicit
+  `dev`, `dist`, or `debug` selector.
 - `./release.main.kts` is the only fresh-dist workflow. By default it reuses unchanged bundled
   runtime JARs whose source revision matches and validates/rebuilds changed repositories, then
-  packages exactly once and runs `all`. An explicit `--suite multiplayer` packages the same way
-  and runs the multiplayer smoke, teleport, and soak stability gate while recording non-gate log
-  findings and still verifying candidate hashes. Direct `./test.main.kts multiplayer` retains its
-  strict log audit.
+  refreshes Packwiz hashes, packages exactly once, and runs `dist`.
   `--skip-tests` is allowed only when the explicit fresh-dist request prohibits tests; it still
   reuses unchanged JARs, builds/stages changed sources without verification, and packages exactly once.
 - `./maintenance.main.kts audit` reports evidence retention decisions without changing the
@@ -33,16 +30,15 @@ content, schema, archive-membership, cleanliness, or correctness verdicts.
 conclusion of an edit. A fresh tested distribution is authorized only when the user explicitly asks
 for one, and must use `release.main.kts`; never rebuild between testing and publication.
 
-## Frugal testing policy
+## Three-tier testing policy
 
 Use the smallest relevant focused validation for ordinary work: format parsing, targeted inspection,
-and `./test.main.kts frugal` when tracked pack content or metadata changed. The frugal selector is
-the exclusive owner of Packwiz hash updates and finishes with `git diff --check`; authoring,
-deployment, and packaging steps must not run `packwiz refresh` directly. Harness changes also run
-`./test.main.kts fast`. Do not build a distribution or run `candidate`, `server`, `multiplayer`,
-`singleplayer`, or `all` because a change appears runtime-sensitive. Pack-level testing runs only
-when the user explicitly orders it or names a pack suite. Fresh distributions run only when the
-user explicitly orders a fresh dist.
+and `./test.main.kts dev`. Dev runs the fast Minecraft-free contracts and `git diff --check`;
+it needs no candidate and does not update tracked Packwiz hashes while developers share the
+workspace. Only fresh-dist preparation in `release.main.kts` runs `packwiz refresh`, followed by
+`git diff --check`. Authoring, deployment, and packaging steps must not run it independently.
+Do not build a distribution or run `dist` or `debug` because a change appears runtime-sensitive.
+Pack-level testing and fresh distributions still require an explicit user order.
 
 Custom-mod changes still run that repository's documented local verification, but do not authorize
 cross-repository builds, JAR deployment, pack refresh, packaging, or pack tests. When pack testing
@@ -56,7 +52,7 @@ Never report only that tests failed, delete a failed fixture, rebuild the candid
 expensive suite before inspecting its evidence. Confirm whether child processes were cleaned up so
 another agent can safely continue.
 
-All heavyweight pack selectors and releases share the same kernel-backed mutex. Invoke them only
+Dist, Debug, and releases share the same kernel-backed mutex. Invoke them only
 through `test.main.kts`, `release.main.kts`, or `pack-test-queue.main.kts run-next`; direct
 heavyweight Gradle tasks reject calls without the inherited lock token. Contention is fail-fast
 with exit code 75 and published owner metadata. A product lane must register its dependency with
@@ -64,14 +60,17 @@ with exit code 75 and published owner metadata. A product lane must register its
 admission requires `bc.pack_test_handoff.v1`, explicit authorization, an allowed selector,
 producer/callback identities, modpack and repository state, exact candidate paths and hashes,
 producer validations and artifacts, ordered dependencies, scenarios, and prior evidence.
+Queue selectors are `dist` and `debug`.
 
 Superseded evidence may be pruned only through the guarded maintenance command. It retains evidence
 matching the current candidate, the newest passed evidence for any suite missing from that run, and
 failures with no later passing result.
 
-The granular suite preserves the package, dedicated-server/runtime-data/lifecycle, multiplayer
-connection, single-player startup, log-policy, and candidate-hash boundaries. It does not authorize
-unrelated audits, performance budgets, persistence matrices, or gameplay scenario expansion.
+Dist checks package contracts, dedicated-server/runtime-data/lifecycle, multiplayer connection and
+adaptive one-sample-per-location TPS, single-player startup, a two-minute three-player campaign,
+logs, and candidate hashes. Debug runs against the same candidate hashes and adds three-sample
+TPS at every location, the 30-minute soak, world save/reopen, restart/reconnect, and native Font
+round-trip scenarios. Further scenario expansion still requires an explicit user order.
 
 Automated tests must not synthesize mouse movement or mouse clicks. UI flows that require pointer
 interaction are manual visual gates; keep them documented and out of the automated harness.

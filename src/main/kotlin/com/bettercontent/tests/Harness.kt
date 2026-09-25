@@ -193,10 +193,11 @@ class EvidenceRun(val config: TestConfig, val suite: String) {
     val fixture: Path = directory.resolve("fixture").also { it.createDirectories() }
     private val events = directory.resolve("events.jsonl")
     private val started = Instant.now()
+    val tier: String = System.getenv("BC_TEST_TIER")?.takeIf { it in setOf("dist", "debug") } ?: "legacy"
     private var failure: String? = null
 
     init {
-        event("suite_started", mapOf("suite" to suite, "root" to config.root.absolutePathString()))
+        event("suite_started", mapOf("suite" to suite, "tier" to tier, "root" to config.root.absolutePathString()))
         config.handoff?.let { source ->
             require(Files.isRegularFile(source)) { "pack-test handoff is missing: $source" }
             Files.copy(source, directory.resolve("handoff.json"), StandardCopyOption.REPLACE_EXISTING)
@@ -257,6 +258,7 @@ class EvidenceRun(val config: TestConfig, val suite: String) {
             "schema" to "bc.modpack_test_run.v1",
             "run_id" to config.runId,
             "suite" to suite,
+            "tier" to tier,
             "status" to status,
             "started_at" to started.toString(),
             "updated_at" to Instant.now().toString(),

@@ -108,7 +108,7 @@ creatures to explain the event.
   changed. Automated tests must not synthesize mouse movement or clicks.
 - Report changed player-visible behavior and verification. Run pack suites only when
   explicitly ordered through `test.main.kts`; otherwise state that pack testing was
-  intentionally omitted under the frugal-testing policy.
+  intentionally omitted under the Dev/Dist/Debug testing policy.
 
 Do not recreate a quest compiler, layout harness, atlas exporter, or parallel validation
 framework. Durable guidance belongs here; raw evidence belongs outside living docs.

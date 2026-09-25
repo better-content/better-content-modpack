@@ -14,18 +14,18 @@ Repository-local validation does not authorize deployment or pack-level testing.
 explicitly requests deployment of one mod, copy only its staged runtime JAR and run:
 
 ```sh
-./test.main.kts frugal
+./test.main.kts dev
 ```
 
-The frugal phase exclusively owns `packwiz refresh`, updates the tracked pack index after a JAR
-replacement, and checks the resulting diff. Do not run a pack suite
-unless the user separately requests pack-level testing.
+Dev checks fast contracts and the diff without changing Packwiz hashes in a shared workspace.
+Fresh-dist preparation refreshes the tracked pack index after the deployed set settles.
+Do not run Dist or Debug unless the user separately requests pack-level testing.
 
 When the user explicitly requests a fresh tested distribution, run `./release.main.kts` from the
 modpack. It requires clean active source repositories, reuses valid source-identical bundled JARs,
 runs documented verification for changed or unannotated sources, stages and validates their fresh
-JARs, deploys the staged set as a group, invokes the frugal phase to refresh the pack,
-invokes `dist.sh` once, and runs all granular pack suites against those exact candidates. The
+JARs, deploys the staged set as a group, refreshes the pack, invokes `dist.sh` once, and runs
+the Dist tier against those exact candidates. The
 machine-readable release inventory is `gradle/active-custom-mods.json`; this table documents the
 same active set for humans. Inventory `dependsOn` edges are release-build order constraints. They
 stage typed Better Content API providers before their consumers: Dimension Drink before Economy,

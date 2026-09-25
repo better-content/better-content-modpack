@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.time.Duration
-import java.time.Instant
 
 @Tag("multiplayer")
 @TestMethodOrder(OrderAnnotation::class)
@@ -33,15 +32,6 @@ class MultiplayerRuntimeTest {
         )
         private const val SOAK_TICKS = 36_000L
         private const val DEFAULT_SOAK_SECONDS = 30 * 60L
-        private val soakSecondsOverride = System.getenv("BC_PILLAGER_SOAK_SECONDS")?.let { raw ->
-            raw.toLongOrNull()?.also { require(it >= 30) { "BC_PILLAGER_SOAK_SECONDS must be at least 30" } }
-                ?: error("BC_PILLAGER_SOAK_SECONDS must be an integer number of seconds")
-        }
-        private val soakDeadlineOverride = System.getenv("BC_PILLAGER_SOAK_UNTIL_UTC")?.let { raw ->
-            runCatching { Instant.parse(raw) }.getOrElse {
-                error("BC_PILLAGER_SOAK_UNTIL_UTC must be an ISO-8601 UTC timestamp")
-            }
-        }
         // A full-pack client can otherwise drive the shared smoke-test host into its
         // memory ceiling during Lost Cities reloads. Four GiB clears TACZ's initial
         // model reload while leaving headroom for the server during the single-client
@@ -52,7 +42,11 @@ class MultiplayerRuntimeTest {
         @BeforeAll
         fun start() {
             val inheritedJavaOptions = System.getenv("JAVA_TOOL_OPTIONS")?.trim().orEmpty()
-            val harnessOptions = listOf(inheritedJavaOptions, "-Dpillager_campaigns.harness=true")
+            val harnessOptions = listOf(
+                inheritedJavaOptions,
+                "-Dpillager_campaigns.harness=true",
+                if (evidence.run.tier == "debug") "-Dbc.pack_test.debug=true" else "",
+            )
                 .filter(String::isNotBlank).joinToString(" ")
             server = DedicatedServerFixture(
                 evidence.run,
@@ -178,7 +172,7 @@ class MultiplayerRuntimeTest {
     @Test @Order(3)
     fun threeSurvivalPlayersExerciseCampaignsAndSoak() {
         assumeTrue(dimensions, "dimension traversal prerequisite failed")
-        evidence.run.checkpoint("three-player campaign and 30-minute Survival soak") {
+        evidence.run.checkpoint("three-player campaign and ${if (evidence.run.tier == "debug") "30-minute" else "two-minute"} Survival soak") {
             clients.drop(1).forEach {
                 startClient(it)
                 // Keep the newly joined soak client out of ordinary campaign eligibility
@@ -214,7 +208,7 @@ class MultiplayerRuntimeTest {
                     "protect ${client.username}",
                     Duration.ofSeconds(30),
                 )
-                server.send("execute in minecraft:overworld run tp ${client.username} $x 320 $z")
+                server.send("execute in minecraft:overworld run tp ${client.username} $x 316 $z")
                 server.commandResult(
                     "execute as ${client.username} at @s run say BC_PILLAGER_POSITION_${index + 1}",
                     Regex("BC_PILLAGER_POSITION_${index + 1}"),
@@ -239,7 +233,7 @@ class MultiplayerRuntimeTest {
             val soakSeconds = soakSecondsAtStart()
             evidence.run.event("pillager_soak_started", mapOf(
                 "duration_seconds" to soakSeconds,
-                "deadline_utc" to soakDeadlineOverride?.toString(),
+                "tier" to evidence.run.tier,
             ))
             val startedAt = System.nanoTime()
             val startedGameTime = gameTime()
@@ -276,31 +270,82 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    private fun soakSecondsAtStart(): Long {
-        require(soakSecondsOverride == null || soakDeadlineOverride == null) {
-            "set only one of BC_PILLAGER_SOAK_SECONDS and BC_PILLAGER_SOAK_UNTIL_UTC"
-        }
-        if (soakDeadlineOverride != null) {
-            val remaining = Duration.between(Instant.now(), soakDeadlineOverride).seconds
-            require(remaining >= 30) { "BC_PILLAGER_SOAK_UNTIL_UTC must be at least 30 seconds in the future" }
-            return remaining
-        }
-        return soakSecondsOverride ?: DEFAULT_SOAK_SECONDS
-    }
+    private fun soakSecondsAtStart(): Long = if (evidence.run.tier == "debug") DEFAULT_SOAK_SECONDS else 120L
 
     @Test @Order(4)
+    fun debugServerRestartAndClientReconnectPreserveWorld() {
+        if (evidence.run.tier != "debug") {
+            evidence.run.event("scenario_omitted", mapOf("name" to "restart and reconnect", "tier" to evidence.run.tier))
+            return
+        }
+        assumeTrue(campaignSoak, "campaign prerequisite failed")
+        evidence.run.checkpoint("server restart and client reconnect") {
+            val before = gameTime()
+            server.commandResult(
+                "execute in minecraft:overworld run setblock 0 100 0 minecraft:diamond_block",
+                Regex("Changed the block at 0, 100, 0"),
+                "persistent world marker",
+                Duration.ofSeconds(30),
+            )
+            clients.forEach { it.close() }
+            server.stopGracefully()
+            server.restart()
+            server.commandResult(
+                "execute in minecraft:overworld if block 0 100 0 minecraft:diamond_block run say BC_RESTART_WORLD_PERSISTED",
+                Regex("BC_RESTART_WORLD_PERSISTED"),
+                "world marker after restart",
+                Duration.ofSeconds(30),
+            )
+            check(gameTime() >= before) { "world game time moved backward across server restart" }
+            val reconnect = ClientFixture(evidence.run, server, clients.first().username, 4, CLIENT_JVM_ARGS)
+            clients = clients + reconnect
+            startClient(reconnect)
+            requirePlayersOnline("reconnect after restart", listOf(reconnect))
+            evidence.run.event("restart_reconnect_passed", mapOf("player_uuid" to reconnect.uuid, "world_time_before" to before, "world_time_after" to gameTime()))
+        }
+    }
+
+    @Test @Order(5)
+    fun debugNativeFontRoundTrip() {
+        if (evidence.run.tier != "debug") {
+            evidence.run.event("scenario_omitted", mapOf("name" to "native Font round trip", "tier" to evidence.run.tier))
+            return
+        }
+        assumeTrue(campaignSoak, "campaign prerequisite failed")
+        evidence.run.checkpoint("native Font round trip") {
+            val player = clients.last()
+            server.commandResult(
+                "execute as ${player.username} run font harness_enter end",
+                Regex("BC_FONT_HARNESS_ENTER player=${Regex.escape(player.username)} template=end"),
+                "native Font activation",
+                Duration.ofMinutes(2),
+            )
+            server.commandResult(
+                "execute as ${player.username} at @s if dimension minecraft:the_end run say BC_FONT_NATIVE_ENTERED",
+                Regex("BC_FONT_NATIVE_ENTERED"),
+                "native Font destination",
+                Duration.ofMinutes(2),
+                retryInterval = Duration.ofSeconds(10),
+            )
+            server.send("execute as ${player.username} run font return")
+            server.commandResult(
+                "execute as ${player.username} at @s if dimension minecraft:overworld run say BC_FONT_NATIVE_RETURNED",
+                Regex("BC_FONT_NATIVE_RETURNED"),
+                "native Font return",
+                Duration.ofMinutes(2),
+                retryInterval = Duration.ofSeconds(10),
+            )
+            evidence.run.event("native_font_roundtrip_passed", mapOf("player" to player.username, "template" to "end"))
+        }
+    }
+
+    @Test @Order(6)
     fun multiplayerEvidenceIsCleanAndCandidatesAreUnchanged() {
         assumeTrue(campaignSoak, "three-player campaign soak prerequisite failed")
         evidence.run.checkpoint("multiplayer log and hash audit") {
             clients.forEach { it.close() }
             server.stopGracefully()
-            if (System.getenv("BC_PACK_STABILITY_ONLY") == "true") {
-                runCatching { server.auditLogs() }.onFailure { finding ->
-                    evidence.run.event("non_gate_log_audit", mapOf("finding" to (finding.message ?: finding.toString())))
-                }
-            } else {
-                server.auditLogs()
-            }
+            server.auditLogs()
             server.assertHashes()
             clients.forEach { it.assertHashes() }
         }
@@ -373,9 +418,8 @@ class MultiplayerRuntimeTest {
             "forceload campaign platform $index",
             Duration.ofMinutes(2),
         )
-        server.send("execute in minecraft:overworld run fill ${x - 72} 319 ${z - 5} $x 319 ${z + 5} minecraft:grass_block")
-        server.send("execute in minecraft:overworld run fill ${x - 72} 320 ${z - 5} $x 320 ${z + 5} minecraft:air")
-        server.send("execute in minecraft:overworld run fill ${x - 72} 321 ${z - 5} $x 321 ${z + 5} minecraft:air")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 315 ${z - 5} $x 315 ${z + 5} minecraft:grass_block")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 316 ${z - 5} $x 319 ${z + 5} minecraft:air")
         server.commandResult(
             "execute in minecraft:overworld run say BC_PILLAGER_PLATFORM_$index",
             Regex("BC_PILLAGER_PLATFORM_$index"),
@@ -400,7 +444,8 @@ class MultiplayerRuntimeTest {
         val deadline = System.nanoTime() + Duration.ofSeconds(180).toNanos()
         var consecutive = 0
         var sample = 0
-        while (System.nanoTime() < deadline && consecutive < 3) {
+        var required = if (evidence.run.tier == "debug") 3 else 1
+        while (System.nanoTime() < deadline && consecutive < required) {
             Thread.sleep(10_000)
             val result = server.commandResult(
                 "forge tps",
@@ -413,14 +458,17 @@ class MultiplayerRuntimeTest {
                 Duration.ofSeconds(90),
             )
             val tps = DimensionSmokePlan.parseOverallTps(result.value)
+            if (tps < 18.0) required = 3
             consecutive = if (tps >= 18.0) consecutive + 1 else 0
             evidence.run.event("dimension_tps_sample", mapOf(
                 "dimension" to target.id, "location" to location, "sample" to ++sample,
                 "mean_tps" to tps, "required_tps" to 18.0, "consecutive_passing" to consecutive,
+                "mode" to if (required == 3 && evidence.run.tier == "dist") "recovery" else evidence.run.tier,
             ))
         }
-        require(consecutive >= 3) {
-            "${target.id} location $location did not produce three consecutive >=18 TPS samples within 180 seconds"
+        require(consecutive >= required) {
+            "${target.id} location $location did not produce $required consecutive >=18 TPS samples within 180 seconds"
         }
     }
+
 }

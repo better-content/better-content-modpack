@@ -7,7 +7,6 @@ import kotlin.system.exitProcess
 val root = __FILE__.canonicalFile.parentFile
 val selector = args.firstOrNull()
 val taskBySelector = mapOf(
-    "fast" to "test",
     "candidate" to "candidateTest",
     "server" to "serverTest",
     "multiplayer" to "multiplayerTest",
@@ -15,14 +14,14 @@ val taskBySelector = mapOf(
 )
 
 fun usage(): Nothing {
-    System.err.println("usage: ./test.main.kts <frugal|fast|candidate|server|multiplayer|singleplayer|all>")
+    System.err.println("usage: ./test.main.kts <dev|dist|debug>")
     exitProcess(2)
 }
 
-if (selector == null || (selector !in taskBySelector && selector !in setOf("frugal", "all")) || args.size != 1) usage()
+if (selector !in setOf("dev", "dist", "debug") || args.size != 1) usage()
 val selected = selector ?: usage()
 
-if (selected !in setOf("frugal", "fast") && System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
+if (selected != "dev" && System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
     val status = ProcessBuilder(
         root.resolve("pack-test-lock.main.kts").absolutePath,
         "run", "test", selected, "--", __FILE__.absolutePath, selected,
@@ -30,21 +29,7 @@ if (selected !in setOf("frugal", "fast") && System.getenv("BC_PACK_TEST_LOCK_TOK
     exitProcess(status)
 }
 
-if (selected == "frugal") {
-    fun run(vararg command: String): Int = ProcessBuilder(*command)
-        .directory(root)
-        .inheritIO()
-        .start()
-        .waitFor()
-
-    println("frugal validation: refreshing Packwiz hashes")
-    val refresh = run("packwiz", "refresh")
-    if (refresh != 0) exitProcess(refresh)
-    println("frugal validation: checking diff whitespace")
-    exitProcess(run("git", "diff", "--check"))
-}
-
-val runId = if (selected == "fast") null else {
+val runId = if (selected == "dev") null else {
     System.getenv("BC_TEST_RUN_ID")?.takeIf { it.isNotBlank() }
         ?: DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC)
             .format(java.time.Instant.now()) + "-" + ProcessHandle.current().pid()
@@ -79,7 +64,8 @@ fun gradle(suite: String, task: String): Int {
         .inheritIO()
         .apply {
             if (suite == "fast") environment().remove("BC_TEST_SELECTOR")
-            else environment()["BC_TEST_SELECTOR"] = selected
+            else environment()["BC_TEST_SELECTOR"] = suite
+            environment()["BC_TEST_TIER"] = selected
             if (runId != null) environment()["BC_TEST_RUN_ID"] = runId
         }
         .start()
@@ -89,18 +75,28 @@ fun gradle(suite: String, task: String): Int {
 }
 
 val statuses = linkedMapOf<String, Int>()
-if (selected == "all") {
+if (selected == "dev") {
     statuses["fast"] = gradle("fast", "test")
-    statuses["candidate"] = gradle("candidate", "candidateTest")
-    if (statuses.getValue("candidate") == 0) {
-        listOf("server", "multiplayer", "singleplayer").forEach { name ->
-            statuses[name] = gradle(name, taskBySelector.getValue(name))
-        }
-    } else {
-        println("candidate validation failed; heavyweight suites were not started")
+    if (statuses.getValue("fast") == 0) {
+        statuses["diff"] = ProcessBuilder("git", "diff", "--check")
+            .directory(root).inheritIO().start().waitFor()
     }
 } else {
-    statuses[selected] = gradle(selected, taskBySelector.getValue(selected))
+    statuses["fast"] = gradle("fast", "test")
+    statuses["diff"] = ProcessBuilder("git", "diff", "--check")
+        .directory(root).inheritIO().start().waitFor()
+    if (statuses.values.all { it == 0 }) {
+        statuses["candidate"] = gradle("candidate", "candidateTest")
+        if (statuses.getValue("candidate") == 0) {
+            listOf("server", "multiplayer", "singleplayer").forEach { name ->
+                statuses[name] = gradle(name, taskBySelector.getValue(name))
+            }
+        } else {
+            println("candidate validation failed; heavyweight suites were not started")
+        }
+    } else {
+        println("Dev validation failed; candidate and heavyweight suites were not started")
+    }
 }
 
 if (runId != null && evidence != null) {

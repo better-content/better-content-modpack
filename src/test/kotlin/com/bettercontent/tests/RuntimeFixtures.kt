@@ -24,7 +24,7 @@ class DedicatedServerFixture(
     val server: Path
     val log = evidence.directory.resolve("server.log")
     val port = freePort()
-    private val process: ManagedProcess
+    private var process: ManagedProcess
 
     init {
         evidence.event("candidate_selected", mapOf(
@@ -151,6 +151,13 @@ class DedicatedServerFixture(
         process.stop()
     }
 
+    fun restart() {
+        require(!process.alive) { "server must be stopped before restart" }
+        process = ManagedProcess("server-restart", listOf("./run.sh"), server, log, environment)
+        evidence.event("server_restarted", mapOf("pid" to process.pid, "port" to port, "directory" to server.toString()))
+        waitReady(2)
+    }
+
     override fun close() = process.close()
 }
 
@@ -181,7 +188,7 @@ class ClientFixture(
     val client = evidence.fixture.resolve(if (slot == 0) "client" else "client-$slot").also { it.createDirectories() }
     val log = evidence.directory.resolve(
         when {
-            dedicated == null -> "singleplayer.log"
+            dedicated == null -> if (slot == 0) "singleplayer.log" else "singleplayer-$slot.log"
             slot == 0 -> "client.log"
             else -> "client-$slot.log"
         },
@@ -230,14 +237,21 @@ class ClientFixture(
         launcher = launch(emptyList())
     }
 
-    private fun launch(connection: List<String>): ManagedProcess {
-        val environment = mapOf(
-            "DISPLAY" to display,
-            "LIBGL_ALWAYS_SOFTWARE" to "1",
-            "MESA_GL_VERSION_OVERRIDE" to "4.6",
-            "MESA_GLSL_VERSION_OVERRIDE" to "460",
-            "ALSOFT_DRIVERS" to "null",
+    fun launchQuickPlayWorld(world: String, mode: String) {
+        require(mode == "save" || mode == "verify")
+        val jvmArgs = "$clientJvmArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
+            "-Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")} -Dbc.pack_test.world=$mode"
+        val command = listOf(
+            "pipx", "run", "--spec", "portablemc==4.4.1", "python",
+            config.root.resolve("src/test/resources/quickplay_world.py").toString(),
+            config.clientMain.toString(), client.toString(), config.java.toString(), jvmArgs,
+            username, uuid, world,
         )
+        launcher = ManagedProcess("minecraft-client", command, client, log, clientEnvironment())
+    }
+
+    private fun launch(connection: List<String>): ManagedProcess {
+        val environment = clientEnvironment()
         val command = mutableListOf(
             "pipx", "run", "--spec", "portablemc==4.4.1", "portablemc",
             "--main-dir", config.clientMain.toString(), "--work-dir", client.toString(), "--timeout", "120",
@@ -249,6 +263,18 @@ class ClientFixture(
         command += "forge:1.20.1-47.4.13"
         return ManagedProcess("minecraft-client", command, client, log, environment)
     }
+
+    private fun clientEnvironment() = mapOf(
+            "DISPLAY" to display,
+            "LIBGL_ALWAYS_SOFTWARE" to "1",
+            "MESA_GL_VERSION_OVERRIDE" to "4.6",
+            "MESA_GLSL_VERSION_OVERRIDE" to "460",
+            "ALSOFT_DRIVERS" to "null",
+        )
+
+    fun waitForWorldProbe(marker: String) = requireNotNull(launcher).waitForLog(
+        Regex(Regex.escape(marker)), Duration.ofMinutes(10), "singleplayer world probe $marker",
+    )
 
     private fun configureDedicatedClientProfile() {
         val options = client.resolve("options.txt")
