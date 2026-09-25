@@ -88,6 +88,10 @@ class ServerRuntimeTest {
 
     @Test @Order(3)
     fun oneLineageTransitionCommitsAndArchivesCleanly() {
+        if (evidence.run.tier != "debug") {
+            evidence.run.event("scenario_omitted", mapOf("name" to "lineage transition and archive", "tier" to evidence.run.tier))
+            return
+        }
         assumeTrue(snapshot, "runtime snapshot prerequisite failed")
         evidence.run.checkpoint("lineage transition and archive") {
             lifecycle(1)
@@ -117,13 +121,13 @@ class ServerRuntimeTest {
 
     @Test @Order(4)
     fun serverEvidenceIsCleanAndCandidatesAreUnchanged() {
-        assumeTrue(first, "lineage transition prerequisite failed")
+        assumeTrue(if (evidence.run.tier == "debug") first else snapshot, "server prerequisite failed")
         evidence.run.checkpoint("server log and hash audit") {
             // The successor startup can leave asynchronous Lost Cities feature work
             // queued after its readiness marker. Let the new world tick before the
             // graceful stop so C2ME does not finish that work after Lost Cities clears
             // its static dimension profile cache during shutdown.
-            Thread.sleep(Duration.ofSeconds(30).toMillis())
+            if (evidence.run.tier == "debug") Thread.sleep(Duration.ofSeconds(30).toMillis())
             fixture.stopGracefully()
             fixture.auditLogs()
             fixture.assertHashes()

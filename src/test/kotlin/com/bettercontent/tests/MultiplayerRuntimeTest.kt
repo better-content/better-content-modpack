@@ -80,24 +80,20 @@ class MultiplayerRuntimeTest {
             evidence.run.directory.resolve("dimensions.json"),
             StandardCopyOption.REPLACE_EXISTING,
         )
-        // Generate and force-load the three distant campaign corridors while no clients are
-        // connected.  Fresh overworld chunk generation can pause the dedicated server for more
-        // than a network heartbeat; doing it during the campaign phase would make a valid client
-        // liveness failure look like a gameplay failure.
-        positions.forEachIndexed { index, (x, z) -> prepareCampaignPlatform(index + 1, x, z) }
-        repeat(3) { sample ->
-            server.commandResult(
-                "forge tps",
-                Regex("Overall: Mean tick time: [0-9.]+ ms\\. Mean TPS: 20\\.[0-9]+"),
-                "prewarm recovery TPS sample ${sample + 1}",
-                // The first report after forced generation still contains the
-                // generation spike. Reissue the command until its rolling
-                // window reflects the recovered server instead of treating
-                // that stale report as a client-startup failure.
-                Duration.ofMinutes(3),
-                retryInterval = Duration.ofSeconds(30),
-            )
-            if (sample < 2) Thread.sleep(10_000)
+        if (evidence.run.tier == "debug") {
+            // Generate and force-load the three distant campaign corridors while no clients are
+            // connected. Fresh overworld generation can pause the server longer than a heartbeat.
+            positions.forEachIndexed { index, (x, z) -> prepareCampaignPlatform(index + 1, x, z) }
+            repeat(3) { sample ->
+                server.commandResult(
+                    "forge tps",
+                    Regex("Overall: Mean tick time: [0-9.]+ ms\\. Mean TPS: 20\\.[0-9]+"),
+                    "prewarm recovery TPS sample ${sample + 1}",
+                    Duration.ofMinutes(3),
+                    retryInterval = Duration.ofSeconds(30),
+                )
+                if (sample < 2) Thread.sleep(10_000)
+            }
         }
         val lead = clients.first()
         startClient(lead)
@@ -114,10 +110,11 @@ class MultiplayerRuntimeTest {
             val inventory = evidence.run.directory.resolve("dimensions.json")
             require(Files.isRegularFile(inventory)) { "dimension inventory was not prepared before client login" }
             val targets = DimensionSmokePlan.discover(inventory, server.server.resolve("config/dimension_drink/fonts"))
+            val locations = DimensionSmokePlan.positions.take(if (evidence.run.tier == "debug") 3 else 1)
             evidence.run.event("dimension_targets", mapOf(
                 "count" to targets.size,
                 "targets" to targets.map { mapOf("id" to it.id, "sources" to it.sources.sorted()) },
-                "locations_per_target" to DimensionSmokePlan.positions.size,
+                "locations_per_target" to locations.size,
             ))
             server.send("gamemode spectator ${lead.username}")
             targets.forEach { target ->
@@ -139,7 +136,7 @@ class MultiplayerRuntimeTest {
                     evidence.run.event("font_only_dimension_guard_passed", mapOf("dimension" to target.id))
                     return@forEach
                 }
-                DimensionSmokePlan.positions.forEachIndexed { index, (x, z) ->
+                locations.forEachIndexed { index, (x, z) ->
                     val marker = "BC_DIMENSION_HEARTBEAT_${target.id.replace(':', '_').replace('/', '_')}_${index}_${lead.username}"
                     evidence.run.event("dimension_teleport_started", mapOf(
                         "dimension" to target.id, "sources" to target.sources.sorted(), "location" to index,
@@ -171,8 +168,12 @@ class MultiplayerRuntimeTest {
 
     @Test @Order(3)
     fun threeSurvivalPlayersExerciseCampaignsAndSoak() {
+        if (evidence.run.tier != "debug") {
+            evidence.run.event("scenario_omitted", mapOf("name" to "three-player campaign soak", "tier" to evidence.run.tier))
+            return
+        }
         assumeTrue(dimensions, "dimension traversal prerequisite failed")
-        evidence.run.checkpoint("three-player campaign and ${if (evidence.run.tier == "debug") "30-minute" else "two-minute"} Survival soak") {
+        evidence.run.checkpoint("three-player campaign and 30-minute Survival soak") {
             clients.drop(1).forEach {
                 startClient(it)
                 // Keep the newly joined soak client out of ordinary campaign eligibility
@@ -270,7 +271,7 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    private fun soakSecondsAtStart(): Long = if (evidence.run.tier == "debug") DEFAULT_SOAK_SECONDS else 120L
+    private fun soakSecondsAtStart(): Long = DEFAULT_SOAK_SECONDS
 
     @Test @Order(4)
     fun debugServerRestartAndClientReconnectPreserveWorld() {
@@ -341,7 +342,7 @@ class MultiplayerRuntimeTest {
 
     @Test @Order(6)
     fun multiplayerEvidenceIsCleanAndCandidatesAreUnchanged() {
-        assumeTrue(campaignSoak, "three-player campaign soak prerequisite failed")
+        assumeTrue(if (evidence.run.tier == "debug") campaignSoak else dimensions, "multiplayer prerequisite failed")
         evidence.run.checkpoint("multiplayer log and hash audit") {
             clients.forEach { it.close() }
             server.stopGracefully()

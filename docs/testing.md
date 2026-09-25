@@ -16,12 +16,13 @@ Pack-level tiers are expensive and run only when explicitly requested:
 ./test.main.kts debug
 ```
 
-Dist includes Dev, candidate contracts, server startup/snapshot/one lineage transition,
-singleplayer title, multiplayer join, all-dimension travel with one TPS sample per location,
-a two-minute three-client campaign, strict logs, and candidate hashes. A sample below 18 TPS
-switches its location to three consecutive passing samples within 180 seconds. Debug uses
-unchanged candidate hashes and adds strict three-sample travel, the 30-minute campaign soak,
-server restart/client reconnect, native Font travel, and singleplayer world boot/save/reopen.
+Dist includes Dev, candidate contracts, server startup/snapshot, singleplayer title,
+multiplayer join, travel to one fresh location in each reachable dimension, one 10-second TPS
+sample there, strict logs, and candidate hashes. A sample below 18 TPS switches that location
+to three consecutive passing samples within 180 seconds. Debug uses unchanged candidate hashes
+and adds three fresh locations per dimension with strict three-sample TPS, one lineage transition
+and archive, the 30-minute three-client campaign soak, server restart/client reconnect, native
+Font travel, and singleplayer world boot/save/reopen.
 
 Dist, Debug, and `release.main.kts` share one kernel-backed runner mutex. The
 supported entry points acquire it automatically and publish current ownership at
@@ -79,19 +80,18 @@ The runtime-data-dumper completion schema is `bc.runtime_dump_completion.v3` and
 `dimensions.json` (`bc.dimensions.v1`). Multiplayer smoke discovers targets at run time from the
 loaded Creating Space rocket-accessible-dimension registry and enabled Dimension Drink Font
 configuration; target counts are evidence, not hard-coded assumptions. Every discovered target
-must be loaded. A single full-pack client traverses three fresh, pairwise-distant locations per
-target as a spectator and requires a post-teleport heartbeat within 90 seconds. Dist takes one
-10-second sample per location and expands low-TPS results to three consecutive passing samples;
-Debug always requires three consecutive samples at at least 18 mean TPS. The other two clients
-are not started for this teleport/TPS test; they are started once afterward for the separate
-three-client Survival soak. Timeouts retain the command, server tail, process state, and fixture
+must be loaded. A single full-pack client travels as a spectator and requires a post-teleport
+heartbeat within 90 seconds. Dist uses one fresh location per reachable target and one 10-second
+TPS sample, expanding low-TPS results to three consecutive passing samples. Debug visits three
+fresh, pairwise-distant locations per target and always requires three consecutive samples at
+at least 18 mean TPS. The other two clients start only for Debug's three-client Survival soak.
+Timeouts retain the command, server tail, process state, and fixture
 for diagnosis. Candidate hashes are checked again after traversal.
 
-The multiplayer fixture then keeps three real clients connected to that same full-pack dedicated
+In Debug, the multiplayer fixture then keeps three real clients connected to that same full-pack dedicated
 server in Survival at linear Overworld checkpoints 10,000 blocks apart. The harness-only
 protection control makes each player invulnerable without changing game mode. A routed scout is
-started for each player with no injected route, then the complete pack runs for a two-minute Dist
-or 30-minute Debug
+started for each player with no injected route, then the complete pack runs for a 30-minute
 wall-clock soak while server/client liveness, campaign status, game time, and logs are sampled.
 This is separate from the isolated Pillager Campaigns development harness and is evidence for the
 packaged modpack candidate.
@@ -105,12 +105,12 @@ campaign players are active. This keeps the local 48–72 block campaign approac
 terrain contract while limiting cold-chunk fan-out without changing the production candidate's
 server.properties.
 
-Before the campaign phase, the fixture lays down three bounded 161×161-block grass pads at
+Before Debug's campaign phase, the fixture lays down three bounded grass corridors at
 the 0/10,000/20,000 checkpoints and places the players above them. These pads exist only in the
 fresh extracted test world, making the routed local-approach proof deterministic while retaining
 the complete modpack, real server tick, and real campaign materialization path.
 
-The lifecycle smoke verifies one lineage transition, its committed archive, and final clean state.
+Debug's lifecycle smoke verifies one lineage transition, its committed archive, and final clean state.
 It intentionally avoids a second generation; longer persistence matrices require separate explicit
 authorization.
 

@@ -66,11 +66,12 @@ Superseded evidence may be pruned only through the guarded maintenance command. 
 matching the current candidate, the newest passed evidence for any suite missing from that run, and
 failures with no later passing result.
 
-Dist checks package contracts, dedicated-server/runtime-data/lifecycle, multiplayer connection and
-adaptive one-sample-per-location TPS, single-player startup, a two-minute three-player campaign,
-logs, and candidate hashes. Debug runs against the same candidate hashes and adds three-sample
-TPS at every location, the 30-minute soak, world save/reopen, restart/reconnect, and native Font
-round-trip scenarios. Further scenario expansion still requires an explicit user order.
+Dist checks package contracts, dedicated-server startup/runtime data, multiplayer connection and
+one fresh location per reachable dimension with adaptive TPS recovery, single-player startup,
+logs, and candidate hashes. Debug runs against the same candidate hashes and adds three fresh
+locations with three-sample TPS, one lineage transition and archive, the 30-minute three-client
+campaign soak, world save/reopen, restart/reconnect, and native Font round-trip scenarios.
+Further scenario expansion still requires an explicit user order.
 
 Automated tests must not synthesize mouse movement or mouse clicks. UI flows that require pointer
 interaction are manual visual gates; keep them documented and out of the automated harness.
