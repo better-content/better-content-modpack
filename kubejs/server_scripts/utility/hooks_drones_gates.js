@@ -31,7 +31,7 @@ ServerEvents.recipes(function (event) {
     ], {
         I: '#forge:plates/iron',
         C: 'create:andesite_casing',
-        H: 'better_content_fixes:soap_on_a_rope',
+        H: 'rehooked_intro_hooks:soap_on_a_rope',
         L: 'minecraft:chain'
     }, 'kubejs:rehooked/iron_hook_post_create')
 

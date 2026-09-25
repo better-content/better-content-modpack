@@ -3038,7 +3038,7 @@ hash = "d9fb3cd3aef5f4e11d5cbd9a698def5182b6f45ee4c651c42488a5804588b525"
 
 [[files]]
 file = "config/rbp/block_definitions/dirt.toml"
-hash = "b38b50640af0519ff780594c957d529dc29c2422a8dea146f835261390bdd5bc"
+hash = "46dad0d73bca180912242619d58a38748f843d3c8c6e94d0e4e7b8852ed16ef9"
 
 [[files]]
 file = "config/rbp/block_definitions/door.toml"
@@ -3070,7 +3070,7 @@ hash = "06f234c3ba1132f848c37470efad6a8973bc715f0add3644396e0f3dbf18c28b"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_dirt.toml"
-hash = "2c39d9ac23349b561b1fa50fca38762e1fc065e66e376d90d0bdfa6933e42ad6"
+hash = "61598b0846a6d46e2570cfc8055bcd44ee2a9c79120e948d407da4f4b56d7505"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_glass.toml"
@@ -7546,7 +7546,7 @@ hash = "c1728c32703ee343a2ed52c53b84bca30db11aa2feb97fb31d68fdd87ada5df0"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "320bbc647ea9f36e0b6b4b70f0ff94a6a202ced84426936726b45f10a9f7d79d"
+hash = "aa3387e27f5690210ca0388dde785a3888ecbbae8767f7fb9b9016d91520b28f"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -7998,7 +7998,7 @@ hash = "7caac7b91c45a001e38f86b0b192cd85e8dee27771904e16c48c9a03f07be966"
 
 [[files]]
 file = "kubejs/data/c/tags/blocks/farmland.json"
-hash = "48148d7deaee6359562a87cdcd268a2640c598353a9748c0567ea7a2b552de49"
+hash = "848215839b807a22ebee5b2a86359061e328155a66bdebfded2ab794d3842da1"
 
 [[files]]
 file = "kubejs/data/c/tags/items/hidden_from_recipe_viewers.json"
@@ -9418,7 +9418,7 @@ hash = "45a8e15f90a181f66721ca21df73cdb3ee02746a3233c2f2dfa49619718a7ada"
 
 [[files]]
 file = "kubejs/data/minecraft/tags/blocks/mineable/hoe.json"
-hash = "acf054541adbf034131b5a6943049634ef832866b00720fe48060b9dd95a451f"
+hash = "c2059036b22a1a97c8e01426a4217717f4884cddb0405ed6f5950a33be4e1497"
 
 [[files]]
 file = "kubejs/data/minecraft/tags/blocks/mineable/pickaxe.json"
@@ -10574,7 +10574,7 @@ hash = "46d53c813d67b3325266e78592faaa8b54e8e54a42a92445c245466555e2c469"
 
 [[files]]
 file = "kubejs/server_scripts/progression/45_acid_chemistry.js"
-hash = "16fda906f63dcb836967475ae816aca2da54989b8e86f6a45168634aff2286f9"
+hash = "0d7d2d937a6cfeec2ac9f401d30aa5b32f03c0104a01b3141f0470f7c06e7024"
 
 [[files]]
 file = "kubejs/server_scripts/progression/50_electrical_control.js"
@@ -10626,11 +10626,11 @@ hash = "e03d4cfc932831d5313a7f569a85d7c36bf03af4971527314089f00d6d2466f6"
 
 [[files]]
 file = "kubejs/server_scripts/utility/21_starter_hook_loot.js"
-hash = "5552f215c94ee70f12096cfa98fd6dc4816c51060ed72e02df14dacd7f2ec803"
+hash = "2a726181b20052af49f646f2ab380e88676bfb9aea452cd6d4d2826e7eadd5b2"
 
 [[files]]
 file = "kubejs/server_scripts/utility/hooks_drones_gates.js"
-hash = "02f49c86cfaf22b2f342df31775887970c50895c779f350b62fcef85fd421cf5"
+hash = "7408c5e876749d2d58ee88b3da2fa30cbc6e55213331f7426c6ed31f76ef127c"
 
 [[files]]
 file = "kubejs/server_scripts/zz_crafting_policy_report.js"
@@ -10690,6 +10690,10 @@ metafile = true
 file = "mods/aether.pw.toml"
 hash = "6f87edf40bf0be7e7e266f9e2ff0bf7584c6bedff7975bad3259a21a60d1e598"
 metafile = true
+
+[[files]]
+file = "mods/airtight-machinery-0.1.0.jar"
+hash = "eb79fc14eb34ed41da1d5603888ecf39c41c0cad6580abe78be3ef0d5bebf201"
 
 [[files]]
 file = "mods/alexs-caves.pw.toml"
@@ -10779,8 +10783,8 @@ file = "mods/better-content-economy-1.0.1.jar"
 hash = "3f4327b23e72244e39ab91c288fe0c3e4b10c9fe4285fadffa6e9d88ced23cc7"
 
 [[files]]
-file = "mods/better-content-fixes-0.1.8.jar"
-hash = "51d76c7c033c160a061bd44a70149071a722392a053e57faee28303d794e1195"
+file = "mods/better-content-fixes-0.1.9.jar"
+hash = "8fc3549fee5c8093584352008a0a9db01544470862d10f9ab76663e4cf9f2de1"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
@@ -10833,6 +10837,10 @@ hash = "c8967ec54209b73fd97f7ad0a75489e75ebc560133051100db2824021431a693"
 file = "mods/burnt-basic.pw.toml"
 hash = "b7ba82d5d94720bc94238bcc365d1b93335b090805057f413a43b5f17eab5f9b"
 metafile = true
+
+[[files]]
+file = "mods/burnt-grass-compat-0.1.0.jar"
+hash = "1b29157e095830340cd30f1b70984d39044cb743f70d8f3eabfe6006f07ace9d"
 
 [[files]]
 file = "mods/cataclysm.pw.toml"
@@ -11125,6 +11133,10 @@ metafile = true
 file = "mods/excavated-variants.pw.toml"
 hash = "8286c4333edcf81683cedbad6f70530efb2f78c80f9bf98657976fb5c1834539"
 metafile = true
+
+[[files]]
+file = "mods/exploration-tick-governor-0.1.0.jar"
+hash = "3d295479ff3e4b90fd2b610edc734e9855eb3726e353b4b22da07c938e3b060d"
 
 [[files]]
 file = "mods/explosion-overhaul-a-new-level-of-destruction.pw.toml"
@@ -11653,6 +11665,18 @@ hash = "470a9687fc5e77138c42297fd168de465ad993704abebed538ecf7bc6c67f9af"
 file = "mods/realistic-physics.pw.toml"
 hash = "163aa7390848c4bf96c650c8730dbd7dcb175e1d34dc4531416c0005dd853f3e"
 metafile = true
+
+[[files]]
+file = "mods/realistic-placement-preview-0.1.0.jar"
+hash = "55e586251804658666c3c3a9ab1a1918483d9a24f0b3f61797f5b8df7806538d"
+
+[[files]]
+file = "mods/regolith-farmland-0.1.0.jar"
+hash = "5132651c59923720d3c54d25c9b12d5f121130c5d3841c6ee1453956daae479b"
+
+[[files]]
+file = "mods/rehooked-intro-hooks-0.1.0.jar"
+hash = "d0153be7ba8b1936fc105aa6eb3826d53a0233df11c13215942517755ad30b88"
 
 [[files]]
 file = "mods/rehooked.pw.toml"

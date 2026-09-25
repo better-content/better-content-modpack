@@ -23,7 +23,7 @@ class HookLootSourceContractTest {
 
         assertTrue(crafting.contains("event.remove({ output: 'rehooked:wood_hook' })"))
         assertFalse(crafting.contains("kubejs:rehooked/wood_hook_post_seared"))
-        assertTrue(crafting.contains("H: 'better_content_fixes:soap_on_a_rope'"))
+        assertTrue(crafting.contains("H: 'rehooked_intro_hooks:soap_on_a_rope'"))
         assertTrue(loot.contains("Item.of("))
         listOf("soap_on_a_rope", "block_and_tackle", "grapnel_bundle", "climbing_vine", "ratchet_reel", "anglers_gaff")
             .forEach { assertTrue(loot.contains("$it:"), "missing loot placement for $it") }
@@ -39,7 +39,7 @@ class HookLootSourceContractTest {
             tables.keys,
         )
         assertTrue(tables.values.all { it in 0.05..0.07 })
-        assertTrue(loot.contains("!Platform.isLoaded('rehooked') || !Platform.isLoaded('better_content_fixes')"))
+        assertTrue(loot.contains("!Platform.isLoaded('rehooked') || !Platform.isLoaded('rehooked_intro_hooks')"))
     }
 
     @Test
@@ -47,25 +47,25 @@ class HookLootSourceContractTest {
         val names = listOf("soap_on_a_rope", "block_and_tackle", "grapnel_bundle", "climbing_vine", "ratchet_reel", "anglers_gaff")
         val loot = Files.readString(root.resolve("kubejs/server_scripts/utility/21_starter_hook_loot.js"))
         val annotations = jacksonObjectMapper().readTree(root.resolve("kubejs/config/hover_annotations.json").toFile())
-            .path("annotations").filter { row -> names.any { row.path("selector").path("item").asText() == "better_content_fixes:$it" } }
+            .path("annotations").filter { row -> names.any { row.path("selector").path("item").asText() == "rehooked_intro_hooks:$it" } }
             .associateBy { it.path("selector").path("item").asText().substringAfter(':') }
         assertEquals(names.toSet(), annotations.keys)
         names.forEach { name ->
             assertTrue(Regex("$name\\s*:").containsMatchIn(loot), "missing loot placement for $name")
             val annotation = annotations.getValue(name)
-            assertEquals("better_content_fixes", annotation.path("required_mod").asText())
+            assertEquals("rehooked_intro_hooks", annotation.path("required_mod").asText())
             assertEquals("mobility.grappling", annotation.path("domain").asText())
             assertTrue(annotation.path("owner").asText().contains("21_starter_hook_loot.js"))
             assertTrue(annotation.path("lines").size() > 0)
         }
-        val profileSource = Files.readString(root.resolve("../mod_source/better-content-fixes/src/main/java/com/bettercontent/bettercontentfixes/compat/rehooked/IntroHookProfile.java").normalize())
+        val profileSource = Files.readString(root.resolve("../mod_source/rehooked-intro-hooks/src/main/java/com/bettercontent/rehookedintrohooks/compat/rehooked/IntroHookProfile.java").normalize())
         val profilePattern = Regex("""new IntroHookProfile\("([a-z_]+)", "[a-z_]+", (\d+), ([0-9.]+)F, ([0-9.]+)F, ([0-9.]+)F\)""")
         val profiles = profilePattern.findAll(profileSource).associate { match ->
             val (name, count, range, lineSpeed, pullSpeed) = match.destructured
             name to listOf(count.toInt(), range.toFloat().toInt(), lineSpeed.toFloat().toInt(), pullSpeed.toFloat().toInt())
         }
         assertEquals(names.toSet(), profiles.keys)
-        val behaviorSource = Files.readString(root.resolve("../mod_source/better-content-fixes/src/main/java/com/bettercontent/bettercontentfixes/compat/rehooked/IntroHookBehaviorPolicy.java").normalize())
+        val behaviorSource = Files.readString(root.resolve("../mod_source/rehooked-intro-hooks/src/main/java/com/bettercontent/rehookedintrohooks/compat/rehooked/IntroHookBehaviorPolicy.java").normalize())
         assertTrue(behaviorSource.contains("RATCHET_PULL_TICKS = 3"))
         assertTrue(behaviorSource.contains("RATCHET_HOLD_TICKS = 2"))
         assertTrue(behaviorSource.contains("RATCHET_PERIOD_TICKS = RATCHET_PULL_TICKS + RATCHET_HOLD_TICKS"))

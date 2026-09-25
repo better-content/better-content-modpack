@@ -42,7 +42,7 @@ class AcidChemistryContractTest {
     fun `renewable acetic acid has food filtration and containment uses`() {
         assertTrue(chemistry.contains("brewinandchewin:fermenting/pickled_pickles"))
         assertTrue(chemistry.contains("kubejs:chemistry/acids/acetate_membrane"))
-        assertTrue(chemistry.contains("better_content_fixes:airtight_upgrade"))
+        assertTrue(chemistry.contains("airtight_machinery:airtight_upgrade"))
         assertTrue(chemistry.contains("kubejs:pressure_seal"))
 
         val filtered = listOf(

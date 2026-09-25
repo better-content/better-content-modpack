@@ -532,7 +532,7 @@ class HoverAnnotationLearningSurfaceTest {
     fun `acetate membrane hover describes its upgrade recipe and retention role`() {
         val recipe = Files.readString(root.resolve("kubejs/server_scripts/progression/45_acid_chemistry.js"))
         val interaction = Files.readString(
-            root.resolve("../mod_source/better-content-fixes/src/main/java/com/bettercontent/bettercontentfixes/chemistry/AirtightUpgradeInteraction.java").normalize(),
+            root.resolve("../mod_source/airtight-machinery/src/main/java/com/bettercontent/airtightmachinery/chemistry/AirtightUpgradeInteraction.java").normalize(),
         )
         val escape = Files.readString(
             root.resolve("../mod_source/latent-chemlib/src/main/java/com/bettercontent/latentchemlib/sim/GasEscapeHandler.java").normalize(),
@@ -545,9 +545,9 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(recipe.contains("{ fluid: 'chemlib:acetic_acid_fluid', amount: 250 }"))
         assertTrue(recipe.contains("results: [{ item: 'kubejs:acetate_membrane', count: 4 }]"))
         assertTrue(recipe.contains("M: 'kubejs:acetate_membrane'"))
-        assertTrue(recipe.contains("event.shaped('better_content_fixes:airtight_upgrade'"))
+        assertTrue(recipe.contains("event.shaped('airtight_machinery:airtight_upgrade'"))
         assertTrue(interaction.contains("held.is(ChemistryContent.AIRTIGHT_UPGRADE.get())"))
-        assertTrue(interaction.contains("holder.betterContentFixes" + "$" + "setAirtight(true)"))
+        assertTrue(interaction.contains("holder.airtightMachinery" + "$" + "setAirtight(true)"))
         assertTrue(escape.contains("if (isAirtight(holder)) return;"))
         assertTrue(owner.contains("AirtightUpgradeInteraction.java"))
         assertTrue(owner.contains("GasEscapeHandler.java"))
@@ -561,23 +561,23 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Airtight Upgrade targets match the registered gas-retention holders`() {
         val interaction = Files.readString(
-            root.resolve("../mod_source/better-content-fixes/src/main/java/com/bettercontent/bettercontentfixes/chemistry/AirtightUpgradeInteraction.java").normalize(),
+            root.resolve("../mod_source/airtight-machinery/src/main/java/com/bettercontent/airtightmachinery/chemistry/AirtightUpgradeInteraction.java").normalize(),
         )
-        val mixins = Files.readString(root.resolve("../mod_source/better-content-fixes/src/main/resources/better_content_fixes.mixins.json").normalize())
+        val mixins = Files.readString(root.resolve("../mod_source/airtight-machinery/src/main/resources/airtight_machinery.mixins.json").normalize())
         val basin = Files.readString(
-            root.resolve("../mod_source/better-content-fixes/src/main/java/com/bettercontent/bettercontentfixes/mixin/chemistry/create/BasinAirtightMixin.java").normalize(),
+            root.resolve("../mod_source/airtight-machinery/src/main/java/com/bettercontent/airtightmachinery/mixin/chemistry/create/BasinAirtightMixin.java").normalize(),
         )
         val mixer = Files.readString(
-            root.resolve("../mod_source/better-content-fixes/src/main/java/com/bettercontent/bettercontentfixes/mixin/chemistry/pneumaticcraft/FluidMixerAirtightMixin.java").normalize(),
+            root.resolve("../mod_source/airtight-machinery/src/main/java/com/bettercontent/airtightmachinery/mixin/chemistry/pneumaticcraft/FluidMixerAirtightMixin.java").normalize(),
         )
         val plant = Files.readString(
-            root.resolve("../mod_source/better-content-fixes/src/main/java/com/bettercontent/bettercontentfixes/mixin/chemistry/pneumaticcraft/ThermopneumaticPlantAirtightMixin.java").normalize(),
+            root.resolve("../mod_source/airtight-machinery/src/main/java/com/bettercontent/airtightmachinery/mixin/chemistry/pneumaticcraft/ThermopneumaticPlantAirtightMixin.java").normalize(),
         )
         val escape = Files.readString(
             root.resolve("../mod_source/latent-chemlib/src/main/java/com/bettercontent/latentchemlib/sim/GasEscapeHandler.java").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("item").asText() == "better_content_fixes:airtight_upgrade"
+            annotation.path("selector").path("item").asText() == "airtight_machinery:airtight_upgrade"
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
 

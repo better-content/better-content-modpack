@@ -2,6 +2,10 @@
   "schema": "bc.ci_source_revisions.v1",
   "repositories": [
     {
+      "repository": "airtight-machinery",
+      "commit": "33dc88ec3573872d20a8afa1314793c57d26e10c"
+    },
+    {
       "repository": "arcane-chunk-loaders",
       "commit": "5bce7d139c8d9405b9150d7cf86744e9c3d18b7b"
     },
@@ -11,7 +15,7 @@
     },
     {
       "repository": "better-content-fixes",
-      "commit": "8005c8fc4ff9a3072d0efe8d046bfe494c82369b"
+      "commit": "44892dd0ea5198d73428340ccac7b2b6861e462b"
     },
     {
       "repository": "better-content-threads",
@@ -20,6 +24,10 @@
     {
       "repository": "bumblezone-cultivars",
       "commit": "35fb49328c9f13630d8efde428ea668b60c08b14"
+    },
+    {
+      "repository": "burnt-grass-compat",
+      "commit": "1f2ced196ed5537de207d973f5fa89a4170eac75"
     },
     {
       "repository": "class-selector",
@@ -60,6 +68,10 @@
     {
       "repository": "dynamic-trees-malum",
       "commit": "006a9e0ef9a10e9b3057538ff5f4ac0aa07b8b58"
+    },
+    {
+      "repository": "exploration-tick-governor",
+      "commit": "1c29a2214682d21e856324f9b604d33363047c96"
     },
     {
       "repository": "heat-sync",
@@ -108,6 +120,18 @@
     {
       "repository": "realistic-ores",
       "commit": "f8ed20190151ec8bb4f7bc69b7c4101d6f4b14f1"
+    },
+    {
+      "repository": "realistic-placement-preview",
+      "commit": "7b8bddc56edda10beb580add2a78356392833044"
+    },
+    {
+      "repository": "regolith-farmland",
+      "commit": "88690be495c8ccd058a8025592ebfbf077190077"
+    },
+    {
+      "repository": "rehooked-intro-hooks",
+      "commit": "c9435158acebdcf0d99bf64f59605a9a1ce70d74"
     },
     {
       "repository": "rpg-stats",

@@ -105,11 +105,11 @@ Distant Horizons remains enabled during compatibility validation. Server generat
 enabled. LOD transparency is disabled to avoid incorrect Distant Horizons/Oculus/shader depth
 composition; nearby vanilla and shader water remain unchanged.
 
-`better_content_fixes` owns the foreground tick-budget governor. After a 100-tick sample warmup it
+`exploration_tick_governor` owns the foreground tick-budget governor. After a 100-tick sample warmup it
 temporarily overrides only Distant Horizons' optional distant generation when the sliding p95
 exceeds 50 ms or a tick exceeds 100 ms. It clears its in-memory override only after 600 consecutive
 ticks with p95 at or below 40 ms and no tick above 100 ms, and never enables a user-disabled DH
-setting. `/better_content_fixes performance_status` reports p50/p95/p99/max and override state.
+setting. `/exploration_tick_governor performance_status` reports p50/p95/p99/max and override state.
 
 The controlled exploration acceptance budget is measured after 60 seconds of warmup over a
 ten-minute fresh-terrain route: median at most 40 ms, p95 at most 50 ms, p99 at most 100 ms, and no

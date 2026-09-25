@@ -125,7 +125,7 @@ ServerEvents.recipes(function (event) {
         processingTime: 200
     }).id('kubejs:chemistry/acids/acetate_membrane')
 
-    event.shaped('better_content_fixes:airtight_upgrade', [
+    event.shaped('airtight_machinery:airtight_upgrade', [
         ' S ',
         'MIM',
         ' S '

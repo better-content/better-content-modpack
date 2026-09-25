@@ -1,7 +1,7 @@
 // ReHooked's six introductory prototypes are loot-only; stronger native tiers
 // retain their authored mechanical-assembly routes.
 LootJS.modifiers(event => {
-    if (!Platform.isLoaded('rehooked') || !Platform.isLoaded('better_content_fixes')) return
+    if (!Platform.isLoaded('rehooked') || !Platform.isLoaded('rehooked_intro_hooks')) return
 
     const earlyTables = {
         'minecraft:chests/abandoned_mineshaft': 0.07,

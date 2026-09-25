@@ -31,7 +31,7 @@ same active set for humans. Inventory `dependsOn` edges are release-build order 
 stage typed Better Content API providers before their consumers: Dimension Drink before Economy,
 Dynamic Survival HUD before Better
 Content Fixes and Revival, WLM before Class Selector, Revival before its three consumers, every domain-event
-provider before Threads, Heat Sync before Latent Chemlib, and Bumblezone Cultivars
+provider before Threads, Heat Sync before Latent Chemlib and Airtight Machinery, and Bumblezone Cultivars
 before Ratlantis Logistics so rats use the typed propagule catalogue.
 This directed build graph is intentionally acyclic; Threads is the downstream event listener and
 no provider depends on it.
@@ -98,24 +98,28 @@ legacy JARs are rebuilt, and every staged release artifact retains the source me
 
 ## Canonical Active Inventory
 
-The active set contains 35 custom mods.
+The active set contains 41 custom mods.
 
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
-| [arena-challenges](https://github.com/better-content/arena-challenges) | `arena_challenges` | `arena-challenges-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [airtight-machinery](https://github.com/better-content/airtight-machinery) | `airtight_machinery` | `airtight-machinery-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [arcane-chunk-loaders](https://github.com/better-content/arcane-chunk-loaders) | `arcane_chunk_loaders` | `arcane-chunk-loaders-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [buried-encounters](https://github.com/better-content/buried-encounters) | `buried_encounters` | `buried-encounters-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-content-fixes](https://github.com/better-content/better-content-fixes) | `better_content_fixes` | `better-content-fixes-0.1.8.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [arena-challenges](https://github.com/better-content/arena-challenges) | `arena_challenges` | `arena-challenges-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-economy](https://github.com/better-content/better-content-economy) | `better_content_economy` | `better-content-economy-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-content-fixes](https://github.com/better-content/better-content-fixes) | `better_content_fixes` | `better-content-fixes-0.1.9.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-threads](https://github.com/better-content/better-content-threads) | `better_content_threads` | `better-content-threads-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [bumblezone-cultivars](https://github.com/better-content/bumblezone-cultivars) | `bumblezone_cultivars` | `bumblezone-cultivars-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [buried-encounters](https://github.com/better-content/buried-encounters) | `buried_encounters` | `buried-encounters-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [burnt-grass-compat](https://github.com/better-content/burnt-grass-compat) | `burnt_grass_compat` | `burnt-grass-compat-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [class-selector](https://github.com/better-content/class-selector) | `class_selector` | `class-selector-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [create-train-fuel-scaling](https://github.com/better-content/create-train-fuel-scaling) | `create_train_fuel_scaling` | `create-train-fuel-scaling-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [create-transmission-loss](https://github.com/better-content/create-transmission-loss) | `create_transmission_loss` | `create-transmission-loss-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [depth-director](https://github.com/better-content/depth-director) | `depth_director` | `depth-director-0.2.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [dimension-drink](https://github.com/better-content/dimension-drink) | `dimension_drink` | `dimension-drink-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [downed-player-revival](https://github.com/better-content/downed-player-revival) | `downed_player_revival` | `downed-player-revival-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [dynamic-survival-hud](https://github.com/better-content/dynamic-survival-hud) | `dynamic_survival_hud` | `dynamic-survival-hud-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [dynamic-trees-malum](https://github.com/better-content/dynamic-trees-malum) | `dynamic_trees_malum` | `dynamic-trees-malum-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [exploration-tick-governor](https://github.com/better-content/exploration-tick-governor) | `exploration_tick_governor` | `exploration-tick-governor-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [heat-sync](https://github.com/better-content/heat-sync) | `heat_sync` | `heat-sync-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [immersive-weathering-sampler](https://github.com/better-content/immersive-weathering-sampler) | `immersive_weathering_sampler` | `immersive-weathering-sampler-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [latent-chemlib](https://github.com/better-content/latent-chemlib) | `latent_chemlib` | `latent-chemlib-0.2.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
@@ -123,20 +127,22 @@ The active set contains 35 custom mods.
 | [oc2r-create-bridge](https://github.com/better-content/oc2r-create-bridge) | `oc2r_create_bridge` | `oc2r-create-bridge-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [oc2r-wireless-pubsub](https://github.com/better-content/oc2r-wireless-pubsub) | `oc2r_wireless_pubsub` | `oc2r-wireless-pubsub-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [pillager-campaigns](https://github.com/better-content/pillager-campaigns) | `pillager_campaigns` | `pillager-campaigns-0.5.4.jar` | `./gradlew verifyFull verifyWorld stageRuntimeJar` |
-| [world-lifecycle-manager](https://github.com/better-content/world-lifecycle-manager) | `world_lifecycle_manager` | `world-lifecycle-manager-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [player-traces](https://github.com/better-content/player-traces) | `player_traces` | `player-traces-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [procedural-bouquets](https://github.com/better-content/procedural-bouquets) | `procedural_bouquets` | `procedural-bouquets-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [rail-beetle](https://github.com/better-content/rail-beetle) | `rail_beetle` | `rail-beetle-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [realistic-ores](https://github.com/better-content/realistic-ores) | `realistic_ores` | `realistic-ores-0.2.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [ratlantis-logistics](https://github.com/better-content/ratlantis-logistics) | `ratlantis_logistics` | `ratlantis-logistics-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [runtime-data-dumper](https://github.com/better-content/runtime-data-dumper) | `runtime_data_dumper` | `runtime-data-dumper-0.1.0.jar` | `./gradlew build stageRuntimeJar` |
-| [downed-player-revival](https://github.com/better-content/downed-player-revival) | `downed_player_revival` | `downed-player-revival-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [realistic-ores](https://github.com/better-content/realistic-ores) | `realistic_ores` | `realistic-ores-0.2.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [realistic-placement-preview](https://github.com/better-content/realistic-placement-preview) | `realistic_placement_preview` | `realistic-placement-preview-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [regolith-farmland](https://github.com/better-content/regolith-farmland) | `regolith_farmland` | `regolith-farmland-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [rehooked-intro-hooks](https://github.com/better-content/rehooked-intro-hooks) | `rehooked_intro_hooks` | `rehooked-intro-hooks-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [rpg-stats](https://github.com/better-content/rpg-stats) | `rpg_stats` | `rpg-stats-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [runtime-data-dumper](https://github.com/better-content/runtime-data-dumper) | `runtime_data_dumper` | `runtime-data-dumper-0.1.0.jar` | `./gradlew build stageRuntimeJar` |
 | [settlement-roads](https://github.com/better-content/settlement-roads) | `settlement_roads` | `settlement-roads-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [systemic-salience](https://github.com/better-content/systemic-salience) | `systemic_salience` | `systemic-salience-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [tinkers-construct-affixes](https://github.com/better-content/tinkers-construct-affixes) | `tinkers_construct_affixes` | `tinkers-construct-affixes-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [player-traces](https://github.com/better-content/player-traces) | `player_traces` | `player-traces-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [village-walls](https://github.com/better-content/village-walls) | `village_walls` | `village-walls-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [water-survival](https://github.com/better-content/water-survival) | `water_survival` | `water-survival-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [world-lifecycle-manager](https://github.com/better-content/world-lifecycle-manager) | `world_lifecycle_manager` | `world-lifecycle-manager-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 
 ## Validation-Only Repositories
 
