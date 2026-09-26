@@ -32,18 +32,19 @@ class WorldgenCompatibilityContractTest {
     }
 
     @Test
-    fun ruinedCitadelRetainsNativeEndBiomesAndAvoidsCrossChunkSpaceWrites() {
+    fun ruinedCitadelIsDisabledUntilItsEndGenerationStopsWritingFarChunks() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val tag = jacksonObjectMapper().readTree(
             root.resolve("kubejs/data/cataclysm/tags/worldgen/biome/has_structure/ruined_citadel_biomes.json")
                 .toFile(),
         )
+        val structure = jacksonObjectMapper().readTree(
+            root.resolve("kubejs/data/cataclysm/worldgen/structure/ruined_citadel.json").toFile(),
+        )
 
         assertTrue(tag.path("replace").asBoolean())
-        assertEquals(
-            setOf("minecraft:end_highlands", "minecraft:end_midlands"),
-            tag.path("values").map { it.asText() }.toSet(),
-        )
+        assertEquals(0, tag.path("values").size())
+        assertEquals("#cataclysm:has_structure/ruined_citadel_biomes", structure.path("biomes").asText())
     }
 
     @Test
