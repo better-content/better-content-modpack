@@ -1,9 +1,5 @@
-#Superlinear ordinary nutrition, Tempo sugar/debt, and Control alcohol tuning.
+#Diet owns ordinary nutrition; Salience adds a five-minute upper-band cost and tunes Sugar/Alcohol.
 [metabolism]
-	#Range: 1.0E-4 ~ 0.1
-	baseNutrientDecayPerMinute = 0.004
-	#Range: 0.1 ~ 12.0
-	fullnessDecayExponent = 4.0
 	#Range: 0.1 ~ 120.0
 	sugarHalfLifeMinutes = 4.0
 	#Range: 0.1 ~ 240.0

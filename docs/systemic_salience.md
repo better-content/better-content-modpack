@@ -75,18 +75,18 @@ Slice of Life: Carrot remains the sole owner of maximum-health progression.
 
 ## Nutrition
 
-Diet stores six ordinary groups: Proteins, Grains, Fruits, Fats, Vegetables, and Dairy. Sugar and Alcohol are optional meta-food loads, never required for dietary completeness. Ordinary thresholds are `50%` supported, `75%` prepared, and `90%` feast; the upper range decays quickly so feast states are deliberate preparation rather than permanent upkeep.
+Diet displays exactly eight groups, matching the eight aspect identities and colours. Proteins, Grains, Fruits, Fats, Vegetables, and Dairy are ordinary nutrition; Sugar and Alcohol are differently behaving loads, never required for dietary completeness. Ordinary thresholds are `50%` supported, `75%` prepared, and `90%` feast. The powerful band loses three percentage points per minute while active: `90%` falls below `75%` in about five idle minutes, sooner during hunger-linked Diet decay or Sugar Tempo.
 
-- Proteins culminate in a telegraphed Heavy Blow after briefly withholding attacks.
-- Grains build Work Rhythm through consecutive correct-tool blocks.
-- Fruits reward sustained sprinting with a stronger Stride.
-- Fats conserve bodily resources and can fund one emergency reserve.
-- Vegetables resist environmental drift and periodically brace one extreme exposure or knockback.
-- Dairy accelerates harmful-effect clearance, preserves beneficial effects through milk, and periodically cleanses one harmful effect.
-- Sugar accelerates attack/use cadence while sharply increasing nutrient expenditure and later metabolic debt.
-- Alcohol has a narrow moderate-composure window; high load degrades handling and can cause stumbles. Maximum alcohol is unambiguously bad.
+- Proteins grant `+75%` melee damage above `75%`, with a charged `+200%` Heavy Blow above `90%` after briefly withholding attacks.
+- Grains grant `+100%` mining speed above `75%`; correct-tool Work Rhythm reaches `+200%` above `90%`.
+- Fruits grant `+50%` movement and swimming above `75%`, with a sprint surge reaching `+100%` above `90%`.
+- Fats reduce hunger, thirst, and stamina costs by `70%` above `75%`, reaching `85%` above `90%` and funding one ten-second zero-cost emergency reserve.
+- Vegetables resist `80%` of temperature drift and half of knockback above `75%`; at `90%` they can cancel one extreme exposure or knockback every 30 seconds.
+- Dairy clears harmful effects four times as fast and preserves benefits through milk above `75%`; at `90%` it cleanses one harmful effect every 20 seconds.
+- Sugar grants `+50%` or `+100%` attack and item-use cadence at its own `25%` and `60%` load thresholds; it burns the powerful nutrition band two or five times faster and builds metabolic debt.
+- Alcohol improves handling only in its moderate `35–65%` window; high load degrades handling and can cause stumbles. Maximum alcohol is unambiguously bad.
 
-Diet's native screen remains the authoritative nutrition display. Generic Diet-wide bonuses are disabled so the discrete behavior is the lesson.
+Diet's native screen remains the authoritative nutrition display and shows each group's actual benefit, load, and estimated upper-tier time. Food tooltips and meal recaps name the effect at the moment it matters. Generic Diet-wide bonuses stay disabled so they cannot duplicate the aspect abilities.
 
 ## Ores
 
