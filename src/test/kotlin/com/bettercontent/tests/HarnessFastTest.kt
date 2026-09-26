@@ -54,12 +54,19 @@ class HarnessFastTest {
     }
 
     @Test
-    fun multiplayerDimensionSmokeIsSingleClientAndSoakAddsTheOtherClientsOnce() {
+    fun distJoinsOneClientAndDebugTraversesDimensionsBeforeSoak() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val source = Files.readString(root.resolve("src/test/kotlin/com/bettercontent/tests/MultiplayerRuntimeTest.kt"))
+        val join = source.substringAfter("fun leadClientJoinsFreshDedicatedServer()").substringBefore("@Test @Order(2)")
+        val traversal = source.substringAfter("fun everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations()")
+            .substringBefore("@Test @Order(3)")
 
-        assertTrue(source.contains("startClient(lead)"))
-        assertTrue(source.contains("requirePlayersOnline(\"dimension traversal start\", listOf(lead))"))
+        assertTrue(join.indexOf("if (evidence.run.tier == \"debug\")") < join.indexOf("server.runtimeDump()"))
+        assertTrue(join.contains("startClient(lead)"))
+        assertTrue(join.contains("requirePlayersOnline(\"client joined\", listOf(lead))"))
+        assertTrue(traversal.indexOf("if (evidence.run.tier != \"debug\")") < traversal.indexOf("DimensionSmokePlan.discover("))
+        assertTrue(traversal.contains("DimensionSmokePlan.positions.take(3)"))
+        assertTrue(source.contains("if (evidence.run.tier == \"debug\") campaignSoak else joined"))
         assertTrue(source.contains("clients.drop(1).forEach"))
         assertTrue(source.contains("requireAllPlayersOnline(\"soak clients joined\")"))
         assertTrue(!source.contains("dimension support heartbeat"))

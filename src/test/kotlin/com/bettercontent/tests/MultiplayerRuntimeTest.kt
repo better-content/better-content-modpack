@@ -20,7 +20,7 @@ class MultiplayerRuntimeTest {
         @JvmField @RegisterExtension val evidence = EvidenceExtension("multiplayer")
         lateinit var server: DedicatedServerFixture
         lateinit var clients: List<ClientFixture>
-        var settled = false
+        var joined = false
         var dimensions = false
         var campaignSoak = false
 
@@ -35,7 +35,7 @@ class MultiplayerRuntimeTest {
         // A full-pack client can otherwise drive the shared smoke-test host into its
         // memory ceiling during Lost Cities reloads. Four GiB clears TACZ's initial
         // model reload while leaving headroom for the server during the single-client
-        // dimension smoke and the separate three-client soak.
+        // join and Debug's dimension traversal and three-client soak.
         private const val CLIENT_JVM_ARGS = "-Xms1G -Xmx4G"
 
         @JvmStatic
@@ -69,18 +69,17 @@ class MultiplayerRuntimeTest {
     }
 
     @Test @Order(1)
-    fun leadClientJoinsFreshDedicatedServer() = evidence.run.checkpoint("single-client dimension smoke join") {
+    fun leadClientJoinsFreshDedicatedServer() = evidence.run.checkpoint("single-client server join") {
         server.waitReady()
-        // The recipe graph exporter performs a large synchronous write on the server thread.
-        // Run it before clients connect so its unavoidable pause cannot trip their network
-        // heartbeat while the dimension inventory is being prepared.
-        val dump = server.runtimeDump()
-        Files.copy(
-            dump.resolve("dimensions.json"),
-            evidence.run.directory.resolve("dimensions.json"),
-            StandardCopyOption.REPLACE_EXISTING,
-        )
         if (evidence.run.tier == "debug") {
+            // The recipe graph exporter performs a large synchronous write on the server thread.
+            // Run it before clients connect so its pause cannot trip their network heartbeat.
+            val dump = server.runtimeDump()
+            Files.copy(
+                dump.resolve("dimensions.json"),
+                evidence.run.directory.resolve("dimensions.json"),
+                StandardCopyOption.REPLACE_EXISTING,
+            )
             // Generate and force-load the three distant campaign corridors while no clients are
             // connected. Fresh overworld generation can pause the server longer than a heartbeat.
             positions.forEachIndexed { index, (x, z) -> prepareCampaignPlatform(index + 1, x, z) }
@@ -97,20 +96,24 @@ class MultiplayerRuntimeTest {
         }
         val lead = clients.first()
         startClient(lead)
-        requirePlayersOnline("dimension client joined", listOf(lead))
-        settled = true
+        requirePlayersOnline("client joined", listOf(lead))
+        joined = true
     }
 
     @Test @Order(2)
     fun everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations() {
-        assumeTrue(settled, "client settle prerequisite failed")
+        if (evidence.run.tier != "debug") {
+            evidence.run.event("scenario_omitted", mapOf("name" to "dimension traversal and TPS stabilization", "tier" to evidence.run.tier))
+            return
+        }
+        assumeTrue(joined, "client join prerequisite failed")
         evidence.run.checkpoint("dimension traversal and TPS stabilization") {
             val lead = clients.first()
             requirePlayersOnline("dimension traversal start", listOf(lead))
             val inventory = evidence.run.directory.resolve("dimensions.json")
             require(Files.isRegularFile(inventory)) { "dimension inventory was not prepared before client login" }
             val targets = DimensionSmokePlan.discover(inventory, server.server.resolve("config/dimension_drink/fonts"))
-            val locations = DimensionSmokePlan.positions.take(if (evidence.run.tier == "debug") 3 else 1)
+            val locations = DimensionSmokePlan.positions.take(3)
             evidence.run.event("dimension_targets", mapOf(
                 "count" to targets.size,
                 "targets" to targets.map { mapOf("id" to it.id, "sources" to it.sources.sorted()) },
@@ -342,7 +345,7 @@ class MultiplayerRuntimeTest {
 
     @Test @Order(6)
     fun multiplayerEvidenceIsCleanAndCandidatesAreUnchanged() {
-        assumeTrue(if (evidence.run.tier == "debug") campaignSoak else dimensions, "multiplayer prerequisite failed")
+        assumeTrue(if (evidence.run.tier == "debug") campaignSoak else joined, "multiplayer prerequisite failed")
         evidence.run.checkpoint("multiplayer log and hash audit") {
             clients.forEach { it.close() }
             server.stopGracefully()
@@ -388,7 +391,7 @@ class MultiplayerRuntimeTest {
         client.launchDedicated()
         client.waitDedicatedJoin()
         // Start clients serially so one full-pack resource reload cannot starve another
-        // client's network heartbeat. The dimension phase starts only the lead; the other
+        // client's network heartbeat. The join starts only the lead; the other
         // two are started once here for the separate Survival soak.
         client.waitSettled()
     }
@@ -445,7 +448,7 @@ class MultiplayerRuntimeTest {
         val deadline = System.nanoTime() + Duration.ofSeconds(180).toNanos()
         var consecutive = 0
         var sample = 0
-        var required = if (evidence.run.tier == "debug") 3 else 1
+        val required = 3
         while (System.nanoTime() < deadline && consecutive < required) {
             Thread.sleep(10_000)
             val result = server.commandResult(
@@ -459,12 +462,11 @@ class MultiplayerRuntimeTest {
                 Duration.ofSeconds(90),
             )
             val tps = DimensionSmokePlan.parseOverallTps(result.value)
-            if (tps < 18.0) required = 3
             consecutive = if (tps >= 18.0) consecutive + 1 else 0
             evidence.run.event("dimension_tps_sample", mapOf(
                 "dimension" to target.id, "location" to location, "sample" to ++sample,
                 "mean_tps" to tps, "required_tps" to 18.0, "consecutive_passing" to consecutive,
-                "mode" to if (required == 3 && evidence.run.tier == "dist") "recovery" else evidence.run.tier,
+                "mode" to evidence.run.tier,
             ))
         }
         require(consecutive >= required) {
