@@ -169,7 +169,7 @@ _version = 3
 			#
 			# If enabled, a chat message will be displayed when DH has too many chunks 
 			# queued for updating.
-			showSlowWorldGenSettingWarnings = true
+			showSlowWorldGenSettingWarnings = false
 			#
 			# If enabled, a chat message will be displayed when DH has too many chunks 
 			# queued for updating.
