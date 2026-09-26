@@ -7,10 +7,12 @@ This repository is the Better Content Forge 1.20.1 modpack content layer.
 - `./dist.sh` creates versioned CurseForge/client and server-content ZIPs under the
   canonical ignored `dist/` directory. It accepts no output-directory override.
 - `./test.main.kts` is the supported three-tier evaluation facade. It requires an explicit
-  `dev`, `dist`, or `debug` selector.
+  `dev`, `dist`, or `debug` selector. `dist` and `debug` also accept a focused `--target`.
 - `./release.main.kts` is the only fresh-dist workflow. By default it reuses unchanged bundled
   runtime JARs whose source revision matches and validates/rebuilds changed repositories, then
   refreshes Packwiz hashes, packages exactly once, and runs `dist`.
+  For explicitly ordered bug fixing, `--target TARGET` packages once and runs focused validation;
+  the candidate still needs full Dist and Debug on unchanged ZIP hashes before signoff.
   `--skip-tests` is allowed only when the explicit fresh-dist request prohibits tests; it still
   reuses unchanged JARs, builds/stages changed sources without verification, and packages exactly once.
 - `./maintenance.main.kts audit` reports evidence retention decisions without changing the
@@ -51,6 +53,12 @@ runtime snapshot, lifecycle/archive evidence, process diagnostics, and retained 
 Never report only that tests failed, delete a failed fixture, rebuild the candidate, or rerun an
 expensive suite before inspecting its evidence. Confirm whether child processes were cleaned up so
 another agent can safely continue.
+Use `./test.main.kts debug --target TARGET --retry-of RUN_ID` for a focused retry after diagnosis.
+Targets use fresh fixtures, candidate contracts, the relevant runtime assertion, hash checks, and
+process cleanup, while retaining separate `target-*` evidence. They do not replace a full-tier
+pass. A source change that needs a new candidate may use `./release.main.kts --target TARGET
+--retry-of RUN_ID`; this packages once without a full Dist run during the bug-fix loop. Run the
+full requested tiers once on the final unchanged candidate.
 
 Dist, Debug, and releases share the same kernel-backed mutex. Invoke them only
 through `test.main.kts`, `release.main.kts`, or `pack-test-queue.main.kts run-next`; direct

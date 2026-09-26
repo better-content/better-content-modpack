@@ -11,7 +11,7 @@ class EvidenceExtension(private val suite: String) : BeforeAllCallback, AfterAll
     private var successful = true
 
     override fun beforeAll(context: ExtensionContext) {
-        run = EvidenceRun(TestConfig.load(), suite)
+        run = EvidenceRun(TestConfig.load(), System.getenv("BC_TEST_EVIDENCE_SUITE")?.takeIf(String::isNotBlank) ?: suite, suite)
     }
 
     override fun testFailed(context: ExtensionContext, cause: Throwable) {
@@ -32,6 +32,11 @@ class EvidenceExtension(private val suite: String) : BeforeAllCallback, AfterAll
         context.executionException.ifPresent { error ->
             successful = false
             run.event("suite_fixture_failed", mapOf("error" to (error.message ?: error.javaClass.name)))
+        }
+        if (run.target != null) {
+            val findings = LogPolicy.findings(collectLogs(run.directory))
+            run.event("target_log_findings", mapOf("count" to findings.size,
+                "first" to findings.take(5).map { "${it.path}:${it.line}: ${it.text}" }))
         }
         run.finish(successful)
     }

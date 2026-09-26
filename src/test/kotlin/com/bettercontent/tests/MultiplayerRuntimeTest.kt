@@ -100,21 +100,44 @@ class MultiplayerRuntimeTest {
         startClient(lead)
         requirePlayersOnline("client joined", listOf(lead))
         joined = true
+        if (evidence.run.target != null) {
+            server.assertHashes()
+            lead.assertHashes()
+        }
     }
 
-    @Test @Order(2)
+    private fun prepareTargetJoin(needsInventory: Boolean = false) {
+        if (joined || evidence.run.target == null) return
+        server.waitReady()
+        if (needsInventory) {
+            val dump = server.runtimeDump()
+            Files.copy(dump.resolve("dimensions.json"), evidence.run.directory.resolve("dimensions.json"),
+                StandardCopyOption.REPLACE_EXISTING)
+        }
+        val lead = clients.first()
+        startClient(lead)
+        requirePlayersOnline("target client joined", listOf(lead))
+        joined = true
+    }
+
+    @Test @Order(3)
     fun everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "dimension traversal and TPS stabilization", "tier" to evidence.run.tier))
             return
         }
+        prepareTargetJoin(needsInventory = true)
         assumeTrue(joined, "client join prerequisite failed")
         evidence.run.checkpoint("dimension traversal and TPS stabilization") {
             val lead = clients.first()
             requirePlayersOnline("dimension traversal start", listOf(lead))
             val inventory = evidence.run.directory.resolve("dimensions.json")
             require(Files.isRegularFile(inventory)) { "dimension inventory was not prepared before client login" }
-            val targets = DimensionSmokePlan.discover(inventory, server.server.resolve("config/dimension_drink/fonts"))
+            val discovered = DimensionSmokePlan.discover(inventory, server.server.resolve("config/dimension_drink/fonts"))
+            val targets = evidence.run.target?.takeIf { it.startsWith("dimension:") }
+                ?.removePrefix("dimension:")?.let { id ->
+                    listOf(discovered.singleOrNull { it.id == id } ?: error("target dimension is not loaded: $id"))
+                } ?: discovered
             targets.forEach { GeometrySmokePlan.isTerrain(it.id) }
             val locations = DimensionSmokePlan.positions.take(3)
             evidence.run.event("dimension_targets", mapOf(
@@ -176,10 +199,14 @@ class MultiplayerRuntimeTest {
             ))
             FalloutWorldgenEvidence.requireNoCityRuinFarWrites(falloutLog)
             dimensions = true
+            if (evidence.run.target != null) {
+                server.assertHashes()
+                lead.assertHashes()
+            }
         }
     }
 
-    @Test @Order(3)
+    @Test @Order(4)
     fun threeSurvivalPlayersExerciseCampaignsAndSoak() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "three-player campaign soak", "tier" to evidence.run.tier))
@@ -286,7 +313,7 @@ class MultiplayerRuntimeTest {
 
     private fun soakSecondsAtStart(): Long = DEFAULT_SOAK_SECONDS
 
-    @Test @Order(4)
+    @Test @Order(5)
     fun debugServerRestartAndClientReconnectPreserveWorld() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "restart and reconnect", "tier" to evidence.run.tier))
@@ -319,15 +346,16 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    @Test @Order(5)
+    @Test @Order(2)
     fun debugNativeFontRoundTrips() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "native Font round trip", "tier" to evidence.run.tier))
             return
         }
-        assumeTrue(campaignSoak, "campaign prerequisite failed")
+        prepareTargetJoin()
+        assumeTrue(joined, "client join prerequisite failed")
         evidence.run.checkpoint("four native Font round trips and geometry") {
-            val player = clients.last()
+            val player = clients.first()
             server.send("gamemode spectator ${player.username}")
             server.send("clear ${player.username}")
             val fonts = linkedMapOf(
@@ -336,14 +364,19 @@ class MultiplayerRuntimeTest {
                 "aether" to "aether:the_aether",
                 "nether" to "minecraft:the_nether",
             )
-            fonts.forEach { (template, dimension) ->
+            val selectedFonts = evidence.run.target?.takeIf { it.startsWith("font:") }
+                ?.removePrefix("font:")?.let { template ->
+                    listOf(template to (fonts[template] ?: error("unknown Font target: $template")))
+                } ?: fonts.toList()
+            selectedFonts.forEachIndexed { index, (template, dimension) ->
                 val originOffset = clientLogOffset(player)
                 server.send("execute in minecraft:overworld run tp ${player.username} 0 320 0")
                 server.commandResult(
                     "execute as ${player.username} at @s if dimension minecraft:overworld run say BC_FONT_ORIGIN_$template",
                     Regex("BC_FONT_ORIGIN_$template"), "Font origin $template", Duration.ofSeconds(90),
                 )
-                waitForClientPosition(player, "minecraft:overworld", originOffset)
+                // Later iterations start in the same chunk just confirmed by the prior return.
+                if (index == 0) waitForClientPosition(player, "minecraft:overworld", originOffset)
                 val enterOffset = clientLogOffset(player)
                 server.commandResult(
                     "execute as ${player.username} at @s run font harness_enter $template",
@@ -360,7 +393,7 @@ class MultiplayerRuntimeTest {
                 val returnOffset = clientLogOffset(player)
                 server.commandResult(
                     "execute as ${player.username} at @s run font harness_return",
-                    Regex("BC_FONT_HARNESS_RETURN player=${Regex.escape(player.username)} template=$template destination=minecraft:overworld"),
+                    Regex("BC_FONT_HARNESS_RETURN player=${Regex.escape(player.username)} template=$template seal=.* destination=minecraft:overworld"),
                     "native return Font interaction $template", Duration.ofMinutes(2),
                 )
                 server.commandResult(
@@ -372,6 +405,10 @@ class MultiplayerRuntimeTest {
                     "template" to template, "dimension" to dimension))
             }
             fontRoundTrips = true
+            if (evidence.run.target != null) {
+                server.assertHashes()
+                player.assertHashes()
+            }
         }
     }
 

@@ -24,6 +24,7 @@ class SingleplayerRuntimeTest {
         @JvmStatic
         @BeforeAll
         fun start() {
+            if (evidence.run.target == "world-save") return
             client = ClientFixture(evidence.run)
             client.prepare()
             client.launchSingleplayer()
@@ -56,9 +57,9 @@ class SingleplayerRuntimeTest {
             evidence.run.event("scenario_omitted", mapOf("name" to "fresh world boot save reopen", "tier" to evidence.run.tier))
             return
         }
-        assumeTrue(title, "title screen prerequisite failed")
+        if (evidence.run.target == null) assumeTrue(title, "title screen prerequisite failed")
         evidence.run.checkpoint("fresh world boot save and reopen") {
-            client.close()
+            if (evidence.run.target == null) client.close()
             val seed = DedicatedServerFixture(evidence.run).also { seedServer = it }
             seed.waitReady()
             seed.stopGracefully()
@@ -80,6 +81,11 @@ class SingleplayerRuntimeTest {
             require(firstSave.toFile().copyRecursively(reopened.client.resolve("saves/DebugWorld").toFile())) {
                 "failed to stage saved world for reopen"
             }
+            val lineageState = first.client.resolve(".world_lifecycle_manager")
+            require(Files.isDirectory(lineageState) &&
+                lineageState.toFile().copyRecursively(reopened.client.resolve(".world_lifecycle_manager").toFile())) {
+                "failed to stage single-player lineage state for reopen"
+            }
             reopened.launchQuickPlayWorld("DebugWorld", "verify")
             reopened.waitForWorldProbe("BC_DEBUG_WORLD_LOADED mode=verify")
             val reopenedTime = Regex("BC_DEBUG_WORLD_LOADED mode=verify game_time=(\\d+)")
@@ -87,6 +93,11 @@ class SingleplayerRuntimeTest {
                 ?: error("reopened world marker has no game time")
             check(reopenedTime >= savedTime) { "reopened world lost saved game time ($reopenedTime < $savedTime)" }
             evidence.run.event("world_reopen_passed", mapOf("saved_game_time" to savedTime, "reopened_game_time" to reopenedTime))
+            if (evidence.run.target != null) {
+                seed.assertHashes()
+                first.assertHashes()
+                reopened.assertHashes()
+            }
         }
     }
 

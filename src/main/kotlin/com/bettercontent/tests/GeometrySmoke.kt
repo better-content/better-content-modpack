@@ -24,7 +24,7 @@ object GeometrySmokePlan {
     private val terrainProfiles: Map<String, (String) -> Boolean> = mapOf(
         "minecraft:overworld" to { id -> id in ground || id.startsWith("unearthed:") },
         "lostcities:lostcity" to { id -> id in ground || id.startsWith("unearthed:") },
-        "rats:ratlantis" to { id -> id in ground || id.startsWith("unearthed:") || id.startsWith("rats:") },
+        "rats:ratlantis" to { id -> id.startsWith("rats:") },
         "minecraft:the_nether" to { id -> id in nether },
         "minecraft:the_end" to { id -> id.startsWith("minecraft:end_stone") || id.startsWith("minecraft:purpur") },
         "aether:the_aether" to { id -> id.startsWith("aether:") },

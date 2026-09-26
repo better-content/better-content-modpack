@@ -65,7 +65,10 @@ when (args.firstOrNull()) {
         val running = directories.getValue("running").resolve(queued.fileName)
         Files.move(queued, running, StandardCopyOption.ATOMIC_MOVE)
         val selector = jq(running, ".selector")
-        val builder = ProcessBuilder(root.resolve("test.main.kts").toString(), selector).directory(root.toFile()).inheritIO()
+        val command = mutableListOf(root.resolve("test.main.kts").toString(), selector)
+        jq(running, ".target // \"\"").takeIf(String::isNotBlank)?.let { command += listOf("--target", it) }
+        jq(running, ".retry_of // \"\"").takeIf(String::isNotBlank)?.let { command += listOf("--retry-of", it) }
+        val builder = ProcessBuilder(command).directory(root.toFile()).inheritIO()
         builder.environment()["BC_PACK_TEST_HANDOFF"] = running.toString()
         builder.environment()["BC_PACK_TEST_STATE_ROOT"] = stateRoot.toString()
         builder.environment()["BC_TEST_CLIENT_SHA256"] = jq(running, ".candidate.client.sha256")

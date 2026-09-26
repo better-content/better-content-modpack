@@ -71,7 +71,7 @@ object EvidencePlanner {
             )
         }
         val currentRun = (matchingProvenance.ifEmpty { matchingReports }).maxByOrNull { it.runId }
-        val latestPassed = knownSuites.associateWith { suite ->
+        val latestPassed = (knownSuites + runs.flatMap { run -> run.reports.map { it.suite } }).associateWith { suite ->
             runs.flatMap { run -> run.reports.map { run to it } }
                 .filter { (_, report) -> report.suite == suite && report.status == "passed" }
                 .maxWithOrNull(compareBy<Pair<RunInfo, SuiteReport>> { it.second.updatedAt }.thenBy { it.first.runId })
@@ -131,6 +131,18 @@ object EvidencePlanner {
             val reportPath = path.resolve(suite).resolve("run.json")
             if (reportPath.exists()) {
                 runCatching { loadReport(reportPath) }.onSuccess { reports += it }.onFailure { malformed = true }
+            }
+        }
+        Files.list(path).use { stream ->
+            stream.filter { it.fileName.toString().startsWith("target-") }.forEach { directory ->
+                val reportPath = directory.resolve("run.json")
+                if (Files.isSymbolicLink(directory) || !Files.isDirectory(directory) || !Files.isRegularFile(reportPath)) {
+                    malformed = true
+                } else {
+                    runCatching { loadReport(reportPath) }.onSuccess { report ->
+                        if (report.suite == directory.fileName.toString()) reports += report else malformed = true
+                    }.onFailure { malformed = true }
+                }
             }
         }
         val provenancePath = path.resolve("release/provenance.json")

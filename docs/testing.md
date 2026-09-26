@@ -16,6 +16,23 @@ Pack-level tiers run only when explicitly requested:
 ./test.main.kts debug
 ```
 
+After inspecting a failed run, use a targeted retry to check a fix without starting every Debug
+scenario. Each retry makes a fresh fixture and records separate `target-*` evidence; it cannot be
+mistaken for a full-tier pass. Supported targets are `join` (Dist or Debug), `font:ratlantis`,
+`font:bumblezone`, `font:aether`, `font:nether`, `fonts`, `dimension:<id>` for a directly
+teleportable dimension, `dimensions`, and `world-save` (Debug). For example:
+
+```sh
+./test.main.kts debug --target font:aether --retry-of 20260926T070341Z-1044833
+./test.main.kts debug --target fonts
+```
+
+Targeted runs still perform fast checks and candidate validation, then start only the selected
+runtime fixture and its required setup. They check candidate hashes and process cleanup. Log
+findings are recorded for diagnosis; the full tier retains the strict log audit. If a source fix
+needs a new JAR, use `./release.main.kts --target font:aether --retry-of RUN_ID` to package once
+and test that target. Finish with complete Dist and Debug runs on those unchanged ZIP hashes.
+
 Dist includes Dev, candidate contracts, a real full-pack client joining a fresh dedicated server,
 an online player heartbeat, strict logs, and candidate hashes. It does not run dimension travel.
 Debug uses unchanged candidate hashes and adds dedicated-server startup/runtime snapshot, three

@@ -50,7 +50,8 @@ class HarnessFastTest {
 
         assertTrue(build.contains("outputs.upToDateWhen { false }"))
         assertTrue(facade.contains("report.lastModified() < startedAt"))
-        assertTrue(facade.contains("validateFreshEvidence(suite, startedAt)"))
+        assertTrue(facade.contains("validateFreshEvidence(evidenceSuite, startedAt)"))
+        assertTrue(facade.contains("BC_TEST_EVIDENCE_SUITE"))
     }
 
     @Test
@@ -102,21 +103,31 @@ class HarnessFastTest {
         val document = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         assertEquals("bc.active_custom_mods.v1", document.path("schema").asText())
         val mods = document.path("mods")
-        assertEquals(35, mods.size())
+        assertEquals(42, mods.size())
         val repositories = mods.map { it.path("repository").asText() }.toSet()
-        assertEquals(35, repositories.size)
-        assertEquals(35, mods.map { it.path("modId").asText() }.toSet().size)
+        assertEquals(mods.size(), repositories.size)
+        assertEquals(mods.size(), mods.map { it.path("modId").asText() }.toSet().size)
+        val mixinConfigOwners = mutableMapOf<String, String>()
         mods.forEach { mod ->
-            assertTrue(Files.isRegularFile(root.resolve("mods").resolve(mod.path("artifact").asText())))
+            val artifact = root.resolve("mods").resolve(mod.path("artifact").asText())
+            assertTrue(Files.isRegularFile(artifact))
             assertTrue(mod.path("tasks").isArray && mod.path("tasks").size() > 0)
             assertTrue(mod.path("dependsOn").let { it.isMissingNode || (it.isArray && it.all { dependency -> dependency.asText() in repositories }) })
+            JarFile(artifact.toFile()).use { jar ->
+                jar.entries().asSequence().map { it.name }
+                    .filter { it.endsWith(".mixins.json") && '/' !in it }
+                    .forEach { config ->
+                        val previous = mixinConfigOwners.putIfAbsent(config, mod.path("repository").asText())
+                        assertTrue(previous == null, "$config is bundled by both $previous and ${mod.path("repository").asText()}")
+                    }
+            }
         }
         fun dependencies(repository: String) = mods.single { it.path("repository").asText() == repository }
             .path("dependsOn").map { it.asText() }
         assertEquals(listOf("heat-sync"), dependencies("latent-chemlib"))
         assertEquals(listOf("better-content-fixes", "dimension-drink"), dependencies("better-content-economy"))
         assertEquals(
-            listOf("dynamic-survival-hud", "heat-sync", "latent-chemlib"),
+            listOf("dynamic-survival-hud"),
             dependencies("better-content-fixes"),
         )
         assertEquals(listOf("world-lifecycle-manager"), dependencies("class-selector"))

@@ -6,6 +6,35 @@ import kotlin.system.exitProcess
 
 val root = __FILE__.canonicalFile.parentFile
 val selector = args.firstOrNull()
+var target: String? = null
+var retryOf: String? = null
+var argument = 1
+while (argument < args.size) {
+    when (args[argument]) {
+        "--target" -> { target = args.getOrNull(argument + 1) ?: usage(); argument += 2 }
+        "--retry-of" -> { retryOf = args.getOrNull(argument + 1) ?: usage(); argument += 2 }
+        else -> usage()
+    }
+}
+val fontTargets = setOf("ratlantis", "bumblezone", "aether", "nether")
+val fontDimensions = setOf("rats:ratlantis", "the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether")
+val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "world-save") ||
+    (target!!.startsWith("font:") && target!!.removePrefix("font:") in fontTargets) ||
+    (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
+        target!!.removePrefix("dimension:") !in fontDimensions)
+val targetSuite = when {
+    target == null -> null
+    target == "world-save" -> "singleplayer"
+    else -> "multiplayer"
+}
+val targetMethod = when {
+    target == null -> null
+    target == "join" -> "leadClientJoinsFreshDedicatedServer"
+    target == "world-save" -> "debugFreshWorldBootSaveAndReopen"
+    target == "fonts" || target?.startsWith("font:") == true -> "debugNativeFontRoundTrips"
+    else -> "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations"
+}
+val targetEvidenceSuite = target?.let { "target-" + it.replace(Regex("[^A-Za-z0-9]+"), "-").trim('-') }
 val taskBySelector = mapOf(
     "candidate" to "candidateTest",
     "server" to "serverTest",
@@ -14,17 +43,21 @@ val taskBySelector = mapOf(
 )
 
 fun usage(): Nothing {
-    System.err.println("usage: ./test.main.kts <dev|dist|debug>")
+    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target join|fonts|font:NAME|dimensions|dimension:ID|world-save] [--retry-of RUN_ID]")
     exitProcess(2)
 }
 
-if (selector !in setOf("dev", "dist", "debug") || args.size != 1) usage()
+if (selector !in setOf("dev", "dist", "debug") || !validTarget ||
+    (target != null && (selector == "dev" || (selector == "dist" && target != "join"))) ||
+    (retryOf != null && target == null) ||
+    (retryOf != null && !Regex("\\d{8}T\\d{6}Z-\\d+").matches(retryOf!!)) ||
+    (retryOf != null && !root.resolve("generated/test-evidence/$retryOf").isDirectory)) usage()
 val selected = selector ?: usage()
 
 if (selected != "dev" && System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
     val status = ProcessBuilder(
         root.resolve("pack-test-lock.main.kts").absolutePath,
-        "run", "test", selected, "--", __FILE__.absolutePath, selected,
+        "run", "test", if (target == null) selected else "$selected:$target", "--", __FILE__.absolutePath, *args,
     ).directory(root).inheritIO().start().waitFor()
     exitProcess(status)
 }
@@ -56,10 +89,12 @@ fun validateFreshEvidence(suite: String, startedAt: Long): Boolean {
     return true
 }
 
-fun gradle(suite: String, task: String): Int {
+fun gradle(suite: String, task: String, method: String? = null, evidenceSuite: String = suite): Int {
     println("test suite: $task" + (runId?.let { " (run $it)" } ?: ""))
     val startedAt = System.currentTimeMillis()
-    val process = ProcessBuilder(root.resolve("gradlew").absolutePath, "--no-daemon", task)
+    val command = mutableListOf(root.resolve("gradlew").absolutePath, "--no-daemon", task)
+    if (method != null) command += listOf("--tests", "com.bettercontent.tests.${if (suite == "multiplayer") "MultiplayerRuntimeTest" else "SingleplayerRuntimeTest"}.$method")
+    val process = ProcessBuilder(command)
         .directory(root)
         .inheritIO()
         .apply {
@@ -67,11 +102,16 @@ fun gradle(suite: String, task: String): Int {
             else environment()["BC_TEST_SELECTOR"] = suite
             environment()["BC_TEST_TIER"] = selected
             if (runId != null) environment()["BC_TEST_RUN_ID"] = runId
+            if (method != null) {
+                environment()["BC_TEST_TARGET"] = target!!
+                environment()["BC_TEST_EVIDENCE_SUITE"] = targetEvidenceSuite!!
+                retryOf?.let { environment()["BC_TEST_RETRY_OF"] = it }
+            }
         }
         .start()
     val status = process.waitFor()
     if (status != 0 || suite == "fast") return status
-    return if (validateFreshEvidence(suite, startedAt)) 0 else 1
+    return if (validateFreshEvidence(evidenceSuite, startedAt)) 0 else 1
 }
 
 val statuses = linkedMapOf<String, Int>()
@@ -88,11 +128,12 @@ if (selected == "dev") {
     if (statuses.values.all { it == 0 }) {
         statuses["candidate"] = gradle("candidate", "candidateTest")
         if (statuses.getValue("candidate") == 0) {
-            val runtimeSuites = if (selected == "debug") listOf("server", "multiplayer", "singleplayer")
+            val runtimeSuites = if (targetSuite != null) listOf(targetSuite) else if (selected == "debug") listOf("server", "multiplayer", "singleplayer")
                 else listOf("multiplayer")
             for (name in runtimeSuites) {
-                statuses[name] = gradle(name, taskBySelector.getValue(name))
-                if (selected == "dist" && statuses.getValue(name) != 0) break
+                val evidenceSuite = if (targetSuite == name) targetEvidenceSuite!! else name
+                statuses[evidenceSuite] = gradle(name, taskBySelector.getValue(name), if (targetSuite == name) targetMethod else null, evidenceSuite)
+                if (selected == "dist" && statuses.getValue(evidenceSuite) != 0) break
             }
         } else {
             println("candidate validation failed; heavyweight suites were not started")

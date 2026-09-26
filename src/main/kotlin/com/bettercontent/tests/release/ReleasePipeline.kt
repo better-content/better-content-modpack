@@ -190,7 +190,8 @@ fun main(args: Array<String>) {
     val provenance = mapOf(
         "schema" to "bc.fresh_dist_provenance.v1",
         "created_at" to Instant.now().toString(),
-        "test_tier" to if (skipTests) "none" else "dist",
+        "test_tier" to if (skipTests) "none" else if (System.getenv("BC_RELEASE_TARGET") != null) "targeted" else "dist",
+        "target" to System.getenv("BC_RELEASE_TARGET"),
         "tests_skipped" to skipTests,
         "candidates" to mapOf(
             "client" to candidates.client.toString(),

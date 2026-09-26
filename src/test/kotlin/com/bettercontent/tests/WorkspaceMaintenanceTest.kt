@@ -48,6 +48,19 @@ class WorkspaceMaintenanceTest {
     }
 
     @Test
+    fun targetedPassDoesNotSupersedeFullFailure(@TempDir root: Path) {
+        report(root, "20260901T010000Z-1", "multiplayer", "failed", "2026-09-01T01:05:00Z", current)
+        report(root, "20260901T020000Z-2", "target-font-aether", "failed", "2026-09-01T02:05:00Z", current)
+        report(root, "20260901T030000Z-3", "target-font-aether", "passed", "2026-09-01T03:05:00Z", current)
+
+        val plan = EvidencePlanner.plan(root, null)
+
+        assertEquals("retain", plan.decisions.single { it.runId.endsWith("-1") }.action)
+        assertEquals("prune", plan.decisions.single { it.runId.endsWith("-2") }.action)
+        assertEquals("retain", plan.decisions.single { it.runId.endsWith("-3") }.action)
+    }
+
+    @Test
     fun retainsMalformedAndSymbolicLinkEntries(@TempDir root: Path) {
         root.resolve("20260901T010000Z-1/server").createDirectories()
         root.resolve("20260901T010000Z-1/server/run.json").writeText("not-json")

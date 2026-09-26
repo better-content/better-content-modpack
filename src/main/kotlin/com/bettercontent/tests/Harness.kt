@@ -103,6 +103,9 @@ object PackTestHandoff {
         System.getenv("BC_TEST_SELECTOR")?.takeIf { it.isNotBlank() && it != "fast" }?.let { selector ->
             require(document.path("selector").asText() == selector) { "pack-test selector differs from the handoff" }
         }
+        System.getenv("BC_TEST_TARGET")?.takeIf(String::isNotBlank)?.let { target ->
+            require(document.path("target").asText() == target) { "pack-test target differs from the handoff" }
+        }
         fun validateSide(side: String, actualPath: Path, actualHash: String) {
             val expected = document.path("candidate").path(side)
             require(Path.of(expected.path("path").asText()).toAbsolutePath().normalize() == actualPath.toAbsolutePath().normalize()) {
@@ -187,17 +190,20 @@ data class TestConfig(
     }
 }
 
-class EvidenceRun(val config: TestConfig, val suite: String) {
+class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: String = suite) {
     private val mapper: ObjectMapper = jacksonObjectMapper()
     val directory: Path = config.runRoot.resolve(config.runId).resolve(suite).also { it.createDirectories() }
     val fixture: Path = directory.resolve("fixture").also { it.createDirectories() }
     private val events = directory.resolve("events.jsonl")
     private val started = Instant.now()
     val tier: String = System.getenv("BC_TEST_TIER")?.takeIf { it in setOf("dist", "debug") } ?: "legacy"
+    val target: String? = System.getenv("BC_TEST_TARGET")?.takeIf(String::isNotBlank)
     private var failure: String? = null
 
     init {
-        event("suite_started", mapOf("suite" to suite, "tier" to tier, "root" to config.root.absolutePathString()))
+        event("suite_started", mapOf("suite" to suite, "source_suite" to sourceSuite, "tier" to tier,
+            "scope" to if (target == null) "full" else "targeted", "target" to target,
+            "retry_of" to System.getenv("BC_TEST_RETRY_OF"), "root" to config.root.absolutePathString()))
         config.handoff?.let { source ->
             require(Files.isRegularFile(source)) { "pack-test handoff is missing: $source" }
             Files.copy(source, directory.resolve("handoff.json"), StandardCopyOption.REPLACE_EXISTING)
@@ -258,6 +264,10 @@ class EvidenceRun(val config: TestConfig, val suite: String) {
             "schema" to "bc.modpack_test_run.v1",
             "run_id" to config.runId,
             "suite" to suite,
+            "source_suite" to sourceSuite,
+            "scope" to if (target == null) "full" else "targeted",
+            "target" to target,
+            "retry_of" to System.getenv("BC_TEST_RETRY_OF"),
             "tier" to tier,
             "status" to status,
             "started_at" to started.toString(),

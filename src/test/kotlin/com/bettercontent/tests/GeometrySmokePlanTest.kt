@@ -41,4 +41,13 @@ class GeometrySmokePlanTest {
         assertEquals(70L, result["expected_family_blocks"])
         assertEquals(true, result["passed"])
     }
+
+    @Test
+    fun ratlantisRequiresRatsWorldBlocks() {
+        val dimension = "rats:ratlantis"
+        val generic = GeometrySample(dimension, 9, mapOf("unearthed:granodiorite" to 100_000))
+        val native = GeometrySample(dimension, 9, mapOf("rats:cheese_ore" to 20, "unearthed:granodiorite" to 100_000))
+        assertEquals(false, GeometrySmokePlan.assess(dimension, listOf(generic))["passed"])
+        assertEquals(true, GeometrySmokePlan.assess(dimension, listOf(native))["passed"])
+    }
 }
