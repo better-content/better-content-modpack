@@ -4,7 +4,7 @@
 
 	[gamerules.chat]
 		#Whether advancements should be announced in chat.
-		announce_advancements = true
+		announce_advancements = false
 		#Whether command blocks should notify admins when they perform commands.
 		command_block_output = true
 		#Whether to log admin commands to server log.
