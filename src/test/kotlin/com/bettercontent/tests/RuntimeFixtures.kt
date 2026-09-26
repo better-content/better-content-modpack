@@ -17,6 +17,7 @@ class DedicatedServerFixture(
     private val evidence: EvidenceRun,
     private val environment: Map<String, String> = emptyMap(),
     private val allowLongClientLogin: Boolean = false,
+    private val suppressInControlSpawns: Boolean = false,
 ) : AutoCloseable {
     val config = evidence.config
     val pair = CandidateLocator.locate(config.root)
@@ -44,6 +45,15 @@ class DedicatedServerFixture(
         server = roots.single()
         disableScheduledBackupsForRuntimeFixture(server)
         if (allowLongClientLogin) configureDedicatedServerMemory(server)
+        if (suppressInControlSpawns) {
+            val rules = server.resolve("config/incontrol/spawner.json")
+            require(rules.isRegularFile()) { "candidate has no InControl spawner configuration at $rules" }
+            rules.toFile().writeText("[]\n")
+            evidence.event("fixture_spawn_override", mapOf(
+                "reason" to "isolate targeted campaign path validation from unrelated InControl spawns",
+                "path" to rules.toString(),
+            ))
+        }
         replaceExact(server.resolve("eula.txt"), "eula=false", "eula=true")
         replaceExact(server.resolve("server.properties"), "online-mode=true", "online-mode=false")
         val properties = server.resolve("server.properties")

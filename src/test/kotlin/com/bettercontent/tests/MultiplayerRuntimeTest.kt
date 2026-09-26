@@ -53,6 +53,7 @@ class MultiplayerRuntimeTest {
                 evidence.run,
                 mapOf("JAVA_TOOL_OPTIONS" to harnessOptions),
                 allowLongClientLogin = true,
+                suppressInControlSpawns = evidence.run.target == "campaign-start",
             )
             clients = usernames.mapIndexed { index, username ->
                 ClientFixture(evidence.run, server, username, index + 1,
@@ -212,8 +213,17 @@ class MultiplayerRuntimeTest {
             evidence.run.event("scenario_omitted", mapOf("name" to "three-player campaign soak", "tier" to evidence.run.tier))
             return
         }
-        assumeTrue(dimensions, "dimension traversal prerequisite failed")
-        evidence.run.checkpoint("three-player campaign and 30-minute Survival soak") {
+        if (evidence.run.target == "campaign" || evidence.run.target == "campaign-start") {
+            server.waitReady()
+            positions.forEachIndexed { index, (x, z) -> prepareCampaignPlatform(index + 1, x, z) }
+            startClient(clients.first())
+            requirePlayersOnline("campaign lead joined", listOf(clients.first()))
+        } else {
+            assumeTrue(dimensions, "dimension traversal prerequisite failed")
+        }
+        val checkpoint = if (evidence.run.target == "campaign-start")
+            "three-player campaign starts" else "three-player campaign and 30-minute Survival soak"
+        evidence.run.checkpoint(checkpoint) {
             clients.drop(1).forEach {
                 startClient(it)
                 // Keep the newly joined soak client out of ordinary campaign eligibility
@@ -269,6 +279,11 @@ class MultiplayerRuntimeTest {
                     Duration.ofMinutes(2),
                     retryInterval = Duration.ofSeconds(10),
                 )
+            }
+
+            if (evidence.run.target == "campaign-start") {
+                evidence.run.event("campaign_start_passed", mapOf("players" to clients.map { it.username }))
+                return@checkpoint
             }
 
             val soakSeconds = soakSecondsAtStart()

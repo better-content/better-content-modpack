@@ -20,7 +20,11 @@ After inspecting a failed run, use a targeted retry to check a fix without start
 scenario. Each retry makes a fresh fixture and records separate `target-*` evidence; it cannot be
 mistaken for a full-tier pass. Supported targets are `join` (Dist or Debug), `font:ratlantis`,
 `font:bumblezone`, `font:aether`, `font:nether`, `fonts`, `dimension:<id>` for a directly
-teleportable dimension, `dimensions`, and `world-save` (Debug). For example:
+teleportable dimension, `dimensions`, `campaign-start` (three live encounters without the soak),
+`campaign` (three clients and the full 30-minute soak), and `world-save` (Debug). The
+`campaign-start` fixture disables InControl's unrelated background spawner rules so an ambient
+spawn cannot interrupt path diagnosis; its evidence records this override. Full Debug and
+`campaign` retain the packaged rules. For example:
 
 ```sh
 ./test.main.kts debug --target font:aether --retry-of 20260926T070341Z-1044833

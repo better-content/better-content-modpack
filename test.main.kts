@@ -18,7 +18,7 @@ while (argument < args.size) {
 }
 val fontTargets = setOf("ratlantis", "bumblezone", "aether", "nether")
 val fontDimensions = setOf("rats:ratlantis", "the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether")
-val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "world-save") ||
+val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "campaign-start", "campaign", "world-save") ||
     (target!!.startsWith("font:") && target!!.removePrefix("font:") in fontTargets) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
         target!!.removePrefix("dimension:") !in fontDimensions)
@@ -30,6 +30,7 @@ val targetSuite = when {
 val targetMethod = when {
     target == null -> null
     target == "join" -> "leadClientJoinsFreshDedicatedServer"
+    target == "campaign" || target == "campaign-start" -> "threeSurvivalPlayersExerciseCampaignsAndSoak"
     target == "world-save" -> "debugFreshWorldBootSaveAndReopen"
     target == "fonts" || target?.startsWith("font:") == true -> "debugNativeFontRoundTrips"
     else -> "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations"
@@ -43,7 +44,7 @@ val taskBySelector = mapOf(
 )
 
 fun usage(): Nothing {
-    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target join|fonts|font:NAME|dimensions|dimension:ID|world-save] [--retry-of RUN_ID]")
+    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target join|fonts|font:NAME|dimensions|dimension:ID|campaign-start|campaign|world-save] [--retry-of RUN_ID]")
     exitProcess(2)
 }
 
