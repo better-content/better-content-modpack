@@ -72,7 +72,9 @@ Dist also audits logs and candidate hashes. Debug uses the same candidate hashes
 dedicated-server runtime data and lifecycle, three fresh locations per directly teleportable
 dimension with strict three-sample TPS and Font-only direct-travel guards, single-player startup
 and world save/reopen, the 30-minute three-client campaign soak, restart/reconnect, and native
-Font round-trip scenarios.
+Font round trips for Ratlantis, Bumblezone, Aether, and Nether. Debug also requires client-side
+arrival evidence and bounded native block-family counts in every classified terrain dimension;
+space and utility dimensions retain travel checks without a terrain threshold.
 Further scenario expansion still requires an explicit user order.
 
 Automated tests must not synthesize mouse movement or mouse clicks. UI flows that require pointer

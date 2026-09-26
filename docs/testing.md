@@ -21,7 +21,7 @@ an online player heartbeat, strict logs, and candidate hashes. It does not run d
 Debug uses unchanged candidate hashes and adds dedicated-server startup/runtime snapshot, three
 fresh locations per directly teleportable dimension with strict three-sample TPS and Font-only
 direct-travel guards, one lineage transition and archive, the 30-minute three-client campaign
-soak, server restart/client reconnect, native Font travel, and singleplayer startup/world
+soak, server restart/client reconnect, four native Font round trips, and singleplayer startup/world
 boot/save/reopen.
 
 Dist, Debug, and `release.main.kts` share one kernel-backed runner mutex. The
@@ -79,11 +79,23 @@ The runtime-data-dumper completion schema is `bc.runtime_dump_completion.v3` and
 `dimensions.json` (`bc.dimensions.v1`). Debug multiplayer traversal discovers targets at run time
 from the loaded Creating Space rocket-accessible-dimension registry and enabled Dimension Drink Font
 configuration; target counts are evidence, not hard-coded assumptions. Every discovered target
-must be loaded. A single full-pack client travels as a spectator and requires a post-teleport
-heartbeat within 90 seconds. Font-only destinations require a direct-travel denial guard. Debug
+must be loaded. A single full-pack client travels as a spectator and requires both a server-side
+position check and a client-side dimension/chunk report within 90 seconds. Font-only destinations
+require a direct-travel denial guard. Debug
 visits three fresh, pairwise-distant locations per directly teleportable target and always requires three
 consecutive samples at at least 18 mean TPS. The other two clients start only for Debug's
 three-client Survival soak.
+For terrain dimensions, Debug counts block IDs in 3×3 already loaded chunks at each visit. A
+dimension passes when the combined samples contain at least 64 non-air blocks and 16 blocks from
+its broad expected family. Space and utility dimensions have no terrain threshold. Each of the
+Ratlantis, Bumblezone, Aether, and Nether Fonts is also activated through the same server-side
+block interaction used by right-click; the real client must arrive, pass a geometry probe, and
+return through the in-world return Font interaction. The histograms and assessments are retained
+with the run evidence. These checks show representative block content, not exact terrain shape or
+structure placement.
+When geometry fails, retain the fixture and compare its histogram with a separate fresh world
+using the same pinned mod JARs and default mod worldgen, without pack-authored datapacks or
+KubeJS content. The comparison is diagnostic; it does not waive the failing candidate result.
 Timeouts retain the command, server tail, process state, and fixture
 for diagnosis. Candidate hashes are checked again after the multiplayer scenario completes.
 
