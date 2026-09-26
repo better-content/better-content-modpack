@@ -13,6 +13,8 @@ import java.util.zip.ZipFile
 @Tag("fast")
 class HoverAnnotationLearningSurfaceTest {
     private val root = Path.of(System.getProperty("bc.repo.root"))
+    private fun pinnedModJar(filename: String): Path =
+        Path.of(System.getProperty("user.home"), ".cache/bc/packwiz-downloads/mods", filename)
     private val registry = jacksonObjectMapper().readTree(root.resolve("kubejs/config/hover_annotations.json").toFile())
 
     @Test
@@ -1141,7 +1143,7 @@ class HoverAnnotationLearningSurfaceTest {
         val pin = Files.readString(root.resolve("mods/serene-seasons.pw.toml"))
         val auditPath = root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ui10-season-sensor-audit.md").normalize()
         val audit = Files.readString(auditPath)
-        val jarPath = root.resolve("generated/test-evidence/20260912T234942Z-4177725/multiplayer/fixture/server-extract/better-content-server/mods/SereneSeasons-forge-1.20.1-9.1.0.2.jar")
+        val jarPath = pinnedModJar("SereneSeasons-forge-1.20.1-9.1.0.2.jar")
         val sha1 = MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jarPath)).joinToString("") { "%02x".format(it) }
         val calendarRow = registry.path("annotations").single { it.path("selector").path("item").asText() == "sereneseasons:calendar" }
         val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "sereneseasons:season_sensor" }
@@ -1177,7 +1179,7 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `pollution hovers distinguish personal protection from local measurement`() {
         val pin = Files.readString(root.resolve("mods/pollution-of-the-realms.pw.toml"))
-        val jarPath = root.resolve("generated/test-evidence/20260912T234942Z-4177725/multiplayer/fixture/server-extract/better-content-server/mods/AdPother-1.20.1-8.1.49.0-build.2294.jar")
+        val jarPath = pinnedModJar("AdPother-1.20.1-8.1.49.0-build.2294.jar")
         val sha1 = MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jarPath)).joinToString("") { "%02x".format(it) }
         val copy = "Protects the wearer from breathing pollution; it does not remove contamination from the world."
         val respiratorRow = registry.path("annotations").single { annotation ->
@@ -1214,7 +1216,7 @@ class HoverAnnotationLearningSurfaceTest {
         val pin = Files.readString(root.resolve("mods/pollution-of-the-realms.pw.toml"))
         val auditPath = root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ui10-pollution-audit.md").normalize()
         val audit = Files.readString(auditPath)
-        val jarPath = root.resolve("generated/test-evidence/20260912T234942Z-4177725/multiplayer/fixture/server-extract/better-content-server/mods/AdPother-1.20.1-8.1.49.0-build.2294.jar")
+        val jarPath = pinnedModJar("AdPother-1.20.1-8.1.49.0-build.2294.jar")
         val sha1 = MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jarPath)).joinToString("") { "%02x".format(it) }
         val aerometerRow = registry.path("annotations").single { it.path("selector").path("item").asText() == "adpother:aerometer" }
         val respiratorRow = registry.path("annotations").single {
@@ -1250,7 +1252,7 @@ class HoverAnnotationLearningSurfaceTest {
         val pin = Files.readString(root.resolve("mods/weather-storms-tornadoes.pw.toml"))
         val auditPath = root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ui10-weather2-audit.md").normalize()
         val audit = Files.readString(auditPath)
-        val jarPath = root.resolve("generated/test-evidence/20260912T234942Z-4177725/multiplayer/fixture/server-extract/better-content-server/mods/weather2-1.20.1-2.8.3.jar")
+        val jarPath = pinnedModJar("weather2-1.20.1-2.8.3.jar")
         val sha1 = MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jarPath)).joinToString("") { "%02x".format(it) }
         val rows = registry.path("annotations")
         fun row(id: String) = rows.single { it.path("selector").path("item").asText() == id }
@@ -1596,7 +1598,7 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Malum natural quartz hover follows the pinned Forge gem tag`() {
         val pin = Files.readString(root.resolve("mods/malum.pw.toml"))
-        val jar = root.resolve("generated/test-evidence/20260912T234942Z-4177725/multiplayer/fixture/server-extract/better-content-server/mods/malum-1.20.1-1.6.7.jar")
+        val jar = pinnedModJar("malum-1.20.1-1.6.7.jar")
         val digest = java.security.MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jar))
             .joinToString("") { "%02x".format(it) }
         val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "malum:natural_quartz" }
