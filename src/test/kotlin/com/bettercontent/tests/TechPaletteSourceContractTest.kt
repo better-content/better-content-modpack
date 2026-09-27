@@ -79,7 +79,7 @@ class TechPaletteSourceContractTest {
         }
         assertTrue(matrix.contains("data/create/recipes/crafting/materials/electron_tube.json"))
         assertTrue(matrix.contains("data/powergrid/recipes/mechanical_crafting/integrated_circuit.json"))
-        assertTrue(matrix.contains("Certus-only tubes were an audit proposal, not adopted policy"))
+        assertTrue(matrix.contains("the crafted Rose Quartz prerequisite now requires Certus"))
         assertTrue(energyRoot.contains("kubejs:impossible_support_matrix"))
         assertTrue(matrix.contains("Deliberately remains the later conjunctive, Ratlantis-rooted gate"))
     }
