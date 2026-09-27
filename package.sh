@@ -2,7 +2,7 @@
 set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 MC_VERSION=1.20.1
-FORGE_VERSION=47.4.13
+FORGE_VERSION=47.4.22
 FORGE_COORD="$MC_VERSION-$FORGE_VERSION"
 fail() { printf 'package failed: %s\n' "$*" >&2; exit 1; }
 

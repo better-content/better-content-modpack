@@ -9,4 +9,4 @@ set -eu
   printf 'supervised Forge startup failed: BC_JAVA is not an executable Java 17 path\n' >&2
   exit 1
 }
-exec "$BC_JAVA" @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.20.1-47.4.13/unix_args.txt "$@"
+exec "$BC_JAVA" @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.20.1-47.4.22/unix_args.txt "$@"

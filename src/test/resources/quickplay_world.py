@@ -9,7 +9,7 @@ from portablemc.standard import Context
 
 
 main_dir, work_dir, java, jvm_args, username, uuid, world = sys.argv[1:]
-version = ForgeVersion("1.20.1-47.4.13", context=Context(Path(main_dir), Path(work_dir)))
+version = ForgeVersion("1.20.1-47.4.22", context=Context(Path(main_dir), Path(work_dir)))
 version.jvm_path = Path(java)
 version.resolution = (1280, 720)
 version.set_auth_offline(username, uuid)

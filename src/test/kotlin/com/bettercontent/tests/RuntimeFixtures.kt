@@ -289,7 +289,7 @@ class ClientFixture(
             "--resolution", "1280x720", "-u", username, "-i", uuid,
         )
         command += connection
-        command += "forge:1.20.1-47.4.13"
+        command += "forge:1.20.1-47.4.22"
         return ManagedProcess("minecraft-client", command, client, log, environment)
     }
 
