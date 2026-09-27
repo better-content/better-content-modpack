@@ -18,9 +18,10 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:thermal_pressure/airtight_machine_block')
 
     event.remove({ output: 'compressedcreativity:rotational_compressor' })
-    event.shaped('compressedcreativity:rotational_compressor', ['PSP', 'GAG', 'CBC'], {
+    event.shaped('compressedcreativity:rotational_compressor', ['XSP', 'GAG', 'CBC'], {
         P: 'create:propeller', S: 'create:shaft', G: 'pneumaticcraft:compressed_iron_gear',
-        A: 'kubejs:airtight_machine_block', C: 'create:brass_casing', B: 'pneumaticcraft:pressure_tube'
+        A: 'kubejs:airtight_machine_block', C: 'create:brass_casing', B: 'pneumaticcraft:pressure_tube',
+        X: 'aether:aerogel'
     }).id('kubejs:thermal_pressure/direct_root/rotational_compressor')
 
     event.remove({ id: 'pneumaticcraft:pressure_chamber_interface' })
@@ -36,7 +37,7 @@ ServerEvents.recipes(function (event) {
         ingredients: [
             { item: 'realistic_ores:rinsed_hotstone' },
             { item: 'realistic_ores:rinsed_black_shale' },
-            { item: 'minecraft:gravel' }
+            { item: 'minecraft:basalt' }
         ],
         results: [{ item: 'tconstruct:scorched_brick', count: 2 }]
     }).id('kubejs:thermal_pressure/foundry/scorched_brick')

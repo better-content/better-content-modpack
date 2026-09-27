@@ -40,7 +40,8 @@ ServerEvents.recipes(function (event) {
             'powergrid:integrated_circuit',
             'powergrid:redstone_relay',
             { id: 'powergrid:wire', count: 2 },
-            'pneumaticcraft:printed_circuit_board'
+            'pneumaticcraft:printed_circuit_board',
+            'rats:oratchalcum_ingot'
         ])
 
     // AE materials remain post-electrical and meteor-dependent. The pack sheet
@@ -69,7 +70,8 @@ ServerEvents.recipes(function (event) {
             { id: 'kubejs:sky_steel_sheet', count: 2 },
             'ae2:logic_processor',
             'oc2r:circuit_board',
-            'kubejs:electrical_control_module'
+            'kubejs:electrical_control_module',
+            'rats:oratchalcum_ingot'
         ])
 
     // Mountain and deep-deposit components back the extreme-Y reward recipes.

@@ -126,13 +126,14 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:chemistry/acids/acetate_membrane')
 
     event.shaped('airtight_machinery:airtight_upgrade', [
-        ' S ',
+        'WSW',
         'MIM',
         ' S '
     ], {
         S: 'kubejs:pressure_seal',
         M: 'kubejs:acetate_membrane',
-        I: 'pneumaticcraft:ingot_iron_compressed'
+        I: 'pneumaticcraft:ingot_iron_compressed',
+        W: 'the_bumblezone:carvable_wax'
     }).id('kubejs:chemistry/acids/airtight_upgrade')
 
     event.remove({ id: 'brewinandchewin:fermenting/pickled_pickles' })

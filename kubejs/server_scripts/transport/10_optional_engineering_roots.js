@@ -24,16 +24,16 @@ ServerEvents.recipes(function (event) {
         }).id('kubejs:transport/powered_works/clockwork/andesite_flap_bearing')
 
         event.remove({ id: 'vs_clockwork:crafting/kinetics/brass_propeller_bearing' })
-        event.shaped('vs_clockwork:brass_propeller_bearing', [' P ', 'BMB', ' S '], {
+        event.shaped('vs_clockwork:brass_propeller_bearing', ['LPL', 'BMB', ' S '], {
             P: 'create:precision_mechanism', B: '#forge:plates/brass',
-            M: 'kubejs:brass_machine_block', S: 'create:shaft'
+            M: 'kubejs:brass_machine_block', S: 'create:shaft', L: 'aether:stripped_skyroot_log'
         }).id('kubejs:transport/precision_factory/clockwork/brass_propeller_bearing')
 
         event.remove({ id: 'vs_clockwork:crafting/pneumatics/air_compressor' })
-        event.shaped('vs_clockwork:air_compressor', ['PTP', 'GAG', ' C '], {
+        event.shaped('vs_clockwork:air_compressor', ['PBP', 'GAG', ' C '], {
             P: 'pneumaticcraft:pressure_tube', T: 'create:shaft',
             G: 'pneumaticcraft:compressed_iron_gear', A: 'kubejs:airtight_machine_block',
-            C: 'create:brass_casing'
+            C: 'create:brass_casing', B: 'aether:blue_aercloud'
         }).id('kubejs:transport/thermal_pressure/clockwork/air_compressor')
 
         event.remove({ id: 'vs_clockwork:crafting/physics/gyro' })
