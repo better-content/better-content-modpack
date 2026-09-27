@@ -1,0 +1,77 @@
+# Goety architecture supports adjoining Goety pieces across broad spans.
+#A list of block IDs and tags that should be affected by this definition.
+#Entries can be supplied in the below formats:
+#	Namespaces:   '<minecraft>'
+#	Tags:         '#forge:stone'
+#	IDs:          'minecraft:stone'
+Blocks = ["goety:arca", "goety:awakened_emerald_block", "goety:big_end_stone_bricks", "goety:black_crystal", "goety:blackstone_brazier", "goety:blackstone_soul_brazier", "goety:blackstone_throne", "goety:blazing_cage", "goety:brick_brazier", "goety:brick_soul_brazier", "goety:carved_indented_gold", "goety:chipped_dark_anvil", "goety:chiseled_end_stone", "goety:chiseled_end_stone_bricks", "goety:chiseled_indented_gold", "goety:chiseled_ominous_stone", "goety:chiseled_ominous_stone_bricks", "goety:chiseled_polished_ominous_stone", "goety:chorus_end_stone_pillar", "goety:cobbled_end_stone", "goety:cobbled_ominous_stone", "goety:cobbled_ominous_stone_path", "goety:cracked_crag_pavement", "goety:cracked_marble", "goety:cracked_ominous_stone_bricks", "goety:cracked_polished_ominous_stone", "goety:crag_bricks", "goety:crag_pavement", "goety:crag_tiles", "goety:creeper_totem", "goety:crypt_bookshelf", "goety:crypt_bricks", "goety:crypt_chest", "goety:crypt_pillar", "goety:crypt_plinth", "goety:crypt_stone", "goety:crypt_stone_chiseled", "goety:crypt_stone_polished", "goety:crypt_tiles", "goety:crypt_urn", "goety:crystal_ball", "goety:cursed_bars", "goety:cursed_cage", "goety:cursed_infuser", "goety:cursed_metal_block", "goety:damaged_dark_anvil", "goety:dark_altar", "goety:dark_altar_blackstone", "goety:dark_altar_crypt_stone", "goety:dark_altar_deepslate", "goety:dark_altar_end_stone", "goety:dark_altar_highrock", "goety:dark_altar_marble", "goety:dark_altar_nether_brick", "goety:dark_altar_ominous_stone", "goety:dark_altar_prismarine", "goety:dark_altar_stone", "goety:dark_anvil", "goety:dark_metal_block", "goety:deepslate_brazier", "goety:deepslate_soul_brazier", "goety:deepslate_throne", "goety:diamond_mold_block", "goety:end_basalt", "goety:end_basalt_bricks", "goety:end_growth_block", "goety:end_lamp", "goety:end_mud_cauldron", "goety:end_rock", "goety:end_rock_bricks", "goety:end_rock_chiseled", "goety:end_rock_slate", "goety:end_stone_pillar", "goety:end_stone_slate", "goety:end_stone_slate_rock", "goety:end_stone_tiles", "goety:freezing_lamp", "goety:glow_light", "goety:gold_arch_marble", "goety:gold_banded_marble", "goety:gold_candelabra", "goety:gold_chiseled_highrock_bricks", "goety:gold_covered_marble", "goety:gold_holder_marble", "goety:gold_indented_highrock_bricks", "goety:gold_plated_marble", "goety:gold_trapdoor", "goety:grim_infuser", "goety:grown_cobbled_end_stone", "goety:grown_end_rock", "goety:haunted_glass", "goety:haunted_glass_mob", "goety:haunted_glass_mob_tinted", "goety:haunted_glass_tinted", "goety:haunted_lamp", "goety:haunted_mirror", "goety:highrock_bricks", "goety:highrock_indented_bricks", "goety:highrock_throne", "goety:ice_bouquet_trap", "goety:indented_gold", "goety:infused_end_stone_pillar", "goety:jade_block", "goety:jade_light", "goety:jade_pillar", "goety:jade_tiles", "goety:lofty_chest", "goety:mandala", "goety:marble", "goety:marble_brazier", "goety:marble_soul_brazier", "goety:marble_throne", "goety:marble_wind_blower", "goety:messy_end_stone_bricks", "goety:mixed_end_stone", "goety:mossy_crag_tiles", "goety:necro_brazier", "goety:nether_brick_brazier", "goety:nether_brick_soul_brazier", "goety:night_beacon", "goety:ominous_brazier_statue", "goety:ominous_idol", "goety:ominous_pyre", "goety:ominous_statue", "goety:ominous_stone_brazier", "goety:ominous_stone_bricks", "goety:ominous_stone_pavement", "goety:ominous_stone_pillar", "goety:ominous_stone_soul_brazier", "goety:ominous_stone_tiles", "goety:ominous_throne", "goety:pale_steel_block", "goety:pedestal", "goety:pedestal_blackstone", "goety:pedestal_crypt_stone", "goety:pedestal_deepslate", "goety:pedestal_end_stone", "goety:pedestal_highrock", "goety:pedestal_marble", "goety:pedestal_nether_brick", "goety:pedestal_ominous_stone", "goety:pedestal_prismarine", "goety:pedestal_stone", "goety:pithos", "goety:plushie", "goety:plushie_1", "goety:plushie_2", "goety:plushie_3", "goety:plushie_4", "goety:plushie_5", "goety:polished_dark_ominous_stone", "goety:polished_highrock", "goety:polished_ominous_stone", "goety:purpur_lamp", "goety:reinforced_redstone_block", "goety:resonance_crystal", "goety:rusty_iron_bars", "goety:rusty_iron_grate", "goety:sculk_converter", "goety:sculk_devourer", "goety:sculk_grower", "goety:shade_brazier", "goety:shade_bricks", "goety:shade_glass", "goety:shade_gravestone", "goety:shade_pillar", "goety:shade_soul_brazier", "goety:shade_stone", "goety:shade_stone_bricks", "goety:shade_stone_chiseled", "goety:shade_stone_polished", "goety:shade_throne", "goety:shade_tiles", "goety:shriek_obelisk", "goety:slate_connected_marble", "goety:slate_cornered_marble", "goety:slate_glazed_marble", "goety:slate_marble", "goety:slate_patterned_marble", "goety:smooth_end_basalt_bricks", "goety:smooth_end_stone", "goety:snap_warts", "goety:snow_bricks", "goety:snowy_crag_bricks", "goety:snowy_crag_pavement", "goety:snowy_highrock_bricks", "goety:snowy_highrock_bricks_slight", "goety:snowy_jade_tiles", "goety:soul_absorber", "goety:soul_light", "goety:soul_mender", "goety:spider_mother_den", "goety:spider_nest", "goety:spider_sac", "goety:stash_urn", "goety:stone_brazier", "goety:stone_soul_brazier", "goety:stone_throne", "goety:studded_chorus_wood", "goety:void_barrel", "goety:void_block", "goety:void_cauldron", "goety:void_major_spread", "goety:void_minor_spread", "goety:void_spawner", "goety:void_vault", "goety:washed_slate_marble", "goety:weathered_slate_marble", "goety:wind_blower", "goety:witch_cauldron", "goety:worn_slate_marble"]
+[Physics]
+	#The maximum weight the block(s) can support both horizontally and vertically.
+	#Range: > 0
+	SupportStrength = 264060
+
+	#Additional support strength to apply to the amount of weight the block(s) can support above when acting as a beam.
+	#A value of 1.0 will allow the block(s) to support an infinite amount of weight, whereas a value of 0.0 will not apply any additional strengthening.
+	#Range: 0.0 ~ 1.0
+	BeamStrength = 0.97
+
+	#The mass of the block(s), in kilograms.
+	#Range: 1.0 ~ 50000.0
+	Mass = 1200.0
+
+	#Whether the block(s) can hang from other blocks for support.
+	CanHang = true
+
+	#Whether the block(s) can attach to the sides of other blocks for support.
+	CanAttach = true
+
+	#Whether the block(s) can diagonally attach to other blocks for support.
+	CanAttachDiagonally = true
+
+	#The chance the block(s) will slide after falling and landing.
+	#Range: 0.0 ~ 1.0
+	SlideChance = 0.45
+
+	#An additional "dice roll" to apply to the base slide chance of the block(s), when being placed by an entity.
+	#Setting a value of 1.0 means the slide chance will remain unaffected.
+	#Range: 0.0 ~ 1.0
+	PlacementSlideModifier = 0.0
+
+	#A multiplier to apply to the damage caused by the block(s) when falling on entities.
+	#Range: 0.0 ~ 10.0
+	EntityDamageScale = 1.0
+
+	#Whether the block(s) should break instead of falling.
+	BreaksOnFalling = false
+
+	#The maximum force the block(s) can withstand before being broken.
+	#Range: > 0
+	Strength = 782400
+
+	#Whether the block(s) can be supported by liquids that are below.
+	FloatsOnLiquid = false
+
+	#This section allows you to extend the collision bounds for each specific face of the block(s).
+	#Note: Directions are relative to the orientation of the block(s) (excluding vertical axis), not the world itself.
+	[Physics.ExtendedCollisionBounds]
+		#Fully extends the collision bounds of the block(s) in the UP direction.
+		Up = false
+
+		#Fully extends the collision bounds of the block(s) in the DOWN direction.
+		Down = false
+
+		#Fully extends the collision bounds of the block(s) in the NORTH direction.
+		North = false
+
+		#Fully extends the collision bounds of the block(s) in the EAST direction.
+		East = false
+
+		#Fully extends the collision bounds of the block(s) in the SOUTH direction.
+		South = false
+
+		#Fully extends the collision bounds of the block(s) in the WEST direction.
+		West = false
+
+[ChunkAnalysis]
+	#Whether the block(s) should be processed during chunk analysis updates.
+	Enabled = true
