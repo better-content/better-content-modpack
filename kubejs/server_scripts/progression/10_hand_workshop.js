@@ -2,8 +2,8 @@
 // Create begins only after the hand-cranked workshop is physically reachable.
 var BC_FONT_BINDERS = [
     ['nether', 'minecraft:netherrack', 'kubejs:nether_font_grout'],
-    ['aether', 'aether:holystone', 'kubejs:aether_font_grout'],
-    ['bumblezone', 'the_bumblezone:pollen_puff', 'kubejs:bumblezone_font_grout'],
+    ['aether', 'aether:aether_dirt', 'kubejs:aether_font_grout'],
+    ['bumblezone', 'the_bumblezone:porous_honeycomb_block', 'kubejs:bumblezone_font_grout'],
     ['ratlantis', 'rats:marbled_cheese_raw', 'kubejs:ratlantis_font_grout']
 ]
 

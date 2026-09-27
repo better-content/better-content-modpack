@@ -467,8 +467,8 @@ class HoverAnnotationLearningSurfaceTest {
         val selectedItems = row.path("selector").path("items").map { it.asText() }.toSet()
         val expected = mapOf(
             "nether" to "minecraft:netherrack",
-            "aether" to "aether:holystone",
-            "bumblezone" to "the_bumblezone:pollen_puff",
+            "aether" to "aether:aether_dirt",
+            "bumblezone" to "the_bumblezone:porous_honeycomb_block",
             "ratlantis" to "rats:marbled_cheese_raw",
         )
 
@@ -690,7 +690,7 @@ class HoverAnnotationLearningSurfaceTest {
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
         assertTrue(acquisition.contains("SpiritCreditAllocation.fromNative(nativeDrops"))
-        assertTrue(acquisition.contains("SpiritHarvestHandler.spawnItemsAsSpirits(physicalDrops, victim, recipient)"))
+        assertTrue(acquisition.contains("releaseGroupedSpirits(physicalDrops, victim, recipient)"))
         assertTrue(acquisition.contains("CurrencyItems.item(entry.getKey()).get()"))
         assertTrue(allocation.contains("Maps Malum's ordinary drops"))
         assertTrue(identity.contains("fromLegacyNativeSpirit"))

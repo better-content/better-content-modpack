@@ -24,8 +24,8 @@ class MatterMetallurgyContractTest {
     fun `four font grouts retain origin identity and share the seared exit`() {
         val origins = mapOf(
             "nether" to "minecraft:netherrack",
-            "aether" to "aether:holystone",
-            "bumblezone" to "the_bumblezone:pollen_puff",
+            "aether" to "aether:aether_dirt",
+            "bumblezone" to "the_bumblezone:porous_honeycomb_block",
             "ratlantis" to "rats:marbled_cheese_raw",
         )
         origins.forEach { (font, binder) ->
@@ -41,13 +41,14 @@ class MatterMetallurgyContractTest {
     }
 
     @Test
-    fun `font grout inventory models inherit the real upstream grout model`() {
+    fun `font grout inventory models use distinct dimension textures`() {
         listOf("aether", "nether", "ratlantis", "bumblezone").forEach { font ->
             val model = root.resolve("kubejs/assets/kubejs/models/item/${font}_font_grout.json")
             assertTrue(Files.isRegularFile(model), "missing inventory model for $font Font grout")
             val contents = Files.readString(model)
-            assertTrue(contents.contains("\"parent\": \"tconstruct:item/grout\""), font)
-            assertFalse(contents.contains("\"textures\""), "$font model must inherit TConstruct's block texture")
+            assertTrue(contents.contains("\"parent\": \"minecraft:item/generated\""), font)
+            assertTrue(contents.contains("\"layer0\": \"kubejs:item/${font}_font_grout\""), font)
+            assertTrue(Files.isRegularFile(root.resolve("kubejs/assets/kubejs/textures/item/${font}_font_grout.png")), font)
         }
     }
 

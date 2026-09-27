@@ -1,3 +1,4 @@
 {
-  "parent": "tconstruct:item/grout"
+  "parent": "minecraft:item/generated",
+  "textures": { "layer0": "kubejs:item/aether_font_grout" }
 }
