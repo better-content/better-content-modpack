@@ -666,11 +666,13 @@ class HoverAnnotationLearningSurfaceTest {
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
 
         assertTrue(loot.contains("if (!inOrigin && persistentHarvest) return 0;"))
-        assertTrue(loot.contains("return offOriginRoll < 0.10F ? 2 : 1;"))
+        assertTrue(loot.contains("return sourcedPlanting ? 1 : 0;"))
+        assertTrue(loot.contains("return inOrigin ? (roll < 0.5F ? 2 : 1) : (roll < 0.2F ? 1 : 0);"))
         assertTrue(catalogue.contains("\"growthForm\":\"persistent-harvest\""))
         assertTrue(seedTag.contains("bumblezone_cultivars:minecraft_glow_berry_seeds"))
-        assertTrue(copy.contains("Mature crops return off-origin seeds, sometimes two"))
-        assertTrue(copy.contains("Persistent-harvest types do not"))
+        assertTrue(copy.contains("Off-origin flowers may yield one seed"))
+        assertTrue(copy.contains("Other crops need Bumblezone-sourced planting"))
+        assertTrue(copy.contains("persistent-harvest yields none"))
         assertTrue(row.path("owner").asText().contains("CultivarLootModifier.java"))
     }
 

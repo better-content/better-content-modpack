@@ -127,7 +127,7 @@ class HarnessFastTest {
         assertEquals(listOf("heat-sync"), dependencies("latent-chemlib"))
         assertEquals(listOf("better-content-fixes", "dimension-drink"), dependencies("better-content-economy"))
         assertEquals(
-            listOf("dynamic-survival-hud"),
+            listOf("better-content-notifications", "dynamic-survival-hud"),
             dependencies("better-content-fixes"),
         )
         assertEquals(listOf("world-lifecycle-manager"), dependencies("class-selector"))
@@ -138,6 +138,7 @@ class HarnessFastTest {
         assertEquals(
             listOf(
                 "arcane-chunk-loaders", "better-content-economy", "better-content-fixes",
+                "better-content-notifications",
                 "bumblezone-cultivars", "create-train-fuel-scaling", "create-transmission-loss",
                 "depth-director", "dimension-drink", "downed-player-revival", "heat-sync",
                 "latent-chemlib", "oc2r-create-bridge", "oc2r-wireless-pubsub", "pillager-campaigns",

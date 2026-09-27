@@ -7550,7 +7550,7 @@ hash = "44bfb3367e89c9be6b49acec305163f7018fa7aa8e0fdf22ea4e101f7a6c3bb3"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "983c6e905be5cdb67269b05eec73121c79cfb7391bcd340c71ab02b801b0554b"
+hash = "d67608061ae70fb7a8bdd7c39b9c1a9adea01a2d761a797e641d34b892f848fc"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -10788,11 +10788,15 @@ hash = "ac29430442d013fd2674a74a409975c0192dfa0072d79bdef518928accd221b8"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.9.jar"
-hash = "c6f8ff81aa7db0e1f732aaa7bb6089d66ec702d7603cd1a2325e1cf24e35920b"
+hash = "c2e37356ae282fcde589f9e7f1c100e3b616e2b3578a222be40479c1980ec019"
+
+[[files]]
+file = "mods/better-content-notifications-1.0.0.jar"
+hash = "1bad359801b18b14220bdd978c250d1aefb6bf83510f3d1c3ffd4c41817fdf25"
 
 [[files]]
 file = "mods/better-content-threads-1.1.0.jar"
-hash = "8bc3cc69aa693af339bb150982a9b65ef54092f49535218696ab2dfd726b913c"
+hash = "dce240b028cb5969c1aa69414d644e36dc2f47c3b8bc7e85e45d16a60f98a616"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"

@@ -98,7 +98,7 @@ legacy JARs are rebuilt, and every staged release artifact retains the source me
 
 ## Canonical Active Inventory
 
-The active set contains 41 custom mods.
+The active set contains 42 custom mods.
 
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
@@ -107,6 +107,7 @@ The active set contains 41 custom mods.
 | [arena-challenges](https://github.com/better-content/arena-challenges) | `arena_challenges` | `arena-challenges-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-economy](https://github.com/better-content/better-content-economy) | `better_content_economy` | `better-content-economy-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-fixes](https://github.com/better-content/better-content-fixes) | `better_content_fixes` | `better-content-fixes-0.1.9.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-content-notifications](https://github.com/better-content/better-content-notifications) | `better_content_notifications` | `better-content-notifications-1.0.0.jar` | `./gradlew verifyFast stageRuntimeJar` |
 | [better-content-threads](https://github.com/better-content/better-content-threads) | `better_content_threads` | `better-content-threads-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [bumblezone-cultivars](https://github.com/better-content/bumblezone-cultivars) | `bumblezone_cultivars` | `bumblezone-cultivars-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [buried-encounters](https://github.com/better-content/buried-encounters) | `buried_encounters` | `buried-encounters-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
