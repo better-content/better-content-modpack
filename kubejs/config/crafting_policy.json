@@ -131,6 +131,10 @@
       "primary_role": "world",
       "support_state": "full"
     },
+    "airtight_machinery": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
     "alexscaves": {
       "primary_role": "world",
       "support_state": "full"
@@ -203,19 +207,23 @@
       "primary_role": "world",
       "support_state": "not_applicable"
     },
+    "better_content_fire": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
     "better_content_fixes": {
       "primary_role": "edge_provider",
       "support_state": "full"
     },
-    "better_content_threads": {
+    "better_content_journal_ui": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "learning_surfaces": {
       "primary_role": "presentation",
       "support_state": "full"
     },
     "bettercaves": {
-      "primary_role": "world",
-      "support_state": "not_applicable"
-    },
-    "biomespawnpoint": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
@@ -241,10 +249,6 @@
     },
     "bumblezone_cultivars": {
       "primary_role": "edge_provider",
-      "support_state": "not_applicable"
-    },
-    "burnt": {
-      "primary_role": "content",
       "support_state": "not_applicable"
     },
     "c2me": {
@@ -369,6 +373,10 @@
     },
     "configurabledeath": {
       "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "configui": {
+      "primary_role": "presentation",
       "support_state": "not_applicable"
     },
     "construct_arsenal": {
@@ -540,6 +548,10 @@
       "support_state": "not_applicable"
     },
     "expandability": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "exploration_tick_governor": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
@@ -871,10 +883,6 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
-    "inventorysorter": {
-      "primary_role": "presentation",
-      "support_state": "not_applicable"
-    },
     "jeed": {
       "primary_role": "presentation",
       "support_state": "not_applicable"
@@ -1131,10 +1139,6 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "quickstack": {
-      "primary_role": "presentation",
-      "support_state": "not_applicable"
-    },
     "rail_beetle": {
       "primary_role": "content",
       "support_state": "not_applicable"
@@ -1155,13 +1159,25 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
+    "realistic_placement_preview": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
     "realisticphysics": {
       "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "regolith_farmland": {
+      "primary_role": "world",
       "support_state": "not_applicable"
     },
     "rehooked": {
       "primary_role": "content",
       "support_state": "not_applicable"
+    },
+    "rehooked_intro_hooks": {
+      "primary_role": "content",
+      "support_state": "full"
     },
     "relics": {
       "primary_role": "content",
@@ -1395,10 +1411,6 @@
       "primary_role": "content",
       "support_state": "full"
     },
-    "trashslot": {
-      "primary_role": "gameplay_system",
-      "support_state": "not_applicable"
-    },
     "twilightforest": {
       "primary_role": "world",
       "support_state": "full"
@@ -1414,6 +1426,10 @@
     "unloaded_activity": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
+    },
+    "untamedwilds": {
+      "primary_role": "world",
+      "support_state": "full"
     },
     "useitemonblockevent": {
       "primary_role": "infrastructure",
@@ -1517,176 +1533,516 @@
     {
       "id": "conventional_tools",
       "selectors": [
-      {"exact_id":"minecraft:wooden_pickaxe"},
-      {"exact_id":"minecraft:wooden_axe"},
-      {"exact_id":"minecraft:wooden_shovel"},
-      {"exact_id":"minecraft:wooden_hoe"},
-      {"exact_id":"minecraft:wooden_sword"},
-      {"exact_id":"minecraft:stone_pickaxe"},
-      {"exact_id":"minecraft:stone_axe"},
-      {"exact_id":"minecraft:stone_shovel"},
-      {"exact_id":"minecraft:stone_hoe"},
-      {"exact_id":"minecraft:stone_sword"},
-      {"exact_id":"minecraft:iron_pickaxe"},
-      {"exact_id":"minecraft:iron_axe"},
-      {"exact_id":"minecraft:iron_shovel"},
-      {"exact_id":"minecraft:iron_hoe"},
-      {"exact_id":"minecraft:iron_sword"},
-      {"exact_id":"minecraft:golden_pickaxe"},
-      {"exact_id":"minecraft:golden_axe"},
-      {"exact_id":"minecraft:golden_shovel"},
-      {"exact_id":"minecraft:golden_hoe"},
-      {"exact_id":"minecraft:golden_sword"},
-      {"exact_id":"minecraft:diamond_pickaxe"},
-      {"exact_id":"minecraft:diamond_axe"},
-      {"exact_id":"minecraft:diamond_shovel"},
-      {"exact_id":"minecraft:diamond_hoe"},
-      {"exact_id":"minecraft:diamond_sword"},
-      {"exact_id":"minecraft:netherite_pickaxe"},
-      {"exact_id":"minecraft:netherite_axe"},
-      {"exact_id":"minecraft:netherite_shovel"},
-      {"exact_id":"minecraft:netherite_hoe"},
-      {"exact_id":"minecraft:netherite_sword"},
-      {"exact_id":"ae2:certus_quartz_pickaxe"},
-      {"exact_id":"ae2:certus_quartz_axe"},
-      {"exact_id":"ae2:certus_quartz_shovel"},
-      {"exact_id":"ae2:certus_quartz_hoe"},
-      {"exact_id":"ae2:certus_quartz_sword"},
-      {"exact_id":"ae2:fluix_pickaxe"},
-      {"exact_id":"ae2:fluix_axe"},
-      {"exact_id":"ae2:fluix_shovel"},
-      {"exact_id":"ae2:fluix_hoe"},
-      {"exact_id":"ae2:fluix_sword"},
-      {"exact_id":"ae2:nether_quartz_pickaxe"},
-      {"exact_id":"ae2:nether_quartz_axe"},
-      {"exact_id":"ae2:nether_quartz_shovel"},
-      {"exact_id":"ae2:nether_quartz_hoe"},
-      {"exact_id":"ae2:nether_quartz_sword"},
-      {"exact_id":"aether:gravitite_pickaxe"},
-      {"exact_id":"aether:gravitite_axe"},
-      {"exact_id":"aether:gravitite_shovel"},
-      {"exact_id":"aether:gravitite_hoe"},
-      {"exact_id":"aether:gravitite_sword"},
-      {"exact_id":"aether:holystone_pickaxe"},
-      {"exact_id":"aether:holystone_axe"},
-      {"exact_id":"aether:holystone_shovel"},
-      {"exact_id":"aether:holystone_hoe"},
-      {"exact_id":"aether:holystone_sword"},
-      {"exact_id":"aether:skyroot_pickaxe"},
-      {"exact_id":"aether:skyroot_axe"},
-      {"exact_id":"aether:skyroot_shovel"},
-      {"exact_id":"aether:skyroot_hoe"},
-      {"exact_id":"aether:skyroot_sword"},
-      {"exact_id":"aether:zanite_pickaxe"},
-      {"exact_id":"aether:zanite_axe"},
-      {"exact_id":"aether:zanite_shovel"},
-      {"exact_id":"aether:zanite_hoe"},
-      {"exact_id":"aether:zanite_sword"},
-      {"exact_id":"everythingcopper:copper_pickaxe"},
-      {"exact_id":"everythingcopper:copper_axe"},
-      {"exact_id":"everythingcopper:copper_shovel"},
-      {"exact_id":"everythingcopper:copper_hoe"},
-      {"exact_id":"everythingcopper:copper_sword"},
-      {"exact_id":"goety:dark_pickaxe"},
-      {"exact_id":"goety:dark_axe"},
-      {"exact_id":"goety:dark_shovel"},
-      {"exact_id":"goety:dark_hoe"},
-      {"exact_id":"goety:dark_sword"},
-      {"exact_id":"malum:soul_stained_steel_pickaxe"},
-      {"exact_id":"malum:soul_stained_steel_axe"},
-      {"exact_id":"malum:soul_stained_steel_shovel"},
-      {"exact_id":"malum:soul_stained_steel_hoe"},
-      {"exact_id":"malum:soul_stained_steel_sword"},
-      {"exact_id":"ars_nouveau:enchanters_sword"},
-      {"exact_id":"create:cardboard_sword"},
-      {"exact_id":"farmersdelight:diamond_knife"},
-      {"exact_id":"farmersdelight:flint_knife"},
-      {"exact_id":"farmersdelight:golden_knife"},
-      {"exact_id":"farmersdelight:iron_knife"},
-      {"exact_id":"farmersdelight:netherite_knife"},
-      {"exact_id":"goety:diamond_ice_axe"},
-      {"exact_id":"goety:eerie_pickaxe"},
-      {"exact_id":"goety:graverobber_shovel"},
-      {"exact_id":"goety:iron_ice_axe"},
-      {"exact_id":"goety:rampaging_axe"},
-      {"exact_id":"notreepunching:diamond_knife"},
-      {"exact_id":"notreepunching:diamond_mattock"},
-      {"exact_id":"notreepunching:diamond_saw"},
-      {"exact_id":"notreepunching:flint_axe"},
-      {"exact_id":"notreepunching:flint_hoe"},
-      {"exact_id":"notreepunching:flint_knife"},
-      {"exact_id":"notreepunching:flint_pickaxe"},
-      {"exact_id":"notreepunching:flint_shovel"},
-      {"exact_id":"notreepunching:gold_knife"},
-      {"exact_id":"notreepunching:gold_mattock"},
-      {"exact_id":"notreepunching:gold_saw"},
-      {"exact_id":"notreepunching:iron_knife"},
-      {"exact_id":"notreepunching:iron_mattock"},
-      {"exact_id":"notreepunching:iron_saw"},
-      {"exact_id":"notreepunching:netherite_knife"},
-      {"exact_id":"notreepunching:netherite_mattock"},
-      {"exact_id":"notreepunching:netherite_saw"},
-      {"exact_id":"occultism:iesnium_pickaxe"},
-      {"exact_id":"occultism:infused_pickaxe"},
-      {"exact_id":"the_flesh_that_hates:flesh_axe"},
-      {"exact_id":"the_flesh_that_hates:flesh_sword"},
-      {"exact_id":"twilightforest:fiery_pickaxe"},
-      {"exact_id":"twilightforest:fiery_sword"},
-      {"exact_id":"twilightforest:giant_pickaxe"},
-      {"exact_id":"twilightforest:giant_sword"},
-      {"exact_id":"twilightforest:ironwood_axe"},
-      {"exact_id":"twilightforest:ironwood_hoe"},
-      {"exact_id":"twilightforest:ironwood_pickaxe"},
-      {"exact_id":"twilightforest:ironwood_shovel"},
-      {"exact_id":"twilightforest:ironwood_sword"},
-      {"exact_id":"twilightforest:knightmetal_axe"},
-      {"exact_id":"twilightforest:knightmetal_pickaxe"},
-      {"exact_id":"twilightforest:knightmetal_sword"},
-      {"exact_id":"twilightforest:steeleaf_axe"},
-      {"exact_id":"twilightforest:steeleaf_hoe"},
-      {"exact_id":"twilightforest:steeleaf_pickaxe"},
-      {"exact_id":"twilightforest:steeleaf_shovel"},
-      {"exact_id":"twilightforest:steeleaf_sword"},
-      {"exact_id":"iceandfire:copper_pickaxe"},
-      {"exact_id":"iceandfire:copper_axe"},
-      {"exact_id":"iceandfire:copper_shovel"},
-      {"exact_id":"iceandfire:copper_hoe"},
-      {"exact_id":"iceandfire:copper_sword"},
-      {"exact_id":"iceandfire:silver_pickaxe"},
-      {"exact_id":"iceandfire:silver_axe"},
-      {"exact_id":"iceandfire:silver_shovel"},
-      {"exact_id":"iceandfire:silver_hoe"},
-      {"exact_id":"iceandfire:silver_sword"},
-      {"exact_id":"iceandfire:dragonbone_pickaxe"},
-      {"exact_id":"iceandfire:dragonbone_axe"},
-      {"exact_id":"iceandfire:dragonbone_shovel"},
-      {"exact_id":"iceandfire:dragonbone_hoe"},
-      {"exact_id":"iceandfire:dragonbone_sword"},
-      {"exact_id":"iceandfire:myrmex_desert_pickaxe"},
-      {"exact_id":"iceandfire:myrmex_desert_axe"},
-      {"exact_id":"iceandfire:myrmex_desert_shovel"},
-      {"exact_id":"iceandfire:myrmex_desert_hoe"},
-      {"exact_id":"iceandfire:myrmex_desert_sword"},
-      {"exact_id":"iceandfire:myrmex_jungle_pickaxe"},
-      {"exact_id":"iceandfire:myrmex_jungle_axe"},
-      {"exact_id":"iceandfire:myrmex_jungle_shovel"},
-      {"exact_id":"iceandfire:myrmex_jungle_hoe"},
-      {"exact_id":"iceandfire:myrmex_jungle_sword"},
-      {"exact_id":"iceandfire:dragonsteel_fire_pickaxe"},
-      {"exact_id":"iceandfire:dragonsteel_fire_axe"},
-      {"exact_id":"iceandfire:dragonsteel_fire_shovel"},
-      {"exact_id":"iceandfire:dragonsteel_fire_hoe"},
-      {"exact_id":"iceandfire:dragonsteel_fire_sword"},
-      {"exact_id":"iceandfire:dragonsteel_ice_pickaxe"},
-      {"exact_id":"iceandfire:dragonsteel_ice_axe"},
-      {"exact_id":"iceandfire:dragonsteel_ice_shovel"},
-      {"exact_id":"iceandfire:dragonsteel_ice_hoe"},
-      {"exact_id":"iceandfire:dragonsteel_ice_sword"},
-      {"exact_id":"iceandfire:dragonsteel_lightning_pickaxe"},
-      {"exact_id":"iceandfire:dragonsteel_lightning_axe"},
-      {"exact_id":"iceandfire:dragonsteel_lightning_shovel"},
-      {"exact_id":"iceandfire:dragonsteel_lightning_hoe"},
-      {"exact_id":"iceandfire:dragonsteel_lightning_sword"}
+        {
+          "exact_id": "minecraft:wooden_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:wooden_axe"
+        },
+        {
+          "exact_id": "minecraft:wooden_shovel"
+        },
+        {
+          "exact_id": "minecraft:wooden_hoe"
+        },
+        {
+          "exact_id": "minecraft:wooden_sword"
+        },
+        {
+          "exact_id": "minecraft:stone_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:stone_axe"
+        },
+        {
+          "exact_id": "minecraft:stone_shovel"
+        },
+        {
+          "exact_id": "minecraft:stone_hoe"
+        },
+        {
+          "exact_id": "minecraft:stone_sword"
+        },
+        {
+          "exact_id": "minecraft:iron_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:iron_axe"
+        },
+        {
+          "exact_id": "minecraft:iron_shovel"
+        },
+        {
+          "exact_id": "minecraft:iron_hoe"
+        },
+        {
+          "exact_id": "minecraft:iron_sword"
+        },
+        {
+          "exact_id": "minecraft:golden_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:golden_axe"
+        },
+        {
+          "exact_id": "minecraft:golden_shovel"
+        },
+        {
+          "exact_id": "minecraft:golden_hoe"
+        },
+        {
+          "exact_id": "minecraft:golden_sword"
+        },
+        {
+          "exact_id": "minecraft:diamond_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:diamond_axe"
+        },
+        {
+          "exact_id": "minecraft:diamond_shovel"
+        },
+        {
+          "exact_id": "minecraft:diamond_hoe"
+        },
+        {
+          "exact_id": "minecraft:diamond_sword"
+        },
+        {
+          "exact_id": "minecraft:netherite_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:netherite_axe"
+        },
+        {
+          "exact_id": "minecraft:netherite_shovel"
+        },
+        {
+          "exact_id": "minecraft:netherite_hoe"
+        },
+        {
+          "exact_id": "minecraft:netherite_sword"
+        },
+        {
+          "exact_id": "ae2:certus_quartz_pickaxe"
+        },
+        {
+          "exact_id": "ae2:certus_quartz_axe"
+        },
+        {
+          "exact_id": "ae2:certus_quartz_shovel"
+        },
+        {
+          "exact_id": "ae2:certus_quartz_hoe"
+        },
+        {
+          "exact_id": "ae2:certus_quartz_sword"
+        },
+        {
+          "exact_id": "ae2:fluix_pickaxe"
+        },
+        {
+          "exact_id": "ae2:fluix_axe"
+        },
+        {
+          "exact_id": "ae2:fluix_shovel"
+        },
+        {
+          "exact_id": "ae2:fluix_hoe"
+        },
+        {
+          "exact_id": "ae2:fluix_sword"
+        },
+        {
+          "exact_id": "ae2:nether_quartz_pickaxe"
+        },
+        {
+          "exact_id": "ae2:nether_quartz_axe"
+        },
+        {
+          "exact_id": "ae2:nether_quartz_shovel"
+        },
+        {
+          "exact_id": "ae2:nether_quartz_hoe"
+        },
+        {
+          "exact_id": "ae2:nether_quartz_sword"
+        },
+        {
+          "exact_id": "aether:gravitite_pickaxe"
+        },
+        {
+          "exact_id": "aether:gravitite_axe"
+        },
+        {
+          "exact_id": "aether:gravitite_shovel"
+        },
+        {
+          "exact_id": "aether:gravitite_hoe"
+        },
+        {
+          "exact_id": "aether:gravitite_sword"
+        },
+        {
+          "exact_id": "aether:holystone_pickaxe"
+        },
+        {
+          "exact_id": "aether:holystone_axe"
+        },
+        {
+          "exact_id": "aether:holystone_shovel"
+        },
+        {
+          "exact_id": "aether:holystone_hoe"
+        },
+        {
+          "exact_id": "aether:holystone_sword"
+        },
+        {
+          "exact_id": "aether:skyroot_pickaxe"
+        },
+        {
+          "exact_id": "aether:skyroot_axe"
+        },
+        {
+          "exact_id": "aether:skyroot_shovel"
+        },
+        {
+          "exact_id": "aether:skyroot_hoe"
+        },
+        {
+          "exact_id": "aether:skyroot_sword"
+        },
+        {
+          "exact_id": "aether:zanite_pickaxe"
+        },
+        {
+          "exact_id": "aether:zanite_axe"
+        },
+        {
+          "exact_id": "aether:zanite_shovel"
+        },
+        {
+          "exact_id": "aether:zanite_hoe"
+        },
+        {
+          "exact_id": "aether:zanite_sword"
+        },
+        {
+          "exact_id": "everythingcopper:copper_pickaxe"
+        },
+        {
+          "exact_id": "everythingcopper:copper_axe"
+        },
+        {
+          "exact_id": "everythingcopper:copper_shovel"
+        },
+        {
+          "exact_id": "everythingcopper:copper_hoe"
+        },
+        {
+          "exact_id": "everythingcopper:copper_sword"
+        },
+        {
+          "exact_id": "goety:dark_pickaxe"
+        },
+        {
+          "exact_id": "goety:dark_axe"
+        },
+        {
+          "exact_id": "goety:dark_shovel"
+        },
+        {
+          "exact_id": "goety:dark_hoe"
+        },
+        {
+          "exact_id": "goety:dark_sword"
+        },
+        {
+          "exact_id": "malum:soul_stained_steel_pickaxe"
+        },
+        {
+          "exact_id": "malum:soul_stained_steel_axe"
+        },
+        {
+          "exact_id": "malum:soul_stained_steel_shovel"
+        },
+        {
+          "exact_id": "malum:soul_stained_steel_hoe"
+        },
+        {
+          "exact_id": "malum:soul_stained_steel_sword"
+        },
+        {
+          "exact_id": "ars_nouveau:enchanters_sword"
+        },
+        {
+          "exact_id": "create:cardboard_sword"
+        },
+        {
+          "exact_id": "farmersdelight:diamond_knife"
+        },
+        {
+          "exact_id": "farmersdelight:flint_knife"
+        },
+        {
+          "exact_id": "farmersdelight:golden_knife"
+        },
+        {
+          "exact_id": "farmersdelight:iron_knife"
+        },
+        {
+          "exact_id": "farmersdelight:netherite_knife"
+        },
+        {
+          "exact_id": "goety:diamond_ice_axe"
+        },
+        {
+          "exact_id": "goety:eerie_pickaxe"
+        },
+        {
+          "exact_id": "goety:graverobber_shovel"
+        },
+        {
+          "exact_id": "goety:iron_ice_axe"
+        },
+        {
+          "exact_id": "goety:rampaging_axe"
+        },
+        {
+          "exact_id": "notreepunching:diamond_knife"
+        },
+        {
+          "exact_id": "notreepunching:diamond_mattock"
+        },
+        {
+          "exact_id": "notreepunching:diamond_saw"
+        },
+        {
+          "exact_id": "notreepunching:flint_axe"
+        },
+        {
+          "exact_id": "notreepunching:flint_hoe"
+        },
+        {
+          "exact_id": "notreepunching:flint_knife"
+        },
+        {
+          "exact_id": "notreepunching:flint_pickaxe"
+        },
+        {
+          "exact_id": "notreepunching:flint_shovel"
+        },
+        {
+          "exact_id": "notreepunching:gold_knife"
+        },
+        {
+          "exact_id": "notreepunching:gold_mattock"
+        },
+        {
+          "exact_id": "notreepunching:gold_saw"
+        },
+        {
+          "exact_id": "notreepunching:iron_knife"
+        },
+        {
+          "exact_id": "notreepunching:iron_mattock"
+        },
+        {
+          "exact_id": "notreepunching:iron_saw"
+        },
+        {
+          "exact_id": "notreepunching:netherite_knife"
+        },
+        {
+          "exact_id": "notreepunching:netherite_mattock"
+        },
+        {
+          "exact_id": "notreepunching:netherite_saw"
+        },
+        {
+          "exact_id": "occultism:iesnium_pickaxe"
+        },
+        {
+          "exact_id": "occultism:infused_pickaxe"
+        },
+        {
+          "exact_id": "the_flesh_that_hates:flesh_axe"
+        },
+        {
+          "exact_id": "the_flesh_that_hates:flesh_sword"
+        },
+        {
+          "exact_id": "twilightforest:fiery_pickaxe"
+        },
+        {
+          "exact_id": "twilightforest:fiery_sword"
+        },
+        {
+          "exact_id": "twilightforest:giant_pickaxe"
+        },
+        {
+          "exact_id": "twilightforest:giant_sword"
+        },
+        {
+          "exact_id": "twilightforest:ironwood_axe"
+        },
+        {
+          "exact_id": "twilightforest:ironwood_hoe"
+        },
+        {
+          "exact_id": "twilightforest:ironwood_pickaxe"
+        },
+        {
+          "exact_id": "twilightforest:ironwood_shovel"
+        },
+        {
+          "exact_id": "twilightforest:ironwood_sword"
+        },
+        {
+          "exact_id": "twilightforest:knightmetal_axe"
+        },
+        {
+          "exact_id": "twilightforest:knightmetal_pickaxe"
+        },
+        {
+          "exact_id": "twilightforest:knightmetal_sword"
+        },
+        {
+          "exact_id": "twilightforest:steeleaf_axe"
+        },
+        {
+          "exact_id": "twilightforest:steeleaf_hoe"
+        },
+        {
+          "exact_id": "twilightforest:steeleaf_pickaxe"
+        },
+        {
+          "exact_id": "twilightforest:steeleaf_shovel"
+        },
+        {
+          "exact_id": "twilightforest:steeleaf_sword"
+        },
+        {
+          "exact_id": "iceandfire:copper_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:copper_axe"
+        },
+        {
+          "exact_id": "iceandfire:copper_shovel"
+        },
+        {
+          "exact_id": "iceandfire:copper_hoe"
+        },
+        {
+          "exact_id": "iceandfire:copper_sword"
+        },
+        {
+          "exact_id": "iceandfire:silver_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:silver_axe"
+        },
+        {
+          "exact_id": "iceandfire:silver_shovel"
+        },
+        {
+          "exact_id": "iceandfire:silver_hoe"
+        },
+        {
+          "exact_id": "iceandfire:silver_sword"
+        },
+        {
+          "exact_id": "iceandfire:dragonbone_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:dragonbone_axe"
+        },
+        {
+          "exact_id": "iceandfire:dragonbone_shovel"
+        },
+        {
+          "exact_id": "iceandfire:dragonbone_hoe"
+        },
+        {
+          "exact_id": "iceandfire:dragonbone_sword"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_desert_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_desert_axe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_desert_shovel"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_desert_hoe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_desert_sword"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_jungle_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_jungle_axe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_jungle_shovel"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_jungle_hoe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_jungle_sword"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_fire_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_fire_axe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_fire_shovel"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_fire_hoe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_fire_sword"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_ice_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_ice_axe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_ice_shovel"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_ice_hoe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_ice_sword"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_lightning_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_lightning_axe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_lightning_shovel"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_lightning_hoe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_lightning_sword"
+        }
       ],
       "disposition": "authority",
       "authority": "tconstruct"
@@ -1788,13 +2144,13 @@
     {
       "id": "stored_coordinate_travel",
       "selectors": [
-      {
-        "namespace": "ars_nouveau",
-        "id_prefix": "warp_"
-      },
-      {
-        "exact_id": "ars_nouveau:portal"
-      },
+        {
+          "namespace": "ars_nouveau",
+          "id_prefix": "warp_"
+        },
+        {
+          "exact_id": "ars_nouveau:portal"
+        },
         {
           "exact_id": "ars_nouveau:stable_warp_scroll"
         },

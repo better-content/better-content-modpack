@@ -72,6 +72,9 @@ class SingleplayerRuntimeTest {
             require(sourceWorld.toFile().copyRecursively(firstSave.toFile())) { "failed to stage fresh world" }
             first.launchQuickPlayWorld("DebugWorld", "save")
             first.waitForWorldProbe("BC_DEBUG_WORLD_EXITED")
+            require(Files.readString(first.log).contains("BC_DEBUG_EMI_READY")) {
+                "world save exited before EMI finished baking recipes"
+            }
             val savedTime = Regex("BC_DEBUG_WORLD_SAVED game_time=(\\d+)").find(Files.readString(first.log))
                 ?.groupValues?.get(1)?.toLong() ?: error("world save marker has no game time")
             first.close()

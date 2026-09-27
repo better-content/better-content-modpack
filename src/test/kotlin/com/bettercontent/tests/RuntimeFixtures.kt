@@ -17,7 +17,7 @@ class DedicatedServerFixture(
     private val evidence: EvidenceRun,
     private val environment: Map<String, String> = emptyMap(),
     private val allowLongClientLogin: Boolean = false,
-    private val suppressInControlSpawns: Boolean = false,
+    private val seed: Long? = null,
 ) : AutoCloseable {
     val config = evidence.config
     val pair = CandidateLocator.locate(config.root)
@@ -45,21 +45,20 @@ class DedicatedServerFixture(
         server = roots.single()
         disableScheduledBackupsForRuntimeFixture(server)
         if (allowLongClientLogin) configureDedicatedServerMemory(server)
-        if (suppressInControlSpawns) {
-            val rules = server.resolve("config/incontrol/spawner.json")
-            require(rules.isRegularFile()) { "candidate has no InControl spawner configuration at $rules" }
-            rules.toFile().writeText("[]\n")
-            evidence.event("fixture_spawn_override", mapOf(
-                "reason" to "isolate targeted campaign path validation from unrelated InControl spawns",
-                "path" to rules.toString(),
-            ))
-        }
         replaceExact(server.resolve("eula.txt"), "eula=false", "eula=true")
         replaceExact(server.resolve("server.properties"), "online-mode=true", "online-mode=false")
         val properties = server.resolve("server.properties")
         val text = properties.readText()
         require(Regex("(?m)^server-port=25565$").containsMatchIn(text)) { "production server port contract is missing" }
         var runtimeProperties = text.replace(Regex("(?m)^server-port=25565$"), "server-port=$port")
+        if (seed != null) {
+            val seedProperty = Regex("(?m)^level-seed=.*$")
+            runtimeProperties = if (seedProperty.containsMatchIn(runtimeProperties)) {
+                runtimeProperties.replace(seedProperty, "level-seed=$seed")
+            } else {
+                runtimeProperties.trimEnd() + "\nlevel-seed=$seed\n"
+            }
+        }
         if (allowLongClientLogin) {
             val watchdog = Regex("(?m)^max-tick-time=.*$")
             runtimeProperties = if (watchdog.containsMatchIn(runtimeProperties)) {
@@ -219,11 +218,31 @@ class ClientFixture(
     }
 
     fun prepare() {
-        Commands.run(
-            listOf("packwiz", "curseforge", "import", pair.client.toString(), "-y"),
-            client,
-            evidence.directory.resolve(if (slot == 0) "client-import.log" else "client-$slot-import.log"),
-        )
+        val importLogName = if (slot == 0) "client-import" else "client-$slot-import"
+        var imported = false
+        for (attempt in 1..3) {
+            val importLog = evidence.directory.resolve(
+                if (attempt == 1) "$importLogName.log" else "$importLogName-attempt-$attempt.log",
+            )
+            try {
+                Commands.run(listOf("packwiz", "curseforge", "import", pair.client.toString(), "-y"), client, importLog)
+                imported = true
+                break
+            } catch (failure: IllegalStateException) {
+                val index = client.resolve("index.toml")
+                val transientHandshake = importLog.isRegularFile() &&
+                    importLog.readText().contains("net/http: TLS handshake timeout")
+                val emptyPartialImport = index.isRegularFile() && Files.size(index) == 0L &&
+                    Files.list(client).use { it.toList() == listOf(index) }
+                if (!transientHandshake || !emptyPartialImport || attempt == 3) throw failure
+                Files.delete(index)
+                evidence.event("client_import_retry", mapOf(
+                    "client" to username, "attempt" to attempt, "reason" to "CurseForge TLS handshake timeout",
+                ))
+                Thread.sleep(attempt * 2_000L)
+            }
+        }
+        check(imported) { "Packwiz client import did not complete" }
         TaczFixtureSupport.reconcileImportedRootManifests(client, config.root)
         Commands.run(
             listOf(config.root.resolve("package.sh").toString(), "resolve", client.toString(), client.toString(), "client"),
@@ -231,7 +250,7 @@ class ClientFixture(
             evidence.directory.resolve(if (slot == 0) "client-artifacts.log" else "client-$slot-artifacts.log"),
         )
         TaczFixtureSupport.assertResolvedArtifacts(client, config.root)
-        if (dedicated != null) configureDedicatedClientProfile()
+        if (dedicated != null || slot == 5 || slot == 6) configureRuntimeClientProfile()
         client.resolve("saves").createDirectories()
         xvfb = ManagedProcess("xvfb-$slot", listOf("Xvfb", display, "-screen", "0", "1280x720x24", "-nolisten", "tcp"), client, xvfbLog)
         Thread.sleep(1000)
@@ -286,9 +305,9 @@ class ClientFixture(
         Regex(Regex.escape(marker)), Duration.ofMinutes(10), "singleplayer world probe $marker",
     )
 
-    private fun configureDedicatedClientProfile() {
+    private fun configureRuntimeClientProfile() {
         val options = client.resolve("options.txt")
-        require(options.isRegularFile()) { "dedicated client is missing options.txt: $options" }
+        require(options.isRegularFile()) { "runtime client is missing options.txt: $options" }
         listOf(
             "renderDistance:12" to "renderDistance:4",
             "simulationDistance:12" to "simulationDistance:5",
@@ -299,16 +318,16 @@ class ClientFixture(
             "entityShadows:true" to "entityShadows:false",
         ).forEach { (old, replacement) -> replaceExact(options, old, replacement) }
 
-        // All three clients render through software OpenGL in this headless fixture. Keep
-        // Distant Horizons installed and initialized, but bound its worker footprint so
-        // a newly joining full-pack client cannot starve the already-connected clients.
+        // Headless clients render through software OpenGL. Keep Distant Horizons installed
+        // and initialized, but avoid background LOD work that competes with the server and
+        // races the integrated server during the save/reopen fixture's world unload.
         val distantHorizons = client.resolve("config/DistantHorizons.toml")
-        require(distantHorizons.isRegularFile()) { "dedicated client is missing Distant Horizons config: $distantHorizons" }
+        require(distantHorizons.isRegularFile()) { "runtime client is missing Distant Horizons config: $distantHorizons" }
         replaceExact(distantHorizons, "numberOfThreads = 6", "numberOfThreads = 1")
         replaceExact(distantHorizons, "lodChunkRenderDistanceRadius = 32", "lodChunkRenderDistanceRadius = 4")
         replaceExact(distantHorizons, "enableDistantGeneration = true", "enableDistantGeneration = false")
         replaceExact(distantHorizons, "rendererMode = \"DEFAULT\"", "rendererMode = \"DISABLED\"")
-        evidence.event("dedicated_client_fixture_profile", mapOf(
+        evidence.event(if (dedicated != null) "dedicated_client_fixture_profile" else "singleplayer_client_fixture_profile", mapOf(
             "client" to username,
             "complete_modpack" to true,
             "software_rendering_limits" to mapOf(

@@ -79,7 +79,7 @@ full-pack client joins a fresh dedicated server and responds to a server-command
 Dist also audits logs and candidate hashes. Debug uses the same candidate hashes and adds
 dedicated-server runtime data and lifecycle, three fresh locations per directly teleportable
 dimension with strict three-sample TPS and Font-only direct-travel guards, single-player startup
-and world save/reopen, the 30-minute three-client campaign soak, restart/reconnect, and native
+and world save/reopen, three live client campaigns, restart/reconnect, and native
 Font round trips for Ratlantis, Bumblezone, Aether, and Nether. Debug also requires client-side
 arrival evidence and bounded native block-family counts in every classified terrain dimension;
 space and utility dimensions retain travel checks without a terrain threshold.

@@ -37,6 +37,7 @@ class EvidenceExtension(private val suite: String) : BeforeAllCallback, AfterAll
             val findings = LogPolicy.findings(collectLogs(run.directory))
             run.event("target_log_findings", mapOf("count" to findings.size,
                 "first" to findings.take(5).map { "${it.path}:${it.line}: ${it.text}" }))
+            if (findings.isNotEmpty()) successful = false
         }
         run.finish(successful)
     }

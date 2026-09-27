@@ -13,9 +13,10 @@ layout-meta {
 }
 
 menu_background {
-  color = #000000
-  instance_identifier = 172d4f86-8e57-41be-8656-8ea13baa3310-1783059249797
-  background_type = color_fancymenu
+  image_path = [source:local]/config/fancymenu/assets/journal-title.png
+  slide = false
+  repeat_texture = false
+  background_type = image
 }
 
 customization {
@@ -96,7 +97,7 @@ vanilla_button {
   advanced_vertical_tilt_mode = false
   horizontal_tilt_degrees = 0.0
   advanced_horizontal_tilt_mode = false
-  is_hidden = false
+  is_hidden = true
   automated_button_clicks = 0
 }
 
@@ -159,7 +160,7 @@ vanilla_button {
   advanced_vertical_tilt_mode = false
   horizontal_tilt_degrees = 0.0
   advanced_horizontal_tilt_mode = false
-  is_hidden = false
+  is_hidden = true
   automated_button_clicks = 0
 }
 
@@ -222,7 +223,7 @@ vanilla_button {
   advanced_vertical_tilt_mode = false
   horizontal_tilt_degrees = 0.0
   advanced_horizontal_tilt_mode = false
-  is_hidden = false
+  is_hidden = true
   automated_button_clicks = 0
 }
 
@@ -261,10 +262,10 @@ vanilla_button {
   auto_sizing_base_screen_width = 0
   auto_sizing_base_screen_height = 0
   sticky_anchor = false
-  anchor_point = vanilla
-  x = 473
-  y = 189
-  width = 200
+  anchor_point = top-left
+  x = 265
+  y = 144
+  width = 150
   height = 20
   stretch_x = false
   stretch_y = false
@@ -324,10 +325,10 @@ vanilla_button {
   auto_sizing_base_screen_width = 0
   auto_sizing_base_screen_height = 0
   sticky_anchor = false
-  anchor_point = vanilla
-  x = 473
-  y = 213
-  width = 98
+  anchor_point = top-left
+  x = 265
+  y = 190
+  width = 150
   height = 20
   stretch_x = false
   stretch_y = false
@@ -474,7 +475,7 @@ vanilla_button {
   advanced_vertical_tilt_mode = false
   horizontal_tilt_degrees = 0.0
   advanced_horizontal_tilt_mode = false
-  is_hidden = false
+  is_hidden = true
   automated_button_clicks = 0
 }
 
@@ -663,7 +664,7 @@ vanilla_button {
   advanced_vertical_tilt_mode = false
   horizontal_tilt_degrees = 0.0
   advanced_horizontal_tilt_mode = false
-  is_hidden = false
+  is_hidden = true
   automated_button_clicks = 0
 }
 
@@ -726,7 +727,7 @@ vanilla_button {
   advanced_vertical_tilt_mode = false
   horizontal_tilt_degrees = 0.0
   advanced_horizontal_tilt_mode = false
-  is_hidden = false
+  is_hidden = true
   automated_button_clicks = 0
 }
 
@@ -789,7 +790,7 @@ vanilla_button {
   advanced_vertical_tilt_mode = false
   horizontal_tilt_degrees = 0.0
   advanced_horizontal_tilt_mode = false
-  is_hidden = false
+  is_hidden = true
   automated_button_clicks = 0
 }
 
@@ -852,7 +853,7 @@ vanilla_button {
   advanced_vertical_tilt_mode = false
   horizontal_tilt_degrees = 0.0
   advanced_horizontal_tilt_mode = false
-  is_hidden = false
+  is_hidden = true
   automated_button_clicks = 0
 }
 
@@ -891,10 +892,10 @@ vanilla_button {
   auto_sizing_base_screen_width = 0
   auto_sizing_base_screen_height = 0
   sticky_anchor = false
-  anchor_point = vanilla
-  x = 575
+  anchor_point = top-left
+  x = 343
   y = 213
-  width = 98
+  width = 72
   height = 20
   stretch_x = false
   stretch_y = false
@@ -915,7 +916,7 @@ vanilla_button {
   advanced_vertical_tilt_mode = false
   horizontal_tilt_degrees = 0.0
   advanced_horizontal_tilt_mode = false
-  is_hidden = false
+  is_hidden = true
   automated_button_clicks = 0
 }
 
@@ -1017,9 +1018,9 @@ vanilla_button {
   auto_sizing_base_screen_width = 0
   auto_sizing_base_screen_height = 0
   sticky_anchor = false
-  anchor_point = vanilla
-  x = 449
-  y = 249
+  anchor_point = top-left
+  x = 265
+  y = 246
   width = 20
   height = 20
   stretch_x = false
@@ -1143,10 +1144,10 @@ vanilla_button {
   auto_sizing_base_screen_width = 0
   auto_sizing_base_screen_height = 0
   sticky_anchor = false
-  anchor_point = vanilla
-  x = 473
-  y = 165
-  width = 200
+  anchor_point = top-left
+  x = 265
+  y = 121
+  width = 150
   height = 20
   stretch_x = false
   stretch_y = false
@@ -1230,7 +1231,7 @@ vanilla_button {
   advanced_vertical_tilt_mode = false
   horizontal_tilt_degrees = 0.0
   advanced_horizontal_tilt_mode = false
-  is_hidden = false
+  is_hidden = true
   automated_button_clicks = 0
 }
 
@@ -1269,9 +1270,9 @@ vanilla_button {
   auto_sizing_base_screen_width = 0
   auto_sizing_base_screen_height = 0
   sticky_anchor = false
-  anchor_point = vanilla
-  x = 677
-  y = 249
+  anchor_point = top-left
+  x = 394
+  y = 246
   width = 20
   height = 20
   stretch_x = false
@@ -1332,10 +1333,10 @@ vanilla_button {
   auto_sizing_base_screen_width = 0
   auto_sizing_base_screen_height = 0
   sticky_anchor = false
-  anchor_point = vanilla
-  x = 473
-  y = 249
-  width = 98
+  anchor_point = top-left
+  x = 265
+  y = 167
+  width = 150
   height = 20
   stretch_x = false
   stretch_y = false
@@ -1395,10 +1396,10 @@ vanilla_button {
   auto_sizing_base_screen_width = 0
   auto_sizing_base_screen_height = 0
   sticky_anchor = false
-  anchor_point = vanilla
-  x = 575
-  y = 249
-  width = 98
+  anchor_point = top-left
+  x = 265
+  y = 213
+  width = 150
   height = 20
   stretch_x = false
   stretch_y = false

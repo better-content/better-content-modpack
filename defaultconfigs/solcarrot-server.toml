@@ -7,7 +7,7 @@
 	#Range: 0 ~ 1000
 	heartsPerMilestone = 1
 	#A list of numbers of unique foods you need to eat to unlock each milestone, in ascending order. Naturally, adding more milestones lets you earn more hearts.
-	milestones = [30, 59, 88, 117, 146, 175, 204, 234, 263, 292, 321, 350, 379, 408, 437]
+	milestones = [30, 60, 90, 119, 149, 179, 209, 238, 268, 298, 328, 357, 387, 417, 446]
 
 [filtering]
 	#Foods in this list won't affect the player's health nor show up in the food book.
@@ -191,8 +191,6 @@
 		"brewinandchewin:scarlet_pierogi",
 		"brewinandchewin:sweet_berry_jam",
 		"brewinandchewin:vegetable_omelet",
-		"burnt:baked_apple",
-		"burnt:ember_berries",
 		"cataclysm:amethyst_crab_meat",
 		"cataclysm:blessed_amethyst_crab_meat",
 		"cataclysm:lionfish",
@@ -637,7 +635,21 @@
 		"ubesdelight:tocino",
 		"ubesdelight:tosilog",
 		"ubesdelight:ube",
-		"ubesdelight:ube_cake_slice"
+		"ubesdelight:ube_cake_slice",
+		"untamedwilds:chum",
+		"untamedwilds:food_aardvark_cucumber",
+		"untamedwilds:food_bear_cooked",
+		"untamedwilds:food_bear_raw",
+		"untamedwilds:food_hakarl",
+		"untamedwilds:food_hemlock_stew",
+		"untamedwilds:food_pachyderm_cooked",
+		"untamedwilds:food_pachyderm_raw",
+		"untamedwilds:food_pemmican",
+		"untamedwilds:food_turtle_cooked",
+		"untamedwilds:food_turtle_raw",
+		"untamedwilds:food_turtle_soup",
+		"untamedwilds:material_blubber",
+		"untamedwilds:material_fat"
 	]
 	#The minimum hunger value foods need to provide in order to count for milestones, in half drumsticks.
 	#Range: 0 ~ 1000

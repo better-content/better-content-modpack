@@ -154,11 +154,6 @@
 	#Normal render-thread ALI behavior is left unchanged.
 	skipOffThreadEmiRegistration = true
 
-[burnt]
-	#Replaces Burnt's generic burnt grass result with pack-specific burnt variants for modded grass-like blocks.
-	#Uses native Burnt outputs when they exist andbetter_content_fixes-owned burnt palette blocks otherwise.
-	#Disable only when diagnosing Burnt grass spread behavior.
-	moddedGrassReplacements = true
 
 [fluidMixing]
 	#Reverts fluid-generated block placements unless the produced block is explicitly allowlisted.

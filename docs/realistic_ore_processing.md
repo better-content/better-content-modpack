@@ -41,6 +41,11 @@ configuration carries about 85% of expected large-body supply (95% for Hotstone)
 the distant echo is 1.5 times larger per body (2 times for Hotstone). Aggregate expected
 yield remains within 1% of the prior configuration for every family.
 
+ADLODS deposit `Indicator` circles place matching Realistic Ores surface samples near
+the corresponding underground body. A sample is a useful local clue to prospect
+below, although a later extraction of the same ore family does not prove it came
+from that particular body. The sample can also be collected for a small chunk.
+
 ## Processing depth
 
 1. Ordinary mining yields one host-independent chunk; Silk Touch preserves the

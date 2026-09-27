@@ -2,7 +2,7 @@
 
 Better Content teaches through the systems the player encounters, not an achievement
 ledger or objective graph. FTB Quests and its custom integration are not active pack
-content. Their tasks and rewards are not transferred into Threads or another system.
+content. Their tasks and rewards are not transferred into Learning Surfaces or another system. The `learning_surfaces` mod owns cards, lessons, and contextual tips; Threads remains the card reader and card vocabulary.
 
 ## Information ownership
 
@@ -35,10 +35,10 @@ copy. Possession must not be described as operating a machine, and intended futu
 behavior must not be presented as implemented.
 
 Preserve stable concept, Thread, and lesson identities when their meaning is unchanged.
-Threads has 52 live discoveries across seven topics; the Lessons reference and loading
-rotation share 18 lessons. Follow [Threads](threads.md) for the single-explanation schema,
-committed outcome evidence, native doorways, and lineage persistence. Domain mods
-own their gameplay events; Threads adapters translate those events into card signals.
+Learning Surfaces has 52 live cards across seven topics; the Lessons reference and loading
+rotation share 18 lessons. The main-menu, Esc, and death contexts share 199 authored tips. Follow [Threads](threads.md) for the single-explanation schema,
+personal trigger evidence, native doorways, and lineage persistence. Domain mods
+own their gameplay events; Learning Surfaces adapters translate those events into card signals.
 
 Annotate pack transition families and curriculum-important systems with a natural
 item anchor unless native hover already teaches the relevant model. Leave ingredients,
@@ -90,13 +90,24 @@ documents.
   depends on what players leave; the pack supplies readable, contextual presentation.
 
 Cards credit owned remote work at its actual successful outcome, including while the owner is
-offline. Setup, inventory possession and proximity do not prove work. No card requires another
-human; the World Condenser remains limited by its current dedicated-server lifecycle support.
-There is no hourly discovery quota or minimum interval.
+offline. First-use cards use explicit acquisition, completed use, screen-close, and approach
+cues at the useful moment. Item checks run after relevant inventory changes; approach checks
+run after accepted movement. Timed onboarding uses a due-time queue. These cues do not infer
+machine operation from possession or proximity. No card requires another human; the World
+Condenser remains limited by its current dedicated-server lifecycle support. There is no
+hourly discovery quota or minimum interval.
+
+Server and provider events own gameplay outcomes, ownership, lineage history, and rewards.
+A bounded client report may credit only personal, non-reward teaching that the server
+cannot observe directly, such as closing an EMI recipe. The server checks the report's
+allowed action and target; it never treats that report as proof of an owned machine result.
+The mod's three catalogues are packaged and fixed for a release. Resource packs may
+change artwork but cannot reload copy or trigger rules while running.
 
 All card and loading illustrations exclude humans, humanoids, humanlike spirits, body parts,
 silhouettes and mannequins. Use concrete objects, mechanisms, environments, and nonhumanoid
-creatures to explain the event.
+creatures to explain the event. All 52 card illustrations and 18 loading/Lessons
+illustrations use reviewed Journal copperplate art; the card copy and triggers are active.
 
 ## Review and validation
 
@@ -113,32 +124,19 @@ creatures to explain the event.
 Do not recreate a quest compiler, layout harness, atlas exporter, or parallel validation
 framework. Durable guidance belongs here; raw evidence belongs outside living docs.
 
-## Death and Esc-menu tips
+## Main-menu, Esc-menu, and death tips
 
-Threads owns a 192-entry catalogue alongside its loading lessons: 80 survival/recovery tips,
-88 broader pack tips, and 24 light late-game teasers. Hints use shared concept IDs and record
-mechanical source references. Teasers introduce possibilities without revealing their complete
-recipes, unlocking a Thread, or claiming progression credit.
+The fixed 199-tip catalogue declares each tip's eligible surface, requirements, relevant
+mods, concept, and mechanical source. The main menu chooses one stable preparation or
+possibility tip per application launch. Esc selects practical advice from current
+server context when opened and keeps it still while the screen is open. A stale context
+falls back to general advice. Death uses the committed final cause, including the
+injury provider's final-death event when present, and stays fixed until respawn or
+logout. Contextual relevance takes priority over unseen novelty.
 
-Show separate stable tips on the death screen and Esc menu, sharing one unseen pool. Display every
-eligible entry before repeating; exhausted contextual categories yield to other unseen entries.
-Prefer reliable cause-specific advice on three of four eligible death selections, and weight
-teasers at one in eight general selections while unseen entries remain in both pools. Unknown
-damage gets general advice. Downed episodes retain their cause until revival or final death.
-Require relevant mods and avoid the last death/Esc tips at cycle boundaries when alternatives exist.
-
-Choose the Esc tip on first use and retain it across menu openings, resizing, reconnecting, and
-restarts. Rotate it once per confirmed death, choosing its replacement when Esc next opens.
-Respawning does not rotate it again. Record only rendered tips; hidden selections must not consume
-entries or prematurely exhaust the pool. Client-local history schema 2 stores shown IDs, cycle,
-and the current Esc tip; schema 1 preserves its known recent IDs during migration. Keep this
-history independent of loading exposure and lineage progress. Network protocol remains 10.
-
-Keep text concise, neutral, and actionable, with current bindings where needed. Wrap at normal
-font size. Pause controls may move upward to fit a tip, with Threads in the top-right corner;
-all built-in copy fits a 320×240 GUI. Omit tips from smaller or oversized resource-pack layouts
-when space is insufficient, without recording them. Hints never delay respawning or change
-normal/hardcore death controls. Resource packs can replace
-`assets/better_content_threads/death_hints/catalogue.json`; invalid catalogues log an error and use
-built-in general advice without erasing history. Validate selection/persistence locally and inspect
-native-client fixtures; pack suites still require an explicit user order.
+Each surface keeps its own client-local exposure history. A tip counts as seen only
+when its copy is actually rendered. Hidden or clipped advice does not consume history.
+The native injury recap owns death controls and space; Learning Surfaces uses its measured
+remaining area and omits a tip if the full copy will not fit. Tips never delay respawn
+or alter normal and hardcore death controls. The packaged catalogue is fixed for a
+release; invalid packaged data fails validation rather than silently swapping copy.

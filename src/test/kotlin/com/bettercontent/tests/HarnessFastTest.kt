@@ -55,7 +55,7 @@ class HarnessFastTest {
     }
 
     @Test
-    fun distJoinsOneClientAndDebugTraversesDimensionsBeforeSoak() {
+    fun distJoinsOneClientAndDebugTraversesDimensionsBeforeCampaigns() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val source = Files.readString(root.resolve("src/test/kotlin/com/bettercontent/tests/MultiplayerRuntimeTest.kt"))
         val join = source.substringAfter("fun leadClientJoinsFreshDedicatedServer()").substringBefore("@Test @Order(2)")
@@ -67,9 +67,12 @@ class HarnessFastTest {
         assertTrue(join.contains("requirePlayersOnline(\"client joined\", listOf(lead))"))
         assertTrue(traversal.indexOf("if (evidence.run.tier != \"debug\")") < traversal.indexOf("DimensionSmokePlan.discover("))
         assertTrue(traversal.contains("DimensionSmokePlan.positions.take(3)"))
-        assertTrue(source.contains("if (evidence.run.tier == \"debug\") campaignSoak else joined"))
+        assertTrue(source.contains("if (evidence.run.target != null) joined"))
+        assertTrue(source.contains("else if (evidence.run.tier == \"debug\") campaignReady"))
         assertTrue(source.contains("clients.drop(1).forEach"))
-        assertTrue(source.contains("requireAllPlayersOnline(\"soak clients joined\")"))
+        assertTrue(source.contains("requireAllPlayersOnline(\"campaign clients joined\")"))
+        assertTrue(source.contains("requireAllPlayersOnline(\"three campaign encounters active\")"))
+        assertTrue(!source.contains("pillager_soak_started"))
         assertTrue(!source.contains("dimension support heartbeat"))
         assertTrue(!source.contains("clients.filter { it !== lead }"))
         assertTrue(!source.contains("joinedClientsSettleContent"))
@@ -103,7 +106,7 @@ class HarnessFastTest {
         val document = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         assertEquals("bc.active_custom_mods.v1", document.path("schema").asText())
         val mods = document.path("mods")
-        assertEquals(42, mods.size())
+        assertEquals(44, mods.size())
         val repositories = mods.map { it.path("repository").asText() }.toSet()
         assertEquals(mods.size(), repositories.size)
         assertEquals(mods.size(), mods.map { it.path("modId").asText() }.toSet().size)
@@ -469,18 +472,19 @@ class HarnessFastTest {
     }
 
     @Test
-    fun logPolicyAcceptsOnlyThreeExactDeepVoidPhysicsFallbackWarningsPerLog(@TempDir root: Path) {
+    fun logPolicyAcceptsOnlyNineExactDeepVoidPhysicsFallbackWarningsPerLog(@TempDir root: Path) {
         val warning =
             "[09:46:22] [Server thread/WARN] [xbigellx.realisticphysics.RealisticPhysics]: " +
                 "Level null when loading chunk at '[-3, -3]' for dimension 'the_deep_void:deep_void'.\n"
-        val accepted = root.resolve("deep-void-physics-fallback.log").also { it.writeText(warning.repeat(3)) }
-        val overflow = root.resolve("deep-void-physics-fallback-overflow.log").also { it.writeText(warning.repeat(4)) }
+        // The initial world and up to eight successor attempts can each emit this exact warning.
+        val accepted = root.resolve("deep-void-physics-fallback.log").also { it.writeText(warning.repeat(9)) }
+        val overflow = root.resolve("deep-void-physics-fallback-overflow.log").also { it.writeText(warning.repeat(10)) }
         val wrongDimension = root.resolve("deep-void-physics-fallback-wrong-dimension.log").also {
             it.writeText(warning.replace("the_deep_void:deep_void", "minecraft:overworld"))
         }
 
         assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(4), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(10), LogPolicy.findings(listOf(overflow)).map { it.line })
         assertEquals(listOf(1), LogPolicy.findings(listOf(wrongDimension)).map { it.line })
     }
 
@@ -488,12 +492,12 @@ class HarnessFastTest {
     fun logPolicyAcceptsOnlyBoundedAdPotherDeferredTasks(@TempDir root: Path) {
         val accepted = root.resolve("accepted-deferred.log").also {
             it.writeText(
-                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 6.830 s to run a deferred task.\n",
+                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 46.450 s to run a deferred task.\n",
             )
         }
         val rejected = root.resolve("rejected-deferred.log").also {
             it.writeText(
-                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 8.001 s to run a deferred task.\n" +
+                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 60.001 s to run a deferred task.\n" +
                     "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'othermod' took 1.533 s to run a deferred task.\n" +
                     "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 6.577 s to run a deferred task.\n" +
                     "[13:55:28] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 6.500 s to run a deferred task.\n",
@@ -502,6 +506,50 @@ class HarnessFastTest {
 
         assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
         assertEquals(listOf(1, 2, 4), LogPolicy.findings(listOf(rejected)).map { it.line })
+    }
+
+    @Test
+    fun untamedSpeciesPrototypesAreAcceptedOnlyDuringJeiRegistration(@TempDir root: Path) {
+        val start = "[12:47:47] [Render thread/INFO] [mezz.jei.library.load.PluginCaller]: Registering ingredients...\n"
+        val end = "[12:47:48] [Render thread/INFO] [mezz.jei.library.load.PluginCaller]: Registering ingredients took 1.170 s\n"
+        val warning = "[12:47:47] [Render thread/WARN] [untamedwilds.UntamedWilds]: There's no species provided for the EntityType\n"
+        val accepted = root.resolve("jei-prototypes.log").also { it.writeText(start + warning.repeat(3400) + end) }
+        val overflow = root.resolve("jei-prototypes-overflow.log").also {
+            it.writeText(start + warning.repeat(3401) + end + warning)
+        }
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(3402, 3404), LogPolicy.findings(listOf(overflow)).map { it.line })
+    }
+
+    @Test
+    fun dedicatedSeedWarningsAreScopedToSingleplayerWorldSave(@TempDir root: Path) {
+        val version = "[11:00:59] [Render thread/WARN] [net.minecraftforge.common.ForgeHooks]: The following mods have version differences that were not resolved:\n" +
+            "unloaded_activity (version 0.6.3 -> MISSING)\n"
+        val remap = "[11:00:59] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry]: " +
+            "Registry minecraft:item: Object did not get ID it asked for. Name: theoneprobe:probe Expected: 3987 Got: 2330\n"
+        val missing = "[11:00:59] [Render thread/WARN] [net.minecraft.server.MinecraftServer]: Missing data pack mod:unloaded_activity\n"
+        val seeded = root.resolve("singleplayer/singleplayer-5.log")
+        seeded.parent.toFile().mkdirs()
+        seeded.writeText(version + remap + missing)
+        val ordinary = root.resolve("multiplayer/client-1.log")
+        ordinary.parent.toFile().mkdirs()
+        ordinary.writeText(version + remap + missing)
+        assertTrue(LogPolicy.findings(listOf(seeded)).isEmpty())
+        assertEquals(listOf(1, 3, 4), LogPolicy.findings(listOf(ordinary)).map { it.line })
+    }
+
+    @Test
+    fun singleplayerOpenAlCleanupIsAcceptedOnlyOnceDuringJeiLogout(@TempDir root: Path) {
+        val stop = "[13:15:35] [Render thread/INFO] [mezz.jei.forge.plugins.forge.ForgeGuiPlugin]: Stopping JEI GUI\n"
+        val error = "[13:15:35] [Render thread/ERROR] [com.mojang.blaze3d.audio.OpenAlUtil]: Cleanup: Invalid name parameter.\n"
+        val seeded = root.resolve("target-world-save/singleplayer-5.log")
+        seeded.parent.toFile().mkdirs()
+        seeded.writeText(stop + error + error)
+        val unscoped = root.resolve("multiplayer/client-1.log")
+        unscoped.parent.toFile().mkdirs()
+        unscoped.writeText(stop + error)
+        assertEquals(listOf(3), LogPolicy.findings(listOf(seeded)).map { it.line })
+        assertEquals(listOf(2), LogPolicy.findings(listOf(unscoped)).map { it.line })
     }
 
     @Test
@@ -529,11 +577,11 @@ class HarnessFastTest {
             it.writeText(warning() + "\n")
         }
         val acceptedServer = root.resolve("accepted-adchimneys-server.log").also {
-            it.writeText(warning(thread = "main", duration = "8.785") + "\n")
+            it.writeText(warning(thread = "main", duration = "41.10") + "\n")
         }
         val rejected = root.resolve("rejected-adchimneys.log").also {
             it.writeText(
-                warning(duration = "10.001") + "\n" +
+                warning(duration = "45.001") + "\n" +
                     warning(thread = "Server thread") + "\n" +
                     warning(mod = "othermod") + "\n",
             )
@@ -545,6 +593,25 @@ class HarnessFastTest {
         assertTrue(LogPolicy.findings(listOf(acceptedClient, acceptedServer)).isEmpty())
         assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(rejected)).map { it.line })
         assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOneBoundedAdLodsDeferredTaskPerLog(@TempDir root: Path) {
+        fun warning(duration: String = "2.248", mod: String = "adlods") =
+            "[07:03:06] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+                "Mod '$mod' took $duration s to run a deferred task."
+
+        val accepted = root.resolve("accepted-adlods.log").also { it.writeText(warning() + "\n") }
+        val overflow = root.resolve("overflow-adlods.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val rejected = root.resolve("rejected-adlods.log").also {
+            it.writeText(warning(duration = "5.001") + "\n" + warning(mod = "othermod") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(rejected)).map { it.line })
     }
 
     @Test
@@ -626,6 +693,10 @@ class HarnessFastTest {
             it.writeText(warning(thread = "DH-Render Loader Thread[0]") + "\n")
         }
         assertTrue(LogPolicy.findings(listOf(renderLoader)).isEmpty())
+        val updatePropagator = root.resolve("accepted-dh-update-propagator-memory.log").also {
+            it.writeText(warning(thread = "DH-Update Propagator Thread[0]") + "\n")
+        }
+        assertTrue(LogPolicy.findings(listOf(updatePropagator)).isEmpty())
     }
 
     @Test
@@ -650,6 +721,27 @@ class HarnessFastTest {
         assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
         assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
         assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactUntamedPlaceholderSoundWarningPerLog(@TempDir root: Path) {
+        fun warning(sound: String = "untamedwilds:nothing") =
+            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
+                "Unable to play empty soundEvent: $sound"
+
+        val accepted = root.resolve("accepted-untamed-placeholder-sound.log").also {
+            it.writeText(warning() + "\n")
+        }
+        val overflow = root.resolve("overflow-untamed-placeholder-sound.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val other = root.resolve("wrong-untamed-placeholder-sound.log").also {
+            it.writeText(warning("untamedwilds:missing") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(other)).map { it.line })
     }
 
     @Test

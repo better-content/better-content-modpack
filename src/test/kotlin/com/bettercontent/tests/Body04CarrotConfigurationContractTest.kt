@@ -17,7 +17,7 @@ class Body04CarrotConfigurationContractTest {
     fun `Carrot whitelist and milestones match the complete runtime food census`() {
         val eligibleFoods = Files.readAllLines(root.resolve("src/test/resources/body04-eligible-foods.txt"))
             .filter(String::isNotBlank)
-        assertEquals(624, eligibleFoods.size)
+        assertEquals(636, eligibleFoods.size)
         assertEquals(eligibleFoods.sorted(), eligibleFoods)
         assertEquals(eligibleFoods.size, eligibleFoods.toSet().size)
         assertTrue(eligibleFoods.all { it.matches(Regex("[a-z0-9_.-]+:[a-z0-9_./-]+")) })
@@ -38,10 +38,10 @@ class Body04CarrotConfigurationContractTest {
 
         val eligibleCount = eligibleFoods.size
         val finalMilestone = ceil(eligibleCount * 0.70).toInt()
-        assertEquals(437, finalMilestone)
+        assertEquals(446, finalMilestone)
         val thresholds = (1..15).map { ceil(finalMilestone * it / 15.0).toInt() }
         assertEquals(
-            listOf(30, 59, 88, 117, 146, 175, 204, 234, 263, 292, 321, 350, 379, 408, 437),
+            listOf(30, 60, 90, 119, 149, 179, 209, 238, 268, 298, 328, 357, 387, 417, 446),
             thresholds,
         )
         val configuredThresholds = Regex("(?m)^\\s*milestones = \\[(.*)]$").find(config)?.groupValues?.get(1)

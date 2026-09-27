@@ -98,7 +98,7 @@ legacy JARs are rebuilt, and every staged release artifact retains the source me
 
 ## Canonical Active Inventory
 
-The active set contains 42 custom mods.
+The active set contains 44 custom mods.
 
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
@@ -108,10 +108,11 @@ The active set contains 42 custom mods.
 | [better-content-economy](https://github.com/better-content/better-content-economy) | `better_content_economy` | `better-content-economy-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-fixes](https://github.com/better-content/better-content-fixes) | `better_content_fixes` | `better-content-fixes-0.1.9.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-content-notifications](https://github.com/better-content/better-content-notifications) | `better_content_notifications` | `better-content-notifications-1.0.0.jar` | `./gradlew verifyFast stageRuntimeJar` |
-| [better-content-threads](https://github.com/better-content/better-content-threads) | `better_content_threads` | `better-content-threads-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-content-threads](https://github.com/better-content/better-content-threads) | `learning_surfaces` | `learning-surfaces-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [bumblezone-cultivars](https://github.com/better-content/bumblezone-cultivars) | `bumblezone_cultivars` | `bumblezone-cultivars-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [buried-encounters](https://github.com/better-content/buried-encounters) | `buried_encounters` | `buried-encounters-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [burnt-grass-compat](https://github.com/better-content/burnt-grass-compat) | `burnt_grass_compat` | `burnt-grass-compat-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| better-content-fire | `better_content_fire` | `better-content-fire-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-content-journal-ui](https://github.com/better-content/better-content-journal-ui) | `better_content_journal_ui` | `better-content-journal-ui-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [class-selector](https://github.com/better-content/class-selector) | `class_selector` | `class-selector-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [create-train-fuel-scaling](https://github.com/better-content/create-train-fuel-scaling) | `create_train_fuel_scaling` | `create-train-fuel-scaling-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [create-transmission-loss](https://github.com/better-content/create-transmission-loss) | `create_transmission_loss` | `create-transmission-loss-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
@@ -119,6 +120,7 @@ The active set contains 42 custom mods.
 | [dimension-drink](https://github.com/better-content/dimension-drink) | `dimension_drink` | `dimension-drink-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [downed-player-revival](https://github.com/better-content/downed-player-revival) | `downed_player_revival` | `downed-player-revival-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [dynamic-survival-hud](https://github.com/better-content/dynamic-survival-hud) | `dynamic_survival_hud` | `dynamic-survival-hud-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [dynamic-trees-hexerei](https://github.com/better-content/dynamic-trees-hexerei) | `dynamic_trees_hexerei` | `dynamic-trees-hexerei-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [dynamic-trees-malum](https://github.com/better-content/dynamic-trees-malum) | `dynamic_trees_malum` | `dynamic-trees-malum-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [exploration-tick-governor](https://github.com/better-content/exploration-tick-governor) | `exploration_tick_governor` | `exploration-tick-governor-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [heat-sync](https://github.com/better-content/heat-sync) | `heat_sync` | `heat-sync-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
@@ -154,5 +156,4 @@ explicitly activated.
 | Repository | Reason | Local validation and staging |
 |---|---|---|
 | [dynamic-trees-dimension-compat](https://github.com/better-content/dynamic-trees-dimension-compat) | The addon requires The Undergarden, which the pack retired. | `./gradlew runData verifyFull` |
-| [dynamic-trees-hexerei](https://github.com/better-content/dynamic-trees-hexerei) | Nature's Spirit owns mahogany ecology; the redundant Hexerei tree addon is retired. | `./gradlew runData verifyFull` |
 | [scalable-tnt](https://github.com/better-content/scalable-tnt) | TNT-01 source prototype; validation-only until unit-only authoring is reviewed and runtime/integration/balance acceptance is authorized. | `./gradlew test` |

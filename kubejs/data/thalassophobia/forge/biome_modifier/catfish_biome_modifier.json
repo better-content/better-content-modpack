@@ -1,0 +1,11 @@
+{
+  "type": "forge:remove_spawns",
+  "biomes": [
+    "river",
+    "mangrove_swamp",
+    "swamp"
+  ],
+  "entity_types": [
+    "thalassophobia:catfish"
+  ]
+}

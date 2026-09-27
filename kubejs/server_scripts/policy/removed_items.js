@@ -9,8 +9,6 @@ BC_DISABLED_ITEMS = BC_DISABLED_ITEMS
 
 ServerEvents.recipes(function (event) {
     ;[
-        'burnt:gunpowder_recipe',
-        'burnt:fire_barrel_recipe_2',
         'createdieselgenerators:bulk_fermenting/lava',
         'pneumaticcraft:amadron/emerald_to_oil',
         'ars_nouveau:water_essence_to_bucket',

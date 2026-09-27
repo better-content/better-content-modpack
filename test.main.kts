@@ -18,19 +18,24 @@ while (argument < args.size) {
 }
 val fontTargets = setOf("ratlantis", "bumblezone", "aether", "nether")
 val fontDimensions = setOf("rats:ratlantis", "the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether")
-val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "campaign-start", "campaign", "world-save") ||
+val validTarget = target == null || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart-compat", "world-save") ||
     (target!!.startsWith("font:") && target!!.removePrefix("font:") in fontTargets) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
         target!!.removePrefix("dimension:") !in fontDimensions)
 val targetSuite = when {
     target == null -> null
+    target == "server-ready" || target == "cursed-pyramid" || target == "lineage-transition" -> "server"
     target == "world-save" -> "singleplayer"
     else -> "multiplayer"
 }
 val targetMethod = when {
     target == null -> null
+    target == "server-ready" -> "packagedServerReachesReadiness"
+    target == "cursed-pyramid" -> "cursedPyramidSeededGenerationAndLogAudit"
+    target == "lineage-transition" -> "oneLineageTransitionCommitsAndArchivesCleanly"
     target == "join" -> "leadClientJoinsFreshDedicatedServer"
-    target == "campaign" || target == "campaign-start" -> "threeSurvivalPlayersExerciseCampaignsAndSoak"
+    target == "campaign" || target == "campaign-start" -> "threeSurvivalPlayersStartCampaigns"
+    target == "restart-compat" -> "debugServerRestartAndClientReconnectPreserveWorld"
     target == "world-save" -> "debugFreshWorldBootSaveAndReopen"
     target == "fonts" || target?.startsWith("font:") == true -> "debugNativeFontRoundTrips"
     else -> "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations"
@@ -44,7 +49,7 @@ val taskBySelector = mapOf(
 )
 
 fun usage(): Nothing {
-    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target join|fonts|font:NAME|dimensions|dimension:ID|campaign-start|campaign|world-save] [--retry-of RUN_ID]")
+    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target server-ready|cursed-pyramid|lineage-transition|join|fonts|font:NAME|dimensions|dimension:ID|campaign-start|campaign|restart-compat|world-save] [--retry-of RUN_ID]")
     exitProcess(2)
 }
 
@@ -94,7 +99,14 @@ fun gradle(suite: String, task: String, method: String? = null, evidenceSuite: S
     println("test suite: $task" + (runId?.let { " (run $it)" } ?: ""))
     val startedAt = System.currentTimeMillis()
     val command = mutableListOf(root.resolve("gradlew").absolutePath, "--no-daemon", task)
-    if (method != null) command += listOf("--tests", "com.bettercontent.tests.${if (suite == "multiplayer") "MultiplayerRuntimeTest" else "SingleplayerRuntimeTest"}.$method")
+    if (method != null) {
+        val testClass = when (suite) {
+            "server" -> "ServerRuntimeTest"
+            "multiplayer" -> "MultiplayerRuntimeTest"
+            else -> "SingleplayerRuntimeTest"
+        }
+        command += listOf("--tests", "com.bettercontent.tests.$testClass.$method")
+    }
     val process = ProcessBuilder(command)
         .directory(root)
         .inheritIO()

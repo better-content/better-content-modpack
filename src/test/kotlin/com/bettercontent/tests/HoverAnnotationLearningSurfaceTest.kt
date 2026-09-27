@@ -549,7 +549,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(recipe.contains("M: 'kubejs:acetate_membrane'"))
         assertTrue(recipe.contains("event.shaped('airtight_machinery:airtight_upgrade'"))
         assertTrue(interaction.contains("held.is(ChemistryContent.AIRTIGHT_UPGRADE.get())"))
-        assertTrue(interaction.contains("holder.airtightMachinery" + "$" + "setAirtight(true)"))
+        assertTrue(interaction.contains("holder.betterContentFixes" + "$" + "setAirtight(true)"))
         assertTrue(escape.contains("if (isAirtight(holder)) return;"))
         assertTrue(owner.contains("AirtightUpgradeInteraction.java"))
         assertTrue(owner.contains("GasEscapeHandler.java"))
@@ -1078,7 +1078,7 @@ class HoverAnnotationLearningSurfaceTest {
             "realistic_ores:surface_sample_ironstone", "realistic_ores:surface_sample_tin_quartz",
         )
         val owner = row.path("owner").asText()
-        val copy = row.path("lines").map { it.asText() }.single()
+        val copy = row.path("lines").map { it.asText() }
 
         assertEquals(expectedTargets, targets)
         assertTrue(owner.contains("ModBlocks.java"))
@@ -1095,7 +1095,13 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(sample.contains("DepositSurveyEpisodes.sampleRead(serverPlayer, depositFamily)"))
         assertTrue(useBody.contains("level.setBlock(position, replacement, Block.UPDATE_ALL)"))
         assertTrue(!useBody.contains("getBlockState") && !useBody.contains("findDeposit") && !useBody.contains("scanDeposit"))
-        assertEquals("Right-click to collect one matching small ore chunk; this sample does not locate a deposit.", copy)
+        assertEquals(
+            listOf(
+                "A matching ADLODS deposit may lie below this surface clue.",
+                "Right-click to collect one matching small ore chunk.",
+            ),
+            copy,
+        )
     }
 
     @Test
@@ -1829,24 +1835,24 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `bundled Threads exposes optional owned lessons and no obsolete dodge teaching`() {
         val learningSurfaceGuide = Files.readString(root.resolve("docs/learning_surfaces.md"))
-        val jar = root.resolve("mods/better-content-threads-1.1.0.jar")
+        val jar = root.resolve("mods/learning-surfaces-1.0.0.jar")
         ZipFile(jar.toFile()).use { zip ->
             fun json(path: String) = zip.getInputStream(zip.getEntry(path)).bufferedReader().use { reader ->
                 jacksonObjectMapper().readTree(reader)
             }
-            val lessons = json("assets/better_content_threads/loading_briefs/catalogue.json")
-            val threads = json("data/better_content_threads/threads/catalogue.json")
-            assertEquals("bc.loading_briefs.v3", lessons.path("schema").asText())
+            val lessons = json("assets/learning_surfaces/loading_briefs/catalogue.json")
+            val threads = json("data/learning_surfaces/threads/catalogue.json")
+            assertEquals("bc.learning_surfaces.lessons.v1", lessons.path("schema").asText())
             assertEquals(18, lessons.path("briefs").size())
-            assertEquals(17, lessons.path("briefs").map { it.path("art").asText() }.distinct().size)
+            assertEquals(18, lessons.path("briefs").map { it.path("art").asText() }.distinct().size)
             assertTrue(learningSurfaceGuide.contains("rotation share ${lessons.path("briefs").size()} lessons"))
             assertTrue(Files.readString(root.resolve("docs/threads.md")).contains("${lessons.path("briefs").size()} loading/Lessons entries"))
             val sourceLessons = jacksonObjectMapper().readTree(
-                root.resolve("../mod_source/better-content-threads/src/main/resources/assets/better_content_threads/loading_briefs/catalogue.json")
+                root.resolve("../mod_source/better-content-threads/src/main/resources/assets/learning_surfaces/loading_briefs/catalogue.json")
                     .normalize().toFile(),
             )
             assertEquals(sourceLessons.path("briefs").size(), lessons.path("briefs").size())
-            assertEquals(17, sourceLessons.path("briefs").map { it.path("art").asText() }.distinct().size)
+            assertEquals(18, sourceLessons.path("briefs").map { it.path("art").asText() }.distinct().size)
             val concepts = threads.path("threads").associate {
                 it.path("id").asText() to it.path("concept_id").asText()
             }
@@ -1863,7 +1869,7 @@ class HoverAnnotationLearningSurfaceTest {
         }
 
         val client = ZipFile(jar.toFile()).use { zip ->
-            val entry = zip.getEntry("com/bettercontent/threads/ThreadClient.class")
+            val entry = zip.getEntry("com/bettercontent/learningsurfaces/ThreadClient.class")
             zip.getInputStream(entry).readBytes().toString(Charsets.ISO_8859_1)
         }
         assertTrue(!client.contains("keepReading"))

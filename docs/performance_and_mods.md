@@ -10,10 +10,10 @@ Generated runtimes and old profiling directories are not authorities for active 
 The Bumblezone 7.13.4 and Rats 8.1.3 are the active Font-only expedition realms replacing the
 retired Undergarden and Deeper Darker routes. `bumblezone_cultivars` owns Bumblezone food flora and
 propagation. `ratlantis_logistics` owns the three visible logistics components, bait-only trust,
-finite Rats work behaviors, and tube traversal repair. Nature's Spirit owns mahogany ecology;
-`dynamic-trees-hexerei` is validation-only, while the CurseForge Dynamic Trees addons for Aether
-and Twilight Forest remain active. `dynamic_trees_malum` is the one active Better Content tree
-extension.
+finite Rats work behaviors, and tube traversal repair. Nature's Spirit remains the canonical mahogany
+wood and progression authority; `dynamic_trees_hexerei` restores dynamic Hexerei mahogany, willow,
+and witch hazel trees. The CurseForge Dynamic Trees addons for Aether and Twilight Forest remain
+active, along with `dynamic_trees_malum`.
 
 TaCZ 1.1.8 is active with playerAnimator and client-only Accelerated Rendering. Create Armorer,
 Applied Armorer, and Immersive Armorer remain external gun-pack ZIPs under `tacz/`. Their benches
@@ -35,12 +35,12 @@ compatibility only; helm control, camera behavior, rendering, specialized add-on
 observer synchronization, and ship persistence remain manual-playtest surfaces. Epic Fight's
 optional third-person combat camera remains player-controlled.
 
-Complicated Bees, EMI Ores, Forgotten Ruins, Quickstack, Ice and Fire, Hexerei, Malum, Occultism,
+Complicated Bees, EMI Ores, Forgotten Ruins, Ice and Fire, Hexerei, Malum, Occultism,
 Goety, Ars Elemental, Ars Creo, Ars Energistique, Polymorph, Supplementaries, Amendments, Genetic
 Animals, Fowl Play, Advanced Chimneys, and Realistic Block Physics are active. Farmer's Delight,
 Ube's Delight, Farmer's Respite, and Brewin' and Chewin' are the active Delight food-and-drink
-set. Quickstack's global `C` and `X` shortcuts remain unbound; its inventory buttons are the
-deliberate transfer surface. The maintained `config/adchimneys/` definitions cover active furnace,
+set. The Journal inventory owns Sort, Quick Stack, and Trash with Undo; the previous separate
+inventory utility mods are removed. The maintained `config/adchimneys/` definitions cover active furnace,
 burner, smeltery, and generator emitters.
 
 Create Sifting 1.8.6 is active with Create 6.0.8. String-mesh hand sifting is the
@@ -79,7 +79,7 @@ last complete one.
 ## Shader block motion classification
 
 The active Complementary Reimagined archive limits `block.10005` grass motion to flexible plants.
-Full cubes and rigid assemblies—including Burnt/Ice and Fire grass blocks, Tinkers' Construct slime
+Full cubes and rigid assemblies—including Better Content Fire/Ice and Fire grass blocks, Tinkers' Construct slime
 grass blocks, tree roots and branches, hedges, planters, flower boxes, pots, doors, and cactus
 structures—must remain outside that class so their vertices do not deform like grass. Additions need
 a model-shape audit: plant stems, crops, vines, flowers, ferns, and saplings may use grass motion;
@@ -169,7 +169,7 @@ systems are intentionally outside the v1 preview scope.
 does not composite the viewport or import server-root legacy data across generations.
 
 `better_content_fixes` owns the active compatibility repairs for Dynamic Trees/Aether, Hyle,
-Unearthed soil and farmland, Burnt grass, C2ME safe-random noise, Weather2 fog under Oculus,
+Unearthed soil and farmland, Better Content Fire ground, C2ME safe-random noise, Weather2 fog under Oculus,
 PVJ Nether groundcover, TFTH proximity audio, and Dimension Font bounded placement. Dynamic Trees
 falling trees remain item-drop only. Dimension Font layout version 3 is new-world data and does not
 deserialize old pieces.

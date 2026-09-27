@@ -6,16 +6,22 @@ reveal and completion stages. Exact recipes and apparatus remain in EMI, Ponder,
 native guides; survival fundamentals remain in the 18 loading/Lessons entries.
 
 The canonical definitions, trigger routes, and art scene specifications live in
-[`better-content-threads/authoring/discoveries.json`](../../mod_source/better-content-threads/authoring/discoveries.json).
-The runtime catalogue is `bc.threads.v4`; network protocol is 11. Old experimental card
-state and identities have no migration requirement.
+[`Learning Surfaces authoring roster`](../../mod_source/better-content-threads/authoring/discoveries.json).
+All 52 cards have reviewed Journal copperplate illustrations. Their intended scenes
+remain in the authoring roster. The packaged card
+catalogue is `bc.learning_surfaces.cards.v1`; the mod network protocol is 1. The new mod
+identity starts fresh without saved-history migration. Cards, lessons, and tips are fixed
+packaged catalogues for each release.
 
 ## Evidence and attribution
 
-Every discovery follows a committed native outcome. Providers publish domain events;
-Threads translates them. Third-party adapters are version-pinned to actual output,
-movement, or work boundaries. Setup, recipe previews, inventory acquisition, nearby
-machines, and another player's work cannot stand in for personal evidence.
+Outcome cards follow committed native events. First-use cards
+also use personal points of need: closing an EMI recipe view, approaching a Font,
+completed food use, and the first positive cave-pressure increment. Accepted movement
+triggers bounded approach checks; inventory changes trigger bounded item checks. Providers
+publish domain events; Learning Surfaces translates them. Outcome adapters remain pinned to
+actual output, movement, or work boundaries. Another player's activity cannot stand
+in for personal evidence.
 
 Owned operations earn credit at success even while their owner is away or offline.
 Persisted job, device, crop, route, or native operator identity supplies attribution.
@@ -44,17 +50,17 @@ Re-encountering a known card may remind the player once in a successor without t
 old artwork unread again. The fallback server SavedData supports offline credit without
 relying on death-cloned player NBT.
 
-Native doorways appear only for installed working targets. The four injury cards lead
-to Body's six-region overview. Card copies remain cosmetic and grant no discovery to
+Native doorways appear only for installed working targets. The active roster retains
+one Death's Door card; Body's six-region overview and contextual tips explain injury
+details. Card copies remain cosmetic and grant no discovery to
 their recipients.
 
 ## Death's Door and other teaching
 
-The injury discoveries separately explain entering Death's Door, recovering HP while
-injuries persist, later trauma amplifying pre-existing functional injuries, and finished
-self-treatment. Initial maims, head-only risk, saturated penalties, and another player's
-treatment cannot masquerade as those outcomes. Injury type chooses medicine; region
-chooses impairment. HP healing, trauma expiry, and injury treatment are different systems.
+The Death's Door card opens when the player enters that state. Native Body and
+contextual tips cover persistent injuries, trauma, and treatment. Injury type chooses
+medicine; region chooses impairment. HP healing, trauma expiry, and injury treatment
+remain different systems.
 
 Main-menu tips are stable per application launch. Esc tips use actual conditions and
 remain stable while open. Final-death advice uses the committed final cause and shares
@@ -63,8 +69,8 @@ are documented in the [source teaching guide](../../mod_source/better-content-th
 
 ## Review
 
-All 52 card illustrations and 17 loading illustrations follow the
-[no-humans art direction](thread_art_direction.md). The source repository's required
+All 52 card illustrations and 18 loading illustrations follow the
+[no-humans art direction](thread_art_direction.md). The Learning Surfaces repository's required
 local gate is `./gradlew verifyFull stageRuntimeJar`; isolated real-client fixtures
 review compact/wide journal and native death-screen rendering. Provider repositories
 verify their own outcomes. These checks do not imply pack deployment or full-pack tests.

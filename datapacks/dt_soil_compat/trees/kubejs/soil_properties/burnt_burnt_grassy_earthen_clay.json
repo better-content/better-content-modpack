@@ -1,9 +1,0 @@
-{
-  "primitive_soil": "burnt:burnt_grassy_earthen_clay",
-  "acceptable_soils": [
-    "dirt_like",
-    "mud_like"
-  ],
-  "substitute_soil": "dynamictrees:mud",
-  "only_if_loaded": "burnt"
-}

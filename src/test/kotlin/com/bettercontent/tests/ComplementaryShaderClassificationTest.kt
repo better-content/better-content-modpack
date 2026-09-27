@@ -26,12 +26,12 @@ class ComplementaryShaderClassificationTest {
             val rigid = explicitRigidBlocks() + swemFlowerBoxes() + tconstructSlimeGrass()
             assertEquals(81, rigid.size, "classification audit scope changed")
             assertTrue(active.intersect(rigid).isEmpty(), "rigid blocks still use grass vertex motion")
-            assertEquals(312, active.size, "unexpected active grass-class membership")
+            assertEquals(300, active.size, "unexpected active grass-class membership")
 
             val flexible = setOf(
                 "short_grass", "fern", "sweet_berry_bush", "wheat", "torchflower_crop",
                 "aether:berry_bush", "ars_nouveau:magebloom_crop", "blue_skies:brumble_vine",
-                "burnt:burnt_high_grass", "deeperdarker:sculk_vines", "farmersdelight:tomatoes",
+                "better_content_fire:smoldering_plant", "deeperdarker:sculk_vines", "farmersdelight:tomatoes",
                 "natures_spirit:willow_vines", "quark:water_pink_petals",
                 "tconstruct:earth_slime_fern", "tconstruct:sky_slime_vine",
                 "twilightforest:huge_water_lily", "undergarden:droopvine")
@@ -95,9 +95,10 @@ class ComplementaryShaderClassificationTest {
     }
 
     private fun explicitRigidBlocks() = setOf(
-        "burnt:burnt_cactus", "burnt:burnt_grass", "burnt:burnt_mangrove_roots",
-        "burnt:recovering_grass", "burnt:smoldering_cactus", "burnt:smoldering_grass",
-        "burnt:smoldering_grass_start", "burnt:smoldering_mangrove_roots",
+        "better_content_fire:burnt_ground", "better_content_fire:burnt_solid",
+        "better_content_fire:burnt_leaves", "better_content_fire:burnt_slab",
+        "better_content_fire:burnt_stairs", "better_content_fire:smoldering_ground",
+        "better_content_fire:smoldering_solid", "better_content_fire:smoldering_stairs",
         "callfromthedepth_:silenttreedoor", "deeperdarker:gloomy_cactus",
         "dtarsnouveau:blue_archwood_root", "dtarsnouveau:green_archwood_root",
         "dtarsnouveau:purple_archwood_root", "dtarsnouveau:red_archwood_root",

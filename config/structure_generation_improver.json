@@ -13,7 +13,8 @@
     "minecraft:shipwreck_beached",
     "minecraft:ocean_ruin_cold",
     "minecraft:ocean_ruin_warm",
-    "minecraft:buried_treasure"
+    "minecraft:buried_treasure",
+    "minecraft:igloo"
   ],
   "comment_foundation_blacklist": "Supports: full id, namespace.*, *, #namespace:tag",
   "Foundation blacklist": [

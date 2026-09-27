@@ -151,7 +151,7 @@ ServerEvents.recipes(function (event) {
     ].forEach(function (output) { event.remove({ output: output }) })
     bcFontCauldron(event, 'occultism_spirit_attuned_crystal', 'occultism:spirit_attuned_crystal', 1, 'minecraft:water', [
         'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem',
-        'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem'
+        'occultism:spirit_attuned_gem', 'rats:gem_of_ratlantis'
     ], { heatRequirement: 'heated' })
     bcFontCauldron(event, 'occultism_spirit_attuned_pickaxe_head', 'occultism:spirit_attuned_pickaxe_head', 1, 'minecraft:water', [
         'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem'

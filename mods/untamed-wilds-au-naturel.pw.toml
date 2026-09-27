@@ -1,0 +1,13 @@
+name = "Untamed Wilds - Au Naturel Edition"
+filename = "untamedwilds-4.0.4-b004.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "b4007ecf2fed03b89205b6fdd3fba6980c9e39bd"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7441092
+project-id = 1399279

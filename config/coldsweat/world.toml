@@ -226,7 +226,7 @@
 	    ["heat_sync:hot_water", 8, 5, "c", 25, "", "", 100],
 	    ["#kubejs:cold_sweat/lit_heat_sources", 7, 6, "c", 25, "lit=true", "", 204],
 	    ["#kubejs:cold_sweat/constant_heat_sources", 5, 4, "c", 20, "", "", 204],
-	    ["#toughasnails:heating_blocks,burnt:fire_barrel_active,burnt:fire_barrel_blast_block,burnt:fragile_magma", 4, 4, "c", 15, "", "", 204],
+	    ["#toughasnails:heating_blocks", 4, 4, "c", 15, "", "", 204],
 	    ["create:blaze_burner", 3, 3, "c", 17, "blaze=smouldering", "", 204],
 	    ["create:blaze_burner", 6, 4, "c", 17, "blaze=fading", "", 204],
 	    ["create:blaze_burner", 8, 5, "c", 25, "blaze=kindled", "", 204],

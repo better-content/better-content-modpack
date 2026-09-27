@@ -26,6 +26,18 @@
     "thalassophobia:cooked_sea_bird",
     "thalassophobia:cooked_hesperornis",
     "thalassophobia:fish_stew",
-    "thalassophobia:jellyfish_jelly_bread"
+    "thalassophobia:jellyfish_jelly_bread",
+    "untamedwilds:chum",
+    "untamedwilds:food_bear_cooked",
+    "untamedwilds:food_bear_raw",
+    "untamedwilds:food_hakarl",
+    "untamedwilds:food_pachyderm_cooked",
+    "untamedwilds:food_pachyderm_raw",
+    "untamedwilds:food_pemmican",
+    "untamedwilds:food_turtle_cooked",
+    "untamedwilds:food_turtle_raw",
+    "untamedwilds:food_turtle_soup",
+    "untamedwilds:material_blubber",
+    "untamedwilds:material_fat"
   ]
 }

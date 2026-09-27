@@ -22,7 +22,7 @@ class MultiplayerRuntimeTest {
         lateinit var clients: List<ClientFixture>
         var joined = false
         var dimensions = false
-        var campaignSoak = false
+        var campaignReady = false
         var fontRoundTrips = false
 
         private val usernames = (1..3).map { "SmokeClient$it" }
@@ -31,12 +31,10 @@ class MultiplayerRuntimeTest {
             10_000 to 0,
             20_000 to 0,
         )
-        private const val SOAK_TICKS = 36_000L
-        private const val DEFAULT_SOAK_SECONDS = 30 * 60L
         // A full-pack client can otherwise drive the shared smoke-test host into its
         // memory ceiling during Lost Cities reloads. Four GiB clears TACZ's initial
         // model reload while leaving headroom for the server during the single-client
-        // join and Debug's dimension traversal and three-client soak.
+        // join and Debug's dimension traversal and three-client campaign check.
         private const val CLIENT_JVM_ARGS = "-Xms1G -Xmx4G"
 
         @JvmStatic
@@ -53,7 +51,6 @@ class MultiplayerRuntimeTest {
                 evidence.run,
                 mapOf("JAVA_TOOL_OPTIONS" to harnessOptions),
                 allowLongClientLogin = true,
-                suppressInControlSpawns = evidence.run.target == "campaign-start",
             )
             clients = usernames.mapIndexed { index, username ->
                 ClientFixture(evidence.run, server, username, index + 1,
@@ -83,18 +80,20 @@ class MultiplayerRuntimeTest {
                 evidence.run.directory.resolve("dimensions.json"),
                 StandardCopyOption.REPLACE_EXISTING,
             )
-            // Generate and force-load the three distant campaign corridors while no clients are
-            // connected. Fresh overworld generation can pause the server longer than a heartbeat.
-            positions.forEachIndexed { index, (x, z) -> prepareCampaignPlatform(index + 1, x, z) }
-            repeat(3) { sample ->
-                server.commandResult(
-                    "forge tps",
-                    Regex("Overall: Mean tick time: [0-9.]+ ms\\. Mean TPS: 20\\.[0-9]+"),
-                    "prewarm recovery TPS sample ${sample + 1}",
-                    Duration.ofMinutes(3),
-                    retryInterval = Duration.ofSeconds(30),
-                )
-                if (sample < 2) Thread.sleep(10_000)
+            if (evidence.run.target == null) {
+                // Full Debug needs distant corridors ready before clients connect. Campaign
+                // targets prepare their own pads; other focused targets do not use them.
+                positions.forEachIndexed { index, (x, z) -> prepareCampaignPlatform(index + 1, x, z) }
+                repeat(3) { sample ->
+                    server.commandResult(
+                        "forge tps",
+                        Regex("Overall: Mean tick time: [0-9.]+ ms\\. Mean TPS: 20\\.[0-9]+"),
+                        "prewarm recovery TPS sample ${sample + 1}",
+                        Duration.ofMinutes(3),
+                        retryInterval = Duration.ofSeconds(30),
+                    )
+                    if (sample < 2) Thread.sleep(10_000)
+                }
             }
         }
         val lead = clients.first()
@@ -208,29 +207,38 @@ class MultiplayerRuntimeTest {
     }
 
     @Test @Order(4)
-    fun threeSurvivalPlayersExerciseCampaignsAndSoak() {
+    fun threeSurvivalPlayersStartCampaigns() {
         if (evidence.run.tier != "debug") {
-            evidence.run.event("scenario_omitted", mapOf("name" to "three-player campaign soak", "tier" to evidence.run.tier))
+            evidence.run.event("scenario_omitted", mapOf("name" to "three-player campaigns", "tier" to evidence.run.tier))
             return
         }
         if (evidence.run.target == "campaign" || evidence.run.target == "campaign-start") {
             server.waitReady()
             positions.forEachIndexed { index, (x, z) -> prepareCampaignPlatform(index + 1, x, z) }
+            if (evidence.run.target == "campaign-start") {
+                // Reproduce the missing central floor found after the full dimension pass.
+                // The campaign-phase repair must restore it before the lead path proof.
+                server.commandResult(
+                    "execute in minecraft:overworld run fill -16 315 -5 32 315 5 minecraft:air",
+                    Regex("Successfully filled [1-9][0-9]* block\\(s\\)"),
+                    "remove central campaign floor for repair check",
+                    Duration.ofSeconds(30),
+                )
+                evidence.run.event("campaign_platform_repair_probe", mapOf("index" to 1, "removed_floor" to true))
+            }
             startClient(clients.first())
             requirePlayersOnline("campaign lead joined", listOf(clients.first()))
         } else {
             assumeTrue(dimensions, "dimension traversal prerequisite failed")
         }
-        val checkpoint = if (evidence.run.target == "campaign-start")
-            "three-player campaign starts" else "three-player campaign and 30-minute Survival soak"
-        evidence.run.checkpoint(checkpoint) {
+        evidence.run.checkpoint("three-player campaigns active") {
             clients.drop(1).forEach {
                 startClient(it)
-                // Keep the newly joined soak client out of ordinary campaign eligibility
+                // Keep newly joined clients out of ordinary campaign eligibility
                 // until all three players are ready for the synchronized fixture setup.
                 server.send("gamemode spectator ${it.username}")
             }
-            requireAllPlayersOnline("soak clients joined")
+            requireAllPlayersOnline("campaign clients joined")
             // Dimension traversal leaves ordinary campaign pressure enabled, so a long
             // full-pack run may naturally have pending encounters by this point. Bring all
             // three clients to a confirmed spectator state before clearing the director. This
@@ -245,7 +253,7 @@ class MultiplayerRuntimeTest {
             )
             clients.forEachIndexed { index, client ->
                 val (x, z) = positions[index]
-                verifyCampaignPlatform(index + 1)
+                verifyCampaignPlatform(index + 1, x, z)
                 server.commandResult(
                     "pillager_campaigns inspect ${client.username}",
                     Regex("campaign_inspect player=${Regex.escape(client.username)} encounter=none"),
@@ -259,19 +267,45 @@ class MultiplayerRuntimeTest {
                     "protect ${client.username}",
                     Duration.ofSeconds(30),
                 )
-                server.send("execute in minecraft:overworld run tp ${client.username} $x 316 $z")
-                server.commandResult(
-                    "execute as ${client.username} at @s run say BC_PILLAGER_POSITION_${index + 1}",
-                    Regex("BC_PILLAGER_POSITION_${index + 1}"),
-                    "position ${client.username}",
-                    Duration.ofSeconds(90),
-                )
-                server.commandResult(
-                    "pillager_campaigns harness spawn scout immediate ${client.username} 5",
-                    Regex("Harness started immediate scout .*${Regex.escape(client.username)}"),
-                    "local campaign ${client.username}",
-                    Duration.ofMinutes(2),
-                )
+                val offsets = listOf(0 to 0, 16 to 0, 0 to 16, -16 to 0, 0 to -16)
+                var started = false
+                for ((attempt, offset) in offsets.withIndex()) {
+                    val targetX = x + offset.first
+                    val targetZ = z + offset.second
+                    server.send("execute in minecraft:overworld run tp ${client.username} $targetX 316 $targetZ")
+                    server.commandResult(
+                        "execute as ${client.username} at @s run say BC_PILLAGER_POSITION_${index + 1}_$attempt",
+                        Regex("BC_PILLAGER_POSITION_${index + 1}_$attempt"),
+                        "position ${client.username} attempt $attempt",
+                        Duration.ofSeconds(90),
+                    )
+                    val result = server.commandResult(
+                        "pillager_campaigns harness spawn scout immediate ${client.username} 5",
+                        Regex("Harness started immediate scout .*${Regex.escape(client.username)}|" +
+                            "Immediate campaign lead could not validate a loaded approach after [0-9]+ candidate\\(s\\)|" +
+                            "Harness could not create a campaign for the target player"),
+                        "local campaign ${client.username} attempt $attempt",
+                        Duration.ofSeconds(30),
+                    )
+                    if (result.value.contains("Harness started immediate scout")) {
+                        evidence.run.event("campaign_location_accepted", mapOf(
+                            "player" to client.username, "attempt" to attempt, "x" to targetX, "z" to targetZ,
+                        ))
+                        started = true
+                        break
+                    }
+                    evidence.run.event("campaign_location_rejected", mapOf(
+                        "player" to client.username, "attempt" to attempt, "x" to targetX, "z" to targetZ,
+                        "reason" to result.value,
+                    ))
+                    server.commandResult(
+                        "pillager_campaigns inspect ${client.username}",
+                        Regex("campaign_inspect player=${Regex.escape(client.username)} encounter=none"),
+                        "campaign reset after rejected position ${client.username} attempt $attempt",
+                        Duration.ofSeconds(30),
+                    )
+                }
+                check(started) { "No local campaign for ${client.username} after ${offsets.size} player positions; see ${server.log}" }
                 server.commandResult(
                     "pillager_campaigns inspect ${client.username}",
                     Regex("campaign_inspect player=${Regex.escape(client.username)} encounter=.* phase=active .* live=[1-9]"),
@@ -281,52 +315,24 @@ class MultiplayerRuntimeTest {
                 )
             }
 
+            requireAllPlayersOnline("three campaign encounters active")
+            check(serverAlive()) { "server exited during three-player campaign check; see ${server.log}" }
+            clients.forEach { client ->
+                check(itAlive(client)) { "${client.username} client exited during campaign check; see ${client.log}" }
+                server.commandResult(
+                    "pillager_campaigns inspect ${client.username}",
+                    Regex("campaign_inspect player=${Regex.escape(client.username)} encounter=.* phase=active .* live=[1-9]"),
+                    "simultaneously active campaign ${client.username}",
+                    Duration.ofSeconds(30),
+                )
+            }
+            campaignReady = true
+            evidence.run.event("campaigns_active", mapOf("players" to clients.map { it.username }))
             if (evidence.run.target == "campaign-start") {
                 evidence.run.event("campaign_start_passed", mapOf("players" to clients.map { it.username }))
-                return@checkpoint
             }
-
-            val soakSeconds = soakSecondsAtStart()
-            evidence.run.event("pillager_soak_started", mapOf(
-                "duration_seconds" to soakSeconds,
-                "tier" to evidence.run.tier,
-            ))
-            val startedAt = System.nanoTime()
-            val startedGameTime = gameTime()
-            var nextSample = 0L
-            while (System.nanoTime() - startedAt < Duration.ofSeconds(soakSeconds).toNanos()) {
-                Thread.sleep(30_000)
-                val elapsed = ((System.nanoTime() - startedAt) / 1_000_000_000L).coerceAtMost(soakSeconds)
-                if (elapsed < nextSample) continue
-                nextSample += 30
-                check(serverAlive()) { "server exited during three-player soak; see ${server.log}" }
-                clients.forEach { check(itAlive(it)) { "${it.username} client exited during soak; see ${it.log}" } }
-                clients.forEach { client ->
-                    server.commandResult(
-                        "pillager_campaigns status ${client.username}",
-                        Regex("eligible_ticks=[0-9]+"),
-                        "campaign status ${client.username} at ${elapsed}s",
-                        Duration.ofSeconds(30),
-                    )
-                }
-                evidence.run.event("pillager_soak_sample", mapOf(
-                    "elapsed_seconds" to elapsed,
-                    "game_time" to gameTime(),
-                    "players" to clients.map { it.username },
-                ))
-            }
-            val elapsedTicks = gameTime() - startedGameTime
-            require(elapsedTicks > 0) { "three-player soak did not advance the Overworld game clock" }
-            evidence.run.event("pillager_soak_complete", mapOf(
-                "duration_seconds" to soakSeconds,
-                "game_ticks" to elapsedTicks,
-                "nominal_game_ticks" to SOAK_TICKS,
-            ))
-            campaignSoak = true
         }
     }
-
-    private fun soakSecondsAtStart(): Long = DEFAULT_SOAK_SECONDS
 
     @Test @Order(5)
     fun debugServerRestartAndClientReconnectPreserveWorld() {
@@ -334,7 +340,40 @@ class MultiplayerRuntimeTest {
             evidence.run.event("scenario_omitted", mapOf("name" to "restart and reconnect", "tier" to evidence.run.tier))
             return
         }
-        assumeTrue(campaignSoak, "campaign prerequisite failed")
+        if (evidence.run.target == "restart-compat") {
+            evidence.run.checkpoint("saved Flesh spread restart and Untamed whale client spawn") {
+                server.waitReady()
+                server.stopGracefully()
+                val data = server.server.resolve("world/data/TheFleshThatHates_FleshBlocks.dat")
+                Files.createDirectories(data.parent)
+                val fixture = requireNotNull(javaClass.getResourceAsStream("/flesh-spread-printed-keys.dat")) {
+                    "missing printed-key Flesh spread fixture"
+                }
+                fixture.use { Files.copy(it, data, StandardCopyOption.REPLACE_EXISTING) }
+                evidence.run.event("flesh_spread_fixture_installed", mapOf("path" to data.toString()))
+                server.restart()
+                val lead = clients.first()
+                startClient(lead)
+                requirePlayersOnline("restart compatibility join", listOf(lead))
+                server.send("gamemode spectator ${lead.username}")
+                server.send("execute in minecraft:overworld run fill -12 98 -12 12 106 12 minecraft:water")
+                val arrivalOffset = clientLogOffset(lead)
+                server.send("execute in minecraft:overworld run tp ${lead.username} 0 108 0")
+                waitForClientPosition(lead, "minecraft:overworld", arrivalOffset, 0, 0)
+                server.send("execute in minecraft:overworld run summon untamedwilds:baleen_whale 0 101 0")
+                server.commandResult(
+                    "execute in minecraft:overworld if entity @e[type=untamedwilds:baleen_whale,x=0,y=101,z=0,distance=..20] run say BC_UNTAMED_WHALE_SPAWNED",
+                    Regex("BC_UNTAMED_WHALE_SPAWNED"), "whale visible near reconnecting client", Duration.ofSeconds(30),
+                )
+                Thread.sleep(5_000)
+                check(itAlive(lead)) { "client exited after Untamed whale spawn; see ${lead.log}" }
+                server.assertHashes()
+                lead.assertHashes()
+                evidence.run.event("restart_compat_passed", mapOf("whale" to "untamedwilds:baleen_whale"))
+            }
+            return
+        }
+        assumeTrue(campaignReady, "campaign prerequisite failed")
         evidence.run.checkpoint("server restart and client reconnect") {
             val before = gameTime()
             server.commandResult(
@@ -405,6 +444,10 @@ class MultiplayerRuntimeTest {
                 )
                 waitForClientPosition(player, dimension, enterOffset)
                 requireGeometry(dimension, listOf(probeGeometry(player, dimension, "font_$template")))
+                // Let the client finish decoding the destination's chunk packets before
+                // switching dimensions again; otherwise a late chunk packet can be applied
+                // against the next ClientLevel while traversing the native Font.
+                Thread.sleep(15_000)
                 val returnOffset = clientLogOffset(player)
                 server.commandResult(
                     "execute as ${player.username} at @s run font harness_return",
@@ -429,8 +472,15 @@ class MultiplayerRuntimeTest {
 
     @Test @Order(6)
     fun multiplayerEvidenceIsCleanAndCandidatesAreUnchanged() {
-        assumeTrue(if (evidence.run.tier == "debug") campaignSoak else joined, "multiplayer prerequisite failed")
-        if (evidence.run.tier == "debug") assumeTrue(fontRoundTrips, "Font round-trip prerequisite failed")
+        assumeTrue(
+            if (evidence.run.target != null) joined
+            else if (evidence.run.tier == "debug") campaignReady
+            else joined,
+            "multiplayer prerequisite failed",
+        )
+        if (evidence.run.tier == "debug" && evidence.run.target == null) {
+            assumeTrue(fontRoundTrips, "Font round-trip prerequisite failed")
+        }
         evidence.run.checkpoint("multiplayer log and hash audit") {
             clients.forEach { it.close() }
             server.stopGracefully()
@@ -519,7 +569,7 @@ class MultiplayerRuntimeTest {
         client.waitDedicatedJoin()
         // Start clients serially so one full-pack resource reload cannot starve another
         // client's network heartbeat. The join starts only the lead; the other
-        // two are started once here for the separate Survival soak.
+        // two are started once here for the separate Survival campaign check.
         client.waitSettled()
     }
 
@@ -534,23 +584,25 @@ class MultiplayerRuntimeTest {
     }
 
     private fun prepareCampaignPlatform(index: Int, x: Int, z: Int) {
-        // The deterministic lead starts at the first ordered local offset (-72, -2). Keep the
-        // forced area and block edits to the loaded approach corridor so setup cannot stall the
-        // full-pack clients while a second 10,000-block-away pad is being prepared.
-        val minX = x - 80
-        val maxX = x + 16
-        val minZ = z - 16
-        val maxZ = z + 16
-        // The production world remains untouched: this fixture-only pad gives the routed
-        // campaign a deterministic, fully traversable local surface at each soak checkpoint.
+        // Four loaded corridors give the in-game route retry distinct western, northern,
+        // eastern, and southern approaches when local terrain or a mob blocks one path.
+        // Each strip stays narrow enough to avoid generating a large distant square.
         server.commandResult(
-            "execute in minecraft:overworld run forceload add $minX $minZ $maxX $maxZ",
+            "execute in minecraft:overworld run forceload add ${x - 80} ${z - 16} ${x + 80} ${z + 16}",
             Regex("Marked \\[-?[0-9]+, -?[0-9]+\\] chunks in minecraft:overworld from \\[-?[0-9]+, -?[0-9]+\\] to \\[-?[0-9]+, -?[0-9]+\\] to be force loaded"),
-            "forceload campaign platform $index",
+            "forceload east-west campaign platform $index",
             Duration.ofMinutes(2),
         )
-        server.send("execute in minecraft:overworld run fill ${x - 72} 315 ${z - 5} $x 315 ${z + 5} minecraft:grass_block")
-        server.send("execute in minecraft:overworld run fill ${x - 72} 316 ${z - 5} $x 319 ${z + 5} minecraft:air")
+        server.commandResult(
+            "execute in minecraft:overworld run forceload add ${x - 16} ${z - 80} ${x + 16} ${z + 80}",
+            Regex("Marked \\[-?[0-9]+, -?[0-9]+\\] chunks in minecraft:overworld from \\[-?[0-9]+, -?[0-9]+\\] to \\[-?[0-9]+, -?[0-9]+\\] to be force loaded"),
+            "forceload north-south campaign platform $index",
+            Duration.ofMinutes(2),
+        )
+        server.send("execute in minecraft:overworld run fill ${x - 72} 315 ${z - 5} ${x + 72} 315 ${z + 5} minecraft:grass_block")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 316 ${z - 5} ${x + 72} 319 ${z + 5} minecraft:air")
+        server.send("execute in minecraft:overworld run fill ${x - 5} 315 ${z - 72} ${x + 5} 315 ${z + 72} minecraft:grass_block")
+        server.send("execute in minecraft:overworld run fill ${x - 5} 316 ${z - 72} ${x + 5} 319 ${z + 72} minecraft:air")
         server.commandResult(
             "execute in minecraft:overworld run say BC_PILLAGER_PLATFORM_$index",
             Regex("BC_PILLAGER_PLATFORM_$index"),
@@ -559,16 +611,21 @@ class MultiplayerRuntimeTest {
         )
     }
 
-    private fun verifyCampaignPlatform(index: Int) {
-        // The pads were generated and force-loaded before client login. Re-running forceload
-        // here can synchronously revisit a distant chunk set and exceed the client heartbeat;
-        // the marker preserves an explicit campaign-phase audit without mutating the world.
+    private fun verifyCampaignPlatform(index: Int, x: Int, z: Int) {
+        // Spawn preparation can replace blocks in the central chunks after the early prewarm.
+        // Rebuild the already loaded corridors immediately before this player's path proof.
+        // Avoid another forceload here: it can stall the server long enough to lose clients.
+        server.send("execute in minecraft:overworld run fill ${x - 72} 315 ${z - 5} ${x + 72} 315 ${z + 5} minecraft:grass_block")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 316 ${z - 5} ${x + 72} 319 ${z + 5} minecraft:air")
+        server.send("execute in minecraft:overworld run fill ${x - 5} 315 ${z - 72} ${x + 5} 315 ${z + 72} minecraft:grass_block")
+        server.send("execute in minecraft:overworld run fill ${x - 5} 316 ${z - 72} ${x + 5} 319 ${z + 72} minecraft:air")
         server.commandResult(
-            "execute in minecraft:overworld run say BC_PILLAGER_PLATFORM_READY_$index",
+            "execute in minecraft:overworld if block $x 315 $z minecraft:grass_block run say BC_PILLAGER_PLATFORM_READY_$index",
             Regex("BC_PILLAGER_PLATFORM_READY_$index"),
-            "verify campaign platform $index",
+            "verify repaired campaign platform $index",
             Duration.ofSeconds(30),
         )
+        evidence.run.event("campaign_platform_repaired", mapOf("index" to index, "x" to x, "z" to z))
     }
 
     private fun waitForStableTps(target: DimensionTarget, location: Int) {

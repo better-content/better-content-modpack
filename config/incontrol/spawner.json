@@ -18,5 +18,691 @@
         "structuretags": "minecraft:village"
       }
     }
+  },
+  {
+    "mob": "untamedwilds:aardvark",
+    "persecond": 0.001,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 2
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/aardvark" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:newt",
+    "persecond": 0.001,
+    "attempts": 20,
+    "amount": {
+      "minimum": 2,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/newt" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:snake",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/snake" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:softshell_turtle",
+    "persecond": 0.0015,
+    "attempts": 20,
+    "amount": {
+      "minimum": 2,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/softshell_turtle" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:tortoise",
+    "persecond": 0.0015,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/tortoise" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:tarantula",
+    "persecond": 0.001,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/tarantula" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:opossum",
+    "persecond": 0.0005,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 2
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/opossum" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:bison",
+    "persecond": 0.003,
+    "attempts": 20,
+    "amount": {
+      "minimum": 3,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/bison" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:boar",
+    "persecond": 0.004,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/boar" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:camel",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/camel" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:hippo",
+    "persecond": 0.0015,
+    "attempts": 20,
+    "amount": {
+      "minimum": 2,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/hippo" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:rhino",
+    "persecond": 0.0015,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 2
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/rhino" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:wildebeest",
+    "persecond": 0.003,
+    "attempts": 20,
+    "amount": {
+      "minimum": 3,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/wildebeest" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:bear",
+    "persecond": 0.003,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/bear" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:big_cat",
+    "persecond": 0.004,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/big_cat" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:hyena",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 3,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/hyena" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:large_snake",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/large_snake" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:monitor",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 2
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/monitor" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:terror_bird",
+    "persecond": 0.001,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 2
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/terror_bird" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:bear",
+    "persecond": 0.001,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/bear" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "maxheight": 48,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:spitter",
+    "persecond": 0.001,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/spitter" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "maxheight": 48,
+      "sturdy": true
+    }
+  },
+  {
+    "mob": "untamedwilds:football_fish",
+    "persecond": 0.001,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/football_fish" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:shark",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/shark" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:manatee",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 2,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/manatee" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:sunfish",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/sunfish" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:trevally",
+    "persecond": 0.004,
+    "attempts": 20,
+    "amount": {
+      "minimum": 3,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/trevally" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:triggerfish",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/triggerfish" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:whale_shark",
+    "persecond": 0.0005,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/whale_shark" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:baleen_whale",
+    "persecond": 0.0005,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/baleen_whale" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:king_crab",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/king_crab" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:spadefish",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 3,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/spadefish" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:sawfish",
+    "persecond": 0.001,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 2
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/sawfish" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:arowana",
+    "persecond": 0.0015,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/arowana" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:catfish",
+    "persecond": 0.003,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/catfish" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:giant_salamander",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/giant_salamander" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:manatee",
+    "persecond": 0.0005,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/manatee" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:spadefish",
+    "persecond": 0.002,
+    "attempts": 20,
+    "amount": {
+      "minimum": 2,
+      "maximum": 3
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/spadefish" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 8,
+      "maxlocal": 4,
+      "inwater": true
+    }
+  },
+  {
+    "mob": "untamedwilds:sawfish",
+    "persecond": 0.0005,
+    "attempts": 20,
+    "amount": {
+      "minimum": 1,
+      "maximum": 1
+    },
+    "conditions": {
+      "dimension": "minecraft:overworld",
+      "and": { "biometags": "kubejs:untamed_spawn/sawfish" },
+      "mindist": 24,
+      "maxdist": 96,
+      "maxthis": 3,
+      "maxlocal": 2,
+      "inwater": true
+    }
   }
 ]

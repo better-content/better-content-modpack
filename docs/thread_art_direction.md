@@ -31,7 +31,7 @@ The 52 card scenes and teaching definitions are maintained in
 [`art-grammar.txt`](../../mod_source/better-content-threads/authoring/art-grammar.txt)
 contains the shared generation prompt. Exact prompts, original image-generation paths,
 reviewed masters, contact sheets, and hashes are retained in
-`/home/dev/workspace_artifacts/reviews/better-content-threads/20260912-discovery-redesign/`.
+`/home/dev/workspace_artifacts/reviews/journal-art-20260927/`.
 
 `authoring/prepare_art.py REVIEW_BUNDLE` creates deterministic runtime derivatives and
 facsimile model overrides. It does not generate new artwork. Visually inspect every

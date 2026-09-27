@@ -1,0 +1,9 @@
+{
+  "exclusions": [
+    "minecraft:gameplay/fishing",
+    "netherdepthsupgrade:gameplay/failed_fishing",
+    "netherdepthsupgrade:gameplay/lava_fishing",
+    "netherdepthsupgrade:gameplay/nether_fishing",
+    "untamedwilds:entities/baleen_whale"
+  ]
+}

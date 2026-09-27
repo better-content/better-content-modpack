@@ -54,5 +54,23 @@
     ],
     "spawntype": "natural",
     "result": "deny"
+  },
+  {
+    "mob": [
+      "thalassophobia:sunfish",
+      "thalassophobia:catfish",
+      "thalassophobia:big_catfish",
+      "thalassophobia:shark",
+      "thalassophobia:bull_shark",
+      "thalassophobia:goblin_shark",
+      "thalassophobia:hammerhead_shark",
+      "thalassophobia:whale_shark",
+      "thalassophobia:whale",
+      "minecraft:camel",
+      "minecraft:panda",
+      "minecraft:polar_bear"
+    ],
+    "spawntype": "natural",
+    "result": "deny"
   }
 ]

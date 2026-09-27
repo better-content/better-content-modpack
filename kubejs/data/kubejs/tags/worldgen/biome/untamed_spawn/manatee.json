@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:is_jungle",
+    "minecraft:cold_ocean",
+    "minecraft:lukewarm_ocean",
+    "minecraft:mangrove_swamp",
+    "minecraft:warm_ocean"
+  ]
+}

@@ -175,8 +175,6 @@ brewinandchewin:scarlet_cheese_wedge
 brewinandchewin:scarlet_pierogi
 brewinandchewin:sweet_berry_jam
 brewinandchewin:vegetable_omelet
-burnt:baked_apple
-burnt:ember_berries
 cataclysm:amethyst_crab_meat
 cataclysm:blessed_amethyst_crab_meat
 cataclysm:lionfish
@@ -622,3 +620,17 @@ ubesdelight:tocino
 ubesdelight:tosilog
 ubesdelight:ube
 ubesdelight:ube_cake_slice
+untamedwilds:chum
+untamedwilds:food_aardvark_cucumber
+untamedwilds:food_bear_cooked
+untamedwilds:food_bear_raw
+untamedwilds:food_hakarl
+untamedwilds:food_hemlock_stew
+untamedwilds:food_pachyderm_cooked
+untamedwilds:food_pachyderm_raw
+untamedwilds:food_pemmican
+untamedwilds:food_turtle_cooked
+untamedwilds:food_turtle_raw
+untamedwilds:food_turtle_soup
+untamedwilds:material_blubber
+untamedwilds:material_fat

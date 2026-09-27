@@ -35,6 +35,12 @@ for sacks, awnings, doormats, feeding troughs, thatch, and wattle-and-daub, whil
 coal provides the ordinary fire-pit route. Explicitly bamboo-, flax-, food-, or
 magic-themed content remains tied to its own material.
 
+An Overworld cave start can gather loose rock or flint, twigs, and hanging roots
+without an onboarding kit. Four hanging roots make one canvas, which binds a
+primitive hand axe. Cave floors also hold occasional fallen oak wood and rare
+azalea trees. These resources recur in newly generated caves; the chosen spawn
+point does not receive a guaranteed cache.
+
 ## Era 1 — Hand Workshop and Tinkers' Construct
 
 Ore separation starts here rather than at the furnace. Use a String Mesh by hand

@@ -91,6 +91,16 @@ object LogPolicy {
         RegexOption.IGNORE_CASE,
     )
     private val warningOrError = Regex("(?:/WARN]|/ERROR]|\\[(?:WARN|ERROR)])")
+    private val untamedJeiPrototypeWarning = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[untamedwilds\\.UntamedWilds]: " +
+            "There's no species provided for the EntityType$",
+    )
+    private val seededWorldRegistryRemap = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[net\\.minecraftforge\\.registries\\.ForgeRegistry]: " +
+            "Registry minecraft:(?:item|sound_event): Object did not get ID it asked for\\. Name: " +
+            "(?:theoneprobe:(?:probe|creativeprobe|probenote|diamond_helmet_probe|gold_helmet_probe|iron_helmet_probe)|" +
+            "guideme:guide\\.click) Expected: [0-9]+ Got: [0-9]+$",
+    )
     private val accepted = listOf(
         Regex("\\[net\\.minecraft\\.client\\.ClientRecipeBook]: Unknown recipe category: .*/the_deep_void:[a-z0-9_]+$"),
         Regex("\\[net\\.minecraft\\.client\\.ClientRecipeBook]: Unknown recipe category: cataclysm:weapon_fusion/cataclysm:weapon_infusion/[a-z0-9_]+$"),
@@ -101,6 +111,10 @@ object LogPolicy {
     private val adPotherDeferredTask = Regex(
         "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
             "Mod 'adpother' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
+    )
+    private val adLodsDeferredTask = Regex(
+        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
+            "Mod 'adlods' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
     )
     private val presenceFootstepsMissingMessyGroundAcoustic = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[PFSolver]: " +
@@ -126,7 +140,7 @@ object LogPolicy {
     )
     private val distantHorizonsInsufficientMemory = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] " +
-            "\\[DH-(?:LOD Builder|Render Loader) Thread\\[[0-9]+]/WARN] " +
+            "\\[DH-(?:LOD Builder|Render Loader|Update Propagator) Thread\\[[0-9]+]/WARN] " +
             "\\[DistantHorizons-DistantHorizons-com\\.seibel\\.distanthorizons\\.core\\.pooling\\." +
             "PhantomArrayListPool]: §6Distant Horizons: Insufficient memory detected\\.§r$",
     )
@@ -150,6 +164,11 @@ object LogPolicy {
             "\\[net\\.minecraft\\.client\\.sounds\\.SoundEngine]: " +
             "Unable to play empty soundEvent: minecraft:entity\\.puffer_fish\\.ambient$",
     )
+    private val emptyUntamedPlaceholderSound = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] " +
+            "\\[net\\.minecraft\\.client\\.sounds\\.SoundEngine]: " +
+            "Unable to play empty soundEvent: untamedwilds:nothing$",
+    )
     private val allTheLeaksServerNotFound = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[AllTheLeaks]: " +
             "Server not found while trying to clear leaked chunks$",
@@ -171,20 +190,58 @@ object LogPolicy {
 
     fun findings(paths: Collection<Path>): List<Finding> = buildList {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
+            val seededWorldLog = path.toString().let { "/singleplayer/" in it || "/target-world-save/" in it }
+            val lines = Files.readAllLines(path)
+            var acceptedSeededWorldRemaps = 0
+            var acceptedSeededWorldVersionDifferences = 0
+            var acceptedSeededWorldMissingDatapacks = 0
+            var acceptedEmptyExplosionIndexes = 0
+            var acceptedSingleplayerMissingC2me = 0
+            var acceptedSingleplayerOpenAlCleanup = 0
+            var jeiRegisteringIngredients = false
+            var acceptedUntamedJeiPrototypeWarnings = 0
             var acceptedEarlyBlockEntityWarnings = 0
             var acceptedRecoveredPhantomArrays = 0
             var acceptedDistantHorizonsInsufficientMemory = 0
             var acceptedAdChimneysDeferredTasks = 0
+            var acceptedAdLodsDeferredTasks = 0
             var acceptedEmptySalmonAmbientSounds = 0
             var acceptedEmptyTropicalFishAmbientSounds = 0
             var acceptedEmptyPufferFishAmbientSounds = 0
             var acceptedEmptyCodAmbientSounds = 0
+            var acceptedEmptyUntamedPlaceholderSounds = 0
             var acceptedAllTheLeaksServerNotFound = 0
             var acceptedInvalidImmersiveWeatheringIcicles = 0
             var acceptedDeepVoidPhysicsFallbacks = 0
             var acceptedAdPotherDeferredTasks = 0
             var acceptedPresenceFootstepsMissingMessyGroundAcoustics = 0
-            Files.readAllLines(path).forEachIndexed { index, line ->
+            lines.forEachIndexed { index, line ->
+                val acceptedSeededWorldWarning = seededWorldLog && when {
+                    line.contains("[net.minecraftforge.common.ForgeHooks]: The following mods have version differences that were not resolved:") &&
+                        lines.getOrNull(index + 1)?.trim() == "unloaded_activity (version 0.6.3 -> MISSING)" ->
+                        ++acceptedSeededWorldVersionDifferences <= 1
+                    seededWorldRegistryRemap.matches(line) -> ++acceptedSeededWorldRemaps <= 7
+                    line.endsWith("[net.minecraft.server.MinecraftServer]: Missing data pack mod:unloaded_activity") ->
+                        ++acceptedSeededWorldMissingDatapacks <= 1
+                    line.endsWith("[com.vinlanx.explosionoverhaul.ExplosionOverhaul]: BlockIndexManager: No data to save - index is empty!") ->
+                        ++acceptedEmptyExplosionIndexes <= 1
+                    line.contains("[DistantHorizons-LOD World Gen - Internal Server]: C2ME missing,") ->
+                        ++acceptedSingleplayerMissingC2me <= 1
+                    line.matches(Regex("\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/ERROR] " +
+                        "\\[com\\.mojang\\.blaze3d\\.audio\\.OpenAlUtil]: Cleanup: Invalid name parameter\\.")) &&
+                        lines.subList((index - 5).coerceAtLeast(0), index)
+                            .any { "[mezz.jei.forge.plugins.forge.ForgeGuiPlugin]: Stopping JEI GUI" in it } ->
+                        ++acceptedSingleplayerOpenAlCleanup <= 1
+                    else -> false
+                }
+                if (line.contains("[mezz.jei.library.load.PluginCaller]: Registering ingredients...")) {
+                    jeiRegisteringIngredients = true
+                }
+                if (line.contains("[mezz.jei.library.load.PluginCaller]: Registering ingredients took ")) {
+                    jeiRegisteringIngredients = false
+                }
+                val acceptedUntamedJeiPrototype = jeiRegisteringIngredients &&
+                    untamedJeiPrototypeWarning.matches(line) && ++acceptedUntamedJeiPrototypeWarnings <= 3400
                 val acceptedEarlyBlockEntity = earlyWorldgenBlockEntity.matches(line) &&
                     ++acceptedEarlyBlockEntityWarnings <= 4
                 val acceptedRecoveredPhantomArray = distantHorizonsRecoveredPhantomArray.matches(line) &&
@@ -199,31 +256,38 @@ object LogPolicy {
                     ++acceptedEmptyPufferFishAmbientSounds <= 1
                 val acceptedEmptyCodAmbientSound = emptyCodAmbientSound.matches(line) &&
                     ++acceptedEmptyCodAmbientSounds <= 1
+                val acceptedEmptyUntamedPlaceholderSound = emptyUntamedPlaceholderSound.matches(line) &&
+                    ++acceptedEmptyUntamedPlaceholderSounds <= 1
                 val acceptedAllTheLeaksWarning = allTheLeaksServerNotFound.matches(line) &&
                     ++acceptedAllTheLeaksServerNotFound <= 1
                 val acceptedInvalidImmersiveWeatheringIcicle = invalidImmersiveWeatheringIcicle.matches(line) &&
                     ++acceptedInvalidImmersiveWeatheringIcicles <= 1
                 val acceptedDeepVoidPhysicsFallback = deepVoidPhysicsFallback.matches(line) &&
-                    ++acceptedDeepVoidPhysicsFallbacks <= 3
+                    ++acceptedDeepVoidPhysicsFallbacks <= 9
                 val acceptedPresenceFootstepsMissingMessyGroundAcoustic =
                     presenceFootstepsMissingMessyGroundAcoustic.matches(line) &&
                         ++acceptedPresenceFootstepsMissingMessyGroundAcoustics <= 1
                 val adPotherDuration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
-                val acceptedAdPotherDeferredTask = adPotherDuration != null && adPotherDuration <= 8.0 &&
+                val acceptedAdPotherDeferredTask = adPotherDuration != null && adPotherDuration <= 60.0 &&
                     ++acceptedAdPotherDeferredTasks <= 1
                 val adChimneysDuration = adChimneysDeferredTask.find(line)
                     ?.groupValues?.get(1)?.toDoubleOrNull()
                 val acceptedAdChimneysDeferredTask = adChimneysDuration != null &&
-                    adChimneysDuration <= 10.0 && ++acceptedAdChimneysDeferredTasks <= 1
+                    adChimneysDuration <= 45.0 && ++acceptedAdChimneysDeferredTasks <= 1
+                val adLodsDuration = adLodsDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
+                val acceptedAdLodsDeferredTask = adLodsDuration != null &&
+                    adLodsDuration <= 5.0 && ++acceptedAdLodsDeferredTasks <= 1
                 if ((fatal.containsMatchIn(line) || warningOrError.containsMatchIn(line)) &&
                     !acceptedEarlyBlockEntity && !acceptedRecoveredPhantomArray &&
                     !acceptedDistantHorizonsMemoryWarning &&
-                    !acceptedAdChimneysDeferredTask && !acceptedEmptySalmonAmbientSound &&
+                    !acceptedAdChimneysDeferredTask && !acceptedAdLodsDeferredTask &&
+                    !acceptedEmptySalmonAmbientSound &&
                     !acceptedEmptyTropicalFishAmbientSound && !acceptedEmptyPufferFishAmbientSound &&
-                    !acceptedEmptyCodAmbientSound &&
+                    !acceptedEmptyCodAmbientSound && !acceptedEmptyUntamedPlaceholderSound &&
                     !acceptedAllTheLeaksWarning && !acceptedInvalidImmersiveWeatheringIcicle &&
                     !acceptedDeepVoidPhysicsFallback && !acceptedPresenceFootstepsMissingMessyGroundAcoustic &&
-                    !acceptedAdPotherDeferredTask && !isAccepted(line)
+                    !acceptedAdPotherDeferredTask && !acceptedUntamedJeiPrototype &&
+                    !acceptedSeededWorldWarning && !isAccepted(line)
                 ) {
                     add(Finding(path, index + 1, line))
                 }

@@ -4,7 +4,6 @@
 #	Tags:         '#forge:stone'
 #	IDs:          'minecraft:stone'
 Blocks = [
-	"burnt:sooty_mud_bricks",
 	"excavated_variants:red_sandstone_black_shale",
 	"excavated_variants:red_sandstone_brassroot",
 	"excavated_variants:red_sandstone_coal_measures",

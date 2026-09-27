@@ -1,8 +1,0 @@
-{
-  "primitive_soil": "burnt:recovering_grass",
-  "acceptable_soils": [
-    "dirt_like"
-  ],
-  "substitute_soil": "dynamictrees:grass_block",
-  "only_if_loaded": "burnt"
-}

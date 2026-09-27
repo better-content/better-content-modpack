@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "AGENTS.md"
-hash = "86ba110d76de3864df3a20944301606eeb564cc0f8fa41051145f528116c1682"
+hash = "073a78b9fafb82136b20c143786783786fe89dbdc2405c84454a6260fbcf6898"
 
 [[files]]
 file = "LICENSE"
@@ -22,11 +22,11 @@ hash = "da41baa38cd86e7388841af4095cb06b9f6f3a1c883cedfe6f0632ea129f4f06"
 
 [[files]]
 file = "config/Deep Void Config.toml"
-hash = "1f15aef233dd6718e27b225e522b69c3cb4dcc9bc4a93f1ec5d7771a2031b579"
+hash = "5222b972674d9ef70ae3461ad50e8e5ec60c692fbee0be2601cc84d0af47357d"
 
 [[files]]
 file = "config/DistantHorizons.toml"
-hash = "3fb49ca8e92d386e6099b9c152baf8ced4e07978dfac21718b972fff198a0b8f"
+hash = "81e1d4c27280604ebf031d4b8b93f18ad0da3d9bd52b15cb5573a68ac02ee4fb"
 
 [[files]]
 file = "config/Hexerei-client.toml"
@@ -701,10 +701,6 @@ file = "config/adpother/Bounds.cfg"
 hash = "11fdff1090b0d37bc9f4024fbb6a531812a5e3cbee019c67badff517a22ddf0c"
 
 [[files]]
-file = "config/adpother/Breakables/burnt$burnt_blocks.cfg"
-hash = "b0d01384bf8b6a4ad4f46afe4a88926db4c9b5570ba96c7d72b3d06f70289089"
-
-[[files]]
 file = "config/adpother/Breakables/charcoal_block.cfg"
 hash = "3f3cd9a7a78d2131c34fb2688214b684be60a39e0cc98707c27a8db4a5e29108"
 
@@ -727,82 +723,6 @@ hash = "64da73c2b1897879e6b9e207587022b3eacc2d6cfadda55511a2e035d1ae8026"
 [[files]]
 file = "config/adpother/Breakables/sulfur_ore.cfg"
 hash = "79526a65b96aa190f541fc36a63c6911529f08156fbdb566234be81477ba6b68"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_bamboo.cfg"
-hash = "b486dba57ba672eda55a823cd6ebeef1489303a409ef585c84c2c5cc9bfc89e1"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_doors.cfg"
-hash = "badcee803549d6841a677b840460f5e3b02412bd454ef7e24a174604ad3ab5ce"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_fence_gates.cfg"
-hash = "6a9bd1d562b419afcc697c2e7b117c843011f539c60b5fd29e73c26cd5befd87"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_fences.cfg"
-hash = "6196d69e3a7235b9b17c3f05690e9e77ed1a56f44190cf60cc0a268dc7e4cd44"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_grass.cfg"
-hash = "49e246ea4875806610d55762f9229182694ab6e93e9b380ea1aff7a9f5bcddb2"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_leaves.cfg"
-hash = "8843525a5945c02c2f95b001b25d2434feac8763d0d2a77059c077205a01e24c"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_logs.cfg"
-hash = "c70e073457b0003932504c590d23e886aab6ffb59dc65dfd8da9f0223e5a6dc9"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_planks.cfg"
-hash = "84ef12cf975214e19a541b641b27c40426da452b9ce3231ed9b8e37492c280ff"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_slabs.cfg"
-hash = "6c5cd29b074cfe89bc26ad021a0913865f09a65b22d15a9d701fb551c8d3f87b"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_stairs.cfg"
-hash = "6356843052d5db50ea03e958e8ae9525937328c2964498acb3943d1d5c16306c"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_stripped_logs.cfg"
-hash = "88ba968e34bd87d9d89a6f5158ce67547cc75daff6ff52c01a898294f915373a"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_stripped_wood.cfg"
-hash = "5891f60fde5d7869eec952abc1b6cf5ea0dbfadd447f4e9b8fb549c3e24249f4"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$burning_wood.cfg"
-hash = "95ee2e2d3d7e9a1f04fc4de02eeffb6ee4430dd42b90c34072ccf2b2329bcbe2"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$smoldering_carpet.cfg"
-hash = "695e47268f0d2f3b3d8b825be4173a8b7851491e286c8973a3f1b64f37d50b01"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$smoldering_hay.cfg"
-hash = "48e5487b782ed94c50d297a31542c2038046a6f037eb3d15b7d7758cb7d3b87e"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$smoldering_wool.cfg"
-hash = "ab3dcfdb6d151fb8eb3497292d307bf1c23f4544b16f4c646885c53fc91f71ad"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$stairs_fire.cfg"
-hash = "78105ac80070ffb5985299aa327ea1546b925dcce68d09646c107fa8cf32fcc9"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$tall_grass_fire.cfg"
-hash = "d969fd2d5cc1672191d65b0d4e9bd4b2a3b3b26a9e894b712523ab40228a18f8"
-
-[[files]]
-file = "config/adpother/Emitters/burnt$wood_fire.cfg"
-hash = "be5297ac7795968ae533050bd8ab4120d763c91530bbbc760da61c65da7fce1e"
 
 [[files]]
 file = "config/adpother/Emitters/cold_sweat$boiler.cfg"
@@ -2238,11 +2158,15 @@ hash = "e2f591923558d17aa4bd65859e30b388083de43a58b7642dbeb4863e53d7d145"
 
 [[files]]
 file = "config/better-content-log4j2.xml"
-hash = "4e1d5d9cda82914626fa3e4229dba0b18cf81933c78e41afb76c3290c8b88fcf"
+hash = "278054f32d9f0806dbaff0ea5949021213755efe0033fc16627cda3e30dc1939"
 
 [[files]]
 file = "config/better_content_economy-common.toml"
 hash = "70762c2c9d053a71b1b3a897bd753a8bc31c783504f9a14e907c4095958d86f0"
+
+[[files]]
+file = "config/better_content_fire-common.toml"
+hash = "2fd5f115152a60b1f7e805c568dd9325747c31b03dd3b025a66da6ac7e704512"
 
 [[files]]
 file = "config/better_content_fixes-common.toml"
@@ -2255,10 +2179,6 @@ hash = "c43d25d96dec063e4bb82262fda71a25a44cd3db492f59d3c921915cb99f4dfa"
 [[files]]
 file = "config/bettergrass.json5"
 hash = "9c6bdb0007965992d947bd13ac253bbd7e60b570c79ae35df64ce392778afea7"
-
-[[files]]
-file = "config/biomespawnpoint/spawnbiomes.txt"
-hash = "0b082cd73d169909ea1ccc6bb5581640bbcb810b5ffbb9165220ee250a7c1c1f"
 
 [[files]]
 file = "config/bloodmagic-client.toml"
@@ -2287,10 +2207,6 @@ hash = "f7ebe31b918fc9e8894cb196abcec57e5a6e364e8a49f2c90da8ac815b6455f4"
 [[files]]
 file = "config/buildinggadgets2-common.toml"
 hash = "cd34bf34ff49c47333b435be7523979037df203f9572bfd0ea5b5f961c86445f"
-
-[[files]]
-file = "config/burnt_basic_config.toml"
-hash = "72f327e71503567ae29b844f7e34013a05759dafaf0b361b232a7fe118d57ff0"
 
 [[files]]
 file = "config/c2me.toml"
@@ -2570,7 +2486,7 @@ hash = "f1d7bd782ae6603b429b3e5b7ce958deea5d2876fc03fc5e9d71feb7d7e152cb"
 
 [[files]]
 file = "config/globalgamerules-common.toml"
-hash = "6c4bd80e9ce25be05155c6deeb75d69f29c7b44bf88b98e0ebe223ab994c6b85"
+hash = "33ea27736af82a472f1170b1cf79b5ff96c24d0590a5363e457d358f26945420"
 
 [[files]]
 file = "config/goety/goety-attributes.toml"
@@ -2686,11 +2602,11 @@ hash = "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
 
 [[files]]
 file = "config/incontrol/spawn.json"
-hash = "87bbd8ea8827aff4cc1cc9be8fb2ede57b98248129d8baa27c0f5505ea9a7be3"
+hash = "ac7a24c2fe3b1ca52b94aec7e66b9736e1e3e9a62a354144b613ba7ee3c39389"
 
 [[files]]
 file = "config/incontrol/spawner.json"
-hash = "2b91472004a719016bec4ff1a83772f5c6e62d50883e2fcda0ddc6b07ba559dc"
+hash = "4b42b6bd60c47de877c46b478917668c45d6dc32c8595a52674650609ce5e86b"
 
 [[files]]
 file = "config/incontrol/structure.json"
@@ -3406,7 +3322,7 @@ hash = "dd7415a83aef00c385628fe1756a0a97738b8dffd00f30effd08dd5e1da27431"
 
 [[files]]
 file = "config/structure_generation_improver.json"
-hash = "8567524a0e6b5fb71030f1822c7dc7dea85efb8e37fea964ebf543febd43bc45"
+hash = "7029e49b2c026c6ad24b9f5c04b4378a36ac27d5fde7f07b717f9da53fcdeb8a"
 
 [[files]]
 file = "config/structurify.json"
@@ -3547,6 +3463,10 @@ hash = "8a3779330d045a34baa0223686ca84c61f872db10b5b5660d8aadfc345ed8601"
 [[files]]
 file = "config/unearthed-common.toml"
 hash = "931647ded604d3a9f2ae50daea575f41b3c73c887e6976dc327dca9346988298"
+
+[[files]]
+file = "config/untamedwilds-common.toml"
+hash = "cf03b690988650d19e0d483690d192f34a15d3d987d8bba95a39379b50c49dd5"
 
 [[files]]
 file = "config/valkyrienskies/clockwork/client.toml"
@@ -4067,30 +3987,6 @@ hash = "ddf8562531528c8e81df00436f2c16c915bf67b559d0e6f84cd64d15d80757bc"
 [[files]]
 file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/bloodmagic_nether_soil.json"
 hash = "b91a53dbbfc912e7471fa38d2322405b2e4c1cb09c20458c05cb1eed21ab5a40"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/burnt_burnt_dirt.json"
-hash = "10a7d89400e6baf705639a04cba75650864a5707a57158dbccc11153cf3dc7db"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/burnt_burnt_grass.json"
-hash = "79b61e6d18bc3ba394e32d4c397726771761b86a243350b85b0ec7996a359ddf"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/burnt_burnt_grassy_earthen_clay.json"
-hash = "1e41ca1082f52c8c6a5ef1e9eb17a52fe55b37d84afaba4ab916899f573d9ae6"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/burnt_burnt_grassy_sandy_d_irt.json"
-hash = "b32e8e6454fdc8ee0526ca0c88341ca327f29171baa1c98c975630f5e773035d"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/burnt_recovering_grass.json"
-hash = "13847f6a024f955295c8de2b1e6323a9e697b706dbeb80cdf2174764954362c2"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/burnt_semi_burnt_dirt.json"
-hash = "87b0e2394d3a8029936515b83335c630230a74c3f27a638a1a5f5bea3d28ec79"
 
 [[files]]
 file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/fallout_wastelands__rockydirt.json"
@@ -4762,7 +4658,7 @@ hash = "6615719b7f8cddfd5de5957922aebaabd6c4270b4750ce0fdc8978778910a54d"
 
 [[files]]
 file = "defaultconfigs/solcarrot-server.toml"
-hash = "bae9ba8a253f55dec0a644668323488269f881e6992eb3bfd36821290b7e0f14"
+hash = "913d8ddf359704e5a9a10d4f459fb3a4fee86145b473af04c11188d55aea31a4"
 
 [[files]]
 file = "defaultconfigs/sophisticatedbackpacks-server.toml"
@@ -4778,7 +4674,7 @@ hash = "f13459ed12f9f5cc5018b4480ccd1641d5a094c20c15e6056e5545d89fd4289a"
 
 [[files]]
 file = "defaultconfigs/systemic_salience-server.toml"
-hash = "41f0dffe2586eb20724edfbb545cbd7aca55632c13e19be095b8cd8163ea7b07"
+hash = "b196f15c5bfc4396a1ad9257b382506751d7b4e3da5513e23dc8b73c0ee9b4d7"
 
 [[files]]
 file = "defaultconfigs/tacz-server.toml"
@@ -5279,10 +5175,6 @@ hash = "8fa23d5b496ce107ae84d76fdd2e31bac38128a2497b987c088a6c992983a5df"
 [[files]]
 file = "kubejs/assets/born_in_chaos_v1/textures/particle/dimanim.png.mcmeta"
 hash = "e0d4407282aee203ce161c92982c3a0eeca0277ab2cdb1f7547efe2a44a5b770"
-
-[[files]]
-file = "kubejs/assets/burnt/models/block/double_tall_grass_fire.json"
-hash = "fb1bcf9c4b40da6f2bc8ec23120f668ac035617be4b3cf7272e4a608c7605b48"
 
 [[files]]
 file = "kubejs/assets/burnt/textures/block/burnt_high_grass.png"
@@ -7497,10 +7389,6 @@ file = "kubejs/client_scripts/guidance/10_hover_annotations.js"
 hash = "6458b711eb208ab70b0b2d80f57eec64bb9c487a070ceafc9207c0945d2c0b2d"
 
 [[files]]
-file = "kubejs/client_scripts/policy/hide_burnt_content.js"
-hash = "1dd1e8e01339a90fb91cd57e509aa2b6f5eb48b2effe200258a9f7e419a6255f"
-
-[[files]]
 file = "kubejs/client_scripts/policy/hide_completed_tcon_tools.js"
 hash = "c0f449eec4223c8a6267b4061e440a4ab8866f287d1cb4e9adc1e12171343a0c"
 
@@ -7511,6 +7399,10 @@ hash = "42e988361a565e7d607322d5ee4ff462f712c5dba0a4566db990af9996ac01e0"
 [[files]]
 file = "kubejs/client_scripts/policy/hide_excavated_variants.js"
 hash = "869d510c4d93e1bb639d494492128414ad9c082c29bde45261573a265887d4eb"
+
+[[files]]
+file = "kubejs/client_scripts/policy/hide_fire_content.js"
+hash = "58128494024fabff81a3d0d9ac62fa7d76bbe08eda0260e5808e52b38044ae37"
 
 [[files]]
 file = "kubejs/client_scripts/policy/hide_native_ordinary_spirits.js"
@@ -7538,7 +7430,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "23177cb07f86a1cedd2f3ddf54ae75b33e03eb2667dc5bfcac1d4d7a6bcafd87"
+hash = "09a477953530fa5e63657184983f9b763b47466b185407a6d79caf695d297e36"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -7550,7 +7442,7 @@ hash = "44bfb3367e89c9be6b49acec305163f7018fa7aa8e0fdf22ea4e101f7a6c3bb3"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "d67608061ae70fb7a8bdd7c39b9c1a9adea01a2d761a797e641d34b892f848fc"
+hash = "a6837460f26f0853577d4bd049b457cac8ea12d3c185c879bb22446703b7c805"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -7981,26 +7873,6 @@ file = "kubejs/data/bloodmagic/tags/items/arc/tool.json"
 hash = "0c615d27d6e7932dab70603593b0d4b2098f06e605c17c7e8549a677ec84ef94"
 
 [[files]]
-file = "kubejs/data/burnt/recipes/gunpowder_recipe.json"
-hash = "ac7bd6b6a6625a7f036590d6109c972b94e528886556b1b750718344a791c0d3"
-
-[[files]]
-file = "kubejs/data/burnt/tags/blocks/burning_logs.json"
-hash = "feeee052535b6c1ea2d5e5aabc6be34363ffcadf5d4eef74e2e6a16c907d694e"
-
-[[files]]
-file = "kubejs/data/burnt/tags/blocks/fire_resistant.json"
-hash = "a0e80f3d8d0febc667906c60ec8271eeb426e7570a9f603369c6719731cee123"
-
-[[files]]
-file = "kubejs/data/burnt/tags/blocks/grass_blocks.json"
-hash = "7074c60bd920f1cbe63acafaac34fc04e3c8dd28f0340e94cc0539189dd7e084"
-
-[[files]]
-file = "kubejs/data/burnt/tags/blocks/plants_will_burn.json"
-hash = "7caac7b91c45a001e38f86b0b192cd85e8dee27771904e16c48c9a03f07be966"
-
-[[files]]
 file = "kubejs/data/c/tags/blocks/farmland.json"
 hash = "848215839b807a22ebee5b2a86359061e328155a66bdebfded2ab794d3842da1"
 
@@ -8050,7 +7922,7 @@ hash = "b8b519c697fc5d79cedef0d3f444ddd46fd45306d4b19495e24cec06865e3d96"
 
 [[files]]
 file = "kubejs/data/cataclysm/tags/worldgen/biome/has_structure/ruined_citadel_biomes.json"
-hash = "a41200aeceff976eaa2187378388b326c7acb8e8a7d533cf0e74200533286a01"
+hash = "bef4d172fc1bfb34d342e79090726c4a0c272dd404783c3ea022b992e0e0415e"
 
 [[files]]
 file = "kubejs/data/cataclysm/tags/worldgen/biome/has_structure/soul_black_smith_biomes.json"
@@ -8198,7 +8070,11 @@ hash = "d790bb50b7f8ae777b2994bd1a9fce5695296e64e875b8698c166818255a99d4"
 
 [[files]]
 file = "kubejs/data/diet/tags/items/proteins.json"
-hash = "ef4dd877a01e5d1e70af9de07f5057569f16bea19135d20ecc1de062611f95ca"
+hash = "9d93b46cf19f8e4de178bd97f56418b1bc1a4e88c97d047ea82224ced9271da3"
+
+[[files]]
+file = "kubejs/data/diet/tags/items/vegetables.json"
+hash = "86663eca839b60b58736defb1ee28e035728469daaf186e0a6ce504b007a1447"
 
 [[files]]
 file = "kubejs/data/dtaether/loot_tables/blocks/aerfin_leaves.json"
@@ -8575,6 +8451,10 @@ hash = "9a0dcd1a1aab6df6a4b61ac118f1aca985947b180f304f3edec21ec84bf784f5"
 [[files]]
 file = "kubejs/data/emi/index/stacks/jumbo_furnace.json"
 hash = "1d3cf5a74900fee31bc64fd7e8f94e5cdb3afa716dced052f268f88d4d22335c"
+
+[[files]]
+file = "kubejs/data/emi_loot/emi_loot_data/table_exclusions.json"
+hash = "e05dce55ec60d1c3e040b6141cdbedff35bb1d6d4e1ce64cb86c83fe5ac6314f"
 
 [[files]]
 file = "kubejs/data/endermanoverhaul/tags/worldgen/biome/end_islands_spawns.json"
@@ -9147,6 +9027,142 @@ hash = "f0adfcf36a75654ffda883610416c18ef9a88b49390e9c4e0abe2e1916098255"
 [[files]]
 file = "kubejs/data/kubejs/tags/worldgen/biome/temperate_spawn_biomes.json"
 hash = "311c371a292b46df03b8aa716bfa94226aad34699a422c57ceb3e15eb36e301d"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/aardvark.json"
+hash = "96c9787c5b5576b0272fe74ca90513e1ac20f5f21fd6a9e82d72aa563457954b"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/arowana.json"
+hash = "5a90c64442500b135f62d501722fda697509ab5fefa9decd0f257cb5518b5065"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/baleen_whale.json"
+hash = "171718b2eddb7db888ff99d7cecb3ebe037714159b982dc7eb1e2744e201e855"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/bear.json"
+hash = "9fd63918214d6290a242d01a89a5124531a6fe7c6c9d8bbcaa7a03515c5ab3eb"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/big_cat.json"
+hash = "f1d03cc8269f3d3c18e3599e904574f435dbae7021bf6779646615205f514519"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/bison.json"
+hash = "c13da1a7320ae396dc6bfc71b2aa3a1b84d03db22bdebdbf55541e5be61e259e"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/boar.json"
+hash = "3c474834e386058fbdb9196d24ecc462a6f0e080a4398169731baf0d03fedf40"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/camel.json"
+hash = "9fa0c77e6849f1f8ef81633eb782984fba01432ce4fc97a8fd3fd10402ff7f8e"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/catfish.json"
+hash = "f7ace14da88d572b9d091260a75b5cb04996f4720c78a0697e01648a42ae4544"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/football_fish.json"
+hash = "1ccf2527609e10808a55ba5c09fe31cffbe8b9bf20b2e27b8b73a51cfa24af2b"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/giant_salamander.json"
+hash = "1b1a49fd6c4f20d73b9571aef4d59701e2c0b1f5650c156fbbf3edf0a92bd6dc"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/hippo.json"
+hash = "3f27441afc2827c6f541a4816768187d595703f0b3fc1a05a40b30d5d45b2d37"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/hyena.json"
+hash = "83630beb92650470509523d06ebc25b1d89680fb6c8df0025ab9eb899d388840"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/king_crab.json"
+hash = "39d3a1ae2e50ab9c52a846ab42abb9e981c93e48789a8aca902697ff539d9e46"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/large_snake.json"
+hash = "5a90c64442500b135f62d501722fda697509ab5fefa9decd0f257cb5518b5065"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/manatee.json"
+hash = "368c6b6c3f18d72b7bcc821a9a2f63bd4b3979fced43ad65689de1c768a0aebc"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/monitor.json"
+hash = "a986907c6771fb8e95be9e5d3f40f9fe49fe6262804296a2347b26ccffe616df"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/newt.json"
+hash = "f4779a760d77db9c90235b4db72c5320461a72279d89778af5c66b49af6ac1e6"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/opossum.json"
+hash = "1ac4fc566fd376f282904134fd5563838e462cb9d3e87c525e4ebc7487a8b086"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/rhino.json"
+hash = "04e3e4cf498b14066c583d8cc9ef876ba74d2a70b245ac3b64edf2e69b8168b0"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/sawfish.json"
+hash = "77bdb9e9bed675ae48da3b3192b338a5583b7efba358acc810a747a056d93923"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/shark.json"
+hash = "8d67da36b0baa5cf58e0c1cb5ce2ed7b7ded301355f41688eec0ee78ebd500ba"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/snake.json"
+hash = "681c5059cf897cdafb90ca0ded76223ef129a113291f65035d1bfc7b01d3d011"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/softshell_turtle.json"
+hash = "f7ace14da88d572b9d091260a75b5cb04996f4720c78a0697e01648a42ae4544"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/spadefish.json"
+hash = "52c7d7d56fe7ab452067f5a74ed21332340abe8dd6e89caeaba965b7b3314cf4"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/spitter.json"
+hash = "e7ce1a956d03d3aa920391af6da0842800ffe4b71c7dcc67ed9d7a7e36764ba8"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/sunfish.json"
+hash = "1ccf2527609e10808a55ba5c09fe31cffbe8b9bf20b2e27b8b73a51cfa24af2b"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/tarantula.json"
+hash = "23264c5122fbc6c5767eead6a429dd8a2d861811c4a2280d3b9fdab0c2217d6e"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/terror_bird.json"
+hash = "c13da1a7320ae396dc6bfc71b2aa3a1b84d03db22bdebdbf55541e5be61e259e"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/tortoise.json"
+hash = "159fd9607141792bed7980195b83906449ae0a6a67cd48de4f4d8c06a1e366a5"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/trevally.json"
+hash = "a7e5d51e5be6771ac8dfea03227f82aae88a069a87f190f5c446100ab5233a63"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/triggerfish.json"
+hash = "cc09e9a1124aa71a09d3100529ac3f7946e1baf22fe42c57526897ef2cf3b4d2"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/whale_shark.json"
+hash = "6ab55879f4f013cbfa990fd47bb6df9a55b1b865e766b7dce48f0caf695c3d3c"
+
+[[files]]
+file = "kubejs/data/kubejs/tags/worldgen/biome/untamed_spawn/wildebeest.json"
+hash = "96c9787c5b5576b0272fe74ca90513e1ac20f5f21fd6a9e82d72aa563457954b"
 
 [[files]]
 file = "kubejs/data/kubejs/tinkering/materials/definition/dragonsteel_fire.json"
@@ -10065,8 +10081,44 @@ file = "kubejs/data/tconstruct/tinkering/tool_definitions/war_pick.json"
 hash = "f412350267f938cecc85bd3932216049c5932a7da89b3f89939366b3c0cd581d"
 
 [[files]]
+file = "kubejs/data/thalassophobia/forge/biome_modifier/big_catfish_biome_modifier.json"
+hash = "5888bac9e7a116bc9958aa4c5dd9c69ae793e1e480a32c9b04bbac10e7a660b6"
+
+[[files]]
+file = "kubejs/data/thalassophobia/forge/biome_modifier/bull_shark_biome_modifier.json"
+hash = "32d80cdac20d638c351c1602579f53571416af2893579ada92308128f0a3cbcf"
+
+[[files]]
+file = "kubejs/data/thalassophobia/forge/biome_modifier/catfish_biome_modifier.json"
+hash = "3ba1f6c11478a0aef0fb1df74adacff5d49a81e26eeb2fb83d45f4ba0c84a097"
+
+[[files]]
+file = "kubejs/data/thalassophobia/forge/biome_modifier/goblin_shark_biome_modifier.json"
+hash = "e1f914c28303e45e5e0d283a719b14acb3bfc70c50c856aca97acb20b9f85bfb"
+
+[[files]]
+file = "kubejs/data/thalassophobia/forge/biome_modifier/hammerhead_shark_biome_modifier.json"
+hash = "47c268b02c08ca839243dd1e6df5a177ed461ce882ae6c99fc3869a56795bd55"
+
+[[files]]
 file = "kubejs/data/thalassophobia/forge/biome_modifier/leech_biome_modifier.json"
 hash = "57c8899b0c2b6c266bc114548695279e406eb483e5877ea29bb74775737cc950"
+
+[[files]]
+file = "kubejs/data/thalassophobia/forge/biome_modifier/shark_biome_modifier.json"
+hash = "8241a66ca3275303ddac211448b59048631f1b70de243a498bac68a327b03e03"
+
+[[files]]
+file = "kubejs/data/thalassophobia/forge/biome_modifier/sunfish_biome_modifier.json"
+hash = "92f793476f5fad49a34e03e1149501988137ee16352997fb58e2f2d4a899d34d"
+
+[[files]]
+file = "kubejs/data/thalassophobia/forge/biome_modifier/whale_biome_modifier.json"
+hash = "52793b0b56939331b1517abf80624590405731b80fc054da11002e497f094a0f"
+
+[[files]]
+file = "kubejs/data/thalassophobia/forge/biome_modifier/whale_shark_biome_modifier.json"
+hash = "1fb7a9eea72ca5c1c3e3bcc1957fb5652f005ea11ed5a87d68f566e40d0498b4"
 
 [[files]]
 file = "kubejs/data/the_bumblezone/advancements/teleportation/teleport_out_of_bumblezone.json"
@@ -10247,6 +10299,30 @@ hash = "84f8ef25744ab6338e8a756d0f945d109943358baf4fc9622d02833138afc39d"
 [[files]]
 file = "kubejs/data/unearthed/tags/items/regolith_usable.json"
 hash = "14a1980ca5d8fa8cb2963b564e6cf204f9325251cf0317e87806af841214939c"
+
+[[files]]
+file = "kubejs/data/untamedwilds/forge/biome_modifier/apex_predator.json"
+hash = "83f3a9c77ff5645899ccb4d0d1bef26f5fe7304c2b847e725984ad32f789c061"
+
+[[files]]
+file = "kubejs/data/untamedwilds/forge/biome_modifier/burrow.json"
+hash = "b67d0680fcc4e874286269a32c96286cc36fa8d82726c0450d8c10586eec0f8b"
+
+[[files]]
+file = "kubejs/data/untamedwilds/forge/biome_modifier/dense_water.json"
+hash = "1647c413bda04d8a5004f0c564ca64822299835612090c599f0e9b2b64c1db03"
+
+[[files]]
+file = "kubejs/data/untamedwilds/forge/biome_modifier/herbivores.json"
+hash = "7b2b6ea999a6075c872f0e8a2b22ae656baf9d78b604f31b445bc9538f1b37be"
+
+[[files]]
+file = "kubejs/data/untamedwilds/forge/biome_modifier/ocean_rare.json"
+hash = "b9bcb14ca850ba121b9cb5c7c0ea1b99c4c8905a673bdb450163114d910ccf09"
+
+[[files]]
+file = "kubejs/data/untamedwilds/forge/biome_modifier/sessile.json"
+hash = "ad7ed8478c89f4718bbcd9257026652c5b772f152829bacda739b89c983fbacf"
 
 [[files]]
 file = "kubejs/data/valkyrienskies/vs_mass/compat/create_vibrant_vaults.json"
@@ -10497,6 +10573,10 @@ file = "kubejs/server_scripts/compat/reviewed/replaceable_deepslate.js"
 hash = "cdadd1a859c50c4f30afa283252ed053e100bafc58d9f12617a939df56adae98"
 
 [[files]]
+file = "kubejs/server_scripts/compat/reviewed/untamed_thalassophobia_pearls.js"
+hash = "6c121a40e55c58972918f1b55a77be1cff0f22ce658e34a899fcfbc6581dd578"
+
+[[files]]
 file = "kubejs/server_scripts/policy/closed_end_dragon_replacements.js"
 hash = "304a3d7ad28a7124ae11c6750b7b79e7ce746572265d2ac04977b8ca1e943ec0"
 
@@ -10697,7 +10777,7 @@ metafile = true
 
 [[files]]
 file = "mods/airtight-machinery-0.1.0.jar"
-hash = "eb79fc14eb34ed41da1d5603888ecf39c41c0cad6580abe78be3ef0d5bebf201"
+hash = "271086ff4699310c1d37b3a0dc706c72e25252437a4cfaae5afefddd25c2b89e"
 
 [[files]]
 file = "mods/alexs-caves.pw.toml"
@@ -10736,7 +10816,7 @@ metafile = true
 
 [[files]]
 file = "mods/arcane-chunk-loaders-0.1.0.jar"
-hash = "6199021cc7b6373756f7ad0dacc146719db5bc70cada7af181809c1ff7f1f186"
+hash = "d8c32b51a1af9e46d986580cbc24d72b7f896b080151b7ffac1f8c6ca0dbefc9"
 
 [[files]]
 file = "mods/architectury-api.pw.toml"
@@ -10745,7 +10825,7 @@ metafile = true
 
 [[files]]
 file = "mods/arena-challenges-0.1.0.jar"
-hash = "becca3d317283ba7a8f9ef635436652fa0ece46d47a774bee7ce3a16f46b699f"
+hash = "baaacce39b59462b9aec4693fed3d3fc0295f3ef006048b4ccdc1475d9e48875"
 
 [[files]]
 file = "mods/armor-of-the-ages.pw.toml"
@@ -10784,7 +10864,11 @@ metafile = true
 
 [[files]]
 file = "mods/better-content-economy-1.0.1.jar"
-hash = "ac29430442d013fd2674a74a409975c0192dfa0072d79bdef518928accd221b8"
+hash = "342f2af3388359e6693519efe6223ca307ca14d5f89716a12d3e613083163733"
+
+[[files]]
+file = "mods/better-content-fire-0.1.0.jar"
+hash = "0eb5e19e6514164558909e747fe3c7bf3b2f83b1552aa28caf681c42703535f4"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.9.jar"
@@ -10801,11 +10885,6 @@ hash = "dce240b028cb5969c1aa69414d644e36dc2f47c3b8bc7e85e45d16a60f98a616"
 [[files]]
 file = "mods/bettergrassify.pw.toml"
 hash = "032166733ae274b06188c8d7a469f03bf2a49a627f02b55e91dcb9192a913242"
-metafile = true
-
-[[files]]
-file = "mods/biome-spawn-point.pw.toml"
-hash = "f7fb7dcb758d9937322ac9ac4881e1646e87e9eceaa10b3061ed5bf4756e9a78"
 metafile = true
 
 [[files]]
@@ -10835,20 +10914,11 @@ metafile = true
 
 [[files]]
 file = "mods/bumblezone-cultivars-0.1.0.jar"
-hash = "d2d3497158792518459f7b3546afe418fb443270db123d5b8876b5d24567f509"
+hash = "d611a4700cd85152c36931a590810d0d4aec9ba341369a57c3c2a941b4be6a37"
 
 [[files]]
 file = "mods/buried-encounters-0.1.0.jar"
 hash = "c8967ec54209b73fd97f7ad0a75489e75ebc560133051100db2824021431a693"
-
-[[files]]
-file = "mods/burnt-basic.pw.toml"
-hash = "b7ba82d5d94720bc94238bcc365d1b93335b090805057f413a43b5f17eab5f9b"
-metafile = true
-
-[[files]]
-file = "mods/burnt-grass-compat-0.1.0.jar"
-hash = "1b29157e095830340cd30f1b70984d39044cb743f70d8f3eabfe6006f07ace9d"
 
 [[files]]
 file = "mods/cataclysm.pw.toml"
@@ -10867,7 +10937,7 @@ metafile = true
 
 [[files]]
 file = "mods/class-selector-1.0.0.jar"
-hash = "0ff1ff7181a50719db52f74a4066d19d7dfb0eb04c048f0c0dd02ad2f8564247"
+hash = "2a568751852850e7fb4ac23318da94c88c261ea7c399bbfa710e28fbc961bdfa"
 
 [[files]]
 file = "mods/cloth-config.pw.toml"
@@ -10922,6 +10992,11 @@ metafile = true
 [[files]]
 file = "mods/coroutil.pw.toml"
 hash = "9f2bb57e05bad305f03c25c275c6d11e952835a41b2da68dba10a0bd1f3f6261"
+metafile = true
+
+[[files]]
+file = "mods/create-aquatic-ambitions.pw.toml"
+hash = "76c45d397433d35d337e4a7ff523800b9d39a3c9b5e3dd56e3db6d7cfd31e675"
 metafile = true
 
 [[files]]
@@ -10993,7 +11068,7 @@ metafile = true
 
 [[files]]
 file = "mods/dimension-drink-1.0.0.jar"
-hash = "3da4170028a2a09e866d22429675ec92b215ab1c95248f42c5c391cc37d88919"
+hash = "e2cef0bf116feaedfadd30cbda7b729b306bd5cd4b7a01f4488325f0060099e3"
 
 [[files]]
 file = "mods/distant-horizons.pw.toml"
@@ -11022,6 +11097,10 @@ metafile = true
 file = "mods/dynamic-trees-for-natures-spirit.pw.toml"
 hash = "9c74ac86374e5f8769d846cdd4a2937652edc98b12f3508641ede0b4fbad18c4"
 metafile = true
+
+[[files]]
+file = "mods/dynamic-trees-hexerei-1.0.1.jar"
+hash = "4cb1a0de63420158ceec6274f46f1cb92cb21b4f60e354e5f491ce03c749c7f7"
 
 [[files]]
 file = "mods/dynamic-trees-malum-1.0.1.jar"
@@ -11144,7 +11223,7 @@ metafile = true
 
 [[files]]
 file = "mods/exploration-tick-governor-0.1.0.jar"
-hash = "3d295479ff3e4b90fd2b610edc734e9855eb3726e353b4b22da07c938e3b060d"
+hash = "e9958c3e3eb0017ea0f48b4dfa6cba623e55cefba5ca542369758f02627d182b"
 
 [[files]]
 file = "mods/explosion-overhaul-a-new-level-of-destruction.pw.toml"
@@ -11317,7 +11396,7 @@ metafile = true
 
 [[files]]
 file = "mods/immersive-weathering-sampler-0.1.0.jar"
-hash = "8849fd4b71c9d716d98a2d387edee856f0441b94517048e8fd7f2490196fdecf"
+hash = "c5fcead1d8b185acc10f900629295b5b0ae1bb271dc7c610d0a52f7ed5ac6a11"
 
 [[files]]
 file = "mods/improved-village-placement.pw.toml"
@@ -11557,7 +11636,7 @@ metafile = true
 
 [[files]]
 file = "mods/pillager-campaigns-0.5.4.jar"
-hash = "39a8b2021ba6764a6a37a528961422d3181c1a0781555ca0ba806aa69cbc2431"
+hash = "7246a4af9962d751fb7eb2586325e7c9da446856858642f463b8837184d4e6b9"
 
 [[files]]
 file = "mods/ping-wheel.pw.toml"
@@ -11649,7 +11728,7 @@ metafile = true
 
 [[files]]
 file = "mods/rail-beetle-0.1.0.jar"
-hash = "51847448e2a377f5b61c1324cd7a67d6fedc92802f41874dc3806d0b3f0d541d"
+hash = "528c9b5a8458f812f4fd8884b179a33830500ee0d3ff144eeceb023497881ce4"
 
 [[files]]
 file = "mods/ratlantis-logistics-0.1.0.jar"
@@ -11676,15 +11755,15 @@ metafile = true
 
 [[files]]
 file = "mods/realistic-placement-preview-0.1.0.jar"
-hash = "55e586251804658666c3c3a9ab1a1918483d9a24f0b3f61797f5b8df7806538d"
+hash = "9c438ea8dfd3bb43766c8de4812dada507cb9b75e733b16f61d77fddd7580d57"
 
 [[files]]
 file = "mods/regolith-farmland-0.1.0.jar"
-hash = "5132651c59923720d3c54d25c9b12d5f121130c5d3841c6ee1453956daae479b"
+hash = "86e46be2e5d554edd0278b95b3b4f15e8ee801cd103164ac2839e290f0ba12c3"
 
 [[files]]
 file = "mods/rehooked-intro-hooks-0.1.0.jar"
-hash = "d0153be7ba8b1936fc105aa6eb3826d53a0233df11c13215942517755ad30b88"
+hash = "c96923c25f845bab6e550527a7663710cd21fb005a9ae9fb23cae7242cff5536"
 
 [[files]]
 file = "mods/rehooked.pw.toml"
@@ -11722,7 +11801,7 @@ hash = "adfe0a0164e9ef80b49ef5f1ead3d8641f8043ae28bf32955490144d9312bd97"
 
 [[files]]
 file = "mods/runtime-data-dumper-0.1.0.jar"
-hash = "d6950d0f2bb9c595e7dae43db89d952840562474d9e4db4ee4e3168f1d9ba15c"
+hash = "9ba0879b120d2d1821dafc43b10995d55e08dc2d029202ff7a46ffd4e100385d"
 
 [[files]]
 file = "mods/satako-library.pw.toml"
@@ -11835,7 +11914,7 @@ metafile = true
 
 [[files]]
 file = "mods/systemic-salience-0.1.1.jar"
-hash = "353980876a8c080b1bfe4e6554063a4fbd70b7a1409a61fe4cacf24693673b10"
+hash = "97c3a68b6e397a96813162541cfba402d353794dad1854cf78eaed7b507b78ef"
 
 [[files]]
 file = "mods/tacz-turrets.pw.toml"
@@ -12007,6 +12086,16 @@ hash = "0547690bac129b6e27f0dc2b959877521a7631c5d4735d044bf154b3fce8f3e2"
 metafile = true
 
 [[files]]
+file = "mods/untamed-wilds-au-naturel.pw.toml"
+hash = "a82156ee7b7a69e12f5521909f2bf47f17d38e536458f77826928bd798729149"
+metafile = true
+
+[[files]]
+file = "mods/upgrade-aquatic.pw.toml"
+hash = "62ca870c6d8ce9ac3721d25e4f283d0916f0fd673260c497e109b03ad7b304fe"
+metafile = true
+
+[[files]]
 file = "mods/valhelsia-core.pw.toml"
 hash = "d8d6daa50fdac46d3176520da691a94c6905465c164dd07458ac02338ae2f62f"
 metafile = true
@@ -12018,7 +12107,7 @@ metafile = true
 
 [[files]]
 file = "mods/village-walls-1.0.0.jar"
-hash = "6fd722b0690540f64ccb0c0dbf5676b53e2b88b0fa0b4138bbbac7436eea11db"
+hash = "3c630a1757ee0f1db9dc30ad7b278178cecb7381263a1da263673c635d95ed3b"
 
 [[files]]
 file = "mods/wares.pw.toml"
@@ -12027,7 +12116,7 @@ metafile = true
 
 [[files]]
 file = "mods/water-survival-1.1.0.jar"
-hash = "303931bee1ae46dbdf71fa9e5a064a8cc4ebd21d448181519010ce5745ad78f8"
+hash = "ae3831cfca2e327922e7d449824cd7985f4de3a1e920be3d60677a040ef80108"
 
 [[files]]
 file = "mods/weather-storms-tornadoes.pw.toml"
@@ -12036,7 +12125,7 @@ metafile = true
 
 [[files]]
 file = "mods/world-lifecycle-manager-0.1.0.jar"
-hash = "f9c66fdf8233e9b6c97c09302ab0760e843a05169ed448b4fea00c73881ce7af"
+hash = "ed91ca000f13a3248f5312485212ce8692ea9a96b4364bad532bb4478ad68bfd"
 
 [[files]]
 file = "mods/xl-packets.pw.toml"
@@ -12073,7 +12162,7 @@ hash = "12df4f25dcb02a37e4ac60e7bdd0910aa3e37f72df42b2590dc52dbf4fe7dd80"
 
 [[files]]
 file = "pack-test-queue.main.kts"
-hash = "74851df7dab886f679956868011bd64fd92910c9663ad92b68f49cacc18cfe58"
+hash = "e5f933e79868f2a10a1547fa5dc2365f4f7dcd9b426994448b54440f3dbe4c1e"
 
 [[files]]
 file = "package.sh"

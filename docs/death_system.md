@@ -62,7 +62,10 @@ especially for solo and multiplayer travel, distant deaths, and repeated deaths.
    priority over ordinary non-forced bed and anchor changes. The native death
    screen remains visible because `do_immediate_respawn=false` in
    [Global Game Rules](../config/globalgamerules-common.toml). The configured
-   `spawn_radius=256` applies where no personal spawn governs the return.
+   World Lifecycle Manager sets the initial shared spawn in a configured temperate biome for
+   fresh worlds and sets its spawn radius to zero. The player's permanent personal respawn can
+   be selected in any biome; `spawn_radius=256` remains the configured fallback on established
+   worlds where no personal spawn governs the return.
    Arena Challenges has a separate match-return handler described below; its
    interaction with Class Selector needs runtime confirmation.
 
@@ -105,7 +108,7 @@ state. Each name links to its owning source repository.
 | [Arena Challenges](https://github.com/better-content/arena-challenges) | Bounded duels and trials with loaned kits; player death resolves a match, restores saved inventory and XP, and requests an arena return on respawn |
 | [Dimension Drink](https://github.com/better-content/dimension-drink) | Font run ends on final death; actual transport back to the origin is a separate successful-return event |
 | [Player Traces](https://github.com/better-content/player-traces) | Records recent pose as a final-death echo and marks respawn in the world; ongoing Door play still generates traces |
-| [Better Content Threads](https://github.com/better-content/better-content-threads) | Injury discoveries, final-cause death tips, and a lineage memory that survives ordinary death |
+| [Learning Surfaces](https://github.com/better-content/better-content-threads) | Injury discoveries, final-cause death tips, and a lineage memory that survives ordinary death |
 | [Dynamic Survival HUD](https://github.com/better-content/dynamic-survival-hud) | Shows semantic-zero danger and changed injury risk without owning the health or injury calculation |
 | [Systemic Salience](https://github.com/better-content/systemic-salience) | Diet, temperature, thirst, and stamina interactions that change survival margins; resets its temporary metabolic state on death clone |
 | [Realistic Ores](https://github.com/better-content/realistic-ores) | Geographically distinct finite deposits and dangerous Hotstone; makes travel and return matter |
@@ -160,7 +163,7 @@ boundary. [Enhanced AI](../mods/enhanced-ai.pw.toml),
 [In Control](../mods/in-control.pw.toml), [The Deep Void](../mods/the-deep-void.pw.toml),
 [Lost Cities](../mods/the-lost-cities.pw.toml), and
 [Cataclysm](../mods/cataclysm.pw.toml) affect where and how dangerous encounters
-occur. [Biome Spawn Point](../mods/biome-spawn-point.pw.toml),
+occur. World Lifecycle Manager selects the initial shared spawn in fresh worlds.
 [Tectonic](../mods/tectonic.pw.toml), [Nature's Spirit](../mods/natures-spirit.pw.toml),
 [Large Ore Deposits](../mods/large-ore-deposits.pw.toml), and
 [Excavated Variants](../mods/excavated-variants.pw.toml) affect the spatial

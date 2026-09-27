@@ -18,13 +18,15 @@ Pack-level tiers run only when explicitly requested:
 
 After inspecting a failed run, use a targeted retry to check a fix without starting every Debug
 scenario. Each retry makes a fresh fixture and records separate `target-*` evidence; it cannot be
-mistaken for a full-tier pass. Supported targets are `join` (Dist or Debug), `font:ratlantis`,
+mistaken for a full-tier pass. Supported targets are `server-ready` (Debug), `join` (Dist or Debug), `font:ratlantis`,
 `font:bumblezone`, `font:aether`, `font:nether`, `fonts`, `dimension:<id>` for a directly
-teleportable dimension, `dimensions`, `campaign-start` (three live encounters without the soak),
-`campaign` (three clients and the full 30-minute soak), and `world-save` (Debug). The
-`campaign-start` fixture disables InControl's unrelated background spawner rules so an ambient
-spawn cannot interrupt path diagnosis; its evidence records this override. Full Debug and
-`campaign` retain the packaged rules. For example:
+teleportable dimension, `dimensions`, `campaign-start` (three live encounters and platform repair),
+`campaign` (three live client encounters), `restart-compat` (saved Flesh spread
+restart and Untamed whale client spawn), `lineage-transition` (Debug lifecycle successor commit
+and archive), `cursed-pyramid` (pinned seed, saved structure record,
+and strict log audit in its surrounding chunks), and `world-save` (Debug). The `campaign-start` fixture
+uses the packaged spawn rules and removes a strip of campaign floor to verify that the
+campaign-phase repair restores pathable geometry. For example:
 
 ```sh
 ./test.main.kts debug --target font:aether --retry-of 20260926T070341Z-1044833
@@ -32,8 +34,8 @@ spawn cannot interrupt path diagnosis; its evidence records this override. Full 
 ```
 
 Targeted runs still perform fast checks and candidate validation, then start only the selected
-runtime fixture and its required setup. They check candidate hashes and process cleanup. Log
-findings are recorded for diagnosis; the full tier retains the strict log audit. If a source fix
+runtime fixture and its required setup. They check candidate hashes, process cleanup, and strict
+logs. Findings are recorded in the target evidence and fail that targeted run. If a source fix
 needs a new JAR, use `./release.main.kts --target font:aether --retry-of RUN_ID` to package once
 and test that target. Finish with complete Dist and Debug runs on those unchanged ZIP hashes.
 
@@ -41,8 +43,8 @@ Dist includes Dev, candidate contracts, a real full-pack client joining a fresh 
 an online player heartbeat, strict logs, and candidate hashes. It does not run dimension travel.
 Debug uses unchanged candidate hashes and adds dedicated-server startup/runtime snapshot, three
 fresh locations per directly teleportable dimension with strict three-sample TPS and Font-only
-direct-travel guards, one lineage transition and archive, the 30-minute three-client campaign
-soak, server restart/client reconnect, four native Font round trips, and singleplayer startup/world
+direct-travel guards, one lineage transition and archive, three live client campaigns,
+server restart/client reconnect, four native Font round trips, and singleplayer startup/world
 boot/save/reopen.
 
 Dist, Debug, and `release.main.kts` share one kernel-backed runner mutex. The
@@ -105,7 +107,7 @@ position check and a client-side dimension/chunk report within 90 seconds. Font-
 require a direct-travel denial guard. Debug
 visits three fresh, pairwise-distant locations per directly teleportable target and always requires three
 consecutive samples at at least 18 mean TPS. The other two clients start only for Debug's
-three-client Survival soak.
+three-client Survival campaign check.
 For terrain dimensions, Debug counts block IDs in 3×3 already loaded chunks at each visit. A
 dimension passes when the combined samples contain at least 64 non-air blocks and 16 blocks from
 its broad expected family. Space and utility dimensions have no terrain threshold. Each of the
@@ -123,8 +125,10 @@ for diagnosis. Candidate hashes are checked again after the multiplayer scenario
 In Debug, the multiplayer fixture then keeps three real clients connected to that same full-pack dedicated
 server in Survival at linear Overworld checkpoints 10,000 blocks apart. The harness-only
 protection control makes each player invulnerable without changing game mode. A routed scout is
-started for each player with no injected route, then the complete pack runs for a 30-minute
-wall-clock soak while server/client liveness, campaign status, game time, and logs are sampled.
+started for each player with no injected route. A rejected terrain path triggers a retry at another
+nearby player position on the prepared platform; each rejected and accepted point is recorded.
+The test confirms that all three clients remain connected and all three encounters are active
+before continuing to restart and log audits.
 This is separate from the isolated Pillager Campaigns development harness and is evidence for the
 packaged modpack candidate.
 

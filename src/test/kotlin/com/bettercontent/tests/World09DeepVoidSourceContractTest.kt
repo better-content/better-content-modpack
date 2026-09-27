@@ -36,6 +36,13 @@ class World09DeepVoidSourceContractTest {
     }
 
     @Test
+    fun `disables the Deep Void wiki book starter grant`() {
+        val config = Files.readString(root.resolve("config/Deep Void Config.toml"))
+        assertTrue(config.contains("[Misc]"))
+        assertTrue(config.contains("GiveWikiBook = false"))
+    }
+
+    @Test
     fun `removes only the pinned release giant skull feature that writes across chunks`() {
         val modifier = mapper.readTree(
             root.resolve("datapacks/worldgen_compat_fixes/data/the_deep_void/forge/biome_modifier/giant_skulls_biome_modifier.json")

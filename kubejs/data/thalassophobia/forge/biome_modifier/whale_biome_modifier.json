@@ -1,0 +1,14 @@
+{
+  "type": "forge:remove_spawns",
+  "biomes": [
+    "cold_ocean",
+    "deep_cold_ocean",
+    "deep_frozen_ocean",
+    "deep_ocean",
+    "frozen_ocean",
+    "ocean"
+  ],
+  "entity_types": [
+    "thalassophobia:whale"
+  ]
+}
