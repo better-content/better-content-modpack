@@ -28,7 +28,7 @@
 	"Spawn Sirens Chance" = 10000
 
 [Mobs.DeathWorms]
-	"Death Worm Spawn Weight" = 1
+	"Death Worm Spawn Weight" = 0
 
 [Mobs.Cockatrice]
 	"Spawn Cockatrices" = true
