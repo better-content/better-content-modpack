@@ -12376,7 +12376,7 @@ hash = "e5f933e79868f2a10a1547fa5dc2365f4f7dcd9b426994448b54440f3dbe4c1e"
 
 [[files]]
 file = "package.sh"
-hash = "305ce41501c807df8d548c18bb806adc2e9ee282d36cdcfa826cdcf49ffbaa7c"
+hash = "00b22df139ba2fdb9aef916910f7f41f6686f9ec7f8fe2203b2adecb84e3434a"
 
 [[files]]
 file = "recipe-policies.yml"

@@ -219,6 +219,10 @@
       "primary_role": "presentation",
       "support_state": "not_applicable"
     },
+    "better_content_notifications": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
     "learning_surfaces": {
       "primary_role": "presentation",
       "support_state": "full"
@@ -388,6 +392,10 @@
       "support_state": "not_applicable"
     },
     "create": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "create_aquatic_ambitions": {
       "primary_role": "content",
       "support_state": "not_applicable"
     },
@@ -1430,6 +1438,10 @@
     "untamedwilds": {
       "primary_role": "world",
       "support_state": "full"
+    },
+    "upgrade_aquatic": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
     },
     "useitemonblockevent": {
       "primary_role": "infrastructure",

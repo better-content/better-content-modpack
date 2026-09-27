@@ -33,6 +33,10 @@ loot denylist. Config, guides, trades, worldgen, and custom hooks need focused
 inspection of their owning sources; the generic runtime suite does not assert every
 acquisition edge.
 
+The live pack also classifies Better Content Notifications as presentation,
+Create: Aquatic Ambitions as content, and Upgrade Aquatic as world content.
+Their support state is not yet a claim that their acquisition graphs are fully integrated.
+
 Vanilla potion delivery is an NBT-sensitive cut that cannot be expressed as a
 whole-item selector because `minecraft:potion` also represents plain water.
 Brewing registries and alternative brewing surfaces are disabled; recipes,
