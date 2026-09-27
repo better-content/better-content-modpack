@@ -128,14 +128,14 @@ class HarnessFastTest {
         fun dependencies(repository: String) = mods.single { it.path("repository").asText() == repository }
             .path("dependsOn").map { it.asText() }
         assertEquals(listOf("heat-sync"), dependencies("latent-chemlib"))
-        assertEquals(listOf("better-content-fixes", "dimension-drink"), dependencies("better-content-economy"))
+        assertEquals(listOf("better-content-fixes", "better-content-notifications", "dimension-drink"), dependencies("better-content-economy"))
         assertEquals(
             listOf("better-content-notifications", "dynamic-survival-hud"),
             dependencies("better-content-fixes"),
         )
         assertEquals(listOf("world-lifecycle-manager"), dependencies("class-selector"))
         assertEquals(listOf("better-content-fixes", "downed-player-revival"), dependencies("depth-director"))
-        assertEquals(listOf("better-content-fixes"), dependencies("dimension-drink"))
+        assertEquals(listOf("better-content-fixes", "better-content-notifications"), dependencies("dimension-drink"))
         assertEquals(listOf("downed-player-revival"), dependencies("pillager-campaigns"))
         assertEquals(listOf("downed-player-revival"), dependencies("player-traces"))
         assertEquals(

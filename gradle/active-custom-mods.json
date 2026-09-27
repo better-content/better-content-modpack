@@ -45,6 +45,7 @@
       ],
       "dependsOn": [
         "better-content-fixes",
+        "better-content-notifications",
         "dimension-drink"
       ]
     },
@@ -199,7 +200,8 @@
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-content-fixes"
+        "better-content-fixes",
+        "better-content-notifications"
       ]
     },
     {
