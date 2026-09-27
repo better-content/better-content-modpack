@@ -31,7 +31,7 @@ ServerEvents.recipes(function (event) {
 
         event.remove({ id: 'vs_clockwork:crafting/pneumatics/air_compressor' })
         event.shaped('vs_clockwork:air_compressor', ['PBP', 'GAG', ' C '], {
-            P: 'pneumaticcraft:pressure_tube', T: 'create:shaft',
+            P: 'pneumaticcraft:pressure_tube',
             G: 'pneumaticcraft:compressed_iron_gear', A: 'kubejs:airtight_machine_block',
             C: 'create:brass_casing', B: 'aether:blue_aercloud'
         }).id('kubejs:transport/thermal_pressure/clockwork/air_compressor')

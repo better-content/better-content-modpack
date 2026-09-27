@@ -3,7 +3,10 @@
 ;(function () {
     var SKIP_SPLASHING = {
         'createaddition:rolling/ice': true,
-        'create_confectionery:sugar_cube': true
+        'create_confectionery:sugar_cube': true,
+        // This recipe is explicitly retired by underwater_works; do not warn
+        // while the migration pass scans the original recipe set.
+        'create_aquatic_ambitions:splashing/suspicious_rock': true
     }
     var GRANULAR_INPUTS = {
         'minecraft:gravel': true,

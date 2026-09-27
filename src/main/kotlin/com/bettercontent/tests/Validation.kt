@@ -101,6 +101,13 @@ object LogPolicy {
             "(?:theoneprobe:(?:probe|creativeprobe|probenote|diamond_helmet_probe|gold_helmet_probe|iron_helmet_probe)|" +
             "guideme:guide\\.click) Expected: [0-9]+ Got: [0-9]+$",
     )
+    private val starcatcherInvalidAccessTransformer = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[main/WARN] " +
+            "\\[net\\.minecraftforge\\.fml\\.loading\\.moddiscovery\\.ModFile]: " +
+            Regex.escape("starcatcher-2.2.1-FORGE-1.20.1.jar contains an invalid 'accessTransformers' TOML entry. " +
+                "Should be e.g. accessTransformers = [\"META-INF/accesstransformer.cfg\", " +
+                "\"META-INF/extra_at.cfg\"] or accessTransformers = [] for no ATs. Falling back to default.") + "$",
+    )
     private val accepted = listOf(
         Regex("\\[net\\.minecraft\\.client\\.ClientRecipeBook]: Unknown recipe category: .*/the_deep_void:[a-z0-9_]+$"),
         Regex("\\[net\\.minecraft\\.client\\.ClientRecipeBook]: Unknown recipe category: cataclysm:weapon_fusion/cataclysm:weapon_infusion/[a-z0-9_]+$"),
@@ -215,6 +222,7 @@ object LogPolicy {
             var acceptedDeepVoidPhysicsFallbacks = 0
             var acceptedAdPotherDeferredTasks = 0
             var acceptedPresenceFootstepsMissingMessyGroundAcoustics = 0
+            var acceptedStarcatcherInvalidAccessTransformers = 0
             lines.forEachIndexed { index, line ->
                 val acceptedSeededWorldWarning = seededWorldLog && when {
                     line.contains("[net.minecraftforge.common.ForgeHooks]: The following mods have version differences that were not resolved:") &&
@@ -267,6 +275,9 @@ object LogPolicy {
                 val acceptedPresenceFootstepsMissingMessyGroundAcoustic =
                     presenceFootstepsMissingMessyGroundAcoustic.matches(line) &&
                         ++acceptedPresenceFootstepsMissingMessyGroundAcoustics <= 1
+                val acceptedStarcatcherInvalidAccessTransformer =
+                    starcatcherInvalidAccessTransformer.matches(line) &&
+                        ++acceptedStarcatcherInvalidAccessTransformers <= 1
                 val adPotherDuration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
                 val acceptedAdPotherDeferredTask = adPotherDuration != null && adPotherDuration <= 60.0 &&
                     ++acceptedAdPotherDeferredTasks <= 1
@@ -286,6 +297,7 @@ object LogPolicy {
                     !acceptedEmptyCodAmbientSound && !acceptedEmptyUntamedPlaceholderSound &&
                     !acceptedAllTheLeaksWarning && !acceptedInvalidImmersiveWeatheringIcicle &&
                     !acceptedDeepVoidPhysicsFallback && !acceptedPresenceFootstepsMissingMessyGroundAcoustic &&
+                    !acceptedStarcatcherInvalidAccessTransformer &&
                     !acceptedAdPotherDeferredTask && !acceptedUntamedJeiPrototype &&
                     !acceptedSeededWorldWarning && !isAccepted(line)
                 ) {

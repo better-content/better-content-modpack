@@ -449,6 +449,18 @@ class HarnessFastTest {
     }
 
     @Test
+    fun logPolicyBoundsKnownStarcatcherMetadataWarning(@TempDir root: Path) {
+        val warning = "[11:00:00] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFile]: " +
+            "starcatcher-2.2.1-FORGE-1.20.1.jar contains an invalid 'accessTransformers' TOML entry. " +
+            "Should be e.g. accessTransformers = [\"META-INF/accesstransformer.cfg\", " +
+            "\"META-INF/extra_at.cfg\"] or accessTransformers = [] for no ATs. Falling back to default."
+        val one = root.resolve("one.log").also { it.writeText("$warning\n") }
+        val repeated = root.resolve("repeated.log").also { it.writeText("$warning\n$warning\n") }
+        assertTrue(LogPolicy.findings(listOf(one)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(repeated)).map { it.line })
+    }
+
+    @Test
     fun logPolicyAcceptsOnlyKnownCustomRecipeBookCategoryWarnings(@TempDir root: Path) {
         val known = root.resolve("known-recipe-categories.log").also {
             it.writeText(

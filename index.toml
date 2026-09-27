@@ -7482,7 +7482,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "00dc0c693805c120389079b464f509234a1908865cba241a06e1a361a84ace86"
+hash = "a14cdce6f08c656338db57a09efbf8bb9a1db5908ad76e273cb45d2bf06346a3"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -10830,7 +10830,7 @@ hash = "88fd90e04048f2ecf4466128fe93bc62f7fb49dcb5d048335173c8cf5205eab7"
 
 [[files]]
 file = "kubejs/server_scripts/processing/ore_sifting_and_spouting.js"
-hash = "c204d541aedacb5f560dc7637393ad715691fbff44eb9189c289927ff4981c31"
+hash = "b81d24c0b53ce5ebbec50caacb86f220deae6e7b73e819f1c71dad279b116187"
 
 [[files]]
 file = "kubejs/server_scripts/progression/00_primitive_workshop.js"
@@ -10914,7 +10914,7 @@ hash = "6956c27d83017d5f3a65dcc4a3304e7f8190b9e2cd8f82753c8a879fe6ef46c0"
 
 [[files]]
 file = "kubejs/server_scripts/transport/10_optional_engineering_roots.js"
-hash = "6dcf8f07f85de8eea73df5c8b07a9a06a9f50e90df45d0dc160542bd363b8b1b"
+hash = "038a6f60a6744af93e3bfbfa017975439666a7f95686256dfe26832285899e4a"
 
 [[files]]
 file = "kubejs/server_scripts/transport/20_found_rail_beetles.js"
@@ -11084,7 +11084,7 @@ hash = "2878a3b9254b695875957cb7d8afb6d62549c941d6bbe52cf2a0e11086d220de"
 
 [[files]]
 file = "mods/better-content-fire-0.1.0.jar"
-hash = "634701134328c7ccfd366f74037d260a9fa1d1efd114454edcebe9c21f49bc48"
+hash = "ebc0b7438b00b8ab6773ef4312f7b2110597f1de4c936874b54991e4437bffb3"
 
 [[files]]
 file = "mods/better-content-fixes-0.1.9.jar"
@@ -11289,7 +11289,7 @@ metafile = true
 
 [[files]]
 file = "mods/dimension-drink-1.0.0.jar"
-hash = "fea47b30673c7c0637c54cd792e24b8441a37fca7835e8886965f75b07f317d8"
+hash = "33926d83606845fc8920dfe734234e590545656a1cc95609e9279fc816b4b0b5"
 
 [[files]]
 file = "mods/distant-horizons.pw.toml"
