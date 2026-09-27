@@ -4,7 +4,17 @@
 #	Namespaces:   '<minecraft>'
 #	Tags:         '#forge:stone'
 #	IDs:          'minecraft:stone'
-Blocks = ["goety:chorus_stairs", "goety:chorus_wood_stairs", "goety:corrupt_chorus_stairs", "goety:haunted_stairs", "goety:pine_stairs", "goety:rotten_stairs", "goety:sky_wood_stairs", "goety:steep_stairs", "goety:windswept_stairs"]
+Blocks = [
+	"goety:chorus_stairs",
+	"goety:chorus_wood_stairs",
+	"goety:corrupt_chorus_stairs",
+	"goety:haunted_stairs",
+	"goety:pine_stairs",
+	"goety:rotten_stairs",
+	"goety:sky_wood_stairs",
+	"goety:steep_stairs",
+	"goety:windswept_stairs",
+]
 [Physics]
 	#The maximum weight the block(s) can support both horizontally and vertically.
 	#Range: > 0

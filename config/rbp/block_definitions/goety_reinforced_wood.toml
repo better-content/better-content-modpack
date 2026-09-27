@@ -4,7 +4,23 @@
 #	Namespaces:   '<minecraft>'
 #	Tags:         '#forge:stone'
 #	IDs:          'minecraft:stone'
-Blocks = ["goety:chorus_planks", "goety:compacted_pine_planks", "goety:compacted_windswept_planks", "goety:corrupt_chorus_planks", "goety:haunted_planks", "goety:pine_planks", "goety:rotten_planks", "goety:sky_wood_planks", "goety:soiled_chorus_planks", "goety:soiled_chorus_planks_heavy", "goety:soiled_corrupt_chorus_planks", "goety:soiled_spruce_planks", "goety:soiled_spruce_planks_heavy", "goety:steep_planks", "goety:windswept_planks"]
+Blocks = [
+	"goety:chorus_planks",
+	"goety:compacted_pine_planks",
+	"goety:compacted_windswept_planks",
+	"goety:corrupt_chorus_planks",
+	"goety:haunted_planks",
+	"goety:pine_planks",
+	"goety:rotten_planks",
+	"goety:sky_wood_planks",
+	"goety:soiled_chorus_planks",
+	"goety:soiled_chorus_planks_heavy",
+	"goety:soiled_corrupt_chorus_planks",
+	"goety:soiled_spruce_planks",
+	"goety:soiled_spruce_planks_heavy",
+	"goety:steep_planks",
+	"goety:windswept_planks",
+]
 [Physics]
 	#The maximum weight the block(s) can support both horizontally and vertically.
 	#Range: > 0
