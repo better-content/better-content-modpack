@@ -128,6 +128,15 @@
       "cost": 10,
       "maximum_per_packet": 1,
       "maximum_per_encounter": 1
+    },
+    {
+      "entity": "iceandfire:deathworm",
+      "role": "heavy",
+      "minimum_depth": 0.68,
+      "weight": 1,
+      "cost": 18,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1
     }
   ]
 }
