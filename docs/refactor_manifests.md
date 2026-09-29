@@ -53,7 +53,8 @@ catalogues, and universal recipe-introspection scripts have no active owner.
 ## Dimension Font charge contract
 
 An unmodified obelisk has 15,000 maximum charge, a 600-charge start cost, no join
-cost, and 0.25 passive charge per inactive tick. An active run drains 80 charge plus 40
+cost, and 1.25 passive charge per inactive tick, refilling the base capacity in ten
+in-game minutes. An active run drains 80 charge plus 40
 per participant once per second. Data-driven capacity and efficiency modifiers
 may change run length; a full unmodified Font supplies 120 solo active seconds
 after its start cost. Starting and joining charge is deducted only after the

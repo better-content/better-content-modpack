@@ -57,8 +57,8 @@ then casts molten Andesite Alloy. A Melter can instead consume one andesite with
 Crank is the only positive SU source before the Nether.
 
 Font obelisks are powered only by internal charge. An unmodified Font stores
-15,000 charge, costs 600 charge to start, regenerates 0.25 each inactive tick,
-and has no join fee. An active run drains 80 charge plus 40 per participant each
+15,000 charge, costs 600 charge to start, regenerates 1.25 each inactive tick,
+and refills from empty in ten in-game minutes. It has no join fee. An active run drains 80 charge plus 40 per participant each
 second, giving a solo player 120 active seconds from a full unmodified Font.
 Generated capacity and efficiency modifiers may extend or shorten that baseline.
 Exhausting charge ends the run and returns its participants.
