@@ -379,10 +379,6 @@
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
-    "configui": {
-      "primary_role": "presentation",
-      "support_state": "not_applicable"
-    },
     "construct_arsenal": {
       "primary_role": "content",
       "support_state": "not_applicable"
