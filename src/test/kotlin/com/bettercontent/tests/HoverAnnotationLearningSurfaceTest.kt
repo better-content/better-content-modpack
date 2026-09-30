@@ -599,15 +599,18 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
-    fun `spirit market workstation hover matches its profession and currency catalogue`() {
+    fun `spirit market workstation hover matches its profession and resident barter`() {
         val economy = Files.readString(
             root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/BetterContentEconomy.java").normalize(),
         )
         val professions = Files.readString(
             root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/registry/SpiritProfessions.java").normalize(),
         )
-        val catalogue = Files.readString(
-            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/trader/VillagerCatalogue.java").normalize(),
+        val interactions = Files.readString(
+            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/resident/ResidentInteractions.java").normalize(),
+        )
+        val barter = Files.readString(
+            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/resident/ResidentBarter.java").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
             annotation.path("selector").path("items").any { it.asText() == "better_content_economy:sacred_reliquary" }
@@ -616,14 +619,16 @@ class HoverAnnotationLearningSurfaceTest {
         val selectedItems = row.path("selector").path("items").map { it.asText() }.toSet()
 
         assertTrue(economy.contains("SpiritProfessions.register(modBus)"))
-        assertTrue(economy.contains("MinecraftForge.EVENT_BUS.register(VillagerCatalogue.class)"))
+        assertTrue(economy.contains("MinecraftForge.EVENT_BUS.register(ResidentInteractions.class)"))
         assertTrue(professions.contains("block.get()") && professions.contains("new VillagerProfession"))
-        assertTrue(catalogue.contains("SpiritProfessions.kindOf(event.getType())"))
-        assertTrue(catalogue.contains("CurrencyItems.item(kind.currencyIdentity())"))
+        assertTrue(interactions.contains("ResidentNetwork.open(player, resident)"))
+        assertTrue(barter.contains("usefulPayment(context, state, payment)"))
+        assertTrue(barter.contains("prepare(context, state, wanted)"))
         assertTrue(copy.contains("Assigns a villager profession"))
-        assertTrue(copy.contains("only the matching spirit color"))
+        assertTrue(copy.contains("items they can make"))
+        assertTrue(copy.contains("supplies they need"))
         assertEquals(7, selectedItems.size)
-        assertTrue(row.path("owner").asText().contains("VillagerCatalogue.java"))
+        assertTrue(row.path("owner").asText().contains("ResidentBarter.java"))
     }
 
     @Test
