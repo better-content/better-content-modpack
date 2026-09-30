@@ -201,7 +201,7 @@ object LogPolicy {
     )
     // Aether's bundled Curios override deliberately replaces these six Artifacts tags.
     private val aetherCuriosTagOverride = Regex(
-        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Worker-Main-[0-9]+/WARN] \\[artifacts\\.Artifacts]: " +
+        "\\[([0-9]{2}:[0-9]{2}:[0-9]{2})] \\[(Worker-(Main|ResourceReload)-[0-9]+)/WARN] \\[artifacts\\.Artifacts]: " +
             "Tag entries for curios:tags/items/aether_(accessory|cape|gloves|pendant|ring|shield)\\.json " +
             "cleared by aether-1\\.20\\.1-1\\.5\\.2-neoforge\\.jar:packs/curios_override$",
     )
@@ -250,7 +250,7 @@ object LogPolicy {
             var acceptedEmptyCodAmbientSounds = 0
             var acceptedEmptyUntamedPlaceholderSounds = 0
             var acceptedAllTheLeaksServerNotFound = 0
-            val acceptedAetherCuriosTags = mutableSetOf<String>()
+            val acceptedAetherCuriosBatches = mutableMapOf<Pair<String, String>, MutableSet<String>>()
             var acceptedInvalidImmersiveWeatheringIcicles = 0
             var acceptedDeepVoidPhysicsFallbacks = 0
             var acceptedAdPotherDeferredTasks = 0
@@ -305,9 +305,13 @@ object LogPolicy {
                     ++acceptedEmptyUntamedPlaceholderSounds <= 1
                 val acceptedAllTheLeaksWarning = allTheLeaksServerNotFound.matches(line) &&
                     ++acceptedAllTheLeaksServerNotFound <= 1
-                val aetherCuriosTag = aetherCuriosTagOverride.matchEntire(line)?.groupValues?.get(1)
-                val acceptedAetherCuriosOverride = aetherCuriosTag != null &&
-                    acceptedAetherCuriosTags.add(aetherCuriosTag) && acceptedAetherCuriosTags.size <= 6
+                val aetherCuriosMatch = aetherCuriosTagOverride.matchEntire(line)
+                val acceptedAetherCuriosOverride = aetherCuriosMatch != null && run {
+                    val groups = aetherCuriosMatch.groupValues
+                    val batch = groups[1] to groups[2]
+                    val tags = acceptedAetherCuriosBatches.getOrPut(batch) { mutableSetOf() }
+                    acceptedAetherCuriosBatches.size <= 2 && tags.add(groups[4]) && tags.size <= 6
+                }
                 val acceptedInvalidImmersiveWeatheringIcicle = invalidImmersiveWeatheringIcicle.matches(line) &&
                     ++acceptedInvalidImmersiveWeatheringIcicles <= 1
                 val acceptedDeepVoidPhysicsFallback = deepVoidPhysicsFallback.matches(line) &&

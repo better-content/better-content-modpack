@@ -672,21 +672,39 @@ class HarnessFastTest {
 
     @Test
     fun logPolicyAcceptsOnlyTheSixAetherCuriosOverrideTags(@TempDir root: Path) {
-        fun warning(tag: String, jar: String = "aether-1.20.1-1.5.2-neoforge.jar") =
-            "[06:58:52] [Worker-Main-21/WARN] [artifacts.Artifacts]: " +
+        fun warning(
+            tag: String,
+            time: String = "06:58:52",
+            worker: String = "Worker-Main-21",
+            jar: String = "aether-1.20.1-1.5.2-neoforge.jar",
+        ) =
+            "[$time] [$worker/WARN] [artifacts.Artifacts]: " +
                 "Tag entries for curios:tags/items/aether_$tag.json cleared by $jar:packs/curios_override"
         val tags = listOf("accessory", "cape", "gloves", "pendant", "ring", "shield")
         val accepted = root.resolve("aether-curios-override.log").also {
-            it.writeText(tags.joinToString("\n", postfix = "\n") { warning(it) })
+            it.writeText(
+                (tags.map { warning(it) } + tags.map {
+                    warning(it, time = "06:59:01", worker = "Worker-ResourceReload-3")
+                }).joinToString("\n", postfix = "\n"),
+            )
         }
         val rejected = root.resolve("changed-aether-curios-override.log").also {
             it.writeText(
                 warning("accessory") + "\n" + warning("accessory") + "\n" +
-                    warning("other") + "\n" + warning("cape", "different-aether.jar") + "\n",
+                    warning("other") + "\n" + warning("cape", jar = "different-aether.jar") + "\n",
+            )
+        }
+        val thirdBatch = root.resolve("third-aether-curios-batch.log").also {
+            it.writeText(
+                (tags.map { warning(it) } + tags.map {
+                    warning(it, time = "06:59:01", worker = "Worker-ResourceReload-3")
+                } + warning("accessory", time = "07:00:00", worker = "Worker-Main-22"))
+                    .joinToString("\n", postfix = "\n"),
             )
         }
         assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
         assertEquals(listOf(2, 3, 4), LogPolicy.findings(listOf(rejected)).map { it.line })
+        assertEquals(listOf(13), LogPolicy.findings(listOf(thirdBatch)).map { it.line })
     }
 
     @Test
