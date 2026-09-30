@@ -1,0 +1,16 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "the_bumblezone:hive_pillar",
+    "the_bumblezone:hive_wall",
+    "the_bumblezone:pollinated_fields",
+    "the_bumblezone:pollinated_pillar",
+    "the_bumblezone:sugar_water_floor"
+  ],
+  "spawners": {
+    "type": "the_bumblezone:beehemoth",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

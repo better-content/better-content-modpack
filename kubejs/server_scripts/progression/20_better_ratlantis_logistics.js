@@ -24,52 +24,52 @@ ServerEvents.recipes(function (event) {
     event.remove({ output: 'prettypipes:pipe' })
     event.shaped('8x prettypipes:pipe', ['RGR', 'ILI', 'RGR'], {
         R: 'minecraft:redstone', G: '#forge:glass', I: 'minecraft:iron_bars',
-        L: 'ratlantis_logistics:courier_lattice'
-    }).id('kubejs:ratlantis_logistics/root/pretty_pipes')
+        L: 'better_ratlantis_logistics:courier_lattice'
+    }).id('kubejs:better_ratlantis_logistics/root/pretty_pipes')
 
     // The first Ratlantis trip establishes a useful 32-pipe network. Modules
     // then expose two additional visible tiers instead of charging hidden
     // inventory costs after crafting.
     event.remove({ output: 'prettypipes:blank_module' })
     event.shaped('prettypipes:blank_module', ['QMQ', 'SPS', 'QRQ'], {
-        Q: 'ae2:certus_quartz_crystal', M: 'ratlantis_logistics:oratchalcum_mechanism',
+        Q: 'ae2:certus_quartz_crystal', M: 'better_ratlantis_logistics:oratchalcum_mechanism',
         S: 'minecraft:stone_slab', P: 'prettypipes:pipe', R: 'minecraft:redstone'
-    }).id('kubejs:ratlantis_logistics/tier/oratchalcum_blank_module')
+    }).id('kubejs:better_ratlantis_logistics/tier/oratchalcum_blank_module')
 
     var BC_PRETTY_PIPES_HIGH_MODULES = {
         high_crafting_module: {
             pattern: ['GCG', 'GMG', 'GIG'],
-            key: { G: 'minecraft:gold_ingot', C: 'ratlantis_logistics:arcane_logistics_core',
+            key: { G: 'minecraft:gold_ingot', C: 'better_ratlantis_logistics:arcane_logistics_core',
                 M: 'prettypipes:medium_crafting_module', I: 'minecraft:iron_ingot' }
         },
         high_extraction_module: {
             pattern: ['GCG', 'GMG', 'GGG'],
-            key: { G: 'minecraft:gold_ingot', C: 'ratlantis_logistics:arcane_logistics_core',
+            key: { G: 'minecraft:gold_ingot', C: 'better_ratlantis_logistics:arcane_logistics_core',
                 M: 'prettypipes:medium_extraction_module' }
         },
         high_filter_module: {
             pattern: ['GCG', 'BMB', 'GBG'],
-            key: { G: 'minecraft:gold_ingot', C: 'ratlantis_logistics:arcane_logistics_core',
+            key: { G: 'minecraft:gold_ingot', C: 'better_ratlantis_logistics:arcane_logistics_core',
                 B: 'minecraft:iron_bars', M: 'prettypipes:medium_filter_module' }
         },
         high_high_priority_module: {
             pattern: ['PCP', 'PMP', 'PPP'],
-            key: { C: 'ratlantis_logistics:arcane_logistics_core', P: 'minecraft:paper',
+            key: { C: 'better_ratlantis_logistics:arcane_logistics_core', P: 'minecraft:paper',
                 M: 'prettypipes:medium_high_priority_module' }
         },
         high_low_priority_module: {
             pattern: ['PCP', 'PMP', 'PPP'],
-            key: { C: 'ratlantis_logistics:arcane_logistics_core', P: '#forge:cobblestone',
+            key: { C: 'better_ratlantis_logistics:arcane_logistics_core', P: '#forge:cobblestone',
                 M: 'prettypipes:medium_low_priority_module' }
         },
         high_retrieval_module: {
             pattern: ['RCR', 'GMG', 'RGR'],
-            key: { R: 'minecraft:redstone_block', C: 'ratlantis_logistics:arcane_logistics_core',
+            key: { R: 'minecraft:redstone_block', C: 'better_ratlantis_logistics:arcane_logistics_core',
                 G: 'minecraft:gold_ingot', M: 'prettypipes:medium_retrieval_module' }
         },
         high_speed_module: {
             pattern: ['GCG', 'BMB', 'GBG'],
-            key: { G: 'minecraft:gold_ingot', C: 'ratlantis_logistics:arcane_logistics_core',
+            key: { G: 'minecraft:gold_ingot', C: 'better_ratlantis_logistics:arcane_logistics_core',
                 B: 'minecraft:sugar', M: 'prettypipes:medium_speed_module' }
         }
     }
@@ -77,45 +77,45 @@ ServerEvents.recipes(function (event) {
         var recipe = BC_PRETTY_PIPES_HIGH_MODULES[module]
         event.remove({ output: 'prettypipes:' + module })
         event.shaped('prettypipes:' + module, recipe.pattern, recipe.key)
-            .id('kubejs:ratlantis_logistics/tier/arcane_' + module)
+            .id('kubejs:better_ratlantis_logistics/tier/arcane_' + module)
     })
 
     event.remove({ output: 'sophisticatedstorage:hopper_upgrade' })
     event.shaped('sophisticatedstorage:hopper_upgrade', ['IRI', 'HLH', ' U '], {
         I: '#forge:ingots/iron', R: '#forge:dusts/redstone', H: 'minecraft:hopper',
-        L: 'ratlantis_logistics:courier_lattice', U: 'sophisticatedstorage:upgrade_base'
-    }).id('kubejs:ratlantis_logistics/root/sophisticated_automation')
+        L: 'better_ratlantis_logistics:courier_lattice', U: 'sophisticatedstorage:upgrade_base'
+    }).id('kubejs:better_ratlantis_logistics/root/sophisticated_automation')
 
     event.remove({ output: 'create:redstone_requester' })
     event.shapeless('create:redstone_requester', [
         'create:stock_link', '#forge:dusts/redstone', '#forge:ingots/iron',
-        'ratlantis_logistics:oratchalcum_mechanism'
-    ]).id('kubejs:ratlantis_logistics/root/create_request_logistics')
+        'better_ratlantis_logistics:oratchalcum_mechanism'
+    ]).id('kubejs:better_ratlantis_logistics/root/create_request_logistics')
 
     event.remove({ output: 'rats:rat_upgrade_basic' })
     event.shaped('rats:rat_upgrade_basic', ['CCC', 'CLC', 'CCC'], {
-        C: '#forge:cheese', L: 'ratlantis_logistics:courier_lattice'
-    }).id('kubejs:ratlantis_logistics/root/rat_work_orders')
+        C: '#forge:cheese', L: 'better_ratlantis_logistics:courier_lattice'
+    }).id('kubejs:better_ratlantis_logistics/root/rat_work_orders')
 
     // Ordinary hoppers remain early local transport. The high-throughput
     // variant joins Ratlantis because it is a scalable logistics upgrade.
     event.remove({ id: 'littlelogistics:rapid_hopper' })
     event.shaped('littlelogistics:rapid_hopper', ['GHG', ' L ', ' R '], {
         G: '#forge:ingots/gold', H: 'minecraft:hopper',
-        L: 'ratlantis_logistics:courier_lattice', R: 'minecraft:redstone_block'
+        L: 'better_ratlantis_logistics:courier_lattice', R: 'minecraft:redstone_block'
     }).id('littlelogistics:rapid_hopper')
 
-    // Docks and rails stay inertly available. Every usable native vehicle pays
-    // its Ratlantis proof within the visible recipe.
+    // Watercraft belong to Ratlantis. Rail stock is made with Nether materials
+    // in 86_dimension_transport.js, so the two travel routes stay independent.
     ;[
         'littlelogistics:barge', 'littlelogistics:barrel_barge',
-        'littlelogistics:energy_locomotive', 'littlelogistics:energy_tug',
+        'littlelogistics:energy_tug',
         'littlelogistics:fishing_barge', 'littlelogistics:fluid_barge',
-        'littlelogistics:seater_barge', 'littlelogistics:steam_locomotive',
+        'littlelogistics:seater_barge',
         'littlelogistics:tug', 'littlelogistics:vacuum_barge'
     ].forEach(function (vehicle) {
         event.replaceInput({ output: vehicle }, '#forge:ingots/iron',
-            'ratlantis_logistics:courier_lattice')
+            'better_ratlantis_logistics:courier_lattice')
     })
     event.replaceInput({ output: 'littlelogistics:fishing_barge' },
         'minecraft:fishing_rod', 'starcatcher:humble_rod')
@@ -125,9 +125,9 @@ ServerEvents.recipes(function (event) {
     event.remove({ output: 'ae2:energy_acceptor' })
     event.shapeless('ae2:energy_acceptor', [
         'powergrid:generator_housing',
-        'ratlantis_logistics:arcane_logistics_core',
+        'better_ratlantis_logistics:arcane_logistics_core',
         'oc2r:computer',
         'ae2:sky_stone_block',
         'kubejs:impossible_support_matrix'
-    ]).id('kubejs:ratlantis_logistics/root/ae2_powergrid_energy_acceptor')
+    ]).id('kubejs:better_ratlantis_logistics/root/ae2_powergrid_energy_acceptor')
 })
