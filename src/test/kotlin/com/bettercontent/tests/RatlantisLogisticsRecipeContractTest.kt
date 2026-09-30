@@ -11,14 +11,14 @@ import java.nio.file.Path
 class RatlantisLogisticsRecipeContractTest {
     private val root = Path.of(System.getProperty("bc.repo.root"))
     private val script = Files.readString(root.resolve(
-        "kubejs/server_scripts/progression/20_ratlantis_logistics.js"))
+        "kubejs/server_scripts/progression/20_better_ratlantis_logistics.js"))
 
     @Test
     fun `pretty pipes has visible three tier Ratlantis gates`() {
         assertTrue(script.contains("event.shaped('8x prettypipes:pipe', ['RGR', 'ILI', 'RGR']"))
-        assertTrue(script.contains("L: 'ratlantis_logistics:courier_lattice'"))
+        assertTrue(script.contains("L: 'better_ratlantis_logistics:courier_lattice'"))
         assertTrue(script.contains("event.shaped('prettypipes:blank_module', ['QMQ', 'SPS', 'QRQ']"))
-        assertTrue(script.contains("M: 'ratlantis_logistics:oratchalcum_mechanism'"))
+        assertTrue(script.contains("M: 'better_ratlantis_logistics:oratchalcum_mechanism'"))
 
         val expected = listOf(
             "high_crafting_module", "high_extraction_module", "high_filter_module",
@@ -26,7 +26,7 @@ class RatlantisLogisticsRecipeContractTest {
             "high_speed_module",
         )
         expected.forEach { module -> assertTrue(script.contains("$module: {"), module) }
-        assertEquals(7, Regex("C: 'ratlantis_logistics:arcane_logistics_core'").findAll(script).count())
+        assertEquals(7, Regex("C: 'better_ratlantis_logistics:arcane_logistics_core'").findAll(script).count())
         assertTrue(script.contains("event.remove({ id: 'prettypipes:module_clearing' })"))
     }
 
@@ -36,7 +36,7 @@ class RatlantisLogisticsRecipeContractTest {
         assertTrue(script.contains(
             "event.shaped('littlelogistics:rapid_hopper', ['GHG', ' L ', ' R ']",
         ))
-        assertTrue(script.contains("L: 'ratlantis_logistics:courier_lattice'"))
+        assertTrue(script.contains("L: 'better_ratlantis_logistics:courier_lattice'"))
         assertTrue(script.contains("R: 'minecraft:redstone_block'"))
         assertTrue(script.contains("}).id('littlelogistics:rapid_hopper')"))
     }

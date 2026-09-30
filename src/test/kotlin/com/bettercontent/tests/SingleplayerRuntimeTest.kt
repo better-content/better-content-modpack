@@ -84,9 +84,9 @@ class SingleplayerRuntimeTest {
             require(firstSave.toFile().copyRecursively(reopened.client.resolve("saves/DebugWorld").toFile())) {
                 "failed to stage saved world for reopen"
             }
-            val lineageState = first.client.resolve(".world_lifecycle_manager")
+            val lineageState = first.client.resolve(".better_world_management")
             require(Files.isDirectory(lineageState) &&
-                lineageState.toFile().copyRecursively(reopened.client.resolve(".world_lifecycle_manager").toFile())) {
+                lineageState.toFile().copyRecursively(reopened.client.resolve(".better_world_management").toFile())) {
                 "failed to stage single-player lineage state for reopen"
             }
             reopened.launchQuickPlayWorld("DebugWorld", "verify")

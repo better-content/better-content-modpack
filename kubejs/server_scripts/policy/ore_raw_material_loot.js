@@ -2,9 +2,9 @@
 // This applies to block, structure, archaeology, entity and trade loot tables,
 // so dimension rewards cannot bypass the same raw-metal identity policy.
 var BC_RAW_METAL_LOOT_ROUTES = [
-    ['minecraft:raw_iron', 'realistic_ores:small_ore_chunk_ironstone'],
-    ['minecraft:raw_copper', 'realistic_ores:small_ore_chunk_copper_bloom'],
-    ['minecraft:raw_gold', 'realistic_ores:gold_concentrate'],
+    ['minecraft:raw_iron', 'better_ore_geology:small_ore_chunk_ironstone'],
+    ['minecraft:raw_copper', 'better_ore_geology:small_ore_chunk_copper_bloom'],
+    ['minecraft:raw_gold', 'better_ore_geology:gold_concentrate'],
     // Raw metal blocks already represent refined block value. Preserve their
     // stack count in the equivalent block instead of multiplying loot value.
     ['minecraft:raw_iron_block', 'minecraft:iron_block'],
@@ -13,7 +13,7 @@ var BC_RAW_METAL_LOOT_ROUTES = [
 ]
 
 LootJS.modifiers(function (event) {
-    if (!Platform.isLoaded('realistic_ores')) return
+    if (!Platform.isLoaded('better_ore_geology')) return
 
     var rawMetalLoot = event.addLootTableModifier(/^(?!minecraft:empty$).*$/)
     for (var i = 0; i < BC_RAW_METAL_LOOT_ROUTES.length; i++) {

@@ -11,7 +11,7 @@ import java.nio.file.Path
 @Tag("fast")
 class FoodDryingContractTest {
     private val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
-    private val heatSync = root.parent.resolve("mod_source/heat-sync")
+    private val heatSync = root.parent.resolve("mod_source/better-industrial-heat")
 
     @Test
     fun `rack recipes tag and annotation describe the same dried foods`() {
@@ -28,13 +28,13 @@ class FoodDryingContractTest {
         assertEquals(authoredRows, recipes.size, "every explicit catalogue row must parse uniquely")
         assertEquals(
             mapOf(
-                "beef" to ("minecraft:beef" to "heat_sync:dried_beef"),
-                "porkchop" to ("minecraft:porkchop" to "heat_sync:dried_porkchop"),
-                "chicken" to ("minecraft:chicken" to "heat_sync:dried_chicken"),
-                "mutton" to ("minecraft:mutton" to "heat_sync:dried_mutton"),
-                "rabbit" to ("minecraft:rabbit" to "heat_sync:dried_rabbit"),
-                "cod" to ("minecraft:cod" to "heat_sync:dried_cod"),
-                "salmon" to ("minecraft:salmon" to "heat_sync:dried_salmon"),
+                "beef" to ("minecraft:beef" to "better_industrial_heat:dried_beef"),
+                "porkchop" to ("minecraft:porkchop" to "better_industrial_heat:dried_porkchop"),
+                "chicken" to ("minecraft:chicken" to "better_industrial_heat:dried_chicken"),
+                "mutton" to ("minecraft:mutton" to "better_industrial_heat:dried_mutton"),
+                "rabbit" to ("minecraft:rabbit" to "better_industrial_heat:dried_rabbit"),
+                "cod" to ("minecraft:cod" to "better_industrial_heat:dried_cod"),
+                "salmon" to ("minecraft:salmon" to "better_industrial_heat:dried_salmon"),
             ),
             recipes,
             "only the authored unspoiled, uncooked food catalogue is eligible for this drying route",
@@ -42,7 +42,7 @@ class FoodDryingContractTest {
 
         val mapper = jacksonObjectMapper()
         val tag = mapper.readTree(
-            heatSync.resolve("src/main/resources/data/heat_sync/tags/items/dried_foods.json").toFile(),
+            heatSync.resolve("src/main/resources/data/better_industrial_heat/tags/items/dried_foods.json").toFile(),
         )
         val taggedOutputs = tag.path("values").map { it.asText() }.toSet()
         val recipeOutputs = recipes.values.map { it.second }.toSet()
@@ -63,7 +63,7 @@ class FoodDryingContractTest {
         assertTrue(annotation.contains("cannot be cooked"))
 
         val thermalSource = Files.readString(
-            heatSync.resolve("src/main/kotlin/com/bettercontent/heatsync/food/FoodThermalService.kt"),
+            heatSync.resolve("src/main/kotlin/com/bettercontent/betterindustrialheat/food/FoodThermalService.kt"),
         )
         assertTrue(thermalSource.contains("stack.`is`(HeatSyncThermalTags.DRIED_FOODS) -> Profile(\"dried\", 1.0, null, meat)"))
         assertTrue(thermalSource.contains("profile.id == \"dried\" || profile.id == \"preserved\" -> 0.1"))

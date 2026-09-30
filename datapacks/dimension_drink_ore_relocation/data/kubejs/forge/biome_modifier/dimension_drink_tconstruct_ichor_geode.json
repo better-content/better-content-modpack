@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#kubejs:dimension_drink_ore_targets/nether",
-  "features": "kubejs:dimension_drink_tconstruct_ichor_geode",
-  "step": "local_modifications"
-}

@@ -3,16 +3,16 @@
 // This route is available before the first Spirit Altar and does not replace
 // Malum's other Soulstone processing recipes.
 ServerEvents.recipes(function (event) {
-    if (!Platform.isLoaded('malum') || !Platform.isLoaded('hexerei') || !Platform.isLoaded('realistic_ores')) return
+    if (!Platform.isLoaded('malum') || !Platform.isLoaded('hexerei') || !Platform.isLoaded('better_ore_geology')) return
 
     event.custom({
         type: 'hexerei:mixingcauldron',
         liquid: { fluid: 'minecraft:water' },
         ingredients: [
-            { item: 'realistic_ores:black_shale' },
-            { item: 'realistic_ores:black_shale' },
-            { item: 'realistic_ores:black_shale' },
-            { item: 'realistic_ores:black_shale' },
+            { item: 'better_ore_geology:black_shale' },
+            { item: 'better_ore_geology:black_shale' },
+            { item: 'better_ore_geology:black_shale' },
+            { item: 'better_ore_geology:black_shale' },
             { item: 'minecraft:soul_sand' },
             { item: 'minecraft:bone_meal' },
             { item: 'minecraft:amethyst_shard' },

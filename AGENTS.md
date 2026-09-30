@@ -110,7 +110,7 @@ root `options.txt` remains the client-default source.
 
 ## Learning-surface authoring
 
-Read `docs/learning_surfaces.md` before changing player teaching. Maintained surfaces are loading
+Read `docs/better_discovery_guides.md` before changing player teaching. Maintained surfaces are loading
 lessons, Threads, tooltips, EMI/Ponder, native guides, and contextual HUD feedback. FTB Quests and
 its custom integration are retired; do not recreate quest graphs, completion ledgers, or compilers.
 

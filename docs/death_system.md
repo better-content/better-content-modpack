@@ -31,7 +31,7 @@ especially for solo and multiplayer travel, distant deaths, and repeated deaths.
 
 1. **Damage and danger.** Vanilla admission rules, armor, absorption, and the
    installed combat and survival mods affect whether damage reaches the player.
-   [Downed Player Revival](https://github.com/better-content/downed-player-revival)
+   [Downed Player Revival](https://github.com/better-content/better-deaths-door)
    owns bodily injuries. A hit that exhausts positive HP enters Death's Door and
    adds one maim. The player retains ordinary movement, combat, and inventory
    controls. There is no bleed-out timer or required helper. Once at semantic zero,
@@ -40,7 +40,7 @@ especially for solo and multiplayer travel, distant deaths, and repeated deaths.
    after the zero-crossing healing lock, while injuries require treatment.
    Explicit special-kill sources, command kill, and the void bypass the Door.
    Revival's current rules say totems do not prevent player death. Its
-   [source README](https://github.com/better-content/downed-player-revival)
+   [source README](https://github.com/better-content/better-deaths-door)
    owns exact probabilities, treatment, and exceptions.
 2. **Death attempt.** A further lethal hit can reach Forge's `LivingDeathEvent`.
    Another handler may cancel that attempt. Revival redirects the
@@ -49,14 +49,14 @@ especially for solo and multiplayer travel, distant deaths, and repeated deaths.
    return calls `canceledDeath` and leaves the player alive. `FinalDeath` means
    Forge accepted this death path. It fires before the rest of vanilla death and
    later respawn processing finish; it is not a receipt for every consequence.
-   Source: Revival's [server-death redirect](https://github.com/better-content/downed-player-revival/blob/main/src/main/java/com/bettercontent/downedplayerrevival/mixin/ServerDeathMixin.java)
-   and [final-death publisher](https://github.com/better-content/downed-player-revival/blob/main/src/main/java/com/bettercontent/downedplayerrevival/RevivalManager.java).
+   Source: Revival's [server-death redirect](https://github.com/better-content/better-deaths-door/blob/main/src/main/java/com/bettercontent/betterdeathsdoor/mixin/ServerDeathMixin.java)
+   and [final-death publisher](https://github.com/better-content/better-deaths-door/blob/main/src/main/java/com/bettercontent/betterdeathsdoor/RevivalManager.java).
 3. **Final death.** Revival clears active bodily state while retaining a death
-   recap until respawn. [RPG Stats](https://github.com/better-content/rpg-stats)
+   recap until respawn. [RPG Stats](https://github.com/better-content/better-rpg-progression)
    clears the current life's committed allocations and grants its XP-level-based
    Heart Fragment entitlement on a confirmed final death. Other owners react to
    death using their own Forge hooks; their effects are listed below.
-4. **Respawn.** [Class Selector](https://github.com/better-content/class-selector)
+4. **Respawn.** [Class Selector](https://github.com/better-content/better-spawns)
    returns an onboarded player to the separately locked personal starting
    location, with scripted sound and particle effects. Its personal spawn takes
    priority over ordinary non-forced bed and anchor changes. The native death
@@ -83,10 +83,10 @@ completed respawn are different lifecycle moments.
 | Curios slots | Curios has `keepCurios="DEFAULT"`, which follows the false vanilla gamerule. KeepCuriosInventory's bundled mixin forces the Curios drop decision to keep unless an item is blacklisted; the pack blacklist is empty. The combined runtime outcome still needs an observed final death before promising every slot survives | [Curios](../defaultconfigs/curios-server.toml), [KeepCuriosInventory](../config/keepcuriosinventory-common.toml) |
 | Food and hunger | Configurable Death does not retain food level or saturation. Diet's installed `2.1.1` JAR defaults to a 100-percentage-point loss of each nutrient group on death, floored at zero (`deathPenaltyMethod=AMOUNT`); the pack does not pin a Diet server override | [Configurable Death](../defaultconfigs/configurabledeath-server.toml), [Diet manifest](../mods/diet.pw.toml) |
 | Health progression | Spice of Life: Carrot Edition starts at five hearts, adds one heart per configured milestone, and retains its eaten-food list through death (`resetOnDeath=false`) | [Sol Carrot server defaults](../defaultconfigs/solcarrot-server.toml) |
-| Per-life development | RPG Stats allocations clear on death; its separately stored Auto plan persists so later earned points can follow the plan | [RPG Stats source](https://github.com/better-content/rpg-stats) |
-| Arena match exception | Arena Challenges snapshots the player's ordinary inventory, XP, and health before issuing a loaned kit. It restores that snapshot when the match ends, including after a match death; its own respawn handler also attempts to return the player to the arena | [Arena Challenges source](https://github.com/better-content/arena-challenges) |
-| Bodily injury | Current-life injuries and treatment history clear on confirmed final death; a recap remains while dead and clears on respawn | [Revival source](https://github.com/better-content/downed-player-revival) |
-| Lineage and discoveries | Ordinary death does not reset Threads discovery generations or the World Lifecycle Manager lineage | [Threads](threads.md), [World Lifecycle Manager source](https://github.com/better-content/world-lifecycle-manager) |
+| Per-life development | RPG Stats allocations clear on death; its separately stored Auto plan persists so later earned points can follow the plan | [RPG Stats source](https://github.com/better-content/better-rpg-progression) |
+| Arena match exception | Arena Challenges snapshots the player's ordinary inventory, XP, and health before issuing a loaned kit. It restores that snapshot when the match ends, including after a match death; its own respawn handler also attempts to return the player to the arena | [Arena Challenges source](https://github.com/better-content/better-arena-trials) |
+| Bodily injury | Current-life injuries and treatment history clear on confirmed final death; a recap remains while dead and clears on respawn | [Revival source](https://github.com/better-content/better-deaths-door) |
+| Lineage and discoveries | Ordinary death does not reset Threads discovery generations or the World Lifecycle Manager lineage | [Threads](threads.md), [World Lifecycle Manager source](https://github.com/better-content/better-world-management) |
 
 `defaultconfigs/` supplies defaults for new worlds. Existing saves can retain
 their own server configuration. These rows describe the tracked pack's target,
@@ -100,25 +100,25 @@ state. Each name links to its owning source repository.
 
 | Owner | Death-system contribution |
 | --- | --- |
-| [Downed Player Revival](https://github.com/better-content/downed-player-revival) | Damage-to-Death's-Door transition, maim roll, treatment, pressure presentation, final-death acceptance signal, and recap |
-| [Class Selector](https://github.com/better-content/class-selector) | Locked personal return point and the sound/particle reinvigoration after respawn |
-| [RPG Stats](https://github.com/better-content/rpg-stats) | Per-life allocation loss, persistent Auto plan, and XP-level-derived final-death Heart Fragments |
-| [Depth Director](https://github.com/better-content/depth-director) | Underground pressure, warnings, bounded surges, semantic low-health response, and injury-aware pacing; injuries slow buildup without retiring the encounter |
-| [Pillager Campaigns](https://github.com/better-content/pillager-campaigns) | Surface scouts and warned multi-wave assaults; Death's Door players remain targets, and the death observer retires a target and starts death grace |
-| [Arena Challenges](https://github.com/better-content/arena-challenges) | Bounded duels and trials with loaned kits; player death resolves a match, restores saved inventory and XP, and requests an arena return on respawn |
-| [Dimension Drink](https://github.com/better-content/dimension-drink) | Font run ends on final death; actual transport back to the origin is a separate successful-return event |
-| [Player Traces](https://github.com/better-content/player-traces) | Records recent pose as a final-death echo and marks respawn in the world; ongoing Door play still generates traces |
-| [Learning Surfaces](https://github.com/better-content/better-content-threads) | Injury discoveries, final-cause death tips, and a lineage memory that survives ordinary death |
-| [Dynamic Survival HUD](https://github.com/better-content/dynamic-survival-hud) | Shows semantic-zero danger and changed injury risk without owning the health or injury calculation |
-| [Systemic Salience](https://github.com/better-content/systemic-salience) | Diet, temperature, thirst, and stamina interactions that change survival margins; resets its temporary metabolic state on death clone |
-| [Realistic Ores](https://github.com/better-content/realistic-ores) | Geographically distinct finite deposits and dangerous Hotstone; makes travel and return matter |
-| [Water Survival](https://github.com/better-content/water-survival) | Water collection and portable drinking choices supporting survival away from base |
-| [Better Content Fixes](https://github.com/better-content/better-content-fixes) | Survival and compatibility rules, including interrupting sleep when danger commits; it is not the owner of final death |
-| [World Lifecycle Manager](https://github.com/better-content/world-lifecycle-manager) | Persists lineage across ordinary player lives; world succession is a distinct, larger lifecycle |
+| [Downed Player Revival](https://github.com/better-content/better-deaths-door) | Damage-to-Death's-Door transition, maim roll, treatment, pressure presentation, final-death acceptance signal, and recap |
+| [Class Selector](https://github.com/better-content/better-spawns) | Locked personal return point and the sound/particle reinvigoration after respawn |
+| [RPG Stats](https://github.com/better-content/better-rpg-progression) | Per-life allocation loss, persistent Auto plan, and XP-level-derived final-death Heart Fragments |
+| [Depth Director](https://github.com/better-content/better-cave-encounters) | Underground pressure, warnings, bounded surges, semantic low-health response, and injury-aware pacing; injuries slow buildup without retiring the encounter |
+| [Pillager Campaigns](https://github.com/better-content/better-pillager-campaigns) | Surface scouts and warned multi-wave assaults; Death's Door players remain targets, and the death observer retires a target and starts death grace |
+| [Arena Challenges](https://github.com/better-content/better-arena-trials) | Bounded duels and trials with loaned kits; player death resolves a match, restores saved inventory and XP, and requests an arena return on respawn |
+| [Dimension Drink](https://github.com/better-content/better-dimension-fonts) | Font run ends on final death; actual transport back to the origin is a separate successful-return event |
+| [Player Traces](https://github.com/better-content/better-player-traces) | Records recent pose as a final-death echo and marks respawn in the world; ongoing Door play still generates traces |
+| [Learning Surfaces](https://github.com/better-content/better-discovery-guides) | Injury discoveries, final-cause death tips, and a lineage memory that survives ordinary death |
+| [Dynamic Survival HUD](https://github.com/better-content/better-survival-hud) | Shows semantic-zero danger and changed injury risk without owning the health or injury calculation |
+| [Systemic Salience](https://github.com/better-content/better-survival-physiology) | Diet, temperature, thirst, and stamina interactions that change survival margins; resets its temporary metabolic state on death clone |
+| [Realistic Ores](https://github.com/better-content/better-ore-geology) | Geographically distinct finite deposits and dangerous Hotstone; makes travel and return matter |
+| [Water Survival](https://github.com/better-content/better-drinking-water) | Water collection and portable drinking choices supporting survival away from base |
+| [Better Content Fixes](https://github.com/better-content/better-compat-fixes) | Survival and compatibility rules, including interrupting sleep when danger commits; it is not the owner of final death |
+| [World Lifecycle Manager](https://github.com/better-content/better-world-management) | Persists lineage across ordinary player lives; world succession is a distinct, larger lifecycle |
 
-See [Systemic Salience](systemic_salience.md#pulse-pacing) for director and
+See [Systemic Salience](better_survival_physiology.md#pulse-pacing) for director and
 campaign pacing, [Realistic Ore Processing](realistic_ore_processing.md) for the
-home/echo deposit geography, and [Learning Surfaces](learning_surfaces.md) for
+home/echo deposit geography, and [Learning Surfaces](better_discovery_guides.md) for
 the teaching contract.
 
 ## Installed third-party surfaces

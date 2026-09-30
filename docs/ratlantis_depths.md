@@ -12,7 +12,7 @@ An underwater arrival keeps the water around its return Font. Four soul-sand cor
 
 Create: Aquatic Ambitions adds the later underwater workshop, including conduit channeling. Its Conduit Cage requires an Oratchalcum Mechanism alongside the native Conduit, prismarine alloy, alloy rods, and Create fluid pipe. That gives the deeper Ratlantis return trip a visible industrial use. Four upstream recipes are removed to preserve exploration and the pack's material routes: prismarine to lapis, prismarine bricks to lapis and copper, suspicious-rock splashing, and the Ender Eye route to a Heart of the Sea. The remaining native recipes provide the aquatic machinery and conduit uses.
 
-The Ratlantis abyss and vaults are features in `ratlantis-logistics`; they affect newly generated chunks only. The ocean feature keeps the existing island layout and Rats ore-bearing stone below the new floor. Existing Ratlantis terrain is not rewritten.
+The Ratlantis abyss and vaults are features in `better-ratlantis-logistics`; they affect newly generated chunks only. The ocean feature keeps the existing island layout and Rats ore-bearing stone below the new floor. Existing Ratlantis terrain is not rewritten.
 
 ## Validation boundary
 

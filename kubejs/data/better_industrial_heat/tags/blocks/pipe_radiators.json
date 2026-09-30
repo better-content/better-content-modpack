@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "better_industrial_heat:heat_pipe",
+    "better_industrial_heat:coolant_exchanger",
+    "better_industrial_heat:thermal_firebox",
+    "better_industrial_heat:boiler_heater",
+    "better_industrial_heat:creative_heat_source",
+    "better_industrial_heat:creative_cold_source",
+    {
+      "id": "better_industrial_heat:impossible_matter_transducer",
+      "required": false
+    }
+  ]
+}

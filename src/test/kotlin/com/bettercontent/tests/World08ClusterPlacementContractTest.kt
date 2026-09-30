@@ -21,7 +21,7 @@ class World08ClusterPlacementContractTest {
         val sets = files.map { mapper.readTree(Files.readString(it)) }
         val placements = sets.map { it["placement"] }
 
-        assertTrue(placements.all { it["type"].asText() == "settlement_roads:clustered_spread" })
+        assertTrue(placements.all { it["type"].asText() == "better_settlement_roads:clustered_spread" })
         assertTrue(placements.all { it["cluster_spacing"].asInt() == 128 })
         assertTrue(placements.all { it["cluster_radius"].asInt() == 12 })
         assertTrue(placements.all { it["baseline_spacing"].asInt() == 4096 })
@@ -31,9 +31,9 @@ class World08ClusterPlacementContractTest {
             sets.map { it["structures"][0]["structure"].asText() }.toSet()
         )
 
-        val placementSource = Files.readString(root.resolve("../mod_source/settlement-roads/src/main/java/com/bettercontent/settlementroads/worldgen/ClusteredSpreadStructurePlacement.java"))
-        val registrySource = Files.readString(root.resolve("../mod_source/settlement-roads/src/main/kotlin/com/bettercontent/settlementroads/worldgen/SettlementRoadsWorldgen.kt"))
-        val policySource = Files.readString(root.resolve("../mod_source/settlement-roads/src/main/kotlin/com/bettercontent/settlementroads/worldgen/ClusteredSpreadPolicy.kt"))
+        val placementSource = Files.readString(root.resolve("../mod_source/better-settlement-roads/src/main/java/com/bettercontent/bettersettlementroads/worldgen/ClusteredSpreadStructurePlacement.java"))
+        val registrySource = Files.readString(root.resolve("../mod_source/better-settlement-roads/src/main/kotlin/com/bettercontent/bettersettlementroads/worldgen/SettlementRoadsWorldgen.kt"))
+        val policySource = Files.readString(root.resolve("../mod_source/better-settlement-roads/src/main/kotlin/com/bettercontent/bettersettlementroads/worldgen/ClusteredSpreadPolicy.kt"))
         assertTrue(placementSource.contains("state.getLevelSeed()"))
         assertTrue(placementSource.contains("CODEC = RecordCodecBuilder.create"))
         assertTrue(placementSource.contains("SITES_PER_CLUSTER = 2"))

@@ -14,7 +14,7 @@ ServerEvents.recipes(function (event) {
     event.shaped('create_aquatic_ambitions:mechanical_conduit',
         ['IMI', 'IAI', 'PUP'], {
             I: 'create_aquatic_ambitions:prismarine_alloy_rod',
-            M: 'ratlantis_logistics:oratchalcum_mechanism',
+            M: 'better_ratlantis_logistics:oratchalcum_mechanism',
             A: 'minecraft:conduit',
             P: 'create_aquatic_ambitions:prismarine_alloy',
             U: 'create:fluid_pipe'

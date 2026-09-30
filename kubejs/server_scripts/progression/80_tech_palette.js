@@ -58,8 +58,8 @@ ServerEvents.recipes(function (event) {
     // World reset authority remains in WLM's operator-gated interface. Its
     // authored recipe is replaced so that the interface itself also requires
     // material recovered from AE2 meteorites.
-    event.remove({ output: 'world_lifecycle_manager:world_condenser_interface' })
-    event.shaped('world_lifecycle_manager:world_condenser_interface', ['SBS', 'BOB', 'SBS'], {
+    event.remove({ output: 'better_world_management:world_condenser_interface' })
+    event.shaped('better_world_management:world_condenser_interface', ['SBS', 'BOB', 'SBS'], {
         S: 'ae2:sky_stone_block', B: 'create:brass_sheet', O: 'minecraft:obsidian'
     }).id('kubejs:tech/world_condenser_interface_meteor_gate')
 })

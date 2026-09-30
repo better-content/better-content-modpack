@@ -639,8 +639,8 @@ Blocks = [
 	"ubesdelight:lemongrass_crate",
 	"ubesdelight:ube_crate",
 	"wares:delivery_table",
-	"better_content_fire:burnt_solid",
-	"better_content_fire:smoldering_solid",
+	"better_wildfire:burnt_solid",
+	"better_wildfire:smoldering_solid",
 ]
 
 [Physics]

@@ -2,471 +2,471 @@
   "schema": "bc.active_custom_mods.v1",
   "mods": [
     {
-      "repository": "airtight-machinery",
-      "modId": "airtight_machinery",
-      "artifact": "airtight-machinery-0.1.0.jar",
+      "repository": "better-airtight-machines",
+      "modId": "better_airtight_machines",
+      "artifact": "better-airtight-machines-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "heat-sync",
-        "latent-chemlib"
+        "better-industrial-heat",
+        "better-chemlib-hazards"
       ]
     },
     {
-      "repository": "arcane-chunk-loaders",
-      "modId": "arcane_chunk_loaders",
-      "artifact": "arcane-chunk-loaders-0.1.0.jar",
+      "repository": "better-magic-chunk-anchors",
+      "modId": "better_magic_chunk_anchors",
+      "artifact": "better-magic-chunk-anchors-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "arena-challenges",
-      "modId": "arena_challenges",
-      "artifact": "arena-challenges-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ],
-      "dependsOn": [
-        "player-traces"
-      ]
-    },
-    {
-      "repository": "better-content-economy",
-      "modId": "better_content_economy",
-      "artifact": "better-content-economy-1.0.1.jar",
+      "repository": "better-arena-trials",
+      "modId": "better_arena_trials",
+      "artifact": "better-arena-trials-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-content-fixes",
-        "better-content-notifications",
-        "dimension-drink"
+        "better-player-traces"
       ]
     },
     {
-      "repository": "better-content-fixes",
-      "modId": "better_content_fixes",
-      "artifact": "better-content-fixes-0.1.9.jar",
+      "repository": "better-spirit-commerce",
+      "modId": "better_spirit_commerce",
+      "artifact": "better-spirit-commerce-1.0.1.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-content-notifications",
-        "dynamic-survival-hud"
+        "better-compat-fixes",
+        "better-gameplay-notices",
+        "better-dimension-fonts"
       ]
     },
     {
-      "repository": "better-content-notifications",
-      "modId": "better_content_notifications",
-      "artifact": "better-content-notifications-1.0.0.jar",
+      "repository": "better-compat-fixes",
+      "modId": "better_compat_fixes",
+      "artifact": "better-compat-fixes-0.1.9.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-gameplay-notices",
+        "better-survival-hud"
+      ]
+    },
+    {
+      "repository": "better-gameplay-notices",
+      "modId": "better_gameplay_notices",
+      "artifact": "better-gameplay-notices-1.0.0.jar",
       "tasks": [
         "verifyFast",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "better-content-threads",
-      "modId": "learning_surfaces",
-      "artifact": "learning-surfaces-1.0.0.jar",
+      "repository": "better-discovery-guides",
+      "modId": "better_discovery_guides",
+      "artifact": "better-discovery-guides-1.0.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "arcane-chunk-loaders",
-        "better-content-economy",
-        "better-content-fixes",
-        "better-content-notifications",
-        "bumblezone-cultivars",
-        "create-train-fuel-scaling",
-        "create-transmission-loss",
-        "depth-director",
-        "dimension-drink",
-        "downed-player-revival",
-        "heat-sync",
-        "latent-chemlib",
-        "oc2r-create-bridge",
-        "oc2r-wireless-pubsub",
-        "pillager-campaigns",
-        "player-traces",
-        "rail-beetle",
-        "realistic-ores",
-        "rpg-stats",
-        "settlement-roads",
-        "systemic-salience",
-        "tinkers-construct-affixes",
-        "water-survival",
-        "world-lifecycle-manager"
+        "better-magic-chunk-anchors",
+        "better-spirit-commerce",
+        "better-compat-fixes",
+        "better-gameplay-notices",
+        "better-bumblezone-crops",
+        "better-create-train-fuel",
+        "better-create-kinetic-loss",
+        "better-cave-encounters",
+        "better-dimension-fonts",
+        "better-deaths-door",
+        "better-industrial-heat",
+        "better-chemlib-hazards",
+        "better-oc2r-create-controls",
+        "better-oc2r-wireless-messaging",
+        "better-pillager-campaigns",
+        "better-player-traces",
+        "better-rail-beetle",
+        "better-ore-geology",
+        "better-rpg-progression",
+        "better-settlement-roads",
+        "better-survival-physiology",
+        "better-tinkers-loot-affixes",
+        "better-drinking-water",
+        "better-world-management"
       ]
     },
     {
-      "repository": "bumblezone-cultivars",
-      "modId": "bumblezone_cultivars",
-      "artifact": "bumblezone-cultivars-0.1.0.jar",
+      "repository": "better-bumblezone-crops",
+      "modId": "better_bumblezone_crops",
+      "artifact": "better-bumblezone-crops-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "buried-encounters",
-      "modId": "buried_encounters",
-      "artifact": "buried-encounters-0.1.0.jar",
+      "repository": "better-buried-encounters",
+      "modId": "better_buried_encounters",
+      "artifact": "better-buried-encounters-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "better-content-fire",
-      "modId": "better_content_fire",
-      "artifact": "better-content-fire-0.1.0.jar",
+      "repository": "better-wildfire",
+      "modId": "better_wildfire",
+      "artifact": "better-wildfire-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "better-content-journal-ui",
-      "modId": "better_content_journal_ui",
-      "artifact": "better-content-journal-ui-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ],
-      "dependsOn": [
-        "better-content-fixes",
-        "downed-player-revival",
-        "rpg-stats",
-        "systemic-salience"
-      ]
-    },
-    {
-      "repository": "class-selector",
-      "modId": "class_selector",
-      "artifact": "class-selector-1.0.0.jar",
+      "repository": "better-journal-inventory",
+      "modId": "better_journal_inventory",
+      "artifact": "better-journal-inventory-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "world-lifecycle-manager"
+        "better-compat-fixes",
+        "better-deaths-door",
+        "better-rpg-progression",
+        "better-survival-physiology"
       ]
     },
     {
-      "repository": "create-train-fuel-scaling",
-      "modId": "create_train_fuel_scaling",
-      "artifact": "create-train-fuel-scaling-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ]
-    },
-    {
-      "repository": "create-transmission-loss",
-      "modId": "create_transmission_loss",
-      "artifact": "create-transmission-loss-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ]
-    },
-    {
-      "repository": "depth-director",
-      "modId": "depth_director",
-      "artifact": "depth-director-0.2.1.jar",
+      "repository": "better-spawns",
+      "modId": "better_spawns",
+      "artifact": "better-spawns-1.0.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-content-fixes",
-        "downed-player-revival"
+        "better-world-management"
       ]
     },
     {
-      "repository": "dimension-drink",
-      "modId": "dimension_drink",
-      "artifact": "dimension-drink-1.0.0.jar",
+      "repository": "better-create-train-fuel",
+      "modId": "better_create_train_fuel",
+      "artifact": "better-create-train-fuel-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-create-kinetic-loss",
+      "modId": "better_create_kinetic_loss",
+      "artifact": "better-create-kinetic-loss-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-cave-encounters",
+      "modId": "better_cave_encounters",
+      "artifact": "better-cave-encounters-0.2.1.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-content-fixes",
-        "better-content-notifications"
+        "better-compat-fixes",
+        "better-deaths-door"
       ]
     },
     {
-      "repository": "downed-player-revival",
-      "modId": "downed_player_revival",
-      "artifact": "downed-player-revival-1.0.0.jar",
+      "repository": "better-dimension-fonts",
+      "modId": "better_dimension_fonts",
+      "artifact": "better-dimension-fonts-1.0.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "dynamic-survival-hud"
+        "better-compat-fixes",
+        "better-gameplay-notices"
       ]
     },
     {
-      "repository": "dynamic-survival-hud",
-      "modId": "dynamic_survival_hud",
-      "artifact": "dynamic-survival-hud-1.0.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ]
-    },
-    {
-      "repository": "dynamic-trees-hexerei",
-      "modId": "dynamic_trees_hexerei",
-      "artifact": "dynamic-trees-hexerei-1.0.1.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ]
-    },
-    {
-      "repository": "dynamic-trees-malum",
-      "modId": "dynamic_trees_malum",
-      "artifact": "dynamic-trees-malum-1.0.1.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ]
-    },
-    {
-      "repository": "exploration-tick-governor",
-      "modId": "exploration_tick_governor",
-      "artifact": "exploration-tick-governor-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ]
-    },
-    {
-      "repository": "heat-sync",
-      "modId": "heat_sync",
-      "artifact": "heat-sync-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ]
-    },
-    {
-      "repository": "immersive-weathering-sampler",
-      "modId": "immersive_weathering_sampler",
-      "artifact": "immersive-weathering-sampler-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ]
-    },
-    {
-      "repository": "latent-chemlib",
-      "modId": "latent_chemlib",
-      "artifact": "latent-chemlib-0.2.0.jar",
+      "repository": "better-deaths-door",
+      "modId": "better_deaths_door",
+      "artifact": "better-deaths-door-1.0.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "heat-sync"
+        "better-survival-hud"
       ]
     },
     {
-      "repository": "mining-helmet",
-      "modId": "mining_helmet",
-      "artifact": "mining-helmet-0.1.0.jar",
+      "repository": "better-survival-hud",
+      "modId": "better_survival_hud",
+      "artifact": "better-survival-hud-1.0.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "oc2r-create-bridge",
-      "modId": "oc2r_create_bridge",
-      "artifact": "oc2r-create-bridge-0.1.0.jar",
+      "repository": "better-hexerei-dynamic-trees",
+      "modId": "better_hexerei_dynamic_trees",
+      "artifact": "better-hexerei-dynamic-trees-1.0.1.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "oc2r-wireless-pubsub",
-      "modId": "oc2r_wireless_pubsub",
-      "artifact": "oc2r-wireless-pubsub-1.0.0.jar",
+      "repository": "better-malum-dynamic-trees",
+      "modId": "better_malum_dynamic_trees",
+      "artifact": "better-malum-dynamic-trees-1.0.1.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "pillager-campaigns",
-      "modId": "pillager_campaigns",
-      "artifact": "pillager-campaigns-0.5.4.jar",
+      "repository": "better-exploration-load-control",
+      "modId": "better_exploration_load_control",
+      "artifact": "better-exploration-load-control-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-industrial-heat",
+      "modId": "better_industrial_heat",
+      "artifact": "better-industrial-heat-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-weathering-offline-progress",
+      "modId": "better_weathering_offline_progress",
+      "artifact": "better-weathering-offline-progress-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-chemlib-hazards",
+      "modId": "better_chemlib_hazards",
+      "artifact": "better-chemlib-hazards-0.2.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-industrial-heat"
+      ]
+    },
+    {
+      "repository": "better-mining-lamp",
+      "modId": "better_mining_lamp",
+      "artifact": "better-mining-lamp-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-oc2r-create-controls",
+      "modId": "better_oc2r_create_controls",
+      "artifact": "better-oc2r-create-controls-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-oc2r-wireless-messaging",
+      "modId": "better_oc2r_wireless_messaging",
+      "artifact": "better-oc2r-wireless-messaging-1.0.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-pillager-campaigns",
+      "modId": "better_pillager_campaigns",
+      "artifact": "better-pillager-campaigns-0.5.4.jar",
       "tasks": [
         "verifyFull",
         "verifyWorld",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "downed-player-revival"
+        "better-deaths-door"
       ]
     },
     {
-      "repository": "player-traces",
-      "modId": "player_traces",
-      "artifact": "player-traces-0.1.0.jar",
+      "repository": "better-player-traces",
+      "modId": "better_player_traces",
+      "artifact": "better-player-traces-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "downed-player-revival"
+        "better-deaths-door"
       ]
     },
     {
-      "repository": "procedural-bouquets",
-      "modId": "procedural_bouquets",
-      "artifact": "procedural-bouquets-0.1.0.jar",
+      "repository": "better-craftable-bouquets",
+      "modId": "better_craftable_bouquets",
+      "artifact": "better-craftable-bouquets-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "rail-beetle",
-      "modId": "rail_beetle",
-      "artifact": "rail-beetle-0.1.0.jar",
+      "repository": "better-rail-beetle",
+      "modId": "better_rail_beetle",
+      "artifact": "better-rail-beetle-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "ratlantis-logistics",
-      "modId": "ratlantis_logistics",
-      "artifact": "ratlantis-logistics-0.1.0.jar",
+      "repository": "better-ratlantis-logistics",
+      "modId": "better_ratlantis_logistics",
+      "artifact": "better-ratlantis-logistics-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "bumblezone-cultivars"
+        "better-bumblezone-crops"
       ]
     },
     {
-      "repository": "realistic-ores",
-      "modId": "realistic_ores",
-      "artifact": "realistic-ores-0.2.0.jar",
+      "repository": "better-ore-geology",
+      "modId": "better_ore_geology",
+      "artifact": "better-ore-geology-0.2.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "realistic-placement-preview",
-      "modId": "realistic_placement_preview",
-      "artifact": "realistic-placement-preview-0.1.0.jar",
+      "repository": "better-block-placement-preview",
+      "modId": "better_block_placement_preview",
+      "artifact": "better-block-placement-preview-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "regolith-farmland",
-      "modId": "regolith_farmland",
-      "artifact": "regolith-farmland-0.1.0.jar",
+      "repository": "better-regolith-farming",
+      "modId": "better_regolith_farming",
+      "artifact": "better-regolith-farming-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "rehooked-intro-hooks",
-      "modId": "rehooked_intro_hooks",
-      "artifact": "rehooked-intro-hooks-0.1.0.jar",
+      "repository": "better-rehooked-grappling",
+      "modId": "better_rehooked_grappling",
+      "artifact": "better-rehooked-grappling-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "rpg-stats",
-      "modId": "rpg_stats",
-      "artifact": "rpg-stats-1.0.1.jar",
+      "repository": "better-rpg-progression",
+      "modId": "better_rpg_progression",
+      "artifact": "better-rpg-progression-1.0.1.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "runtime-data-dumper",
-      "modId": "runtime_data_dumper",
-      "artifact": "runtime-data-dumper-0.1.0.jar",
+      "repository": "better-runtime-diagnostics",
+      "modId": "better_runtime_diagnostics",
+      "artifact": "better-runtime-diagnostics-0.1.0.jar",
       "tasks": [
         "build",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "settlement-roads",
-      "modId": "settlement_roads",
-      "artifact": "settlement-roads-0.1.0.jar",
+      "repository": "better-settlement-roads",
+      "modId": "better_settlement_roads",
+      "artifact": "better-settlement-roads-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "systemic-salience",
-      "modId": "systemic_salience",
-      "artifact": "systemic-salience-0.1.1.jar",
+      "repository": "better-survival-physiology",
+      "modId": "better_survival_physiology",
+      "artifact": "better-survival-physiology-0.1.1.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "tinkers-construct-affixes",
-      "modId": "tinkers_construct_affixes",
-      "artifact": "tinkers-construct-affixes-1.0.0.jar",
+      "repository": "better-tinkers-loot-affixes",
+      "modId": "better_tinkers_loot_affixes",
+      "artifact": "better-tinkers-loot-affixes-1.0.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "village-walls",
-      "modId": "village_walls",
-      "artifact": "village-walls-1.0.0.jar",
+      "repository": "better-village-fortifications",
+      "modId": "better_village_fortifications",
+      "artifact": "better-village-fortifications-1.0.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "water-survival",
-      "modId": "water_survival",
-      "artifact": "water-survival-1.1.0.jar",
+      "repository": "better-drinking-water",
+      "modId": "better_drinking_water",
+      "artifact": "better-drinking-water-1.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
       ]
     },
     {
-      "repository": "world-lifecycle-manager",
-      "modId": "world_lifecycle_manager",
-      "artifact": "world-lifecycle-manager-0.1.0.jar",
+      "repository": "better-world-management",
+      "modId": "better_world_management",
+      "artifact": "better-world-management-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"

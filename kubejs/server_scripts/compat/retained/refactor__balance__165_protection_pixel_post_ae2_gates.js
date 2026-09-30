@@ -121,9 +121,9 @@ ServerEvents.recipes(function (event) {
         ingredients: [
             { item: 'minecraft:white_terracotta' },
             { item: 'minecraft:netherite_scrap' },
-            { item: 'heat_sync:heat_pipe' },
-            { item: 'realistic_ores:thorium_concentrate' },
-            { item: 'realistic_ores:uranium_concentrate' }
+            { item: 'better_industrial_heat:heat_pipe' },
+            { item: 'better_ore_geology:thorium_concentrate' },
+            { item: 'better_ore_geology:uranium_concentrate' }
         ],
         results: [{ item: 'protection_pixel:heatresistantceramicsheet', count: 2 }]
     }).id('kubejs:protection_pixel/heat_resistant_ceramic_sheet')
@@ -140,9 +140,9 @@ ServerEvents.recipes(function (event) {
     ], {
         S: { item: 'kubejs:sky_steel_sheet' },
         Q: { item: 'kubejs:sky_steel_sheet' },
-        L: { item: 'heat_sync:heat_pipe' },
+        L: { item: 'better_industrial_heat:heat_pipe' },
         A: { item: 'protection_pixel:alloyarmorplate' },
-        F: { item: 'latent_chemlib:gas_reaction_chamber' },
+        F: { item: 'better_chemlib_hazards:gas_reaction_chamber' },
         C: { item: 'ae2:engineering_processor' }
     }, 'kubejs:create/mechanical_crafting/protection_pixel/armor_load_platform')
 
@@ -153,8 +153,8 @@ ServerEvents.recipes(function (event) {
         'FQCQF',
         'HFHFH'
     ], {
-        H: { item: 'heat_sync:heat_pipe' },
-        F: { item: 'latent_chemlib:gas_reaction_chamber' },
+        H: { item: 'better_industrial_heat:heat_pipe' },
+        F: { item: 'better_chemlib_hazards:gas_reaction_chamber' },
         Q: { item: 'kubejs:ae_logic_package' },
         C: { item: 'ae2:engineering_processor' },
         A: { item: 'protection_pixel:alloyarmorplate' }
@@ -166,7 +166,7 @@ ServerEvents.recipes(function (event) {
         'RHR'
     ], {
         R: { item: 'kubejs:platinum_group_residue' },
-        H: { item: 'heat_sync:coolant_exchanger' },
+        H: { item: 'better_industrial_heat:coolant_exchanger' },
         Q: { item: 'kubejs:ae_logic_package' },
         E: { item: 'protection_pixel:powerengine' }
     }, 'kubejs:create/mechanical_crafting/protection_pixel/heat_overlock_mechanism')
@@ -321,11 +321,11 @@ ServerEvents.recipes(function (event) {
         'STS'
     ], {
         H: { item: 'protection_pixel:heatresistantceramicsheet' },
-        O: { item: 'realistic_ores:crushed_hotstone' },
+        O: { item: 'better_ore_geology:crushed_hotstone' },
         Q: { item: 'kubejs:ae_logic_package' },
         L: { item: 'protection_pixel:linkplate_helmet' },
         S: { item: 'protection_pixel:smallnetheritesheet' },
-        T: { item: 'realistic_ores:thorium_concentrate' }
+        T: { item: 'better_ore_geology:thorium_concentrate' }
     }, 'kubejs:create/mechanical_crafting/protection_pixel/tosaki_helmet_lava_diving')
 
      bcPpMechanical(event, 'protection_pixel:tosaki_chestplate', [
@@ -335,7 +335,7 @@ ServerEvents.recipes(function (event) {
         'SOS'
     ], {
         H: { item: 'protection_pixel:heatresistantceramicsheet' },
-        O: { item: 'realistic_ores:crushed_hotstone' },
+        O: { item: 'better_ore_geology:crushed_hotstone' },
         Q: { item: 'kubejs:ae_logic_package' },
         L: { item: 'protection_pixel:linkplate_chestplate' },
         A: { item: 'protection_pixel:heatoverlockingmechanism' },
@@ -351,7 +351,7 @@ ServerEvents.recipes(function (event) {
     ], {
         H: { item: 'protection_pixel:heatresistantceramicsheet' },
         Q: { item: 'kubejs:ae_logic_package' },
-        O: { item: 'realistic_ores:crushed_hotstone' },
+        O: { item: 'better_ore_geology:crushed_hotstone' },
         L: { item: 'protection_pixel:linkplate_leggings' },
         S: { item: 'protection_pixel:smallnetheritesheet' },
         I: { item: 'kubejs:titanium_thermal_plate' }

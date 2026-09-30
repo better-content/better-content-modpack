@@ -16,7 +16,7 @@ class Malum08RelocationContractTest {
 
     @Test
     fun `all native Malum mineral modifiers are overridden by the empty biome tag`() {
-        val relocationData = root.resolve("datapacks/dimension_drink_ore_relocation/data")
+        val relocationData = root.resolve("datapacks/better_dimension_fonts_ore_relocation/data")
         val emptyTag = mapper.readTree(
             relocationData.resolve("kubejs/tags/worldgen/biome/no_biomes.json").toFile(),
         )
@@ -45,23 +45,23 @@ class Malum08RelocationContractTest {
 
     @Test
     fun `each authored Malum relocation remains connected to its selected target tag`() {
-        val data = root.resolve("datapacks/dimension_drink_ore_relocation/data")
+        val data = root.resolve("datapacks/better_dimension_fonts_ore_relocation/data")
         val destinations = mapOf(
-            "dimension_drink_blazing_quartz_ore" to "nether",
-            "dimension_drink_brilliant_ore" to "deep",
-            "dimension_drink_cthonic_gold_ore" to "deep",
-            "dimension_drink_malum_deepslate_quartz_geode" to "deep",
-            "dimension_drink_malum_quartz_geode" to "sky",
-            "dimension_drink_natural_quartz_ore" to "stone",
-            "dimension_drink_soulstone_ore" to "deep",
+            "better_dimension_fonts_blazing_quartz_ore" to "nether",
+            "better_dimension_fonts_brilliant_ore" to "deep",
+            "better_dimension_fonts_cthonic_gold_ore" to "deep",
+            "better_dimension_fonts_malum_deepslate_quartz_geode" to "deep",
+            "better_dimension_fonts_malum_quartz_geode" to "sky",
+            "better_dimension_fonts_natural_quartz_ore" to "stone",
+            "better_dimension_fonts_soulstone_ore" to "deep",
         )
         destinations.forEach { (id, target) ->
             val modifier = mapper.readTree(data.resolve("kubejs/forge/biome_modifier/$id.json").toFile())
-            val tagId = "#kubejs:dimension_drink_ore_targets/$target"
+            val tagId = "#kubejs:better_dimension_fonts_ore_targets/$target"
             assertEquals(tagId, modifier.path("biomes").asText(), "$id selected target")
 
             val targetTag = mapper.readTree(
-                data.resolve("kubejs/tags/worldgen/biome/dimension_drink_ore_targets/$target.json").toFile(),
+                data.resolve("kubejs/tags/worldgen/biome/better_dimension_fonts_ore_targets/$target.json").toFile(),
             )
             assertFalse(targetTag.path("replace").asBoolean(), "$target must stay additive")
             assertTrue(targetTag.path("values").isArray && !targetTag.path("values").isEmpty, "$target must resolve to authored biome tags")

@@ -72,8 +72,8 @@ class MatterMetallurgyContractTest {
     fun `foundry crosses processed geology without native nether grout`() {
         assertTrue(thermalPressure.contains("event.remove({ output: 'tconstruct:nether_grout' })"))
         assertTrue(thermalPressure.contains("event.remove({ input: 'tconstruct:nether_grout' })"))
-        assertTrue(thermalPressure.contains("realistic_ores:rinsed_hotstone"))
-        assertTrue(thermalPressure.contains("realistic_ores:rinsed_black_shale"))
+        assertTrue(thermalPressure.contains("better_ore_geology:rinsed_hotstone"))
+        assertTrue(thermalPressure.contains("better_ore_geology:rinsed_black_shale"))
         assertTrue(thermalPressure.contains("results: [{ item: 'tconstruct:scorched_brick', count: 2 }]"))
         assertFalse(thermalPressure.contains("foundry/nether_grout"))
     }
@@ -95,7 +95,7 @@ class MatterMetallurgyContractTest {
     fun `obsolete ore sprawl and synthetic diamond bypass stay removed`() {
         assertTrue(acidChemistry.contains("pneumaticcraft:pressure_chamber/coal_to_diamond"))
         assertFalse(magicSynthesis.contains("sanguine_"))
-        assertFalse(magicSynthesis.contains("latent_chemlib:sealed_chemical_cell"))
+        assertFalse(magicSynthesis.contains("better_chemlib_hazards:sealed_chemical_cell"))
         assertFalse(magicSynthesis.contains("grinding_ball"))
         assertFalse(Files.exists(root.resolve("kubejs/data/bloodmagic/tags/items/arc/cuttingfluid.json")))
 

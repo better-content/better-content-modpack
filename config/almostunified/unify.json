@@ -1,6 +1,6 @@
 {
   "modPriorities": [
-    "realistic_ores",
+    "better_ore_geology",
     "chemlib",
     "minecraft",
     "kubejs",
@@ -543,9 +543,9 @@
     "cucumber:shaped_tag"
   ],
   "ignoredRecipes": [
-    "^realistic_ores:compat/create/crushing/.*$",
-    "^realistic_ores:crafting/ore_reassembly/.*$",
-    "^kubejs:realistic_ores/.*$"
+    "^better_ore_geology:compat/create/crushing/.*$",
+    "^better_ore_geology:crafting/ore_reassembly/.*$",
+    "^kubejs:better_ore_geology/.*$"
   ],
   "itemsHidingJeiRei": true,
   "customTags": {

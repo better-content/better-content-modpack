@@ -106,7 +106,7 @@ ServerEvents.recipes(function (event) {
         'kubejs:transition/geology/tungsten_carbide_insert',
         'kubejs:tungsten_carbide_insert', 1, [
             '#forge:ingots/steel',
-            'realistic_ores:crushed_ironstone',
+            'better_ore_geology:crushed_ironstone',
             'minecraft:coal',
             'minecraft:coal'
         ], 'heated')
@@ -114,8 +114,8 @@ ServerEvents.recipes(function (event) {
     event.custom({
         type: 'create:mixing',
         ingredients: [
-            { item: 'realistic_ores:gold_concentrate' },
-            { item: 'realistic_ores:gold_concentrate' },
+            { item: 'better_ore_geology:gold_concentrate' },
+            { item: 'better_ore_geology:gold_concentrate' },
             { fluid: 'chemlib:hydrochloric_acid_fluid', amount: 250 },
             { fluid: 'chemlib:nitric_acid_fluid', amount: 250 }
         ],

@@ -42,7 +42,7 @@ object GeometrySmokePlan {
         "the_deep_void:the_pit" to { id -> id.startsWith("the_deep_void:") || id == "minecraft:deepslate" },
     )
     private val air = setOf("minecraft:air", "minecraft:cave_air", "minecraft:void_air")
-    private val harnessBlocks = setOf("minecraft:bedrock", "minecraft:obsidian", "minecraft:oxidized_copper", "dimension_drink:return_seal")
+    private val harnessBlocks = setOf("minecraft:bedrock", "minecraft:obsidian", "minecraft:oxidized_copper", "better_dimension_fonts:return_seal")
 
     fun isTerrain(dimension: String): Boolean {
         require(dimension in terrainProfiles || dimension in utilityDimensions) { "unclassified loaded dimension: $dimension" }

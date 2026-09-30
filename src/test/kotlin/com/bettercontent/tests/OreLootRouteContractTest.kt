@@ -20,9 +20,9 @@ class OreLootRouteContractTest {
 
         assertEquals(
             mapOf(
-                "minecraft:raw_iron" to "realistic_ores:small_ore_chunk_ironstone",
-                "minecraft:raw_copper" to "realistic_ores:small_ore_chunk_copper_bloom",
-                "minecraft:raw_gold" to "realistic_ores:gold_concentrate",
+                "minecraft:raw_iron" to "better_ore_geology:small_ore_chunk_ironstone",
+                "minecraft:raw_copper" to "better_ore_geology:small_ore_chunk_copper_bloom",
+                "minecraft:raw_gold" to "better_ore_geology:gold_concentrate",
                 "minecraft:raw_iron_block" to "minecraft:iron_block",
                 "minecraft:raw_copper_block" to "minecraft:copper_block",
                 "minecraft:raw_gold_block" to "minecraft:gold_block",
@@ -31,7 +31,7 @@ class OreLootRouteContractTest {
         )
         assertTrue(policy.contains("event.addLootTableModifier(/^(?!minecraft:empty$).*$/)"))
         assertTrue(policy.contains("rawMetalLoot.replaceLoot(route[0], route[1], true)"))
-        assertTrue(policy.contains("if (!Platform.isLoaded('realistic_ores')) return"))
+        assertTrue(policy.contains("if (!Platform.isLoaded('better_ore_geology')) return"))
     }
 
     @Test
@@ -39,12 +39,12 @@ class OreLootRouteContractTest {
         val policy = Files.readString(root.resolve("kubejs/server_scripts/policy/ore_raw_material_recipes.js"))
         listOf(
             "quark:building/crafting/raw_iron_bricks_revert" to
-                "9x realistic_ores:small_ore_chunk_ironstone",
+                "9x better_ore_geology:small_ore_chunk_ironstone",
             "quark:building/crafting/raw_copper_bricks_revert" to
-                "9x realistic_ores:small_ore_chunk_copper_bloom",
+                "9x better_ore_geology:small_ore_chunk_copper_bloom",
             "quark:building/crafting/raw_gold_bricks_revert" to
-                "9x realistic_ores:gold_concentrate",
-            "goety:psgold" to "2x realistic_ores:gold_concentrate",
+                "9x better_ore_geology:gold_concentrate",
+            "goety:psgold" to "2x better_ore_geology:gold_concentrate",
         ).forEach { (source, output) ->
             assertTrue(policy.contains("source: '$source'"), "missing source recipe $source")
             assertTrue(policy.contains("output: '$output'"), "missing replacement output for $source")

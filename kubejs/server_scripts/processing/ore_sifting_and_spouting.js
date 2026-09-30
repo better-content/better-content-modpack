@@ -28,15 +28,15 @@
         'malum:crushed_soulstone': true
     }
     var CANONICAL_FEEDS = {
-        'create:crushed_raw_copper': { nugget: 'create:copper_nugget', concentrate: 'realistic_ores:copper_concentrate', base: 2, chance: 0.25 },
-        'create:crushed_raw_gold': { nugget: 'minecraft:gold_nugget', concentrate: 'realistic_ores:gold_concentrate', base: 2, chance: 0.25 },
-        'create:crushed_raw_iron': { nugget: 'minecraft:iron_nugget', concentrate: 'realistic_ores:iron_concentrate', base: 2, chance: 0.25 },
-        'create:crushed_raw_zinc': { nugget: 'create:zinc_nugget', concentrate: 'realistic_ores:zinc_concentrate', base: 2, chance: 0.25 },
-        'create:crushed_raw_silver': { nugget: 'iceandfire:silver_nugget', concentrate: 'realistic_ores:silver_concentrate', base: 2, chance: 0.25 },
-        'malum:copper_node': { nugget: 'create:copper_nugget', concentrate: 'realistic_ores:copper_concentrate', base: 1, chance: 0.5 },
-        'malum:gold_node': { nugget: 'minecraft:gold_nugget', concentrate: 'realistic_ores:gold_concentrate', base: 1, chance: 0.5 },
-        'malum:iron_node': { nugget: 'minecraft:iron_nugget', concentrate: 'realistic_ores:iron_concentrate', base: 1, chance: 0.5 },
-        'malum:zinc_node': { nugget: 'create:zinc_nugget', concentrate: 'realistic_ores:zinc_concentrate', base: 1, chance: 0.5 }
+        'create:crushed_raw_copper': { nugget: 'create:copper_nugget', concentrate: 'better_ore_geology:copper_concentrate', base: 2, chance: 0.25 },
+        'create:crushed_raw_gold': { nugget: 'minecraft:gold_nugget', concentrate: 'better_ore_geology:gold_concentrate', base: 2, chance: 0.25 },
+        'create:crushed_raw_iron': { nugget: 'minecraft:iron_nugget', concentrate: 'better_ore_geology:iron_concentrate', base: 2, chance: 0.25 },
+        'create:crushed_raw_zinc': { nugget: 'create:zinc_nugget', concentrate: 'better_ore_geology:zinc_concentrate', base: 2, chance: 0.25 },
+        'create:crushed_raw_silver': { nugget: 'iceandfire:silver_nugget', concentrate: 'better_ore_geology:silver_concentrate', base: 2, chance: 0.25 },
+        'malum:copper_node': { nugget: 'create:copper_nugget', concentrate: 'better_ore_geology:copper_concentrate', base: 1, chance: 0.5 },
+        'malum:gold_node': { nugget: 'minecraft:gold_nugget', concentrate: 'better_ore_geology:gold_concentrate', base: 1, chance: 0.5 },
+        'malum:iron_node': { nugget: 'minecraft:iron_nugget', concentrate: 'better_ore_geology:iron_concentrate', base: 1, chance: 0.5 },
+        'malum:zinc_node': { nugget: 'create:zinc_nugget', concentrate: 'better_ore_geology:zinc_concentrate', base: 1, chance: 0.5 }
     }
     var SHARED_METALS = ['iron', 'nickel', 'copper', 'gold', 'tin', 'zinc', 'lead',
         'cadmium', 'silver', 'aluminum', 'titanium', 'cobalt', 'osmium', 'uranium', 'thorium']
@@ -163,7 +163,7 @@
                 return
             }
             var raw = { tag: rawTag }
-            var concentrate = { item: 'realistic_ores:' + material + '_concentrate' }
+            var concentrate = { item: 'better_ore_geology:' + material + '_concentrate' }
             ;[false, true].forEach(function (wet) {
                 var recipe = {
                     type: 'createsifter:sifting',

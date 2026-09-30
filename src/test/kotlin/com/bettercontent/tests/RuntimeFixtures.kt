@@ -137,13 +137,13 @@ class DedicatedServerFixture(
     fun preserveState() {
         val output = evidence.directory.resolve("server-state").also { it.createDirectories() }
         listOf(
-            server.resolve(".world_lifecycle_manager/perks-v2.tsv"),
-            server.resolve(".world_lifecycle_manager/lineage-v5.tsv"),
-            server.resolve("logs/world-lifecycle-manager-supervisor.log"),
+            server.resolve(".better_world_management/perks-v2.tsv"),
+            server.resolve(".better_world_management/lineage-v5.tsv"),
+            server.resolve("logs/better-world-management-supervisor.log"),
         ).filter(Files::isRegularFile).forEach { source ->
             Files.copy(source, output.resolve(source.fileName.toString()), StandardCopyOption.REPLACE_EXISTING)
         }
-        val archives = server.resolve(".world_lifecycle_manager/archives")
+        val archives = server.resolve(".better_world_management/archives")
         if (Files.isDirectory(archives)) {
             val hashes = Files.list(archives).use { stream ->
                 stream.filter(Files::isRegularFile).sorted().map { "${Hashes.sha256(it)}  ${it.fileName}" }.toList()

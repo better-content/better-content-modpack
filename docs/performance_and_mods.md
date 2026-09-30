@@ -8,12 +8,12 @@ Generated runtimes and old profiling directories are not authorities for active 
 ## Active integration state
 
 The Bumblezone 7.13.4 and Rats 8.1.3 are the active Font-only expedition realms replacing the
-retired Undergarden and Deeper Darker routes. `bumblezone_cultivars` owns Bumblezone food flora and
-propagation. `ratlantis_logistics` owns the three visible logistics components, bait-only trust,
+retired Undergarden and Deeper Darker routes. `better_bumblezone_crops` owns Bumblezone food flora and
+propagation. `better_ratlantis_logistics` owns the three visible logistics components, bait-only trust,
 finite Rats work behaviors, and tube traversal repair. Nature's Spirit remains the canonical mahogany
-wood and progression authority; `dynamic_trees_hexerei` restores dynamic Hexerei mahogany, willow,
+wood and progression authority; `better_hexerei_dynamic_trees` restores dynamic Hexerei mahogany, willow,
 and witch hazel trees. The CurseForge Dynamic Trees addons for Aether and Twilight Forest remain
-active, along with `dynamic_trees_malum`.
+active, along with `better_malum_dynamic_trees`.
 
 TaCZ 1.1.8 is active with playerAnimator and client-only Accelerated Rendering. Create Armorer,
 Applied Armorer, and Immersive Armorer remain external gun-pack ZIPs under `tacz/`. Their benches
@@ -105,11 +105,11 @@ Distant Horizons remains enabled during compatibility validation. Server generat
 enabled. LOD transparency is disabled to avoid incorrect Distant Horizons/Oculus/shader depth
 composition; nearby vanilla and shader water remain unchanged.
 
-`exploration_tick_governor` owns the foreground tick-budget governor. After a 100-tick sample warmup it
+`better_exploration_load_control` owns the foreground tick-budget governor. After a 100-tick sample warmup it
 temporarily overrides only Distant Horizons' optional distant generation when the sliding p95
 exceeds 50 ms or a tick exceeds 100 ms. It clears its in-memory override only after 600 consecutive
 ticks with p95 at or below 40 ms and no tick above 100 ms, and never enables a user-disabled DH
-setting. `/exploration_tick_governor performance_status` reports p50/p95/p99/max and override state.
+setting. `/better_exploration_load_control performance_status` reports p50/p95/p99/max and override state.
 
 The controlled exploration acceptance budget is measured after 60 seconds of warmup over a
 ten-minute fresh-terrain route: median at most 40 ms, p95 at most 50 ms, p99 at most 100 ms, and no
@@ -132,12 +132,12 @@ Lost Cities, Twilight Forest, and Fallout Wastelands are Creating Space destinat
 to the Lost Cities planet. Its mobs and ecology are planet-scoped: do not add them to the Overworld,
 Depth Director regions or encounters, or any other dimension, including as repurposed minibosses.
 The mod remains active on its intended planet; its six Mushroom Fields structures are disabled by
-`datapacks/worldgen_compat_fixes`, and `better_content_fixes` disables its unconditional client
+`datapacks/worldgen_compat_fixes`, and `better_compat_fixes` disables its unconditional client
 proximity-music scan. Its entities, combat, evolution, and ordinary Records-channel sounds remain
 active there.
 
 `datapacks/hyle_deep` owns the exhaustive Hyle/Unearthed deep-stone pass beginning at Y -64.
-`better_content_fixes` moves Hyle and SGI terrain conforming to decoration tail, completes only
+`better_compat_fixes` moves Hyle and SGI terrain conforming to decoration tail, completes only
 leftover replaceable bottom-section host blocks during generation, and registers the Unearthed
 soil aliases Dynamic Trees needs. Do not add a chunk-load replacement sweep: it could rewrite
 player-placed stone. Do not restore Unearthed Dynamic Trees soil-property files that reference
@@ -164,19 +164,19 @@ systems are intentionally outside the v1 preview scope.
 
 ## Custom compatibility ownership
 
-`world_lifecycle_manager` owns dedicated-server succession and the persistent schematic library.
-`player_traces` owns world-local, bounded movement and annotation data under the active save; it
+`better_world_management` owns dedicated-server succession and the persistent schematic library.
+`better_player_traces` owns world-local, bounded movement and annotation data under the active save; it
 does not composite the viewport or import server-root legacy data across generations.
 
-`better_content_fixes` owns the active compatibility repairs for Dynamic Trees/Aether, Hyle,
+`better_compat_fixes` owns the active compatibility repairs for Dynamic Trees/Aether, Hyle,
 Unearthed soil and farmland, Better Content Fire ground, C2ME safe-random noise, Weather2 fog under Oculus,
 PVJ Nether groundcover, TFTH proximity audio, and Dimension Font bounded placement. Dynamic Trees
 falling trees remain item-drop only. Dimension Font layout version 3 is new-world data and does not
 deserialize old pieces.
 
-`pillager_campaigns` bounds its loaded-column sampling, route search, and spawn production; it must
-never load terrain to seek a route. `settlement_roads` and `village_walls` likewise keep tick work
-bounded and clean transient state. `class-selector` always owns first-join spectator scouting and
+`better_pillager_campaigns` bounds its loaded-column sampling, route search, and spawn production; it must
+never load terrain to seek a route. `better_settlement_roads` and `better_village_fortifications` likewise keep tick work
+bounded and clean transient state. `better-spawns` always owns first-join spectator scouting and
 permanent spawn locking. Its active `progression` embark mode asks World Lifecycle Manager for the
 current lineage policy: new lineages receive site-only onboarding, class perks expose only their
 unlocked classes, and unlocking all six classes exposes the bounded Embark point-buy. World
@@ -189,11 +189,11 @@ present, including after a failed health check or interrupted retry.
 
 ## Heat and pollution authority
 
-`heat_sync` owns industrial heat storage, transfer, pipes, ambient bridging, hot water, and coolant
+`better_industrial_heat` owns industrial heat storage, transfer, pipes, ambient bridging, hot water, and coolant
 exchange. Create: Power Grid retains its electrical and device-overheat simulation; its optional
 `ThermalBehaviour` adapter exposes that temperature to HeatSync without creating a second heat API.
 
-`latent_chemlib` owns contained high-energy chemistry, decay heat, criticality, radiation, and
+`better_chemlib_hazards` owns contained high-energy chemistry, decay heat, criticality, radiation, and
 mass-debit semantics. It has no reactor power ladder or atmospheric scheduler. Released gases
 become native AdPother pollutant blocks at the configured contained-mass boundary; AdPother then
 owns movement, wind, impacts, detection, protection, emitters, chimneys, filters, and cleanup.

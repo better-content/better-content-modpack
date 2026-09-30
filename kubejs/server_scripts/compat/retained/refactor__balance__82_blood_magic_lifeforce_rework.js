@@ -18,16 +18,16 @@ ServerEvents.recipes(function (event) {
         C: 'minecraft:cauldron'
     }).id('kubejs:bloodmagic/heart_bound_blood_altar')
 
-    if (Platform.isLoaded('rpg_stats')) {
+    if (Platform.isLoaded('better_rpg_progression')) {
         // The one fragment in this craft remains installed in the block item.
-        event.shaped(Item.of('rpg_stats:heart_block', '{BlockEntityTag:{id:"rpg_stats:heart_block",Fragments:1L}}'), [
+        event.shaped(Item.of('better_rpg_progression:heart_block', '{BlockEntityTag:{id:"better_rpg_progression:heart_block",Fragments:1L}}'), [
             'BIB',
             'IHI',
             'BIB'
         ], {
             B: 'minecraft:bone_block',
             I: 'minecraft:iron_ingot',
-            H: 'rpg_stats:heart_fragment'
+            H: 'better_rpg_progression:heart_fragment'
         }).id('kubejs:bloodmagic/first_heart_block')
     }
 

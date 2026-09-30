@@ -94,13 +94,13 @@ ServerEvents.recipes(function (event) {
 
     bcFontCauldron(event, 'crystal_ball_overworld', 'hexerei:crystal_ball', 1, 'minecraft:lava', [
         'minecraft:glass',
-        'realistic_ores:black_shale',
+        'better_ore_geology:black_shale',
         'minecraft:glass',
         'minecraft:amethyst_shard',
         'hexerei:moon_dust',
         'minecraft:sculk_catalyst',
         'minecraft:glass',
-        'realistic_ores:black_shale'
+        'better_ore_geology:black_shale'
     ], { heatRequirement: 'heated' })
 
     // Every impure chalk preparation proves all four expedition Fonts equally:

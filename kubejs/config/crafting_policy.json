@@ -131,7 +131,7 @@
       "primary_role": "world",
       "support_state": "full"
     },
-    "airtight_machinery": {
+    "better_airtight_machines": {
       "primary_role": "content",
       "support_state": "full"
     },
@@ -155,7 +155,7 @@
       "primary_role": "presentation",
       "support_state": "not_applicable"
     },
-    "arcane_chunk_loaders": {
+    "better_magic_chunk_anchors": {
       "primary_role": "content",
       "support_state": "full"
     },
@@ -163,11 +163,11 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
-    "arena_challenges": {
+    "better_arena_trials": {
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "buried_encounters": {
+    "better_buried_encounters": {
       "primary_role": "content",
       "support_state": "not_applicable"
     },
@@ -203,27 +203,27 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
-    "better_content_economy": {
+    "better_spirit_commerce": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
-    "better_content_fire": {
+    "better_wildfire": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
-    "better_content_fixes": {
+    "better_compat_fixes": {
       "primary_role": "edge_provider",
       "support_state": "full"
     },
-    "better_content_journal_ui": {
+    "better_journal_inventory": {
       "primary_role": "presentation",
       "support_state": "not_applicable"
     },
-    "better_content_notifications": {
+    "better_gameplay_notices": {
       "primary_role": "presentation",
       "support_state": "not_applicable"
     },
-    "learning_surfaces": {
+    "better_discovery_guides": {
       "primary_role": "presentation",
       "support_state": "full"
     },
@@ -251,7 +251,7 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "bumblezone_cultivars": {
+    "better_bumblezone_crops": {
       "primary_role": "edge_provider",
       "support_state": "not_applicable"
     },
@@ -351,7 +351,7 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "class_selector": {
+    "better_spawns": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
@@ -399,11 +399,11 @@
       "primary_role": "content",
       "support_state": "full"
     },
-    "create_train_fuel_scaling": {
+    "better_create_train_fuel": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
-    "create_transmission_loss": {
+    "better_create_kinetic_loss": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
@@ -443,7 +443,7 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
-    "depth_director": {
+    "better_cave_encounters": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
@@ -451,11 +451,11 @@
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
-    "dimension_drink": {
+    "better_dimension_fonts": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
-    "downed_player_revival": {
+    "better_deaths_door": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
@@ -483,15 +483,15 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
-    "dynamic_survival_hud": {
+    "better_survival_hud": {
       "primary_role": "presentation",
       "support_state": "not_applicable"
     },
-    "dynamic_trees_hexerei": {
+    "better_hexerei_dynamic_trees": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
-    "dynamic_trees_malum": {
+    "better_malum_dynamic_trees": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
@@ -555,7 +555,7 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
-    "exploration_tick_governor": {
+    "better_exploration_load_control": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
@@ -851,7 +851,7 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "heat_sync": {
+    "better_industrial_heat": {
       "primary_role": "content",
       "support_state": "not_applicable"
     },
@@ -871,7 +871,7 @@
       "primary_role": "world",
       "support_state": "not_applicable"
     },
-    "immersive_weathering_sampler": {
+    "better_weathering_offline_progress": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
@@ -935,7 +935,7 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
-    "latent_chemlib": {
+    "better_chemlib_hazards": {
       "primary_role": "content",
       "support_state": "not_applicable"
     },
@@ -999,7 +999,7 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "mining_helmet": {
+    "better_mining_lamp": {
       "primary_role": "content",
       "support_state": "not_applicable"
     },
@@ -1051,11 +1051,11 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "oc2r_create_bridge": {
+    "better_oc2r_create_controls": {
       "primary_role": "edge_provider",
       "support_state": "not_applicable"
     },
-    "oc2r_wireless_pubsub": {
+    "better_oc2r_wireless_messaging": {
       "primary_role": "edge_provider",
       "support_state": "not_applicable"
     },
@@ -1075,7 +1075,7 @@
       "primary_role": "presentation",
       "support_state": "not_applicable"
     },
-    "pillager_campaigns": {
+    "better_pillager_campaigns": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
@@ -1087,7 +1087,7 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
-    "player_traces": {
+    "better_player_traces": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
@@ -1119,7 +1119,7 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "procedural_bouquets": {
+    "better_craftable_bouquets": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
@@ -1143,11 +1143,11 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "rail_beetle": {
+    "better_rail_beetle": {
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "ratlantis_logistics": {
+    "better_ratlantis_logistics": {
       "primary_role": "edge_provider",
       "support_state": "not_applicable"
     },
@@ -1159,11 +1159,11 @@
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
-    "realistic_ores": {
+    "better_ore_geology": {
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "realistic_placement_preview": {
+    "better_block_placement_preview": {
       "primary_role": "presentation",
       "support_state": "not_applicable"
     },
@@ -1171,7 +1171,7 @@
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
-    "regolith_farmland": {
+    "better_regolith_farming": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
@@ -1179,7 +1179,7 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "rehooked_intro_hooks": {
+    "better_rehooked_grappling": {
       "primary_role": "content",
       "support_state": "full"
     },
@@ -1203,11 +1203,11 @@
       "primary_role": "presentation",
       "support_state": "not_applicable"
     },
-    "rpg_stats": {
+    "better_rpg_progression": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
-    "runtime_data_dumper": {
+    "better_runtime_diagnostics": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
@@ -1231,7 +1231,7 @@
       "primary_role": "world",
       "support_state": "not_applicable"
     },
-    "settlement_roads": {
+    "better_settlement_roads": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
@@ -1303,7 +1303,7 @@
       "primary_role": "content",
       "support_state": "full"
     },
-    "systemic_salience": {
+    "better_survival_physiology": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },
@@ -1371,7 +1371,7 @@
       "primary_role": "content",
       "support_state": "full"
     },
-    "tinkers_construct_affixes": {
+    "better_tinkers_loot_affixes": {
       "primary_role": "content",
       "support_state": "full"
     },
@@ -1447,7 +1447,7 @@
       "primary_role": "content",
       "support_state": "full"
     },
-    "village_walls": {
+    "better_village_fortifications": {
       "primary_role": "world",
       "support_state": "not_applicable"
     },
@@ -1463,7 +1463,7 @@
       "primary_role": "content",
       "support_state": "full"
     },
-    "water_survival": {
+    "better_drinking_water": {
       "primary_role": "content",
       "support_state": "full"
     },
@@ -1471,7 +1471,7 @@
       "primary_role": "world",
       "support_state": "full"
     },
-    "world_lifecycle_manager": {
+    "better_world_management": {
       "primary_role": "world",
       "support_state": "full"
     },
@@ -1498,7 +1498,7 @@
     "technology.petroleum_splitting": "pneumaticcraft",
     "materials.mahogany": "natures_spirit",
     "survival.hand_fishing": "starcatcher",
-    "dimensions.ratlantis_entry": "dimension_drink",
+    "dimensions.ratlantis_entry": "better_dimension_fonts",
     "world.dragon_ecology": "iceandfire"
   },
   "families": [
@@ -2224,14 +2224,14 @@
       "capability": "ratlantis.logistics",
       "required_proofs": [
         "rats:gem_of_ratlantis",
-        "ratlantis_logistics:courier_lattice"
+        "better_ratlantis_logistics:courier_lattice"
       ]
     },
     {
       "capability": "ae2.network",
       "required_proofs": [
         "powergrid:generator_housing",
-        "ratlantis_logistics:arcane_logistics_core",
+        "better_ratlantis_logistics:arcane_logistics_core",
         "oc2r:computer",
         "ae2:sky_stone_block",
         "kubejs:impossible_support_matrix",
@@ -2250,7 +2250,7 @@
     {
       "capability": "impossible_matter.source",
       "required_proofs": [
-        "arcane_chunk_loaders:source_chunk_anchor",
+        "better_magic_chunk_anchors:source_chunk_anchor",
         "source:100000"
       ]
     }

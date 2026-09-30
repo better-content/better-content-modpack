@@ -98,7 +98,7 @@ makes a snapshot usable evidence; recency alone does not make it current. Preser
 snapshots as historical candidate evidence and do not use their volatile totals as claims about the
 tracked pack.
 
-The runtime-data-dumper completion schema is `bc.runtime_dump_completion.v3` and includes
+The better-runtime-diagnostics completion schema is `bc.runtime_dump_completion.v3` and includes
 `dimensions.json` (`bc.dimensions.v1`). Debug multiplayer traversal discovers targets at run time
 from the loaded Creating Space rocket-accessible-dimension registry and enabled Dimension Drink Font
 configuration; target counts are evidence, not hard-coded assumptions. Every discovered target

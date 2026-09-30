@@ -15,7 +15,7 @@ class CustomModNamespacePolicyTest {
             .readTree(root.resolve("kubejs/config/crafting_policy.json").toFile())
             .path("namespaces")
 
-        listOf("arena_challenges", "buried_encounters").forEach { namespace ->
+        listOf("better_arena_trials", "better_buried_encounters").forEach { namespace ->
             assertEquals("content", namespaces.path(namespace).path("primary_role").asText(), namespace)
             assertEquals("not_applicable", namespaces.path(namespace).path("support_state").asText(), namespace)
         }

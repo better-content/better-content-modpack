@@ -1,0 +1,10 @@
+{
+  "schema": "bc.better_chemlib_hazards.machine_profile.v1",
+  "default_max_heat": 4000.0,
+  "reaction_chamber_max_heat": 32000.0,
+  "reaction_chamber_max_charge": 20.0,
+  "machine_mass_capacity": 16000.0,
+  "chamber_temperature_per_second": 2500.0,
+  "chamber_charge_per_second": 0.025,
+  "chamber_energy_per_second": 30000.0
+}

@@ -10,17 +10,17 @@ ServerEvents.recipes(function (event) {
     event.remove({ output: 'littlelogistics:seater_car' })
     event.shaped('littlelogistics:seater_car', ['PPP', 'G G', 'R R'], {
         P: 'minecraft:crimson_planks', G: 'minecraft:gold_ingot', R: 'minecraft:rail'
-    }).id('kubejs:fonts/nether/seater_car')
+    }).id('littlelogistics:seater_car')
     event.remove({ output: 'littlelogistics:chest_car' })
     event.shaped('littlelogistics:chest_car', [' C ', 'PGP', 'R R'], {
         C: 'minecraft:chest', P: 'minecraft:crimson_planks',
         G: 'minecraft:gold_ingot', R: 'minecraft:rail'
-    }).id('kubejs:fonts/nether/chest_car')
+    }).id('littlelogistics:chest_car')
     event.remove({ output: 'littlelogistics:steam_locomotive' })
     event.shaped('littlelogistics:steam_locomotive', [' G ', 'BFB', 'RCR'], {
         G: 'minecraft:gold_ingot', B: 'minecraft:blaze_rod',
         F: 'minecraft:furnace', R: 'minecraft:rail', C: 'littlelogistics:seater_car'
-    }).id('kubejs:fonts/nether/steam_locomotive')
+    }).id('littlelogistics:steam_locomotive')
 
     // Quicksoil itself is the Aether's native fast path. Swets and skyroot
     // turn a small found patch into enough blocks to expand the route.
@@ -40,21 +40,21 @@ ServerEvents.recipes(function (event) {
     event.shaped('2x littlelogistics:barge', ['P P', 'PCP', 'LLL'], {
         P: 'rats:pirat_planks', C: 'minecraft:chest',
         L: 'better_ratlantis_logistics:courier_lattice'
-    }).id('kubejs:fonts/ratlantis/barge_pair')
+    }).id('littlelogistics:barge')
     event.remove({ output: 'littlelogistics:tug' })
     event.shaped('littlelogistics:tug', [' L ', 'PFP', 'LLL'], {
         L: 'better_ratlantis_logistics:courier_lattice', P: 'rats:pirat_planks',
         F: 'minecraft:furnace'
-    }).id('kubejs:fonts/ratlantis/tug')
+    }).id('littlelogistics:tug')
     event.remove({ output: 'littlelogistics:barge_dock' })
     event.shaped('4x littlelogistics:barge_dock', ['PPP', 'L L', 'PPP'], {
         P: 'rats:pirat_planks', L: 'better_ratlantis_logistics:courier_lattice'
-    }).id('kubejs:fonts/ratlantis/barge_docks')
+    }).id('littlelogistics:barge_dock')
     event.remove({ output: 'littlelogistics:tug_dock' })
     event.shaped('4x littlelogistics:tug_dock', ['PPP', 'LFL', 'PPP'], {
         P: 'rats:pirat_planks', L: 'better_ratlantis_logistics:courier_lattice',
         F: 'minecraft:furnace'
-    }).id('kubejs:fonts/ratlantis/tug_docks')
+    }).id('littlelogistics:tug_dock')
 
     // Honey crystals are renewable in the Bumblezone; native honey-bucket
     // recipes then provide Beehemoth lures. A wax saddle avoids loot RNG.

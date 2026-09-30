@@ -31,7 +31,7 @@ ServerEvents.recipes(function (event) {
     ], {
         I: '#forge:plates/iron',
         C: 'create:andesite_casing',
-        H: 'rehooked_intro_hooks:soap_on_a_rope',
+        H: 'better_rehooked_grappling:soap_on_a_rope',
         L: 'minecraft:chain'
     }, 'kubejs:rehooked/iron_hook_post_create')
 
@@ -64,7 +64,7 @@ ServerEvents.recipes(function (event) {
         H: 'minecraft:blaze_rod',
         B: 'rehooked:diamond_hook',
         P: 'powergrid:conductive_casing',
-        C: 'heat_sync:heat_pipe'
+        C: 'better_industrial_heat:heat_pipe'
     }, 'kubejs:rehooked/blaze_hook_post_electricity')
 
      bcMobilityMechanical(event, 'rehooked:ender_hook', [

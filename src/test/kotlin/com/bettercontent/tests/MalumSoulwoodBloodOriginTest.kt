@@ -27,7 +27,7 @@ class MalumSoulwoodBloodOriginTest {
         assertEquals(1, recipe.get("drainRate").asInt())
 
         val siteBootstrap = Files.readString(
-            root.resolve("../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/BlightLocusBootstrap.java"),
+            root.resolve("../mod_source/better-malum-dynamic-trees/src/main/java/com/bettercontent/bettermalumdynamictrees/BlightLocusBootstrap.java"),
         )
         assertFalse(siteBootstrap.contains("SOULWOOD_GROWTH"), "the site bootstrap must not place a guaranteed starter")
         assertTrue(siteBootstrap.contains("new ActiveBlightEvent()"), "keep Malum's native blight event as the natural route")

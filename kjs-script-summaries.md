@@ -62,8 +62,8 @@ Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 - `kubejs/server_scripts/processing/ore_sifting_and_spouting.js` — Disables Bulk Washing, migrates granular separations to waterlogged Sifting, and assigns direct water treatments to Spouting.
 - `kubejs/server_scripts/progression/00_primitive_workshop.js` — Establishes the pre-Font fiber, fired-goods, and simple-fittings recipe layer for local handling and homestead utilities.
 - `kubejs/server_scripts/progression/10_hand_workshop.js` — Authors four named Font grouts, automated and Melter-scale Andesite Alloy casting, and hand-cranked Create entry.
-- `kubejs/server_scripts/progression/20_ratlantis_logistics.js` — Removes direct Ratlantis access and gives Pretty Pipes, Sophisticated automation, Create requests, Rats, AE2, and Little Logistics visible Ratlantis-rooted recipes.
-- `kubejs/server_scripts/progression/21_bumblezone_cultivars.js` — Removes recipes that would create origin-controlled cultivar propagules outside nursery and harvest acquisition.
+- `kubejs/server_scripts/progression/20_better_ratlantis_logistics.js` — Removes direct Ratlantis access and gives Pretty Pipes, Sophisticated automation, Create requests, Rats, AE2, and Little Logistics visible Ratlantis-rooted recipes.
+- `kubejs/server_scripts/progression/21_better_bumblezone_crops.js` — Removes recipes that would create origin-controlled cultivar propagules outside nursery and harvest acquisition.
 - `kubejs/server_scripts/progression/20_powered_works.js` — Authors the Powered Works Machine Block roots and early kinetic machinery.
 - `kubejs/server_scripts/progression/30_precision_factory.js` — Authors the Precision Factory brass, deployment, and mechanical-crafting roots.
 - `kubejs/server_scripts/progression/40_thermal_pressure.js` — Authors processed-geology Scorched Brick production, compressed-air entry, and airtight machinery while disabling native Nether grout.

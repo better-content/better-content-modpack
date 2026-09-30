@@ -14,8 +14,8 @@ class WorldCondenserMeteorGateContractTest {
     )
     private val wlmRecipe = Files.readString(
         root.parent.resolve(
-            "mod_source/world-lifecycle-manager/src/main/resources/data/" +
-                "world_lifecycle_manager/recipes/world_condenser_interface.json",
+            "mod_source/better-world-management/src/main/resources/data/" +
+                "better_world_management/recipes/world_condenser_interface.json",
         ),
     )
 
@@ -28,13 +28,13 @@ class WorldCondenserMeteorGateContractTest {
 
         assertTrue(
             progression.contains(
-                "event.remove({ output: 'world_lifecycle_manager:world_condenser_interface' })",
+                "event.remove({ output: 'better_world_management:world_condenser_interface' })",
             ),
             "the original mod recipe and any other output recipe must be removed",
         )
         assertTrue(
             progression.contains(
-                "event.shaped('world_lifecycle_manager:world_condenser_interface', " +
+                "event.shaped('better_world_management:world_condenser_interface', " +
                     "['SBS', 'BOB', 'SBS'], {",
             ),
         )

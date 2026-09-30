@@ -21,7 +21,7 @@ class OreProcessingPolicyContractTest {
         assertTrue(script.contains("'create:crushed_raw_silver': true"))
         assertTrue(script.contains(
             "'create:crushed_raw_silver': { nugget: 'iceandfire:silver_nugget', " +
-                "concentrate: 'realistic_ores:silver_concentrate', base: 2, chance: 0.25 }",
+                "concentrate: 'better_ore_geology:silver_concentrate', base: 2, chance: 0.25 }",
         ))
     }
 
@@ -51,7 +51,7 @@ class OreProcessingPolicyContractTest {
         val modifier = read(
             "defaultresources/excavated_variants/excavated_variants/modifiers/tag_attachment.json5",
         )
-        val runtimePolicy = read("kubejs/server_scripts/policy/realistic_ores_tag_policy.js")
+        val runtimePolicy = read("kubejs/server_scripts/policy/better_ore_geology_tag_policy.js")
         assertTrue(modifier.contains("'forge:blocks/ores'"))
         assertTrue(modifier.contains("'c:blocks/ores'"))
         assertFalse(modifier.contains("'forge:items/ores'"))

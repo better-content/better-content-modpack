@@ -18,7 +18,7 @@
   ],
   "comment_foundation_blacklist": "Supports: full id, namespace.*, *, #namespace:tag",
   "Foundation blacklist": [
-    "dimension_drink:dimensional_font"
+    "better_dimension_fonts:dimensional_font"
   ],
   "comment_auto": "Below list contains real structure template files (.nbt). Do not edit."
 }

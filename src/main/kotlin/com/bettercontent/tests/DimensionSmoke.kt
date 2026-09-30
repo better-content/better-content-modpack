@@ -40,7 +40,7 @@ object DimensionSmokePlan {
                     if (definition.path("enabled").asBoolean(true)) {
                         val id = definition.path("targetDimension").asText()
                         require(resourceLocation.matches(id)) { "invalid Font target dimension in $path: $id" }
-                        sources.getOrPut(id, ::linkedSetOf).add("dimension_drink")
+                        sources.getOrPut(id, ::linkedSetOf).add("better_dimension_fonts")
                     }
                 }
             }

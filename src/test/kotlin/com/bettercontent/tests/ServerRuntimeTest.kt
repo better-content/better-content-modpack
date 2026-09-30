@@ -69,7 +69,7 @@ class ServerRuntimeTest {
             // Keep console commands short; long source lines can be truncated by the server input reader.
             val marker = "BC_FONT_$index"
             fixture.commandResult(
-                "execute in $dimension if block $x $y $z dimension_drink:dimensional_font run say $marker",
+                "execute in $dimension if block $x $y $z better_dimension_fonts:dimensional_font run say $marker",
                 Regex(Regex.escape(marker)),
                 "verify generated $id Font coordinate",
                 Duration.ofSeconds(30),
@@ -111,26 +111,26 @@ class ServerRuntimeTest {
         assumeTrue(snapshot, "runtime snapshot prerequisite failed")
         evidence.run.checkpoint("lineage transition and archive") {
             lifecycle(1)
-            assertTrue("perks\t-" in fixture.server.resolve(".world_lifecycle_manager/perks-v2.tsv").readLines())
-            assertTrue("generation\t1" in fixture.server.resolve(".world_lifecycle_manager/lineage-v5.tsv").readLines())
-            val archives = Files.list(fixture.server.resolve(".world_lifecycle_manager/archives")).use { stream ->
+            assertTrue("perks\t-" in fixture.server.resolve(".better_world_management/perks-v2.tsv").readLines())
+            assertTrue("generation\t1" in fixture.server.resolve(".better_world_management/lineage-v5.tsv").readLines())
+            val archives = Files.list(fixture.server.resolve(".better_world_management/archives")).use { stream ->
                 stream.filter { Files.isRegularFile(it) && it.fileName.toString().endsWith(".zip") }.sorted().toList()
             }
             assertEquals(1, archives.size)
-            val lineage = fixture.server.resolve(".world_lifecycle_manager/lineage-v5.tsv").readLines()
+            val lineage = fixture.server.resolve(".better_world_management/lineage-v5.tsv").readLines()
                 .first { it.startsWith("lineage\t") }.substringAfter('\t')
             archives.forEach { archive ->
                 assertTrue(Files.isRegularFile(archive.resolveSibling("${archive.fileName}.sha256")))
                 val transaction = Regex("(transaction-[a-z0-9_-]+)\\.zip$").find(archive.fileName.toString())?.groupValues?.get(1)
                     ?: error("archive name has no transaction ID: $archive")
                 Commands.run(
-                    listOf("./world-lifecycle-manager-server.sh", "verify-archive", archive.toString(), lineage, transaction),
+                    listOf("./better-world-management-server.sh", "verify-archive", archive.toString(), lineage, transaction),
                     fixture.server,
                     evidence.run.directory.resolve("archive-$transaction.log"),
                     mapOf("BC_JAVA" to fixture.config.java.toString()),
                 )
             }
-            assertTrue(Files.size(fixture.server.resolve("logs/world-lifecycle-manager-supervisor.log")) > 0)
+            assertTrue(Files.size(fixture.server.resolve("logs/better-world-management-supervisor.log")) > 0)
             first = true
         }
     }
@@ -205,11 +205,11 @@ class ServerRuntimeTest {
     }
 
     private fun lifecycle(expected: Int) {
-        fixture.send("world_lifecycle_manager select minecraft:plains minecraft:forest minecraft:meadow")
+        fixture.send("better_world_management select minecraft:plains minecraft:forest minecraft:meadow")
         fixture.waitLogCount(Regex("Selected Prestige biomes minecraft:plains > minecraft:forest > minecraft:meadow"), expected, "biome selection")
-        fixture.send("world_lifecycle_manager stage")
+        fixture.send("better_world_management stage")
         fixture.waitLogCount(Regex("Staged prestige reset"), expected, "prestige stage")
-        fixture.send("world_lifecycle_manager commit")
+        fixture.send("better_world_management commit")
         fixture.waitLogCount(Regex("Prestige commit accepted: .* clean shutdown is scheduled"), expected, "prestige acceptance")
         fixture.waitLogCount(Regex("committed; successor world is active"), expected, "successor activation", Duration.ofMinutes(20))
         fixture.waitReady(expected + 1)

@@ -126,7 +126,7 @@ key_key.rehooked.remove_all_hooks_key:key.keyboard.space
 key_key.modernfix.config:key.keyboard.unknown
 key_Highlight drone locations:key.keyboard.f9
 key_key.curios.open.desc:key.keyboard.unknown
-key_key.class_selector.open_menu:key.keyboard.k
+key_key.better_spawns.open_menu:key.keyboard.k
 key_key.epicfight.show_tooltip:key.keyboard.left.shift
 key_key.epicfight.skill_gui:key.keyboard.k:SHIFT
 key_key.epicfight.config:key.keyboard.unknown
@@ -238,7 +238,7 @@ key_key.aether.invisibility_toggle.desc:key.keyboard.i:ALT
 key_key.sophisticatedcore.sort:key.keyboard.unknown
 key_key.sophisticatedcore.transfer_to_storage:key.keyboard.left.bracket
 key_key.sophisticatedcore.transfer_to_inventory:key.keyboard.right.bracket
-key_key.rpg_stats.open_stats:key.keyboard.o
+key_key.better_rpg_progression.open_stats:key.keyboard.o
 key_placebo.toggleTrails:key.keyboard.unknown
 key_placebo.toggleWings:key.keyboard.unknown
 key_key.sophisticatedbackpacks.open_backpack:key.keyboard.b
@@ -346,7 +346,7 @@ key_key.goety.lich.laugh:key.keyboard.l:CONTROL
 key_key.goety.activate_curio:key.keyboard.unknown
 key_key.traces.reveal:key.keyboard.g
 key_key.traces.annotation:key.keyboard.n
-key_key.rail_beetle.select_route:key.keyboard.j
+key_key.better_rail_beetle.select_route:key.keyboard.j
 key_key.goety.dismiss:key.keyboard.keypad.decimal
 key_pneumaticcraft.armor.upgrade.fall_protection:key.keyboard.unknown
 key_pneumaticcraft.armor.upgrade.jet_boots.module.hover:key.keyboard.unknown

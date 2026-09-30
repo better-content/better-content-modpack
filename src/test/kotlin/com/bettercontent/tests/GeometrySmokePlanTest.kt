@@ -23,7 +23,7 @@ class GeometrySmokePlanTest {
         val dimension = "the_bumblezone:the_bumblezone"
         val empty = GeometrySample(dimension, 9, mapOf("minecraft:air" to 900_000))
         val platform = GeometrySample(dimension, 9, mapOf("minecraft:oxidized_copper" to 500,
-            "minecraft:air" to 899_500, "dimension_drink:return_seal" to 1))
+            "minecraft:air" to 899_500, "better_dimension_fonts:return_seal" to 1))
         assertEquals(false, GeometrySmokePlan.assess(dimension, listOf(empty))["passed"])
         assertEquals(false, GeometrySmokePlan.assess(dimension, listOf(platform))["passed"])
     }

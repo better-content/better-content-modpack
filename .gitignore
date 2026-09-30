@@ -30,6 +30,7 @@ generated/surface-samples-*-superflat.png
 generated/validation/integration-audit/spark-classification/
 generated/validation/integration-audit/stream-classification*/
 generated/validation/player-player-traces-*/
+generated/validation/player-better-player-traces-*/
 generated/validation/build40-*
 generated/validation/mod-gates-pre-complete-*
 generated/validation/automated_test_report.md

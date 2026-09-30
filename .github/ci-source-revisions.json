@@ -2,168 +2,188 @@
   "schema": "bc.ci_source_revisions.v1",
   "repositories": [
     {
-      "repository": "airtight-machinery",
-      "commit": "33dc88ec3573872d20a8afa1314793c57d26e10c"
+      "repository": "better-airtight-machines",
+      "commit": "6e00c9fb89076824e240f9caf54cce616cb94c91"
     },
     {
-      "repository": "arcane-chunk-loaders",
-      "commit": "5bce7d139c8d9405b9150d7cf86744e9c3d18b7b"
+      "repository": "better-magic-chunk-anchors",
+      "commit": "c51187810591323bc4c922c72d682bc25161da8f"
     },
     {
-      "repository": "better-content-economy",
-      "commit": "16f5a069f8d7325a532957aed71242650ecc6ef1"
+      "repository": "better-spirit-commerce",
+      "commit": "42ec11ac686ca012d48a61d11b6577b38a33b9bd"
     },
     {
-      "repository": "better-content-fixes",
-      "commit": "44892dd0ea5198d73428340ccac7b2b6861e462b"
+      "repository": "better-compat-fixes",
+      "commit": "72688911f1b2dd6a8a894c792611d142fb878e08"
     },
     {
-      "repository": "better-content-threads",
-      "commit": "d59ea6dc80f0747701eeed38e20e855d9e4e0c59"
+      "repository": "better-discovery-guides",
+      "commit": "14cef204d6b24af174fb88f1639444db57e04843"
     },
     {
-      "repository": "bumblezone-cultivars",
-      "commit": "35fb49328c9f13630d8efde428ea668b60c08b14"
+      "repository": "better-bumblezone-crops",
+      "commit": "e7c167142954247d94b14b9bcd22c7376c70994a"
     },
     {
       "repository": "burnt-grass-compat",
       "commit": "1f2ced196ed5537de207d973f5fa89a4170eac75"
     },
     {
-      "repository": "class-selector",
-      "commit": "f410abb44f7df3376633a2a0311edf85be380664"
+      "repository": "better-spawns",
+      "commit": "ab634db5277057cb0634e41cba0c1399e89fc2e7"
     },
     {
-      "repository": "create-train-fuel-scaling",
-      "commit": "153d0f76a09739b3f36266e4bd8162202bd25b26"
+      "repository": "better-create-train-fuel",
+      "commit": "f0bf8f2376097cef03dabbcbbb59961361b3039c"
     },
     {
-      "repository": "create-transmission-loss",
-      "commit": "805814133478e9eb6c34af7d0566413d89e96ac7"
+      "repository": "better-create-kinetic-loss",
+      "commit": "4d0ac1afee231fb1f23cdfe1549e7050afb167e7"
     },
     {
-      "repository": "depth-director",
-      "commit": "ae0b4f0c4eb4af0a49f0fa1494089b48d8ddd4ba"
+      "repository": "better-cave-encounters",
+      "commit": "abaf60bcc4c9466c3fddca91272d40858d223735"
     },
     {
-      "repository": "dimension-drink",
-      "commit": "8077b803f338bd4b67f1614961ebd8c309e0e9f4"
+      "repository": "better-dimension-fonts",
+      "commit": "e69b81023cb605556fa267f54c47026811acd76b"
     },
     {
-      "repository": "downed-player-revival",
-      "commit": "9e94c1cefcbc6b11750df35d2fd930b923a5085f"
+      "repository": "better-deaths-door",
+      "commit": "5d2ccb70867dc6be738a76523f8a9adf11e17cdd"
     },
     {
-      "repository": "dynamic-survival-hud",
-      "commit": "d3822667f74883052f1521c2c03ec86d1c26311f"
+      "repository": "better-survival-hud",
+      "commit": "1b2a849c196e87aa330893e8e89b48e25d9e71a3"
     },
     {
       "repository": "dynamic-trees-dimension-compat",
       "commit": "7de39c2f4b5c03d865d5be6be0f472f4e6e9efb1"
     },
     {
-      "repository": "dynamic-trees-hexerei",
-      "commit": "3749a1f84eebe4887d6a2c8a40a104fb8753430d"
+      "repository": "better-hexerei-dynamic-trees",
+      "commit": "6198f16688dbdde6ef9d84fa4db74239c41605cd"
     },
     {
-      "repository": "dynamic-trees-malum",
-      "commit": "006a9e0ef9a10e9b3057538ff5f4ac0aa07b8b58"
+      "repository": "better-malum-dynamic-trees",
+      "commit": "3afab47d38683036e71983b29f31e302bb717305"
     },
     {
-      "repository": "exploration-tick-governor",
-      "commit": "1c29a2214682d21e856324f9b604d33363047c96"
+      "repository": "better-exploration-load-control",
+      "commit": "1a155a038973c9601bf585af0cbfdf0f4f2b18ef"
     },
     {
-      "repository": "heat-sync",
-      "commit": "d538e2d8b2a86766943076fe909efa6e1baaba43"
+      "repository": "better-industrial-heat",
+      "commit": "e463c1ec25c072bc81541a89d43648234e889aa9"
     },
     {
-      "repository": "immersive-weathering-sampler",
-      "commit": "1b112342393b61502157fc34f6b4e2ee32f01fdc"
+      "repository": "better-weathering-offline-progress",
+      "commit": "8000f72a942f16440d2e372a91d330736c807fee"
     },
     {
-      "repository": "latent-chemlib",
-      "commit": "bcfb50770b24a09132c732a9e0429cbe3501f8fc"
+      "repository": "better-chemlib-hazards",
+      "commit": "34f37b54938a1d553d832074d8607c4a0bb0a507"
     },
     {
-      "repository": "mining-helmet",
-      "commit": "3e9da1f7fa896db5706267a1f5eaf340198bb24e"
+      "repository": "better-mining-lamp",
+      "commit": "5a2e40ad15e27531beebc5053123ec9c322e7310"
     },
     {
-      "repository": "oc2r-create-bridge",
-      "commit": "6f62a90c33f2bcc51e3cdf1c7b95f4c6e78c3f38"
+      "repository": "better-oc2r-create-controls",
+      "commit": "5e91e95396264e129b11e2407943c7ca86b78f2f"
     },
     {
-      "repository": "oc2r-wireless-pubsub",
-      "commit": "4ae3eb985c5c21b2805798f71ef4c0c27341bf22"
+      "repository": "better-oc2r-wireless-messaging",
+      "commit": "5806452a956827014795d248f496471a1961775c"
     },
     {
-      "repository": "pillager-campaigns",
-      "commit": "dc85c00018188f0fbabcbc159e2992bf95228473"
+      "repository": "better-pillager-campaigns",
+      "commit": "5c68b89539774b1ec680c1dfb2ce2cc81f3e3d75"
     },
     {
-      "repository": "player-traces",
-      "commit": "28b1a2fa8e3fcfb794952fc58ae2ba88f10ae7e2"
+      "repository": "better-player-traces",
+      "commit": "b71be7b33d5cc460278839c4a7f5ae7f733d734d"
     },
     {
-      "repository": "procedural-bouquets",
-      "commit": "46ea06b128c58b0e46f940f6baf411c0db426a72"
+      "repository": "better-craftable-bouquets",
+      "commit": "390afd5551e8a8d7f172a923768f004189b606e7"
     },
     {
-      "repository": "rail-beetle",
-      "commit": "1ddc3d3fb15103e54f5935b28b2cf7e434086218"
+      "repository": "better-rail-beetle",
+      "commit": "fbc54e52a13c8fcdb23caf81d3c743286b254bcb"
     },
     {
-      "repository": "ratlantis-logistics",
-      "commit": "ae7f36ee05d3873d1a80c87cb5f0c789c68acec4"
+      "repository": "better-ratlantis-logistics",
+      "commit": "74b953717b2f2a486528c06234ba661bf257f7a8"
     },
     {
-      "repository": "realistic-ores",
-      "commit": "f8ed20190151ec8bb4f7bc69b7c4101d6f4b14f1"
+      "repository": "better-ore-geology",
+      "commit": "b2b4c06d67abb98508ec883c3b1fd5cb51b46afd"
     },
     {
-      "repository": "realistic-placement-preview",
-      "commit": "7b8bddc56edda10beb580add2a78356392833044"
+      "repository": "better-block-placement-preview",
+      "commit": "37d3673f5479a1a24644c2fc3f6208d7908d11fa"
     },
     {
-      "repository": "regolith-farmland",
-      "commit": "88690be495c8ccd058a8025592ebfbf077190077"
+      "repository": "better-regolith-farming",
+      "commit": "5d1112eade31eed9e5b25a871d7c8392fc214894"
     },
     {
-      "repository": "rehooked-intro-hooks",
-      "commit": "c9435158acebdcf0d99bf64f59605a9a1ce70d74"
+      "repository": "better-rehooked-grappling",
+      "commit": "b783de57e62e285e6a8a655ac2b8823b9e091e9e"
     },
     {
-      "repository": "rpg-stats",
-      "commit": "82ab244f7970adb18d5b572390a320a40fedc39e"
+      "repository": "better-rpg-progression",
+      "commit": "eeb347334b6fbb7e8b1991bfa7dcca4713b1e035"
     },
     {
-      "repository": "runtime-data-dumper",
-      "commit": "14880ebfda92d3f25cb40b277ef667d44e0349ab"
+      "repository": "better-runtime-diagnostics",
+      "commit": "2ba9ff23015e49dffa945be538e6b724d277b8a0"
     },
     {
-      "repository": "settlement-roads",
-      "commit": "6a6723c0e3b71dc168ad21b8fe13b999cb2455a9"
+      "repository": "better-settlement-roads",
+      "commit": "267fdeec0bec6f940adce871d32bfbaf29465496"
     },
     {
-      "repository": "systemic-salience",
-      "commit": "cb8d929517a163cd84f834141f36c5ddb9f6764e"
+      "repository": "better-survival-physiology",
+      "commit": "48e407eaff2e7248d52a0a5a729c13d156c868a7"
     },
     {
-      "repository": "tinkers-construct-affixes",
-      "commit": "9087e36ac171ae5cca76fae4496f73b7afac7192"
+      "repository": "better-tinkers-loot-affixes",
+      "commit": "db560919e44e08df49b3c437de3a79e9447c6cda"
     },
     {
-      "repository": "village-walls",
-      "commit": "249fe721eb1e49ab45044400dc396394ef35621f"
+      "repository": "better-village-fortifications",
+      "commit": "d5dd3a68ee733d920487f4dc93abdc01998c86eb"
     },
     {
-      "repository": "water-survival",
-      "commit": "603de4d2c1df7acf19d66cd925f624d1cd035b91"
+      "repository": "better-drinking-water",
+      "commit": "4521b15e9056707d23f968a0506b77e26c0fa71a"
     },
     {
-      "repository": "world-lifecycle-manager",
-      "commit": "54a1d93f6b453c8ef23914fa7a3e3b336b6d4be9"
+      "repository": "better-world-management",
+      "commit": "3b6f3991eebd615dad2b77c1fee54486a5112bea"
+    },
+    {
+      "repository": "better-arena-trials",
+      "commit": "430a48fe96cfc99dc62e1faf06143cb8c611ab3c"
+    },
+    {
+      "repository": "better-gameplay-notices",
+      "commit": "64923e97f7a463292992852c1a51237645af7a21"
+    },
+    {
+      "repository": "better-buried-encounters",
+      "commit": "7e5a9a88d388ea1885c2dea423dafdfce454833c"
+    },
+    {
+      "repository": "better-wildfire",
+      "commit": "e8df4aa5f4ca00350239c7631b82ecba60939d59"
+    },
+    {
+      "repository": "better-journal-inventory",
+      "commit": "0d6a187b3d1a4bac1a1394229635de45dbebabe6"
     }
   ]
 }

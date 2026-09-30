@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#kubejs:dimension_drink_ore_targets/deep",
-  "features": "kubejs:dimension_drink_brilliant_ore",
-  "step": "underground_ores"
-}

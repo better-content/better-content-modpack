@@ -3,16 +3,16 @@
 // outputs have no furnace/smoker/campfire recipes, so drying cannot be folded
 // back into a generic cooking loop.
 ServerEvents.recipes(function (event) {
-    if (!Platform.isLoaded('hexerei') || !Platform.isLoaded('heat_sync')) return
+    if (!Platform.isLoaded('hexerei') || !Platform.isLoaded('better_industrial_heat')) return
 
     var catalogue = [
-        ['minecraft:beef', 'heat_sync:dried_beef', 'beef'],
-        ['minecraft:porkchop', 'heat_sync:dried_porkchop', 'porkchop'],
-        ['minecraft:chicken', 'heat_sync:dried_chicken', 'chicken'],
-        ['minecraft:mutton', 'heat_sync:dried_mutton', 'mutton'],
-        ['minecraft:rabbit', 'heat_sync:dried_rabbit', 'rabbit'],
-        ['minecraft:cod', 'heat_sync:dried_cod', 'cod'],
-        ['minecraft:salmon', 'heat_sync:dried_salmon', 'salmon']
+        ['minecraft:beef', 'better_industrial_heat:dried_beef', 'beef'],
+        ['minecraft:porkchop', 'better_industrial_heat:dried_porkchop', 'porkchop'],
+        ['minecraft:chicken', 'better_industrial_heat:dried_chicken', 'chicken'],
+        ['minecraft:mutton', 'better_industrial_heat:dried_mutton', 'mutton'],
+        ['minecraft:rabbit', 'better_industrial_heat:dried_rabbit', 'rabbit'],
+        ['minecraft:cod', 'better_industrial_heat:dried_cod', 'cod'],
+        ['minecraft:salmon', 'better_industrial_heat:dried_salmon', 'salmon']
     ]
 
     catalogue.forEach(function (entry) {

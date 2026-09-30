@@ -23,4 +23,4 @@ export BC_JAVA
 if [[ "$#" -eq 0 ]]; then
   set -- nogui
 fi
-exec "$SCRIPT_DIR/world-lifecycle-manager-server.sh" "$@"
+exec "$SCRIPT_DIR/better-world-management-server.sh" "$@"

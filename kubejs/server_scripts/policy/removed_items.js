@@ -213,7 +213,7 @@ ServerEvents.recipes(function (event) {
         ;['the_deep_void:void_pendant', 'the_deep_void:void_mirror', 'the_deep_void:void_core_recipe']
             .forEach(function (id) { event.remove({ id: id }) })
     }
-    event.remove({ type: 'bloodmagic:dimension_drink' })
+    event.remove({ type: 'bloodmagic:better_dimension_fonts' })
     event.replaceInput({ id: 'bloodmagic:alchemytable/reagent_suppression' },
         'bloodmagic:teleposer', 'minecraft:sponge')
     BC_DISABLED_ITEMS.forEach(function (item) { event.remove({ output: item }) })

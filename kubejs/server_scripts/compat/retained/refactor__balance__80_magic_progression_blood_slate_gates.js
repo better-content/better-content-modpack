@@ -6,7 +6,7 @@ var BM_SLATE_T2 = 'bloodmagic:reinforcedslate'
 var BM_SLATE_T3 = 'bloodmagic:infusedslate'
 var BM_SLATE_T4 = 'bloodmagic:demonslate'
 var BM_SLATE_T5 = 'bloodmagic:etherealslate'
-var BC_OVERWORLD_OCCULT_T1 = 'realistic_ores:black_shale'
+var BC_OVERWORLD_OCCULT_T1 = 'better_ore_geology:black_shale'
 var BC_OVERWORLD_OCCULT_T4 = 'minecraft:sculk_catalyst'
 
 function gate(event, filter, oldInput, newInput) {

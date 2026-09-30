@@ -1,7 +1,7 @@
 // Each dimensional Font supplies a renewable libation and a visible native
 // material for a later machine family. One bucket restores 48,000 charge.
 ServerEvents.recipes(function (event) {
-    event.shaped('dimension_drink:font_pourer', ['OVO', 'GPG', 'OHO'], {
+    event.shaped('better_dimension_fonts:font_pourer', ['OVO', 'GPG', 'OHO'], {
         O: 'minecraft:oxidized_cut_copper', V: 'create:fluid_valve',
         G: '#forge:glass', P: 'create:fluid_pipe', H: 'minecraft:pointed_dripstone'
     }).id('kubejs:fonts/font_pourer')
@@ -18,15 +18,15 @@ ServerEvents.recipes(function (event) {
                 { item: row[1] }, { item: row[2] }, { item: row[3] },
                 { fluid: 'minecraft:water', amount: 1000 }
             ],
-            results: [{ fluid: 'dimension_drink:' + row[0] + '_libation', amount: 1000 }],
+            results: [{ fluid: 'better_dimension_fonts:' + row[0] + '_libation', amount: 1000 }],
             processingTime: 200
         }).id('kubejs:fonts/libation/' + row[0])
     })
 
-    event.remove({ output: 'heat_sync:boiler_heater' })
-    event.shaped('heat_sync:boiler_heater', ['SCS', 'FHF', 'MTB'], {
+    event.remove({ output: 'better_industrial_heat:boiler_heater' })
+    event.shaped('better_industrial_heat:boiler_heater', ['SCS', 'FHF', 'MTB'], {
         S: '#forge:plates/steel', C: '#forge:plates/copper',
-        F: 'create:fluid_pipe', H: 'heat_sync:heat_pipe',
+        F: 'create:fluid_pipe', H: 'better_industrial_heat:heat_pipe',
         M: 'minecraft:magma_cream', T: 'create:fluid_tank', B: 'minecraft:blaze_rod'
     }).id('kubejs:fonts/nether/boiler_heater')
 

@@ -89,9 +89,9 @@
       "evidence": "Minecraft vanilla source"
     },
     {
-      "id": "realistic_ores:black_shale",
+      "id": "better_ore_geology:black_shale",
       "status": "native-runtime-dependent-root",
-      "evidence": "../mod_source/realistic-ores/tools/geological_worldgen.json"
+      "evidence": "../mod_source/better-ore-geology/tools/geological_worldgen.json"
     },
     {
       "id": "player:positive_xp_level",
@@ -101,7 +101,7 @@
     {
       "id": "player:confirmed_final_death",
       "status": "conditional-world-root",
-      "evidence": "../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/event/CommonForgeEvents.kt"
+      "evidence": "../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common/event/CommonForgeEvents.kt"
     },
     {
       "id": "malum:cursed_grit",
@@ -111,17 +111,17 @@
     {
       "id": "the_deep_void:dimension_access",
       "status": "runtime-dependent-root",
-      "evidence": "mods/the-deep-void.pw.toml; datapacks/dimension_drink_ore_relocation/data/kubejs/tags/worldgen/biome/dimension_drink_ore_targets/deep.json"
+      "evidence": "mods/the-deep-void.pw.toml; datapacks/better_dimension_fonts_ore_relocation/data/kubejs/tags/worldgen/biome/better_dimension_fonts_ore_targets/deep.json"
     },
     {
       "id": "overworld:rare_blight_locus",
       "status": "runtime-dependent-root",
-      "evidence": "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/BlightLocusBootstrap.java"
+      "evidence": "../mod_source/better-malum-dynamic-trees/src/main/java/com/bettercontent/bettermalumdynamictrees/BlightLocusBootstrap.java"
     },
     {
       "id": "overworld:district_candidate",
       "status": "runtime-dependent-root",
-      "evidence": "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/WeepingWellDistrictPolicy.java"
+      "evidence": "../mod_source/better-malum-dynamic-trees/src/main/java/com/bettercontent/bettermalumdynamictrees/WeepingWellDistrictPolicy.java"
     },
     {
       "id": "minecraft:skeleton",
@@ -145,8 +145,8 @@
       "malum08Legacy": false,
       "evidence": [
         "mods/malum.pw.toml",
-        "../mod_source/dynamic-trees-malum/src/main/resources/trees/dynamic_trees_malum/species/runewood.json",
-        "../mod_source/dynamic-trees-malum/src/main/resources/trees/dynamic_trees_malum/families/runewood.json"
+        "../mod_source/better-malum-dynamic-trees/src/main/resources/trees/better_malum_dynamic_trees/species/runewood.json",
+        "../mod_source/better-malum-dynamic-trees/src/main/resources/trees/better_malum_dynamic_trees/families/runewood.json"
       ],
       "boundary": "The addon binds Dynamic Trees to Malum Runewood; Malum native worldgen and candidate placement are runtime gates."
     },
@@ -209,7 +209,7 @@
       ],
       "requiresAnyOf": [
         [
-          "realistic_ores:black_shale"
+          "better_ore_geology:black_shale"
         ],
         [
           "minecraft:water"
@@ -231,7 +231,7 @@
       "malum08Legacy": false,
       "evidence": [
         "kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js",
-        "../mod_source/realistic-ores/tools/geological_worldgen.json"
+        "../mod_source/better-ore-geology/tools/geological_worldgen.json"
       ],
       "boundary": "Recipe source exists and Black Shale is a Realistic Ores worldgen material; recipe registration and generated deposits are runtime gates."
     },
@@ -312,7 +312,7 @@
     {
       "id": "bloodmagic.heart_fragment_death_reward",
       "outputs": [
-        "rpg_stats:heart_fragment"
+        "better_rpg_progression:heart_fragment"
       ],
       "requiresAnyOf": [
         [
@@ -325,9 +325,9 @@
       "status": "source-backed-conditional-on-positive-xp-final-death",
       "malum08Legacy": false,
       "evidence": [
-        "../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/event/CommonForgeEvents.kt",
-        "../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/item/HeartFragmentData.kt",
-        "../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/item/HeartFragmentEntitlements.kt"
+        "../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common/event/CommonForgeEvents.kt",
+        "../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common/item/HeartFragmentData.kt",
+        "../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common/item/HeartFragmentEntitlements.kt"
       ],
       "boundary": "The checked-in handler captures level at final death; the fragment formula returns zero at level zero and a positive entitlement for a positive level. This is not a guaranteed first-life resource."
     },
@@ -341,14 +341,14 @@
           "bloodmagic:altar"
         ],
         [
-          "rpg_stats:heart_block_with_fragment"
+          "better_rpg_progression:heart_block_with_fragment"
         ]
       ],
       "status": "source-backed-conditional-on-heart-fragment",
       "malum08Legacy": false,
       "evidence": [
         "kubejs/server_scripts/compat/retained/refactor__balance__82_blood_magic_lifeforce_rework.js",
-        "../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/block/entity/HeartBlockEntity.kt"
+        "../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common/block/entity/HeartBlockEntity.kt"
       ],
       "boundary": "The pack crafts a Blood Altar from ordinary blocks and a Heart Block with one installed fragment; that block transfers LP to an adjacent Blood Altar. Positive-XP final-death access remains conditional."
     },
@@ -378,11 +378,11 @@
     {
       "id": "bloodmagic.heart_block_with_fragment",
       "outputs": [
-        "rpg_stats:heart_block_with_fragment"
+        "better_rpg_progression:heart_block_with_fragment"
       ],
       "requiresAnyOf": [
         [
-          "rpg_stats:heart_fragment"
+          "better_rpg_progression:heart_fragment"
         ],
         [
           "minecraft:bone_block"
@@ -458,9 +458,9 @@
     {
       "id": "malum.spirit_harvest_on_exposed_death",
       "outputs": [
-        "better_content_economy:ordinary_spirits",
-        "better_content_economy:work_spirit",
-        "better_content_economy:control_spirit"
+        "better_spirit_commerce:ordinary_spirits",
+        "better_spirit_commerce:work_spirit",
+        "better_spirit_commerce:control_spirit"
       ],
       "requiresAnyOf": [
         [
@@ -474,8 +474,8 @@
       "malum08Legacy": false,
       "evidence": [
         "mods/malum.pw.toml",
-        "../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/spirit/SpiritAcquisition.java",
-        "../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/spirit/SpiritCreditAllocation.java"
+        "../mod_source/better-spirit-commerce/src/main/java/com/bettercontent/spiritcommerce/spirit/SpiritAcquisition.java",
+        "../mod_source/better-spirit-commerce/src/main/java/com/bettercontent/spiritcommerce/spirit/SpiritCreditAllocation.java"
       ],
       "boundary": "Better Content Economy uses Malum's pinned skeleton spirit vector but releases physical economy spirits immediately from a credited player kill. Region allocation changes the aspect mix while conserving unit count; Work and Control are possible outputs, not guaranteed for each skeleton. Spawner-origin and soulless victims release none. In-world pickup remains a runtime gate.",
       "pinnedProviderResources": [
@@ -497,9 +497,9 @@
       "status": "configured-runtime-dependent",
       "malum08Legacy": false,
       "evidence": [
-        "datapacks/dimension_drink_ore_relocation/data/kubejs/worldgen/configured_feature/dimension_drink_brilliant_ore.json",
-        "datapacks/dimension_drink_ore_relocation/data/kubejs/forge/biome_modifier/dimension_drink_brilliant_ore.json",
-        "datapacks/dimension_drink_ore_relocation/data/kubejs/tags/worldgen/biome/dimension_drink_ore_targets/deep.json"
+        "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/worldgen/configured_feature/better_dimension_fonts_brilliant_ore.json",
+        "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/forge/biome_modifier/better_dimension_fonts_brilliant_ore.json",
+        "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/tags/worldgen/biome/better_dimension_fonts_ore_targets/deep.json"
       ],
       "boundary": "Replacement feature is configured against the Deep Void target tag; distribution and drops need candidate observation."
     },
@@ -534,7 +534,7 @@
           "minecraft:gunpowder"
         ],
         [
-          "better_content_economy:work_spirit"
+          "better_spirit_commerce:work_spirit"
         ],
         [
           "malum:spirit_altar"
@@ -563,9 +563,9 @@
       "status": "configured-runtime-dependent",
       "malum08Legacy": false,
       "evidence": [
-        "datapacks/dimension_drink_ore_relocation/data/kubejs/worldgen/configured_feature/dimension_drink_cthonic_gold_ore.json",
-        "datapacks/dimension_drink_ore_relocation/data/kubejs/forge/biome_modifier/dimension_drink_cthonic_gold_ore.json",
-        "datapacks/dimension_drink_ore_relocation/data/kubejs/tags/worldgen/biome/dimension_drink_ore_targets/deep.json"
+        "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/worldgen/configured_feature/better_dimension_fonts_cthonic_gold_ore.json",
+        "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/forge/biome_modifier/better_dimension_fonts_cthonic_gold_ore.json",
+        "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/tags/worldgen/biome/better_dimension_fonts_ore_targets/deep.json"
       ],
       "boundary": "New target-tag replacement route; candidate ore placement is unobserved."
     },
@@ -608,9 +608,9 @@
       "status": "configured-runtime-dependent",
       "malum08Legacy": false,
       "evidence": [
-        "datapacks/dimension_drink_ore_relocation/data/kubejs/worldgen/configured_feature/dimension_drink_natural_quartz_ore.json",
-        "datapacks/dimension_drink_ore_relocation/data/kubejs/forge/biome_modifier/dimension_drink_natural_quartz_ore.json",
-        "datapacks/dimension_drink_ore_relocation/data/kubejs/tags/worldgen/biome/dimension_drink_ore_targets/deep.json",
+        "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/worldgen/configured_feature/better_dimension_fonts_natural_quartz_ore.json",
+        "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/forge/biome_modifier/better_dimension_fonts_natural_quartz_ore.json",
+        "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/tags/worldgen/biome/better_dimension_fonts_ore_targets/deep.json",
         "mods/malum.pw.toml"
       ],
       "boundary": "Native Malum gem-tag compatibility is declared; relocated target generation is not runtime-observed."
@@ -628,8 +628,8 @@
       "status": "source-authored-native-probabilistic-runtime-dependent",
       "malum08Legacy": false,
       "evidence": [
-        "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/BlightLocusBootstrap.java",
-        "../mod_source/dynamic-trees-malum/src/test/java/com/bettercontent/dynamictreesmalum/BlightLocusBootstrapSourceTest.java"
+        "../mod_source/better-malum-dynamic-trees/src/main/java/com/bettercontent/bettermalumdynamictrees/BlightLocusBootstrap.java",
+        "../mod_source/better-malum-dynamic-trees/src/test/java/com/bettercontent/bettermalumdynamictrees/BlightLocusBootstrapSourceTest.java"
       ],
       "boundary": "Locus bootstrap starts native finite blight; Malum may probabilistically add Growth. Never assert a guaranteed starter at each site."
     },
@@ -647,7 +647,7 @@
       "malum08Legacy": false,
       "evidence": [
         "mods/malum.pw.toml",
-        "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/BlightLocusBootstrap.java"
+        "../mod_source/better-malum-dynamic-trees/src/main/java/com/bettercontent/bettermalumdynamictrees/BlightLocusBootstrap.java"
       ],
       "boundary": "Pinned Malum 1.6.7 Blighted Soil loot yields Gunk without Silk Touch; actual site materialization and mining are runtime-dependent.",
       "pinnedProviderResources": [
@@ -691,9 +691,9 @@
       "status": "source-gated-native-runtime-dependent",
       "malum08Legacy": false,
       "evidence": [
-        "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/WeepingWellDistrictPolicy.java",
-        "../mod_source/dynamic-trees-malum/src/main/java/com/bettercontent/dynamictreesmalum/mixin/WeepingWellStructureMixin.java",
-        "../mod_source/dynamic-trees-malum/src/main/resources/dynamic_trees_malum.mixins.json",
+        "../mod_source/better-malum-dynamic-trees/src/main/java/com/bettercontent/bettermalumdynamictrees/WeepingWellDistrictPolicy.java",
+        "../mod_source/better-malum-dynamic-trees/src/main/java/com/bettercontent/bettermalumdynamictrees/mixin/WeepingWellStructureMixin.java",
+        "../mod_source/better-malum-dynamic-trees/src/main/resources/better_malum_dynamic_trees.mixins.json",
         "mods/malum.pw.toml",
         "mods/malum.pw.toml"
       ],
@@ -708,9 +708,9 @@
     "malum:runewood_planks",
     "malum:processed_soulstone",
     "malum:spirit_altar",
-    "better_content_economy:ordinary_spirits",
-    "better_content_economy:control_spirit",
-    "better_content_economy:work_spirit",
+    "better_spirit_commerce:ordinary_spirits",
+    "better_spirit_commerce:control_spirit",
+    "better_spirit_commerce:work_spirit",
     "malum:brilliant_stone",
     "malum:crushed_brilliance",
     "malum:cthonic_gold",

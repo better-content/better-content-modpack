@@ -199,6 +199,12 @@ object LogPolicy {
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[AllTheLeaks]: " +
             "Server not found while trying to clear leaked chunks$",
     )
+    // Aether's bundled Curios override deliberately replaces these six Artifacts tags.
+    private val aetherCuriosTagOverride = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Worker-Main-[0-9]+/WARN] \\[artifacts\\.Artifacts]: " +
+            "Tag entries for curios:tags/items/aether_(accessory|cape|gloves|pendant|ring|shield)\\.json " +
+            "cleared by aether-1\\.20\\.1-1\\.5\\.2-neoforge\\.jar:packs/curios_override$",
+    )
     private val invalidImmersiveWeatheringIcicle = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Server thread/WARN] " +
             "\\[net\\.minecraft\\.world\\.level\\.chunk\\.LevelChunk]: " +
@@ -244,6 +250,7 @@ object LogPolicy {
             var acceptedEmptyCodAmbientSounds = 0
             var acceptedEmptyUntamedPlaceholderSounds = 0
             var acceptedAllTheLeaksServerNotFound = 0
+            val acceptedAetherCuriosTags = mutableSetOf<String>()
             var acceptedInvalidImmersiveWeatheringIcicles = 0
             var acceptedDeepVoidPhysicsFallbacks = 0
             var acceptedAdPotherDeferredTasks = 0
@@ -298,6 +305,9 @@ object LogPolicy {
                     ++acceptedEmptyUntamedPlaceholderSounds <= 1
                 val acceptedAllTheLeaksWarning = allTheLeaksServerNotFound.matches(line) &&
                     ++acceptedAllTheLeaksServerNotFound <= 1
+                val aetherCuriosTag = aetherCuriosTagOverride.matchEntire(line)?.groupValues?.get(1)
+                val acceptedAetherCuriosOverride = aetherCuriosTag != null &&
+                    acceptedAetherCuriosTags.add(aetherCuriosTag) && acceptedAetherCuriosTags.size <= 6
                 val acceptedInvalidImmersiveWeatheringIcicle = invalidImmersiveWeatheringIcicle.matches(line) &&
                     ++acceptedInvalidImmersiveWeatheringIcicles <= 1
                 val acceptedDeepVoidPhysicsFallback = deepVoidPhysicsFallback.matches(line) &&
@@ -336,7 +346,8 @@ object LogPolicy {
                     !acceptedEmptySalmonAmbientSound &&
                     !acceptedEmptyTropicalFishAmbientSound && !acceptedEmptyPufferFishAmbientSound &&
                     !acceptedEmptyCodAmbientSound && !acceptedEmptyUntamedPlaceholderSound &&
-                    !acceptedAllTheLeaksWarning && !acceptedInvalidImmersiveWeatheringIcicle &&
+                    !acceptedAllTheLeaksWarning && !acceptedAetherCuriosOverride &&
+                    !acceptedInvalidImmersiveWeatheringIcicle &&
                     !acceptedDeepVoidPhysicsFallback && !acceptedPresenceFootstepsMissingMessyGroundAcoustic &&
                     !acceptedStarcatcherInvalidAccessTransformer && !acceptedCampaignItemFrameIronSword &&
                     !acceptedCampaignItemFrameIronAxe && !acceptedCampaignUnknownStepHeightAttribute &&

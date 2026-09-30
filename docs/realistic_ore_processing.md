@@ -133,6 +133,6 @@ The removed beryl/beryllium, calcium, carbon, chromium, gallium, iridium,
 magnesium, phosphate, platinum, silicon, sodium, tantalum, and tungsten
 concentrates had no distinct live consumer strong enough to earn assay output.
 The obsolete Alchemistry audit input was removed and is not a live use. The obsolete
-`latent_chemlib/material_coefficients` data file was removed because the runtime
+`better_chemlib_hazards/material_coefficients` data file was removed because the runtime
 nuclear simulation does not load it; absorber evidence comes from the actual
 block-ID environment scan.

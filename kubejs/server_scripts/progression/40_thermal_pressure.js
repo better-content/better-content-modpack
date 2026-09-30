@@ -35,8 +35,8 @@ ServerEvents.recipes(function (event) {
     event.custom({
         type: 'create:mixing', heatRequirement: 'heated',
         ingredients: [
-            { item: 'realistic_ores:rinsed_hotstone' },
-            { item: 'realistic_ores:rinsed_black_shale' },
+            { item: 'better_ore_geology:rinsed_hotstone' },
+            { item: 'better_ore_geology:rinsed_black_shale' },
             { item: 'minecraft:basalt' }
         ],
         results: [{ item: 'tconstruct:scorched_brick', count: 2 }]

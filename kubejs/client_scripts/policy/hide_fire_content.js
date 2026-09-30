@@ -1,7 +1,7 @@
 // Generated burnt and smoldering block states remain available to the
 // world simulation, but do not need standalone entries in recipe viewers.
 function bcHideFireContent(event) {
-    event.hide('@better_content_fire')
+    event.hide('@better_wildfire')
 }
 
 JEIEvents.hideItems(function (event) {

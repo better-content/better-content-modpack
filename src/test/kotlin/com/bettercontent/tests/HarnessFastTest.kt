@@ -671,6 +671,25 @@ class HarnessFastTest {
     }
 
     @Test
+    fun logPolicyAcceptsOnlyTheSixAetherCuriosOverrideTags(@TempDir root: Path) {
+        fun warning(tag: String, jar: String = "aether-1.20.1-1.5.2-neoforge.jar") =
+            "[06:58:52] [Worker-Main-21/WARN] [artifacts.Artifacts]: " +
+                "Tag entries for curios:tags/items/aether_$tag.json cleared by $jar:packs/curios_override"
+        val tags = listOf("accessory", "cape", "gloves", "pendant", "ring", "shield")
+        val accepted = root.resolve("aether-curios-override.log").also {
+            it.writeText(tags.joinToString("\n", postfix = "\n") { warning(it) })
+        }
+        val rejected = root.resolve("changed-aether-curios-override.log").also {
+            it.writeText(
+                warning("accessory") + "\n" + warning("accessory") + "\n" +
+                    warning("other") + "\n" + warning("cape", "different-aether.jar") + "\n",
+            )
+        }
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2, 3, 4), LogPolicy.findings(listOf(rejected)).map { it.line })
+    }
+
+    @Test
     fun logPolicyAcceptsOneBoundedAdChimneysDeferredTaskPerLog(@TempDir root: Path) {
         fun warning(thread: String = "Render thread", duration: String = "7.318", mod: String = "adchimneys") =
             "[07:03:06] [$thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +

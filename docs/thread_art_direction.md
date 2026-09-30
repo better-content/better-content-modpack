@@ -27,8 +27,8 @@ they do not require a whole-image tint or the retired four-suit composition rule
 ## Editable source and review
 
 The 53 card scenes and teaching definitions are maintained in
-[`authoring/discoveries.json`](../../mod_source/better-content-threads/authoring/discoveries.json).
-[`art-grammar.txt`](../../mod_source/better-content-threads/authoring/art-grammar.txt)
+[`authoring/discoveries.json`](../../mod_source/better-discovery-guides/authoring/discoveries.json).
+[`art-grammar.txt`](../../mod_source/better-discovery-guides/authoring/art-grammar.txt)
 contains the shared generation prompt. Exact prompts, original image-generation paths,
 reviewed masters, contact sheets, and hashes are retained in
 `/home/dev/workspace_artifacts/reviews/journal-art-20260927/`.

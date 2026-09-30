@@ -39,7 +39,7 @@ class MalumAcquisitionGraphContractTest {
         val ritual = routes.getValue("cthonic_gold.ritual")
         assertEquals(4, ritual.path("requiresAnyOf").size())
         assertTrue(routes.getValue("soulstone.crushed_from_raw").path("outputs").any { it.asText() == "malum:crushed_soulstone" })
-        assertTrue(routes.getValue("malum.hex_ash.spirit_infusion").path("requiresAnyOf").any { group -> group.any { it.asText() == "better_content_economy:work_spirit" } })
+        assertTrue(routes.getValue("malum.hex_ash.spirit_infusion").path("requiresAnyOf").any { group -> group.any { it.asText() == "better_spirit_commerce:work_spirit" } })
         assertTrue(routes.getValue("malum.crude_scythe").path("excludedByEconomy").asBoolean())
         assertEquals(
             setOf("data/malum/recipes/create/crushing/crush_raw_soulstone.json"),
@@ -80,7 +80,7 @@ class MalumAcquisitionGraphContractTest {
         val required = graph.path("requiredOutcomes").map { it.asText() }.toSet()
         assertEquals(emptySet<String>(), required - reachable)
         assertTrue(reachable.containsAll(setOf(
-            "better_content_economy:ordinary_spirits", "better_content_economy:work_spirit", "better_content_economy:control_spirit", "malum:hex_ash",
+            "better_spirit_commerce:ordinary_spirits", "better_spirit_commerce:work_spirit", "better_spirit_commerce:control_spirit", "malum:hex_ash",
             "malum:runewood_planks", "malum:processed_soulstone", "malum:spirit_altar",
             "malum:brilliant_stone", "malum:cthonic_gold", "malum:natural_quartz",
             "malum:soulwood_growth", "malum:primordial_soup",
@@ -89,7 +89,7 @@ class MalumAcquisitionGraphContractTest {
         // The altar path is conditional on positive-level final-death heart-fragment access.
         assertTrue(reachable.contains("bloodmagic:blankslate"))
         assertTrue(reachable.contains("bloodmagic:altar_lp_capability"))
-        assertTrue(reachable.contains("rpg_stats:heart_block_with_fragment"))
+        assertTrue(reachable.contains("better_rpg_progression:heart_block_with_fragment"))
         assertTrue(graph.path("knownConditionalRoots").map { it.asText() }.containsAll(setOf(
             "player:positive_xp_level", "player:confirmed_final_death",
         )))

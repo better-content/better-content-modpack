@@ -26,19 +26,19 @@ class TechPaletteSourceContractTest {
         }
 
         assertEquals(1, producers.size, "parallel Energy Acceptor recipes can bypass progression gates")
-        assertEquals("20_ratlantis_logistics.js", producers.single().fileName.toString())
+        assertEquals("20_better_ratlantis_logistics.js", producers.single().fileName.toString())
 
         val gatedRoute = Files.readString(producers.single())
         listOf(
             "powergrid:generator_housing",
-            "ratlantis_logistics:arcane_logistics_core",
+            "better_ratlantis_logistics:arcane_logistics_core",
             "oc2r:computer",
             "ae2:sky_stone_block",
             "kubejs:impossible_support_matrix",
         ).forEach { ingredient ->
             assertTrue(gatedRoute.contains("'$ingredient'"), "missing Energy Acceptor gate: $ingredient")
         }
-        assertTrue(gatedRoute.contains(".id('kubejs:ratlantis_logistics/root/ae2_powergrid_energy_acceptor')"))
+        assertTrue(gatedRoute.contains(".id('kubejs:better_ratlantis_logistics/root/ae2_powergrid_energy_acceptor')"))
     }
 
     @Test
@@ -63,7 +63,7 @@ class TechPaletteSourceContractTest {
     @Test
     fun `meteor component map distinguishes the early palette from the ME network gate`() {
         val palette = Files.readString(root.resolve("kubejs/server_scripts/progression/80_tech_palette.js"))
-        val energyRoot = Files.readString(root.resolve("kubejs/server_scripts/progression/20_ratlantis_logistics.js"))
+        val energyRoot = Files.readString(root.resolve("kubejs/server_scripts/progression/20_better_ratlantis_logistics.js"))
         val matrix = Files.readString(root.resolve("docs/tech01_component_acquisition.md"))
 
         assertTrue(palette.contains("type: 'pneumaticcraft:pressure_chamber', pressure: 4.0"))

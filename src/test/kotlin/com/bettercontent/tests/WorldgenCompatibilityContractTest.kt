@@ -53,18 +53,18 @@ class WorldgenCompatibilityContractTest {
         val mapper = jacksonObjectMapper()
         val configured = mapper.readTree(
             root.resolve(
-                "datapacks/dimension_drink_ore_relocation/data/kubejs/worldgen/configured_feature/" +
-                    "dimension_drink_tconstruct_ichor_geode.json",
+                "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/worldgen/configured_feature/" +
+                    "better_dimension_fonts_tconstruct_ichor_geode.json",
             ).toFile(),
         )
         val placed = mapper.readTree(
             root.resolve(
-                "datapacks/dimension_drink_ore_relocation/data/kubejs/worldgen/placed_feature/" +
-                    "dimension_drink_tconstruct_ichor_geode.json",
+                "datapacks/better_dimension_fonts_ore_relocation/data/kubejs/worldgen/placed_feature/" +
+                    "better_dimension_fonts_tconstruct_ichor_geode.json",
             ).toFile(),
         )
 
-        assertEquals("kubejs:dimension_drink_tconstruct_ichor_geode", placed.path("feature").asText())
+        assertEquals("kubejs:better_dimension_fonts_tconstruct_ichor_geode", placed.path("feature").asText())
         assertEquals("minecraft:geode", configured.path("type").asText())
         val config = configured.path("config")
         assertEquals(-16, config.path("min_gen_offset").asInt())

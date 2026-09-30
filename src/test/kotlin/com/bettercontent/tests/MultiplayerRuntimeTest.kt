@@ -43,7 +43,7 @@ class MultiplayerRuntimeTest {
             val inheritedJavaOptions = System.getenv("JAVA_TOOL_OPTIONS")?.trim().orEmpty()
             val harnessOptions = listOf(
                 inheritedJavaOptions,
-                "-Dpillager_campaigns.harness=true",
+                "-Dbetter_pillager_campaigns.harness=true",
                 if (evidence.run.tier == "debug") "-Dbc.pack_test.debug=true" else "",
             )
                 .filter(String::isNotBlank).joinToString(" ")
@@ -133,7 +133,7 @@ class MultiplayerRuntimeTest {
             requirePlayersOnline("dimension traversal start", listOf(lead))
             val inventory = evidence.run.directory.resolve("dimensions.json")
             require(Files.isRegularFile(inventory)) { "dimension inventory was not prepared before client login" }
-            val discovered = DimensionSmokePlan.discover(inventory, server.server.resolve("config/dimension_drink/fonts"))
+            val discovered = DimensionSmokePlan.discover(inventory, server.server.resolve("config/better_dimension_fonts/fonts"))
             val targets = evidence.run.target?.takeIf { it.startsWith("dimension:") }
                 ?.removePrefix("dimension:")?.let { id ->
                     listOf(discovered.singleOrNull { it.id == id } ?: error("target dimension is not loaded: $id"))
@@ -246,7 +246,7 @@ class MultiplayerRuntimeTest {
             // reset or the first Survival eligibility evaluation.
             clients.forEach { requireSpectator(it) }
             server.commandResult(
-                "pillager_campaigns reset",
+                "better_pillager_campaigns reset",
                 Regex("Reset all invasion pressure"),
                 "reset campaign fixture state",
                 Duration.ofSeconds(30),
@@ -255,14 +255,14 @@ class MultiplayerRuntimeTest {
                 val (x, z) = positions[index]
                 verifyCampaignPlatform(index + 1, x, z)
                 server.commandResult(
-                    "pillager_campaigns inspect ${client.username}",
+                    "better_pillager_campaigns inspect ${client.username}",
                     Regex("campaign_inspect player=${Regex.escape(client.username)} encounter=none"),
                     "verify clean campaign state ${client.username}",
                     Duration.ofSeconds(30),
                 )
                 server.send("gamemode survival ${client.username}")
                 server.commandResult(
-                    "pillager_campaigns harness protect ${client.username}",
+                    "better_pillager_campaigns harness protect ${client.username}",
                     Regex("Protected ${Regex.escape(client.username)}.*gamemode=survival.*invulnerable=true"),
                     "protect ${client.username}",
                     Duration.ofSeconds(30),
@@ -280,7 +280,7 @@ class MultiplayerRuntimeTest {
                         Duration.ofSeconds(90),
                     )
                     val result = server.commandResult(
-                        "pillager_campaigns harness spawn scout immediate ${client.username} 5",
+                        "better_pillager_campaigns harness spawn scout immediate ${client.username} 5",
                         Regex("Harness started immediate scout .*${Regex.escape(client.username)}|" +
                             "Immediate campaign lead could not validate a loaded approach after [0-9]+ candidate\\(s\\)|" +
                             "Harness could not create a campaign for the target player"),
@@ -299,7 +299,7 @@ class MultiplayerRuntimeTest {
                         "reason" to result.value,
                     ))
                     server.commandResult(
-                        "pillager_campaigns inspect ${client.username}",
+                        "better_pillager_campaigns inspect ${client.username}",
                         Regex("campaign_inspect player=${Regex.escape(client.username)} encounter=none"),
                         "campaign reset after rejected position ${client.username} attempt $attempt",
                         Duration.ofSeconds(30),
@@ -307,7 +307,7 @@ class MultiplayerRuntimeTest {
                 }
                 check(started) { "No local campaign for ${client.username} after ${offsets.size} player positions; see ${server.log}" }
                 server.commandResult(
-                    "pillager_campaigns inspect ${client.username}",
+                    "better_pillager_campaigns inspect ${client.username}",
                     Regex("campaign_inspect player=${Regex.escape(client.username)} encounter=.* phase=active .* live=[1-9]"),
                     "active campaign ${client.username}",
                     Duration.ofMinutes(2),
@@ -320,7 +320,7 @@ class MultiplayerRuntimeTest {
             clients.forEach { client ->
                 check(itAlive(client)) { "${client.username} client exited during campaign check; see ${client.log}" }
                 server.commandResult(
-                    "pillager_campaigns inspect ${client.username}",
+                    "better_pillager_campaigns inspect ${client.username}",
                     Regex("campaign_inspect player=${Regex.escape(client.username)} encounter=.* phase=active .* live=[1-9]"),
                     "simultaneously active campaign ${client.username}",
                     Duration.ofSeconds(30),

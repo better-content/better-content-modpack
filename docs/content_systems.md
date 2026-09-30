@@ -92,7 +92,7 @@ depth. A loading lesson may lead to a known Thread and its native doorway; it
 does not reveal an unknown card. Hover annotations stay concise and never grow
 into lesson prose merely to reproduce another surface.
 
-Authoring and review follow [Learning surfaces](learning_surfaces.md). There is no
+Authoring and review follow [Learning surfaces](better_discovery_guides.md). There is no
 active achievement ledger or replacement reward system.
 
 ## Spirit commerce

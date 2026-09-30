@@ -149,7 +149,7 @@
     "hexerei:animal_fat_from_pig",
     "hexerei:animal_fat_from_sheep",
     "hexerei:sage_seeds_from_grass",
-    "latent_chemlib:placed_nuclear_state",
+    "better_chemlib_hazards:placed_nuclear_state",
     "occultism:datura_seed_from_grass",
     "occultism:datura_seed_from_tall_grass",
     "occultism:tallow_from_cows",
@@ -225,6 +225,6 @@
     "twilightforest:fiery_pick_smelting",
     "twilightforest:giant_pick_grouping",
     "ubesdelight:add_loot_village_plains_house",
-    "bumblezone_cultivars:propagation"
+    "better_bumblezone_crops:propagation"
   ]
 }

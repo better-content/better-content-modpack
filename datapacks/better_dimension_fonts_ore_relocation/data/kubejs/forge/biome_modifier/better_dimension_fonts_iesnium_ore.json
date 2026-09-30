@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#kubejs:better_dimension_fonts_ore_targets/nether",
+  "features": "kubejs:better_dimension_fonts_iesnium_ore",
+  "step": "underground_ores"
+}

@@ -119,19 +119,19 @@ class World09DeepVoidSourceContractTest {
 
     @Test
     fun `Malum deep ores target the pinned Deep Void biome family`() {
-        val dataRoot = root.resolve("datapacks/dimension_drink_ore_relocation/data")
+        val dataRoot = root.resolve("datapacks/better_dimension_fonts_ore_relocation/data")
         val targets = mapper.readTree(
-            dataRoot.resolve("kubejs/tags/worldgen/biome/dimension_drink_ore_targets/deep.json").toFile(),
+            dataRoot.resolve("kubejs/tags/worldgen/biome/better_dimension_fonts_ore_targets/deep.json").toFile(),
         )
         assertFalse(targets.path("replace").asBoolean())
         assertTrue(targets.path("values").any { it.asText() == "#the_deep_void:is_deep_void" })
 
         listOf("soulstone_ore", "brilliant_ore", "cthonic_gold_ore").forEach { route ->
             val modifier = mapper.readTree(
-                dataRoot.resolve("kubejs/forge/biome_modifier/dimension_drink_$route.json").toFile(),
+                dataRoot.resolve("kubejs/forge/biome_modifier/better_dimension_fonts_$route.json").toFile(),
             )
             assertTrue(
-                modifier.path("biomes").asText() == "#kubejs:dimension_drink_ore_targets/deep",
+                modifier.path("biomes").asText() == "#kubejs:better_dimension_fonts_ore_targets/deep",
                 "$route must remain connected to the Deep Void biome tag",
             )
         }
@@ -141,7 +141,7 @@ class World09DeepVoidSourceContractTest {
     fun `one-way Deep Void entry removes the providers return item recipes`() {
         val policy = Files.readString(root.resolve("kubejs/server_scripts/policy/removed_items.js"))
         val start = policy.indexOf("// Deep Void access is one-way by design.")
-        val end = policy.indexOf("event.remove({ type: 'bloodmagic:dimension_drink' })", start)
+        val end = policy.indexOf("event.remove({ type: 'bloodmagic:better_dimension_fonts' })", start)
         assertTrue(start >= 0, "one-way policy block must remain identifiable")
         assertTrue(end > start, "one-way policy block must remain bounded")
         val oneWayPolicy = policy.substring(start, end)
