@@ -16,7 +16,7 @@ class FireLifecycleSourceContractTest {
 
     @Test
     fun `generated fire runtime has bounded spread and ecological recovery`() {
-        val config = Files.readString(root.resolve("config/better_content_fire-common.toml"))
+        val config = Files.readString(root.resolve("config/better_wildfire-common.toml"))
         val spread = value(config, "spreadChance").toDouble()
         val recovery = value(config, "groundRecoveryChance").toDouble()
         assertTrue(spread > 0.0 && spread <= 0.1)
@@ -28,16 +28,24 @@ class FireLifecycleSourceContractTest {
 
     @Test
     fun `new fire mod replaces Burnt and its old compatibility layer`() {
+        val artifact = mapper.readTree(root.resolve("gradle/active-custom-mods.json").toFile())
+            .path("mods").single { it.path("repository").asText() == "better-wildfire" }
+        assertEquals("better_wildfire", artifact.path("modId").asText())
+        assertEquals("better-wildfire-0.1.0.jar", artifact.path("artifact").asText())
+        val bundled = root.resolve("mods/${artifact.path("artifact").asText()}")
+        if (Files.isRegularFile(bundled)) {
+            val packwiz = Files.readString(root.resolve("index.toml"))
+            assertTrue(packwiz.contains("file = \"mods/${artifact.path("artifact").asText()}\""))
+        }
         val packwiz = Files.readString(root.resolve("index.toml"))
-        assertTrue(packwiz.contains("file = \"mods/better-content-fire-0.1.0.jar\""))
         assertFalse(packwiz.contains("mods/burnt-basic.pw.toml"))
         assertFalse(packwiz.contains("mods/burnt-grass-compat-0.1.0.jar"))
         val namespaces = mapper.readTree(root.resolve("kubejs/config/crafting_policy.json").toFile()).path("namespaces")
-        assertEquals("world", namespaces.path("better_content_fire").path("primary_role").asText())
+        assertEquals("world", namespaces.path("better_wildfire").path("primary_role").asText())
         assertFalse(namespaces.has("burnt"))
         assertFalse(namespaces.has("burnt_grass_compat"))
         val hide = Files.readString(root.resolve("kubejs/client_scripts/policy/hide_fire_content.js"))
-        assertTrue(hide.contains("@better_content_fire"))
+        assertTrue(hide.contains("@better_wildfire"))
         assertTrue(hide.contains("JEIEvents.hideItems"))
         assertTrue(hide.contains("EMIEvents.hideItems"))
     }

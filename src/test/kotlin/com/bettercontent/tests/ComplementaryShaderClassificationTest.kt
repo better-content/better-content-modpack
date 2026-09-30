@@ -31,7 +31,7 @@ class ComplementaryShaderClassificationTest {
             val flexible = setOf(
                 "short_grass", "fern", "sweet_berry_bush", "wheat", "torchflower_crop",
                 "aether:berry_bush", "ars_nouveau:magebloom_crop", "blue_skies:brumble_vine",
-                "better_content_fire:smoldering_plant", "deeperdarker:sculk_vines", "farmersdelight:tomatoes",
+                "better_wildfire:smoldering_plant", "deeperdarker:sculk_vines", "farmersdelight:tomatoes",
                 "natures_spirit:willow_vines", "quark:water_pink_petals",
                 "tconstruct:earth_slime_fern", "tconstruct:sky_slime_vine",
                 "twilightforest:huge_water_lily", "undergarden:droopvine")
@@ -63,7 +63,7 @@ class ComplementaryShaderClassificationTest {
             "unearthed_schist", "unearthed_siltstone", "unearthed_slate",
             "unearthed_weathered_rhyolite", "unearthed_white_granite")
         val canonical = families.flatMapTo(linkedSetOf()) { family ->
-            setOf("realistic_ores:$family", "realistic_ores:deepslate_$family")
+            setOf("better_ore_geology:$family", "better_ore_geology:deepslate_$family")
         }
         val excavated = hosts.flatMapTo(linkedSetOf()) { host ->
             families.map { family -> "excavated_variants:${host}_$family" }
@@ -77,7 +77,7 @@ class ComplementaryShaderClassificationTest {
             val glowingOres = properties.lineSequence().single { it.startsWith("block.10024=") }
                 .substringAfter('=').split(' ').filter(String::isNotBlank).toSet()
             val realisticCoverage = glowingOres.filterTo(linkedSetOf()) { id ->
-                id.startsWith("realistic_ores:") ||
+                id.startsWith("better_ore_geology:") ||
                     id.startsWith("excavated_variants:") && families.any { id.endsWith("_$it") }
             }
 
@@ -95,10 +95,10 @@ class ComplementaryShaderClassificationTest {
     }
 
     private fun explicitRigidBlocks() = setOf(
-        "better_content_fire:burnt_ground", "better_content_fire:burnt_solid",
-        "better_content_fire:burnt_leaves", "better_content_fire:burnt_slab",
-        "better_content_fire:burnt_stairs", "better_content_fire:smoldering_ground",
-        "better_content_fire:smoldering_solid", "better_content_fire:smoldering_stairs",
+        "better_wildfire:burnt_ground", "better_wildfire:burnt_solid",
+        "better_wildfire:burnt_leaves", "better_wildfire:burnt_slab",
+        "better_wildfire:burnt_stairs", "better_wildfire:smoldering_ground",
+        "better_wildfire:smoldering_solid", "better_wildfire:smoldering_stairs",
         "callfromthedepth_:silenttreedoor", "deeperdarker:gloomy_cactus",
         "dtarsnouveau:blue_archwood_root", "dtarsnouveau:green_archwood_root",
         "dtarsnouveau:purple_archwood_root", "dtarsnouveau:red_archwood_root",
@@ -108,7 +108,7 @@ class ComplementaryShaderClassificationTest {
         "dynamictrees:jungle_root", "dynamictrees:mangrove_roots",
         "dynamictreesplus:cactus_branch", "framedblocks:framed_flower_pot",
         "iceandfire:chared_grass", "iceandfire:crackled_grass", "iceandfire:frozen_grass",
-        "notreepunching:clay_flower_pot", "procedural_bouquets:bouquet_grid",
+        "notreepunching:clay_flower_pot", "better_craftable_bouquets:bouquet_grid",
         "quark:blossom_bookshelf", "quark:blue_blossom_hedge",
         "quark:flowering_azalea_hedge", "quark:lavender_blossom_hedge",
         "quark:orange_blossom_hedge", "quark:red_blossom_hedge",

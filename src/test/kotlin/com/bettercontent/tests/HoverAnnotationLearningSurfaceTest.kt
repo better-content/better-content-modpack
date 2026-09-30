@@ -79,7 +79,7 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `chunk anchor hovers match variant inputs shared area and redstone pause`() {
-        val sourceRoot = root.resolve("../mod_source/arcane-chunk-loaders/src/main/java/com/bettercontent/arcanechunkloaders").normalize()
+        val sourceRoot = root.resolve("../mod_source/better-magic-chunk-anchors/src/main/java/com/bettercontent/bettermagicchunkanchors").normalize()
         val shared = Files.readString(sourceRoot.resolve("blockentity/ArcaneAnchorBlockEntity.java"))
         val anchorData = Files.readString(sourceRoot.resolve("blockentity/AnchorData.java"))
         val kineticBlock = Files.readString(sourceRoot.resolve("block/KineticAnchorBlock.java"))
@@ -89,13 +89,13 @@ class HoverAnnotationLearningSurfaceTest {
         assertEquals(7, sourceRows.size)
 
         val expectations = mapOf(
-            "arcane_chunk_loaders:flux_chunk_anchor" to listOf("Accepts FE/RF from any side."),
-            "arcane_chunk_loaders:kinetic_chunk_anchor" to listOf("Accepts Create rotation through its vertical shaft."),
-            "arcane_chunk_loaders:source_chunk_anchor" to listOf("Accepts Source through its Ars Source interface."),
-            "arcane_chunk_loaders:lifeforce_chunk_anchor" to listOf("Accepts Blood Magic life essence from any side."),
-            "arcane_chunk_loaders:pressure_chunk_anchor" to listOf("Accepts PneumaticCraft air through pressure tubes."),
-            "arcane_chunk_loaders:soul_chunk_anchor" to listOf("Sneak-use empty-handed to transfer Goety soul energy."),
-            "arcane_chunk_loaders:spirit_chunk_anchor" to listOf("Accepts Better Content spirits and exotic Malum spirits manually or through automation."),
+            "better_magic_chunk_anchors:flux_chunk_anchor" to listOf("Accepts FE/RF from any side."),
+            "better_magic_chunk_anchors:kinetic_chunk_anchor" to listOf("Accepts Create rotation through its vertical shaft."),
+            "better_magic_chunk_anchors:source_chunk_anchor" to listOf("Accepts Source through its Ars Source interface."),
+            "better_magic_chunk_anchors:lifeforce_chunk_anchor" to listOf("Accepts Blood Magic life essence from any side."),
+            "better_magic_chunk_anchors:pressure_chunk_anchor" to listOf("Accepts PneumaticCraft air through pressure tubes."),
+            "better_magic_chunk_anchors:soul_chunk_anchor" to listOf("Sneak-use empty-handed to transfer Goety soul energy."),
+            "better_magic_chunk_anchors:spirit_chunk_anchor" to listOf("Accepts Better Content spirits and exotic Malum spirits manually or through automation."),
         )
         expectations.forEach { (id, expectedLines) ->
             val row = sourceRows.single { it.path("selector").path("item").asText() == id }
@@ -122,7 +122,7 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `schematicannon hover matches per cannon persistence and native first fallback`() {
-        val sourceRoot = root.resolve("../mod_source/world-lifecycle-manager/src/main/java/com/bettercontent/worldlifecyclemanager").normalize()
+        val sourceRoot = root.resolve("../mod_source/better-world-management/src/main/java/com/bettercontent/betterworldmanagement").normalize()
         val substitutions = Files.readString(sourceRoot.resolve("SchematicannonSubstitutions.java"))
         val mixin = Files.readString(sourceRoot.resolve("mixin/SchematicannonBlockEntityMixin.java"))
         val row = registry.path("annotations").single {
@@ -143,7 +143,7 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `lineage sync and world condenser hovers match collision and reset boundaries`() {
-        val sourceRoot = root.resolve("../mod_source/world-lifecycle-manager/src/main/java/com/bettercontent/worldlifecyclemanager").normalize()
+        val sourceRoot = root.resolve("../mod_source/better-world-management/src/main/java/com/bettercontent/betterworldmanagement").normalize()
         val downloadStore = Files.readString(sourceRoot.resolve("SchematicDownloadStore.java"))
         val interfaceBlock = Files.readString(sourceRoot.resolve("WorldCondenserInterfaceBlock.java"))
         val prestigeService = Files.readString(sourceRoot.resolve("PrestigeService.java"))
@@ -151,7 +151,7 @@ class HoverAnnotationLearningSurfaceTest {
             it.path("selector").path("item").asText() == "create:empty_schematic"
         }
         val condenserRow = registry.path("annotations").single {
-            it.path("selector").path("item").asText() == "world_lifecycle_manager:world_condenser_interface"
+            it.path("selector").path("item").asText() == "better_world_management:world_condenser_interface"
         }
 
         assertTrue(downloadRow.path("owner").asText().contains("SchematicDownloadStore.java"))
@@ -177,12 +177,12 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `hosted uranium and thorium hover matches inert worldgen and active lifecycle`() {
-        val base = "../mod_source/latent-chemlib/src/main/"
-        val formsPath = base + "resources/data/latent_chemlib/nuclear_forms/realistic_ores.json"
+        val base = "../mod_source/better-chemlib-hazards/src/main/"
+        val formsPath = base + "resources/data/better_chemlib_hazards/nuclear_forms/better_ore_geology.json"
         val forms = jacksonObjectMapper().readTree(root.resolve(formsPath).normalize().toFile()).path("forms")
-        val lifecycle = Files.readString(root.resolve(base + "java/com/bettercontent/latentchemlib/sim/PlacedNuclearLifecycle.java").normalize())
-        val scanner = Files.readString(root.resolve(base + "java/com/bettercontent/latentchemlib/sim/NuclearSurfaceScanner.java").normalize())
-        val simulation = Files.readString(root.resolve(base + "java/com/bettercontent/latentchemlib/sim/NuclearSimulationService.java").normalize())
+        val lifecycle = Files.readString(root.resolve(base + "java/com/bettercontent/betterchemlibhazards/sim/PlacedNuclearLifecycle.java").normalize())
+        val scanner = Files.readString(root.resolve(base + "java/com/bettercontent/betterchemlibhazards/sim/NuclearSurfaceScanner.java").normalize())
+        val simulation = Files.readString(root.resolve(base + "java/com/bettercontent/betterchemlibhazards/sim/NuclearSimulationService.java").normalize())
         assertTrue(lifecycle.contains("if (fixed.get().form().naturalWorldgenInert())"))
         assertTrue(lifecycle.contains("trackDisturbed(level, event.getPos(), fixed.get())"))
         assertTrue(lifecycle.contains("RADIOACTIVE_ACTIVATED"))
@@ -192,7 +192,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(simulation.contains("RadioactiveFormResolver.INSTANCE.resolve(stack)"))
 
         listOf("uranium", "thorium").forEach { family ->
-            val tag = "realistic_ores:radioactive_forms/$family/hosted_ore_blocks"
+            val tag = "better_ore_geology:radioactive_forms/$family/hosted_ore_blocks"
             val row = registry.path("annotations").single { it.path("selector").path("tag").asText() == tag }
             val copy = row.path("lines").map { it.asText() }.joinToString(" ")
             val form = forms.single { it.path("item_tag").asText() == tag }
@@ -208,11 +208,11 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `affixed part cache hover follows dimension origin and reward production`() {
-        val base = "../mod_source/tinkers-construct-affixes/src/main/kotlin/com/bettercontent/tinkersconstructaffixes/"
+        val base = "../mod_source/better-tinkers-loot-affixes/src/main/kotlin/com/bettercontent/bettertinkerslootaffixes/"
         val item = Files.readString(root.resolve(base + "AffixItems.kt").normalize())
         val origins = Files.readString(root.resolve(base + "AffixOrigins.kt").normalize())
         val rewards = Files.readString(root.resolve(base + "TConAffixRewards.kt").normalize())
-        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "tinkers_construct_affixes:affixed_part_cache" }
+        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_tinkers_loot_affixes:affixed_part_cache" }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
         assertTrue(item.contains("AffixOrigins.fromDimension(level.dimension().location())"))
         assertTrue(item.contains("TConAffixRewards.rollAffixedPart(level.random, origin, \"cache\")"))
@@ -287,34 +287,34 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `powered train fuel guidance follows the active speed and stopped-cost policy`() {
-        val policy = Files.readString(root.resolve("config/create_train_fuel_scaling-common.toml"))
+        val policy = Files.readString(root.resolve("config/better_create_train_fuel-common.toml"))
         val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "create:controls" }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
         assertTrue(policy.contains("baseCost = 1.0"))
         assertTrue(policy.contains("k = 2.0"))
         assertTrue(policy.contains("consumeWhileStopped = false"))
-        assertTrue(row.path("owner").asText().contains("create_train_fuel_scaling-common.toml"))
+        assertTrue(row.path("owner").asText().contains("better_create_train_fuel-common.toml"))
         assertTrue(copy.contains("rises sharply with speed"))
         assertTrue(copy.contains("stopped trains do not drain fuel"))
     }
 
     @Test
     fun `player traces probe annotation uses its registered item namespace`() {
-        val mod = Files.readString(root.resolve("../mod_source/player-traces/src/main/kotlin/com/bettercontent/playertraces/TracesMod.kt").normalize())
-        val items = Files.readString(root.resolve("../mod_source/player-traces/src/main/kotlin/com/bettercontent/playertraces/item/TracesItems.kt").normalize())
-        assertTrue(mod.contains("const val MOD_ID = \"player_traces\""))
+        val mod = Files.readString(root.resolve("../mod_source/better-player-traces/src/main/kotlin/com/bettercontent/betterplayertraces/TracesMod.kt").normalize())
+        val items = Files.readString(root.resolve("../mod_source/better-player-traces/src/main/kotlin/com/bettercontent/betterplayertraces/item/TracesItems.kt").normalize())
+        assertTrue(mod.contains("const val MOD_ID = \"better_player_traces\""))
         assertTrue(items.contains("REGISTRY.register(\"foot_traffic_probe\")"))
-        assertTrue(exactTargets().contains("player_traces:foot_traffic_probe"))
+        assertTrue(exactTargets().contains("better_player_traces:foot_traffic_probe"))
         assertTrue(!exactTargets().contains("traces:foot_traffic_probe"))
     }
 
     @Test
     fun `foot traffic probe reports read-only local regional and server totals`() {
-        val itemPath = "../mod_source/player-traces/src/main/kotlin/com/bettercontent/playertraces/item/FootTrafficProbeItem.kt"
-        val queryPath = "../mod_source/player-traces/src/main/kotlin/com/bettercontent/playertraces/logic/TraceQueryService.kt"
+        val itemPath = "../mod_source/better-player-traces/src/main/kotlin/com/bettercontent/betterplayertraces/item/FootTrafficProbeItem.kt"
+        val queryPath = "../mod_source/better-player-traces/src/main/kotlin/com/bettercontent/betterplayertraces/logic/TraceQueryService.kt"
         val item = Files.readString(root.resolve(itemPath).normalize())
         val query = Files.readString(root.resolve(queryPath).normalize())
-        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "player_traces:foot_traffic_probe" }
+        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_player_traces:foot_traffic_probe" }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
 
         assertTrue(item.contains("TraceQueryService().trafficPotential(level, player.blockPosition())"))
@@ -332,10 +332,10 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `wireless hover states the payload-scaled sender relay cost`() {
         val device = Files.readString(
-            root.resolve("../mod_source/oc2r-wireless-pubsub/src/main/java/com/bettercontent/oc2rwirelesspubsub/device/WirelessCardItemDevice.java").normalize(),
+            root.resolve("../mod_source/better-oc2r-wireless-messaging/src/main/java/com/bettercontent/betteroc2rwirelessmessaging/device/WirelessCardItemDevice.java").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("items").any { it.asText() == "oc2r_wireless_pubsub:wireless_relay" }
+            annotation.path("selector").path("items").any { it.asText() == "better_oc2r_wireless_messaging:wireless_relay" }
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
         assertTrue(device.contains("BASE_ENERGY_COST = 4"))
@@ -365,11 +365,11 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `rain collector hover follows the configured Thirst default purity`() {
         val collector = Files.readString(
-            root.resolve("../mod_source/water-survival/src/main/java/com/bettercontent/watersurvival/RainCollectorBlock.java").normalize(),
+            root.resolve("../mod_source/better-drinking-water/src/main/java/com/bettercontent/betterdrinkingwater/RainCollectorBlock.java").normalize(),
         )
         val thirstConfig = Files.readString(root.resolve("config/thirst/common.toml"))
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("item").asText() == "water_survival:rain_collector"
+            annotation.path("selector").path("item").asText() == "better_drinking_water:rain_collector"
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
         assertTrue(collector.contains("public static final int CAPACITY = 4"))
@@ -402,19 +402,19 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Heart Fragment hover states the per-fragment altar rate`() {
         val deathEvents = Files.readString(
-            root.resolve("../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/event/CommonForgeEvents.kt").normalize(),
+            root.resolve("../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common/event/CommonForgeEvents.kt").normalize(),
         )
         val entitlements = Files.readString(
-            root.resolve("../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/item/HeartFragmentEntitlements.kt").normalize(),
+            root.resolve("../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common/item/HeartFragmentEntitlements.kt").normalize(),
         )
         val fragmentData = Files.readString(
-            root.resolve("../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/item/HeartFragmentData.kt").normalize(),
+            root.resolve("../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common/item/HeartFragmentData.kt").normalize(),
         )
         val heartBlock = Files.readString(
-            root.resolve("../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common/block/entity/HeartBlockEntity.kt").normalize(),
+            root.resolve("../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common/block/entity/HeartBlockEntity.kt").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("item").asText() == "rpg_stats:heart_fragment"
+            annotation.path("selector").path("item").asText() == "better_rpg_progression:heart_fragment"
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
 
@@ -435,16 +435,16 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `bouquet hover controls match the empty-hand editor and rotation keys`() {
         val block = Files.readString(
-            root.resolve("../mod_source/procedural-bouquets/src/main/java/com/bettercontent/proceduralbouquets/block/BouquetGridBlock.java").normalize(),
+            root.resolve("../mod_source/better-craftable-bouquets/src/main/java/com/bettercontent/bettercraftablebouquets/block/BouquetGridBlock.java").normalize(),
         )
         val screen = Files.readString(
-            root.resolve("../mod_source/procedural-bouquets/src/main/java/com/bettercontent/proceduralbouquets/client/BouquetGridScreen.java").normalize(),
+            root.resolve("../mod_source/better-craftable-bouquets/src/main/java/com/bettercontent/bettercraftablebouquets/client/BouquetGridScreen.java").normalize(),
         )
         val menu = Files.readString(
-            root.resolve("../mod_source/procedural-bouquets/src/main/java/com/bettercontent/proceduralbouquets/menu/BouquetGridMenu.java").normalize(),
+            root.resolve("../mod_source/better-craftable-bouquets/src/main/java/com/bettercontent/bettercraftablebouquets/menu/BouquetGridMenu.java").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("items").any { it.asText() == "procedural_bouquets:bouquet_grid" }
+            annotation.path("selector").path("items").any { it.asText() == "better_craftable_bouquets:bouquet_grid" }
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
 
@@ -484,11 +484,11 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Boiler Heater hover costs match configured heat per delivery strength`() {
         val heatLogic = Files.readString(
-            root.resolve("../mod_source/heat-sync/src/main/kotlin/com/bettercontent/heatsync/content/heat/BoilerHeaterLogic.kt").normalize(),
+            root.resolve("../mod_source/better-industrial-heat/src/main/kotlin/com/bettercontent/betterindustrialheat/content/heat/BoilerHeaterLogic.kt").normalize(),
         )
-        val activeConfig = Files.readString(root.resolve("config/heat_sync-common.toml"))
+        val activeConfig = Files.readString(root.resolve("config/better_industrial_heat-common.toml"))
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("item").asText() == "heat_sync:boiler_heater"
+            annotation.path("selector").path("item").asText() == "better_industrial_heat:boiler_heater"
         }
         val copy = row.path("lines").map { it.asText() }.single()
 
@@ -499,25 +499,25 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(activeConfig.contains("strength_2_cost_per_tick = 2.0"))
         assertTrue(activeConfig.contains("strength_3_cost_per_tick = 3.0"))
         assertTrue(copy.contains("Consumes 1/2/3 heat per tick at delivery strength 1/2/3."))
-        assertTrue(row.path("owner").asText().contains("config/heat_sync-common.toml"))
+        assertTrue(row.path("owner").asText().contains("config/better_industrial_heat-common.toml"))
     }
 
     @Test
     fun `mining helmet light guidance follows optional Dynamic Lights registration`() {
         val item = Files.readString(
-            root.resolve("../mod_source/mining-helmet/src/main/java/com/bettercontent/mininghelmet/MiningHelmetItem.java").normalize(),
+            root.resolve("../mod_source/better-mining-lamp/src/main/java/com/bettercontent/bettermininglamp/MiningHelmetItem.java").normalize(),
         )
         val client = Files.readString(
-            root.resolve("../mod_source/mining-helmet/src/main/java/com/bettercontent/mininghelmet/client/MiningHelmetClient.java").normalize(),
+            root.resolve("../mod_source/better-mining-lamp/src/main/java/com/bettercontent/bettermininglamp/client/MiningHelmetClient.java").normalize(),
         )
         val lightHandler = Files.readString(
-            root.resolve("../mod_source/mining-helmet/src/main/java/com/bettercontent/mininghelmet/client/DynamicLightsCompat.java").normalize(),
+            root.resolve("../mod_source/better-mining-lamp/src/main/java/com/bettercontent/bettermininglamp/client/DynamicLightsCompat.java").normalize(),
         )
         val lightConfig = Files.readString(
-            root.resolve("../mod_source/mining-helmet/src/main/resources/assets/mining_helmet/dynamiclights/item/mining_helmet.json").normalize(),
+            root.resolve("../mod_source/better-mining-lamp/src/main/resources/assets/better_mining_lamp/dynamiclights/item/better_mining_lamp.json").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("item").asText() == "mining_helmet:mining_helmet"
+            annotation.path("selector").path("item").asText() == "better_mining_lamp:better_mining_lamp"
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
 
@@ -527,7 +527,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(item.contains("extends ArmorItem") && item.contains("implements ICurioItem"))
         assertTrue(copy.contains("With Sodium Dynamic Lights, a worn helmet emits level 15"))
         assertTrue(copy.contains("Curios head slot provides light only"))
-        assertEquals("mining_helmet", row.path("required_mod").asText())
+        assertEquals("better_mining_lamp", row.path("required_mod").asText())
         assertTrue(row.path("owner").asText().contains("DynamicLightsCompat.java"))
     }
 
@@ -535,10 +535,10 @@ class HoverAnnotationLearningSurfaceTest {
     fun `acetate membrane hover describes its upgrade recipe and retention role`() {
         val recipe = Files.readString(root.resolve("kubejs/server_scripts/progression/45_acid_chemistry.js"))
         val interaction = Files.readString(
-            root.resolve("../mod_source/airtight-machinery/src/main/java/com/bettercontent/airtightmachinery/chemistry/AirtightUpgradeInteraction.java").normalize(),
+            root.resolve("../mod_source/better-airtight-machines/src/main/java/com/bettercontent/betterairtightmachines/chemistry/AirtightUpgradeInteraction.java").normalize(),
         )
         val escape = Files.readString(
-            root.resolve("../mod_source/latent-chemlib/src/main/java/com/bettercontent/latentchemlib/sim/GasEscapeHandler.java").normalize(),
+            root.resolve("../mod_source/better-chemlib-hazards/src/main/java/com/bettercontent/betterchemlibhazards/sim/GasEscapeHandler.java").normalize(),
         )
         val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "kubejs:acetate_membrane" }
         val owner = row.path("owner").asText()
@@ -548,7 +548,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(recipe.contains("{ fluid: 'chemlib:acetic_acid_fluid', amount: 250 }"))
         assertTrue(recipe.contains("results: [{ item: 'kubejs:acetate_membrane', count: 4 }]"))
         assertTrue(recipe.contains("M: 'kubejs:acetate_membrane'"))
-        assertTrue(recipe.contains("event.shaped('airtight_machinery:airtight_upgrade'"))
+        assertTrue(recipe.contains("event.shaped('better_airtight_machines:airtight_upgrade'"))
         assertTrue(interaction.contains("held.is(ChemistryContent.AIRTIGHT_UPGRADE.get())"))
         assertTrue(interaction.contains("holder.betterContentFixes" + "$" + "setAirtight(true)"))
         assertTrue(escape.contains("if (isAirtight(holder)) return;"))
@@ -564,23 +564,23 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Airtight Upgrade targets match the registered gas-retention holders`() {
         val interaction = Files.readString(
-            root.resolve("../mod_source/airtight-machinery/src/main/java/com/bettercontent/airtightmachinery/chemistry/AirtightUpgradeInteraction.java").normalize(),
+            root.resolve("../mod_source/better-airtight-machines/src/main/java/com/bettercontent/betterairtightmachines/chemistry/AirtightUpgradeInteraction.java").normalize(),
         )
-        val mixins = Files.readString(root.resolve("../mod_source/airtight-machinery/src/main/resources/airtight_machinery.mixins.json").normalize())
+        val mixins = Files.readString(root.resolve("../mod_source/better-airtight-machines/src/main/resources/better_airtight_machines.mixins.json").normalize())
         val basin = Files.readString(
-            root.resolve("../mod_source/airtight-machinery/src/main/java/com/bettercontent/airtightmachinery/mixin/chemistry/create/BasinAirtightMixin.java").normalize(),
+            root.resolve("../mod_source/better-airtight-machines/src/main/java/com/bettercontent/betterairtightmachines/mixin/chemistry/create/BasinAirtightMixin.java").normalize(),
         )
         val mixer = Files.readString(
-            root.resolve("../mod_source/airtight-machinery/src/main/java/com/bettercontent/airtightmachinery/mixin/chemistry/pneumaticcraft/FluidMixerAirtightMixin.java").normalize(),
+            root.resolve("../mod_source/better-airtight-machines/src/main/java/com/bettercontent/betterairtightmachines/mixin/chemistry/pneumaticcraft/FluidMixerAirtightMixin.java").normalize(),
         )
         val plant = Files.readString(
-            root.resolve("../mod_source/airtight-machinery/src/main/java/com/bettercontent/airtightmachinery/mixin/chemistry/pneumaticcraft/ThermopneumaticPlantAirtightMixin.java").normalize(),
+            root.resolve("../mod_source/better-airtight-machines/src/main/java/com/bettercontent/betterairtightmachines/mixin/chemistry/pneumaticcraft/ThermopneumaticPlantAirtightMixin.java").normalize(),
         )
         val escape = Files.readString(
-            root.resolve("../mod_source/latent-chemlib/src/main/java/com/bettercontent/latentchemlib/sim/GasEscapeHandler.java").normalize(),
+            root.resolve("../mod_source/better-chemlib-hazards/src/main/java/com/bettercontent/betterchemlibhazards/sim/GasEscapeHandler.java").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("item").asText() == "airtight_machinery:airtight_upgrade"
+            annotation.path("selector").path("item").asText() == "better_airtight_machines:airtight_upgrade"
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
 
@@ -633,12 +633,12 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `Bumblezone nursery hover matches one-time worldgen and seed recovery`() {
-        val base = "../mod_source/bumblezone-cultivars/src/main/java/com/bettercontent/bumblezonecultivars/"
+        val base = "../mod_source/better-bumblezone-crops/src/main/java/com/bettercontent/betterbumblezonecrops/"
         val mod = Files.readString(root.resolve(base + "BumblezoneCultivars.java").normalize())
         val finalizer = Files.readString(root.resolve(base + "CultivarChunkFinalizer.java").normalize())
         val nursery = Files.readString(root.resolve(base + "LivingPollenNurseryBlock.java").normalize())
         val loot = Files.readString(root.resolve(base + "CultivarLootModifier.java").normalize())
-        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "bumblezone_cultivars:living_pollen_nursery" }
+        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_bumblezone_crops:living_pollen_nursery" }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
         assertTrue(mod.contains("LIVING_POLLEN_NURSERY = BLOCKS.register(\"living_pollen_nursery\""))
         assertTrue(finalizer.contains("if (!event.isNewChunk()) return"))
@@ -658,16 +658,16 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `cultivar seed hover preserves the persistent-harvest off-origin exception`() {
         val loot = Files.readString(
-            root.resolve("../mod_source/bumblezone-cultivars/src/main/java/com/bettercontent/bumblezonecultivars/CultivarLootModifier.java").normalize(),
+            root.resolve("../mod_source/better-bumblezone-crops/src/main/java/com/bettercontent/betterbumblezonecrops/CultivarLootModifier.java").normalize(),
         )
         val catalogue = Files.readString(
-            root.resolve("../mod_source/bumblezone-cultivars/src/main/resources/defaults/cultivars.json").normalize(),
+            root.resolve("../mod_source/better-bumblezone-crops/src/main/resources/defaults/cultivars.json").normalize(),
         )
         val seedTag = Files.readString(
-            root.resolve("../mod_source/bumblezone-cultivars/src/main/resources/data/bumblezone_cultivars/tags/items/seeds.json").normalize(),
+            root.resolve("../mod_source/better-bumblezone-crops/src/main/resources/data/better_bumblezone_crops/tags/items/seeds.json").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("tag").asText() == "bumblezone_cultivars:seeds"
+            annotation.path("selector").path("tag").asText() == "better_bumblezone_crops:seeds"
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
 
@@ -675,7 +675,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(loot.contains("return sourcedPlanting ? 1 : 0;"))
         assertTrue(loot.contains("return inOrigin ? (roll < 0.5F ? 2 : 1) : (roll < 0.2F ? 1 : 0);"))
         assertTrue(catalogue.contains("\"growthForm\":\"persistent-harvest\""))
-        assertTrue(seedTag.contains("bumblezone_cultivars:minecraft_glow_berry_seeds"))
+        assertTrue(seedTag.contains("better_bumblezone_crops:minecraft_glow_berry_seeds"))
         assertTrue(copy.contains("Off-origin flowers may yield one seed"))
         assertTrue(copy.contains("Other crops need Bumblezone-sourced planting"))
         assertTrue(copy.contains("persistent-harvest yields none"))
@@ -875,7 +875,7 @@ class HoverAnnotationLearningSurfaceTest {
                 "kubejs/server_scripts/utility/hooks_drones_gates.js",
             ),
             "kubejs:impossible_support_matrix" to listOf(
-                "kubejs/server_scripts/progression/20_ratlantis_logistics.js",
+                "kubejs/server_scripts/progression/20_better_ratlantis_logistics.js",
                 "kubejs/server_scripts/compat/retained/refactor__balance__166_tome_of_blood_post_ae2_gates.js",
             ),
             "kubejs:mountain_beryl_lens" to listOf(
@@ -1015,21 +1015,21 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `geological feed hovers follow all authored milling sifting and assay routes`() {
-        val dataRoot = root.resolve("../mod_source/realistic-ores/src/main/resources/data/realistic_ores").normalize()
+        val dataRoot = root.resolve("../mod_source/better-ore-geology/src/main/resources/data/better_ore_geology").normalize()
         fun json(path: String) = jacksonObjectMapper().readTree(dataRoot.resolve(path).toFile())
         fun tagValues(name: String) = json("tags/items/$name.json").path("values").map { it.asText() }.toSet()
         val chunks = tagValues("deposit_chunks")
         val crushed = tagValues("crushed_feeds")
         val rinsed = tagValues("rinsed_feeds")
         val families = setOf("coal_measures", "ironstone", "copper_bloom", "tin_quartz", "brassroot", "evaporite_beds", "hotstone", "black_shale")
-        assertEquals(families.map { "realistic_ores:ore_chunk_$it" }.toSet(), chunks)
-        assertEquals(families.map { "realistic_ores:crushed_$it" }.toSet(), crushed)
-        assertEquals(families.map { "realistic_ores:rinsed_$it" }.toSet(), rinsed)
+        assertEquals(families.map { "better_ore_geology:ore_chunk_$it" }.toSet(), chunks)
+        assertEquals(families.map { "better_ore_geology:crushed_$it" }.toSet(), crushed)
+        assertEquals(families.map { "better_ore_geology:rinsed_$it" }.toSet(), rinsed)
 
         families.forEach { family ->
-            val chunk = "realistic_ores:ore_chunk_$family"
-            val crushedFeed = "realistic_ores:crushed_$family"
-            val rinsedFeed = "realistic_ores:rinsed_$family"
+            val chunk = "better_ore_geology:ore_chunk_$family"
+            val crushedFeed = "better_ore_geology:crushed_$family"
+            val rinsedFeed = "better_ore_geology:rinsed_$family"
             val stringRoot = "recipes/compat/createsifter/sifting/$family/string"
             val dry = json("${stringRoot}_dry.json")
             val wet = json("${stringRoot}_wet.json")
@@ -1056,9 +1056,9 @@ class HoverAnnotationLearningSurfaceTest {
         }
 
         val registryRows = registry.path("annotations")
-        val chunksHover = registryRows.single { it.path("selector").path("tag").asText() == "realistic_ores:deposit_chunks" }
-        val crushedHover = registryRows.single { it.path("selector").path("tag").asText() == "realistic_ores:crushed_feeds" }
-        val rinsedHover = registryRows.single { it.path("selector").path("tag").asText() == "realistic_ores:rinsed_feeds" }
+        val chunksHover = registryRows.single { it.path("selector").path("tag").asText() == "better_ore_geology:deposit_chunks" }
+        val crushedHover = registryRows.single { it.path("selector").path("tag").asText() == "better_ore_geology:crushed_feeds" }
+        val rinsedHover = registryRows.single { it.path("selector").path("tag").asText() == "better_ore_geology:rinsed_feeds" }
         val fanHover = registryRows.single { it.path("selector").path("item").asText() == "create:encased_fan" }
         val processing = Files.readString(root.resolve("kubejs/server_scripts/processing/ore_sifting_and_spouting.js"))
         assertTrue(chunksHover.path("lines").toString().contains("String Mesh") && chunksHover.path("lines").toString().contains("milling creates more feed"))
@@ -1070,7 +1070,7 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `surface sample hover describes collection without claiming deposit detection`() {
-        val base = "../mod_source/realistic-ores/src/main/java/com/bettercontent/realisticores/"
+        val base = "../mod_source/better-ore-geology/src/main/java/com/bettercontent/betteroregeology/"
         val blocks = Files.readString(root.resolve(base + "registry/ModBlocks.java").normalize())
         val sample = Files.readString(root.resolve(base + "block/SurfaceSampleBlock.java").normalize())
         val useBody = sample.substringAfter("public InteractionResult use(").substringBefore("    @Override\n    protected void createBlockStateDefinition")
@@ -1078,10 +1078,10 @@ class HoverAnnotationLearningSurfaceTest {
         val row = registry.path("annotations").single { it.path("concept_id").asText() == "geology.deposits.surface_sign" }
         val targets = row.path("selector").path("items").map { it.asText() }.toSet()
         val expectedTargets = setOf(
-            "realistic_ores:surface_sample_black_shale", "realistic_ores:surface_sample_brassroot",
-            "realistic_ores:surface_sample_coal_measures", "realistic_ores:surface_sample_copper_bloom",
-            "realistic_ores:surface_sample_evaporite_beds", "realistic_ores:surface_sample_hotstone",
-            "realistic_ores:surface_sample_ironstone", "realistic_ores:surface_sample_tin_quartz",
+            "better_ore_geology:surface_sample_black_shale", "better_ore_geology:surface_sample_brassroot",
+            "better_ore_geology:surface_sample_coal_measures", "better_ore_geology:surface_sample_copper_bloom",
+            "better_ore_geology:surface_sample_evaporite_beds", "better_ore_geology:surface_sample_hotstone",
+            "better_ore_geology:surface_sample_ironstone", "better_ore_geology:surface_sample_tin_quartz",
         )
         val owner = row.path("owner").asText()
         val copy = row.path("lines").map { it.asText() }
@@ -1115,19 +1115,19 @@ class HoverAnnotationLearningSurfaceTest {
         val exact = exactTargets()
         val tags = tagTargets()
         val expectedExact = setOf(
-            "dimension_drink:dimensional_font",
-            "dimension_drink:return_seal",
-            "bumblezone_cultivars:living_pollen_nursery",
-            "water_survival:rain_collector",
-            "mining_helmet:mining_helmet",
-            "oc2r_wireless_pubsub:wireless_relay",
-            "procedural_bouquets:bouquet_grid",
+            "better_dimension_fonts:dimensional_font",
+            "better_dimension_fonts:return_seal",
+            "better_bumblezone_crops:living_pollen_nursery",
+            "better_drinking_water:rain_collector",
+            "better_mining_lamp:better_mining_lamp",
+            "better_oc2r_wireless_messaging:wireless_relay",
+            "better_craftable_bouquets:bouquet_grid",
             "better_spirit_commerce:sacred_reliquary",
             "malum:spirit_pouch",
-            "ratlantis_logistics:courier_lattice",
-            "rail_beetle:route_beacon",
-            "player_traces:foot_traffic_probe",
-            "tinkers_construct_affixes:affixed_part_cache",
+            "better_ratlantis_logistics:courier_lattice",
+            "better_rail_beetle:route_beacon",
+            "better_player_traces:foot_traffic_probe",
+            "better_tinkers_loot_affixes:affixed_part_cache",
             "create:schematicannon",
             "sereneseasons:calendar",
             "weather2:tornado_sensor",
@@ -1138,15 +1138,15 @@ class HoverAnnotationLearningSurfaceTest {
             "ae2:pattern_provider",
             "creatingspace:rocket_controls",
             "iceandfire:dragonsteel_fire_ingot",
-            "realistic_ores:surface_sample_hotstone",
+            "better_ore_geology:surface_sample_hotstone",
         )
         val expectedTags = setOf(
-            "bumblezone_cultivars:seeds",
+            "better_bumblezone_crops:seeds",
             "dynamictrees:seeds",
-            "realistic_ores:crushed_feeds",
-            "realistic_ores:rinsed_feeds",
-            "realistic_ores:radioactive_forms/uranium/hosted_ore_blocks",
-            "realistic_ores:radioactive_forms/thorium/hosted_ore_blocks",
+            "better_ore_geology:crushed_feeds",
+            "better_ore_geology:rinsed_feeds",
+            "better_ore_geology:radioactive_forms/uranium/hosted_ore_blocks",
+            "better_ore_geology:radioactive_forms/thorium/hosted_ore_blocks",
         )
         assertTrue((expectedExact - exact).isEmpty(), "missing exact anchors: ${(expectedExact - exact).sorted()}")
         assertTrue((expectedTags - tags).isEmpty(), "missing tag anchors: ${(expectedTags - tags).sorted()}")
@@ -1385,16 +1385,16 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `Rail Beetle annotations teach baseline power and tier progression`() {
-        val sourceRoot = root.resolve("../mod_source/rail-beetle/src/main/java/com/bettercontent/railbeetle/entity").normalize()
+        val sourceRoot = root.resolve("../mod_source/better-rail-beetle/src/main/java/com/bettercontent/betterrailbeetle/entity").normalize()
         val entity = Files.readString(sourceRoot.resolve("RailBeetleEntity.java"))
         val power = Files.readString(sourceRoot.resolve("BeetlePower.java"))
-        val engineKinds = Files.readString(root.resolve("../mod_source/rail-beetle/src/main/java/com/bettercontent/railbeetle/upgrade/EngineKind.java").normalize())
-        val planner = Files.readString(root.resolve("../mod_source/rail-beetle/src/main/java/com/bettercontent/railbeetle/navigation/TerrainRoutePlanner.java").normalize())
+        val engineKinds = Files.readString(root.resolve("../mod_source/better-rail-beetle/src/main/java/com/bettercontent/betterrailbeetle/upgrade/EngineKind.java").normalize())
+        val planner = Files.readString(root.resolve("../mod_source/better-rail-beetle/src/main/java/com/bettercontent/betterrailbeetle/navigation/TerrainRoutePlanner.java").normalize())
         val recipes = Files.readString(root.resolve("kubejs/server_scripts/transport/10_optional_engineering_roots.js"))
-        val vehicle = registry.path("annotations").single { it.path("selector").path("item").asText() == "rail_beetle:rail_beetle" }
-        val beacon = registry.path("annotations").single { it.path("selector").path("item").asText() == "rail_beetle:route_beacon" }
-        val engines = registry.path("annotations").single { it.path("selector").path("items").any { item -> item.asText() == "rail_beetle:steam_drive" } }
-        val tierTwo = registry.path("annotations").single { it.path("selector").path("items").any { item -> item.asText() == "rail_beetle:high_speed_governor_2" } }
+        val vehicle = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_rail_beetle:better_rail_beetle" }
+        val beacon = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_rail_beetle:route_beacon" }
+        val engines = registry.path("annotations").single { it.path("selector").path("items").any { item -> item.asText() == "better_rail_beetle:steam_drive" } }
+        val tierTwo = registry.path("annotations").single { it.path("selector").path("items").any { item -> item.asText() == "better_rail_beetle:high_speed_governor_2" } }
 
         assertTrue(vehicle.path("lines").any { it.asText() == "Surveys, drives, and builds rails and shallow bridges." })
         assertTrue(vehicle.path("lines").any { it.asText() == "Uses engine power first, then fuel from its working inventory." })
@@ -1439,7 +1439,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(entity.contains("int refill = BeetleSupplies.takeFuel(inventory)"))
         assertTrue(power.contains("static boolean consumeEngine(ItemStack engineStack"))
         assertTrue(power.contains("case STEAM -> refillBurnable"))
-        assertTrue(recipes.contains("'rail_beetle:' + prior"))
+        assertTrue(recipes.contains("'better_rail_beetle:' + prior"))
         assertTrue(recipes.contains("railBeetleTierTwo('high_speed_governor_2', 'high_speed_governor_1'"))
         assertTrue(recipes.contains("railBeetleElectricalTierTwo('dispatch_receiver_2', 'dispatch_receiver_1'"))
     }
@@ -1498,17 +1498,17 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `Heat Sync hovers match network firebox coolant and transducer behavior`() {
-        val sourceRoot = root.resolve("../mod_source/heat-sync/src/main/kotlin/com/bettercontent/heatsync").normalize()
+        val sourceRoot = root.resolve("../mod_source/better-industrial-heat/src/main/kotlin/com/bettercontent/betterindustrialheat").normalize()
         val pipe = Files.readString(sourceRoot.resolve("content/heat/HeatPipeBlockEntity.kt"))
         val controller = Files.readString(sourceRoot.resolve("HeatSyncPipeThermalController.kt"))
         val firebox = Files.readString(sourceRoot.resolve("content/heat/ThermalFireboxBlockEntity.kt"))
         val exchanger = Files.readString(sourceRoot.resolve("content/coolant/CoolantExchangerBlockEntity.kt"))
         val transducer = Files.readString(sourceRoot.resolve("content/energy/ImpossibleMatterTransducerBlockEntity.kt"))
         val expectations = mapOf(
-            "heat_sync:heat_pipe" to "Stores and equalizes network heat while exchanging with its surroundings.",
-            "heat_sync:thermal_firebox" to "Burns ordinary furnace fuel into network heat; it does not generate rotation.",
-            "heat_sync:coolant_exchanger" to "Transfers heat by converting hot and cold fluids. Hold the Ponder key to see the setup.",
-            "heat_sync:impossible_matter_transducer" to "Unbinds adjacent Impossible Matter into AE power and heat; requires FE containment and a working heat sink.",
+            "better_industrial_heat:heat_pipe" to "Stores and equalizes network heat while exchanging with its surroundings.",
+            "better_industrial_heat:thermal_firebox" to "Burns ordinary furnace fuel into network heat; it does not generate rotation.",
+            "better_industrial_heat:coolant_exchanger" to "Transfers heat by converting hot and cold fluids. Hold the Ponder key to see the setup.",
+            "better_industrial_heat:impossible_matter_transducer" to "Unbinds adjacent Impossible Matter into AE power and heat; requires FE containment and a working heat sink.",
         )
         expectations.forEach { (id, copy) ->
             val row = registry.path("annotations").single {
@@ -1516,7 +1516,7 @@ class HoverAnnotationLearningSurfaceTest {
             }
             assertTrue(row.path("lines").any { it.asText() == copy }, id)
         }
-        assertTrue(registry.path("annotations").single { it.path("selector").path("item").asText() == "heat_sync:heat_pipe" }
+        assertTrue(registry.path("annotations").single { it.path("selector").path("item").asText() == "better_industrial_heat:heat_pipe" }
             .path("owner").asText().contains("HeatSyncPipeThermalController.kt"))
 
         assertTrue(pipe.contains("fun addHeat(heat: Float)"))
@@ -1563,8 +1563,8 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `bed and campfire hovers follow permanent spawn and local heat rules`() {
-        val respawn = Files.readString(root.resolve("../mod_source/class-selector/src/main/kotlin/com/bettercontent/classselector/respawn/PersonalRespawnEvents.kt").normalize())
-        val snowMelt = Files.readString(root.resolve("../mod_source/water-survival/src/main/java/com/bettercontent/watersurvival/SnowMeltHandler.java").normalize())
+        val respawn = Files.readString(root.resolve("../mod_source/better-spawns/src/main/kotlin/com/bettercontent/betterspawns/respawn/PersonalRespawnEvents.kt").normalize())
+        val snowMelt = Files.readString(root.resolve("../mod_source/better-drinking-water/src/main/java/com/bettercontent/betterdrinkingwater/SnowMeltHandler.java").normalize())
         val coldSweat = Files.readString(root.resolve("config/coldsweat/world.toml"))
         val bedRow = registry.path("annotations").single { it.path("selector").path("tag").asText() == "minecraft:beds" }
         val campfireRow = registry.path("annotations").single { it.path("selector").path("item").asText() == "minecraft:campfire" }
@@ -1593,13 +1593,13 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `Dimension Font hover matches empty hand activation and return seal behavior`() {
-        val source = Files.readString(root.resolve("../mod_source/dimension-drink/src/main/kotlin/com/bettercontent/dimensiondrink/content/ObeliskBlock.kt").normalize())
+        val source = Files.readString(root.resolve("../mod_source/better-dimension-fonts/src/main/kotlin/com/bettercontent/betterdimensionfonts/content/ObeliskBlock.kt").normalize())
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("items").any { it.asText() == "dimension_drink:return_seal" }
+            annotation.path("selector").path("items").any { it.asText() == "better_dimension_fonts:return_seal" }
         }
         val targets = row.path("selector").path("items").map { it.asText() }.toSet()
 
-        assertEquals(setOf("dimension_drink:dimensional_font", "dimension_drink:return_seal"), targets)
+        assertEquals(setOf("better_dimension_fonts:dimensional_font", "better_dimension_fonts:return_seal"), targets)
         assertEquals(listOf("Generated Fonts open trips empty-handed; harvested Fonts are unbound. Return seals end trips early."), row.path("lines").map { it.asText() })
         assertTrue(row.path("owner").asText().contains("ObeliskBlock.kt"))
         assertTrue(source.contains("if (returnOnly)"))
@@ -1632,8 +1632,8 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `Create transmission hover follows configured part cost and speed scaling`() {
-        val config = Files.readString(root.resolve("config/create_transmission_loss-common.toml"))
-        val sourceRoot = root.resolve("../mod_source/create-transmission-loss/src/main/kotlin/com/bettercontent/createtransmissionloss").normalize()
+        val config = Files.readString(root.resolve("config/better_create_kinetic_loss-common.toml"))
+        val sourceRoot = root.resolve("../mod_source/better-create-kinetic-loss/src/main/kotlin/com/bettercontent/bettercreatekineticloss").normalize()
         val scanner = Files.readString(sourceRoot.resolve("network/NetworkScanner.kt"))
         val configSource = Files.readString(sourceRoot.resolve("config/Config.kt"))
         val row = registry.path("annotations").single { annotation ->
@@ -1643,7 +1643,7 @@ class HoverAnnotationLearningSurfaceTest {
 
         assertEquals(setOf("create:shaft", "create:cogwheel", "create:large_cogwheel", "create:gearbox", "create:vertical_gearbox", "create:belt_connector"), targets)
         assertEquals("Transmission parts consume SU; larger, faster networks cost more capacity.", row.path("lines").single().asText())
-        assertTrue(row.path("owner").asText().contains("create_transmission_loss-common.toml"))
+        assertTrue(row.path("owner").asText().contains("better_create_kinetic_loss-common.toml"))
         assertTrue(row.path("owner").asText().contains("NetworkScanner.kt"))
         assertTrue(config.contains("enabled = true"))
         assertTrue(config.contains("speedMode = \"LINEAR\""))
@@ -1657,8 +1657,8 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `Ratlantis bait hover distinguishes taming from ordinary cheese`() {
-        val source = Files.readString(root.resolve("../mod_source/ratlantis-logistics/src/main/java/com/bettercontent/ratlantislogistics/RatlantisLogistics.java").normalize())
-        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "ratlantis_logistics:ratlantean_bait" }
+        val source = Files.readString(root.resolve("../mod_source/better-ratlantis-logistics/src/main/java/com/bettercontent/betterratlantislogistics/RatlantisLogistics.java").normalize())
+        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_ratlantis_logistics:ratlantean_bait" }
         assertEquals("Use to tame wild rats. Ordinary cheese cannot tame them.", row.path("lines").single().asText())
         assertTrue(row.path("owner").asText().contains("RatlantisLogistics.java"))
         assertTrue(source.contains("heldId.equals(new ResourceLocation(\"rats\", \"cheese\"))"))
@@ -1670,10 +1670,10 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `Heart Block hover matches fragment installation and adjacent altar output`() {
-        val sourceRoot = root.resolve("../mod_source/rpg-stats/src/main/kotlin/com/bettercontent/rpgstats/common").normalize()
+        val sourceRoot = root.resolve("../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common").normalize()
         val block = Files.readString(sourceRoot.resolve("block/HeartBlock.kt"))
         val entity = Files.readString(sourceRoot.resolve("block/entity/HeartBlockEntity.kt"))
-        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "rpg_stats:heart_block" }
+        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_rpg_progression:heart_block" }
 
         assertEquals("Place beside a Blood Altar; use Heart Fragments to increase LP production.", row.path("lines").single().asText())
         assertTrue(row.path("owner").asText().contains("block/HeartBlock.kt"))
@@ -1711,7 +1711,7 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Pretty Pipes annotations expose all three visible Ratlantis gates`() {
         val text = Files.readString(root.resolve("kubejs/config/hover_annotations.json"))
-        val recipes = Files.readString(root.resolve("kubejs/server_scripts/progression/20_ratlantis_logistics.js"))
+        val recipes = Files.readString(root.resolve("kubejs/server_scripts/progression/20_better_ratlantis_logistics.js"))
         assertTrue(text.contains("four lattices make the first 32 pipes"))
         assertTrue(text.contains("Oratchalcum Mechanism"))
         assertTrue(text.contains("Arcane Logistics Core"))
@@ -1725,22 +1725,22 @@ class HoverAnnotationLearningSurfaceTest {
         val pipe = registry.path("annotations").single { it.path("selector").path("item").asText() == "prettypipes:pipe" }
         val blank = registry.path("annotations").single { it.path("selector").path("item").asText() == "prettypipes:blank_module" }
         val advanced = registry.path("annotations").single { it.path("selector").path("items").any { item -> item.asText() == "prettypipes:high_speed_module" } }
-        val mechanism = registry.path("annotations").single { it.path("selector").path("item").asText() == "ratlantis_logistics:oratchalcum_mechanism" }
-        val logisticsCore = registry.path("annotations").single { it.path("selector").path("item").asText() == "ratlantis_logistics:arcane_logistics_core" }
-        assertTrue(pipe.path("owner").asText().contains("20_ratlantis_logistics.js"))
-        assertTrue(blank.path("owner").asText().contains("20_ratlantis_logistics.js"))
-        assertTrue(advanced.path("owner").asText().contains("20_ratlantis_logistics.js"))
-        assertTrue(mechanism.path("owner").asText().contains("20_ratlantis_logistics.js"))
-        assertTrue(logisticsCore.path("owner").asText().contains("20_ratlantis_logistics.js"))
+        val mechanism = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_ratlantis_logistics:oratchalcum_mechanism" }
+        val logisticsCore = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_ratlantis_logistics:arcane_logistics_core" }
+        assertTrue(pipe.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
+        assertTrue(blank.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
+        assertTrue(advanced.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
+        assertTrue(mechanism.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
+        assertTrue(logisticsCore.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
         assertTrue(pipe.path("lines").single().asText().contains("four lattices make the first 32 pipes"))
         assertTrue(blank.path("lines").single().asText().contains("Oratchalcum Mechanism"))
         assertTrue(advanced.path("lines").single().asText().contains("Arcane Logistics Core"))
         assertTrue(mechanism.path("lines").single().asText().contains("ordinary pipe modules and Create request-network integration"))
         assertTrue(logisticsCore.path("lines").single().asText().contains("high-tier pipe modules and advanced logistics automation"))
         assertTrue(recipes.contains("event.shaped('8x prettypipes:pipe'"))
-        assertTrue(recipes.contains("L: 'ratlantis_logistics:courier_lattice'"))
-        assertTrue(recipes.contains("M: 'ratlantis_logistics:oratchalcum_mechanism'"))
-        assertTrue(recipes.contains("C: 'ratlantis_logistics:arcane_logistics_core'"))
+        assertTrue(recipes.contains("L: 'better_ratlantis_logistics:courier_lattice'"))
+        assertTrue(recipes.contains("M: 'better_ratlantis_logistics:oratchalcum_mechanism'"))
+        assertTrue(recipes.contains("C: 'better_ratlantis_logistics:arcane_logistics_core'"))
         assertTrue(recipes.contains("event.shapeless('create:redstone_requester'"))
         assertTrue(recipes.contains("event.remove({ output: 'ae2:energy_acceptor' })"))
         highModules.forEach { assertTrue(recipes.contains("$it: {"), it) }
@@ -1750,7 +1750,7 @@ class HoverAnnotationLearningSurfaceTest {
     fun `early handling annotations expose the primitive and automatic boundary`() {
         val text = Files.readString(root.resolve("kubejs/config/hover_annotations.json"))
         val primitive = Files.readString(root.resolve("kubejs/server_scripts/progression/00_primitive_workshop.js"))
-        val ratlantis = Files.readString(root.resolve("kubejs/server_scripts/progression/20_ratlantis_logistics.js"))
+        val ratlantis = Files.readString(root.resolve("kubejs/server_scripts/progression/20_better_ratlantis_logistics.js"))
         val precision = Files.readString(root.resolve("kubejs/server_scripts/progression/30_precision_factory.js"))
         assertTrue(text.contains("Passive vertical transfer from canvas and iron fittings"))
         assertTrue(text.contains("Automatic crafting begins after Create's Mechanical Crafter."))
@@ -1769,8 +1769,8 @@ class HoverAnnotationLearningSurfaceTest {
         val copy = rapidHopper.path("lines").map { it.asText() }.joinToString(" ")
         assertTrue(ratlantis.contains("event.remove({ id: 'littlelogistics:rapid_hopper' })"))
         assertTrue(ratlantis.contains("event.shaped('littlelogistics:rapid_hopper'"))
-        assertTrue(ratlantis.contains("L: 'ratlantis_logistics:courier_lattice'"))
-        assertTrue(rapidHopper.path("owner").asText().contains("20_ratlantis_logistics.js"))
+        assertTrue(ratlantis.contains("L: 'better_ratlantis_logistics:courier_lattice'"))
+        assertTrue(rapidHopper.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
         assertTrue(copy.contains("requires a Courier Lattice from Ratlantis"))
     }
 
@@ -1791,7 +1791,7 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Malum bootstrap annotations follow the authored Black Shale and gold ritual routes`() {
         val routeScript = Files.readString(root.resolve("kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js"))
-        assertTrue(routeScript.contains("realistic_ores:black_shale"))
+        assertTrue(routeScript.contains("better_ore_geology:black_shale"))
         assertTrue(routeScript.contains("heatRequirement: 'heated'"))
         assertTrue(routeScript.contains("output: { item: 'malum:raw_soulstone' }"))
 
@@ -1840,21 +1840,25 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `bundled Threads exposes optional owned lessons and no obsolete dodge teaching`() {
-        val learningSurfaceGuide = Files.readString(root.resolve("docs/learning_surfaces.md"))
-        val jar = root.resolve("mods/learning-surfaces-1.0.0.jar")
+        val learningSurfaceGuide = Files.readString(root.resolve("docs/better_discovery_guides.md"))
+        val jar = listOf(
+            root.resolve("mods/better-discovery-guides-1.0.0.jar"),
+            root.resolve("../mod_source/better-discovery-guides/build/libs/better-discovery-guides-1.0.0.jar").normalize(),
+        ).firstOrNull(Files::isRegularFile)
+            ?: error("Better Discovery Guides runtime JAR is missing from both the pack and local source build")
         ZipFile(jar.toFile()).use { zip ->
             fun json(path: String) = zip.getInputStream(zip.getEntry(path)).bufferedReader().use { reader ->
                 jacksonObjectMapper().readTree(reader)
             }
-            val lessons = json("assets/learning_surfaces/loading_briefs/catalogue.json")
-            val threads = json("data/learning_surfaces/threads/catalogue.json")
-            assertEquals("bc.learning_surfaces.lessons.v1", lessons.path("schema").asText())
+            val lessons = json("assets/better_discovery_guides/loading_briefs/catalogue.json")
+            val threads = json("data/better_discovery_guides/threads/catalogue.json")
+            assertEquals("bc.better_discovery_guides.lessons.v1", lessons.path("schema").asText())
             assertEquals(18, lessons.path("briefs").size())
             assertEquals(18, lessons.path("briefs").map { it.path("art").asText() }.distinct().size)
             assertTrue(learningSurfaceGuide.contains("rotation share ${lessons.path("briefs").size()} lessons"))
             assertTrue(Files.readString(root.resolve("docs/threads.md")).contains("${lessons.path("briefs").size()} loading/Lessons entries"))
             val sourceLessons = jacksonObjectMapper().readTree(
-                root.resolve("../mod_source/better-content-threads/src/main/resources/assets/learning_surfaces/loading_briefs/catalogue.json")
+                root.resolve("../mod_source/better-discovery-guides/src/main/resources/assets/better_discovery_guides/loading_briefs/catalogue.json")
                     .normalize().toFile(),
             )
             assertEquals(sourceLessons.path("briefs").size(), lessons.path("briefs").size())
@@ -1875,7 +1879,7 @@ class HoverAnnotationLearningSurfaceTest {
         }
 
         val client = ZipFile(jar.toFile()).use { zip ->
-            val entry = zip.getEntry("com/bettercontent/learningsurfaces/ThreadClient.class")
+            val entry = zip.getEntry("com/bettercontent/betterdiscoveryguides/ThreadClient.class")
             zip.getInputStream(entry).readBytes().toString(Charsets.ISO_8859_1)
         }
         assertTrue(!client.contains("keepReading"))

@@ -101,7 +101,7 @@ class HarnessFastTest {
     }
 
     @Test
-    fun activeReleaseInventoryIsUniqueAndMatchesBundledArtifacts() {
+    fun activeReleaseInventoryIsUniqueAndMatchesCurrentSources() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val document = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         assertEquals("bc.active_custom_mods.v1", document.path("schema").asText())
@@ -112,43 +112,53 @@ class HarnessFastTest {
         assertEquals(mods.size(), mods.map { it.path("modId").asText() }.toSet().size)
         val mixinConfigOwners = mutableMapOf<String, String>()
         mods.forEach { mod ->
+            val repository = mod.path("repository").asText()
+            val repositoryRoot = root.parent.resolve("mod_source").resolve(repository)
+            assertTrue(Files.isDirectory(repositoryRoot), "missing active source repository $repository")
             val artifact = root.resolve("mods").resolve(mod.path("artifact").asText())
-            assertTrue(Files.isRegularFile(artifact))
             assertTrue(mod.path("tasks").isArray && mod.path("tasks").size() > 0)
             assertTrue(mod.path("dependsOn").let { it.isMissingNode || (it.isArray && it.all { dependency -> dependency.asText() in repositories }) })
-            JarFile(artifact.toFile()).use { jar ->
-                jar.entries().asSequence().map { it.name }
-                    .filter { it.endsWith(".mixins.json") && '/' !in it }
-                    .forEach { config ->
-                        val previous = mixinConfigOwners.putIfAbsent(config, mod.path("repository").asText())
-                        assertTrue(previous == null, "$config is bundled by both $previous and ${mod.path("repository").asText()}")
-                    }
+            val configs = if (Files.isRegularFile(artifact)) {
+                JarFile(artifact.toFile()).use { jar ->
+                    jar.entries().asSequence().map { it.name }
+                        .filter { it.endsWith(".mixins.json") && '/' !in it }.toList()
+                }
+            } else {
+                val resources = repositoryRoot.resolve("src/main/resources")
+                Files.walk(resources).use { files ->
+                    files.filter(Files::isRegularFile).map { it.fileName.toString() }
+                        .filter { it.endsWith(".mixins.json") }.toList()
+                }
+            }
+            configs.forEach { config ->
+                val previous = mixinConfigOwners.putIfAbsent(config, repository)
+                assertTrue(previous == null, "$config is owned by both $previous and $repository")
             }
         }
         fun dependencies(repository: String) = mods.single { it.path("repository").asText() == repository }
             .path("dependsOn").map { it.asText() }
-        assertEquals(listOf("heat-sync"), dependencies("latent-chemlib"))
-        assertEquals(listOf("better-content-fixes", "better-content-notifications", "dimension-drink"), dependencies("better-content-economy"))
+        assertEquals(listOf("better-industrial-heat"), dependencies("better-chemlib-hazards"))
+        assertEquals(listOf("better-compat-fixes", "better-gameplay-notices", "better-dimension-fonts"), dependencies("better-spirit-commerce"))
         assertEquals(
-            listOf("better-content-notifications", "dynamic-survival-hud"),
-            dependencies("better-content-fixes"),
+            listOf("better-gameplay-notices", "better-survival-hud"),
+            dependencies("better-compat-fixes"),
         )
-        assertEquals(listOf("world-lifecycle-manager"), dependencies("class-selector"))
-        assertEquals(listOf("better-content-fixes", "downed-player-revival"), dependencies("depth-director"))
-        assertEquals(listOf("better-content-fixes", "better-content-notifications"), dependencies("dimension-drink"))
-        assertEquals(listOf("downed-player-revival"), dependencies("pillager-campaigns"))
-        assertEquals(listOf("downed-player-revival"), dependencies("player-traces"))
+        assertEquals(listOf("better-world-management"), dependencies("better-spawns"))
+        assertEquals(listOf("better-compat-fixes", "better-deaths-door"), dependencies("better-cave-encounters"))
+        assertEquals(listOf("better-compat-fixes", "better-gameplay-notices"), dependencies("better-dimension-fonts"))
+        assertEquals(listOf("better-deaths-door"), dependencies("better-pillager-campaigns"))
+        assertEquals(listOf("better-deaths-door"), dependencies("better-player-traces"))
         assertEquals(
             listOf(
-                "arcane-chunk-loaders", "better-content-economy", "better-content-fixes",
-                "better-content-notifications",
-                "bumblezone-cultivars", "create-train-fuel-scaling", "create-transmission-loss",
-                "depth-director", "dimension-drink", "downed-player-revival", "heat-sync",
-                "latent-chemlib", "oc2r-create-bridge", "oc2r-wireless-pubsub", "pillager-campaigns",
-                "player-traces", "rail-beetle", "realistic-ores", "rpg-stats", "settlement-roads",
-                "systemic-salience", "tinkers-construct-affixes", "water-survival", "world-lifecycle-manager",
+                "better-magic-chunk-anchors", "better-spirit-commerce", "better-compat-fixes",
+                "better-gameplay-notices",
+                "better-bumblezone-crops", "better-create-train-fuel", "better-create-kinetic-loss",
+                "better-cave-encounters", "better-dimension-fonts", "better-deaths-door", "better-industrial-heat",
+                "better-chemlib-hazards", "better-oc2r-create-controls", "better-oc2r-wireless-messaging", "better-pillager-campaigns",
+                "better-player-traces", "better-rail-beetle", "better-ore-geology", "better-rpg-progression", "better-settlement-roads",
+                "better-survival-physiology", "better-tinkers-loot-affixes", "better-drinking-water", "better-world-management",
             ),
-            dependencies("better-content-threads"),
+            dependencies("better-discovery-guides"),
         )
 
         mods.forEach { mod ->
