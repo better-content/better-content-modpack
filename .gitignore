@@ -21,6 +21,8 @@ generated/cache/
 generated/evidence/
 /generated/runtime-dumps/
 /generated/test-evidence/
+/generated/gui-screenshots/
+/generated/*.tar.gz
 generated/asset-review/*/evidence/
 generated/pack-site/
 generated/surface-marker-capture/
