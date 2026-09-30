@@ -195,7 +195,6 @@ var BC_COMBAT_TYPES = {
 
 function bcCombatLabel(type, preset) {
     if (type === 'epicfight:tachi' && preset === 'twin_blade') return 'Twin blade'
-    if (type === 'epicfight:tachi' && preset === 'coral_blade') return 'Curved blade'
     return BC_COMBAT_TYPES[type]
 }
 

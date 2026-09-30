@@ -57,7 +57,7 @@ The pack replaces Better Combat with Epic Fight. Every chassis in the 45-entry b
 | Longsword | Estoc |
 | Spear | Pitchfork, Halberd, Amethyst Staff, Quarterstaff, Pike, Lance |
 | Sword | Cutlass, Battlesign, Scepter, Sword |
-| Tachi | Fuma Shuriken, Khopesh, Katana |
+| Tachi | Fuma Shuriken, Katana |
 | Trident | Javelin |
 | Integration ranged | Longbow, Crossbow, Swasher |
 
