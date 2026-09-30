@@ -165,8 +165,9 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(condenserOwners.contains("WorldCondenserInterfaceBlock.java"))
         assertTrue(condenserOwners.contains("PrestigeService.java"))
         val condenserCopy = condenserRow.path("lines").map { it.asText() }
-        assertEquals(listOf("Only server operators can use this interface.", "Permanently resets the active world through a staged process."), condenserCopy)
-        assertTrue(interfaceBlock.contains("serverPlayer.hasPermissions(4)"))
+        assertEquals(listOf("Place two blocks above a harvested, unbound Font with open space between.", "Players configure and stage the reset; a server operator commits it."), condenserCopy)
+        assertTrue(interfaceBlock.contains("WorldCondenserAssembly.valid(level, pos)"))
+        assertTrue(prestigeService.contains("requireOperator(player);"))
         assertTrue(interfaceBlock.contains("supportsPrestigeReset(serverPlayer.server)"))
         assertTrue(prestigeService.contains("public static void stage(MinecraftServer server)"))
         assertTrue(prestigeService.contains("public static String commit(MinecraftServer server)"))
@@ -1594,7 +1595,7 @@ class HoverAnnotationLearningSurfaceTest {
         val targets = row.path("selector").path("items").map { it.asText() }.toSet()
 
         assertEquals(setOf("dimension_drink:dimensional_font", "dimension_drink:return_seal"), targets)
-        assertEquals(listOf("Use empty-handed for Font travel; the seal ends the current round trip early."), row.path("lines").map { it.asText() })
+        assertEquals(listOf("Generated Fonts open trips empty-handed; harvested Fonts are unbound. Return seals end trips early."), row.path("lines").map { it.asText() })
         assertTrue(row.path("owner").asText().contains("ObeliskBlock.kt"))
         assertTrue(source.contains("if (returnOnly)"))
         assertTrue(source.contains("if (!held.isEmpty || player.isShiftKeyDown) return InteractionResult.PASS"))

@@ -63,6 +63,11 @@ second, giving a solo player 120 active seconds from a full unmodified Font.
 Generated capacity and efficiency modifiers may extend or shorten that baseline.
 Exhausting charge ends the run and returns its participants.
 
+Harvesting a generated Font breaks its dimension binding. The replanted Font cannot
+start an expedition, but it can support a World Condenser mounted two blocks above it.
+Players configure the Condenser's successor choices there; an operator commits the
+permanent reset on a supervised dedicated server.
+
 Bumblezone and Ratlantis are expedition-only: upstream portals, tokens, and hive
 teleportation are disabled. Ordinary vegetable patches generate naturally in the
 Overworld, but Bumblezone nurseries remain the origin of non-space food seed stock

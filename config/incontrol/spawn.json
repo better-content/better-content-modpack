@@ -5,6 +5,14 @@
   },
   {
     "when": "position",
+    "mob": ["born_in_chaos_v1:corpse_fish", "born_in_chaos_v1:glutton_fish"],
+    "dimension": "rats:ratlantis",
+    "spawntype": "natural",
+    "random": 0.6666667,
+    "result": "deny"
+  },
+  {
+    "when": "position",
     "mob": [
       "born_in_chaos_v1:baby_skeleton",
       "born_in_chaos_v1:decrepit_skeleton",
