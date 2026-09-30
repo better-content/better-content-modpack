@@ -8,11 +8,13 @@ val root = __FILE__.canonicalFile.parentFile
 val selector = args.firstOrNull()
 var target: String? = null
 var retryOf: String? = null
+var existingCandidate = false
 var argument = 1
 while (argument < args.size) {
     when (args[argument]) {
         "--target" -> { target = args.getOrNull(argument + 1) ?: usage(); argument += 2 }
         "--retry-of" -> { retryOf = args.getOrNull(argument + 1) ?: usage(); argument += 2 }
+        "--existing-candidate" -> { existingCandidate = true; argument++ }
         else -> usage()
     }
 }
@@ -49,16 +51,22 @@ val taskBySelector = mapOf(
 )
 
 fun usage(): Nothing {
-    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target server-ready|cursed-pyramid|lineage-transition|join|fonts|font:NAME|dimensions|dimension:ID|campaign-start|campaign|restart-compat|world-save] [--retry-of RUN_ID]")
+    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target server-ready|cursed-pyramid|lineage-transition|join|fonts|font:NAME|dimensions|dimension:ID|campaign-start|campaign|restart-compat|world-save] [--retry-of RUN_ID] [--existing-candidate]")
     exitProcess(2)
 }
 
 if (selector !in setOf("dev", "dist", "debug") || !validTarget ||
     (target != null && (selector == "dev" || (selector == "dist" && target != "join"))) ||
     (retryOf != null && target == null) ||
+    (existingCandidate && (selector != "debug" || target != null || args.count { it == "--existing-candidate" } != 1)) ||
     (retryOf != null && !Regex("\\d{8}T\\d{6}Z-\\d+").matches(retryOf!!)) ||
     (retryOf != null && !root.resolve("generated/test-evidence/$retryOf").isDirectory)) usage()
 val selected = selector ?: usage()
+
+if (selected == "debug" && target == null && !existingCandidate) {
+    exitProcess(ProcessBuilder(root.resolve("release.main.kts").absolutePath, "--debug")
+        .directory(root).inheritIO().start().waitFor())
+}
 
 if (selected != "dev" && System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
     val status = ProcessBuilder(

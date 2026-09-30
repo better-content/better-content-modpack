@@ -7,10 +7,15 @@ This repository is the Better Content Forge 1.20.1 modpack content layer.
 - `./dist.sh` creates versioned CurseForge/client and server-content ZIPs under the
   canonical ignored `dist/` directory. It accepts no output-directory override.
 - `./test.main.kts` is the supported three-tier evaluation facade. It requires an explicit
-  `dev`, `dist`, or `debug` selector. `dist` and `debug` also accept a focused `--target`.
+  `dev`, `dist`, or `debug` selector. Full direct `debug` routes through forced fresh-dist
+  preparation, complete Dist, and Debug on the resulting unchanged ZIP pair. `dist` and
+  `debug` also accept a focused `--target`; queued full Debug uses `--existing-candidate`
+  to preserve its immutable-candidate handoff.
 - `./release.main.kts` is the only fresh-dist workflow. By default it reuses unchanged bundled
   runtime JARs whose source revision matches and validates/rebuilds changed repositories, then
   refreshes Packwiz hashes, packages exactly once, and runs `dist`.
+  Its `--debug` mode verifies and rebuilds every active custom mod regardless of source
+  revision, packages once, then runs complete Dist and Debug on that candidate.
   For explicitly ordered bug fixing, `--target TARGET` packages once and runs focused validation;
   the candidate still needs full Dist and Debug on unchanged ZIP hashes before signoff.
   `--skip-tests` is allowed only when the explicit fresh-dist request prohibits tests; it still
@@ -76,7 +81,9 @@ failures with no later passing result.
 
 Dist runs Dev checks, validates the exact packaged candidate pair, and verifies that one real
 full-pack client joins a fresh dedicated server and responds to a server-command heartbeat.
-Dist also audits logs and candidate hashes. Debug uses the same candidate hashes and adds
+Dist also audits logs and candidate hashes. Full direct Debug first rebuilds and tests all 44
+active custom mods from clean source checkouts and creates one new candidate; targeted and
+queued Debug keep their existing candidate. Debug uses its Dist candidate hashes and adds
 dedicated-server runtime data and lifecycle, three fresh locations per directly teleportable
 dimension with strict three-sample TPS and Font-only direct-travel guards, single-player startup
 and world save/reopen, three live client campaigns, restart/reconnect, and native

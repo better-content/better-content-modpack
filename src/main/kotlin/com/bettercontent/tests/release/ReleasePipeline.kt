@@ -43,11 +43,13 @@ private const val SOURCE_METADATA_ENTRY = "META-INF/better-content-source.proper
 private const val SOURCE_METADATA_SCHEMA = "bc.custom_mod_source.v1"
 
 fun main(args: Array<String>) {
-    require(args.size == 3) { "usage: ReleasePipeline ROOT JOBS SKIP_TESTS" }
+    require(args.size == 4) { "usage: ReleasePipeline ROOT JOBS SKIP_TESTS FORCE_REBUILD" }
     val root = Path.of(args[0]).toAbsolutePath().normalize()
     val jobs = args[1].toInt()
     val skipTests = args[2].toBooleanStrict()
+    val forceRebuild = args[3].toBooleanStrict()
     require(jobs in 1..4) { "release jobs must be between 1 and 4" }
+    require(!skipTests || !forceRebuild) { "forced rebuild requires source verification" }
     val workspace = root.parent
     val manifest: ActiveModManifest = mapper.readValue(root.resolve("gradle/active-custom-mods.json").toFile())
     require(manifest.schema == "bc.active_custom_mods.v1") { "unexpected active-mod manifest schema" }
@@ -136,7 +138,7 @@ fun main(args: Array<String>) {
         val executor = Executors.newFixedThreadPool(jobs)
         val futures = ready.associateWith { mod ->
             executor.submit(Callable {
-                build(root, workspace, evidence, staging, mod, sourceUpdatesByRepository.getValue(mod.repository), skipTests)
+                build(root, workspace, evidence, staging, mod, sourceUpdatesByRepository.getValue(mod.repository), skipTests, forceRebuild)
             })
         }
         executor.shutdown()
@@ -190,9 +192,10 @@ fun main(args: Array<String>) {
     val provenance = mapOf(
         "schema" to "bc.fresh_dist_provenance.v1",
         "created_at" to Instant.now().toString(),
-        "test_tier" to if (skipTests) "none" else if (System.getenv("BC_RELEASE_TARGET") != null) "targeted" else "dist",
+        "test_tier" to if (skipTests) "none" else if (System.getenv("BC_RELEASE_DEBUG") == "1") "debug" else if (System.getenv("BC_RELEASE_TARGET") != null) "targeted" else "dist",
         "target" to System.getenv("BC_RELEASE_TARGET"),
         "tests_skipped" to skipTests,
+        "force_rebuild" to forceRebuild,
         "candidates" to mapOf(
             "client" to candidates.client.toString(),
             "client_sha256" to candidates.clientSha256,
@@ -224,7 +227,7 @@ fun main(args: Array<String>) {
     println("release evidence: $evidence")
 }
 
-private fun build(
+internal fun build(
     root: Path,
     workspace: Path,
     evidence: Path,
@@ -232,12 +235,13 @@ private fun build(
     mod: ActiveMod,
     sourceUpdate: SourceUpdate,
     skipTests: Boolean,
+    forceRebuild: Boolean,
 ): BuiltMod {
     val repository = workspace.resolve("mod_source").resolve(mod.repository)
     val log = evidence.resolve("mod-${mod.repository}.log")
     val bundled = root.resolve("mods").resolve(mod.artifact)
     val staged = staging.resolve(mod.artifact)
-    if (sourceUpdate.status == "same") {
+    if (sourceUpdate.status == "same" && !forceRebuild) {
         require(Files.isRegularFile(bundled) && jarDeclaresMod(bundled, mod.modId)) {
             "unchanged ${mod.repository} has no valid bundled artifact to reuse"
         }

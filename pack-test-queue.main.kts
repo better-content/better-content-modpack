@@ -68,6 +68,7 @@ when (args.firstOrNull()) {
         val command = mutableListOf(root.resolve("test.main.kts").toString(), selector)
         jq(running, ".target // \"\"").takeIf(String::isNotBlank)?.let { command += listOf("--target", it) }
         jq(running, ".retry_of // \"\"").takeIf(String::isNotBlank)?.let { command += listOf("--retry-of", it) }
+        if (selector == "debug" && "--target" !in command) command += "--existing-candidate"
         val builder = ProcessBuilder(command).directory(root.toFile()).inheritIO()
         builder.environment()["BC_PACK_TEST_HANDOFF"] = running.toString()
         builder.environment()["BC_PACK_TEST_STATE_ROOT"] = stateRoot.toString()

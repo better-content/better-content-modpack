@@ -2,10 +2,12 @@ package com.bettercontent.tests
 
 import com.bettercontent.tests.release.ActiveMod
 import com.bettercontent.tests.release.annotateJar
+import com.bettercontent.tests.release.build
 import com.bettercontent.tests.release.packageResolveCommand
 import com.bettercontent.tests.release.jarDeclaresMod
 import com.bettercontent.tests.release.readSourceCommit
 import com.bettercontent.tests.release.sourceUpdateStatus
+import com.bettercontent.tests.release.SourceUpdate
 import com.bettercontent.tests.release.ReflectionAllowance
 import com.bettercontent.tests.release.readReflectionAllowlist
 import com.bettercontent.tests.release.sourceReflectionViolations
@@ -338,6 +340,49 @@ class HarnessFastTest {
         assertEquals("same", sourceUpdateStatus("commit-1", "commit-1"))
         assertEquals("changed", sourceUpdateStatus("commit-2", "commit-1"))
         assertEquals("baseline-missing", sourceUpdateStatus("commit-1", null))
+    }
+
+    @Test
+    fun fullDebugRebuildsAndVerifiesSourceIdenticalJar(@TempDir workspace: Path) {
+        val root = workspace.resolve("better-content-modpack").also(Files::createDirectories)
+        val repository = workspace.resolve("mod_source/fixture").also(Files::createDirectories)
+        val mod = ActiveMod("fixture", "fixture_mod", "fixture.jar", listOf("verifyFull", "stageRuntimeJar"))
+        fun git(vararg args: String): String {
+            val process = ProcessBuilder("git", *args).directory(repository.toFile())
+                .redirectError(ProcessBuilder.Redirect.INHERIT).start()
+            val result = process.inputStream.bufferedReader().readText().trim()
+            assertEquals(0, process.waitFor())
+            return result
+        }
+        git("init", "-q")
+        git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--allow-empty", "-qm", "fixture")
+        val commit = git("rev-parse", "HEAD")
+        val jarContents = mapOf("META-INF/mods.toml" to "[[mods]]\nmodId=\"fixture_mod\"\n")
+        val bundled = root.resolve("mods/fixture.jar")
+        zip(bundled, jarContents)
+        annotateJar(bundled, mod, commit)
+        zip(repository.resolve("build/libs/fixture.jar"), jarContents)
+        val wrapper = repository.resolve("gradlew")
+        wrapper.writeText("#!/bin/sh\nprintf '%s\\n' \"\$@\" > invoked-tasks.txt\n")
+        assertTrue(wrapper.toFile().setExecutable(true))
+        val evidence = root.resolve("generated/test-evidence/fixture/release").also(Files::createDirectories)
+        val staging = evidence.resolve("staged-jars").also(Files::createDirectories)
+        val sourceUpdate = SourceUpdate("fixture", mod.artifact, commit, commit, "same")
+
+        val rebuilt = build(root, workspace, evidence, staging, mod, sourceUpdate, skipTests = false, forceRebuild = true)
+
+        assertEquals("rebuilt", rebuilt.mode)
+        assertEquals(listOf("--no-daemon", "clean", "verifyFull", "stageRuntimeJar"),
+            Files.readAllLines(repository.resolve("invoked-tasks.txt")))
+        assertEquals(commit, readSourceCommit(rebuilt.jar, mod))
+        assertEquals(commit, readSourceCommit(bundled, mod))
+
+        val deployedBytes = Files.readAllBytes(bundled)
+        wrapper.writeText("#!/bin/sh\nexit 7\n")
+        assertThrows(IllegalArgumentException::class.java) {
+            build(root, workspace, evidence, staging, mod, sourceUpdate, skipTests = false, forceRebuild = true)
+        }
+        assertTrue(Files.readAllBytes(bundled).contentEquals(deployedBytes))
     }
 
     @Test

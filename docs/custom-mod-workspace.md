@@ -40,6 +40,12 @@ no provider depends on it.
 artifact reuse, stages changed sources without verification, and skips pack suites. There is no
 implicit forced-rebuild mode.
 
+Direct full `./test.main.kts debug` explicitly selects forced rebuild mode: all 44 active
+repositories must be clean, every manifest-listed verification runs, and every runtime JAR is
+rebuilt after `clean` regardless of matching source metadata. It packages one new candidate
+pair and runs complete Dist and Debug on identical ZIP hashes. Targeted and queued Debug
+continue to use an existing candidate.
+
 ## Reproducible Build Bootstrap
 
 Every repository owns its official Gradle wrapper and a distribution SHA-256. Use `./gradlew`;

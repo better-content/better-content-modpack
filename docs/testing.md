@@ -16,6 +16,12 @@ Pack-level tiers run only when explicitly requested:
 ./test.main.kts debug
 ```
 
+Direct full Debug requires clean active custom-mod repositories. It runs each of the 44 active
+mods' manifest-listed verification tasks and rebuilds every runtime JAR after `clean`, even when
+the bundled JAR records the same source revision. It stages the JARs in dependency order,
+deploys the validated set, refreshes Packwiz, packages once, then runs complete Dist and Debug
+on the new ZIP pair. Release evidence links the Dist and Debug run IDs and candidate hashes.
+
 After inspecting a failed run, use a targeted retry to check a fix without starting every Debug
 scenario. Each retry makes a fresh fixture and records separate `target-*` evidence; it cannot be
 mistaken for a full-tier pass. Supported targets are `server-ready` (Debug), `join` (Dist or Debug), `font:ratlantis`,
@@ -37,11 +43,13 @@ Targeted runs still perform fast checks and candidate validation, then start onl
 runtime fixture and its required setup. They check candidate hashes, process cleanup, and strict
 logs. Findings are recorded in the target evidence and fail that targeted run. If a source fix
 needs a new JAR, use `./release.main.kts --target font:aether --retry-of RUN_ID` to package once
-and test that target. Finish with complete Dist and Debug runs on those unchanged ZIP hashes.
+and test that target. Direct full Debug later rebuilds all active mods and runs complete Dist and
+Debug on its new, unchanged ZIP pair.
 
 Dist includes Dev, candidate contracts, a real full-pack client joining a fresh dedicated server,
 an online player heartbeat, strict logs, and candidate hashes. It does not run dimension travel.
-Debug uses unchanged candidate hashes and adds dedicated-server startup/runtime snapshot, three
+Direct full Debug uses unchanged candidate hashes from its newly packaged Dist run and adds
+dedicated-server startup/runtime snapshot, three
 fresh locations per directly teleportable dimension with strict three-sample TPS and Font-only
 direct-travel guards, one lineage transition and archive, three live client campaigns,
 server restart/client reconnect, four native Font round trips, and singleplayer startup/world
@@ -70,6 +78,8 @@ and status; absolute client/server paths and SHA-256 hashes; repository revision
 producer validations; artifacts; ordered dependencies; requested scenarios; and prior evidence.
 Admission copies the document into the queue, rejects duplicate request IDs, and the harness
 revalidates the exact candidate paths and hashes before use.
+Queued full Debug runs against that pinned pair and does not rebuild sources or package another
+pair.
 
 The tiers run internal Gradle tasks `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
 `singleplayerTest`. Dist sequences fast checks, the candidate gate, and the multiplayer runtime
@@ -187,9 +197,10 @@ records that local-only update check in release evidence. It never fetches or mo
 It reuses unchanged bundled runtime JARs whose embedded source revision matches the clean checkout,
 and runs the documented verification only for changed repositories. It annotates and deploys all
 staged runtime JARs together, refreshes Packwiz hashes and checks the diff, runs `dist.sh`
-exactly once, and then runs the complete Dist tier. Debug is run separately against the unchanged
-ZIP pair when explicitly requested. Release evidence records each mod's `reused` or `rebuilt`
-mode and JAR hash.
+exactly once, and then runs the complete Dist tier. Targeted and queued Debug can test that
+unchanged ZIP pair when explicitly requested. Direct full Debug forces verification and rebuilding
+of every active mod, then packages once and runs complete Dist and Debug. Release evidence records
+each mod's `reused` or `rebuilt` mode and JAR hash.
 Legacy JARs without source metadata are replaced during this bootstrap run.
 
 `--skip-tests` is the explicit untested-release path. It still reuses valid source-identical
