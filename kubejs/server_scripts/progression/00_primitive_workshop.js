@@ -3,6 +3,21 @@
 // recipes preserve crop-specific upstream routes while ensuring generic
 // workshop utilities do not depend on origin-controlled cultivars.
 ServerEvents.recipes(function (event) {
+    // A knife cut on grass yields straw; both backpack ingredients come from it.
+    event.shaped('2x minecraft:string', ['SSS'], {
+        S: 'farmersdelight:straw'
+    }).id('kubejs:primitive_workshop/string_from_straw')
+    event.remove({ id: 'sophisticatedbackpacks:backpack' })
+    event.custom({
+        type: 'sophisticatedbackpacks:basic_backpack',
+        pattern: ['CCC', 'CSC', 'CCC'],
+        key: {
+            C: { item: 'farmersdelight:canvas' },
+            S: { item: 'minecraft:string' }
+        },
+        result: { item: 'sophisticatedbackpacks:backpack' }
+    }).id('kubejs:primitive_workshop/backpack_from_canvas')
+
     event.remove({ id: 'create:crafting/kinetics/chute' })
     event.shaped('4x create:chute', ['NCN', 'C C', 'NCN'], {
         N: '#forge:nuggets/iron', C: 'farmersdelight:canvas'

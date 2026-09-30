@@ -1,13 +1,13 @@
 # Threads
 
-Threads answers “what just happened to me?” through 52 discoveries. Each card gives the
+Threads answers “what just happened to me?” through 53 discoveries. Each card gives the
 experienced event, its cause, and a useful next step. Gameplay does not have separate
 reveal and completion stages. Exact recipes and apparatus remain in EMI, Ponder, and
 native guides; survival fundamentals remain in the 18 loading/Lessons entries.
 
 The canonical definitions, trigger routes, and art scene specifications live in
 [`Learning Surfaces authoring roster`](../../mod_source/better-content-threads/authoring/discoveries.json).
-All 52 cards have reviewed Journal copperplate illustrations. Their intended scenes
+All 53 cards have reviewed Journal copperplate illustrations. Their intended scenes
 remain in the authoring roster. The packaged card
 catalogue is `bc.learning_surfaces.cards.v1`; the mod network protocol is 1. The new mod
 identity starts fresh without saved-history migration. Cards, lessons, and tips are fixed
@@ -69,7 +69,7 @@ are documented in the [source teaching guide](../../mod_source/better-content-th
 
 ## Review
 
-All 52 card illustrations and 18 loading illustrations follow the
+All 53 card illustrations and 18 loading illustrations follow the
 [no-humans art direction](thread_art_direction.md). The Learning Surfaces repository's required
 local gate is `./gradlew verifyFull stageRuntimeJar`; isolated real-client fixtures
 review compact/wide journal and native death-screen rendering. Provider repositories

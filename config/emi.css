@@ -103,12 +103,12 @@
 	/**
 	 * Whether the EMI config button should be visible.
 	 */
-	emi-config-button-visibility: shown;
+	emi-config-button-visibility: hidden;
 
 	/**
 	 * Whether the recipe tree button should be visible.
 	 */
-	recipe-tree-button-visibility: auto;
+	recipe-tree-button-visibility: hidden;
 
 	/**
 	 * The maximum height the recipe screen will grow to be if space is available in
@@ -167,7 +167,7 @@
 	/**
 	 * The pages in the left sidebar
 	 */
-	left-sidebar-pages: favorites;
+	left-sidebar-pages: none;
 
 	/**
 	 * The subpanels in the left sidebar
@@ -202,7 +202,7 @@
 	/**
 	 * The pages in the right sidebar
 	 */
-	right-sidebar-pages: index, craftables;
+	right-sidebar-pages: index, craftables, favorites;
 
 	/**
 	 * The subpanels in the right sidebar
@@ -212,12 +212,12 @@
 	/**
 	 * How many columns and rows of ingredients to limit the right sidebar to
 	 */
-	right-sidebar-size: 14, 22;
+	right-sidebar-size: 14, 25;
 
 	/**
 	 * How much space to maintain between the right sidebar and obstructions, in pixels
 	 */
-	right-sidebar-margins: 38, 14, 32, 14;
+	right-sidebar-margins: 38, 14, 14, 14;
 
 	/**
 	 * Where to position the right sidebar

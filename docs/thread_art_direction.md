@@ -20,13 +20,13 @@ frames, UI, logos, and watermarks. Code owns framing and typography. Do not impo
 unrelated occult symbols, forced aspect links, or recurring mystery motifs.
 
 Card masters are 2:3 portraits. Ship 256×384 full-color images and grayscale thumbnails,
-plus cosmetic item derivatives whose predicate follows the global card order 1–52.
+plus cosmetic item derivatives whose predicate follows the global card order 1–53.
 Loading masters are 2:1 landscapes and ship at 512×256. Seven topics organize the reader;
 they do not require a whole-image tint or the retired four-suit composition rules.
 
 ## Editable source and review
 
-The 52 card scenes and teaching definitions are maintained in
+The 53 card scenes and teaching definitions are maintained in
 [`authoring/discoveries.json`](../../mod_source/better-content-threads/authoring/discoveries.json).
 [`art-grammar.txt`](../../mod_source/better-content-threads/authoring/art-grammar.txt)
 contains the shared generation prompt. Exact prompts, original image-generation paths,

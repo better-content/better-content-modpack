@@ -35,7 +35,7 @@ copy. Possession must not be described as operating a machine, and intended futu
 behavior must not be presented as implemented.
 
 Preserve stable concept, Thread, and lesson identities when their meaning is unchanged.
-Learning Surfaces has 52 live cards across seven topics; the Lessons reference and loading
+Learning Surfaces has 53 live cards across seven topics; the Lessons reference and loading
 rotation share 18 lessons. The main-menu, Esc, and death contexts share 199 authored tips. Follow [Threads](threads.md) for the single-explanation schema,
 personal trigger evidence, native doorways, and lineage persistence. Domain mods
 own their gameplay events; Learning Surfaces adapters translate those events into card signals.
@@ -106,7 +106,7 @@ change artwork but cannot reload copy or trigger rules while running.
 
 All card and loading illustrations exclude humans, humanoids, humanlike spirits, body parts,
 silhouettes and mannequins. Use concrete objects, mechanisms, environments, and nonhumanoid
-creatures to explain the event. All 52 card illustrations and 18 loading/Lessons
+creatures to explain the event. All 53 card illustrations and 18 loading/Lessons
 illustrations use reviewed Journal copperplate art; the card copy and triggers are active.
 
 ## Review and validation
