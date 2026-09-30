@@ -1,0 +1,13 @@
+name = "Dynamic Trees - Fruits Delight"
+filename = "DynamicTreesFruitsDelight-1.20.1-1.0.0.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "a21872e77e1ce048d0e7553efff500f4b4030e39"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7079680
+project-id = 1360918

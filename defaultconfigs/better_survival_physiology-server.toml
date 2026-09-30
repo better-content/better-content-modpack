@@ -1,21 +1,8 @@
-#Diet owns ordinary nutrition; Salience adds a five-minute upper-band cost and tunes Sugar/Alcohol.
+#Diet owns nutrition; Sweetness amplifies benefits and raises all nutrition and hunger costs.
 [metabolism]
 	#Range: 0.1 ~ 120.0
 	sugarHalfLifeMinutes = 4.0
 	#Range: 0.1 ~ 240.0
-	debtHalfLifeMinutes = 10.0
-	#Range: 0.1 ~ 240.0
 	alcoholClearMinutes = 20.0
-	#Range: 0.0 ~ 1.0
-	sugarDebtRecoveryGate = 0.25
 	#item_id=load entries; replace this list to tune drinks or add compat drinks.
 	alcoholPotencies = ["brewinandchewin:kombucha=0.08", "brewinandchewin:beer=0.14", "brewinandchewin:pale_jane=0.16", "brewinandchewin:strongroot_ale=0.18", "brewinandchewin:steel_toe_stout=0.20", "brewinandchewin:mead=0.22", "brewinandchewin:rice_wine=0.22", "brewinandchewin:egg_grog=0.24", "brewinandchewin:bloody_mary=0.24", "brewinandchewin:salty_folly=0.25", "brewinandchewin:glittering_grenadine=0.26", "brewinandchewin:saccharine_rum=0.28", "brewinandchewin:red_rum=0.30", "brewinandchewin:dread_nog=0.32", "brewinandchewin:vodka=0.38", "brewinandchewin:withering_dross=0.42"]
-
-#Shared discrete thresholds for every ordinary group.
-[thresholds]
-	#Range: 0.0 ~ 1.0
-	ordinary = 0.5
-	#Range: 0.0 ~ 1.0
-	prepared = 0.75
-	#Range: 0.0 ~ 1.0
-	feast = 0.9
