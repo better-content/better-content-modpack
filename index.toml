@@ -2257,14 +2257,6 @@ file = "config/compressedcreativity-client.toml"
 hash = "4bd2bc574ef4401d37569fbf9883598bbb515288685f6c2c696fbbcaf3609ae2"
 
 [[files]]
-file = "config/configui/layout.json"
-hash = "be1293077fb038a34ccf633fb183808a5f7f291061200bca0f7fc51ceead9b28"
-
-[[files]]
-file = "config/configui/textures/journal.png"
-hash = "ba7230512d5c674782812a55b99db9312743270f7c9629c25904b5aef601040a"
-
-[[files]]
 file = "config/create-client.toml"
 hash = "5b9ee8bee23d0f12b926567309802eed6f1f46a195726b2b034d692deb833b65"
 
@@ -2339,6 +2331,10 @@ hash = "cabd47cb17c0259108df37d86adbd71309a2d2cf52c842fbd28becdc964120ae"
 [[files]]
 file = "config/embeddium-options.json"
 hash = "18b453ebd91dfaa8e6e50b68453f8445e5477c81f926c5a5c539fd35d10f46cc"
+
+[[files]]
+file = "config/emi.css"
+hash = "6f8a16d27ffc42314c7efaff417bf160f3253ad2acb1504763685b332dcb43c1"
 
 [[files]]
 file = "config/emi_ores-client.json"
@@ -2418,7 +2414,7 @@ hash = "6b842a0cd156c9586904dec63c2ac1846cb540df97c5a137d83781572d819485"
 
 [[files]]
 file = "config/fancymenu/customization/title_screen_layout.txt"
-hash = "eae47ac75564db5d7e8b103764ffcf943a8a3f65a29b76f9e3c1e2538934eb75"
+hash = "7833e2fa7e57cef7c0b09c8d594e518c275b6488424cf899ea830143e47a2ef9"
 
 [[files]]
 file = "config/fancymenu/customization/universal_layout.txt"
@@ -4326,7 +4322,7 @@ hash = "0780e2b78dec4e379dbb2907c15c7b09652f0b30abe71383d9254cd42266f8e9"
 
 [[files]]
 file = "datapacks/epic_tinkers_construct_v9.zip"
-hash = "83a76ab8c1b9be5310132f4396d9641d971e9d7b0a4542bbd7f4012fc448d47c"
+hash = "d71d4e1797bb978831fbbddb3be24c330319f6b0d7147d29a09e5c7554a9782a"
 
 [[files]]
 file = "datapacks/fallout_wasteland_biome_fix/data/fallout_wastelands_/worldgen/biome/wasteland_badlands.json"
@@ -7113,30 +7109,6 @@ file = "kubejs/assets/the_flesh_that_hates/textures/item/plaqueblock.png"
 hash = "4b2ecf4e3b86a3c1d06f90c34fc456bb68bdbceb4130e6373b159e8e6d043a1e"
 
 [[files]]
-file = "kubejs/assets/tinkers_khopesh/textures/item/tool/khopesh/bottom_blade_tconstruct_unknown.png"
-hash = "57b401c9ff815c75e6512aa9805e467d5f16026cce9f3933d24f0c3a6ab77ea4"
-
-[[files]]
-file = "kubejs/assets/tinkers_khopesh/textures/item/tool/khopesh/broken_bottom_blade_tconstruct_unknown.png"
-hash = "001c79bde0d068ad159e2fdd765aa9ab6582b11b04b946207c2bc76a881bc5fd"
-
-[[files]]
-file = "kubejs/assets/tinkers_khopesh/textures/item/tool/khopesh/broken_top_blade_tconstruct_unknown.png"
-hash = "9a6df7fad95a5700d67e61496e3f22c4ebc6ddab39c61ed358dc5fc537481393"
-
-[[files]]
-file = "kubejs/assets/tinkers_khopesh/textures/item/tool/khopesh/guard_tconstruct_unknown.png"
-hash = "3a89476599c4466cda539111c0a6560eaca78fe77065787d0d1e235bb2cea85d"
-
-[[files]]
-file = "kubejs/assets/tinkers_khopesh/textures/item/tool/khopesh/handle_tconstruct_unknown.png"
-hash = "1bee9542a91df57348dbcc1dae82fc348b5a9b84f47f935592a4fa85be9d4a3f"
-
-[[files]]
-file = "kubejs/assets/tinkers_khopesh/textures/item/tool/khopesh/top_blade_tconstruct_unknown.png"
-hash = "117393dbbc7e8327ae03e07ee5545ce5eddf81987dde3b08c85077be9bc5ddb9"
-
-[[files]]
 file = "kubejs/assets/tinkers_things/models/block/hematite.json"
 hash = "581351741f416bb06cb745b3ddfb63be7dc26122eb1b83f7bcd82f135723607d"
 
@@ -7438,7 +7410,7 @@ hash = "0cdcd842a9aa30424f258210359023a6cd9002960ae97e265fd27f659fe10116"
 
 [[files]]
 file = "kubejs/client_scripts/guidance/10_hover_annotations.js"
-hash = "6458b711eb208ab70b0b2d80f57eec64bb9c487a070ceafc9207c0945d2c0b2d"
+hash = "a9af61220f8f2c0fc832fa06b3ac8c75c9aca0f9a1efe52bb2dc55f87399dc93"
 
 [[files]]
 file = "kubejs/client_scripts/policy/hide_completed_tcon_tools.js"
@@ -7482,7 +7454,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "a14cdce6f08c656338db57a09efbf8bb9a1db5908ad76e273cb45d2bf06346a3"
+hash = "ba0e415c661b654419ca4dbb01a962607af95b9059ae257a22b5bdbb6f10ace9"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -7514,7 +7486,7 @@ hash = "0440d5f0ac6110531786235cecd63e6ba0f9122786cc2d4210ad67417a071dad"
 
 [[files]]
 file = "kubejs/config/tcon_edps_catalogue.json"
-hash = "b49148a4bfd2325d74c0790887c2c1ab9970cf716b3fd9d8c313632f8f2ea0b7"
+hash = "7eb9b8407ab52376e05b8b3ad7774844676be8d5d34255c6b352471229e16889"
 
 [[files]]
 file = "kubejs/data/additionalweaponry/capabilities/weapons/butcher_knife.json"
@@ -10289,14 +10261,6 @@ file = "kubejs/data/tinkers_katanas/tinkering/tool_definitions/katana.json"
 hash = "08d111c16fd05b250bfb11d950d2e227b73c3a8705d826213ce9111b2b84e8f7"
 
 [[files]]
-file = "kubejs/data/tinkers_khopesh/capabilities/weapons/khopesh.json"
-hash = "7c84e60877bbcb04cb6da39b7c71af97428289e910ddd3f04ae3b4276c3e3cec"
-
-[[files]]
-file = "kubejs/data/tinkers_khopesh/tinkering/tool_definitions/khopesh.json"
-hash = "7b407679e06b66a8e4e587e83f464ec40521ff731527caab2c7969225f851f12"
-
-[[files]]
 file = "kubejs/data/tinkers_things/capabilities/weapons/amethyst_staff.json"
 hash = "eb0c345b55288998898ad58bd668184a6cf0fe657c6c0d1eccb03e157fae2bbc"
 
@@ -11092,7 +11056,7 @@ hash = "1e8a2cb34243649020dd78c1c390e762d63ae956c5e0b826c20ecc61c19d52b9"
 
 [[files]]
 file = "mods/better-content-journal-ui-0.1.0.jar"
-hash = "2d38ae59f2f428dae5c053ffd8282eef66e84edaf8dd16a55be92d6083dffc34"
+hash = "3bf96193cca33a9fd765ed3d1f3606c275423cea7f5d0cd1d3fa7ae5cbac63ea"
 
 [[files]]
 file = "mods/better-content-notifications-1.0.0.jar"
@@ -11191,11 +11155,6 @@ hash = "6b24ff6d6aa5614c2eb061f324758036dbde2db1fc72edc2312669a9621aa26d"
 metafile = true
 
 [[files]]
-file = "mods/configurable-ui.pw.toml"
-hash = "bfe4d43608c7804c0b820440531dbdd7b6aaee6c407bf76945a18facc04ef1d9"
-metafile = true
-
-[[files]]
 file = "mods/configured.pw.toml"
 hash = "8165f9f7f66ffe4fa7b92ef8f8564cd10f93ec2cf07d6931c442cf91333a1ca3"
 metafile = true
@@ -11289,7 +11248,7 @@ metafile = true
 
 [[files]]
 file = "mods/dimension-drink-1.0.0.jar"
-hash = "33926d83606845fc8920dfe734234e590545656a1cc95609e9279fc816b4b0b5"
+hash = "b7d7a91b3f921443e047d6679581495b1f0e2e674e08edba67b0929e3788c292"
 
 [[files]]
 file = "mods/distant-horizons.pw.toml"
@@ -11298,7 +11257,7 @@ metafile = true
 
 [[files]]
 file = "mods/downed-player-revival-1.0.0.jar"
-hash = "ff2b9e3f474836e7c7be05510eaf60e2a3ba427519bce4e7627cfa4d1c5fc002"
+hash = "83ec68c6ac217a30eb521aef32c0ce097913bd089d8204a7eff5ca2f90b55071"
 
 [[files]]
 file = "mods/dynamic-asset-generator.pw.toml"
@@ -11695,7 +11654,7 @@ hash = "3f36664dff8d25d10ccfab1d9965d8f161566bf6650df1a825d25c4e15c608d9"
 
 [[files]]
 file = "mods/learning-surfaces-1.0.0.jar"
-hash = "0752cf3260cf24b97b8ccdf7040814ec72a2409f78fbeb720e32d2684354d2b4"
+hash = "21e1340910037b5a469095c6ccd7213cb701699061ead9bb0a87c2fd18858dbf"
 
 [[files]]
 file = "mods/lionfishapi.pw.toml"
@@ -12012,7 +11971,7 @@ metafile = true
 
 [[files]]
 file = "mods/rpg-stats-1.0.1.jar"
-hash = "adfe0a0164e9ef80b49ef5f1ead3d8641f8043ae28bf32955490144d9312bd97"
+hash = "7ea888d699dfbea9438cb9151f167dafbd6db2ffce0e8f97d7d1954ab931d2d6"
 
 [[files]]
 file = "mods/runtime-data-dumper-0.1.0.jar"
@@ -12223,11 +12182,6 @@ metafile = true
 [[files]]
 file = "mods/tinkers-katanas.pw.toml"
 hash = "2c38846da17ae4e073cc30fa105501a635ed5ed7c0704b49b415f33253d7f3fa"
-metafile = true
-
-[[files]]
-file = "mods/tinkers-khopesh.pw.toml"
-hash = "0b68073498fff7317a1d05aa3a77e326ff7574a5a1f04742cd6c6ef662b7d186"
 metafile = true
 
 [[files]]
