@@ -456,8 +456,89 @@ class HarnessFastTest {
             "\"META-INF/extra_at.cfg\"] or accessTransformers = [] for no ATs. Falling back to default."
         val one = root.resolve("one.log").also { it.writeText("$warning\n") }
         val repeated = root.resolve("repeated.log").also { it.writeText("$warning\n$warning\n") }
+        val excessive = root.resolve("excessive.log").also { it.writeText("$warning\n$warning\n$warning\n") }
         assertTrue(LogPolicy.findings(listOf(one)).isEmpty())
+        assertTrue(LogPolicy.findings(listOf(repeated)).isEmpty())
+        assertEquals(listOf(3), LogPolicy.findings(listOf(excessive)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyBoundsCampaignItemFrameToolWarnings(@TempDir root: Path) {
+        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
+        val sword = "[05:50:27] [C2ME worker #3/WARN] [net.minecraft.world.entity.decoration.ItemFrame]: " +
+            "Unable to load item from: {count:1,id:\"minecraft:iron_sword\"}"
+        val axe = "[05:50:27] [C2ME worker #3/WARN] [net.minecraft.world.entity.decoration.ItemFrame]: " +
+            "Unable to load item from: {count:1,id:\"minecraft:iron_axe\"}"
+        val accepted = multiplayer.resolve("server.log").also { it.writeText("$sword\n$axe\n") }
+        val repeated = multiplayer.resolve("repeated.log").also {
+            it.writeText("$sword\n$axe\n$sword\n$axe\n")
+        }
+        val unrelated = multiplayer.resolve("unrelated.log").also {
+            it.writeText(sword.replace("minecraft:iron_sword", "minecraft:diamond") + "\n")
+        }
+        val otherSuite = root.resolve("server.log").also { it.writeText("$sword\n$axe\n") }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(3, 4), LogPolicy.findings(listOf(repeated)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(otherSuite)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyBoundsCampaignUnknownStepHeightAttributeWarnings(@TempDir root: Path) {
+        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
+        val warning = "[08:59:36] [C2ME worker #3/WARN] " +
+            "[net.minecraft.world.entity.ai.attributes.AttributeMap]: " +
+            "Ignoring unknown attribute 'forge:step_height'"
+        val accepted = multiplayer.resolve("server.log").also {
+            it.writeText("$warning\n$warning\n")
+        }
+        val excessive = multiplayer.resolve("excessive-server.log").also {
+            it.writeText("$warning\n$warning\n$warning\n")
+        }
+        val wrongFile = multiplayer.resolve("fixture/server-extract/logs").also { it.createDirectories() }
+            .resolve("server.log").also { it.writeText("$warning\n") }
+        val unrelated = multiplayer.resolve("unrelated.log").also {
+            it.writeText(warning.replace("forge:step_height", "forge:reach") + "\n")
+        }
+        val otherSuite = root.resolve("server.log").also { it.writeText("$warning\n") }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(3), LogPolicy.findings(listOf(excessive)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongFile)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(otherSuite)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyBoundsIceAndFireDeferredTaskWarning(@TempDir root: Path) {
+        val singleplayer = root.resolve("singleplayer").also { it.createDirectories() }
+        val multiplayerClientLogs = root.resolve("multiplayer/fixture/client-3/logs").also { it.createDirectories() }
+        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
+        val warning = "[06:40:51] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+            "Mod 'iceandfire' took 1.118 s to run a deferred task."
+        val accepted = singleplayer.resolve("client.log").also { it.writeText("$warning\n") }
+        val acceptedCampaignLog = multiplayerClientLogs.resolve("latest.log").also { it.writeText("$warning\n") }
+        val acceptedCampaignCopy = multiplayer.resolve("client-3.log").also { it.writeText("$warning\n") }
+        val repeatedCampaign = multiplayerClientLogs.resolve("repeated.log").also {
+            it.writeText("$warning\n$warning\n")
+        }
+        val repeated = singleplayer.resolve("repeated.log").also { it.writeText("$warning\n$warning\n") }
+        val slow = singleplayer.resolve("slow.log").also {
+            it.writeText(warning.replace("1.118", "2.001") + "\n")
+        }
+        val unrelated = singleplayer.resolve("unrelated.log").also {
+            it.writeText(warning.replace("iceandfire", "othermod") + "\n")
+        }
+        val otherSuite = root.resolve("client.log").also { it.writeText("$warning\n") }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertTrue(LogPolicy.findings(listOf(acceptedCampaignLog, acceptedCampaignCopy)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(repeatedCampaign)).map { it.line })
         assertEquals(listOf(2), LogPolicy.findings(listOf(repeated)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(slow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(otherSuite)).map { it.line })
     }
 
     @Test

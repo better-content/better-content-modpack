@@ -108,6 +108,25 @@ object LogPolicy {
                 "Should be e.g. accessTransformers = [\"META-INF/accesstransformer.cfg\", " +
                 "\"META-INF/extra_at.cfg\"] or accessTransformers = [] for no ATs. Falling back to default.") + "$",
     )
+    private val campaignItemFrameIronSword = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[C2ME worker #[0-9]+/WARN] " +
+            "\\[net\\.minecraft\\.world\\.entity\\.decoration\\.ItemFrame]: " +
+            "Unable to load item from: \\{count:1,id:\"minecraft:iron_sword\"}$",
+    )
+    private val campaignItemFrameIronAxe = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[C2ME worker #[0-9]+/WARN] " +
+            "\\[net\\.minecraft\\.world\\.entity\\.decoration\\.ItemFrame]: " +
+            "Unable to load item from: \\{count:1,id:\"minecraft:iron_axe\"}$",
+    )
+    private val campaignUnknownStepHeightAttribute = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[C2ME worker #[0-9]+/WARN] " +
+            "\\[net\\.minecraft\\.world\\.entity\\.ai\\.attributes\\.AttributeMap]: " +
+            "Ignoring unknown attribute 'forge:step_height'$",
+    )
+    private val iceAndFireDeferredTask = Regex(
+        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
+            "Mod 'iceandfire' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
+    )
     private val accepted = listOf(
         Regex("\\[net\\.minecraft\\.client\\.ClientRecipeBook]: Unknown recipe category: .*/the_deep_void:[a-z0-9_]+$"),
         Regex("\\[net\\.minecraft\\.client\\.ClientRecipeBook]: Unknown recipe category: cataclysm:weapon_fusion/cataclysm:weapon_infusion/[a-z0-9_]+$"),
@@ -198,6 +217,13 @@ object LogPolicy {
     fun findings(paths: Collection<Path>): List<Finding> = buildList {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
             val seededWorldLog = path.toString().let { "/singleplayer/" in it || "/target-world-save/" in it }
+            val multiplayerLog = "/multiplayer/" in path.toString()
+            val multiplayerAggregateServerLog = multiplayerLog && path.parent.fileName.toString() == "multiplayer"
+            val singleplayerLog = "/singleplayer/" in path.toString()
+            val multiplayerClientLog = multiplayerLog && (
+                "/fixture/client-" in path.toString() ||
+                    path.fileName.toString().matches(Regex("client-[0-9]+\\.log"))
+                )
             val lines = Files.readAllLines(path)
             var acceptedSeededWorldRemaps = 0
             var acceptedSeededWorldVersionDifferences = 0
@@ -223,6 +249,10 @@ object LogPolicy {
             var acceptedAdPotherDeferredTasks = 0
             var acceptedPresenceFootstepsMissingMessyGroundAcoustics = 0
             var acceptedStarcatcherInvalidAccessTransformers = 0
+            var acceptedCampaignItemFrameIronSwords = 0
+            var acceptedCampaignItemFrameIronAxes = 0
+            var acceptedCampaignUnknownStepHeightAttributes = 0
+            var acceptedIceAndFireDeferredTasks = 0
             lines.forEachIndexed { index, line ->
                 val acceptedSeededWorldWarning = seededWorldLog && when {
                     line.contains("[net.minecraftforge.common.ForgeHooks]: The following mods have version differences that were not resolved:") &&
@@ -277,7 +307,18 @@ object LogPolicy {
                         ++acceptedPresenceFootstepsMissingMessyGroundAcoustics <= 1
                 val acceptedStarcatcherInvalidAccessTransformer =
                     starcatcherInvalidAccessTransformer.matches(line) &&
-                        ++acceptedStarcatcherInvalidAccessTransformers <= 1
+                        ++acceptedStarcatcherInvalidAccessTransformers <= 2
+                val acceptedCampaignItemFrameIronSword = multiplayerLog &&
+                    campaignItemFrameIronSword.matches(line) && ++acceptedCampaignItemFrameIronSwords <= 1
+                val acceptedCampaignItemFrameIronAxe = multiplayerLog &&
+                    campaignItemFrameIronAxe.matches(line) && ++acceptedCampaignItemFrameIronAxes <= 1
+                val acceptedCampaignUnknownStepHeightAttribute = multiplayerAggregateServerLog &&
+                    campaignUnknownStepHeightAttribute.matches(line) &&
+                    ++acceptedCampaignUnknownStepHeightAttributes <= 2
+                val iceAndFireDuration = iceAndFireDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
+                val acceptedIceAndFireDeferredTask = (singleplayerLog || multiplayerClientLog) &&
+                    iceAndFireDuration != null &&
+                    iceAndFireDuration <= 2.0 && ++acceptedIceAndFireDeferredTasks <= 1
                 val adPotherDuration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
                 val acceptedAdPotherDeferredTask = adPotherDuration != null && adPotherDuration <= 60.0 &&
                     ++acceptedAdPotherDeferredTasks <= 1
@@ -297,7 +338,9 @@ object LogPolicy {
                     !acceptedEmptyCodAmbientSound && !acceptedEmptyUntamedPlaceholderSound &&
                     !acceptedAllTheLeaksWarning && !acceptedInvalidImmersiveWeatheringIcicle &&
                     !acceptedDeepVoidPhysicsFallback && !acceptedPresenceFootstepsMissingMessyGroundAcoustic &&
-                    !acceptedStarcatcherInvalidAccessTransformer &&
+                    !acceptedStarcatcherInvalidAccessTransformer && !acceptedCampaignItemFrameIronSword &&
+                    !acceptedCampaignItemFrameIronAxe && !acceptedCampaignUnknownStepHeightAttribute &&
+                    !acceptedIceAndFireDeferredTask &&
                     !acceptedAdPotherDeferredTask && !acceptedUntamedJeiPrototype &&
                     !acceptedSeededWorldWarning && !isAccepted(line)
                 ) {
