@@ -601,19 +601,19 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `spirit market workstation hover matches its profession and resident barter`() {
         val economy = Files.readString(
-            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/BetterContentEconomy.java").normalize(),
+            root.resolve("../mod_source/better-spirit-commerce/src/main/java/com/bettercontent/spiritcommerce/BetterSpiritCommerce.java").normalize(),
         )
         val professions = Files.readString(
-            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/registry/SpiritProfessions.java").normalize(),
+            root.resolve("../mod_source/better-spirit-commerce/src/main/java/com/bettercontent/spiritcommerce/registry/SpiritProfessions.java").normalize(),
         )
         val interactions = Files.readString(
-            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/resident/ResidentInteractions.java").normalize(),
+            root.resolve("../mod_source/better-spirit-commerce/src/main/java/com/bettercontent/spiritcommerce/resident/ResidentInteractions.java").normalize(),
         )
         val barter = Files.readString(
-            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/resident/ResidentBarter.java").normalize(),
+            root.resolve("../mod_source/better-spirit-commerce/src/main/java/com/bettercontent/spiritcommerce/resident/ResidentBarter.java").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("items").any { it.asText() == "better_content_economy:sacred_reliquary" }
+            annotation.path("selector").path("items").any { it.asText() == "better_spirit_commerce:sacred_reliquary" }
         }
         val copy = row.path("lines").map { it.asText() }.single()
         val selectedItems = row.path("selector").path("items").map { it.asText() }.toSet()
@@ -685,16 +685,16 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `economy spirit hover explains direct drops and Malum reagents`() {
         val acquisition = Files.readString(
-            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/spirit/SpiritAcquisition.java").normalize(),
+            root.resolve("../mod_source/better-spirit-commerce/src/main/java/com/bettercontent/spiritcommerce/spirit/SpiritAcquisition.java").normalize(),
         )
         val allocation = Files.readString(
-            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/spirit/SpiritCreditAllocation.java").normalize(),
+            root.resolve("../mod_source/better-spirit-commerce/src/main/java/com/bettercontent/spiritcommerce/spirit/SpiritCreditAllocation.java").normalize(),
         )
         val identity = Files.readString(
-            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/spirit/CurrencyIdentity.java").normalize(),
+            root.resolve("../mod_source/better-spirit-commerce/src/main/java/com/bettercontent/spiritcommerce/spirit/CurrencyIdentity.java").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
-            annotation.path("selector").path("items").any { it.asText() == "better_content_economy:mobility_spirit" }
+            annotation.path("selector").path("items").any { it.asText() == "better_spirit_commerce:mobility_spirit" }
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
         assertTrue(acquisition.contains("SpiritCreditAllocation.fromNative(nativeDrops"))
@@ -705,7 +705,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(copy.contains("release stackable Better Content spirits from the dying mob"))
         assertTrue(copy.contains("serve as currency and ordinary Malum reagents"))
         assertTrue(copy.contains("Eldritch and Umbral remain separate"))
-        assertEquals("better_content_economy", row.path("required_mod").asText())
+        assertEquals("better_spirit_commerce", row.path("required_mod").asText())
         assertTrue(row.path("owner").asText().contains("SpiritCreditAllocation.java"))
         assertTrue(row.path("owner").asText().contains("CurrencyIdentity.java"))
     }
@@ -713,18 +713,18 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `spirit pouch currency claim is gated by the registered Economy slot mixin`() {
         val mixin = Files.readString(
-            root.resolve("../mod_source/better-content-economy/src/main/java/com/bettercontent/economy/mixin/SpiritPouchCurrencySlotMixin.java").normalize(),
+            root.resolve("../mod_source/better-spirit-commerce/src/main/java/com/bettercontent/spiritcommerce/mixin/SpiritPouchCurrencySlotMixin.java").normalize(),
         )
         val mixinConfig = Files.readString(
-            root.resolve("../mod_source/better-content-economy/src/main/resources/better_content_economy.mixins.json").normalize(),
+            root.resolve("../mod_source/better-spirit-commerce/src/main/resources/better_spirit_commerce.mixins.json").normalize(),
         )
         val row = registry.path("annotations").single { annotation ->
             annotation.path("selector").path("item").asText() == "malum:spirit_pouch"
         }
         assertTrue(mixinConfig.contains("SpiritPouchCurrencySlotMixin"))
         assertTrue(mixin.contains("CurrencyIdentity.fromItemId(ForgeRegistries.ITEMS.getKey(stack.getItem())) != null"))
-        assertTrue(row.path("lines").map { it.asText() }.single().contains("with Economy installed"))
-        assertEquals("better_content_economy", row.path("required_mod").asText())
+        assertTrue(row.path("lines").map { it.asText() }.single().contains("with Spirit Commerce installed"))
+        assertEquals("better_spirit_commerce", row.path("required_mod").asText())
         assertTrue(row.path("owner").asText().contains("SpiritPouchCurrencySlotMixin.java"))
     }
 
@@ -1122,7 +1122,7 @@ class HoverAnnotationLearningSurfaceTest {
             "mining_helmet:mining_helmet",
             "oc2r_wireless_pubsub:wireless_relay",
             "procedural_bouquets:bouquet_grid",
-            "better_content_economy:sacred_reliquary",
+            "better_spirit_commerce:sacred_reliquary",
             "malum:spirit_pouch",
             "ratlantis_logistics:courier_lattice",
             "rail_beetle:route_beacon",
