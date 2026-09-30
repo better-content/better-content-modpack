@@ -840,6 +840,54 @@ class HarnessFastTest {
     }
 
     @Test
+    fun logPolicyAcceptsOnlyTheExactRatlantisDistantHorizonsUnloadPaletteError(@TempDir root: Path) {
+        fun block(
+            closedDimension: String = "rats:ratlantis",
+            chunk: String = "C[0,-1]",
+            cause: String = "Caused by: net.minecraft.world.level.chunk.MissingPaletteEntryException: " +
+                "Missing Palette entry for index 2.",
+        ) = listOf(
+            "[08:47:58] [Render thread/INFO] [DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.level.DhClientLevel]: " +
+                "Closed [DhClientLevel] for [Wrapped{ClientLevel@token@$closedDimension}]",
+            "[08:47:58] [DH-LOD Builder Thread[0]/ERROR] " +
+                "[DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.generation.DhLightingEngine]: " +
+                "Unexpected lighting issue for center chunk: $chunk",
+            "net.minecraft.ReportedException: Getting block state",
+            "\tat net.minecraft.world.level.chunk.LevelChunk.m_8055_(LevelChunk.java:182)",
+            "\tat com.seibel.distanthorizons.core.generation.DhLightingEngine.lightChunk(DhLightingEngine.java:260)",
+            cause,
+        )
+
+        val accepted = root.resolve("target-font-ratlantis/fixture/client-1/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText(block().joinToString("\n", postfix = "\n"))
+        }
+        val duplicate = root.resolve("target-font-ratlantis/fixture/client-2/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText((block() + block()).joinToString("\n", postfix = "\n"))
+        }
+        val wrongDimension = root.resolve("target-font-ratlantis/fixture/client-3/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText(block(closedDimension = "the_bumblezone:the_bumblezone").joinToString("\n", postfix = "\n"))
+        }
+        val wrongChunk = root.resolve("target-font-ratlantis/fixture/client-4/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText(block(chunk = "C[1,-1]").joinToString("\n", postfix = "\n"))
+        }
+        val wrongCause = root.resolve("target-font-ratlantis/fixture/client-5/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText(block(cause = "Caused by: net.minecraft.world.level.chunk.MissingPaletteEntryException: " +
+                "Missing Palette entry for index 3.").joinToString("\n", postfix = "\n"))
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(8, 9), LogPolicy.findings(listOf(duplicate)).map { it.line })
+        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(wrongDimension)).map { it.line })
+        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(wrongChunk)).map { it.line })
+        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(wrongCause)).map { it.line })
+    }
+
+    @Test
     fun logPolicyAcceptsOnlyOneExactEmptySalmonAmbientSoundWarningPerLog(@TempDir root: Path) {
         fun warning(sound: String = "minecraft:entity.salmon.ambient") =
             "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +

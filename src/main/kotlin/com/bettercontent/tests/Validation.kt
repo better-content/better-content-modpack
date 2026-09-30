@@ -170,6 +170,15 @@ object LogPolicy {
             "\\[DistantHorizons-DistantHorizons-com\\.seibel\\.distanthorizons\\.core\\.pooling\\." +
             "PhantomArrayListPool]: §6Distant Horizons: Insufficient memory detected\\.§r$",
     )
+    private val distantHorizonsRatlantisLightingError = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] " +
+            "\\[DH-LOD Builder Thread\\[0]/ERROR] " +
+            "\\[DistantHorizons-DistantHorizons-com\\.seibel\\.distanthorizons\\.core\\.generation\\." +
+            "DhLightingEngine]: Unexpected lighting issue for center chunk: C\\[0,-1]$",
+    )
+    private val distantHorizonsRatlantisLevelClosed = Regex(
+        "Closed \\[DhClientLevel] for \\[Wrapped\\{ClientLevel@[^}]+@rats:ratlantis\\}\\]",
+    )
     private val emptySalmonAmbientSound = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] " +
             "\\[net\\.minecraft\\.client\\.sounds\\.SoundEngine]: " +
@@ -220,6 +229,39 @@ object LogPolicy {
 
     data class Finding(val path: Path, val line: Int, val text: String)
 
+    private fun acceptedRatlantisLightingErrorLines(path: Path, lines: List<String>): Set<Int> {
+        val pathText = path.toString()
+        val clientLog = ("/multiplayer/" in pathText || "/target-font-ratlantis/" in pathText) &&
+            ("/fixture/client-" in pathText || path.fileName.toString().matches(Regex("client-[0-9]+\\.log")))
+        if (!clientLog) return emptySet()
+
+        val acceptedLines = mutableSetOf<Int>()
+        var acceptedOneTransition = false
+        lines.forEachIndexed { index, line ->
+            if (acceptedOneTransition || !distantHorizonsRatlantisLightingError.matches(line)) return@forEachIndexed
+            if (lines.getOrNull(index + 1) != "net.minecraft.ReportedException: Getting block state") {
+                return@forEachIndexed
+            }
+            val recentLines = lines.subList((index - 20).coerceAtLeast(0), index)
+            val stackLines = lines.subList(index + 2, (index + 24).coerceAtMost(lines.size))
+            val closedRatlantisLevel = recentLines.any(distantHorizonsRatlantisLevelClosed::containsMatchIn)
+            val blockStateReadStack = stackLines.any {
+                "at net.minecraft.world.level.chunk.LevelChunk.m_8055_(LevelChunk.java:182)" in it
+            }
+            val dhLightingStack = stackLines.any { "DhLightingEngine.lightChunk(DhLightingEngine.java:260)" in it }
+            val missingPaletteCause = stackLines.any {
+                it == "Caused by: net.minecraft.world.level.chunk.MissingPaletteEntryException: " +
+                    "Missing Palette entry for index 2."
+            }
+            if (closedRatlantisLevel && blockStateReadStack && dhLightingStack && missingPaletteCause) {
+                acceptedLines += index
+                acceptedLines += index + 1
+                acceptedOneTransition = true
+            }
+        }
+        return acceptedLines
+    }
+
     fun findings(paths: Collection<Path>): List<Finding> = buildList {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
             val seededWorldLog = path.toString().let { "/singleplayer/" in it || "/target-world-save/" in it }
@@ -229,8 +271,9 @@ object LogPolicy {
             val multiplayerClientLog = multiplayerLog && (
                 "/fixture/client-" in path.toString() ||
                     path.fileName.toString().matches(Regex("client-[0-9]+\\.log"))
-                )
+            )
             val lines = Files.readAllLines(path)
+            val acceptedRatlantisLightingErrors = acceptedRatlantisLightingErrorLines(path, lines)
             var acceptedSeededWorldRemaps = 0
             var acceptedSeededWorldVersionDifferences = 0
             var acceptedSeededWorldMissingDatapacks = 0
@@ -357,7 +400,7 @@ object LogPolicy {
                     !acceptedCampaignItemFrameIronAxe && !acceptedCampaignUnknownStepHeightAttribute &&
                     !acceptedIceAndFireDeferredTask &&
                     !acceptedAdPotherDeferredTask && !acceptedUntamedJeiPrototype &&
-                    !acceptedSeededWorldWarning && !isAccepted(line)
+                    !acceptedSeededWorldWarning && index !in acceptedRatlantisLightingErrors && !isAccepted(line)
                 ) {
                     add(Finding(path, index + 1, line))
                 }
