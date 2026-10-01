@@ -9,6 +9,7 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
+import java.security.MessageDigest
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -200,11 +201,13 @@ private val mapper = jacksonObjectMapper()
 private val timestampFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC)
 
 fun main(args: Array<String>) {
-    require(args.size == 3) { "usage: WorkspaceMaintenance ROOT <audit|prune> <true|false>" }
+    require(args.size in 3..4) { "usage: WorkspaceMaintenance ROOT <audit|prune|resume> <true|false> [TRANSACTION_ID]" }
     val root = Path.of(args[0]).toAbsolutePath().normalize()
     val mode = args[1]
     val apply = args[2].toBooleanStrict()
-    require(mode == "audit" || (mode == "prune" && apply)) { "prune requires explicit apply" }
+    require(mode == "audit" && !apply && args.size == 3 ||
+        mode == "prune" && apply && args.size == 3 ||
+        mode == "resume" && apply && args.size == 4) { "prune and resume require explicit apply" }
     val currentPair = if (root.resolve("dist").isDirectory()) CandidateLocator.locate(root) else null
     val currentHashes = currentPair?.let { CandidateHashes(it.clientSha256, it.serverSha256) }
     val evidenceRoot = root.resolve("generated/test-evidence")
@@ -214,10 +217,15 @@ fun main(args: Array<String>) {
         return
     }
     require(currentHashes != null) { "prune requires exactly one current client/server candidate pair" }
+    if (mode == "resume") {
+        requireNoCompetingProcesses(root)
+        resumePrune(root, currentHashes, args[3])
+        return
+    }
     require(plan.currentRunId != null) { "current candidate has no matching retained evidence" }
-    requireRepositoriesClean(root.parent)
-    requireNoCompetingProcesses()
-    applyPrune(root, currentHashes, plan)
+    val repositoryState = repositoryState(root.parent)
+    requireNoCompetingProcesses(root)
+    applyPrune(root, currentHashes, plan, repositoryState)
 }
 
 private fun withSizes(evidenceRoot: Path, plan: EvidencePlan): EvidencePlan {
@@ -228,16 +236,17 @@ private fun withSizes(evidenceRoot: Path, plan: EvidencePlan): EvidencePlan {
     return plan.copy(decisions = decisions, reclaimableKiB = allocatedKiB(prunable))
 }
 
-private fun applyPrune(root: Path, current: CandidateHashes?, plan: EvidencePlan) {
+private fun applyPrune(root: Path, current: CandidateHashes, plan: EvidencePlan, repositoryBaseline: Map<String, String>) {
     val stamp = timestampFormatter.format(Instant.now())
     val transactionId = "$stamp-${ProcessHandle.current().pid()}"
     val transaction = root.parent.resolve(".local/share/worklane/maintenance/$transactionId").also { it.createDirectories() }
     val quarantine = transaction.resolve("quarantine").also { it.createDirectories() }
     mapper.writerWithDefaultPrettyPrinter().writeValue(
         transaction.resolve("workspace-before.json").toFile(),
-        manifest(root, "prune", current, plan, emptyList(), "planned"),
+        manifest(root, "prune", current, plan, emptyList(), "planned", repositoryBaseline),
     )
     val moved = mutableListOf<Pair<Path, Path>>()
+    var deletionStarted = false
     try {
         plan.prunable.forEach { decision ->
             val source = directChild(root.resolve("generated/test-evidence"), decision.runId)
@@ -253,7 +262,7 @@ private fun applyPrune(root: Path, current: CandidateHashes?, plan: EvidencePlan
             Files.move(source, target, StandardCopyOption.ATOMIC_MOVE)
             moved += source to target
         }
-        requireRepositoriesClean(root.parent)
+        require(repositoryState(root.parent) == repositoryBaseline) { "repository state changed during maintenance" }
         val afterPair = CandidateLocator.locate(root)
         val afterHashes = CandidateHashes(afterPair.clientSha256, afterPair.serverSha256)
         require(afterHashes == current) { "candidate hashes changed during maintenance" }
@@ -264,18 +273,26 @@ private fun applyPrune(root: Path, current: CandidateHashes?, plan: EvidencePlan
         }
         mapper.writerWithDefaultPrettyPrinter().writeValue(
             transaction.resolve("workspace-after.json").toFile(),
-            manifest(root, "prune", current, plan, moved.map { it.first.toString() }, "validated"),
+            manifest(root, "prune", current, plan, moved.map { it.first.toString() }, "validated", repositoryBaseline),
         )
+        deletionStarted = true
         deleteTree(quarantine)
         mapper.writerWithDefaultPrettyPrinter().writeValue(
             transaction.resolve("workspace-after.json").toFile(),
-            manifest(root, "prune", current, plan, moved.map { it.first.toString() }, "completed"),
+            manifest(root, "prune", current, plan, moved.map { it.first.toString() }, "completed", repositoryBaseline),
         )
     } catch (error: Throwable) {
-        moved.asReversed().forEach { (source, target) ->
-            if (target.exists() && !source.exists()) {
-                source.parent.createDirectories()
-                Files.move(target, source, StandardCopyOption.ATOMIC_MOVE)
+        if (deletionStarted) {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(
+                transaction.resolve("workspace-after.json").toFile(),
+                manifest(root, "prune", current, plan, moved.map { it.first.toString() }, "deletion_incomplete", repositoryBaseline),
+            )
+        } else {
+            moved.asReversed().forEach { (source, target) ->
+                if (target.exists() && !source.exists()) {
+                    source.parent.createDirectories()
+                    Files.move(target, source, StandardCopyOption.ATOMIC_MOVE)
+                }
             }
         }
         throw error
@@ -285,6 +302,28 @@ private fun applyPrune(root: Path, current: CandidateHashes?, plan: EvidencePlan
     println("planned evidence reclaim: ${plan.reclaimableKiB} KiB")
 }
 
+private fun resumePrune(root: Path, current: CandidateHashes, transactionId: String) {
+    require(Regex("""\d{8}T\d{6}Z-\d+""").matches(transactionId)) { "invalid maintenance transaction ID" }
+    val transaction = root.parent.resolve(".local/share/worklane/maintenance").resolve(transactionId)
+    require(transaction.isDirectory() && !Files.isSymbolicLink(transaction)) { "missing maintenance transaction" }
+    val record = mapper.readTree(transaction.resolve("workspace-after.json").toFile())
+    require(record.path("schema").asText() == "bc.workspace_maintenance.v1")
+    require(record.path("mode").asText() == "prune")
+    require(record.path("status").asText() in setOf("validated", "deletion_incomplete"))
+    require(record.path("repository").asText() == root.toString())
+    require(record.path("current_candidate").path("clientSha256").asText() == current.clientSha256 &&
+        record.path("current_candidate").path("serverSha256").asText() == current.serverSha256)
+    require(record.path("repository_state") == mapper.valueToTree<JsonNode>(repositoryState(root.parent))) {
+        "repository state changed since maintenance; inspect transaction before resuming"
+    }
+    val quarantine = transaction.resolve("quarantine")
+    require(!Files.isSymbolicLink(quarantine)) { "unsafe maintenance quarantine" }
+    deleteTree(quarantine)
+    (record as com.fasterxml.jackson.databind.node.ObjectNode).put("status", "completed")
+    mapper.writerWithDefaultPrettyPrinter().writeValue(transaction.resolve("workspace-after.json").toFile(), record)
+    println("resumed maintenance transaction: " + transactionId)
+}
+
 private fun manifest(
     root: Path,
     mode: String,
@@ -292,6 +331,7 @@ private fun manifest(
     plan: EvidencePlan,
     removedTargets: List<String>,
     status: String,
+    repositoryState: Map<String, String>? = null,
 ): Map<String, Any?> = linkedMapOf(
     "schema" to "bc.workspace_maintenance.v1",
     "created_at" to Instant.now().toString(),
@@ -303,6 +343,7 @@ private fun manifest(
     "planned_reclaim_kib" to plan.reclaimableKiB,
     "decisions" to plan.decisions,
     "removed_targets" to removedTargets,
+    "repository_state" to repositoryState,
 )
 
 private fun directChild(parent: Path, name: String): Path {
@@ -323,7 +364,7 @@ private fun distributionServerTrees(root: Path): List<Path> {
     }
 }
 
-private fun requireRepositoriesClean(workspace: Path) {
+private fun repositoryState(workspace: Path): Map<String, String> {
     val repositories = buildList {
         add(workspace.resolve("better-content-modpack"))
         val source = workspace.resolve("mod_source")
@@ -331,14 +372,51 @@ private fun requireRepositoriesClean(workspace: Path) {
             stream.filter { it.resolve(".git").isDirectory() }.sorted().forEach { add(it) }
         }
     }
-    repositories.forEach { repository ->
-        val process = ProcessBuilder("git", "status", "--porcelain").directory(repository.toFile()).start()
-        val output = process.inputStream.bufferedReader().use { it.readText() }
-        require(process.waitFor() == 0 && output.isBlank()) { "repository is dirty: $repository" }
+    return repositories.associate { repository ->
+        val digest = MessageDigest.getInstance("SHA-256")
+        fun git(vararg args: String): ByteArray {
+            val process = ProcessBuilder(listOf("git") + args).directory(repository.toFile())
+                .redirectError(ProcessBuilder.Redirect.INHERIT).start()
+            val bytes = process.inputStream.use { it.readAllBytes() }
+            require(process.waitFor() == 0) { "Git state inspection failed: $repository" }
+            return bytes
+        }
+        digest.update(git("rev-parse", "HEAD"))
+        digest.update(git("status", "--porcelain=v1", "-z", "--untracked-files=all"))
+        val diff = ProcessBuilder("git", "diff", "HEAD", "--binary", "--no-ext-diff")
+            .directory(repository.toFile()).redirectError(ProcessBuilder.Redirect.INHERIT).start()
+        diff.inputStream.use { input ->
+            val buffer = ByteArray(1024 * 1024)
+            while (true) {
+                val count = input.read(buffer)
+                if (count < 0) break
+                digest.update(buffer, 0, count)
+            }
+        }
+        require(diff.waitFor() == 0) { "Git diff inspection failed: $repository" }
+        val untracked = git("ls-files", "--others", "--exclude-standard", "-z")
+            .toString(Charsets.UTF_8).split('\u0000').filter { it.isNotEmpty() }.sorted()
+        untracked.forEach { relative ->
+            val file = repository.resolve(relative).normalize()
+            require(file.startsWith(repository)) { "untracked path escaped repository: $relative" }
+            digest.update(relative.toByteArray())
+            when {
+                Files.isSymbolicLink(file) -> digest.update(Files.readSymbolicLink(file).toString().toByteArray())
+                Files.isRegularFile(file) -> Files.newInputStream(file).use { input ->
+                    val buffer = ByteArray(1024 * 1024)
+                    while (true) {
+                        val count = input.read(buffer)
+                        if (count < 0) break
+                        digest.update(buffer, 0, count)
+                    }
+                }
+            }
+        }
+        repository.toString() to digest.digest().joinToString("") { "%02x".format(it) }
     }
 }
 
-private fun requireNoCompetingProcesses() {
+private fun requireNoCompetingProcesses(root: Path) {
     val ignored = buildSet {
         add(ProcessHandle.current().pid())
         var parent = ProcessHandle.current().parent()
@@ -350,9 +428,11 @@ private fun requireNoCompetingProcesses() {
     }
     val markers = listOf("gradle", "minecraft", "forge", "packwiz", "portablemc")
     val competing = ProcessHandle.allProcesses().filter { process ->
-        process.pid() !in ignored && process.info().commandLine().orElse("").lowercase().let { line ->
-            markers.any { it in line }
-        }
+        val command = process.info().commandLine().orElse("")
+        val cwd = runCatching { Files.readSymbolicLink(Path.of("/proc", process.pid().toString(), "cwd")) }
+            .getOrNull()
+        process.pid() !in ignored && markers.any { it in command.lowercase() } &&
+            (root.toString() in command || cwd?.startsWith(root) == true)
     }.map { it.pid() to it.info().commandLine().orElse("") }.toList()
     require(competing.isEmpty()) { "competing pack processes are active: $competing" }
 }

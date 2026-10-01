@@ -22,7 +22,10 @@ This repository is the Better Content Forge 1.20.1 modpack content layer.
   reuses unchanged JARs, builds/stages changed sources without verification, and packages exactly once.
 - `./maintenance.main.kts audit` reports evidence retention decisions without changing the
   workspace. `./maintenance.main.kts prune --apply` removes only superseded test evidence and
-  redundant distribution staging after cleanliness, process, path, and candidate-hash guards pass.
+  redundant distribution staging after repository-state, process, path, and candidate-hash guards pass.
+  It preserves dirty repository files and records their fingerprints before and after pruning.
+  Use `./maintenance.main.kts prune --resume TRANSACTION_ID` only if a validated deletion was
+  interrupted; inspect its transaction manifest first.
 - `./package.sh` is the shared internal packager; do not invoke alternate assemblers.
 - `./pack-test-queue.main.kts` is the persistent coordinator queue, and
   `./pack-test-lock.main.kts` is the internal single-runner mutex wrapper. Only

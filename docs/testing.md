@@ -174,10 +174,12 @@ After reviewing that output, explicitly apply the guarded prune with:
 ./maintenance.main.kts prune --apply
 ```
 
-The command refuses dirty repositories, competing Gradle or Minecraft processes, unsafe paths, and
-candidate-hash changes. It retains the evidence matching the current ZIP pair, the newest passed
+The command records repository state before pruning and refuses to continue if that state changes.
+It also refuses pack processes, unsafe paths, and candidate-hash changes. It retains the evidence matching the current ZIP pair, the newest passed
 report for a suite missing from that run, and any failure without a later passing result. Pruning
 writes a `bc.workspace_maintenance.v1` transaction manifest beneath the Worklane state directory.
+If deletion stops after validation, inspect the manifest and run
+`./maintenance.main.kts prune --resume TRANSACTION_ID` to finish deleting its quarantine.
 Successful packaging removes its expanded server staging tree after the server ZIP is complete;
 failed packaging keeps staging for diagnosis.
 

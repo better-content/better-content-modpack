@@ -103,4 +103,5 @@ tasks.register<JavaExec>("workspaceMaintenance") {
         providers.gradleProperty("maintenanceMode").orElse("audit").get(),
         providers.gradleProperty("maintenanceApply").orElse("false").get(),
     )
+    providers.gradleProperty("maintenanceTransaction").orNull?.let { args(it) }
 }
