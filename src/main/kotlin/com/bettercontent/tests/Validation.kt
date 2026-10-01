@@ -214,6 +214,12 @@ object LogPolicy {
             "Tag entries for curios:tags/items/aether_(accessory|cape|gloves|pendant|ring|shield)\\.json " +
             "cleared by aether-1\\.20\\.1-1\\.5\\.2-neoforge\\.jar:packs/curios_override$",
     )
+    // The pack deliberately replaces the ordinary back tag so backpacks only use better_backpack.
+    private val curatedCuriosBackTagOverride = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Worker-(Main|ResourceReload)-[0-9]+/WARN] " +
+            "\\[artifacts\\.Artifacts]: Tag entries for curios:tags/items/back\\.json " +
+            "cleared by KubeJS Resource Pack \\[data]$",
+    )
     private val invalidImmersiveWeatheringIcicle = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Server thread/WARN] " +
             "\\[net\\.minecraft\\.world\\.level\\.chunk\\.LevelChunk]: " +
@@ -294,6 +300,7 @@ object LogPolicy {
             var acceptedEmptyUntamedPlaceholderSounds = 0
             var acceptedAllTheLeaksServerNotFound = 0
             val acceptedAetherCuriosBatches = mutableMapOf<Pair<String, String>, MutableSet<String>>()
+            var acceptedCuratedCuriosBackOverrides = 0
             var acceptedInvalidImmersiveWeatheringIcicles = 0
             var acceptedDeepVoidPhysicsFallbacks = 0
             var acceptedAdPotherDeferredTasks = 0
@@ -355,6 +362,8 @@ object LogPolicy {
                     val tags = acceptedAetherCuriosBatches.getOrPut(batch) { mutableSetOf() }
                     acceptedAetherCuriosBatches.size <= 2 && tags.add(groups[4]) && tags.size <= 6
                 }
+                val acceptedCuratedCuriosBackOverride = curatedCuriosBackTagOverride.matches(line) &&
+                    ++acceptedCuratedCuriosBackOverrides <= 3
                 val acceptedInvalidImmersiveWeatheringIcicle = invalidImmersiveWeatheringIcicle.matches(line) &&
                     ++acceptedInvalidImmersiveWeatheringIcicles <= 1
                 val acceptedDeepVoidPhysicsFallback = deepVoidPhysicsFallback.matches(line) &&
@@ -394,6 +403,7 @@ object LogPolicy {
                     !acceptedEmptyTropicalFishAmbientSound && !acceptedEmptyPufferFishAmbientSound &&
                     !acceptedEmptyCodAmbientSound && !acceptedEmptyUntamedPlaceholderSound &&
                     !acceptedAllTheLeaksWarning && !acceptedAetherCuriosOverride &&
+                    !acceptedCuratedCuriosBackOverride &&
                     !acceptedInvalidImmersiveWeatheringIcicle &&
                     !acceptedDeepVoidPhysicsFallback && !acceptedPresenceFootstepsMissingMessyGroundAcoustic &&
                     !acceptedStarcatcherInvalidAccessTransformer && !acceptedCampaignItemFrameIronSword &&

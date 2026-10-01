@@ -716,6 +716,22 @@ class HarnessFastTest {
     }
 
     @Test
+    fun logPolicyAcceptsOnlyTheCuratedCuriosBackTagOverride(@TempDir root: Path) {
+        val known = "[01:31:25] [Worker-Main-20/WARN] [artifacts.Artifacts]: " +
+            "Tag entries for curios:tags/items/back.json cleared by KubeJS Resource Pack [data]"
+        val accepted = root.resolve("curios-back.log").also {
+            it.writeText(List(3) { known }.joinToString("\n", postfix = "\n"))
+        }
+        val rejected = root.resolve("changed-curios-back.log").also {
+            it.writeText((List(4) { known } + known.replace("back.json", "belt.json") +
+                known.replace("KubeJS Resource Pack [data]", "another pack"))
+                .joinToString("\n", postfix = "\n"))
+        }
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(4, 5, 6), LogPolicy.findings(listOf(rejected)).map { it.line })
+    }
+
+    @Test
     fun logPolicyAcceptsOnlyTheSixAetherCuriosOverrideTags(@TempDir root: Path) {
         fun warning(
             tag: String,
