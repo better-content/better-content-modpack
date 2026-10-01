@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "AGENTS.md"
-hash = "59ee8aa354baeebf0dd9867119d7b01b66ecb65d0e79b7e3b4ffecaddb7d05f8"
+hash = "24e3b09b43f2e381cf7f9bc2c8f8932ca6644c8fc2aad162d9fdcadf6f357fd9"
 
 [[files]]
 file = "LICENSE"
@@ -2274,7 +2274,7 @@ hash = "cd34bf34ff49c47333b435be7523979037df203f9572bfd0ea5b5f961c86445f"
 
 [[files]]
 file = "config/c2me.toml"
-hash = "b63e382cc5bf8865149d972d5a1bffd838f24cfefeee3aecc27f2cd484a5e58d"
+hash = "6fcb7aa275704a6217c8121379ad1459ad704974e7f978bbfcd7b4a6aa24753c"
 
 [[files]]
 file = "config/chemlib-common.toml"
@@ -2346,7 +2346,7 @@ hash = "93c34d3df9c601d00503b824bc7a27d7bcf2f0108c9761eb4fa16beb39e9c2a8"
 
 [[files]]
 file = "config/curios-common.toml"
-hash = "541ee90994c1cf3d4e132df2ac3ff74004bc3952d3914ae843b5089a4dda8a95"
+hash = "e6abfe9073fca77a2185cee8bf2fcdb3956834e7f5021bc7ff8bde4da95be06e"
 
 [[files]]
 file = "config/dcm.json"
@@ -4590,7 +4590,7 @@ hash = "ccc2dd06ae82b645bc6908cc8be23947273ed3a1e74ff233ca62249421b77e0e"
 
 [[files]]
 file = "defaultconfigs/better_survival_physiology-server.toml"
-hash = "b196f15c5bfc4396a1ad9257b382506751d7b4e3da5513e23dc8b73c0ee9b4d7"
+hash = "71a4de28c8900d2205c8ea2727895525b786bb189d88eed5327cc3335a7ea0ca"
 
 [[files]]
 file = "defaultconfigs/better_tinkers_loot_affixes-server.toml"
@@ -7458,7 +7458,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "007ac421884d2d05cf9ba3b0bed3bbb02af1e7a3300f4c20ec6a2aa02ea90651"
+hash = "fec76b4b45f14f17bcc351a37a8a7c27d8c60272d03535ef20c970cec2384ea4"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -8137,12 +8137,44 @@ file = "kubejs/data/creatingspace/worldgen/biome/moon_plains.json"
 hash = "713b1976dc8a5a9198218f788d1ee11adbfe5a18f787cace425e9207a85fe277"
 
 [[files]]
+file = "kubejs/data/curios/tags/items/back.json"
+hash = "20d643f5eeb5602a96772fd3131d76319088021e650774b1a1ae71b49a123c80"
+
+[[files]]
+file = "kubejs/data/curios/tags/items/belt.json"
+hash = "f1ae487930f4ee5d7148460997c6a3eb22065b25c6da1c0312413c097fbd51e0"
+
+[[files]]
+file = "kubejs/data/curios/tags/items/better_backpack.json"
+hash = "d9dc197666208dd4873c4a8e857cdaaad116780f1d5e5625468d9b299ba89fce"
+
+[[files]]
+file = "kubejs/data/curios/tags/items/body.json"
+hash = "38b393aa015e2474d368327bf21c95be04209b922cde7098d44658458722c946"
+
+[[files]]
+file = "kubejs/data/curios/tags/items/charm.json"
+hash = "da65573eb1f03ac3b0d2bfc678ccd7a8081ef8dbcd9e7d7a71c2bfdf9319ac58"
+
+[[files]]
 file = "kubejs/data/curios/tags/items/curio.json"
 hash = "bc16fb9b5b49bade7da6c0f0cbcf46aa46c655be93519bef5fce09e58cca0619"
 
 [[files]]
+file = "kubejs/data/curios/tags/items/hands.json"
+hash = "6a265239942b4cc0ba9a6f43ab17709b625ed2c5c5752f1fea574d7219a84e03"
+
+[[files]]
+file = "kubejs/data/curios/tags/items/necklace.json"
+hash = "b022af343daebeba1c8e1b5f6b13744d48605595bcf107810d527014eb448db8"
+
+[[files]]
+file = "kubejs/data/curios/tags/items/ring.json"
+hash = "5711d10f086e7f151ab39491e2ee8150d877966fc485eb6e1c41557d7f243b58"
+
+[[files]]
 file = "kubejs/data/diet/tags/items/proteins.json"
-hash = "9d93b46cf19f8e4de178bd97f56418b1bc1a4e88c97d047ea82224ced9271da3"
+hash = "61c86cbfc7e8679a69dedeadd71253f2ac8bea8137e8cda50385c29247d2e470"
 
 [[files]]
 file = "kubejs/data/diet/tags/items/sugars.json"
@@ -8683,6 +8715,34 @@ hash = "6517788d91fad86b4a316c18af84e70aaa2c7c1dd9dcf7ef82188428c5396c3f"
 [[files]]
 file = "kubejs/data/fallout_wastelands_/worldgen/template_pool/industrialruin_openq.json"
 hash = "6f71406196b271b9c16b6bc7933fcfeae86e280387ada2b7c8ad1aff8e2b20cd"
+
+[[files]]
+file = "kubejs/data/farmersdelight/forge/biome_modifier/wild_beetroots.json"
+hash = "a75d5d611e58e3c80bbf0244f82a8a8351c4e8c4aa0f3a1c56da5343aa6d5ae5"
+
+[[files]]
+file = "kubejs/data/farmersdelight/forge/biome_modifier/wild_cabbages.json"
+hash = "a75d5d611e58e3c80bbf0244f82a8a8351c4e8c4aa0f3a1c56da5343aa6d5ae5"
+
+[[files]]
+file = "kubejs/data/farmersdelight/forge/biome_modifier/wild_carrots.json"
+hash = "a75d5d611e58e3c80bbf0244f82a8a8351c4e8c4aa0f3a1c56da5343aa6d5ae5"
+
+[[files]]
+file = "kubejs/data/farmersdelight/forge/biome_modifier/wild_onions.json"
+hash = "a75d5d611e58e3c80bbf0244f82a8a8351c4e8c4aa0f3a1c56da5343aa6d5ae5"
+
+[[files]]
+file = "kubejs/data/farmersdelight/forge/biome_modifier/wild_potatoes.json"
+hash = "a75d5d611e58e3c80bbf0244f82a8a8351c4e8c4aa0f3a1c56da5343aa6d5ae5"
+
+[[files]]
+file = "kubejs/data/farmersdelight/forge/biome_modifier/wild_rice.json"
+hash = "a75d5d611e58e3c80bbf0244f82a8a8351c4e8c4aa0f3a1c56da5343aa6d5ae5"
+
+[[files]]
+file = "kubejs/data/farmersdelight/forge/biome_modifier/wild_tomatoes.json"
+hash = "a75d5d611e58e3c80bbf0244f82a8a8351c4e8c4aa0f3a1c56da5343aa6d5ae5"
 
 [[files]]
 file = "kubejs/data/farmersdelight/loot_modifiers/straw_from_grass.json"
@@ -10893,6 +10953,10 @@ file = "kubejs/server_scripts/progression/86_dimension_transport.js"
 hash = "cbb1ad1845f6afc887b6f5eadaf22cfe16777ea8ec0ddfcb24ea05daf8628b8a"
 
 [[files]]
+file = "kubejs/server_scripts/progression/food_eras.js"
+hash = "cac2c292ada7a9b42290362b2761bb438034f5d9999334e1fc20ff4d9a62fc01"
+
+[[files]]
 file = "kubejs/server_scripts/transport/10_optional_engineering_roots.js"
 hash = "1a6ff8bf7e0acc6c50fe5e1ad57ee5e87ee980dac4cf2ba79a2c85cabf10e8e0"
 
@@ -10954,7 +11018,7 @@ hash = "fa4a884c45848822d6f36286df9b57195fda5610d3390500b150ae1414a1c39c"
 
 [[files]]
 file = "maintenance.main.kts"
-hash = "0e1670ead6bdcd54ff90ac74bcc8021fd19d4d61487835a307c734935fa58f2b"
+hash = "f3df9bd9b99f4b5127d8eb825371a82ec34934108061bb5254ad1e37288677fe"
 
 [[files]]
 file = "mods/accelerated-rendering.pw.toml"
@@ -11076,7 +11140,7 @@ hash = "a70a5a37b1675feb340a6c82255903e85e2c8619657aaaacf8ecd3c48d127a8b"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
-hash = "87cf1a92b94b5b18b9d0a4383701ef6bda53ab11a683d07c9580c6336ce2ef49"
+hash = "e1e23fe4d8f6c59fb75618f8c81fc7a85bbe53089bb8d11b79bf4c1e258d6614"
 
 [[files]]
 file = "mods/better-craftable-bouquets-0.1.0.jar"
@@ -11092,19 +11156,19 @@ hash = "b4e34a77f8876cc0f4f11d1b5b2847949c460359ff389da6527308dbd43b721c"
 
 [[files]]
 file = "mods/better-deaths-door-1.0.0.jar"
-hash = "469ac50f56e8c993aadd875c9443d12351c2fd6f524be1bfeec01b149d6986e8"
+hash = "2231e169069857f1adfef47f363ec15405b57c22a6579974a20f2c3ca5b996b8"
 
 [[files]]
 file = "mods/better-dimension-fonts-1.0.0.jar"
-hash = "79ce07d8cf2d0951b78620b7dff517dadf284a54a800cbd612861d905d8c5ba5"
+hash = "a3fddead3aa3d170f0187028056a502967265833c172f09e744de6aa91ff91ef"
 
 [[files]]
 file = "mods/better-discovery-guides-1.0.0.jar"
-hash = "9d1f5a88928b5c2913de892fefd500da2cd196d1006573c6f337de6f8268280d"
+hash = "35debf5ef34efb61d779fc5b54e51b2c796033ede4257b588bafebb06f56ea60"
 
 [[files]]
 file = "mods/better-drinking-water-1.1.0.jar"
-hash = "8f182ae867a7e7c7d0605e58c527224aa687928ab39fdb63c7e1bdf34c5e0f87"
+hash = "74ecc495798020eb0bc658ff739a3dfbb3d43607c9dd1d233c90acd561e481c4"
 
 [[files]]
 file = "mods/better-exploration-load-control-0.1.0.jar"
@@ -11124,7 +11188,7 @@ hash = "42cb5fb8f09b6ecfbaef80d7537d53cd1a35366137bd6249e8b090b82dd6708e"
 
 [[files]]
 file = "mods/better-journal-inventory-0.1.0.jar"
-hash = "ee51b2aa97fe64788d919a821d3bd17f79118cea0513e75f0cd7eaa30ca54669"
+hash = "12b76b84ea2d9af6f49200696a657f39a18fed45be24e5b3d94aa63c54a5ecf9"
 
 [[files]]
 file = "mods/better-magic-chunk-anchors-0.1.0.jar"
@@ -11192,7 +11256,7 @@ hash = "14a961b5f496a38c982dbf21921a68b437efb57435f9b68f2b90c4edd942fba5"
 
 [[files]]
 file = "mods/better-spirit-commerce-1.0.1.jar"
-hash = "ba485852084253ea14d715be5f48eab96890481f752b9ed1cbbe81a552edb471"
+hash = "10e0423e89b68c6dbd269fdb49bbb93377e9c586e7c337e61e3eb317bc464442"
 
 [[files]]
 file = "mods/better-survival-hud-1.0.0.jar"
@@ -11200,7 +11264,7 @@ hash = "14f8e282274ceb6689ea55f04a85cc5f46954eecf0f7864b4638583e6354133c"
 
 [[files]]
 file = "mods/better-survival-physiology-0.1.1.jar"
-hash = "7ea7592431c2df1eb8a797c687d5a24dfbf039d4d947b4b9e310ee212576cf38"
+hash = "6b5beff94782a5e9cded1cdb14d5a6396c3568b687f2fffea2c1fac453ec3f21"
 
 [[files]]
 file = "mods/better-tinkers-loot-affixes-1.0.0.jar"
@@ -11208,11 +11272,11 @@ hash = "3fe0e53410f41580a3783c1b06adf851f51dd7b0ef59c2a1b9b419c79004925c"
 
 [[files]]
 file = "mods/better-village-fortifications-1.0.0.jar"
-hash = "b46828ac2124974a7b04bb18b17966bac034f9af9a10df8ecd3aef1bd5ca3e34"
+hash = "1830bd3556467d72a03698ef950d5886f228bb64d0feaaf008822709a6ebc78e"
 
 [[files]]
 file = "mods/better-weathering-offline-progress-0.1.0.jar"
-hash = "ef577372a13f6a2869f9c590b7cc3202ce302695dae43066b2c7678e727f8483"
+hash = "eafd9b52c6e567eca8689fc7c972f2ae063085235afdd4288c921a3169e9b2e6"
 
 [[files]]
 file = "mods/better-wildfire-0.1.0.jar"
@@ -11400,6 +11464,11 @@ metafile = true
 [[files]]
 file = "mods/dynamic-trees-for-natures-spirit.pw.toml"
 hash = "9c74ac86374e5f8769d846cdd4a2937652edc98b12f3508641ede0b4fbad18c4"
+metafile = true
+
+[[files]]
+file = "mods/dynamic-trees-fruits-delight.pw.toml"
+hash = "3c3a6dead3ecfc490331fb709ae45a4568dad17af7c43cad19781df4c5d90850"
 metafile = true
 
 [[files]]
@@ -11595,6 +11664,11 @@ metafile = true
 [[files]]
 file = "mods/framework.pw.toml"
 hash = "9e2175476f720e0b2d21b28e91873cecf5555648e2137310e1b7cf98f6b98ab8"
+metafile = true
+
+[[files]]
+file = "mods/fruits-delight.pw.toml"
+hash = "8b4d4f87a45907749c6c901e92891ba7501ffe7b36d9bb335696a841d290b2e8"
 metafile = true
 
 [[files]]
@@ -12342,7 +12416,7 @@ hash = "12df4f25dcb02a37e4ac60e7bdd0910aa3e37f72df42b2590dc52dbf4fe7dd80"
 
 [[files]]
 file = "pack-test-queue.main.kts"
-hash = "e5f933e79868f2a10a1547fa5dc2365f4f7dcd9b426994448b54440f3dbe4c1e"
+hash = "5cf0300caff94901572ce47add3ec21b30f3296d2d39f4110e6b93a570b49b52"
 
 [[files]]
 file = "package.sh"
