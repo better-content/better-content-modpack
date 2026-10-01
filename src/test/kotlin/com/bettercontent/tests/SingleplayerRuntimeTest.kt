@@ -70,6 +70,12 @@ class SingleplayerRuntimeTest {
             first.prepare()
             val firstSave = first.client.resolve("saves/DebugWorld")
             require(sourceWorld.toFile().copyRecursively(firstSave.toFile())) { "failed to stage fresh world" }
+            // This fixture verifies world persistence, not the separate 16 km initial-spawn
+            // search. That search can keep C2ME feature placement active while the probe
+            // closes the integrated server, racing POI updates against world unload.
+            val initialSpawnState = firstSave.resolve("data/better_world_management/initial-spawn-v1.tsv")
+            Files.createDirectories(initialSpawnState.parent)
+            Files.writeString(initialSpawnState, "fallback\n")
             first.launchQuickPlayWorld("DebugWorld", "save")
             first.waitForWorldProbe("BC_DEBUG_WORLD_EXITED")
             require(Files.readString(first.log).contains("BC_DEBUG_EMI_READY")) {

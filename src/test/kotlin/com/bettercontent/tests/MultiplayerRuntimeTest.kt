@@ -72,6 +72,12 @@ class MultiplayerRuntimeTest {
     fun leadClientJoinsFreshDedicatedServer() = evidence.run.checkpoint("single-client server join") {
         server.waitReady()
         if (evidence.run.tier == "debug") {
+            server.commandResult(
+                "gamerule doPatrolSpawning false",
+                Regex("Gamerule doPatrolSpawning is now set to: false"),
+                "disable ambient patrol spawning in the controlled Debug fixture",
+                Duration.ofSeconds(30),
+            )
             // The recipe graph exporter performs a large synchronous write on the server thread.
             // Run it before clients connect so its pause cannot trip their network heartbeat.
             val dump = server.runtimeDump()
@@ -375,6 +381,12 @@ class MultiplayerRuntimeTest {
         }
         assumeTrue(campaignReady, "campaign prerequisite failed")
         evidence.run.checkpoint("server restart and client reconnect") {
+            server.commandResult(
+                "kill @e[type=minecraft:pillager]",
+                Regex("Killed [0-9]+ entities"),
+                "clear campaign pillagers before server restart",
+                Duration.ofSeconds(30),
+            )
             val before = gameTime()
             server.commandResult(
                 "execute in minecraft:overworld run setblock 0 100 0 minecraft:diamond_block",

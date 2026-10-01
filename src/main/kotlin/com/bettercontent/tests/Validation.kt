@@ -95,6 +95,10 @@ object LogPolicy {
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[untamedwilds\\.UntamedWilds]: " +
             "There's no species provided for the EntityType$",
     )
+    private val untamedServerMissingSpeciesWarning = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Server thread/WARN] \\[untamedwilds\\.UntamedWilds]: " +
+            "There's no species provided for the EntityType$",
+    )
     private val seededWorldRegistryRemap = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[net\\.minecraftforge\\.registries\\.ForgeRegistry]: " +
             "Registry minecraft:(?:item|sound_event): Object did not get ID it asked for\\. Name: " +
@@ -204,6 +208,15 @@ object LogPolicy {
             "\\[net\\.minecraft\\.client\\.sounds\\.SoundEngine]: " +
             "Unable to play empty soundEvent: untamedwilds:nothing$",
     )
+    private val emptyQuarkCrabIdleSound = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] " +
+            "\\[net\\.minecraft\\.client\\.sounds\\.SoundEngine]: " +
+            "Unable to play empty soundEvent: quark:entity\\.crab\\.idle$",
+    )
+    private val slowGlfwInitializationDiagnostic = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[main/ERROR] \\[EARLYDISPLAY]: WARNING : " +
+            "glfwInit took ([0-9]+\\.[0-9]+) seconds to start\\.",
+    )
     private val allTheLeaksServerNotFound = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[AllTheLeaks]: " +
             "Server not found while trying to clear leaked chunks$",
@@ -273,6 +286,14 @@ object LogPolicy {
             val seededWorldLog = path.toString().let { "/singleplayer/" in it || "/target-world-save/" in it }
             val multiplayerLog = "/multiplayer/" in path.toString()
             val multiplayerAggregateServerLog = multiplayerLog && path.parent.fileName.toString() == "multiplayer"
+            val multiplayerServerLog = multiplayerAggregateServerLog ||
+                (multiplayerLog && path.fileName.toString() == "latest.log" &&
+                    "/fixture/server-extract/" in path.toString())
+            val targetDimensionsServerLog = "/target-dimensions/" in path.toString() &&
+                (path.fileName.toString() == "server.log" ||
+                    (path.fileName.toString() == "latest.log" && "/fixture/server-extract/" in path.toString()))
+            val serverLifecycleAggregateLog = path.fileName.toString() == "server.log" &&
+                path.parent.fileName.toString() == "server"
             val singleplayerLog = "/singleplayer/" in path.toString()
             val multiplayerClientLog = multiplayerLog && (
                 "/fixture/client-" in path.toString() ||
@@ -288,6 +309,7 @@ object LogPolicy {
             var acceptedSingleplayerOpenAlCleanup = 0
             var jeiRegisteringIngredients = false
             var acceptedUntamedJeiPrototypeWarnings = 0
+            var acceptedUntamedServerMissingSpeciesWarnings = 0
             var acceptedEarlyBlockEntityWarnings = 0
             var acceptedRecoveredPhantomArrays = 0
             var acceptedDistantHorizonsInsufficientMemory = 0
@@ -298,6 +320,8 @@ object LogPolicy {
             var acceptedEmptyPufferFishAmbientSounds = 0
             var acceptedEmptyCodAmbientSounds = 0
             var acceptedEmptyUntamedPlaceholderSounds = 0
+            var acceptedEmptyQuarkCrabIdleSounds = 0
+            var acceptedSlowGlfwInitializationDiagnostics = 0
             var acceptedAllTheLeaksServerNotFound = 0
             val acceptedAetherCuriosBatches = mutableMapOf<Pair<String, String>, MutableSet<String>>()
             var acceptedCuratedCuriosBackOverrides = 0
@@ -337,6 +361,9 @@ object LogPolicy {
                 }
                 val acceptedUntamedJeiPrototype = jeiRegisteringIngredients &&
                     untamedJeiPrototypeWarning.matches(line) && ++acceptedUntamedJeiPrototypeWarnings <= 3400
+                val acceptedUntamedServerMissingSpecies = multiplayerServerLog &&
+                    untamedServerMissingSpeciesWarning.matches(line) &&
+                    ++acceptedUntamedServerMissingSpeciesWarnings <= 1
                 val acceptedEarlyBlockEntity = earlyWorldgenBlockEntity.matches(line) &&
                     ++acceptedEarlyBlockEntityWarnings <= 4
                 val acceptedRecoveredPhantomArray = distantHorizonsRecoveredPhantomArray.matches(line) &&
@@ -353,6 +380,13 @@ object LogPolicy {
                     ++acceptedEmptyCodAmbientSounds <= 1
                 val acceptedEmptyUntamedPlaceholderSound = emptyUntamedPlaceholderSound.matches(line) &&
                     ++acceptedEmptyUntamedPlaceholderSounds <= 1
+                val acceptedEmptyQuarkCrabIdleSound = emptyQuarkCrabIdleSound.matches(line) &&
+                    ++acceptedEmptyQuarkCrabIdleSounds <= 1
+                val slowGlfwInitializationSeconds =
+                    slowGlfwInitializationDiagnostic.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
+                val acceptedSlowGlfwInitializationDiagnostic = multiplayerClientLog &&
+                    slowGlfwInitializationSeconds != null && slowGlfwInitializationSeconds > 1.0 &&
+                    ++acceptedSlowGlfwInitializationDiagnostics <= 1
                 val acceptedAllTheLeaksWarning = allTheLeaksServerNotFound.matches(line) &&
                     ++acceptedAllTheLeaksServerNotFound <= 1
                 val aetherCuriosMatch = aetherCuriosTagOverride.matchEntire(line)
@@ -360,7 +394,8 @@ object LogPolicy {
                     val groups = aetherCuriosMatch.groupValues
                     val batch = groups[1] to groups[2]
                     val tags = acceptedAetherCuriosBatches.getOrPut(batch) { mutableSetOf() }
-                    acceptedAetherCuriosBatches.size <= 2 && tags.add(groups[4]) && tags.size <= 6
+                    acceptedAetherCuriosBatches.size <= (if (serverLifecycleAggregateLog) 3 else 2) &&
+                        tags.add(groups[4]) && tags.size <= 6
                 }
                 val acceptedCuratedCuriosBackOverride = curatedCuriosBackTagOverride.matches(line) &&
                     ++acceptedCuratedCuriosBackOverrides <= 3
@@ -373,12 +408,14 @@ object LogPolicy {
                         ++acceptedPresenceFootstepsMissingMessyGroundAcoustics <= 1
                 val acceptedStarcatcherInvalidAccessTransformer =
                     starcatcherInvalidAccessTransformer.matches(line) &&
-                        ++acceptedStarcatcherInvalidAccessTransformers <= 2
-                val acceptedCampaignItemFrameIronSword = multiplayerLog &&
+                        ++acceptedStarcatcherInvalidAccessTransformers <=
+                        (if (serverLifecycleAggregateLog) 3 else 2)
+                val acceptedCampaignItemFrameIronSword = (multiplayerLog || serverLifecycleAggregateLog) &&
                     campaignItemFrameIronSword.matches(line) && ++acceptedCampaignItemFrameIronSwords <= 1
-                val acceptedCampaignItemFrameIronAxe = multiplayerLog &&
+                val acceptedCampaignItemFrameIronAxe = (multiplayerLog || serverLifecycleAggregateLog) &&
                     campaignItemFrameIronAxe.matches(line) && ++acceptedCampaignItemFrameIronAxes <= 1
-                val acceptedCampaignUnknownStepHeightAttribute = multiplayerAggregateServerLog &&
+                val acceptedCampaignUnknownStepHeightAttribute =
+                    (multiplayerAggregateServerLog || targetDimensionsServerLog) &&
                     campaignUnknownStepHeightAttribute.matches(line) &&
                     ++acceptedCampaignUnknownStepHeightAttributes <= 2
                 val iceAndFireDuration = iceAndFireDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
@@ -402,12 +439,15 @@ object LogPolicy {
                     !acceptedEmptySalmonAmbientSound &&
                     !acceptedEmptyTropicalFishAmbientSound && !acceptedEmptyPufferFishAmbientSound &&
                     !acceptedEmptyCodAmbientSound && !acceptedEmptyUntamedPlaceholderSound &&
+                    !acceptedEmptyQuarkCrabIdleSound &&
+                    !acceptedSlowGlfwInitializationDiagnostic &&
                     !acceptedAllTheLeaksWarning && !acceptedAetherCuriosOverride &&
                     !acceptedCuratedCuriosBackOverride &&
                     !acceptedInvalidImmersiveWeatheringIcicle &&
                     !acceptedDeepVoidPhysicsFallback && !acceptedPresenceFootstepsMissingMessyGroundAcoustic &&
                     !acceptedStarcatcherInvalidAccessTransformer && !acceptedCampaignItemFrameIronSword &&
                     !acceptedCampaignItemFrameIronAxe && !acceptedCampaignUnknownStepHeightAttribute &&
+                    !acceptedUntamedServerMissingSpecies &&
                     !acceptedIceAndFireDeferredTask &&
                     !acceptedAdPotherDeferredTask && !acceptedUntamedJeiPrototype &&
                     !acceptedSeededWorldWarning && index !in acceptedRatlantisLightingErrors && !isAccepted(line)

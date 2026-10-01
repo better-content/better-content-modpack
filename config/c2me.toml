@@ -19,10 +19,12 @@ globalExecutorParallelism = "default"
 
 [threadedWorldGen]
 	# Better Caves liquid regions are disabled separately because they are the
-	# documented C2ME 1.20.1 conflict. Keep threaded generation for this pack's
+	# documented C2ME 1.20.1 conflict. Keep async chunk scheduling enabled for
 	# Weather2/Burnt tick samplers, which can otherwise block on terrain loads.
 	enabled = "true"
-	allowThreadedFeatures = "true"
+	# Cataclysm's burning_arena emits far-chunk setBlock errors during parallel
+	# feature-stage placement. Keep features on the serialized generation path.
+	allowThreadedFeatures = "false"
 	reduceLockRadius = "true"
 	asyncScheduling = "true"
 
