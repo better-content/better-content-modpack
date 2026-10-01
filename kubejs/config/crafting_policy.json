@@ -35,6 +35,10 @@
       "primary_role": "presentation",
       "support_state": "not_applicable"
     },
+    "dtfruitsdelight": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
     "embeddium": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
@@ -799,6 +803,10 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
+    "fruitsdelight": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
     "framework": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
@@ -969,6 +977,22 @@
     },
     "lootr": {
       "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "l2harvester": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "l2harvester05x": {
+      "primary_role": "integration",
+      "support_state": "not_applicable"
+    },
+    "l2harvester60x": {
+      "primary_role": "integration",
+      "support_state": "not_applicable"
+    },
+    "l2library": {
+      "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
     "lostcities": {

@@ -26,6 +26,10 @@ A reported category becomes blocking only after its known backlog is zero.
 Creative/debug items remain classified as technical rather than survival graph
 roots.
 
+Fruits Delight is classified as content and its Dynamic Trees add-on as world
+generation; L2 Harvester is content, its 0.5x and 6.0x adapters are
+integrations, and L2 Library is infrastructure.
+
 Recipe cuts and canonical-duplicate selectors are also applied to the global
 loot modifier from this same contract. Exact selectors and namespace/prefix
 selectors resolve against the live item registry, avoiding a second hand-kept
