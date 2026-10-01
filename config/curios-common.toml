@@ -1,5 +1,28 @@
 #List of slots to create or modify.
 #See documentation for syntax: https://docs.illusivesoulworks.com/curios/configuration#slot-configuration
 #
-slots = []
-
+slots = [
+  "id=head;size=1;operation=SET;add_cosmetic=false",
+  "id=necklace;size=1;operation=SET;add_cosmetic=false",
+  "id=body;size=1;operation=SET;add_cosmetic=false",
+  "id=hands;size=1;operation=SET;add_cosmetic=false",
+  "id=belt;size=1;operation=SET;add_cosmetic=false",
+  "id=feet;size=1;operation=SET;add_cosmetic=false",
+  "id=ring;size=1;operation=SET;add_cosmetic=false",
+  "id=charm;size=1;operation=SET;add_cosmetic=false",
+  "id=back;size=1;operation=SET;add_cosmetic=false",
+  "id=hook;size=1;operation=SET;add_cosmetic=false",
+  "id=water;size=1;operation=SET;add_cosmetic=false",
+  "id=better_backpack;size=1;operation=SET;order=81;icon=curios:slot/empty_back_slot;add_cosmetic=false",
+  "id=an_focus;size=0;operation=SET",
+  "id=bracelet;size=0;operation=SET",
+  "id=brooch;size=0;operation=SET",
+  "id=bundle;size=0;operation=SET",
+  "id=curio;size=0;operation=SET",
+  "id=empty_bottle;size=0;operation=SET",
+  "id=living_armour_socket;size=0;operation=SET",
+  "id=rings;size=0;operation=SET",
+  "id=rune;size=0;operation=SET",
+  "id=talisman;size=0;operation=SET",
+  "id=waist;size=0;operation=SET"
+]

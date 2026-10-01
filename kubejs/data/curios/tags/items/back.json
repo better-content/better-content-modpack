@@ -1,0 +1,14 @@
+{
+  "replace": true,
+  "values": [
+    "#aether:accessories_capes",
+    "relics:midnight_robe",
+    "relics:elytra_booster",
+    "relics:arrow_quiver",
+    "adpother:iron_vacuum_bag",
+    "adpother:gold_vacuum_bag",
+    "adpother:diamond_vacuum_bag",
+    "goety:necro_cape",
+    "goety:nameless_cape"
+  ]
+}
