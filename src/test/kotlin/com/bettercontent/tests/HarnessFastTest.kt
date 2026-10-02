@@ -509,9 +509,11 @@ class HarnessFastTest {
         val serverDir = multiplayer.resolve("fixture/server-extract/better-content-server/logs")
         val clientDir = multiplayer.resolve("fixture/client-1/logs")
         val lifecycleDir = root.resolve("server")
+        val singleplayerDir = root.resolve("singleplayer/fixture/client-1/logs")
         serverDir.createDirectories()
         clientDir.createDirectories()
         lifecycleDir.createDirectories()
+        singleplayerDir.createDirectories()
         val notice = "[03:11:22] [Collective Update Checker/WARN] [Collective]: " +
             "[Update] Collective has an update available: 8.40 -> 8.41\n"
         val server = serverDir.resolve("latest.log").also { it.writeText(notice) }
@@ -522,7 +524,11 @@ class HarnessFastTest {
             it.parent.createDirectories()
             it.writeText(notice + notice + notice)
         }
-        val outsideMultiplayer = root.resolve("singleplayer/client.log").also {
+        val singleplayer = singleplayerDir.resolve("latest.log").also { it.writeText(notice) }
+        val repeatedSingleplayer = singleplayerDir.resolve("repeated.log").also {
+            it.writeText(notice + notice)
+        }
+        val outsideMultiplayer = root.resolve("unscoped/client.log").also {
             it.parent.createDirectories()
             it.writeText(notice)
         }
@@ -534,6 +540,8 @@ class HarnessFastTest {
         assertEquals(listOf(2), LogPolicy.findings(listOf(repeated)).map { it.line })
         assertTrue(LogPolicy.findings(listOf(lifecycle)).isEmpty())
         assertEquals(listOf(3), LogPolicy.findings(listOf(lifecycleOverflow)).map { it.line })
+        assertTrue(LogPolicy.findings(listOf(singleplayer)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(repeatedSingleplayer)).map { it.line })
         assertEquals(listOf(1), LogPolicy.findings(listOf(outsideMultiplayer)).map { it.line })
         assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
     }
