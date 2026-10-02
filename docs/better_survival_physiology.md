@@ -15,7 +15,7 @@ Every row has exactly one representative in each authority. Aspect words appear 
 | Endurance | ∞ | `#52606A` | Constitution | Fats | Coal Measures |
 | Robustness | ◆ | `#AF6A2F` | Fortitude | Vegetables | Ironstone |
 | Renewal | ✚ | `#6CCAF0` | Vitality | Dairy | Evaporite Beds |
-| Control | ⊕ | `#8E5BB7` | Perception | Alcohol | Black Shale |
+| Control | ⊕ | `#8E5BB7` | Focus | Alcohol | Black Shale |
 
 The shipped ore identity palette is authoritative and is shared by the RPG, bodily-state,
 and Threads aspect definitions. Glyph, name, value structure, morphology, and actual
@@ -69,7 +69,7 @@ RPG allocations use `cap × points / (points + 20)`: twenty committed points rea
 - Constitution conserves hunger, thirst, and stamina.
 - Fortitude resists temperature and knockback.
 - Vitality shortens harmful effects and preserves beneficial effects; it never grants health, healing, or combat recovery.
-- Perception improves recoil, dispersion, and spell range.
+- Focus narrows arrow spread and gently increases arrow speed and effective range from the start; later guns gain recoil and dispersion control, while Goety spells gain range.
 
 Slice of Life: Carrot remains the sole owner of maximum-health progression.
 
