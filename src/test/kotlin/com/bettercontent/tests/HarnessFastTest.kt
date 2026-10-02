@@ -509,16 +509,41 @@ class HarnessFastTest {
         val serverDir = multiplayer.resolve("fixture/server-extract/better-content-server/logs")
         val clientDir = multiplayer.resolve("fixture/client-1/logs")
         val lifecycleDir = root.resolve("server")
+        val standaloneServerDir = root.resolve("server/fixture/server-extract/better-content-server/logs")
+        val targetJoin = root.resolve("target-join")
+        val targetServerDir = targetJoin.resolve("fixture/server-extract/better-content-server/logs")
+        val targetClientDir = targetJoin.resolve("fixture/client-1/logs")
         val singleplayerDir = root.resolve("singleplayer/fixture/client-1/logs")
         serverDir.createDirectories()
         clientDir.createDirectories()
         lifecycleDir.createDirectories()
+        standaloneServerDir.createDirectories()
+        targetServerDir.createDirectories()
+        targetClientDir.createDirectories()
         singleplayerDir.createDirectories()
         val notice = "[03:11:22] [Collective Update Checker/WARN] [Collective]: " +
             "[Update] Collective has an update available: 8.40 -> 8.41\n"
         val server = serverDir.resolve("latest.log").also { it.writeText(notice) }
+        val standaloneServer = standaloneServerDir.resolve("latest.log").also { it.writeText(notice) }
+        val standaloneServerOverflow = standaloneServerDir.resolve("overflow/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText(notice + notice)
+        }
         val client = clientDir.resolve("latest.log").also { it.writeText(notice) }
         val repeated = clientDir.resolve("repeated.log").also { it.writeText(notice + notice) }
+        val multiplayerAggregate = multiplayer.resolve("server.log").also { it.writeText(notice + notice) }
+        val multiplayerAggregateOverflow = multiplayer.resolve("overflow/multiplayer/server.log").also {
+            it.parent.createDirectories()
+            it.writeText(notice + notice + notice)
+        }
+        val targetServer = targetServerDir.resolve("latest.log").also { it.writeText(notice) }
+        val targetClient = targetClientDir.resolve("latest.log").also { it.writeText(notice) }
+        val targetAggregateServer = targetJoin.resolve("server.log").also { it.writeText(notice) }
+        val targetAggregateClient = targetJoin.resolve("client-1.log").also { it.writeText(notice) }
+        val targetAggregateServerOverflow = targetJoin.resolve("overflow/target-join/server.log").also {
+            it.parent.createDirectories()
+            it.writeText(notice + notice + notice)
+        }
         val lifecycle = lifecycleDir.resolve("server.log").also { it.writeText(notice + notice) }
         val lifecycleOverflow = lifecycleDir.resolve("overflow/server/server.log").also {
             it.parent.createDirectories()
@@ -537,7 +562,13 @@ class HarnessFastTest {
         }
 
         assertTrue(LogPolicy.findings(listOf(server, client)).isEmpty())
+        assertTrue(LogPolicy.findings(listOf(standaloneServer)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(standaloneServerOverflow)).map { it.line })
         assertEquals(listOf(2), LogPolicy.findings(listOf(repeated)).map { it.line })
+        assertTrue(LogPolicy.findings(listOf(multiplayerAggregate)).isEmpty())
+        assertEquals(listOf(3), LogPolicy.findings(listOf(multiplayerAggregateOverflow)).map { it.line })
+        assertTrue(LogPolicy.findings(listOf(targetServer, targetClient, targetAggregateServer, targetAggregateClient)).isEmpty())
+        assertEquals(listOf(3), LogPolicy.findings(listOf(targetAggregateServerOverflow)).map { it.line })
         assertTrue(LogPolicy.findings(listOf(lifecycle)).isEmpty())
         assertEquals(listOf(3), LogPolicy.findings(listOf(lifecycleOverflow)).map { it.line })
         assertTrue(LogPolicy.findings(listOf(singleplayer)).isEmpty())

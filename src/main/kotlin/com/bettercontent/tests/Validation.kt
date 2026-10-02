@@ -289,16 +289,25 @@ object LogPolicy {
     fun findings(paths: Collection<Path>): List<Finding> = buildList {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
             val seededWorldLog = path.toString().let { "/singleplayer/" in it || "/target-world-save/" in it }
-            val multiplayerLog = "/multiplayer/" in path.toString()
+            val targetMultiplayerLog = Regex(
+                "/target-(?:join|fonts|font-[^/]+|dimensions|dimension-[^/]+|campaign-start|campaign|restart-compat)/",
+            ).containsMatchIn(path.toString())
+            val multiplayerLog = "/multiplayer/" in path.toString() || targetMultiplayerLog
             val multiplayerAggregateServerLog = multiplayerLog && path.parent.fileName.toString() == "multiplayer"
-            val multiplayerServerLog = multiplayerAggregateServerLog ||
+            val targetAggregateServerLog = targetMultiplayerLog && path.fileName.toString() == "server.log" &&
+                path.parent.fileName.toString().startsWith("target-")
+            val multiplayerServerLog = multiplayerAggregateServerLog || targetAggregateServerLog ||
                 (multiplayerLog && path.fileName.toString() == "latest.log" &&
                     "/fixture/server-extract/" in path.toString())
+            val standaloneServerFixtureLog = path.fileName.toString() == "latest.log" &&
+                "/server/fixture/server-extract/" in path.toString()
             val targetDimensionsServerLog = "/target-dimensions/" in path.toString() &&
                 (path.fileName.toString() == "server.log" ||
                     (path.fileName.toString() == "latest.log" && "/fixture/server-extract/" in path.toString()))
             val serverLifecycleAggregateLog = path.fileName.toString() == "server.log" &&
                 path.parent.fileName.toString() == "server"
+            val aggregateDedicatedServerLog = multiplayerAggregateServerLog || targetAggregateServerLog ||
+                serverLifecycleAggregateLog
             val singleplayerLog = "/singleplayer/" in path.toString()
             val multiplayerClientLog = multiplayerLog && (
                 "/fixture/client-" in path.toString() ||
@@ -429,9 +438,10 @@ object LogPolicy {
                     iceAndFireDuration != null &&
                     iceAndFireDuration <= 2.0 && ++acceptedIceAndFireDeferredTasks <= 1
                 val acceptedCollectiveUpdateNotice =
-                    (multiplayerServerLog || multiplayerClientLog || serverLifecycleAggregateLog || singleplayerLog) &&
+                    (multiplayerServerLog || standaloneServerFixtureLog || multiplayerClientLog ||
+                        serverLifecycleAggregateLog || singleplayerLog) &&
                         collectiveUpdateNotice.matches(line) && ++acceptedCollectiveUpdateNotices <=
-                        (if (serverLifecycleAggregateLog) 2 else 1)
+                        (if (aggregateDedicatedServerLog) 2 else 1)
                 val adPotherDuration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
                 val acceptedAdPotherDeferredTask = adPotherDuration != null && adPotherDuration <= 60.0 &&
                     ++acceptedAdPotherDeferredTasks <= 1
