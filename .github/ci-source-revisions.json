@@ -179,11 +179,13 @@
     },
     {
       "repository": "better-wildfire",
-      "commit": "e8df4aa5f4ca00350239c7631b82ecba60939d59"
+      "commit": "e8df4aa5f4ca00350239c7631b82ecba60939d59",
+      "visibility": "private"
     },
     {
       "repository": "better-journal-inventory",
-      "commit": "0d6a187b3d1a4bac1a1394229635de45dbebabe6"
+      "commit": "0d6a187b3d1a4bac1a1394229635de45dbebabe6",
+      "visibility": "private"
     }
   ]
 }

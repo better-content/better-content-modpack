@@ -112,10 +112,17 @@ class HarnessFastTest {
         val repositories = mods.map { it.path("repository").asText() }.toSet()
         assertEquals(mods.size(), repositories.size)
         assertEquals(mods.size(), mods.map { it.path("modId").asText() }.toSet().size)
+        val sourceInventory = jacksonObjectMapper().readTree(root.resolve(".github/ci-source-revisions.json").toFile())
+            .path("repositories")
+        val privateRepositories = sourceInventory.filter { it.path("visibility").asText() == "private" }
+            .map { it.path("repository").asText() }.toSet()
+        assertEquals(setOf("better-wildfire", "better-journal-inventory"), privateRepositories)
+        assertTrue(privateRepositories.all { it in repositories })
         val mixinConfigOwners = mutableMapOf<String, String>()
         mods.forEach { mod ->
             val repository = mod.path("repository").asText()
             val repositoryRoot = root.parent.resolve("mod_source").resolve(repository)
+            if (repository in privateRepositories) return@forEach
             assertTrue(Files.isDirectory(repositoryRoot), "missing active source repository $repository")
             val artifact = root.resolve("mods").resolve(mod.path("artifact").asText())
             assertTrue(mod.path("tasks").isArray && mod.path("tasks").size() > 0)
@@ -165,6 +172,7 @@ class HarnessFastTest {
 
         mods.forEach { mod ->
             val repository = mod.path("repository").asText()
+            if (repository in privateRepositories) return@forEach
             val repositoryRoot = root.parent.resolve("mod_source").resolve(repository)
             val buildText = listOf(repositoryRoot.resolve("build.gradle"), repositoryRoot.resolve("build.gradle.kts"))
                 .filter(Files::isRegularFile)

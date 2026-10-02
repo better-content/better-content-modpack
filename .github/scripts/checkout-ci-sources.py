@@ -24,6 +24,12 @@ def checkout(manifest: Path, workspace: Path):
             raise ValueError("unsafe repository name")
         if not re.fullmatch(r"[0-9a-f]{40}", record["commit"]):
             raise ValueError("source revision must be an immutable commit")
+        if record.get("visibility", "public") not in ("public", "private"):
+            raise ValueError("unsupported source repository visibility")
+
+    # A public repository's Actions token cannot read private sibling repositories.
+    # Those repositories run their own source checks; this checkout stays public-only.
+    records = [r for r in records if r.get("visibility", "public") == "public"]
 
     def materialize(record):
         target = workspace / "mod_source" / record["repository"]
