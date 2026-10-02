@@ -8,14 +8,14 @@ Every row has exactly one representative in each authority. Aspect words appear 
 
 | Aspect | Glyph | sRGB | RPG development | Diet identity | Ore identity |
 | --- | --- | --- | --- | --- | --- |
-| Impact | ✦ | `#FF4055` | Strength | Proteins | Hotstone |
-| Tempo | » | `#00A985` | Dexterity | Sugar | Copper Bloom |
-| Work | ⚒ | `#F0E2C5` | Aptitude | Grains | Tin Quartz |
-| Mobility | ➜ | `#E0B01F` | Agility | Fruits | Brassroot |
-| Endurance | ∞ | `#52606A` | Constitution | Fats | Coal Measures |
-| Robustness | ◆ | `#AF6A2F` | Fortitude | Vegetables | Ironstone |
-| Renewal | ✚ | `#6CCAF0` | Vitality | Dairy | Evaporite Beds |
-| Control | ⊕ | `#8E5BB7` | Focus | Alcohol | Black Shale |
+| Impact | ✦ | `#FF4055` | Arms | Proteins | Hotstone |
+| Tempo | » | `#00A985` | Hands | Sugar | Copper Bloom |
+| Work | ⚒ | `#F0E2C5` | Fingers | Grains | Tin Quartz |
+| Mobility | ➜ | `#E0B01F` | Lungs | Fruits | Brassroot |
+| Endurance | ∞ | `#52606A` | Blood | Fats | Coal Measures |
+| Robustness | ◆ | `#AF6A2F` | Skin | Vegetables | Ironstone |
+| Renewal | ✚ | `#6CCAF0` | Liver | Dairy | Evaporite Beds |
+| Control | ⊕ | `#8E5BB7` | Eyes | Alcohol | Black Shale |
 
 The shipped ore identity palette is authoritative and is shared by the RPG, bodily-state,
 and Threads aspect definitions. Glyph, name, value structure, morphology, and actual
@@ -37,7 +37,7 @@ Every identity has one recurring motion and sound phrase. These cues play only a
 | Renewal | rising spiral and bloom | ascending chimes | Evaporite crystal bloom |
 | Control | converging points | ticks resolving to a ping | Black Shale convergence |
 
-The eight 18×18 badges are canonical byte-identical assets across RPG Stats, Systemic Salience, and Realistic Ores. Audio is a semantic family rather than a shared file: each aspect keeps the phrase in the table while RPG allocation UI, nutrition and systemic bodily cues, and Realistic Ores discovery use context-specific mixes. Tempo may add an event-specific broken-cadence variant without becoming a ninth identity. Realistic Ores reuses the badge strip while its world identity remains morphology-first dirty geology rather than an aspect-colour wash.
+Systemic Salience and Realistic Ores share canonical byte-identical 18×18 aspect badges. RPG Stats uses distinct 18×18 body-part badges in the same palette and keeps the matching aspect cues. Audio is a semantic family rather than a shared file: each aspect keeps the phrase in the table while RPG allocation UI, nutrition and systemic bodily cues, and Realistic Ores discovery use context-specific mixes. Tempo may add an event-specific broken-cadence variant without becoming a ninth identity. Realistic Ores reuses the badge strip while its world identity remains morphology-first dirty geology rather than an aspect-colour wash.
 
 ## Teaching surfaces
 
@@ -62,14 +62,14 @@ These owners already implement meaningful pauses at their own scopes. Keep ordin
 
 RPG allocations use `cap × points / (points + 20)`: twenty committed points reach half the cap, allocation cannot be refunded during the life, and death wipes the ledger. Each visible category is singular and mechanically coherent:
 
-- Strength increases damaging impact and knockback.
-- Dexterity increases attack and item-use cadence.
-- Aptitude increases productive mining speed and reach.
-- Agility increases movement, swimming, and step capability.
-- Constitution conserves hunger, thirst, and stamina.
-- Fortitude resists temperature and knockback.
-- Vitality shortens harmful effects and preserves beneficial effects; it never grants health, healing, or combat recovery.
-- Focus narrows arrow spread and gently increases arrow speed and effective range from the start; later guns gain recoil and dispersion control, while Goety spells gain range.
+- Arms increases damaging impact and knockback.
+- Hands increases attack and item-use cadence.
+- Fingers increases productive mining speed and reach.
+- Lungs increases movement, swimming, step capability, and underwater air capacity; 20 points extend the base 15-second reserve to 22.5 seconds.
+- Blood conserves hunger, thirst, and stamina.
+- Skin resists temperature and knockback.
+- Liver shortens harmful effects and preserves beneficial effects; it never grants health, healing, or combat recovery.
+- Eyes narrow arrow spread and gently increase arrow speed and effective range from the start; later guns gain recoil and dispersion control, while Goety spells gain range.
 
 Slice of Life: Carrot remains the sole owner of maximum-health progression.
 
