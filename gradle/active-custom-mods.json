@@ -213,6 +213,7 @@
         "stageRuntimeJar"
       ],
       "dependsOn": [
+        "better-gameplay-notices",
         "better-survival-hud"
       ]
     },
@@ -407,6 +408,9 @@
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-gameplay-notices"
       ]
     },
     {
