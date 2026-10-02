@@ -3,7 +3,7 @@
 #	Namespaces:   '<minecraft>'
 #	Tags:         '#forge:stone'
 #	IDs:          'minecraft:stone'
-Blocks = ["minecraft:iron_bars"]
+Blocks = ["createdeco:andesite_mesh_fence", "createdeco:brass_mesh_fence", "createdeco:copper_mesh_fence", "createdeco:industrial_iron_mesh_fence", "createdeco:iron_mesh_fence", "createdeco:zinc_mesh_fence", "minecraft:iron_bars"]
 
 [Physics]
 	#The maximum weight the block(s) can support both horizontally and vertically.

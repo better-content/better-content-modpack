@@ -1,0 +1,12 @@
+["The Bumblezone Welcome Options"]
+enableInitialWelcomeMessage = true
+
+["The Bumblezone Teleportation Options"]
+enableEntranceTeleportation = false
+enableExitTeleportation = false
+forceBumblezoneOriginMobToOverworldCenter = true
+forceExitToOverworld = false
+onlyOverworldHivesTeleports = false
+warnPlayersOfWrongBlockUnderHive = true
+allowTeleportationWithModdedBeehives = true
+defaultDimension = "minecraft:overworld"

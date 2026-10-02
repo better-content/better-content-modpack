@@ -1,0 +1,2304 @@
+{
+  "schema": "bc.crafting_policy.v1",
+  "enforcement": {
+    "unknown_loaded_namespaces": "blocking",
+    "family_and_authority_leaks": "report",
+    "live_consumers_of_cuts": "report",
+    "promotion_rule": "Promote a reported category only after its recorded backlog is zero."
+  },
+  "namespaces": {
+    "acceleratedrendering": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "ambientsounds": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "bettergrass": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "configured": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "controlling": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "darkness": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "distanthorizons": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "dtfruitsdelight": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "embeddium": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "emi": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "emitrades": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "entityculling": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "epictaczcompat": {
+      "primary_role": "integration",
+      "support_state": "not_applicable"
+    },
+    "epicparcool": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "parcool": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "plonk": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "mousetweaks": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "nomorepopups": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "norecipebookreborn": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "oculus": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "presencefootsteps": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "rubidium": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "sound_physics_remastered": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "theoneprobe": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "transition": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "trender": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "adchimneys": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "additionalweaponry": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "adlods": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "adpother": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "ae2": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "aether": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "better_airtight_machines": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "alexscaves": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "alltheleaks": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "almostunified": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "amendments": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "appleskin": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "better_magic_chunk_anchors": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "architectury": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "better_arena_trials": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_buried_encounters": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "armoroftheages": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "ars_creo": {
+      "primary_role": "edge_provider",
+      "support_state": "full"
+    },
+    "ars_elemental": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "ars_nouveau": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "arseng": {
+      "primary_role": "edge_provider",
+      "support_state": "full"
+    },
+    "artifacts": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "athena": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "balm": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "better_spirit_commerce": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "better_wildfire": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "better_compat_fixes": {
+      "primary_role": "edge_provider",
+      "support_state": "full"
+    },
+    "better_journal_inventory": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "better_gameplay_notices": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "better_discovery_guides": {
+      "primary_role": "presentation",
+      "support_state": "full"
+    },
+    "bettercaves": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "bloodmagic": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "blueprint": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "born_in_chaos_v1": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "brewinandchewin": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "buildinggadgets2": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_bumblezone_crops": {
+      "primary_role": "edge_provider",
+      "support_state": "not_applicable"
+    },
+    "c2me": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_base": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_client_uncapvd": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_fixes_chunkio_threading_issues": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_fixes_general_threading_issues": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_fixes_worldgen_threading_issues": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_fixes_worldgen_vanilla_bugs": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_notickvd": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_opts_allocs": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_opts_chunk_access": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_opts_chunkio": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_opts_math": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_opts_scheduling": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_opts_worldgen_general": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_opts_worldgen_vanilla": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_rewrites_chunk_serializer": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_rewrites_chunkio": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_server_utils": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_threading_chunkio": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_threading_lighting": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "c2me_threading_worldgen": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "chemlib": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "citadel": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "cataclysm": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_spawns": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "cloth_config": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "cold_sweat": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "collective": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "complicated_bees": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "compressedcreativity": {
+      "primary_role": "edge_provider",
+      "support_state": "not_applicable"
+    },
+    "configurabledeath": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "construct_arsenal": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "coroutil": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "create": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "create_aquatic_ambitions": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "createsifter": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "better_create_train_fuel": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "better_create_kinetic_loss": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "createdeco": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "createdieselgenerators": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "creatingspace": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "creativecore": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "cristellib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "cumulus_menus": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "curios": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "dawnoftimebuilder": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "defaultresources": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "better_cave_encounters": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "diet": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "better_dimension_fonts": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "better_deaths_door": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "dtaether": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "dtarsnouveau": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "dtnatures_spirit": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "dtquark": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "dttwilightforest": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "dynamic_asset_generator": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "better_survival_hud": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "better_hexerei_dynamic_trees": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "better_malum_dynamic_trees": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "dynamictrees": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "dynamictreesplus": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "dynamicvillagertrades": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "eanimod": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "emi_loot": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "emi_ores": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "endermanoverhaul": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "enhancedai": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "epicfight": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "epicfight_first_person_model": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "epicfighttinkercompat": {
+      "primary_role": "edge_provider",
+      "support_state": "not_applicable"
+    },
+    "etstlib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "everythingcopper": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "excavated_variants": {
+      "primary_role": "edge_provider",
+      "support_state": "not_applicable"
+    },
+    "expandability": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "better_exploration_load_control": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "explosionoverhaul": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "fabric_api": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_api_base": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_api_lookup_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_biome_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_block_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_block_view_api_v2": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_blockrenderlayer_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_client_tags_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_command_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_command_api_v2": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_content_registries_v0": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_convention_tags_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_data_attachment_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_data_generation_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_dimensions_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_entity_events_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_events_interaction_v0": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_game_rule_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_item_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_item_group_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_key_binding_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_lifecycle_events_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_loot_api_v2": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_message_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_mining_level_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_model_loading_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_models_v0": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_networking_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_object_builder_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_particles_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_recipe_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_registry_sync_v0": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_renderer_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_renderer_indigo": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_rendering_data_attachment_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_rendering_fluids_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_rendering_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_resource_conditions_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_resource_loader_v0": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_screen_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_screen_handler_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_sound_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_transfer_api_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fabric_transitive_access_wideners_v1": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fallout_wastelands_": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "fancymenu": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "farmersdelight": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "farmersrespite": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "farsightedmobs": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "fastbench": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fastfurnace": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "ferritecore": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "findme": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "flywheel": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "forge": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "forgeendertech": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "forgottenruins": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "fowlplay": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "framedblocks": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "fruitsdelight": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "framework": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "ftbbackups2": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "ftblibrary": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fusion": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "fzzy_config": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "geckolib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "glitchcore": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "globalgamerules": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "globalpacks": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "goety": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "guardvillagers": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "guideme": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "hangglider": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_industrial_heat": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "hexerei": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "hyle": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "iceandfire": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "immersive_weathering": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "better_weathering_offline_progress": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "improved_village_placement": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "incontrol": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "insanelib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "jeed": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "jei": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "jsonthings": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "jumbofurnace": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "keepcuriosinventory": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "kelvin": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "konkrete": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "kotlinforforge": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "kubejs": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "kubejs_create": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "kubejsbloodmagic": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "kuma_api": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "better_chemlib_hazards": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "lithostitched": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "lionfishapi": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "littlelogistics": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "lodestone": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "logbegone": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "looot": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "lootjs": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "lootr": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "l2harvester": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "l2harvester05x": {
+      "primary_role": "integration",
+      "support_state": "not_applicable"
+    },
+    "l2harvester60x": {
+      "primary_role": "integration",
+      "support_state": "not_applicable"
+    },
+    "l2library": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "lostcities": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "malum": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "mantle": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "markdown_manual": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "melody": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "midnightlib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "minecraft": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_mining_lamp": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "mixinsquared": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "modernfix": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "modonomicon": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "moonlight": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "moreartifacts": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "morejs": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "morered": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "natures_spirit": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "naturescompass": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "nitrogen_internals": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "nomobfarm": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "oc2r": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_oc2r_create_controls": {
+      "primary_role": "edge_provider",
+      "support_state": "not_applicable"
+    },
+    "better_oc2r_wireless_messaging": {
+      "primary_role": "edge_provider",
+      "support_state": "not_applicable"
+    },
+    "occultism": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "octolib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "particular": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "patchouli": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "better_pillager_campaigns": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "pingwheel": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "placebo": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "better_player_traces": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "playeranimator": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "pneumaticcraft": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "polylib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "polymorph": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "ponder": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "powergrid": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "prettypipes": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_craftable_bouquets": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "projectvibrantjourneys": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "protection_pixel": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "puzzlesaccessapi": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "puzzleslib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "quark": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_rail_beetle": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_ratlantis_logistics": {
+      "primary_role": "edge_provider",
+      "support_state": "not_applicable"
+    },
+    "rats": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "rbp": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "better_ore_geology": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_block_placement_preview": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "realisticphysics": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "better_regolith_farming": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "rehooked": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_rehooked_grappling": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "relics": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "resourcefulconfig": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "resourcefullib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "rhino": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "rotavision": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "better_rpg_progression": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "better_runtime_diagnostics": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "satako": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "savage_and_ravage": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "searchables": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "sedna": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "sereneseasons": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "better_settlement_roads": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "simplebedrockmodel": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "simpledaylengthextender": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "sleepingoverhaul": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "smartbrainlib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "sodiumdynamiclights": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "sodiumoptionsapi": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "solcarrot": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "sophisticatedbackpacks": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "sophisticatedcore": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "sophisticatedstorage": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "spark": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "spectrelib": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "staaaaaaaaaaaack": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "starcatcher": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "structure_generation_improver": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "structurify": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "supplementaries": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "better_survival_physiology": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "t_and_t": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "tacz": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "tacz_turrets": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "takesapillage": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "tconjei": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "tconstruct": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "tectonic": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "terrablender": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "thalassophobia": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "the_bumblezone": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "the_deep_void": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "the_flesh_that_hates": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "thirst": {
+      "primary_role": "gameplay_system",
+      "support_state": "full"
+    },
+    "tinker_rapier": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "tinkers_advanced": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "tinkers_battle_spades": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "better_tinkers_loot_affixes": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "tinkers_katanas": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "tinkers_things": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "tinkersweaponry": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "tinymultiblocklib": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "tntutils": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "tomeofblood": {
+      "primary_role": "edge_provider",
+      "support_state": "full"
+    },
+    "tponder": {
+      "primary_role": "presentation",
+      "support_state": "not_applicable"
+    },
+    "trackwork": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "tradingpost": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "twilightforest": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "ubesdelight": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "unearthed": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "unloaded_activity": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "untamedwilds": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "upgrade_aquatic": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "useitemonblockevent": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "valhelsia_core": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "valkyrienskies": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "better_village_fortifications": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "vs_clockwork": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "vs_eureka": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "wares": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "better_drinking_water": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "weather2": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "better_world_management": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
+    "xlpackets": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "yet_another_config_lib_v3": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "yungsapi": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "zeta": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    }
+  },
+  "authority_domains": {
+    "technology.conventional_tools": "tconstruct",
+    "technology.stationary_electrical_generation": "powergrid",
+    "technology.petroleum_splitting": "pneumaticcraft",
+    "materials.mahogany": "natures_spirit",
+    "survival.hand_fishing": "starcatcher",
+    "dimensions.ratlantis_entry": "better_dimension_fonts",
+    "world.dragon_ecology": "iceandfire"
+  },
+  "families": [
+    {
+      "id": "stationary_electrical_generators",
+      "selectors": [
+        {
+          "namespace": "pneumaticcraft",
+          "id_prefix": "pneumatic_dynamo"
+        },
+        {
+          "namespace": "complicated_bees",
+          "id_prefix": "furnace_generator"
+        },
+        {
+          "namespace": "complicated_bees",
+          "id_prefix": "honey_generator"
+        },
+        {
+          "exact_id": "weather2:wind_turbine"
+        },
+        {
+          "exact_id": "ae2:vibration_chamber"
+        },
+        {
+          "exact_id": "ae2:crystal_resonance_generator"
+        },
+        {
+          "namespace": "arseng",
+          "id_prefix": "source_"
+        }
+      ],
+      "disposition": "cut",
+      "authority": "powergrid"
+    },
+    {
+      "id": "conventional_tools",
+      "selectors": [
+        {
+          "exact_id": "minecraft:wooden_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:wooden_axe"
+        },
+        {
+          "exact_id": "minecraft:wooden_shovel"
+        },
+        {
+          "exact_id": "minecraft:wooden_hoe"
+        },
+        {
+          "exact_id": "minecraft:wooden_sword"
+        },
+        {
+          "exact_id": "minecraft:stone_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:stone_axe"
+        },
+        {
+          "exact_id": "minecraft:stone_shovel"
+        },
+        {
+          "exact_id": "minecraft:stone_hoe"
+        },
+        {
+          "exact_id": "minecraft:stone_sword"
+        },
+        {
+          "exact_id": "minecraft:iron_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:iron_axe"
+        },
+        {
+          "exact_id": "minecraft:iron_shovel"
+        },
+        {
+          "exact_id": "minecraft:iron_hoe"
+        },
+        {
+          "exact_id": "minecraft:iron_sword"
+        },
+        {
+          "exact_id": "minecraft:golden_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:golden_axe"
+        },
+        {
+          "exact_id": "minecraft:golden_shovel"
+        },
+        {
+          "exact_id": "minecraft:golden_hoe"
+        },
+        {
+          "exact_id": "minecraft:golden_sword"
+        },
+        {
+          "exact_id": "minecraft:diamond_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:diamond_axe"
+        },
+        {
+          "exact_id": "minecraft:diamond_shovel"
+        },
+        {
+          "exact_id": "minecraft:diamond_hoe"
+        },
+        {
+          "exact_id": "minecraft:diamond_sword"
+        },
+        {
+          "exact_id": "minecraft:netherite_pickaxe"
+        },
+        {
+          "exact_id": "minecraft:netherite_axe"
+        },
+        {
+          "exact_id": "minecraft:netherite_shovel"
+        },
+        {
+          "exact_id": "minecraft:netherite_hoe"
+        },
+        {
+          "exact_id": "minecraft:netherite_sword"
+        },
+        {
+          "exact_id": "ae2:certus_quartz_pickaxe"
+        },
+        {
+          "exact_id": "ae2:certus_quartz_axe"
+        },
+        {
+          "exact_id": "ae2:certus_quartz_shovel"
+        },
+        {
+          "exact_id": "ae2:certus_quartz_hoe"
+        },
+        {
+          "exact_id": "ae2:certus_quartz_sword"
+        },
+        {
+          "exact_id": "ae2:fluix_pickaxe"
+        },
+        {
+          "exact_id": "ae2:fluix_axe"
+        },
+        {
+          "exact_id": "ae2:fluix_shovel"
+        },
+        {
+          "exact_id": "ae2:fluix_hoe"
+        },
+        {
+          "exact_id": "ae2:fluix_sword"
+        },
+        {
+          "exact_id": "ae2:nether_quartz_pickaxe"
+        },
+        {
+          "exact_id": "ae2:nether_quartz_axe"
+        },
+        {
+          "exact_id": "ae2:nether_quartz_shovel"
+        },
+        {
+          "exact_id": "ae2:nether_quartz_hoe"
+        },
+        {
+          "exact_id": "ae2:nether_quartz_sword"
+        },
+        {
+          "exact_id": "aether:gravitite_pickaxe"
+        },
+        {
+          "exact_id": "aether:gravitite_axe"
+        },
+        {
+          "exact_id": "aether:gravitite_shovel"
+        },
+        {
+          "exact_id": "aether:gravitite_hoe"
+        },
+        {
+          "exact_id": "aether:gravitite_sword"
+        },
+        {
+          "exact_id": "aether:holystone_pickaxe"
+        },
+        {
+          "exact_id": "aether:holystone_axe"
+        },
+        {
+          "exact_id": "aether:holystone_shovel"
+        },
+        {
+          "exact_id": "aether:holystone_hoe"
+        },
+        {
+          "exact_id": "aether:holystone_sword"
+        },
+        {
+          "exact_id": "aether:skyroot_pickaxe"
+        },
+        {
+          "exact_id": "aether:skyroot_axe"
+        },
+        {
+          "exact_id": "aether:skyroot_shovel"
+        },
+        {
+          "exact_id": "aether:skyroot_hoe"
+        },
+        {
+          "exact_id": "aether:skyroot_sword"
+        },
+        {
+          "exact_id": "aether:zanite_pickaxe"
+        },
+        {
+          "exact_id": "aether:zanite_axe"
+        },
+        {
+          "exact_id": "aether:zanite_shovel"
+        },
+        {
+          "exact_id": "aether:zanite_hoe"
+        },
+        {
+          "exact_id": "aether:zanite_sword"
+        },
+        {
+          "exact_id": "everythingcopper:copper_pickaxe"
+        },
+        {
+          "exact_id": "everythingcopper:copper_axe"
+        },
+        {
+          "exact_id": "everythingcopper:copper_shovel"
+        },
+        {
+          "exact_id": "everythingcopper:copper_hoe"
+        },
+        {
+          "exact_id": "everythingcopper:copper_sword"
+        },
+        {
+          "exact_id": "goety:dark_pickaxe"
+        },
+        {
+          "exact_id": "goety:dark_axe"
+        },
+        {
+          "exact_id": "goety:dark_shovel"
+        },
+        {
+          "exact_id": "goety:dark_hoe"
+        },
+        {
+          "exact_id": "goety:dark_sword"
+        },
+        {
+          "exact_id": "malum:soul_stained_steel_pickaxe"
+        },
+        {
+          "exact_id": "malum:soul_stained_steel_axe"
+        },
+        {
+          "exact_id": "malum:soul_stained_steel_shovel"
+        },
+        {
+          "exact_id": "malum:soul_stained_steel_hoe"
+        },
+        {
+          "exact_id": "malum:soul_stained_steel_sword"
+        },
+        {
+          "exact_id": "ars_nouveau:enchanters_sword"
+        },
+        {
+          "exact_id": "create:cardboard_sword"
+        },
+        {
+          "exact_id": "farmersdelight:diamond_knife"
+        },
+        {
+          "exact_id": "farmersdelight:flint_knife"
+        },
+        {
+          "exact_id": "farmersdelight:golden_knife"
+        },
+        {
+          "exact_id": "farmersdelight:iron_knife"
+        },
+        {
+          "exact_id": "farmersdelight:netherite_knife"
+        },
+        {
+          "exact_id": "goety:diamond_ice_axe"
+        },
+        {
+          "exact_id": "goety:eerie_pickaxe"
+        },
+        {
+          "exact_id": "goety:graverobber_shovel"
+        },
+        {
+          "exact_id": "goety:iron_ice_axe"
+        },
+        {
+          "exact_id": "goety:rampaging_axe"
+        },
+        {
+          "exact_id": "notreepunching:diamond_knife"
+        },
+        {
+          "exact_id": "notreepunching:diamond_mattock"
+        },
+        {
+          "exact_id": "notreepunching:diamond_saw"
+        },
+        {
+          "exact_id": "notreepunching:flint_axe"
+        },
+        {
+          "exact_id": "notreepunching:flint_hoe"
+        },
+        {
+          "exact_id": "notreepunching:flint_knife"
+        },
+        {
+          "exact_id": "notreepunching:flint_pickaxe"
+        },
+        {
+          "exact_id": "notreepunching:flint_shovel"
+        },
+        {
+          "exact_id": "notreepunching:gold_knife"
+        },
+        {
+          "exact_id": "notreepunching:gold_mattock"
+        },
+        {
+          "exact_id": "notreepunching:gold_saw"
+        },
+        {
+          "exact_id": "notreepunching:iron_knife"
+        },
+        {
+          "exact_id": "notreepunching:iron_mattock"
+        },
+        {
+          "exact_id": "notreepunching:iron_saw"
+        },
+        {
+          "exact_id": "notreepunching:netherite_knife"
+        },
+        {
+          "exact_id": "notreepunching:netherite_mattock"
+        },
+        {
+          "exact_id": "notreepunching:netherite_saw"
+        },
+        {
+          "exact_id": "occultism:iesnium_pickaxe"
+        },
+        {
+          "exact_id": "occultism:infused_pickaxe"
+        },
+        {
+          "exact_id": "the_flesh_that_hates:flesh_axe"
+        },
+        {
+          "exact_id": "the_flesh_that_hates:flesh_sword"
+        },
+        {
+          "exact_id": "twilightforest:fiery_pickaxe"
+        },
+        {
+          "exact_id": "twilightforest:fiery_sword"
+        },
+        {
+          "exact_id": "twilightforest:giant_pickaxe"
+        },
+        {
+          "exact_id": "twilightforest:giant_sword"
+        },
+        {
+          "exact_id": "twilightforest:ironwood_axe"
+        },
+        {
+          "exact_id": "twilightforest:ironwood_hoe"
+        },
+        {
+          "exact_id": "twilightforest:ironwood_pickaxe"
+        },
+        {
+          "exact_id": "twilightforest:ironwood_shovel"
+        },
+        {
+          "exact_id": "twilightforest:ironwood_sword"
+        },
+        {
+          "exact_id": "twilightforest:knightmetal_axe"
+        },
+        {
+          "exact_id": "twilightforest:knightmetal_pickaxe"
+        },
+        {
+          "exact_id": "twilightforest:knightmetal_sword"
+        },
+        {
+          "exact_id": "twilightforest:steeleaf_axe"
+        },
+        {
+          "exact_id": "twilightforest:steeleaf_hoe"
+        },
+        {
+          "exact_id": "twilightforest:steeleaf_pickaxe"
+        },
+        {
+          "exact_id": "twilightforest:steeleaf_shovel"
+        },
+        {
+          "exact_id": "twilightforest:steeleaf_sword"
+        },
+        {
+          "exact_id": "iceandfire:copper_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:copper_axe"
+        },
+        {
+          "exact_id": "iceandfire:copper_shovel"
+        },
+        {
+          "exact_id": "iceandfire:copper_hoe"
+        },
+        {
+          "exact_id": "iceandfire:copper_sword"
+        },
+        {
+          "exact_id": "iceandfire:silver_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:silver_axe"
+        },
+        {
+          "exact_id": "iceandfire:silver_shovel"
+        },
+        {
+          "exact_id": "iceandfire:silver_hoe"
+        },
+        {
+          "exact_id": "iceandfire:silver_sword"
+        },
+        {
+          "exact_id": "iceandfire:dragonbone_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:dragonbone_axe"
+        },
+        {
+          "exact_id": "iceandfire:dragonbone_shovel"
+        },
+        {
+          "exact_id": "iceandfire:dragonbone_hoe"
+        },
+        {
+          "exact_id": "iceandfire:dragonbone_sword"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_desert_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_desert_axe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_desert_shovel"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_desert_hoe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_desert_sword"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_jungle_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_jungle_axe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_jungle_shovel"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_jungle_hoe"
+        },
+        {
+          "exact_id": "iceandfire:myrmex_jungle_sword"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_fire_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_fire_axe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_fire_shovel"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_fire_hoe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_fire_sword"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_ice_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_ice_axe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_ice_shovel"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_ice_hoe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_ice_sword"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_lightning_pickaxe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_lightning_axe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_lightning_shovel"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_lightning_hoe"
+        },
+        {
+          "exact_id": "iceandfire:dragonsteel_lightning_sword"
+        }
+      ],
+      "disposition": "authority",
+      "authority": "tconstruct"
+    },
+    {
+      "id": "hexerei_mahogany",
+      "selectors": [
+        {
+          "exact_id": "hexerei:mahogany_sapling"
+        },
+        {
+          "exact_id": "hexerei:mahogany_leaves"
+        },
+        {
+          "exact_id": "hexerei:mahogany_log"
+        },
+        {
+          "exact_id": "hexerei:mahogany_wood"
+        },
+        {
+          "exact_id": "hexerei:stripped_mahogany_log"
+        },
+        {
+          "exact_id": "hexerei:stripped_mahogany_wood"
+        },
+        {
+          "exact_id": "hexerei:mahogany_planks"
+        },
+        {
+          "exact_id": "hexerei:mahogany_slab"
+        },
+        {
+          "exact_id": "hexerei:mahogany_stairs"
+        },
+        {
+          "exact_id": "hexerei:mahogany_button"
+        },
+        {
+          "exact_id": "hexerei:mahogany_door"
+        },
+        {
+          "exact_id": "hexerei:mahogany_fence"
+        },
+        {
+          "exact_id": "hexerei:mahogany_fence_gate"
+        },
+        {
+          "exact_id": "hexerei:mahogany_pressure_plate"
+        },
+        {
+          "exact_id": "hexerei:mahogany_sign"
+        },
+        {
+          "exact_id": "hexerei:mahogany_hanging_sign"
+        },
+        {
+          "exact_id": "hexerei:mahogany_trapdoor"
+        },
+        {
+          "exact_id": "hexerei:mahogany_boat"
+        },
+        {
+          "exact_id": "hexerei:mahogany_chest_boat"
+        }
+      ],
+      "disposition": "canonical_duplicate",
+      "authority": "natures_spirit"
+    },
+    {
+      "id": "non_starcatcher_rods",
+      "selectors": [
+        {
+          "exact_id": "minecraft:fishing_rod"
+        },
+        {
+          "exact_id": "tconstruct:fishing_rod"
+        }
+      ],
+      "disposition": "cut",
+      "authority": "starcatcher"
+    },
+    {
+      "id": "creatediesel_petroleum_extraction",
+      "selectors": [
+        {
+          "namespace": "createdieselgenerators",
+          "id_prefix": "pumpjack"
+        },
+        {
+          "exact_id": "createdieselgenerators:oil_scanner"
+        },
+        {
+          "exact_id": "createdieselgenerators:distillation_controller"
+        }
+      ],
+      "disposition": "cut",
+      "authority": "pneumaticcraft"
+    },
+    {
+      "id": "stored_coordinate_travel",
+      "selectors": [
+        {
+          "namespace": "ars_nouveau",
+          "id_prefix": "warp_"
+        },
+        {
+          "exact_id": "ars_nouveau:portal"
+        },
+        {
+          "exact_id": "ars_nouveau:stable_warp_scroll"
+        },
+        {
+          "exact_id": "goety:recall_focus"
+        },
+        {
+          "exact_id": "goety:call_focus"
+        },
+        {
+          "exact_id": "goety:end_walk_focus"
+        },
+        {
+          "exact_id": "moreartifacts:recall_potion"
+        },
+        {
+          "exact_id": "relics:spatial_sign"
+        }
+      ],
+      "disposition": "cut"
+    },
+    {
+      "id": "vanilla_dragon_boss",
+      "selectors": [
+        {
+          "exact_id": "minecraft:dragon_head"
+        },
+        {
+          "exact_id": "minecraft:dragon_egg"
+        },
+        {
+          "exact_id": "minecraft:dragon_breath"
+        }
+      ],
+      "disposition": "cut",
+      "authority": "iceandfire"
+    },
+    {
+      "id": "technical_and_creative",
+      "selectors": [
+        {
+          "id_prefix": "creative_"
+        },
+        {
+          "id_prefix": "debug_"
+        }
+      ],
+      "disposition": "creative_or_technical"
+    }
+  ],
+  "capability_roots": [
+    {
+      "capability": "create.steam",
+      "required_proofs": [
+        "kubejs:brass_machine_block",
+        "create:steam_engine"
+      ]
+    },
+    {
+      "capability": "powergrid.generation",
+      "required_proofs": [
+        "kubejs:electrical_machine_block",
+        "powergrid:generator_housing"
+      ]
+    },
+    {
+      "capability": "ratlantis.logistics",
+      "required_proofs": [
+        "rats:gem_of_ratlantis",
+        "better_ratlantis_logistics:courier_lattice"
+      ]
+    },
+    {
+      "capability": "ae2.network",
+      "required_proofs": [
+        "powergrid:generator_housing",
+        "better_ratlantis_logistics:arcane_logistics_core",
+        "oc2r:computer",
+        "ae2:sky_stone_block",
+        "kubejs:impossible_support_matrix",
+        "ae2:energy_acceptor"
+      ]
+    },
+    {
+      "capability": "occultism.parent",
+      "required_proofs": [
+        "aether:ambrosium_shard",
+        "minecraft:blaze_powder",
+        "the_bumblezone:honey_crystal_shards",
+        "rats:gem_of_ratlantis"
+      ]
+    },
+    {
+      "capability": "impossible_matter.source",
+      "required_proofs": [
+        "better_magic_chunk_anchors:source_chunk_anchor",
+        "source:100000"
+      ]
+    }
+  ],
+  "known_debt": [
+    {
+      "id": "vanilla_source_water_regeneration",
+      "blocking": false,
+      "status": "deferred"
+    },
+    {
+      "id": "vanilla_source_lava_regeneration",
+      "blocking": false,
+      "status": "deferred"
+    },
+    {
+      "id": "renewable_stone_loops",
+      "blocking": false,
+      "status": "deferred"
+    },
+    {
+      "id": "governed_family_non_acquisition_consumer_backlog",
+      "blocking": false,
+      "status": "tracked"
+    }
+  ]
+}

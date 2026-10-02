@@ -19,5 +19,3 @@
   - `NO_DESTRUCTION_GLASSWORKS`: Like NO_DESTRUCTION, but glass still shatters.
 
 **Note**: Invalid JSON (extra commas, comments) will cause the mod to use defaults. Restart the game/server for changes to take effect.
-
-https://www.youtube.com/watch?v=dQw4w9WgXcQ

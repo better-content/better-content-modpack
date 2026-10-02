@@ -3,23 +3,77 @@
   "values": [
     "minecraft:powder_snow",
     "minecraft:powder_snow_cauldron",
-    { "id": "cold_sweat:slush", "required": false },
-    { "id": "aether:cold_aercloud", "required": false },
-    { "id": "aether:frosted_ice", "required": false },
-    { "id": "aether:icestone", "required": false },
-    { "id": "aether:icestone_slab", "required": false },
-    { "id": "aether:icestone_stairs", "required": false },
-    { "id": "aether:icestone_wall", "required": false },
-    { "id": "brewinandchewin:ice_crate", "required": false },
-    { "id": "immersive_weathering:thin_ice", "required": false },
-    { "id": "pneumaticcraft:fake_ice", "required": false },
-    { "id": "everythingcopper:copper_powder_snow_cauldron", "required": false },
-    { "id": "everythingcopper:exposed_copper_powder_snow_cauldron", "required": false },
-    { "id": "everythingcopper:weathered_copper_powder_snow_cauldron", "required": false },
-    { "id": "everythingcopper:oxidized_copper_powder_snow_cauldron", "required": false },
-    { "id": "everythingcopper:waxed_copper_powder_snow_cauldron", "required": false },
-    { "id": "everythingcopper:waxed_exposed_copper_powder_snow_cauldron", "required": false },
-    { "id": "everythingcopper:waxed_weathered_copper_powder_snow_cauldron", "required": false },
-    { "id": "everythingcopper:waxed_oxidized_copper_powder_snow_cauldron", "required": false }
+    {
+      "id": "cold_sweat:slush",
+      "required": false
+    },
+    {
+      "id": "aether:cold_aercloud",
+      "required": false
+    },
+    {
+      "id": "aether:frosted_ice",
+      "required": false
+    },
+    {
+      "id": "aether:icestone",
+      "required": false
+    },
+    {
+      "id": "aether:icestone_slab",
+      "required": false
+    },
+    {
+      "id": "aether:icestone_stairs",
+      "required": false
+    },
+    {
+      "id": "aether:icestone_wall",
+      "required": false
+    },
+    {
+      "id": "brewinandchewin:ice_crate",
+      "required": false
+    },
+    {
+      "id": "immersive_weathering:thin_ice",
+      "required": false
+    },
+    {
+      "id": "pneumaticcraft:fake_ice",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:copper_powder_snow_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:exposed_copper_powder_snow_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:weathered_copper_powder_snow_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:oxidized_copper_powder_snow_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:waxed_copper_powder_snow_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:waxed_exposed_copper_powder_snow_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:waxed_weathered_copper_powder_snow_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:waxed_oxidized_copper_powder_snow_cauldron",
+      "required": false
+    }
   ]
 }

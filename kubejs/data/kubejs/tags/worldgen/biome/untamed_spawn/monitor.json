@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:is_desert",
+    "#forge:is_savanna",
+    "#forge:is_swamp",
+    "#minecraft:is_badlands",
+    "#minecraft:is_jungle",
+    "#minecraft:is_savanna"
+  ]
+}

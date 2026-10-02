@@ -1,0 +1,12 @@
+{
+  "category": "ars_nouveau:rituals",
+  "advancement": "minecraft:end/root",
+  "icon": "ars_nouveau:ritual_warping",
+  "name": "item.ars_nouveau.ritual_warping",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "This travel ritual is disabled in Better Content."
+    }
+  ]
+}

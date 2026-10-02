@@ -7,7 +7,7 @@
   priority: [
     'excavated_variants:geolosys.json5',
     'excavated_variants:minecraft.json5',
-    'excavated_variants:realistic_ores.json5',
+    'excavated_variants:better_ore_geology.json5',
   ],
   // These Malum ores use full/animated textures rather than separable ore
   // overlays. Excavated Variants otherwise substitutes minecraft:blank and

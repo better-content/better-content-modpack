@@ -13,7 +13,7 @@ layout-meta {
 }
 
 menu_background {
-  color = #000000
+  color = #EDE0C1
   instance_identifier = dabbcb57-bf6c-4bcf-8af7-5d418651d363-1783059705023
   background_type = color_fancymenu
 }

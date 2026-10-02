@@ -1,9 +1,8 @@
 // Hexerei manufactures physical Occultism components; Occultism owns ritual
 // activation, spirit fire, bindings, and summoned-servant gameplay.
 //
-// Hexerei is the preparation practice downstream of Font expeditions. Its core
-// apparatus and characteristic reagents therefore retain matter from Nether,
-// Aether, Undergarden, and Otherside runs. Occultism still owns spirit fire,
+// Hexerei is the preparation practice downstream of the Aether, Nether,
+// Bumblezone, and Ratlantis Fonts. Occultism still owns spirit fire,
 // pentacles, named bindings, and the Foliot -> Djinni -> Afrit -> Marid ladder;
 // Hexerei owns only the physical preparation of each impure chalk.
 
@@ -71,15 +70,15 @@ ServerEvents.recipes(function (event) {
         'aether:zanite_gemstone'
     ], { moonRequirement: 'full_moon' })
 
-    bcFontCauldron(event, 'infused_fabric_undergarden', 'hexerei:infused_fabric', 2, 'minecraft:water', [
+    bcFontCauldron(event, 'infused_fabric_overworld', 'hexerei:infused_fabric', 2, 'minecraft:water', [
         'minecraft:black_dye',
         'minecraft:leather',
         'minecraft:string',
-        'undergarden:cloggrum_ingot',
+        'complicated_bees:beeswax',
         'minecraft:leather',
         'minecraft:string',
-        'undergarden:cloggrum_ingot',
-        'undergarden:regalium_crystal'
+        'complicated_bees:beeswax',
+        'minecraft:black_dye'
     ], {})
 
     bcFontCauldron(event, 'blood_sigil_nether', 'hexerei:blood_sigil', 1, 'minecraft:lava', [
@@ -93,54 +92,54 @@ ServerEvents.recipes(function (event) {
         'minecraft:nether_brick'
     ], { fluidLevelsConsumed: 333, heatRequirement: 'heated' })
 
-    bcFontCauldron(event, 'crystal_ball_otherside', 'hexerei:crystal_ball', 1, 'minecraft:lava', [
+    bcFontCauldron(event, 'crystal_ball_overworld', 'hexerei:crystal_ball', 1, 'minecraft:lava', [
         'minecraft:glass',
-        'deeperdarker:gloomslate',
+        'better_ore_geology:black_shale',
         'minecraft:glass',
-        'deeperdarker:soul_dust',
+        'minecraft:amethyst_shard',
         'hexerei:moon_dust',
-        'deeperdarker:soul_crystal',
+        'minecraft:sculk_catalyst',
         'minecraft:glass',
-        'deeperdarker:gloomslate'
+        'better_ore_geology:black_shale'
     ], { heatRequirement: 'heated' })
 
-    // White remains the universal base. Gold remains the binding/possession
-    // adjunct; purple retains the End-stone route reached through Foliot work;
-    // red still requires Afrit essence. Spirit fire continues to purify all four.
+    // Every impure chalk preparation proves all four expedition Fonts equally:
+    // Aether ambrosium, Nether blaze powder, Bumblezone honey crystal, and a
+    // Ratlantis gem. There is no Overworld or End substitute.
     bcFontCauldron(event, 'occultism_chalk_white_impure', 'occultism:chalk_white_impure', 1, 'minecraft:water', [
         'occultism:burnt_otherstone',
         'occultism:otherworld_ashes',
-        'deeperdarker:soul_dust',
-        'hexerei:moon_dust',
-        'occultism:burnt_otherstone',
-        'occultism:otherworld_ashes'
+        'aether:ambrosium_shard',
+        'minecraft:blaze_powder',
+        'the_bumblezone:honey_crystal_shards',
+        'rats:gem_of_ratlantis'
     ], { heatRequirement: 'heated' })
 
     bcFontCauldron(event, 'occultism_chalk_gold_impure', 'occultism:chalk_gold_impure', 1, 'minecraft:water', [
         'occultism:chalk_white_impure',
         '#forge:dusts/gold',
-        '#forge:dusts/glowstone',
         'aether:ambrosium_shard',
-        'aether:ambrosium_shard',
-        'hexerei:moon_dust'
+        'minecraft:blaze_powder',
+        'the_bumblezone:honey_crystal_shards',
+        'rats:gem_of_ratlantis'
     ], { heatRequirement: 'heated' })
 
     bcFontCauldron(event, 'occultism_chalk_purple_impure', 'occultism:chalk_purple_impure', 1, 'minecraft:water', [
         'occultism:chalk_white_impure',
-        '#forge:dusts/end_stone',
         '#forge:dusts/obsidian',
-        '#forge:dusts/obsidian',
-        'undergarden:regalium_crystal',
-        'undergarden:regalium_crystal'
+        'aether:ambrosium_shard',
+        'minecraft:blaze_powder',
+        'the_bumblezone:honey_crystal_shards',
+        'rats:gem_of_ratlantis'
     ], { heatRequirement: 'heated' })
 
     bcFontCauldron(event, 'occultism_chalk_red_impure', 'occultism:chalk_red_impure', 1, 'minecraft:lava', [
         'occultism:chalk_white_impure',
         'occultism:afrit_essence',
+        'aether:ambrosium_shard',
         'minecraft:blaze_powder',
-        'minecraft:magma_cream',
-        'hexerei:blood_sigil',
-        'minecraft:soul_soil'
+        'the_bumblezone:honey_crystal_shards',
+        'rats:gem_of_ratlantis'
     ], { fluidLevelsConsumed: 333, heatRequirement: 'heated' })
 
     // These are physical components/tools. Their ritual-derived ingredients
@@ -152,7 +151,7 @@ ServerEvents.recipes(function (event) {
     ].forEach(function (output) { event.remove({ output: output }) })
     bcFontCauldron(event, 'occultism_spirit_attuned_crystal', 'occultism:spirit_attuned_crystal', 1, 'minecraft:water', [
         'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem',
-        'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem'
+        'occultism:spirit_attuned_gem', 'rats:gem_of_ratlantis'
     ], { heatRequirement: 'heated' })
     bcFontCauldron(event, 'occultism_spirit_attuned_pickaxe_head', 'occultism:spirit_attuned_pickaxe_head', 1, 'minecraft:water', [
         'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem'
@@ -161,15 +160,15 @@ ServerEvents.recipes(function (event) {
         'occultism:awakened_feather', 'occultism:purified_ink', 'occultism:taboo_book'
     ], { heatRequirement: 'heated' })
 
-    // Keep the storage controller and remote progression used by the live
-    // questline. Only the portable satchel remains disabled.
-    event.remove({ output: 'occultism:satchel' })
-    event.remove({ id: 'occultism:ritual/craft_satchel' })
-
-    // The disabled miner family cannot bypass material production, but the
-    // remaining high Occultism ritual still stays on its own Font spine.
-    event.replaceInput({ id: 'occultism:ritual/craft_dimensional_mineshaft' },
-        'occultism:spirit_attuned_crystal', 'hexerei:blood_sigil')
-    event.replaceInput({ id: 'occultism:ritual/craft_dimensional_mineshaft' },
-        'minecraft:ender_eye', 'deeperdarker:sculk_bone')
+    // Infinite-dimensional storage, remote access, stable wormholes, portable
+    // storage, and miners are outside the finite-space/matter contract. The
+    // dimensional matrix remains available as a finite ritual component.
+    ;[
+        'occultism:satchel', 'occultism:stable_wormhole',
+        'occultism:storage_controller', 'occultism:storage_controller_base',
+        'occultism:storage_remote', 'occultism:storage_remote_inert',
+        'occultism:storage_stabilizer_tier1', 'occultism:storage_stabilizer_tier2',
+        'occultism:storage_stabilizer_tier3', 'occultism:storage_stabilizer_tier4',
+        'occultism:wormhole_frame', 'occultism:dimensional_mineshaft'
+    ].forEach(function (output) { event.remove({ output: output }) })
 })

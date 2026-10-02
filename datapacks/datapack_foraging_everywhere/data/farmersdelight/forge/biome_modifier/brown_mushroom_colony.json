@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#kubejs:undergarden_forage/bog",
-  "features": "farmersdelight:patch_brown_mushroom_colony",
-  "step": "vegetal_decoration"
-}

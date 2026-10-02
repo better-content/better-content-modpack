@@ -1,0 +1,8 @@
+# Safe temperate default sites shared with first-generation onboarding.
+# Operators may extend this list after checking live terrain and final feet positions.
+minecraft:plains
+minecraft:sunflower_plains
+minecraft:meadow
+minecraft:forest
+minecraft:flower_forest
+minecraft:birch_forest

@@ -3,7 +3,7 @@
 #	Namespaces:   '<minecraft>'
 #	Tags:         '#forge:stone'
 #	IDs:          'minecraft:stone'
-Blocks = ["dimension_drink:dimensional_font"]
+Blocks = ["better_dimension_fonts:dimensional_font"]
 
 [Physics]
 	#The maximum weight the block(s) can support both horizontally and vertically.

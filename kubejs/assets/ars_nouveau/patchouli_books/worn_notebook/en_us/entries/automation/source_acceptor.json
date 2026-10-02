@@ -1,0 +1,12 @@
+{
+  "category": "ars_nouveau:automation",
+  "advancement": "minecraft:end/root",
+  "icon": "arseng:source_acceptor",
+  "name": "block.arseng.source_acceptor",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Ars Energistique Source conversion is disabled. Use PowerGrid to generate electricity."
+    }
+  ]
+}

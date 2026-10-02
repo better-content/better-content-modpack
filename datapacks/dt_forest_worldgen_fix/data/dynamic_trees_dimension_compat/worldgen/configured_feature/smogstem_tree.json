@@ -1,7 +1,0 @@
-{
-  "type": "dynamictrees:tree",
-  "config": {
-    "species": "dynamic_trees_dimension_compat:smogstem",
-    "radius": 3
-  }
-}

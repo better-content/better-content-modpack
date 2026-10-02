@@ -1,0 +1,51 @@
+{
+  "materials": [
+    {
+      "item": {
+        "tag": "minecraft:planks"
+      },
+      "count": 12
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/copper"
+      },
+      "count": 128
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 128
+    },
+    {
+      "item": {
+        "tag": "forge:gems/lapis"
+      },
+      "count": 32
+    },
+    {
+      "item": {
+        "tag": "forge:gems/diamond"
+      },
+      "count": 8
+    },
+    {
+      "item": {
+        "tag": "forge:gems/quartz"
+      },
+      "count": 32
+    },
+    {
+      "item": {
+        "item": "kubejs:electrical_instrumentation_module"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "gun",
+    "id": "immersive_armorer:dual_barrel_cannon"
+  },
+  "type": "tacz:gun_smith_table_crafting"
+}

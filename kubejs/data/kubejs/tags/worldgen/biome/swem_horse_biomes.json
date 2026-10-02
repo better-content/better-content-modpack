@@ -59,10 +59,6 @@
     "natures_spirit:boreal_taiga",
     "natures_spirit:snowy_fir_forest",
     "natures_spirit:snowy_redwood_forest",
-    "natures_spirit:tundra",
-    "undergarden:dense_forest",
-    "undergarden:gronglegrowth",
-    "undergarden:smogstem_forest",
-    "undergarden:wigglewood_forest"
+    "natures_spirit:tundra"
   ]
 }

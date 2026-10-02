@@ -1,0 +1,37 @@
+{
+  "name": "Minigun Ammo",
+  "icon": "pneumaticcraft:gun_ammo",
+  "category": "pneumaticcraft:tools",
+  "advancement": "pneumaticcraft:minigun",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Gun Ammo is used by the $(l:tools/minigun)Minigun/$.$(p)Ammo must be loaded into the Minigun's magazine. Cartridge size and special effects vary by ammunition type."
+    },
+    {
+      "type": "spotlight",
+      "item": "pneumaticcraft:gun_ammo",
+      "text": "Plain $(item)Gun Ammo/$ has a large cartridge of 1000 rounds. Potion-tipped ammunition is disabled in Better Content."
+    },
+    {
+      "type": "crafting",
+      "recipe": "pneumaticcraft:gun_ammo",
+      "recipe2": "pneumaticcraft:gun_ammo_incendiary"
+    },
+    {
+      "type": "crafting",
+      "recipe": "pneumaticcraft:gun_ammo_weighted",
+      "recipe2": "pneumaticcraft:gun_ammo_ap"
+    },
+    {
+      "type": "crafting",
+      "recipe": "pneumaticcraft:gun_ammo_explosive",
+      "recipe2": "pneumaticcraft:gun_ammo_freezing"
+    },
+    {
+      "type": "text",
+      "title": "Potion-Tipped Ammo",
+      "text": "This recipe is disabled in Better Content."
+    }
+  ]
+}

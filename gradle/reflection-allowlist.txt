@@ -1,0 +1,8 @@
+# Reflection is permitted only in exact diagnostic adapters and their direct tests.
+# Format: repository<TAB>repository-relative source path
+better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnostics/ReflectiveFabricBiomeModifierAdapter.java
+better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnostics/ReflectiveEmiReadinessAdapter.java
+better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnostics/ReflectivePneumaticRecipeAdapter.java
+better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnostics/ReflectiveRecipeFamilyAdapter.java
+better-runtime-diagnostics	src/test/java/com/bettercontent/betterruntimediagnostics/RecipeGraphExporterTest.java
+better-arena-trials	src/main/java/com/bettercontent/betterarenatrials/server/ArenaTraceBridge.java

@@ -3,13 +3,29 @@
   "values": [
     "minecraft:snow",
     "minecraft:snow_block",
-    { "id": "#goety:snow_bricks", "required": false },
-    { "id": "#immersive_weathering:snowy", "required": false },
-    { "id": "immersive_weathering:frost", "required": false },
-    { "id": "immersive_weathering:permafrost", "required": false },
-    { "id": "immersive_weathering:grassy_permafrost", "required": false },
-    { "id": "undergarden:frozen_deepturf", "required": false },
-    { "id": "undergarden:frozen_deepturf_block", "required": false },
-    { "id": "projectvibrantjourneys:ice_chunks", "required": false }
+    {
+      "id": "#goety:snow_bricks",
+      "required": false
+    },
+    {
+      "id": "#immersive_weathering:snowy",
+      "required": false
+    },
+    {
+      "id": "immersive_weathering:frost",
+      "required": false
+    },
+    {
+      "id": "immersive_weathering:permafrost",
+      "required": false
+    },
+    {
+      "id": "immersive_weathering:grassy_permafrost",
+      "required": false
+    },
+    {
+      "id": "projectvibrantjourneys:ice_chunks",
+      "required": false
+    }
   ]
 }

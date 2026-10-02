@@ -24,16 +24,16 @@ ServerEvents.recipes(function (event) {
         }).id('kubejs:transport/powered_works/clockwork/andesite_flap_bearing')
 
         event.remove({ id: 'vs_clockwork:crafting/kinetics/brass_propeller_bearing' })
-        event.shaped('vs_clockwork:brass_propeller_bearing', [' P ', 'BMB', ' S '], {
+        event.shaped('vs_clockwork:brass_propeller_bearing', ['LPL', 'BMB', ' S '], {
             P: 'create:precision_mechanism', B: '#forge:plates/brass',
-            M: 'kubejs:brass_machine_block', S: 'create:shaft'
+            M: 'kubejs:brass_machine_block', S: 'create:shaft', L: 'aether:stripped_skyroot_log'
         }).id('kubejs:transport/precision_factory/clockwork/brass_propeller_bearing')
 
         event.remove({ id: 'vs_clockwork:crafting/pneumatics/air_compressor' })
-        event.shaped('vs_clockwork:air_compressor', ['PTP', 'GAG', ' C '], {
-            P: 'pneumaticcraft:pressure_tube', T: 'create:shaft',
+        event.shaped('vs_clockwork:air_compressor', ['PBP', 'GAG', ' C '], {
+            P: 'pneumaticcraft:pressure_tube',
             G: 'pneumaticcraft:compressed_iron_gear', A: 'kubejs:airtight_machine_block',
-            C: 'create:brass_casing'
+            C: 'create:brass_casing', B: 'aether:blue_aercloud'
         }).id('kubejs:transport/thermal_pressure/clockwork/air_compressor')
 
         event.remove({ id: 'vs_clockwork:crafting/physics/gyro' })
@@ -59,5 +59,102 @@ ServerEvents.recipes(function (event) {
             E: 'create:electron_tube', M: 'create:precision_mechanism',
             B: 'kubejs:brass_machine_block', R: 'create:railway_casing'
         }).id('kubejs:transport/precision_factory/trackwork/level_controller')
+    }
+
+    if (Platform.isLoaded('better_rail_beetle')) {
+        event.remove({ id: 'better_rail_beetle:better_rail_beetle' })
+        event.shaped('better_rail_beetle:better_rail_beetle', ['ECE', ' B ', ' M '], {
+            E: 'create:electron_tube', C: 'create:railway_casing',
+            B: 'minecraft:barrel', M: 'minecraft:minecart'
+        }).id('kubejs:transport/precision_factory/better_rail_beetle')
+
+        event.shaped('better_rail_beetle:engine_cradle', ['BIB', 'CMC', 'BIB'], {
+            B: '#forge:plates/brass', I: '#forge:plates/iron',
+            C: 'create:andesite_casing', M: 'create:precision_mechanism'
+        }).id('kubejs:transport/precision_factory/better_rail_beetle/engine_cradle')
+        event.shaped('2x better_rail_beetle:compact_module_frame', ['BCB', 'IPI', 'BCB'], {
+            B: '#forge:plates/brass', C: '#forge:plates/copper',
+            I: '#forge:plates/iron', P: 'create:precision_mechanism'
+        }).id('kubejs:transport/precision_factory/better_rail_beetle/module_frame')
+        event.shaped('better_rail_beetle:dispatch_remote', [' E ', 'CMC', ' B '], {
+            E: 'create:electron_tube', C: '#forge:plates/copper',
+            M: 'better_rail_beetle:compact_module_frame', B: 'minecraft:stone_button'
+        }).id('kubejs:transport/precision_factory/better_rail_beetle/dispatch_remote')
+
+        var railBeetleTierOne = function (output, center, side) {
+            event.shaped('better_rail_beetle:' + output, [' S ', 'CMC', ' S '], {
+                S: side, C: center, M: 'better_rail_beetle:compact_module_frame'
+            }).id('kubejs:transport/precision_factory/better_rail_beetle/' + output)
+        }
+        var railBeetleTierTwo = function (output, prior, side) {
+            event.shaped('better_rail_beetle:' + output, [' S ', 'AMA', ' S '], {
+                S: side, A: 'kubejs:airtight_machine_block', M: 'better_rail_beetle:' + prior
+            }).id('kubejs:transport/thermal_pressure/better_rail_beetle/' + output)
+        }
+        var railBeetleElectricalTierTwo = function (output, prior, side) {
+            event.shaped('better_rail_beetle:' + output, [' S ', 'EME', ' S '], {
+                S: side, E: 'kubejs:electrical_machine_block', M: 'better_rail_beetle:' + prior
+            }).id('kubejs:transport/electrical_control/better_rail_beetle/' + output)
+        }
+
+        railBeetleTierOne('high_speed_governor_1', 'create:speedometer', 'create:cogwheel')
+        railBeetleTierOne('exhaust_recuperator_1', 'create:fluid_tank', '#forge:plates/copper')
+        railBeetleTierOne('brake_manifold_1', 'create:fluid_pipe', '#forge:plates/iron')
+        railBeetleTierOne('adhesion_sanders_1', '#kubejs:ordinary_sand', 'create:chute')
+        railBeetleTierOne('compound_torque_clutch_1', 'create:clutch', 'create:large_cogwheel')
+        railBeetleTierOne('reinforced_drawgear_1', 'create:minecart_coupling', '#forge:plates/iron')
+        railBeetleTierOne('telescopic_survey_array_1', 'minecraft:spyglass', 'create:electron_tube')
+        railBeetleTierOne('dispatch_receiver_1', 'better_rail_beetle:dispatch_remote', 'minecraft:redstone_torch')
+        railBeetleTierOne('trestle_erector_1', 'create:deployer', 'create:mechanical_piston')
+        railBeetleTierOne('caged_searchlight', 'minecraft:lantern', '#forge:plates/copper')
+
+        railBeetleTierTwo('high_speed_governor_2', 'high_speed_governor_1', 'create:precision_mechanism')
+        railBeetleTierTwo('brake_manifold_2', 'brake_manifold_1', 'pneumaticcraft:pressure_tube')
+        railBeetleTierTwo('adhesion_sanders_2', 'adhesion_sanders_1', 'pneumaticcraft:compressed_iron_gear')
+        railBeetleTierTwo('compound_torque_clutch_2', 'compound_torque_clutch_1', 'pneumaticcraft:compressed_iron_gear')
+        railBeetleTierTwo('reinforced_drawgear_2', 'reinforced_drawgear_1', 'create:sturdy_sheet')
+        railBeetleTierTwo('trestle_erector_2', 'trestle_erector_1', 'create:mechanical_crafter')
+        railBeetleElectricalTierTwo('exhaust_recuperator_2', 'exhaust_recuperator_1', 'powergrid:integrated_circuit')
+        railBeetleElectricalTierTwo('telescopic_survey_array_2', 'telescopic_survey_array_1', 'powergrid:integrated_circuit')
+        railBeetleElectricalTierTwo('dispatch_receiver_2', 'dispatch_receiver_1', 'morered:red_alloy_wire')
+
+        if (Platform.isLoaded('create')) {
+            event.shaped('better_rail_beetle:steam_drive', [' W ', 'SCS', ' F '], {
+                W: 'create:fluid_tank', S: 'create:steam_engine',
+                C: 'better_rail_beetle:engine_cradle', F: 'minecraft:blast_furnace'
+            }).id('kubejs:transport/precision_factory/better_rail_beetle/steam_drive')
+        }
+        if (Platform.isLoaded('powergrid')) {
+            event.shaped('better_rail_beetle:flux_traction_motor', [' C ', 'MFM', ' E '], {
+                C: 'powergrid:integrated_circuit', M: 'powergrid:electric_motor',
+                F: 'better_rail_beetle:engine_cradle', E: 'kubejs:electrical_machine_block'
+            }).id('kubejs:transport/electrical_control/better_rail_beetle/flux_traction_motor')
+        }
+        if (Platform.isLoaded('ars_nouveau')) {
+            event.shaped('better_rail_beetle:source_impeller', [' G ', 'GCG', ' A '], {
+                G: 'ars_nouveau:source_gem', C: 'better_rail_beetle:engine_cradle', A: 'ars_nouveau:arcane_core'
+            }).id('kubejs:transport/precision_factory/better_rail_beetle/source_impeller')
+        }
+        if (Platform.isLoaded('bloodmagic')) {
+            event.shaped('better_rail_beetle:lifeforce_ram', [' B ', 'BCB', ' T '], {
+                B: 'bloodmagic:bloodstonebrick', C: 'better_rail_beetle:engine_cradle', T: 'bloodmagic:altar'
+            }).id('kubejs:transport/precision_factory/better_rail_beetle/lifeforce_ram')
+        }
+        if (Platform.isLoaded('pneumaticcraft')) {
+            event.shaped('better_rail_beetle:pneumatic_expansion_motor', [' T ', 'GCG', ' A '], {
+                T: 'pneumaticcraft:pressure_tube', G: 'pneumaticcraft:compressed_iron_gear',
+                C: 'better_rail_beetle:engine_cradle', A: 'kubejs:airtight_machine_block'
+            }).id('kubejs:transport/thermal_pressure/better_rail_beetle/pneumatic_expansion_motor')
+        }
+        if (Platform.isLoaded('goety')) {
+            event.shaped('better_rail_beetle:soul_combustor', [' O ', 'OCO', ' B '], {
+                O: 'goety:ominous_stone', C: 'better_rail_beetle:engine_cradle', B: 'minecraft:soul_campfire'
+            }).id('kubejs:transport/precision_factory/better_rail_beetle/soul_combustor')
+        }
+        if (Platform.isLoaded('malum')) {
+            event.shaped('better_rail_beetle:spirit_warping_engine', [' S ', 'SCS', ' B '], {
+                S: 'malum:block_of_soulstone', C: 'better_rail_beetle:engine_cradle', B: 'malum:spirit_altar'
+            }).id('kubejs:transport/precision_factory/better_rail_beetle/spirit_warping_engine')
+        }
     }
 })

@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "#better_industrial_heat:pipe_radiators",
+    {
+      "id": "powergrid:heating_coil",
+      "required": false
+    },
+    {
+      "id": "powergrid:basin_heater",
+      "required": false
+    }
+  ]
+}

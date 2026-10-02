@@ -1,4 +1,5 @@
 ServerEvents.recipes(function (event) {
+    event.remove({ id: 'minecraft:campfire' })
     event.shaped('minecraft:campfire', [
         ' S ',
         'SCS',

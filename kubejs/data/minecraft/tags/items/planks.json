@@ -3,8 +3,6 @@
   "values": [
     "aether:skyroot_planks",
     "ars_nouveau:archwood_planks",
-    "deeperdarker:bloom_planks",
-    "deeperdarker:echo_planks",
     "fallout_wastelands_:dried_planks",
     "fallout_wastelands_:molder_wood_planks",
     "fallout_wastelands_:red_painted_planks",
@@ -40,9 +38,6 @@
     "twilightforest:mining_planks",
     "twilightforest:time_planks",
     "twilightforest:transformation_planks",
-    "twilightforest:twilight_oak_planks",
-    "undergarden:grongle_planks",
-    "undergarden:smogstem_planks",
-    "undergarden:wigglewood_planks"
+    "twilightforest:twilight_oak_planks"
   ]
 }

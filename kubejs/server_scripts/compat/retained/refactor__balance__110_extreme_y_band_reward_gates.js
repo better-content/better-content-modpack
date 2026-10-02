@@ -18,7 +18,7 @@ var BC_EXTREME = {
     lava: {
         osmium: 'kubejs:soulstone_carbon_matrix',
         iridium: 'kubejs:titanium_thermal_plate',
-        hotstone: 'realistic_ores:crushed_hotstone',
+        hotstone: 'better_ore_geology:crushed_hotstone',
         debris: 'minecraft:netherite_scrap'
     },
     gate: {
@@ -101,17 +101,6 @@ ServerEvents.recipes(function (event) {
         R: BC_EXTREME.deepslate.rhodium,
         B: BC_EXTREME.gate.oc2r
     }, 'kubejs:extreme_y_rewards/deepslate/advanced_magnet_upgrade')
-
-     bcExtremeRecipe(event, 'sophisticatedbackpacks:advanced_tool_swapper_upgrade', [
-        'RTR',
-        'PBP',
-        'RTR'
-    ], {
-        R: BC_EXTREME.deepslate.ruthenium,
-        T: 'sophisticatedbackpacks:tool_swapper_upgrade',
-        P: BC_EXTREME.deepslate.platinum,
-        B: BC_EXTREME.gate.oc2r
-    }, 'kubejs:extreme_y_rewards/deepslate/advanced_tool_swapper_upgrade')
 
      bcExtremeRecipe(event, 'buildinggadgets2:gadget_destruction', [
         'RPR',

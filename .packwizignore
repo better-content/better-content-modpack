@@ -1,7 +1,18 @@
 .codex
+/.gradle/
+/.github/
 docs
 /.kjs-script-summaries.md.kate-swp
 /kjs-script-summaries.md
+/build.gradle.kts
+/build/
+/gradle/
+/gradlew
+/gradlew.bat
+/release.main.kts
+/settings.gradle.kts
+/src/
+/test.main.kts
 .git
 .gitattributes
 .gitignore
@@ -25,7 +36,6 @@ fresh-dist
 logs
 /error.txt
 /libraries/
-/modpack questbook notes
 /pca.sh
 /run.bat
 /run.sh

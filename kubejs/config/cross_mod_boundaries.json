@@ -1,19 +1,6 @@
 {
-  "schema": "bc.cross_mod_boundaries.v1",
-  "description": "Reviewed native-anchor and explicit fallback boundaries that connect mod capability families to the pack's tech, magic, and pressure spines.",
-  "recipe_source": "kubejs/server_scripts/90_policy/20_progression/172_cross_mod_anchor_boundaries.js",
-  "boundaries": [
-    {"anchor":"compressedcreativity:engine_rotor","family":"compressedcreativity","stage":"airtight","surface":"pneumaticcraft:pressure_chamber","recipe_id":"kubejs:cross_mod_anchor/pncr_pressure/compressedcreativity_engine_rotor","proofs":["pneumaticcraft:turbine_blade","pneumaticcraft:advanced_pressure_tube","kubejs:pressure_seal"],"top_n_rank":2,"dominated_outputs":2,"disposition":"native_anchor"},
-    {"anchor":"littlelogistics:spring","family":"littlelogistics","stage":"create_andesite","surface":"create:mixing","recipe_id":"kubejs:cross_mod_anchor/create_mixing/littlelogistics_spring","proofs":["create:andesite_alloy","machine:create:mechanical_mixer"],"top_n_rank":1,"dominated_outputs":9,"disposition":"native_anchor"},
-    {"anchor":"weather2:weather_item","family":"weather2","stage":"power_grid","surface":"pneumaticcraft:pressure_chamber","recipe_id":"kubejs:cross_mod_anchor/pncr_pressure/weather2_weather_item","proofs":["kubejs:electrical_instrumentation_module","powergrid:redstone_relay"],"top_n_rank":1,"dominated_outputs":8,"disposition":"native_anchor"},
-    {"anchor":"thalassophobia:oxygen_tank","family":"thalassophobia","stage":"airtight","surface":"pneumaticcraft:pressure_chamber","recipe_id":"kubejs:cross_mod_anchor/pncr_pressure/thalassophobia_oxygen_tank","proofs":["pneumaticcraft:air_canister","kubejs:pressure_seal"],"top_n_rank":null,"dominated_outputs":1,"disposition":"reviewed_capability_fallback"},
-    {"anchor":"moreartifacts:shadow_dust","family":"moreartifacts","stage":"slate_t3_infused","surface":"bloodmagic:alchemytable","recipe_id":"kubejs:cross_mod_anchor/blood_alchemy/moreartifacts_shadow_dust","proofs":["bloodmagic:infusedslate","deeperdarker:cobbled_sculk_stone"],"top_n_rank":1,"dominated_outputs":18,"disposition":"native_anchor"},
-    {"anchor":"ars_nouveau:blank_thread","family":"ars_nouveau","stage":"slate_t1_blank","surface":"hexerei:mixingcauldron","recipe_id":"kubejs:cross_mod_anchor/hexerei_cauldron/ars_blank_thread","proofs":["bloodmagic:blankslate","hexerei:wax_blend"],"top_n_rank":4,"dominated_outputs":20,"disposition":"native_anchor"},
-    {"anchor":"ars_nouveau:abjuration_essence","family":"ars_nouveau","stage":"slate_t2_reinforced","surface":"ars_nouveau:imbuement","recipe_id":"kubejs:cross_mod_anchor/ars_imbuement/ars_abjuration_essence","proofs":["bloodmagic:reinforcedslate"],"top_n_rank":5,"dominated_outputs":13,"disposition":"native_anchor"},
-    {"anchor":"ars_nouveau:manipulation_essence","family":"ars_nouveau","stage":"slate_t3_infused","surface":"ars_nouveau:imbuement","recipe_id":"kubejs:cross_mod_anchor/ars_imbuement/ars_manipulation_essence","proofs":["bloodmagic:infusedslate"],"top_n_rank":1,"dominated_outputs":17,"disposition":"native_anchor"},
-    {"anchor":"malum:esoteric_spool","family":"malum","stage":"slate_t1_blank","surface":"malum:spirit_infusion","recipe_id":"kubejs:cross_mod_anchor/malum_spirit_infusion/malum_esoteric_spool","proofs":["bloodmagic:blankslate"],"top_n_rank":3,"dominated_outputs":23,"disposition":"native_anchor"},
-    {"anchor":"malum:alchemical_impetus","family":"malum","stage":"slate_t2_reinforced","surface":"malum:spirit_infusion","recipe_id":"kubejs:cross_mod_anchor/malum_spirit_infusion/malum_alchemical_impetus","proofs":["bloodmagic:reinforcedslate"],"top_n_rank":4,"dominated_outputs":25,"disposition":"native_anchor"},
-    {"anchor":"malum:soul_stained_steel_ingot","family":"malum","stage":"slate_t3_infused","surface":"malum:spirit_infusion","recipe_id":"kubejs:cross_mod_anchor/malum_spirit_infusion/malum_soul_stained_steel","proofs":["bloodmagic:infusedslate"],"top_n_rank":8,"dominated_outputs":27,"disposition":"native_anchor"},
-    {"anchor":"occultism:otherstone","family":"occultism","stage":"slate_t2_reinforced","surface":"hexerei:mixingcauldron","recipe_id":"kubejs:cross_mod_anchor/hexerei_cauldron/occultism_otherstone","proofs":["hexerei:moon_dust","hexerei:infused_fabric","bloodmagic:reinforcedslate"],"top_n_rank":1,"dominated_outputs":29,"disposition":"native_anchor"}
-  ]
+  "schema": "bc.cross_mod_boundaries.v2",
+  "authority": "kubejs/config/crafting_policy.json",
+  "capability_roots": "kubejs/config/crafting_policy.json#/capability_roots",
+  "note": "Cross-mod ownership is canonical in bc.crafting_policy.v1. Recipe implementations remain in progression and retained compatibility scripts."
 }

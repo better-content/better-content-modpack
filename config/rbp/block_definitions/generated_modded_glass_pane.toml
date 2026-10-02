@@ -86,8 +86,7 @@ Blocks = [
 	"tconstruct:seared_soul_glass_pane",
 	"tconstruct:soul_glass_pane",
 	"tconstruct:white_clear_stained_glass_pane",
-	"tconstruct:yellow_clear_stained_glass_pane",
-	"undergarden:sediment_glass_pane"]
+	"tconstruct:yellow_clear_stained_glass_pane"]
 
 [Physics]
 	#The maximum weight the block(s) can support both horizontally and vertically.

@@ -2,7 +2,7 @@
 #General settings
 [profiles]
 	#Block to put underneath a bed so that it qualifies as a teleporter bed
-	specialBedBlock = "minecraft:diamond_block"
+	specialBedBlock = "minecraft:barrier"
 	selectedProfile = ""
 	selectedCustomJson = ""
 	#The size of the todo queues for the lost city generator
@@ -23,4 +23,3 @@
 	avoidVillages = true
 	#If true then avoid flattening the terrain around the city in case there was a structure that was avoided
 	avoidFlattening = true
-

@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#kubejs:dimension_drink_ore_targets/stone",
-  "features": "kubejs:dimension_drink_natural_quartz_ore",
-  "step": "underground_ores"
-}

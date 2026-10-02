@@ -1,7 +1,7 @@
 version = 3
 
 # C2ME is required for the finished pack; risky features are re-enabled one
-# group at a time and must pass the supported `./smoke.sh` evaluation.
+# group at a time and, when pack testing is explicitly ordered, use the `server` suite.
 defaultGlobalExecutorParallelismExpression = "default"
 globalExecutorParallelism = "default"
 
@@ -18,8 +18,13 @@ globalExecutorParallelism = "default"
 	enforceSafeWorldRandomAccess = "true"
 
 [threadedWorldGen]
+	# Better Caves liquid regions are disabled separately because they are the
+	# documented C2ME 1.20.1 conflict. Keep async chunk scheduling enabled for
+	# Weather2/Burnt tick samplers, which can otherwise block on terrain loads.
 	enabled = "true"
-	allowThreadedFeatures = "true"
+	# Cataclysm's burning_arena emits far-chunk setBlock errors during parallel
+	# feature-stage placement. Keep features on the serialized generation path.
+	allowThreadedFeatures = "false"
 	reduceLockRadius = "true"
 	asyncScheduling = "true"
 

@@ -1,0 +1,8 @@
+
+[general]
+	# Preserve the pack-authored FancyMenu title screen.
+	"Custom main menu" = false
+	# True if riding dragons should make the player take a 3rd person view automatically.
+	"Auto 3rd person when riding dragon" = true
+	# Whether to use the vanilla font in the bestiary or not.
+	"Use Vanilla Font" = false

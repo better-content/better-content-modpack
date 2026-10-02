@@ -3,8 +3,6 @@
   "values": [
     "aether:skyroot_stairs",
     "ars_nouveau:archwood_stairs",
-    "deeperdarker:bloom_stairs",
-    "deeperdarker:echo_stairs",
     "fallout_wastelands_:molder_wood_stairs",
     "immersive_weathering:charred_stairs",
     "natures_spirit:aspen_stairs",
@@ -31,9 +29,6 @@
     "twilightforest:mining_stairs",
     "twilightforest:time_stairs",
     "twilightforest:transformation_stairs",
-    "twilightforest:twilight_oak_stairs",
-    "undergarden:grongle_stairs",
-    "undergarden:smogstem_stairs",
-    "undergarden:wigglewood_stairs"
+    "twilightforest:twilight_oak_stairs"
   ]
 }

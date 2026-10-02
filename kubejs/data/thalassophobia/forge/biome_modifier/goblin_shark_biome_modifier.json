@@ -1,0 +1,12 @@
+{
+  "type": "forge:remove_spawns",
+  "biomes": [
+    "deep_cold_ocean",
+    "deep_frozen_ocean",
+    "deep_lukewarm_ocean",
+    "deep_ocean"
+  ],
+  "entity_types": [
+    "thalassophobia:goblin_shark"
+  ]
+}

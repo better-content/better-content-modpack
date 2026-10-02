@@ -1,0 +1,11 @@
+{
+  "type": "forge:remove_spawns",
+  "biomes": [
+    "river",
+    "ocean",
+    "warm_ocean"
+  ],
+  "entity_types": [
+    "thalassophobia:bull_shark"
+  ]
+}

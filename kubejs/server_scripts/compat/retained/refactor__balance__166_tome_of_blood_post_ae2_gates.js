@@ -74,7 +74,8 @@ function bcTobArmor(event, output, reagent, id) {
 }
 
 ServerEvents.recipes(function (event) {
-    if (!bcTobExists('tomeofblood:novice_tome_of_blood')) return bcTobRemoveIds(event, [
+    if (!bcTobExists('tomeofblood:novice_tome_of_blood')) return
+    bcTobRemoveIds(event, [
         'tomeofblood:altar/novice_blood_tome',
         'tomeofblood:altar/apprentice_blood_tome',
         'tomeofblood:altar/archmage_blood_tome',
@@ -135,7 +136,6 @@ ServerEvents.recipes(function (event) {
 
      bcTobAlchemy(event, 'tomeofblood:novice_tome_of_blood', [
         { item: 'ars_nouveau:novice_spell_book' },
-        { item: 'ars_nouveau:archmage_spell_book' },
         { item: 'bloodmagic:archmagebloodorb' },
         { item: 'ae2:controller' },
         { item: 'kubejs:ae_logic_package' },
@@ -158,7 +158,7 @@ ServerEvents.recipes(function (event) {
         { item: 'minecraft:nether_star' },
         { item: 'bloodmagic:etherealslate' },
         { item: 'kubejs:impossible_support_matrix' },
-        { item: 'latent_chemlib:gas_reaction_chamber' }
+        { item: 'better_chemlib_hazards:gas_reaction_chamber' }
     ], 100000, 320, 5, 'kubejs:tomeofblood/alchemytable/archmage_tome_post_ae2')
 
      bcTobGlyph(event, 'tomeofblood:glyph_sentient_harm', 80, [
@@ -174,7 +174,7 @@ ServerEvents.recipes(function (event) {
         'ars_nouveau:conjuration_essence',
         'bloodmagic:etherealslate',
         'kubejs:impossible_support_matrix',
-        'latent_chemlib:gas_reaction_chamber'
+        'better_chemlib_hazards:gas_reaction_chamber'
     ], 'kubejs:tomeofblood/glyph_sentient_wrath_post_ae2')
 
      bcTobArmor(event, 'tomeofblood:living_mage_hood', 'bloodmagic:livinghelmet', 'kubejs:tomeofblood/living_mage_hood_post_ae2')

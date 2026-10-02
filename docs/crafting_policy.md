@@ -1,0 +1,87 @@
+# Crafting graph policy
+
+The crafting graph is every survival acquisition or transformation edge, not
+only crafting-table recipes. It includes recipes, machine processes, rituals,
+loot, trades, world generation, entity drops, fishing, guide
+recipes, and custom runtime hooks.
+
+`kubejs/config/crafting_policy.json` is the machine-readable
+`bc.crafting_policy.v1` contract. It classifies every loaded mod namespace,
+names authority domains and family selectors, records capability proofs, and
+lists acknowledged debt. `docs/balance_policy.md` is the human-readable change
+register. These two files are authoritative; `cross_mod_boundaries.json` and
+`magic_parenting.json` contain references only. Ars glyph grammar remains in
+`formal_magic_domains.json` because those entries describe real spell grammar,
+not duplicated ownership policy.
+
+## Enforcement
+
+An unknown loaded namespace blocks startup. Family/authority leaks and live
+consumers of cuts are reported with exact recipe and item IDs by the final
+KubeJS recipe pass. That report intentionally describes the upstream graph at
+the start of recipe application; it is a migration/backlog inventory, not a
+claim that the reported edges survive the pack's later removals. The effective
+post-application runtime snapshot is authoritative for shipped recipe edges.
+A reported category becomes blocking only after its known backlog is zero.
+Creative/debug items remain classified as technical rather than survival graph
+roots.
+
+Fruits Delight is classified as content and its Dynamic Trees add-on as world
+generation; L2 Harvester is content, its 0.5x and 6.0x adapters are
+integrations, and L2 Library is infrastructure.
+
+Recipe cuts and canonical-duplicate selectors are also applied to the global
+loot modifier from this same contract. Exact selectors and namespace/prefix
+selectors resolve against the live item registry, avoiding a second hand-kept
+loot denylist. Config, guides, trades, worldgen, and custom hooks need focused
+inspection of their owning sources; the generic runtime suite does not assert every
+acquisition edge.
+
+The live pack also classifies Better Content Notifications as presentation,
+Create: Aquatic Ambitions as content, and Upgrade Aquatic as world content.
+Their support state is not yet a claim that their acquisition graphs are fully integrated.
+
+Vanilla potion delivery is an NBT-sensitive cut that cannot be expressed as a
+whole-item selector because `minecraft:potion` also represents plain water.
+Brewing registries and alternative brewing surfaces are disabled; recipes,
+loot, trades, and newly placed structure inventories reject effect-bearing
+drinkable potions and every splash, lingering, and tipped-arrow variant. Plain
+water bottles, including Thirst purity metadata, remain supported. Food effects,
+status effects, and mod-owned flask systems are outside this cut.
+
+Pretty Pipes uses a visible three-tier Ratlantis ladder. The Courier Lattice recipe yields four
+lattices and each lattice-rooted pipe recipe yields eight pipes, so the first expedition supports
+a 32-pipe starter network. A blank module visibly consumes an Oratchalcum Mechanism. The seven
+high crafting, extraction, filter, high-priority, low-priority, retrieval, and speed modules each
+visibly consume one Arcane Logistics Core; their low and medium recipes retain upstream costs.
+
+Selectors are family-level wherever possible: namespace, tag, ID prefix, or an
+exact ID when no stable family exists. Capability roots prove the first
+meaningful entry into a system; they do not replace every downstream recipe.
+
+Wood compatibility preserves dedicated outputs instead of merging wood
+identities. Quark's named ladder families accept their canonical and vertical
+planks, while every other loaded item in `#minecraft:planks` is accepted by
+the oak-ladder recipe. The fallback changes recipe compatibility only; it does
+not classify those planks as oak or replace their normal wood-family tags.
+
+## Invariants
+
+- Nonliving matter consumes finite substrate. Biological growth and breeding
+  may remain renewable.
+- Space may be costly and finite, including AE2 spatial IO, but not infinite or
+  remotely universal.
+- PowerGrid owns stationary electrical generation. Electrical consumers,
+  storage, pressure, gas, SU, and OC2R remain supported.
+- Tinkers' Construct owns conventional pickaxe/axe/shovel/hoe/sword capability.
+  Unique weapons, bows, armor, creature gear, and material integrations remain.
+- The vanilla End is inaccessible. End ecology needed by the pack is routed to
+  Creating Space orbit, Ratlantis, Overworld cultivation, or Ice and Fire.
+- Vanilla potion delivery is absent; plain water bottles and independently owned
+  food, status-effect, and flask systems remain.
+
+Vanilla water/lava source renewal and renewable stone loops are acknowledged
+noncompliance for this release. PneumaticCraft's infinite-source exception is
+off, and existing Create hose-pulley/bottomless-fluid safeguards remain. A
+strict finite-fluid migration is deferred; Flowing Fluids and a custom fluid
+implementation are intentionally not introduced here.

@@ -1,6 +1,6 @@
 // Mobility and autonomous helper tools are powerful route-editing utilities.
 // Keep them off the hand grid; tier hooks and Create Stuff & Additions drones
-// through mechanical assembly.
+// through mechanical assembly. The Soap on a Rope prototype is supplied only as early loot.
 
 function bcMobilityExists(id) {
     try { return Item.exists(id) } catch (e) { return false }
@@ -13,7 +13,7 @@ function bcMobilityMechanical(event, output, pattern, key, recipeId) {
 }
 
 ServerEvents.recipes(function (event) {
-    if (!bcMobilityExists('kubejs:sky_steel_sheet') || !bcMobilityExists('kubejs:ae_logic_package')) return bcMobilityMechanical(event, 'rehooked:wood_chain', [
+     bcMobilityMechanical(event, 'rehooked:wood_chain', [
         ' SS',
         'SCS',
         'SS '
@@ -22,16 +22,7 @@ ServerEvents.recipes(function (event) {
         C: 'tconstruct:seared_bricks'
     }, 'kubejs:rehooked/wood_chain_post_seared')
 
-     bcMobilityMechanical(event, 'rehooked:wood_hook', [
-        'RRC',
-        ' WH',
-        'W H'
-    ], {
-        R: 'farmersdelight:rope',
-        C: 'tconstruct:seared_bricks',
-        W: 'rehooked:wood_chain',
-        H: '#forge:rods/wooden'
-    }, 'kubejs:rehooked/wood_hook_post_seared')
+     if (bcMobilityExists('rehooked:wood_hook')) event.remove({ output: 'rehooked:wood_hook' })
 
      bcMobilityMechanical(event, 'rehooked:iron_hook', [
         'IIC',
@@ -40,7 +31,7 @@ ServerEvents.recipes(function (event) {
     ], {
         I: '#forge:plates/iron',
         C: 'create:andesite_casing',
-        H: 'rehooked:wood_hook',
+        H: 'better_rehooked_grappling:soap_on_a_rope',
         L: 'minecraft:chain'
     }, 'kubejs:rehooked/iron_hook_post_create')
 
@@ -73,7 +64,7 @@ ServerEvents.recipes(function (event) {
         H: 'minecraft:blaze_rod',
         B: 'rehooked:diamond_hook',
         P: 'powergrid:conductive_casing',
-        C: 'heat_sync:heat_pipe'
+        C: 'better_industrial_heat:heat_pipe'
     }, 'kubejs:rehooked/blaze_hook_post_electricity')
 
      bcMobilityMechanical(event, 'rehooked:ender_hook', [

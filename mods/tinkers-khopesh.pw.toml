@@ -1,8 +1,0 @@
-name = "Tinker's Khopesh"
-filename = "tinkers_khopesh-1.0.0.jar"
-side = "both"
-
-[download]
-url = "https://edge.forgecdn.net/files/7428/209/tinkers_khopesh-1.0.0.jar"
-hash-format = "sha256"
-hash = "9af52bc2de2755a3a37982a74fd14334edfad85707a646828cb6dbce6f62a291"

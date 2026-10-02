@@ -53,6 +53,8 @@ ServerEvents.tags('item', function (event) {
 
     addAllToTargets(event, stoneTargets, stoneLikeEntries)
     addAllToTargets(event, cobbleTargets, cobbleLikeEntries)
+    event.add('kubejs:furnace_materials', '#forge:stone')
+    event.add('kubejs:furnace_materials', '#forge:cobblestone')
     addAllToTargets(event, normalStoneTargets, stoneLikeEntries)
     addAllToTargets(event, normalStoneTargets, cobbleLikeEntries)
     addAllToTargets(event, mossyCobbleTargets, [

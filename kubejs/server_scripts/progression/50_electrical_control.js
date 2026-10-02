@@ -15,15 +15,24 @@ ServerEvents.recipes(function (event) {
             { type: 'pneumaticcraft:stacked_item', item: 'morered:red_alloy_wire', count: 2 },
             { type: 'pneumaticcraft:stacked_item', item: 'create:electron_tube', count: 1 }
         ],
-        results: [{ item: 'kubejs:electrical_machine_block' }]
+        results: [{ item: 'kubejs:electrical_machine_block', count: 2 }]
     }).id('kubejs:electrical_control/electrical_machine_block')
 
+    // PowerGrid owns stationary electrical generation. Both orientations are
+    // removed first so conversion cannot bypass the Electrical Machine Block.
     event.remove({ output: 'pneumaticcraft:pneumatic_dynamo' })
-    event.shaped('pneumaticcraft:pneumatic_dynamo', ['GTG', 'PMP', 'SCS'], {
-        G: 'pneumaticcraft:compressed_iron_gear', T: 'pneumaticcraft:advanced_pressure_tube',
-        P: 'pneumaticcraft:printed_circuit_board', M: 'kubejs:electrical_machine_block',
-        S: '#forge:plates/steel', C: 'powergrid:copper_coil'
-    }).id('kubejs:electrical_control/direct_root/first_fe_generator')
+    event.remove({ output: 'powergrid:generator_housing' })
+    event.remove({ output: 'powergrid:vertical_generator_housing' })
+    event.shaped('powergrid:generator_housing', ['IPI', 'CMC', 'IPI'], {
+        I: '#forge:plates/iron', P: '#forge:plates/copper',
+        C: 'powergrid:conductive_casing', M: 'kubejs:electrical_machine_block'
+    }).id('kubejs:electrical_control/direct_root/first_stationary_generator')
+    event.shapeless('powergrid:vertical_generator_housing', [
+        'powergrid:generator_housing'
+    ]).id('kubejs:electrical_control/generator_vertical_conversion')
+    event.shapeless('powergrid:generator_housing', [
+        'powergrid:vertical_generator_housing'
+    ]).id('kubejs:electrical_control/generator_horizontal_conversion')
     event.remove({ id: 'morered:soldering_table' })
     event.shaped('morered:soldering_table', ['PPP', 'WMW', ' C '], {
         P: 'morered:stone_plate', W: 'morered:red_alloy_wire',

@@ -1,19 +1,33 @@
 // Any one active Font can start seared metallurgy. TCon owns alloy composition;
 // Create begins only after the hand-cranked workshop is physically reachable.
 var BC_FONT_BINDERS = [
-    ['nether', 'minecraft:netherrack'],
-    ['aether', 'aether:holystone'],
-    ['undergarden', 'undergarden:deepsoil'],
-    ['otherside', 'deeperdarker:cobbled_sculk_stone']
+    ['nether', 'minecraft:netherrack', 'kubejs:nether_font_grout'],
+    ['aether', 'aether:aether_dirt', 'kubejs:aether_font_grout'],
+    ['bumblezone', 'the_bumblezone:porous_honeycomb_block', 'kubejs:bumblezone_font_grout'],
+    ['ratlantis', 'rats:marbled_cheese_raw', 'kubejs:ratlantis_font_grout']
 ]
 
 ServerEvents.recipes(function (event) {
+    // TCon's native cast recipes consume these blanks in the Part Builder
+    // material slot. Keep the blank inputs visible in EMI so cast making does
+    // not depend on discovering an implicit table action.
+    event.shaped('4x tconstruct:blank_sand_cast', ['SS', 'SS'], {
+        S: 'minecraft:sand'
+    }).id('kubejs:hand_workshop/tconstruct/blank_sand_cast')
+    event.shaped('4x tconstruct:blank_red_sand_cast', ['SS', 'SS'], {
+        S: 'minecraft:red_sand'
+    }).id('kubejs:hand_workshop/tconstruct/blank_red_sand_cast')
+
     event.remove({ output: 'tconstruct:grout' })
     BC_FONT_BINDERS.forEach(function (font) {
-        event.shapeless('2x tconstruct:grout', [font[1], '#minecraft:sand', 'minecraft:gravel'])
+        event.shapeless('2x ' + font[2], [font[1], '#kubejs:ordinary_sand', 'minecraft:gravel'])
             .id('kubejs:hand_workshop/font_grout/' + font[0])
-        event.shapeless('8x tconstruct:grout', [font[1], '#minecraft:sand', '#minecraft:sand', '#minecraft:sand', '#minecraft:sand', 'minecraft:gravel', 'minecraft:gravel', 'minecraft:gravel', 'minecraft:gravel'])
+        event.shapeless('8x ' + font[2], [font[1], '#kubejs:ordinary_sand', '#kubejs:ordinary_sand', '#kubejs:ordinary_sand', '#kubejs:ordinary_sand', 'minecraft:gravel', 'minecraft:gravel', 'minecraft:gravel', 'minecraft:gravel'])
             .id('kubejs:hand_workshop/font_grout/' + font[0] + '_bulk')
+        event.smelting('tconstruct:seared_brick', font[2])
+            .id('kubejs:hand_workshop/font_grout/' + font[0] + '_smelting')
+        event.blasting('tconstruct:seared_brick', font[2])
+            .id('kubejs:hand_workshop/font_grout/' + font[0] + '_blasting')
     })
 
     event.remove({ type: 'minecraft:crafting_shaped', output: 'create:andesite_alloy' })
@@ -33,6 +47,19 @@ ServerEvents.recipes(function (event) {
             temperature: 800
         }).id('kubejs:hand_workshop/alloying/andesite_alloy_' + route[0])
     })
+
+    // Preserve upstream's efficient Melter route alongside the automated alloy path.
+    ;[['iron', 'forge:molten_iron', 20], ['zinc', 'forge:molten_zinc', 16]].forEach(function (route) {
+        event.custom({
+            type: 'tconstruct:casting_basin',
+            cast: { item: 'minecraft:andesite' },
+            cast_consumed: true,
+            fluid: { tag: route[1], amount: 10 },
+            result: 'create:andesite_alloy',
+            cooling_time: route[2]
+        }).id('kubejs:hand_workshop/casting/andesite_alloy_' + route[0] + '_melter')
+    })
+
     event.custom({
         type: 'tconstruct:casting_table',
         cast: { tag: 'tconstruct:casts/multi_use/ingot' },

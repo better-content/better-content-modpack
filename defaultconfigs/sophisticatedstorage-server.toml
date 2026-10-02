@@ -16,7 +16,7 @@
 	[server.WoodBarrel]
 		#Number of inventory slots in the storage
 		#Range: 1 ~ 180
-		inventorySlotCount = 27
+		inventorySlotCount = 45
 		#Number of upgrade slots in the storage
 		#Range: 0 ~ 10
 		upgradeSlotCount = 1
@@ -70,7 +70,7 @@
 	[server.LimitedBarrelI]
 		#Multiplier that's used to calculate base slot limit
 		#Range: 1 ~ 8192
-		baseSlotLimitMultiplier = 32
+		baseSlotLimitMultiplier = 53
 		#Number of upgrade slots in the storage
 		#Range: 0 ~ 10
 		upgradeSlotCount = 1
@@ -124,7 +124,7 @@
 	[server.LimitedBarrelII]
 		#Multiplier that's used to calculate base slot limit
 		#Range: 1 ~ 8192
-		baseSlotLimitMultiplier = 16
+		baseSlotLimitMultiplier = 27
 		#Number of upgrade slots in the storage
 		#Range: 0 ~ 10
 		upgradeSlotCount = 1
@@ -178,7 +178,7 @@
 	[server.LimitedBarrelIII]
 		#Multiplier that's used to calculate base slot limit
 		#Range: 1 ~ 8192
-		baseSlotLimitMultiplier = 10
+		baseSlotLimitMultiplier = 17
 		#Number of upgrade slots in the storage
 		#Range: 0 ~ 10
 		upgradeSlotCount = 1
@@ -232,7 +232,7 @@
 	[server.LimitedBarrelIV]
 		#Multiplier that's used to calculate base slot limit
 		#Range: 1 ~ 8192
-		baseSlotLimitMultiplier = 8
+		baseSlotLimitMultiplier = 13
 		#Number of upgrade slots in the storage
 		#Range: 0 ~ 10
 		upgradeSlotCount = 1
@@ -286,7 +286,7 @@
 	[server.WoodChest]
 		#Number of inventory slots in the storage
 		#Range: 1 ~ 180
-		inventorySlotCount = 27
+		inventorySlotCount = 45
 		#Number of upgrade slots in the storage
 		#Range: 0 ~ 10
 		upgradeSlotCount = 1

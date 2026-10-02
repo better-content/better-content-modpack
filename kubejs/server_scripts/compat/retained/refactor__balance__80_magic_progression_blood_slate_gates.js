@@ -6,11 +6,8 @@ var BM_SLATE_T2 = 'bloodmagic:reinforcedslate'
 var BM_SLATE_T3 = 'bloodmagic:infusedslate'
 var BM_SLATE_T4 = 'bloodmagic:demonslate'
 var BM_SLATE_T5 = 'bloodmagic:etherealslate'
-var BC_OTHERSIDE_T1 = 'deeperdarker:cobbled_sculk_stone'
-var BC_OTHERSIDE_T2 = 'deeperdarker:gloomslate'
-var BC_OTHERSIDE_T3 = 'minecraft:sculk_catalyst'
-var BC_OTHERSIDE_T4 = 'deeperdarker:sculk_bone'
-var BC_OTHERSIDE_T5 = 'deeperdarker:resonarium'
+var BC_OVERWORLD_OCCULT_T1 = 'better_ore_geology:black_shale'
+var BC_OVERWORLD_OCCULT_T4 = 'minecraft:sculk_catalyst'
 
 function gate(event, filter, oldInput, newInput) {
     event.replaceInput(filter, oldInput, newInput)
@@ -19,7 +16,7 @@ function gate(event, filter, oldInput, newInput) {
 ServerEvents.recipes(function (event) {
     // Altar I: first dirty-magic proofs.
     gate(event, { id: 'malum:spirit_altar' }, '#forge:ingots/gold', BM_SLATE_T1)
-    gate(event, { id: 'malum:spirit_altar' }, '#forge:stone', BC_OTHERSIDE_T1)
+    gate(event, { id: 'malum:spirit_altar' }, '#forge:stone', BC_OVERWORLD_OCCULT_T1)
 
     // Altar III: dangerous bridge magic, spirits, and servants.
     // Tome of Blood moved to the post-AE2 hybrid branch in
@@ -37,9 +34,9 @@ ServerEvents.recipes(function (event) {
     gate(event, { id: 'ars_elemental:imbuement_lesser_fire_focus' }, 'minecraft:gold_ingot', '#kubejs:formal_magic/proof/rare')
     gate(event, { id: 'ars_elemental:imbuement_lesser_water_focus' }, 'minecraft:gold_ingot', '#kubejs:formal_magic/proof/rare')
     gate(event, { id: 'goety:cursed_cage' }, 'goety:cursed_bars', BM_SLATE_T4)
-    gate(event, { id: 'goety:cursed_cage' }, 'minecraft:sculk', BC_OTHERSIDE_T4)
+    gate(event, { id: 'goety:cursed_cage' }, 'minecraft:sculk', BC_OVERWORLD_OCCULT_T4)
     gate(event, { id: 'goety:dark_altar' }, 'goety:magic_emerald', BM_SLATE_T4)
-    gate(event, { id: 'goety:dark_altar' }, 'minecraft:sculk_catalyst', BC_OTHERSIDE_T4)
+    gate(event, { id: 'goety:dark_altar' }, 'minecraft:sculk_catalyst', BC_OVERWORLD_OCCULT_T4)
 
     // Formal depth III: Creo is the Create-era application of formal motion.
     gate(event, { id: 'ars_creo:starbuncle_wheel' }, 'create:water_wheel', '#kubejs:formal_magic/proof/epic')

@@ -1,0 +1,58 @@
+[scheduler]
+	enabled = true
+	disable_vanilla_patrol_spawning = true
+	#Range: 1 ~ 1200
+	interval_ticks = 20
+	#Loaded columns inspected per scheduler pass. This never loads or tickets a chunk.
+	#Range: 64 ~ 65536
+	surface_sample_budget = 16384
+
+[scouts]
+	#Range: 0 ~ 1200000
+	minimum_eligible_ticks = 7200
+	#Range: 0 ~ 1200000
+	maximum_eligible_ticks = 14400
+	#Range: 200 ~ 144000
+	withdraw_after_active_ticks = 2400
+
+[assaults]
+	#Range: 0 ~ 2400000
+	minimum_eligible_ticks = 72000
+	#Range: 0 ~ 2400000
+	maximum_eligible_ticks = 144000
+	#Range: 0 ~ 24000
+	warning_surface_ticks = 2400
+	#Range: 100 ~ 24000
+	wave_progress_timeout_ticks = 1500
+	#Range: 0 ~ 1200000
+	death_grace_ticks = 24000
+
+[grouping]
+	#Range: 8 ~ 256
+	nearby_player_radius = 64
+
+[limits]
+	#Range: 1 ~ 160
+	global_campaign_mobs = 96
+	#Range: 1 ~ 32
+	spawns_per_tick = 8
+	#Range: 1 ~ 160
+	spawns_per_second = 24
+
+[scaling]
+	#Range: 1 ~ 12000000
+	eligible_ticks_per_intensity = 144000
+
+[approach]
+	#Range: 8 ~ 256
+	minimum_blocks = 48
+	#Range: 8 ~ 384
+	maximum_blocks = 72
+	#Range: 64 ~ 65536
+	maximum_search_expansions = 4096
+
+[cleanup]
+	#Range: 200 ~ 144000
+	active_idle_ticks = 6000
+	#Range: 20 ~ 24000
+	target_unavailable_ticks = 1200

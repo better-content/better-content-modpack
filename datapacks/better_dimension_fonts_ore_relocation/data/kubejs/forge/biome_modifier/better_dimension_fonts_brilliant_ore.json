@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#kubejs:better_dimension_fonts_ore_targets/deep",
+  "features": "kubejs:better_dimension_fonts_brilliant_ore",
+  "step": "underground_ores"
+}

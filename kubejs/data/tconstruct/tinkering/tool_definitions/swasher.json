@@ -74,12 +74,6 @@
       ]
     },
     {
-      "type": "tconstruct:tool_actions",
-      "tool_actions": [
-        "sword_dig"
-      ]
-    },
-    {
       "type": "tconstruct:is_effective",
       "predicate_type": "mantle:tag",
       "tag": "forge:mineable/sword"

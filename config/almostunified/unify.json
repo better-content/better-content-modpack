@@ -1,6 +1,6 @@
 {
   "modPriorities": [
-    "realistic_ores",
+    "better_ore_geology",
     "chemlib",
     "minecraft",
     "kubejs",
@@ -510,9 +510,6 @@
     "excavated_variants:create_scorchia_lead_zinc_vein",
     "excavated_variants:create_scoria_lead_zinc_vein",
     "excavated_variants:create_veridium_lead_zinc_vein",
-    "excavated_variants:deeperdarker_gloomslate_lead_zinc_vein",
-    "excavated_variants:deeperdarker_sculk_grime_lead_zinc_vein",
-    "excavated_variants:deeperdarker_sculk_stone_lead_zinc_vein",
     "excavated_variants:diorite_lead_zinc_vein",
     "excavated_variants:dripstone_lead_zinc_vein",
     "excavated_variants:granite_lead_zinc_vein",
@@ -523,10 +520,6 @@
     "excavated_variants:sandstone_lead_zinc_vein",
     "excavated_variants:smooth_basalt_lead_zinc_vein",
     "excavated_variants:tuff_lead_zinc_vein",
-    "excavated_variants:undergarden_depthrock_lead_zinc_vein",
-    "excavated_variants:undergarden_loose_tremblecrust_lead_zinc_vein",
-    "excavated_variants:undergarden_shiverstone_lead_zinc_vein",
-    "excavated_variants:undergarden_tremblecrust_lead_zinc_vein",
     "excavated_variants:unearthed_beige_limestone_lead_zinc_vein",
     "excavated_variants:unearthed_conglomerate_lead_zinc_vein",
     "excavated_variants:unearthed_dacite_lead_zinc_vein",
@@ -550,9 +543,9 @@
     "cucumber:shaped_tag"
   ],
   "ignoredRecipes": [
-    "^realistic_ores:compat/create/crushing/.*$",
-    "^realistic_ores:crafting/ore_reassembly/.*$",
-    "^kubejs:realistic_ores/.*$"
+    "^better_ore_geology:compat/create/crushing/.*$",
+    "^better_ore_geology:crafting/ore_reassembly/.*$",
+    "^kubejs:better_ore_geology/.*$"
   ],
   "itemsHidingJeiRei": true,
   "customTags": {

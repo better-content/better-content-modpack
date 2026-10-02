@@ -362,7 +362,7 @@
 
 		[building.sign_post.way_sign]
 			#Entirely disables them from spawning
-			enabled = true
+			enabled = false
 			#With this option road signs will display the distance to the structure that they are pointing to
 			show_distance_text = true
 
@@ -680,4 +680,3 @@
 		#Chance that a slime mob will apply slimed effect on successful attack. Multiplied by the slime size
 		#Range: 0.0 ~ 1.0
 		chance_per_slime_size = 0.15
-

@@ -11,39 +11,62 @@ behavioural fantasies:
 
 | Deposit | Immediate promise | Visual identity |
 | --- | --- | --- |
-| Coal Measures | fuel | broad broken black strata |
-| Ironstone | iron and tools | thick rusty bedded bands |
-| Copper Bloom | copper | green oxidation around brassy mineralization |
-| Tin Quartz | bronze and quartz | white crystal ribbons with dark inclusions |
-| Brassroot | zinc and brass | yellow-grey branching roots |
-| Evaporite Beds | salt and preservation | pale crystalline beds |
-| Hotstone | dangerous usable heat and heavy matter | dark energetic mineral body |
-| Black Shale | redstone and supernatural material | black strata with violet contamination |
+| Coal Measures | fuel | broken uneven carbon seams; home Y 40..144, echo Y 160..320 |
+| Ironstone | iron and tools | rusty lenticular/oolitic beds; home Y -16..80, echo Y 112..288 |
+| Copper Bloom | copper | branching stockwork and oxidation halos; home Y 16..112, echo Y -112..-56 |
+| Tin Quartz | bronze and quartz | steep quartz lodes and cassiterite splays; home Y -72..16, echo Y 160..384 |
+| Brassroot | zinc and brass | asymmetric dendritic fracture veins; home Y -48..40, echo Y 96..192 |
+| Evaporite Beds | salt and preservation | stacked salt/gypsum beds; home Y 72..176, echo Y -32..24 |
+| Hotstone | dangerous usable heat and heavy matter | lopsided breccia pipes; home Y -128..-72, echo Y 192..448 |
+| Black Shale | redstone and supernatural material | dark laminations and violet stringers; home Y -104..-24, echo Y 0..64 |
 
 Oil Seep remains a separate fluid surface feature. Technical materials survive
 as assay depth where they have an audited pack use; they do not create additional
 worldgen families merely to preserve chemical taxonomy.
 
+The Aether has rare ironstone in Holystone. Twilight Forest has rare Coal Measures,
+Ironstone, Copper Bloom, and Tin Quartz in ordinary stone. The pack removes
+Twilight's legacy coal, iron, and copper placed features only in its own biomes;
+the matching Realistic Ores deposits provide their ordinary material routes in
+new chunks. Twilight gold remains until an authored gold-bearing replacement is
+available. Create zinc and Occultism silver add modifiers are already scoped to
+the deliberately empty `#kubejs:no_biomes` tag; their processing outputs remain.
+
 Each family exposes authored stone and deepslate blocks, a surface sample whose
 item identity is `small_ore_chunk_<family>`, a full `ore_chunk_<family>`, and a
 `crushed_<family>` processing feed. Native and Excavated Variants hosts separate
 and reassemble losslessly. Scattered family worldgen and ADLODS deposits remain
-complementary exploration layers.
+complementary exploration layers. ADLODS mirrors the same home and echo bands: the home
+configuration carries about 85% of expected large-body supply (95% for Hotstone), while
+the distant echo is 1.5 times larger per body (2 times for Hotstone). Aggregate expected
+yield remains within 1% of the prior configuration for every family.
+
+ADLODS deposit `Indicator` circles place matching Realistic Ores surface samples near
+the corresponding underground body. A sample is a useful local clue to prospect
+below, although a later extraction of the same ore family does not prove it came
+from that particular body. The sample can also be collected for a small chunk.
 
 ## Processing depth
 
 1. Ordinary mining yields one host-independent chunk; Silk Touch preserves the
    exact ore block. Nine small chunks combine into one full chunk.
-2. A millstone produces two crushed feeds and Crushing Wheels produce three.
-   A full chunk cooks to two primary units; one crushed feed cooks to one.
-3. Separation consumes four matching crushed feeds, one route-specific grinding
-   ball, and 500 mB of the declared water or acid route. It yields four units of
-   primary concentrate plus the route's curated coproduct chances. Create recipes
-   are capped at four result entries, including the grinding-ball return; rich
-   routes may consume their premium medium to keep that runtime limit.
-4. Furnace exits resolve to canonical native or ChemLib forms. TConstruct molten
-   exits are metal-only; quartz, gems, salts, carbon, and other nonmetals remain
-   item-form outputs.
+2. A String Mesh can hand-sift a chunk for one primary recovery unit before
+   rotational power. A Millstone produces two crushed feeds and Crushing Wheels
+   produce three, which makes comminution the first recovery multiplier.
+3. Dry Sifting recovers the primary product. Waterlogged Zinc Sifting adds major
+   and minor coproducts at 12.5% and 6.25% per feed. Waterlogged Brass Sifting
+   exposes major, minor, trace, and precious grades at 25%, 12.5%, 5%, and 1.25%.
+4. The maximum-recovery technical route fills each crushed feed with 250 mB of water, then
+   pressure-separates four matching rinsed feeds at 2 bar. It returns four primary
+   recovery units plus the family's complete curated coproduct set. PneumaticCraft's
+   result format has no chance field, so listed technical coproducts are deliberate
+   deterministic outputs rather than misleading pseudo-probabilities.
+5. Blood Magic, Hexerei, Ars Nouveau, and Occultism process unsplit chunks into
+   the same canonical primary products. Their apparatus costs and side bonuses
+   differ, but they cannot stack with Create's comminution multiplier.
+6. Heat is a low-yield fallback and finishing operation for metals only. One metal
+   chunk or concentrate yields four nuggets. Quartz, gems, salts, carbon, sulfur,
+   redstone, lapis, and other nonmetals leave separation in their usable item form.
 
 Tin Quartz folds gem-bearing pegmatite assays into its industrial depth, while
 Hotstone uses route-specific assay variants, so legible deposits can reveal
@@ -51,34 +74,37 @@ several late technical profiles without multiplying blocks.
 The retained catalogue is 24 audited outputs plus rock salt, sodium chloride,
 and saltpeter.
 
-Sulfuric and hydrochloric routes begin in Thermal & Pressure. Nitric acid begins
-under Electrical Control. Mixed hydrochloric/nitric acid remains restricted to
-the declared precious-metal routes.
+Acids remain authored chemistry products for their own consumers, but are not a
+second ore-separation matrix. There are no acid permutations, grinding media,
+or hidden "best ball" ladder to memorize.
 
 ## Immediate utility
 
-The processing backend is intentionally deep, but every family must communicate
-something before that backend is required. Coal chunks burn directly. Evaporite
-material yields Rock Salt for cooking and preservation. Black Shale supports soul
-fire, yields soul sand, and supplies redstone. Tin Quartz later separates gems.
-Hotstone emits light,
-hurts on contact, and can be consolidated into magma.
+The processing backend is deep but begins without machinery: every chunk can be
+hand-sifted with a String Mesh. Coal chunks also burn directly, Black Shale blocks
+support soul fire, and Hotstone emits light, hurts on contact, and can be consolidated
+into magma. Direct Rock Salt and Soul Sand crafting shortcuts are intentionally gone;
+their recovery now teaches the shared separation system.
 
-## Grinding media
+## Four salient routes
 
-| Ball | Return chance | Role |
-| --- | ---: | --- |
-| Andesite | 80% | first mechanical concentration |
-| Iron | 84% | common base-metal route |
-| Brass | 87% | precision route |
-| Steel | 91% | pressure-era sulfides |
-| Nickel | 93% | heat/acid-resistant processing |
-| Titanium | 95% | electrical and aerospace route |
-| Blood-infused | 97% | optional magic crossing |
-| Fluix | 98% | optional post-AE2 crossing |
+| Route | Input | Outcome |
+| --- | --- | --- |
+| Technical | four rinsed feeds at 2 bar | four primary units plus the complete deterministic assay |
+| Blood | one chunk and ARC cutting fluid | two primary units plus a 25% corrupted tiny-dust chance |
+| Hexerei | four chunks, four selenite shards, water, and heat | eight primary units |
+| Ars | one chunk | two primary units plus a 25% family essence chance; Tin Quartz may also yield Source Gem |
+| Occultism | one chunk | two primary units, modified by the summoned crusher's tier |
 
-The ball is returned probabilistically by its recipe. Route affinity is explicit;
-a higher return chance does not make every ball valid for every deposit.
+These are alternative approaches to shared resource results, not isolated resource
+economies. Recipe viewers show exact outputs and apparatus costs; the version-3
+processing manifest records the common units and route-specific bonuses.
+
+Create Bulk Washing is disabled. Granular legacy washing recipes use waterlogged
+Sifting, while direct hydration, cleaning, stripping, and rusting operations use a
+Spout. Flour and cleaning operations consume 100 mB, concrete consumes 250 mB, and
+magma-to-obsidian consumes 1,000 mB. The outputless sugar-cube recipe and direct
+ice-to-packed-ice shortcut are removed.
 
 ## Design contract
 
@@ -93,20 +119,20 @@ Systemic Salience does not turn ores into neon aspect tokens.
 | --- | --- |
 | Coal, iron, copper, tin, zinc | immediate fuel, tools, bronze, brass, and progression roots |
 | Gold, redstone, quartz, lapis | familiar technical and magical crafting economies |
-| Diamond, emerald, amethyst | deeper Tin Quartz assays and ordinary gem uses |
+| Diamond, emerald, amethyst | deeper Tin Quartz assays and ordinary gem uses; no diamond ore generates |
 | Rock salt, sodium chloride, saltpeter | cooking/preservation first; chemical and nitrate depth later |
-| Soul sand, sulfur | immediate Black Shale/soul utility; soul, reagent, and pollution chemistry |
+| Soul sand, sulfur, vanadium | immediate Black Shale/soul utility; sulfur and vanadium supply the supported contact-process acid chain |
 | Aluminum, cobalt, osmium, silver | live TConstruct materials and pack metallurgy/electrum routes |
-| Nickel | grinding medium and Creating Space alloy routes |
-| Titanium | premium grinding medium, Space Machine Block, aerospace recipes, and molten material |
+| Nickel | Creating Space alloy routes and molten material |
+| Titanium | Space Machine Block, aerospace recipes, and molten material |
 | Uranium | Hotstone fissile assay, Necronium, nuclear simulation, and Protection Pixel recipes |
-| Thorium | Hotstone fissile assay, nuclear decay chain, quests, and Protection Pixel recipes |
+| Thorium | Hotstone fissile assay, nuclear decay chain, and Protection Pixel recipes |
 | Lead, cadmium | Hotstone/Brassroot assay depth and real placeable-block absorber behavior in Latent's nuclear environment scan |
 
 The removed beryl/beryllium, calcium, carbon, chromium, gallium, iridium,
 magnesium, phosphate, platinum, silicon, sodium, tantalum, and tungsten
 concentrates had no distinct live consumer strong enough to earn assay output.
-Archived Alchemistry configuration is not treated as a live use. The obsolete
-`latent_chemlib/material_coefficients` data file was removed because the runtime
+The obsolete Alchemistry audit input was removed and is not a live use. The obsolete
+`better_chemlib_hazards/material_coefficients` data file was removed because the runtime
 nuclear simulation does not load it; absorber evidence comes from the actual
 block-ID environment scan.

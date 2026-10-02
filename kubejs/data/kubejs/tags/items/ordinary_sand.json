@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:sand",
+    "minecraft:red_sand",
+    "natures_spirit:pink_sand"
+  ]
+}

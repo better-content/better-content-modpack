@@ -9,3 +9,4 @@
 -Xmx16G
 -XX:+UseG1GC
 -Dfile.encoding=UTF-8
+-Dlog4j.configurationFile=config/better-content-log4j2.xml

@@ -301,7 +301,7 @@
 	#Range: > 20
 	spawnInterval = 300
 	#List of dimension IDs where incubators should not spawn.
-	"Incubator Dimension Blacklist" = ["minecraft:overworld", "minecraft:the_nether", "minecraft:the_end", "ae2:spatial_storage", "aether:the_aether", "bloodmagic:dungeon", "creatingspace:earth_orbit", "creatingspace:mars", "creatingspace:mars_orbit", "creatingspace:moon_orbit", "creatingspace:the_moon", "creatingspace:venus", "deeperdarker:otherside", "fallout_wastelands_:wastelands", "twilightforest:twilight_forest", "undergarden:undergarden"]
+	"Incubator Dimension Blacklist" = ["minecraft:overworld", "minecraft:the_nether", "minecraft:the_end", "ae2:spatial_storage", "aether:the_aether", "bloodmagic:dungeon", "creatingspace:earth_orbit", "creatingspace:mars", "creatingspace:mars_orbit", "creatingspace:moon_orbit", "creatingspace:the_moon", "creatingspace:venus", "fallout_wastelands_:wastelands", "twilightforest:twilight_forest", "the_bumblezone:the_bumblezone", "rats:ratlantis"]
 	#Points threshold for high spawn chance
 	#Default values: 3000
 	#Range: > 0

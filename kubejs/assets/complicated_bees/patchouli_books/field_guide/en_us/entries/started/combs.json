@@ -1,0 +1,23 @@
+{
+  "name": "Combs and You",
+  "icon": "complicated_bees:comb",
+  "category": "complicated_bees:started",
+  "advancement": "complicated_bees:apiary",
+  "turnin": "complicated_bees:processing",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "But how do you get the honey out of the combs? It's a little too sticky to manually dig out of the combs cleanly, and you have MUCH better things to do with your time, I'm sure. Enter the Centrifuge: this machine will spin things really, really fast, separating them by density - in this case, your combs into honey, wax, and other potential extra things."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "complicated_bees:centrifuge",
+      "title": "The Strong Centrifuge",
+      "text": "$(o)No relation to any similarly-named machines."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Power the centrifuge with a PowerGrid generator. Complicated Bees generators are disabled."
+    }
+  ]
+}

@@ -56,23 +56,23 @@ function bcHoverTextLines(rawLines) {
 }
 
 function bcHoverStyle(line, tone) {
-    return tone === 'warning' ? Text.red(line) : Text.darkGray(line)
+    return tone === 'warning' ? Text.red(line) : Text.gray(line)
 }
 
 var BC_HOVER_STATIC = []
 var BC_HOVER_EXACT_TARGETS = {}
 
-function bcHoverAddExact(target, lines, tone, label) {
+function bcHoverAddExact(target, lines, tone, conceptId, label) {
     if (BC_HOVER_EXACT_TARGETS[target]) {
         bcHoverWarn(label + ' duplicates target ' + target)
         return
     }
     BC_HOVER_EXACT_TARGETS[target] = true
-    BC_HOVER_STATIC.push({ target: target, lines: lines, tone: tone })
+    BC_HOVER_STATIC.push({ target: target, lines: lines, tone: tone, conceptId: conceptId })
 }
 
 function bcHoverCompileStatic() {
-    if (String(BC_HOVER_DATA.schema || '') !== 'bc.hover_annotations.v1') {
+    if (String(BC_HOVER_DATA.schema || '') !== 'bc.hover_annotations.v2') {
         bcHoverWarn('unsupported or missing registry schema')
         return
     }
@@ -85,9 +85,10 @@ function bcHoverCompileStatic() {
         var row = annotations[i] || {}
         var label = 'static entry ' + i
         var category = String(row.category || '')
+        var conceptId = String(row.concept_id || '')
         var domain = String(row.domain || '')
         var owner = String(row.owner || '')
-        if (!BC_HOVER_CATEGORIES[category] || !domain || !owner) {
+        if (!BC_HOVER_CATEGORIES[category] || !/^[a-z0-9_.]{3,96}$/.test(conceptId) || !domain || !owner) {
             bcHoverWarn(label + ' has invalid authoring metadata')
             continue
         }
@@ -102,13 +103,13 @@ function bcHoverCompileStatic() {
             continue
         }
         if (selector.item) {
-            bcHoverAddExact(String(selector.item), lines, String(row.tone || ''), label)
+            bcHoverAddExact(String(selector.item), lines, String(row.tone || ''), conceptId, label)
         } else if (Array.isArray(selector.items) && selector.items.length > 0) {
             for (var j = 0; j < selector.items.length; j++) {
-                bcHoverAddExact(String(selector.items[j]), lines, String(row.tone || ''), label)
+                bcHoverAddExact(String(selector.items[j]), lines, String(row.tone || ''), conceptId, label)
             }
         } else if (selector.tag) {
-            BC_HOVER_STATIC.push({ target: '#' + String(selector.tag), lines: lines, tone: String(row.tone || '') })
+            BC_HOVER_STATIC.push({ target: '#' + String(selector.tag), lines: lines, tone: String(row.tone || ''), conceptId: conceptId })
         } else {
             bcHoverWarn(label + ' has an empty selector')
         }
@@ -127,7 +128,7 @@ function bcFormalGlyphKey(itemId) {
 function bcFormalOriginName(origin) {
     var key = String(origin)
     var names = {
-        core: 'Ars grammar',
+        core: 'Ars Nouveau',
         hexerei: 'Hexerei',
         occultism: 'Occultism',
         blood_magic: 'Blood Magic',
@@ -194,7 +195,6 @@ var BC_COMBAT_TYPES = {
 
 function bcCombatLabel(type, preset) {
     if (type === 'epicfight:tachi' && preset === 'twin_blade') return 'Twin blade'
-    if (type === 'epicfight:tachi' && preset === 'coral_blade') return 'Curved blade'
     return BC_COMBAT_TYPES[type]
 }
 
@@ -228,7 +228,7 @@ function bcHoverCompileCombatGroup(rows, workFirst) {
         }
         var line = 'Combat handling: ' + label
         if (row.alternate && row.alternate.mode) line += ' · alternate: ' + bcCombatAlternate(row.alternate.mode)
-        line += workFirst ? '. Work-first tool.' : '.'
+        line += workFirst ? '. Primarily a gathering tool.' : '.'
         if (!bcHoverValidLines([line], 'combat item ' + itemId)) continue
         BC_HOVER_EXACT_TARGETS[itemId] = true
         BC_HOVER_COMBAT.push({ target: itemId, line: line })
@@ -256,9 +256,9 @@ ItemEvents.tooltip(function (event) {
         for (var l = 0; l < row.lines.length; l++) event.add(row.target, bcHoverStyle(row.lines[l], row.tone))
     }
     for (var f = 0; f < BC_HOVER_FORMAL.length; f++) {
-        event.add(BC_HOVER_FORMAL[f].target, Text.darkGray(BC_HOVER_FORMAL[f].line))
+        event.add(BC_HOVER_FORMAL[f].target, Text.gray(BC_HOVER_FORMAL[f].line))
     }
     for (var c = 0; c < BC_HOVER_COMBAT.length; c++) {
-        event.add(BC_HOVER_COMBAT[c].target, Text.darkGray(BC_HOVER_COMBAT[c].line))
+        event.add(BC_HOVER_COMBAT[c].target, Text.gray(BC_HOVER_COMBAT[c].line))
     }
 })

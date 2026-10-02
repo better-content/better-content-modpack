@@ -4,6 +4,8 @@
 # Keep only disposable/downloaded installer output out of the worktree.
 /forge-*-installer.jar
 /forge-*-installer.jar.log
+.gradle/
+build/
 .idea/
 tools/runtime-probe/.gradle/
 tools/runtime-probe/build/
@@ -17,6 +19,10 @@ generated/exports/
 generated/exports-build40-*
 generated/cache/
 generated/evidence/
+/generated/runtime-dumps/
+/generated/test-evidence/
+/generated/gui-screenshots/
+/generated/*.tar.gz
 generated/asset-review/*/evidence/
 generated/pack-site/
 generated/surface-marker-capture/
@@ -24,6 +30,7 @@ generated/surface-samples-*-superflat.png
 generated/validation/integration-audit/spark-classification/
 generated/validation/integration-audit/stream-classification*/
 generated/validation/player-player-traces-*/
+generated/validation/player-better-player-traces-*/
 generated/validation/build40-*
 generated/validation/mod-gates-pre-complete-*
 generated/validation/automated_test_report.md

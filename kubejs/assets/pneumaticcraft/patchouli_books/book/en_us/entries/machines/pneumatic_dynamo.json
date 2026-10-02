@@ -1,22 +1,17 @@
 {
-  "name": "Pneumatic Dynamo",
-  "icon": "pneumaticcraft:pneumatic_dynamo",
+  "name": "Generating Electricity",
+  "icon": "powergrid:generator_housing",
   "category": "pneumaticcraft:machines",
   "advancement": "pneumaticcraft:advanced_pressure_tube",
   "pages": [
     {
       "type": "text",
-      "text": "The $(item)Pneumatic Dynamo/$ converts $(l:base_concepts/pressure)compressed air/$ into $(thing)Forge Energy/$, which is compatible with $(thing)Redstone Flux/$ and other mods' energy systems. It produces 40 FE/tick by default, but can be upgraded with $(l:base_concepts/upgrades#speed)Speed Upgrades/$. The FE output rate of the $(item)Flux Compressor/$ is twice the amount of the current FE production; 80 FE/tick by default, but can be increased via Speed Upgrades."
+      "text": "The Pneumatic Dynamo is disabled. Use PowerGrid to generate electricity. PneumaticCraft still supplies pressure, gas processing, storage, and machines that use electricity."
     },
     {
       "type": "spotlight",
-      "item": "pneumaticcraft:pneumatic_dynamo",
-      "text": "An important factor that influences efficiency is the Dynamo's $(l:base_concepts/heat)temperature/$. The Dynamo needs to be $(thing)cooled/$, or its efficiency will drop as the temperature rises, up to the point where no air is generated at all."
-    },
-    {
-      "type": "crafting",
-      "text": "Crafting a Pneumatic Dynamo",
-      "recipe": "kubejs:electrical_control/direct_root/first_fe_generator"
+      "item": "powergrid:generator_housing",
+      "text": "Build the Electrical Machine Block, then use it in PowerGrid's first generator housing."
     }
   ]
 }

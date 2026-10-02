@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "fd_canvas",
+  "pattern": [
+    "RR",
+    "RR"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:hanging_roots"
+    }
+  },
+  "result": {
+    "item": "farmersdelight:canvas"
+  }
+}

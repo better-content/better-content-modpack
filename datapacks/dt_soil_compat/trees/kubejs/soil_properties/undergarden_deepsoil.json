@@ -1,8 +1,0 @@
-{
-  "primitive_soil": "undergarden:deepsoil",
-  "acceptable_soils": [
-    "dirt_like"
-  ],
-  "substitute_soil": "dynamictrees:dirt",
-  "only_if_loaded": "undergarden"
-}

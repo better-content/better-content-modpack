@@ -1,0 +1,1 @@
+{"type":"minecraft:block","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"immersive_weathering:better_malum_dynamic_trees/runewood_leaf_pile"}],"conditions":[{"condition":"minecraft:survives_explosion"}]}]}

@@ -1,0 +1,10 @@
+{
+  "chance": 0.1,
+  "conditions": {
+    "complicated_bees:dimension": {"dimension": "minecraft:overworld"},
+    "complicated_bees:block_under": {"block": "minecraft:chorus_flower"}
+  },
+  "first": "complicated_bees:ender",
+  "result": "complicated_bees:surreal",
+  "second": "complicated_bees:warped"
+}

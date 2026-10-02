@@ -1,1 +1,0 @@
-{ "parent": "minecraft:item/generated", "textures": { "layer0": "kubejs:item/sanguine_hydrochloric_cutting_fluid" } }

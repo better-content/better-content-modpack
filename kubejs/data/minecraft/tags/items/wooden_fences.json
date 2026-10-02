@@ -3,8 +3,6 @@
   "values": [
     "aether:skyroot_fence",
     "ars_nouveau:archwood_fence",
-    "deeperdarker:bloom_fence",
-    "deeperdarker:echo_fence",
     "fallout_wastelands_:molder_wood_fence",
     "immersive_weathering:charred_fence",
     "natures_spirit:aspen_fence",
@@ -38,9 +36,6 @@
     "twilightforest:mining_fence",
     "twilightforest:time_fence",
     "twilightforest:transformation_fence",
-    "twilightforest:twilight_oak_fence",
-    "undergarden:grongle_fence",
-    "undergarden:smogstem_fence",
-    "undergarden:wigglewood_fence"
+    "twilightforest:twilight_oak_fence"
   ]
 }

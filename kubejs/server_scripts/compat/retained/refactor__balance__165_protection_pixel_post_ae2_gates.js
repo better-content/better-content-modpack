@@ -7,11 +7,19 @@ function bcPpExists(id) {
 }
 
 function bcPpRemove(event, outputs) {
-    return
+    for (var i = 0; i < outputs.length; i++) event.remove({ output: outputs[i] })
 }
 
 function bcPpMechanical(event, output, pattern, key, id) {
     if (!bcPpExists(output)) return
+    event.remove({ output: output })
+    event.custom({
+        type: 'create:mechanical_crafting',
+        pattern: pattern,
+        key: key,
+        result: { item: output },
+        acceptMirrored: false
+    }).id(id)
 }
 
 function bcPpSequence(event, input, transitional, output, sequence, loops, id) {
@@ -78,6 +86,7 @@ ServerEvents.recipes(function (event) {
         'protection_pixel:wingsofprismas_chestplate'
     ])
 
+    event.remove({ output: 'protection_pixel:smallnetheritesheet' })
     event.custom({
         type: 'create:mixing',
         heatRequirement: 'superheated',
@@ -85,39 +94,41 @@ ServerEvents.recipes(function (event) {
             { item: 'minecraft:netherite_ingot' },
             { item: 'kubejs:sky_steel_sheet' },
             { item: 'kubejs:sky_steel_sheet' },
-            { item: 'chemlib:osmium_plate' },
-            { item: 'chemlib:iridium_plate' }
+            { item: 'kubejs:soulstone_carbon_matrix' },
+            { item: 'kubejs:titanium_thermal_plate' }
         ],
         results: [{ item: 'protection_pixel:smallnetheritesheet', count: 2 }]
     }).id('kubejs:protection_pixel/small_netherite_sheet')
 
+    event.remove({ output: 'protection_pixel:reinforcedfiber' })
     event.custom({
         type: 'create:mixing',
         heatRequirement: 'heated',
         ingredients: [
             { item: 'minecraft:netherite_scrap' },
-            { item: 'createadditionallogistics:flexible_shaft' },
-            { item: 'chemlib:palladium_plate' },
-            { item: 'chemlib:ruthenium_plate' },
+            { item: 'create:belt_connector' },
+            { item: 'kubejs:tungsten_carbide_insert' },
+            { item: 'kubejs:platinum_group_residue' },
             { item: 'bloodmagic:etherealslate' }
         ],
         results: [{ item: 'protection_pixel:reinforcedfiber', count: 2 }]
     }).id('kubejs:protection_pixel/reinforced_fiber')
 
+    event.remove({ output: 'protection_pixel:heatresistantceramicsheet' })
     event.custom({
         type: 'create:mixing',
         heatRequirement: 'superheated',
         ingredients: [
             { item: 'minecraft:white_terracotta' },
             { item: 'minecraft:netherite_scrap' },
-            { item: 'heat_sync:heat_pipe' },
-            { item: 'chemlib:thorium_plate' },
-            { item: 'chemlib:uranium_plate' }
+            { item: 'better_industrial_heat:heat_pipe' },
+            { item: 'better_ore_geology:thorium_concentrate' },
+            { item: 'better_ore_geology:uranium_concentrate' }
         ],
         results: [{ item: 'protection_pixel:heatresistantceramicsheet', count: 2 }]
     }).id('kubejs:protection_pixel/heat_resistant_ceramic_sheet')
 
-     bcPpSequence(event, 'protection_pixel:smallnetheritesheet', 'protection_pixel:incompletealloyarmorplate', 'protection_pixel:alloyarmorplate', [bcPpPress('protection_pixel:incompletealloyarmorplate'), bcPpDeploy('protection_pixel:incompletealloyarmorplate', 'kubejs:sky_steel_sheet'), bcPpDeploy('protection_pixel:incompletealloyarmorplate', 'kubejs:sky_steel_sheet'), bcPpDeploy('protection_pixel:incompletealloyarmorplate', 'bloodmagic:etherealslate'), bcPpDeploy('protection_pixel:incompletealloyarmorplate', 'chemlib:iridium_plate')
+     bcPpSequence(event, 'protection_pixel:smallnetheritesheet', 'protection_pixel:incompletealloyarmorplate', 'protection_pixel:alloyarmorplate', [bcPpPress('protection_pixel:incompletealloyarmorplate'), bcPpDeploy('protection_pixel:incompletealloyarmorplate', 'kubejs:sky_steel_sheet'), bcPpDeploy('protection_pixel:incompletealloyarmorplate', 'kubejs:sky_steel_sheet'), bcPpDeploy('protection_pixel:incompletealloyarmorplate', 'bloodmagic:etherealslate'), bcPpDeploy('protection_pixel:incompletealloyarmorplate', 'kubejs:titanium_thermal_plate')
     ], 2, 'kubejs:protection_pixel/alloy_armor_plate')
 
      bcPpMechanical(event, 'protection_pixel:armorloadplatform', [
@@ -129,9 +140,9 @@ ServerEvents.recipes(function (event) {
     ], {
         S: { item: 'kubejs:sky_steel_sheet' },
         Q: { item: 'kubejs:sky_steel_sheet' },
-        L: { item: 'heat_sync:heat_pipe' },
+        L: { item: 'better_industrial_heat:heat_pipe' },
         A: { item: 'protection_pixel:alloyarmorplate' },
-        F: { item: 'latent_chemlib:gas_reaction_chamber' },
+        F: { item: 'better_chemlib_hazards:gas_reaction_chamber' },
         C: { item: 'ae2:engineering_processor' }
     }, 'kubejs:create/mechanical_crafting/protection_pixel/armor_load_platform')
 
@@ -142,8 +153,8 @@ ServerEvents.recipes(function (event) {
         'FQCQF',
         'HFHFH'
     ], {
-        H: { item: 'heat_sync:heat_pipe' },
-        F: { item: 'latent_chemlib:gas_reaction_chamber' },
+        H: { item: 'better_industrial_heat:heat_pipe' },
+        F: { item: 'better_chemlib_hazards:gas_reaction_chamber' },
         Q: { item: 'kubejs:ae_logic_package' },
         C: { item: 'ae2:engineering_processor' },
         A: { item: 'protection_pixel:alloyarmorplate' }
@@ -154,8 +165,8 @@ ServerEvents.recipes(function (event) {
         'QEQ',
         'RHR'
     ], {
-        R: { item: 'chemlib:ruthenium_plate' },
-        H: { item: 'heat_sync:coolant_exchanger' },
+        R: { item: 'kubejs:platinum_group_residue' },
+        H: { item: 'better_industrial_heat:coolant_exchanger' },
         Q: { item: 'kubejs:ae_logic_package' },
         E: { item: 'protection_pixel:powerengine' }
     }, 'kubejs:create/mechanical_crafting/protection_pixel/heat_overlock_mechanism')
@@ -310,11 +321,11 @@ ServerEvents.recipes(function (event) {
         'STS'
     ], {
         H: { item: 'protection_pixel:heatresistantceramicsheet' },
-        O: { item: 'realistic_ores:crushed_hotstone' },
+        O: { item: 'better_ore_geology:crushed_hotstone' },
         Q: { item: 'kubejs:ae_logic_package' },
         L: { item: 'protection_pixel:linkplate_helmet' },
         S: { item: 'protection_pixel:smallnetheritesheet' },
-        T: { item: 'chemlib:thorium_plate' }
+        T: { item: 'better_ore_geology:thorium_concentrate' }
     }, 'kubejs:create/mechanical_crafting/protection_pixel/tosaki_helmet_lava_diving')
 
      bcPpMechanical(event, 'protection_pixel:tosaki_chestplate', [
@@ -324,7 +335,7 @@ ServerEvents.recipes(function (event) {
         'SOS'
     ], {
         H: { item: 'protection_pixel:heatresistantceramicsheet' },
-        O: { item: 'realistic_ores:crushed_hotstone' },
+        O: { item: 'better_ore_geology:crushed_hotstone' },
         Q: { item: 'kubejs:ae_logic_package' },
         L: { item: 'protection_pixel:linkplate_chestplate' },
         A: { item: 'protection_pixel:heatoverlockingmechanism' },
@@ -340,13 +351,13 @@ ServerEvents.recipes(function (event) {
     ], {
         H: { item: 'protection_pixel:heatresistantceramicsheet' },
         Q: { item: 'kubejs:ae_logic_package' },
-        O: { item: 'realistic_ores:crushed_hotstone' },
+        O: { item: 'better_ore_geology:crushed_hotstone' },
         L: { item: 'protection_pixel:linkplate_leggings' },
         S: { item: 'protection_pixel:smallnetheritesheet' },
-        I: { item: 'chemlib:iridium_plate' }
+        I: { item: 'kubejs:titanium_thermal_plate' }
     }, 'kubejs:create/mechanical_crafting/protection_pixel/tosaki_leggings_lava_diving')
 
-     bcPpSequence(event, 'protection_pixel:wingsofprism_chestplate', 'protection_pixel:incompletewingsofprism', 'protection_pixel:wingsofprismas_chestplate', [bcPpFillLava('protection_pixel:incompletewingsofprism', 500), bcPpPress('protection_pixel:incompletewingsofprism'), bcPpDeploy('protection_pixel:incompletewingsofprism', 'protection_pixel:heatoverlockingmechanism'), bcPpDeploy('protection_pixel:incompletewingsofprism', 'kubejs:ae_logic_package'), bcPpDeploy('protection_pixel:incompletewingsofprism', 'bloodmagic:etherealslate'), bcPpDeploy('protection_pixel:incompletewingsofprism', 'chemlib:iridium_plate')
+     bcPpSequence(event, 'protection_pixel:wingsofprism_chestplate', 'protection_pixel:incompletewingsofprism', 'protection_pixel:wingsofprismas_chestplate', [bcPpFillLava('protection_pixel:incompletewingsofprism', 500), bcPpPress('protection_pixel:incompletewingsofprism'), bcPpDeploy('protection_pixel:incompletewingsofprism', 'protection_pixel:heatoverlockingmechanism'), bcPpDeploy('protection_pixel:incompletewingsofprism', 'kubejs:ae_logic_package'), bcPpDeploy('protection_pixel:incompletewingsofprism', 'bloodmagic:etherealslate'), bcPpDeploy('protection_pixel:incompletewingsofprism', 'kubejs:titanium_thermal_plate')
     ], 2, 'kubejs:protection_pixel/wingsofprism_as')
 
     // Broad safety net: all named armor/equipment should consume post-AE2 components if an

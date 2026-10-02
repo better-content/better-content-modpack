@@ -11,7 +11,6 @@ Blocks = [
 	"create:horizontal_framed_glass",
 	"create:tiled_glass",
 	"create:vertical_framed_glass",
-	"deeperdarker:soundproof_glass",
 	"fallout_wastelands_:blasted_glass",
 	"fallout_wastelands_:burnished_glass",
 	"fallout_wastelands_:wasteland_broken_glass",
@@ -60,8 +59,7 @@ Blocks = [
 	"tconstruct:soul_glass",
 	"tconstruct:white_clear_stained_glass",
 	"tconstruct:yellow_clear_stained_glass",
-	"twilightforest:auroralized_glass",
-	"undergarden:sediment_glass"]
+	"twilightforest:auroralized_glass"]
 
 [Physics]
 	#The maximum weight the block(s) can support both horizontally and vertically.

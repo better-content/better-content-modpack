@@ -2,5 +2,83 @@
   {
     "mob": "minecraft:creeper",
     "result": "deny"
+  },
+  {
+    "when": "position",
+    "mob": ["born_in_chaos_v1:corpse_fish", "born_in_chaos_v1:glutton_fish"],
+    "dimension": "rats:ratlantis",
+    "spawntype": "natural",
+    "random": 0.6666667,
+    "result": "deny"
+  },
+  {
+    "when": "position",
+    "mob": [
+      "born_in_chaos_v1:baby_skeleton",
+      "born_in_chaos_v1:decrepit_skeleton",
+      "goety:rattled",
+      "goety:frayed",
+      "born_in_chaos_v1:dread_hound",
+      "born_in_chaos_v1:skeleton_demoman",
+      "born_in_chaos_v1:barrel_zombie",
+      "born_in_chaos_v1:door_knight",
+      "born_in_chaos_v1:zombie_clown",
+      "born_in_chaos_v1:zombie_lumberjack",
+      "born_in_chaos_v1:skeleton_thrasher",
+      "born_in_chaos_v1:zombie_bruiser",
+      "quark:forgotten",
+      "born_in_chaos_v1:corpse_fly",
+      "born_in_chaos_v1:baby_spider",
+      "goety:web_spider",
+      "born_in_chaos_v1:bloody_gadfly",
+      "born_in_chaos_v1:restless_spirit",
+      "quark:wraith",
+      "goety:wraith",
+      "goety:muck_wraith",
+      "born_in_chaos_v1:dark_vortex",
+      "goety:reaper",
+      "born_in_chaos_v1:seared_spirit",
+      "tconstruct:ender_slime",
+      "endermanoverhaul:cave_enderman",
+      "endermanoverhaul:end_enderman",
+      "endermanoverhaul:end_islands_enderman"
+    ],
+    "dimension": "minecraft:overworld",
+    "maxheight": 62,
+    "spawntype": "natural",
+    "result": "deny"
+  },
+  {
+    "mob": [
+      "cataclysm:aptrgangr",
+      "cataclysm:coralssus",
+      "cataclysm:ignited_revenant",
+      "cataclysm:the_prowler",
+      "cataclysm:ender_golem",
+      "cataclysm:kobolediator",
+      "cataclysm:wadjet",
+      "cataclysm:amethyst_crab",
+      "cataclysm:clawdian"
+    ],
+    "spawntype": "natural",
+    "result": "deny"
+  },
+  {
+    "mob": [
+      "thalassophobia:sunfish",
+      "thalassophobia:catfish",
+      "thalassophobia:big_catfish",
+      "thalassophobia:shark",
+      "thalassophobia:bull_shark",
+      "thalassophobia:goblin_shark",
+      "thalassophobia:hammerhead_shark",
+      "thalassophobia:whale_shark",
+      "thalassophobia:whale",
+      "minecraft:camel",
+      "minecraft:panda",
+      "minecraft:polar_bear"
+    ],
+    "spawntype": "natural",
+    "result": "deny"
   }
 ]

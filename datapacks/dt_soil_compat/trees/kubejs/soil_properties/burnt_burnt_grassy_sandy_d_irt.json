@@ -1,9 +1,0 @@
-{
-  "primitive_soil": "burnt:burnt_grassy_sandy_d_irt",
-  "acceptable_soils": [
-    "dirt_like",
-    "sand_like"
-  ],
-  "substitute_soil": "dynamictrees:dirt",
-  "only_if_loaded": "burnt"
-}

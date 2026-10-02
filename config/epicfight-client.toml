@@ -6,22 +6,22 @@ provider = "NULL"
 
 [ingame]
 	camera_auto_switch = false
-	first_person_model = false
-	show_target_indicator = true
+	first_person_model = true
+	show_target_indicator = false
 	#Allowed Values: NONE, HURT, TARGET, TARGET_AND_HURT
-	health_bar_show_option = "HURT"
+	health_bar_show_option = "NONE"
 	show_epicfight_attributes = true
 	#Range: 0.0 ~ 1.0
 	target_outline_color = 0.0
 	#Allowed Values: NONE, CROSSHAIR, HIGHLIGHT, CROSSHAIR_AND_HIGHLIGHT
 	mine_block_guide_option = "CROSSHAIR"
-	enable_target_entity_guide = true
+	enable_target_entity_guide = false
 	blood_effects = true
 	ground_slams = true
 	#Range: 0 ~ 30
 	max_hit_projectiles = 30
 	enable_player_vanilla_model = true
-	enable_cosmetics = true
+	enable_cosmetics = false
 	use_compute_shader = false
 	enable_pov_action = true
 	#Range: 1 ~ 10

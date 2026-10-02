@@ -1,0 +1,12 @@
+{
+  "category": "ars_nouveau:automation",
+  "advancement": "minecraft:end/root",
+  "icon": "arseng:source_cell_housing",
+  "name": "item.arseng.source_cell_housing",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Ars Energistique Source storage and conversion are disabled in Better Content."
+    }
+  ]
+}

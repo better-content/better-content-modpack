@@ -1,5 +1,6 @@
 {
   "category": "ars_nouveau:rituals",
+  "advancement": "minecraft:end/root",
   "icon": "ars_nouveau:ritual_flight",
   "name": "item.ars_nouveau.ritual_flight",
   "pages": [
@@ -9,7 +10,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "This legacy recipe is intentionally unavailable in Better Content progression."
+      "text": "This recipe is disabled in Better Content."
     }
   ]
 }

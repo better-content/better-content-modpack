@@ -27,8 +27,8 @@ ServerEvents.tags('block', event => {
 
     blocks.forEach(id => {
         event.add('minecraft:mineable/pickaxe', id)
-        event.remove('minecraft:needs_stone_tool', id)
         event.remove('minecraft:needs_iron_tool', id)
         event.remove('minecraft:needs_diamond_tool', id)
+        event.add('minecraft:needs_stone_tool', id)
     })
 })

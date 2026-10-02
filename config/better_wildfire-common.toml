@@ -1,0 +1,6 @@
+[wildfire]
+spreadChance = 0.05
+smolderTicks = 80
+maxIgnitionsPerTick = 64
+playerRadius = 128
+groundRecoveryChance = 0.03

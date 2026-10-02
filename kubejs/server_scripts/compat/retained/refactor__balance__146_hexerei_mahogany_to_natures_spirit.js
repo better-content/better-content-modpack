@@ -4,6 +4,31 @@ function bcReplaceHexereiMahoganyInput(event, oldInput, newInput) {
 }
 
 ServerEvents.recipes(function (event) {
+    // Nature's Spirit owns the canonical tree and ordinary wood set. Hexerei's
+    // unique functional/decorative variants remain, but must consume the
+    // Nature's Spirit material below.
+    ;[
+        'hexerei:mahogany_sapling',
+        'hexerei:mahogany_leaves',
+        'hexerei:mahogany_log',
+        'hexerei:mahogany_wood',
+        'hexerei:stripped_mahogany_log',
+        'hexerei:stripped_mahogany_wood',
+        'hexerei:mahogany_planks',
+        'hexerei:mahogany_slab',
+        'hexerei:mahogany_stairs',
+        'hexerei:mahogany_button',
+        'hexerei:mahogany_door',
+        'hexerei:mahogany_fence',
+        'hexerei:mahogany_fence_gate',
+        'hexerei:mahogany_pressure_plate',
+        'hexerei:mahogany_sign',
+        'hexerei:mahogany_hanging_sign',
+        'hexerei:mahogany_trapdoor',
+        'hexerei:mahogany_boat',
+        'hexerei:mahogany_chest_boat'
+    ].forEach(function (item) { event.remove({ output: item }) })
+
     var mappings = [
         ['hexerei:mahogany_log', 'natures_spirit:mahogany_log'],
         ['hexerei:mahogany_wood', 'natures_spirit:mahogany_wood'],

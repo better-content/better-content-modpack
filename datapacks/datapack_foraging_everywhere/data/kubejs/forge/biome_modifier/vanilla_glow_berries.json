@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#kubejs:undergarden_forage/wet",
-  "features": "minecraft:cave_vines",
-  "step": "vegetal_decoration"
-}

@@ -1,8 +1,0 @@
-{
-  "primitive_soil": "deeperdarker:blooming_moss_block",
-  "acceptable_soils": [
-    "dirt_like"
-  ],
-  "substitute_soil": "dynamictrees:moss_block",
-  "only_if_loaded": "deeperdarker"
-}

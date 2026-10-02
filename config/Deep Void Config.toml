@@ -1,0 +1,7 @@
+["Generation&World"]
+	# The origin Cult Temple is the pack's single central entrance; distributed native holes and fall/Abductor routes remain enabled.
+	PlaceCultTemple = false
+
+[Misc]
+	# The pinned mod otherwise gives its wiki book to players when they first join.
+	GiveWikiBook = false

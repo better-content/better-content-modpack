@@ -1,0 +1,12 @@
+{
+  "name": "Honey Generator",
+  "category": "complicated_bees:machines",
+  "advancement": "minecraft:end/root",
+  "icon": "complicated_bees:honey_generator",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "This generator is disabled. Use a PowerGrid generator for electricity."
+    }
+  ]
+}

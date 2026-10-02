@@ -1,7 +1,0 @@
-{
-  "type": "dynamictrees:tree",
-  "config": {
-    "species": "dynamic_trees_dimension_compat:wigglewood",
-    "radius": 3
-  }
-}

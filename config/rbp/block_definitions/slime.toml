@@ -3,7 +3,7 @@
 #	Namespaces:   '<minecraft>'
 #	Tags:         '#forge:stone'
 #	IDs:          'minecraft:stone'
-Blocks = ["minecraft:honey_block", "minecraft:slime_block"]
+Blocks = ["minecraft:honey_block", "minecraft:slime_block", "tconstruct:earth_congealed_slime", "tconstruct:ender_congealed_slime", "tconstruct:ichor_congealed_slime", "tconstruct:sky_congealed_slime"]
 
 [Physics]
 	#The maximum weight the block(s) can support both horizontally and vertically.

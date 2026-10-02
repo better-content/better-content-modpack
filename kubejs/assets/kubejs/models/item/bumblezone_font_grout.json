@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": { "layer0": "kubejs:item/bumblezone_font_grout" }
+}

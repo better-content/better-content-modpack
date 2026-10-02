@@ -1,0 +1,9 @@
+[wanderingTrader]
+	recurringVisits = true
+	#Range: > 0
+	initialDelay = 48000
+	#Range: > 1200
+	visitInterval = 120000
+	#Range: 20 ~ 24000
+	retryDelay = 1200
+	announceArrival = true

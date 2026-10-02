@@ -8,11 +8,17 @@
   "Structure blacklist": [
     "ae2:meteorite",
     "hexerei:dark_coven",
-    "hexerei:nature_coven"
+    "hexerei:nature_coven",
+    "minecraft:shipwreck",
+    "minecraft:shipwreck_beached",
+    "minecraft:ocean_ruin_cold",
+    "minecraft:ocean_ruin_warm",
+    "minecraft:buried_treasure",
+    "minecraft:igloo"
   ],
   "comment_foundation_blacklist": "Supports: full id, namespace.*, *, #namespace:tag",
   "Foundation blacklist": [
-    "dimension_drink:dimensional_font"
+    "better_dimension_fonts:dimensional_font"
   ],
   "comment_auto": "Below list contains real structure template files (.nbt). Do not edit."
 }

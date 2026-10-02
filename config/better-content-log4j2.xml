@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Better Content's production log policy. The regex denies only fixed-version, enumerated
+  compatibility chatter that has been reviewed under the full pack smoke. New warning/error
+  families remain visible, and the explicit runtime suites reject every WARN or ERROR record that reaches output.
+-->
+<Configuration status="ERROR">
+    <Properties>
+        <!-- Keep each expression small: client startup emits very large multiline messages. -->
+        <Property name="noise1">(?s)^(?:Advanced terminal features|Mod file .* is missing mods\.toml file|Attempted to select a dependency jar|Mixin config .* does not specify "minVersion" property|Option 'mixin\.|Unable to determine desktop session type|Embeddium has applied one or more workarounds|This is not necessarily an issue|Reference map '.*' for .* could not be read|Error loading class:).*$</Property>
+        <Property name="noise2">(?s)^(?:@Mixin target |Force-disabling mixin |FAILED: target node not found!|valkyrienskies-common\.mixins\.json:feature\.sculk\.MixinVibrationSystemTicker: Interface mixin contains a non-public method|@Final field |Static binding violation:|@Inject\(@At\("INVOKE"\)\)|Modified mixin |Method overwrite conflict for |Mod\(s\) .* are modifying Embeddium|Mod mixin into Embeddium).*$</Property>
+        <Property name="noise3">(?s)^(?:Something is attempting|Shader .* could not find|Found a broken ingredient|Ignoring ingredient that isn't|Supplied images for extraction|Too many physics frames in the physics frame queue|Tried to load (?:a DUMMY block entity|a block entity)|Skipping (?:BlockEntity|Entity) with id|defineId called for:|Registry entry listened).*$</Property>
+        <Property name="noise4">(?s)^(?:Item Capability Exception:|Failed to process update information|Assets URL 'union:|Attempted to load class .* for invalid dist DEDICATED_SERVER|Fabric API detected!|Loaded native library successfully but ICMP still failed|Recipe count|Initial datapack load took|Dedicated server took|\*\*\*\* SERVER IS RUNNING IN OFFLINE/INSECURE MODE!|The server will make no attempt to authenticate usernames).*$</Property>
+        <Property name="noise5">(?s)^(?:While this makes the game possible to play without internet access|To change this, set "online-mode" to "true"|Configuration file .* is not correct\. Correcting|Incorrect key .* was corrected|Plugin .* skipping|Hanging entity at invalid position|POI data mismatch:|No key selector in MapLike|Guidebook missing |Physics pipeline ending|Can't keep up!).*$</Property>
+        <Property name="noise6">(?s)^(?:Unable to find class |Failed to load item |Failed to get block color|Failed to verify authentication|Failed to initialize Linux Narrator|Missing particle sprites:|Texture .* with size|Item '.*' has multiple|Item Group has no|Rooty Dirt block NOT|Recipe registry plugin is).*$</Property>
+        <Property name="noise7">(?s)^(?:Partial Oculus support enabled|One or more BufferBuilders|Server config reloaded|Tried to over-fill a |Unrecognized user type:|Total time to load|Time from main menu|Game took |Distant Horizons: G1 Garbage collector detected|Applying workaround:|\[Computer Shader Acceleration\]).*$</Property>
+        <Property name="noise8">(?s)^(?:unable to create data|attempt to retrieve enablement|Ruby says &quot;this should work just fine&quot;, lets hope it does 😂|(?:applied_armorer|create_armorer|immersive_armorer):.* index file read fail!).*$</Property>
+        <Property name="noise9">(?s)^(?:Mixin alexscaves\.mixins\.json:SwampHutPieceMixin has multiple constructors, \(Lnet/minecraft/world/level/levelgen/structure/pieces/StructurePieceType;IIIIIILnet/minecraft/core/Direction;\)V was selected|Failed to get VarHandle for class class com\.github\.alexthe666\.citadel\.server\.world\.CitadelServerData with field dataMap and type interface java\.util\.Map|Failed to instantiate constructor\.).*$</Property>
+        <Property name="noise10">(?s)^(?:File alexscaves:sounds/block/purple_soda/purple_soda_swim_[34]\.ogg does not exist, cannot add it to event alexscaves:purple_soda_swim|File alexscaves:sounds/mob/luxtructosaurus/luxtructosaurus_(?:snort_[012]|breathe_[012])\.ogg does not exist, cannot add it to event alexscaves:luxtructosaurus_(?:snort|breathe)|Missing sound for event: alexscaves:(?:abyssal_chasm_ambience_mood|luxtructosaurus_breath)|Partially Incompatible Distant Horizons mod detected: \[Alex's Caves\] may require some config changes in order to render Distant Horizons correctly\.).*$</Property>
+        <Property name="noise11">^Mod 'cold_sweat' took [0-9.]+ s to run a deferred task\.$</Property>
+        <Property name="noise12">^Entity Chameleon\['Chameleon'/[0-9]+, l='ClientLevel', x=-?[0-9.]+, y=-?[0-9.]+, z=-?[0-9.]+\] does not have attribute cold_sweat:(heat_dampening|base_temperature|world_temperature|temperature_rate|freezing_point|cold_resistance|cold_dampening|heat_resistance|burning_point)$</Property>
+        <!-- Ice and Fire beta-5 requests two absent optional fire-dragon animation poses and falls back safely. -->
+        <Property name="noise13">^Could not load /assets/iceandfire/models/tabula/firedragon/firedragon_(?:swimming|swim5)\.tbl: in is null$</Property>
+    </Properties>
+    <Appenders>
+        <Console name="SysOut" target="SYSTEM_OUT">
+            <Filters>
+                <RegexFilter regex="${noise1}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise2}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise3}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise4}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise5}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise6}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise7}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise8}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise9}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise10}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise11}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise12}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise13}" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] [%logger]: %msg{nolookups}%n"/>
+        </Console>
+        <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+            <Filters>
+                <RegexFilter regex="${noise1}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise2}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise3}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise4}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise5}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise6}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise7}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise8}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise9}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise10}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise11}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise12}" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <RegexFilter regex="${noise13}" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] [%logger]: %msg{nolookups}%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <Filters>
+                <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <AppenderRef ref="SysOut"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>

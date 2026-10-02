@@ -1,0 +1,13 @@
+{
+  "type": "forge:remove_spawns",
+  "biomes": [
+    "deep_lukewarm_ocean",
+    "deep_ocean",
+    "lukewarm_ocean",
+    "ocean",
+    "warm_ocean"
+  ],
+  "entity_types": [
+    "thalassophobia:sunfish"
+  ]
+}

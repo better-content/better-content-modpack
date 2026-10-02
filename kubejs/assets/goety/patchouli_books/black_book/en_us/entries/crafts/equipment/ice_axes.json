@@ -1,0 +1,12 @@
+{
+  "name": "Ice Axes",
+  "category": "goety:crafts/equipment",
+  "advancement": "minecraft:end/root",
+  "icon": "goety:iron_ice_axe",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "These tools are disabled. Use Tinkers' Construct tools."
+    }
+  ]
+}

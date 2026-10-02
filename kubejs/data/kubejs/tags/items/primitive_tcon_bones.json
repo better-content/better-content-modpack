@@ -1,7 +1,9 @@
 {
   "replace": false,
   "values": [
+    "minecraft:bone",
     "projectvibrantjourneys:bones",
-    "projectvibrantjourneys:charred_bones"
+    "projectvibrantjourneys:charred_bones",
+    "projectvibrantjourneys:seashells"
   ]
 }

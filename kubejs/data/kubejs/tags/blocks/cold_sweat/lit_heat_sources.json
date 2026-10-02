@@ -4,11 +4,29 @@
     "minecraft:furnace",
     "minecraft:smoker",
     "minecraft:blast_furnace",
-    { "id": "createdieselgenerators:burner", "required": false },
-    { "id": "dawnoftimebuilder:fireplace", "required": false },
-    { "id": "dawnoftimebuilder:irori_fireplace", "required": false },
-    { "id": "ubesdelight:kalan", "required": false },
-    { "id": "supplementaries:fire_pit", "required": false },
-    { "id": "#goety:brazier", "required": false }
+    {
+      "id": "createdieselgenerators:burner",
+      "required": false
+    },
+    {
+      "id": "dawnoftimebuilder:fireplace",
+      "required": false
+    },
+    {
+      "id": "dawnoftimebuilder:irori_fireplace",
+      "required": false
+    },
+    {
+      "id": "ubesdelight:kalan",
+      "required": false
+    },
+    {
+      "id": "supplementaries:fire_pit",
+      "required": false
+    },
+    {
+      "id": "#goety:brazier",
+      "required": false
+    }
   ]
 }

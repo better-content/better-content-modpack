@@ -3,8 +3,6 @@
   "values": [
     "aether:skyroot_door",
     "ars_nouveau:archwood_door",
-    "deeperdarker:bloom_door",
-    "deeperdarker:echo_door",
     "fallout_wastelands_:joshua_tree_door",
     "fallout_wastelands_:molder_wood_door",
     "natures_spirit:aspen_door",
@@ -37,9 +35,6 @@
     "twilightforest:mining_door",
     "twilightforest:time_door",
     "twilightforest:transformation_door",
-    "twilightforest:twilight_oak_door",
-    "undergarden:grongle_door",
-    "undergarden:smogstem_door",
-    "undergarden:wigglewood_door"
+    "twilightforest:twilight_oak_door"
   ]
 }

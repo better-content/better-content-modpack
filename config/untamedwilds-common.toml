@@ -1,0 +1,3 @@
+# Controlled replenishment is provided by In Control; worldgen fauna features stay off.
+[mobcontrol]
+masterspawner = false

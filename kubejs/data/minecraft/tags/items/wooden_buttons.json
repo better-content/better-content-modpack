@@ -3,8 +3,6 @@
   "values": [
     "aether:skyroot_button",
     "ars_nouveau:archwood_button",
-    "deeperdarker:bloom_button",
-    "deeperdarker:echo_button",
     "fallout_wastelands_:molder_wood_button",
     "natures_spirit:aspen_button",
     "natures_spirit:cedar_button",
@@ -37,9 +35,6 @@
     "twilightforest:sorting_button",
     "twilightforest:time_button",
     "twilightforest:transformation_button",
-    "twilightforest:twilight_oak_button",
-    "undergarden:grongle_button",
-    "undergarden:smogstem_button",
-    "undergarden:wigglewood_button"
+    "twilightforest:twilight_oak_button"
   ]
 }

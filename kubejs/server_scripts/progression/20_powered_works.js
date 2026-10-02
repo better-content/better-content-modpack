@@ -1,7 +1,9 @@
 // Machine Blocks prove an era only at its direct roots; downstream Create parts
 // return immediately to native components.
 ServerEvents.recipes(function (event) {
-    event.shaped('kubejs:andesite_machine_block', ['PAP', 'ASA', 'PAP'], {
+    // Direct roots consume Machine Blocks. Batch them so proving the era does not
+    // recursively multiply every lower-tier casing for the rest of the Works spine.
+    event.shaped('4x kubejs:andesite_machine_block', ['PAP', 'ASA', 'PAP'], {
         P: '#forge:plates/iron', A: 'create:andesite_alloy', S: 'tconstruct:seared_bricks'
     }).id('kubejs:powered_works/andesite_machine_block')
 
@@ -33,7 +35,7 @@ ServerEvents.recipes(function (event) {
             { tag: 'forge:plates/copper' }, { tag: 'forge:plates/copper' },
             { item: 'minecraft:nether_brick' }, { item: 'create:andesite_alloy' }, { item: 'create:andesite_alloy' }
         ],
-        results: [{ item: 'kubejs:copper_machine_block' }]
+        results: [{ item: 'kubejs:copper_machine_block', count: 4 }]
     }).id('kubejs:powered_works/copper_machine_block')
 
     ;[

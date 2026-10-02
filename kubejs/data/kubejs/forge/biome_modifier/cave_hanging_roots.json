@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "kubejs:cave_hanging_roots",
+  "step": "vegetal_decoration"
+}

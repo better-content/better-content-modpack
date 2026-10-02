@@ -1,0 +1,1321 @@
+package com.bettercontent.tests
+
+import com.bettercontent.tests.release.ActiveMod
+import com.bettercontent.tests.release.annotateJar
+import com.bettercontent.tests.release.build
+import com.bettercontent.tests.release.packageResolveCommand
+import com.bettercontent.tests.release.jarDeclaresMod
+import com.bettercontent.tests.release.readSourceCommit
+import com.bettercontent.tests.release.sourceUpdateStatus
+import com.bettercontent.tests.release.SourceUpdate
+import com.bettercontent.tests.release.ReflectionAllowance
+import com.bettercontent.tests.release.readReflectionAllowlist
+import com.bettercontent.tests.release.sourceReflectionViolations
+import com.bettercontent.tests.release.unusedReflectionAllowances
+import com.bettercontent.tests.release.bytecodeReflectionViolations
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Tag
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.Opcodes
+import java.nio.file.Files
+import java.nio.file.Path
+import java.time.Duration
+import java.util.jar.JarFile
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+import kotlin.io.path.createDirectories
+import kotlin.io.path.writeText
+
+@Tag("fast")
+class HarnessFastTest {
+    @Test
+    fun runtimeFixtureDisablesWallClockScheduledBackups(@TempDir root: Path) {
+        val config = root.resolve("config").also { it.createDirectories() }.resolve("ftbbackups2.json")
+        config.writeText("""{"enabled": true, "backup_cron": "0 0 */2 * * ?"}""")
+
+        disableScheduledBackupsForRuntimeFixture(root)
+
+        assertEquals("""{"enabled": false, "backup_cron": "0 0 */2 * * ?"}""", Files.readString(config))
+        assertThrows(IllegalArgumentException::class.java) { disableScheduledBackupsForRuntimeFixture(root) }
+    }
+
+    @Test
+    fun testFacadeRejectsCachedPackSuiteResultsWithoutFreshEvidence() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val build = Files.readString(root.resolve("build.gradle.kts"))
+        val facade = Files.readString(root.resolve("test.main.kts"))
+
+        assertTrue(build.contains("outputs.upToDateWhen { false }"))
+        assertTrue(facade.contains("report.lastModified() < startedAt"))
+        assertTrue(facade.contains("validateFreshEvidence(evidenceSuite, startedAt)"))
+        assertTrue(facade.contains("BC_TEST_EVIDENCE_SUITE"))
+    }
+
+    @Test
+    fun distJoinsOneClientAndDebugTraversesDimensionsBeforeCampaigns() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val source = Files.readString(root.resolve("src/test/kotlin/com/bettercontent/tests/MultiplayerRuntimeTest.kt"))
+        val join = source.substringAfter("fun leadClientJoinsFreshDedicatedServer()").substringBefore("@Test @Order(2)")
+        val traversal = source.substringAfter("fun everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations()")
+            .substringBefore("@Test @Order(3)")
+
+        assertTrue(join.indexOf("if (evidence.run.tier == \"debug\")") < join.indexOf("server.runtimeDump()"))
+        assertTrue(join.contains("startClient(lead)"))
+        assertTrue(join.contains("requirePlayersOnline(\"client joined\", listOf(lead))"))
+        assertTrue(traversal.indexOf("if (evidence.run.tier != \"debug\")") < traversal.indexOf("DimensionSmokePlan.discover("))
+        assertTrue(traversal.contains("DimensionSmokePlan.positions.take(3)"))
+        assertTrue(source.contains("if (evidence.run.target != null) joined"))
+        assertTrue(source.contains("else if (evidence.run.tier == \"debug\") campaignReady"))
+        assertTrue(source.contains("clients.drop(1).forEach"))
+        assertTrue(source.contains("requireAllPlayersOnline(\"campaign clients joined\")"))
+        assertTrue(source.contains("requireAllPlayersOnline(\"three campaign encounters active\")"))
+        assertTrue(!source.contains("pillager_soak_started"))
+        assertTrue(!source.contains("dimension support heartbeat"))
+        assertTrue(!source.contains("clients.filter { it !== lead }"))
+        assertTrue(!source.contains("joinedClientsSettleContent"))
+    }
+
+    @Test
+    fun packwizHashRefreshBelongsOnlyToFreshDistPreparation() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val facade = Files.readString(root.resolve("test.main.kts"))
+        val packager = Files.readString(root.resolve("package.sh"))
+        val release = Files.readString(root.resolve("src/main/kotlin/com/bettercontent/tests/release/ReleasePipeline.kt"))
+
+        assertTrue(!facade.contains("packwiz refresh"))
+        assertTrue(!packager.contains("packwiz refresh"))
+        assertTrue(release.contains("listOf(\"packwiz\", \"refresh\")"))
+        assertTrue(release.contains("listOf(\"git\", \"diff\", \"--check\")"))
+    }
+
+    @Test
+    fun releaseWarmsTheCanonicalArtifactCacheBeforeModBuilds(@TempDir root: Path) {
+        val target = root.resolve("build/release-dependency-warmup/run")
+        assertEquals(
+            listOf(root.resolve("package.sh").toString(), "resolve", root.toString(), target.toString(), "client"),
+            packageResolveCommand(root, target),
+        )
+    }
+
+    @Test
+    fun activeReleaseInventoryIsUniqueAndMatchesCurrentSources() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val document = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
+        assertEquals("bc.active_custom_mods.v1", document.path("schema").asText())
+        val mods = document.path("mods")
+        assertEquals(44, mods.size())
+        val repositories = mods.map { it.path("repository").asText() }.toSet()
+        assertEquals(mods.size(), repositories.size)
+        assertEquals(mods.size(), mods.map { it.path("modId").asText() }.toSet().size)
+        val sourceInventory = jacksonObjectMapper().readTree(root.resolve(".github/ci-source-revisions.json").toFile())
+            .path("repositories")
+        val privateRepositories = sourceInventory.filter { it.path("visibility").asText() == "private" }
+            .map { it.path("repository").asText() }.toSet()
+        assertEquals(setOf("better-wildfire", "better-journal-inventory"), privateRepositories)
+        assertTrue(privateRepositories.all { it in repositories })
+        val mixinConfigOwners = mutableMapOf<String, String>()
+        mods.forEach { mod ->
+            val repository = mod.path("repository").asText()
+            val repositoryRoot = root.parent.resolve("mod_source").resolve(repository)
+            if (repository in privateRepositories) return@forEach
+            assertTrue(Files.isDirectory(repositoryRoot), "missing active source repository $repository")
+            val artifact = root.resolve("mods").resolve(mod.path("artifact").asText())
+            assertTrue(mod.path("tasks").isArray && mod.path("tasks").size() > 0)
+            assertTrue(mod.path("dependsOn").let { it.isMissingNode || (it.isArray && it.all { dependency -> dependency.asText() in repositories }) })
+            val configs = if (Files.isRegularFile(artifact)) {
+                JarFile(artifact.toFile()).use { jar ->
+                    jar.entries().asSequence().map { it.name }
+                        .filter { it.endsWith(".mixins.json") && '/' !in it }.toList()
+                }
+            } else {
+                val resources = repositoryRoot.resolve("src/main/resources")
+                Files.walk(resources).use { files ->
+                    files.filter(Files::isRegularFile).map { it.fileName.toString() }
+                        .filter { it.endsWith(".mixins.json") }.toList()
+                }
+            }
+            configs.forEach { config ->
+                val previous = mixinConfigOwners.putIfAbsent(config, repository)
+                assertTrue(previous == null, "$config is owned by both $previous and $repository")
+            }
+        }
+        fun dependencies(repository: String) = mods.single { it.path("repository").asText() == repository }
+            .path("dependsOn").map { it.asText() }
+        assertEquals(listOf("better-industrial-heat"), dependencies("better-chemlib-hazards"))
+        assertEquals(listOf("better-compat-fixes", "better-gameplay-notices", "better-dimension-fonts"), dependencies("better-spirit-commerce"))
+        assertEquals(
+            listOf("better-gameplay-notices", "better-survival-hud"),
+            dependencies("better-compat-fixes"),
+        )
+        assertEquals(listOf("better-world-management"), dependencies("better-spawns"))
+        assertEquals(listOf("better-compat-fixes", "better-deaths-door"), dependencies("better-cave-encounters"))
+        assertEquals(listOf("better-compat-fixes", "better-gameplay-notices"), dependencies("better-dimension-fonts"))
+        assertEquals(listOf("better-deaths-door"), dependencies("better-pillager-campaigns"))
+        assertEquals(listOf("better-deaths-door"), dependencies("better-player-traces"))
+        assertEquals(
+            listOf(
+                "better-magic-chunk-anchors", "better-spirit-commerce", "better-compat-fixes",
+                "better-gameplay-notices",
+                "better-bumblezone-crops", "better-create-train-fuel", "better-create-kinetic-loss",
+                "better-cave-encounters", "better-dimension-fonts", "better-deaths-door", "better-industrial-heat",
+                "better-chemlib-hazards", "better-oc2r-create-controls", "better-oc2r-wireless-messaging", "better-pillager-campaigns",
+                "better-player-traces", "better-rail-beetle", "better-ore-geology", "better-rpg-progression", "better-settlement-roads",
+                "better-survival-physiology", "better-tinkers-loot-affixes", "better-drinking-water", "better-world-management",
+            ),
+            dependencies("better-discovery-guides"),
+        )
+
+        mods.forEach { mod ->
+            val repository = mod.path("repository").asText()
+            if (repository in privateRepositories) return@forEach
+            val repositoryRoot = root.parent.resolve("mod_source").resolve(repository)
+            val buildText = listOf(repositoryRoot.resolve("build.gradle"), repositoryRoot.resolve("build.gradle.kts"))
+                .filter(Files::isRegularFile)
+                .joinToString("\n") { Files.readString(it) }
+            val siblingBuildDependencies = Regex("""\.\./([a-z0-9-]+)/build/libs""")
+                .findAll(buildText).map { it.groupValues[1] }.toSet()
+            val missingBuildDependencies = siblingBuildDependencies - dependencies(repository).toSet()
+            assertTrue(
+                missingBuildDependencies.isEmpty(),
+                "$repository omits release dependencies for sibling build artifacts: ${missingBuildDependencies.sorted()}",
+            )
+        }
+    }
+
+    @Test
+    fun retiredQuestContentIsAbsentAndSharedFtbModsRemain() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val retiredNamespaces = setOf("better_content_quests", "ftbquests", "ftbteams", "ftbxmodcompat", "ftbfiltersystem")
+        val namespaces = jacksonObjectMapper().readTree(root.resolve("kubejs/config/crafting_policy.json").toFile())
+            .path("namespaces")
+        retiredNamespaces.forEach { assertTrue(!namespaces.has(it), "retired namespace remains classified: $it") }
+        listOf("ftblibrary", "ftbbackups2").forEach { assertTrue(namespaces.has(it), "shared namespace is missing: $it") }
+
+        listOf(
+            "mods/better-content-quests-1.0.0.jar", "mods/ftb-quests-forge.pw.toml",
+            "mods/ftb-teams-forge.pw.toml", "mods/ftb-xmod-compat.pw.toml",
+            "mods/ftb-filter-system.pw.toml", "modpack questbook notes",
+        ).forEach { assertTrue(!Files.exists(root.resolve(it)), "retired quest content remains: $it") }
+        listOf("mods/ftb-library-forge.pw.toml", "mods/ftb-backups-2.pw.toml", "config/ftbbackups2.json")
+            .forEach { assertTrue(Files.isRegularFile(root.resolve(it)), "shared FTB content is missing: $it") }
+
+        val questConfig = root.resolve("config/ftbquests")
+        if (Files.exists(questConfig)) {
+            Files.walk(questConfig).use { files ->
+                assertTrue(files.noneMatch(Files::isRegularFile), "retired quest configuration remains")
+            }
+        }
+        val options = Files.readString(root.resolve("options.txt"))
+        assertTrue(!options.contains("key_key.ftbteams.") && !options.contains("key_key.ftbquests."))
+        Files.list(root.resolve("config/rbp/block_definitions")).use { definitions ->
+            definitions.filter(Files::isRegularFile).forEach { definition ->
+                val text = Files.readString(definition)
+                retiredNamespaces.forEach { namespace ->
+                    assertTrue(!text.contains("$namespace:"), "retired block definition in $definition: $namespace")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun newlyIntegratedArenaNamespacesAreClassified() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val namespaces = jacksonObjectMapper().readTree(root.resolve("kubejs/config/crafting_policy.json").toFile())
+            .path("namespaces")
+        assertEquals("content", namespaces.path("cataclysm").path("primary_role").asText())
+        assertEquals("infrastructure", namespaces.path("lionfishapi").path("primary_role").asText())
+        assertEquals("world", namespaces.path("the_deep_void").path("primary_role").asText())
+        listOf("cataclysm", "lionfishapi", "the_deep_void").forEach { namespace ->
+            assertTrue(namespaces.path(namespace).path("support_state").isTextual,
+                "$namespace lacks a crafting policy support state")
+        }
+    }
+
+    @Test
+    fun reflectionAllowlistIsExactAndSourceAuditRejectsUnlistedUse(@TempDir root: Path) {
+        val workspace = root.resolve("workspace")
+        val repository = workspace.resolve("mod_source/example")
+        val source = repository.resolve("src/main/java/example/Probe.java").also { it.parent.createDirectories() }
+        source.writeText("package example; final class Probe { Class<?> load() throws Exception { return Class\n.forName(\"example.Target\"); } }")
+        repository.resolve("src/test/java/example/BoundaryTest.java").also {
+            it.parent.createDirectories()
+            it.writeText("package example; final class BoundaryTest { String forbidden = \"Class.forName(\"; }")
+        }
+        assertEquals(1, sourceReflectionViolations(workspace, listOf("example"), emptySet()).size)
+        val allowance = ReflectionAllowance("example", "src/main/java/example/Probe.java")
+        assertTrue(sourceReflectionViolations(workspace, listOf("example"), setOf(allowance)).isEmpty())
+        assertTrue(unusedReflectionAllowances(workspace, setOf(allowance)).isEmpty())
+        val staleAllowance = ReflectionAllowance("example", "src/test/java/example/BoundaryTest.java")
+        assertEquals(listOf(staleAllowance), unusedReflectionAllowances(workspace, setOf(staleAllowance)))
+
+        val allowlist = root.resolve("allowlist.txt")
+        allowlist.writeText("example\tsrc/main/java/example/Probe.java\n")
+        assertEquals(setOf(allowance), readReflectionAllowlist(allowlist))
+    }
+
+    @Test
+    fun activeReflectionAllowlistMatchesWorkspaceSources() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val workspace = root.parent
+        val allowances = readReflectionAllowlist(root.resolve("gradle/reflection-allowlist.txt"))
+        val customRepositories = Files.list(workspace.resolve("mod_source")).use { stream ->
+            stream.filter { Files.isDirectory(it) && it.resolve(".git").toFile().isDirectory }
+                .map { it.fileName.toString() }.sorted().toList()
+        }
+        val stale = allowances.filterNot { allowance ->
+            allowance.repository in customRepositories && Files.isRegularFile(
+                workspace.resolve("mod_source").resolve(allowance.repository).resolve(allowance.sourcePath),
+            )
+        }
+        assertEquals(emptyList<ReflectionAllowance>(), stale.sortedWith(compareBy(ReflectionAllowance::repository, ReflectionAllowance::sourcePath)))
+        assertEquals(emptyList<ReflectionAllowance>(), unusedReflectionAllowances(workspace, allowances))
+        assertEquals(emptyList<String>(), sourceReflectionViolations(workspace, customRepositories, allowances))
+    }
+
+    @Test
+    fun stagedBytecodeAuditRejectsReflectiveInvocation(@TempDir root: Path) {
+        val repository = root.resolve("example")
+        repository.resolve("src/main/java/example/Probe.java").also {
+            it.parent.createDirectories()
+            it.writeText("package example; final class Probe {}")
+        }
+        val writer = ClassWriter(0)
+        writer.visit(Opcodes.V17, Opcodes.ACC_FINAL or Opcodes.ACC_SUPER, "example/Probe", null, "java/lang/Object", null)
+        writer.visitMethod(Opcodes.ACC_STATIC, "load", "()Ljava/lang/Class;", null, arrayOf("java/lang/ClassNotFoundException")).also { method ->
+            method.visitCode()
+            method.visitLdcInsn("example.Target")
+            method.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/Class", "forName", "(Ljava/lang/String;)Ljava/lang/Class;", false)
+            method.visitInsn(Opcodes.ARETURN)
+            method.visitMaxs(1, 0)
+            method.visitEnd()
+        }
+        writer.visitEnd()
+        val jar = root.resolve("example.jar")
+        ZipOutputStream(Files.newOutputStream(jar)).use { output ->
+            output.putNextEntry(ZipEntry("example/Probe.class"))
+            output.write(writer.toByteArray())
+            output.closeEntry()
+        }
+        assertEquals(1, bytecodeReflectionViolations("example", repository, jar, emptySet()).size)
+        val allowance = ReflectionAllowance("example", "src/main/java/example/Probe.java")
+        assertTrue(bytecodeReflectionViolations("example", repository, jar, setOf(allowance)).isEmpty())
+    }
+
+    @Test
+    fun releaseJarDetectionIgnoresDependencyModIds(@TempDir root: Path) {
+        val jar = root.resolve("fixture.jar")
+        zip(jar, mapOf("META-INF/mods.toml" to """
+            modLoader="javafml"
+            [[mods]]
+            modId="declared_mod"
+            [[dependencies.declared_mod]]
+            modId="dependency_mod"
+        """.trimIndent()))
+        assertTrue(jarDeclaresMod(jar, "declared_mod"))
+        assertTrue(!jarDeclaresMod(jar, "dependency_mod"))
+    }
+
+    @Test
+    fun freshReleaseEmbedsAndReadsCustomSourceIdentity(@TempDir root: Path) {
+        val mod = ActiveMod("fixture", "fixture_mod", "fixture.jar", emptyList())
+        val jar = root.resolve(mod.artifact)
+        zip(jar, mapOf(
+            "META-INF/mods.toml" to """
+                modLoader="javafml"
+                [[mods]]
+                modId="fixture_mod"
+            """.trimIndent(),
+            "fixture/data.txt" to "kept",
+        ))
+
+        annotateJar(jar, mod, "commit-1")
+
+        assertEquals("commit-1", readSourceCommit(jar, mod))
+        assertTrue(jarDeclaresMod(jar, mod.modId))
+        JarFile(jar.toFile()).use { result ->
+            assertTrue(result.getJarEntry("fixture/data.txt") != null)
+            assertTrue(result.getJarEntry("META-INF/better-content-source.properties") != null)
+        }
+    }
+
+    @Test
+    fun sourceRevisionCheckDistinguishesChangedAndLegacyJars() {
+        assertEquals("same", sourceUpdateStatus("commit-1", "commit-1"))
+        assertEquals("changed", sourceUpdateStatus("commit-2", "commit-1"))
+        assertEquals("baseline-missing", sourceUpdateStatus("commit-1", null))
+    }
+
+    @Test
+    fun fullDebugRebuildsAndVerifiesSourceIdenticalJar(@TempDir workspace: Path) {
+        val root = workspace.resolve("better-content-modpack").also(Files::createDirectories)
+        val repository = workspace.resolve("mod_source/fixture").also(Files::createDirectories)
+        val mod = ActiveMod("fixture", "fixture_mod", "fixture.jar", listOf("verifyFull", "stageRuntimeJar"))
+        fun git(vararg args: String): String {
+            val process = ProcessBuilder("git", *args).directory(repository.toFile())
+                .redirectError(ProcessBuilder.Redirect.INHERIT).start()
+            val result = process.inputStream.bufferedReader().readText().trim()
+            assertEquals(0, process.waitFor())
+            return result
+        }
+        git("init", "-q")
+        git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--allow-empty", "-qm", "fixture")
+        val commit = git("rev-parse", "HEAD")
+        val jarContents = mapOf("META-INF/mods.toml" to "[[mods]]\nmodId=\"fixture_mod\"\n")
+        val bundled = root.resolve("mods/fixture.jar")
+        zip(bundled, jarContents)
+        annotateJar(bundled, mod, commit)
+        zip(repository.resolve("build/libs/fixture.jar"), jarContents)
+        val wrapper = repository.resolve("gradlew")
+        wrapper.writeText("#!/bin/sh\nprintf '%s\\n' \"\$@\" > invoked-tasks.txt\n")
+        assertTrue(wrapper.toFile().setExecutable(true))
+        val evidence = root.resolve("generated/test-evidence/fixture/release").also(Files::createDirectories)
+        val staging = evidence.resolve("staged-jars").also(Files::createDirectories)
+        val sourceUpdate = SourceUpdate("fixture", mod.artifact, commit, commit, "same")
+
+        val rebuilt = build(root, workspace, evidence, staging, mod, sourceUpdate, skipTests = false, forceRebuild = true)
+
+        assertEquals("rebuilt", rebuilt.mode)
+        assertEquals(listOf("--no-daemon", "clean", "verifyFull", "stageRuntimeJar"),
+            Files.readAllLines(repository.resolve("invoked-tasks.txt")))
+        assertEquals(commit, readSourceCommit(rebuilt.jar, mod))
+        assertEquals(commit, readSourceCommit(bundled, mod))
+
+        val deployedBytes = Files.readAllBytes(bundled)
+        wrapper.writeText("#!/bin/sh\nexit 7\n")
+        assertThrows(IllegalArgumentException::class.java) {
+            build(root, workspace, evidence, staging, mod, sourceUpdate, skipTests = false, forceRebuild = true)
+        }
+        assertTrue(Files.readAllBytes(bundled).contentEquals(deployedBytes))
+    }
+
+    @Test
+    fun candidateLocatorRejectsMismatchedReleaseDirectories(@TempDir root: Path) {
+        zip(root.resolve("dist/a/client/better-content.zip"), mapOf("manifest.json" to "{}"))
+        zip(root.resolve("dist/b/server/better-content.zip"), mapOf("server/eula.txt" to "eula=false"))
+
+        val error = assertThrows(IllegalArgumentException::class.java) { CandidateLocator.locate(root) }
+        assertTrue(error.message!!.contains("different releases"))
+    }
+
+    @Test
+    fun hashGuardDetectsChangedCandidate(@TempDir root: Path) {
+        val file = root.resolve("candidate.zip")
+        file.writeText("before")
+        val before = Hashes.sha256(file)
+        file.writeText("after")
+        assertTrue(before != Hashes.sha256(file))
+    }
+
+    @Test
+    fun immutableHandoffMustMatchCoordinatorAndCandidateHashes(@TempDir root: Path) {
+        val client = root.resolve("release/client/better-content.zip").also {
+            it.parent.createDirectories()
+            it.writeText("client")
+        }
+        val server = root.resolve("release/server/better-content.zip").also {
+            it.parent.createDirectories()
+            it.writeText("server")
+        }
+        val pair = CandidatePair(root.resolve("release"), client, server, Hashes.sha256(client), Hashes.sha256(server))
+        val handoff = root.resolve("handoff.json")
+        val mapper = jacksonObjectMapper()
+        mapper.writeValue(handoff.toFile(), mapOf(
+            "schema" to "bc.pack_test_handoff.v1",
+            "request_id" to "request-1",
+            "producer" to mapOf("agent" to "workspace_coord"),
+            "authorization" to mapOf("explicit" to true),
+            "callback" to mapOf("agent" to "fixture", "pane_id" to "w1:p1"),
+            "modpack" to mapOf("head" to "head-1", "status" to emptyList<String>()),
+            "repositories" to emptyList<Any>(),
+            "validations" to emptyList<Any>(),
+            "artifacts" to emptyList<Any>(),
+            "dependencies" to emptyList<Any>(),
+            "scenarios" to emptyList<Any>(),
+            "prior_evidence" to emptyList<Any>(),
+            "candidate" to mapOf(
+                "client" to mapOf("path" to client.toString(), "sha256" to pair.clientSha256),
+                "server" to mapOf("path" to server.toString(), "sha256" to pair.serverSha256),
+            ),
+        ))
+        assertEquals("request-1", PackTestHandoff.validate(handoff, pair))
+        mapper.writeValue(handoff.toFile(), mapper.readTree(handoff.toFile()).deepCopy<com.fasterxml.jackson.databind.node.ObjectNode>().apply {
+            withObject("candidate").withObject("server").put("sha256", "bad")
+        })
+        assertThrows(IllegalArgumentException::class.java) { PackTestHandoff.validate(handoff, pair) }
+    }
+
+    @Test
+    fun dimensionSmokeDiscoversDynamicAndFontTargets(@TempDir root: Path) {
+        val dimensions = root.resolve("dimensions.json")
+        dimensions.writeText("""{
+          "schema": "bc.dimensions.v1",
+          "complete": true,
+          "loaded_dimensions": ["aether:the_aether", "ae2:spatial_storage", "bloodmagic:dungeon", "creatingspace:mars", "minecraft:overworld", "minecraft:the_end"],
+          "rocket_accessible_dimensions": ["minecraft:overworld", "creatingspace:mars"]
+        }""")
+        val fonts = root.resolve("fonts").also { it.createDirectories() }
+        fonts.resolve("aether.json").writeText("""{"enabled":true,"targetDimension":"aether:the_aether"}""")
+        val targets = DimensionSmokePlan.discover(dimensions, fonts)
+        assertEquals(listOf("ae2:spatial_storage", "aether:the_aether", "bloodmagic:dungeon", "creatingspace:mars", "minecraft:overworld", "minecraft:the_end"), targets.map { it.id })
+        assertEquals(setOf("creatingspace"), targets.single { it.id == "creatingspace:mars" }.sources)
+        assertTrue(DimensionSmokePlan.requiresFontTravel("rats:ratlantis"))
+        assertTrue(DimensionSmokePlan.requiresFontTravel("the_bumblezone:the_bumblezone"))
+        assertTrue(!DimensionSmokePlan.requiresFontTravel("minecraft:the_nether"))
+        assertEquals(20.0, DimensionSmokePlan.parseOverallTps("Overall: Mean tick time: 2.1 ms. Mean TPS: 20.000"))
+        assertEquals(
+            listOf(100_000 to 100_000, 100_128 to 100_000, 100_000 to 100_128),
+            DimensionSmokePlan.positions,
+        )
+    }
+
+    @Test
+    fun runtimeSnapshotRequiresCompleteConsistentDocuments(@TempDir root: Path) {
+        val mapper = jacksonObjectMapper()
+        val names = listOf("recipes.json", "registries.json", "tags.json", "mods.json", "loot.json", "trades.json", "worldgen.json", "dimensions.json", "lighting.json")
+        mapper.writeValue(root.resolve("snapshot.json").toFile(), mapOf(
+            "schema" to "bc.runtime_dump_completion.v3",
+            "complete" to true,
+            "evidence_state" to "complete",
+            "files" to names,
+            "snapshot_id" to "snapshot-1",
+            "surfaces" to mapOf("recipes" to mapOf("complete_for_contract" to true)),
+        ))
+        names.forEach { name ->
+            val data = mutableMapOf<String, Any>("snapshot_id" to "snapshot-1")
+            if (name == "recipes.json") data.putAll(mapOf("complete" to true, "partial_count" to 0, "error_count" to 0))
+            mapper.writeValue(root.resolve(name).toFile(), data)
+        }
+        assertEquals("snapshot-1", RuntimeSnapshotValidator.validate(root))
+
+        mapper.writeValue(root.resolve("tags.json").toFile(), mapOf("snapshot_id" to "other"))
+        assertThrows(IllegalArgumentException::class.java) { RuntimeSnapshotValidator.validate(root) }
+    }
+
+    @Test
+    fun logPolicyNamesWarningsAndFatalRecords(@TempDir root: Path) {
+        val clean = root.resolve("clean.log").also { it.writeText("[INFO] ready\n") }
+        val accepted = root.resolve("accepted.log").also {
+            it.writeText("[pool-12-thread-1/WARN] [xbigellx.realisticphysics.RealisticPhysics]: Forcing chunk load: [-79, 44]\n" +
+                "[C2ME worker #5/ERROR] [net.minecraft.Util]: Detected setBlock in a far chunk [57, 66], pos: BlockPos{x=923, y=63, z=1056}, status: minecraft:features, currently generating: ResourceKey[minecraft:worldgen/placed_feature / natures_spirit:marsh_water_placed]\n" +
+                "[Server thread/WARN] [net.minecraft.network.Connection]: handleDisconnection() called twice\n")
+        }
+        val bad = root.resolve("bad.log").also { it.writeText("[Server/WARN] unsafe\nReportedException: boom\n") }
+        assertTrue(LogPolicy.findings(listOf(clean, accepted)).isEmpty())
+        val findings = LogPolicy.findings(listOf(bad))
+        assertEquals(2, findings.size)
+        assertEquals(listOf(1, 2), findings.map { it.line })
+    }
+
+    @Test
+    fun logPolicyBoundsKnownStarcatcherMetadataWarning(@TempDir root: Path) {
+        val warning = "[11:00:00] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFile]: " +
+            "starcatcher-2.2.1-FORGE-1.20.1.jar contains an invalid 'accessTransformers' TOML entry. " +
+            "Should be e.g. accessTransformers = [\"META-INF/accesstransformer.cfg\", " +
+            "\"META-INF/extra_at.cfg\"] or accessTransformers = [] for no ATs. Falling back to default."
+        val one = root.resolve("one.log").also { it.writeText("$warning\n") }
+        val repeated = root.resolve("repeated.log").also { it.writeText("$warning\n$warning\n") }
+        val excessive = root.resolve("excessive.log").also { it.writeText("$warning\n$warning\n$warning\n") }
+        assertTrue(LogPolicy.findings(listOf(one)).isEmpty())
+        assertTrue(LogPolicy.findings(listOf(repeated)).isEmpty())
+        assertEquals(listOf(3), LogPolicy.findings(listOf(excessive)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyBoundsCampaignItemFrameToolWarnings(@TempDir root: Path) {
+        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
+        val sword = "[05:50:27] [C2ME worker #3/WARN] [net.minecraft.world.entity.decoration.ItemFrame]: " +
+            "Unable to load item from: {count:1,id:\"minecraft:iron_sword\"}"
+        val axe = "[05:50:27] [C2ME worker #3/WARN] [net.minecraft.world.entity.decoration.ItemFrame]: " +
+            "Unable to load item from: {count:1,id:\"minecraft:iron_axe\"}"
+        val accepted = multiplayer.resolve("server.log").also { it.writeText("$sword\n$axe\n") }
+        val repeated = multiplayer.resolve("repeated.log").also {
+            it.writeText("$sword\n$axe\n$sword\n$axe\n")
+        }
+        val unrelated = multiplayer.resolve("unrelated.log").also {
+            it.writeText(sword.replace("minecraft:iron_sword", "minecraft:diamond") + "\n")
+        }
+        val otherSuite = root.resolve("server.log").also { it.writeText("$sword\n$axe\n") }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(3, 4), LogPolicy.findings(listOf(repeated)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(otherSuite)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyBoundsCampaignUnknownStepHeightAttributeWarnings(@TempDir root: Path) {
+        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
+        val warning = "[08:59:36] [C2ME worker #3/WARN] " +
+            "[net.minecraft.world.entity.ai.attributes.AttributeMap]: " +
+            "Ignoring unknown attribute 'forge:step_height'"
+        val accepted = multiplayer.resolve("server.log").also {
+            it.writeText("$warning\n$warning\n")
+        }
+        val excessive = multiplayer.resolve("excessive-server.log").also {
+            it.writeText("$warning\n$warning\n$warning\n")
+        }
+        val wrongFile = multiplayer.resolve("fixture/server-extract/logs").also { it.createDirectories() }
+            .resolve("server.log").also { it.writeText("$warning\n") }
+        val unrelated = multiplayer.resolve("unrelated.log").also {
+            it.writeText(warning.replace("forge:step_height", "forge:reach") + "\n")
+        }
+        val otherSuite = root.resolve("server.log").also { it.writeText("$warning\n") }
+        val targetDimensionsAggregate = root.resolve("target-dimensions/server.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText("$warning\n$warning\n")
+        }
+        val targetDimensionsLatest = root.resolve("target-dimensions/fixture/server-extract/server/logs/latest.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText("$warning\n$warning\n")
+        }
+        val targetDimensionsOverflow = root.resolve("target-dimensions/fixture/server-extract/overflow/logs/latest.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText("$warning\n$warning\n$warning\n")
+        }
+        val targetDimensionsWrongFile = root.resolve("target-dimensions/fixture/client-1/logs/latest.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText("$warning\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted, targetDimensionsAggregate, targetDimensionsLatest)).isEmpty())
+        assertEquals(listOf(3), LogPolicy.findings(listOf(excessive)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongFile)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(otherSuite)).map { it.line })
+        assertEquals(listOf(3), LogPolicy.findings(listOf(targetDimensionsOverflow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(targetDimensionsWrongFile)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyBoundsIceAndFireDeferredTaskWarning(@TempDir root: Path) {
+        val singleplayer = root.resolve("singleplayer").also { it.createDirectories() }
+        val multiplayerClientLogs = root.resolve("multiplayer/fixture/client-3/logs").also { it.createDirectories() }
+        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
+        val warning = "[06:40:51] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+            "Mod 'iceandfire' took 1.118 s to run a deferred task."
+        val accepted = singleplayer.resolve("client.log").also { it.writeText("$warning\n") }
+        val acceptedCampaignLog = multiplayerClientLogs.resolve("latest.log").also { it.writeText("$warning\n") }
+        val acceptedCampaignCopy = multiplayer.resolve("client-3.log").also { it.writeText("$warning\n") }
+        val repeatedCampaign = multiplayerClientLogs.resolve("repeated.log").also {
+            it.writeText("$warning\n$warning\n")
+        }
+        val repeated = singleplayer.resolve("repeated.log").also { it.writeText("$warning\n$warning\n") }
+        val slow = singleplayer.resolve("slow.log").also {
+            it.writeText(warning.replace("1.118", "2.001") + "\n")
+        }
+        val unrelated = singleplayer.resolve("unrelated.log").also {
+            it.writeText(warning.replace("iceandfire", "othermod") + "\n")
+        }
+        val otherSuite = root.resolve("client.log").also { it.writeText("$warning\n") }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertTrue(LogPolicy.findings(listOf(acceptedCampaignLog, acceptedCampaignCopy)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(repeatedCampaign)).map { it.line })
+        assertEquals(listOf(2), LogPolicy.findings(listOf(repeated)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(slow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(otherSuite)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyKnownCustomRecipeBookCategoryWarnings(@TempDir root: Path) {
+        val known = root.resolve("known-recipe-categories.log").also {
+            it.writeText(
+                "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
+                    "Unknown recipe category: [!!!supplier!!!]/the_deep_void:glutton_jei_wheat\n" +
+                    "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
+                    "Unknown recipe category: cataclysm:weapon_fusion/cataclysm:weapon_infusion/brontes\n",
+            )
+        }
+        val unknown = root.resolve("unknown-recipe-category.log").also {
+            it.writeText(
+                "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
+                    "Unknown recipe category: other_mod:broken\n" +
+                    "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
+                    "Unknown recipe category: cataclysm:other_custom_type/brontes\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(known)).isEmpty())
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(unknown)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyNineExactDeepVoidPhysicsFallbackWarningsPerLog(@TempDir root: Path) {
+        val warning =
+            "[09:46:22] [Server thread/WARN] [xbigellx.realisticphysics.RealisticPhysics]: " +
+                "Level null when loading chunk at '[-3, -3]' for dimension 'the_deep_void:deep_void'.\n"
+        // The initial world and up to eight successor attempts can each emit this exact warning.
+        val accepted = root.resolve("deep-void-physics-fallback.log").also { it.writeText(warning.repeat(9)) }
+        val overflow = root.resolve("deep-void-physics-fallback-overflow.log").also { it.writeText(warning.repeat(10)) }
+        val wrongDimension = root.resolve("deep-void-physics-fallback-wrong-dimension.log").also {
+            it.writeText(warning.replace("the_deep_void:deep_void", "minecraft:overworld"))
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(10), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongDimension)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyBoundedAdPotherDeferredTasks(@TempDir root: Path) {
+        val accepted = root.resolve("accepted-deferred.log").also {
+            it.writeText(
+                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 46.450 s to run a deferred task.\n",
+            )
+        }
+        val rejected = root.resolve("rejected-deferred.log").also {
+            it.writeText(
+                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 60.001 s to run a deferred task.\n" +
+                    "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'othermod' took 1.533 s to run a deferred task.\n" +
+                    "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 6.577 s to run a deferred task.\n" +
+                    "[13:55:28] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 6.500 s to run a deferred task.\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(1, 2, 4), LogPolicy.findings(listOf(rejected)).map { it.line })
+    }
+
+    @Test
+    fun untamedSpeciesPrototypesAreAcceptedOnlyDuringJeiRegistration(@TempDir root: Path) {
+        val start = "[12:47:47] [Render thread/INFO] [mezz.jei.library.load.PluginCaller]: Registering ingredients...\n"
+        val end = "[12:47:48] [Render thread/INFO] [mezz.jei.library.load.PluginCaller]: Registering ingredients took 1.170 s\n"
+        val warning = "[12:47:47] [Render thread/WARN] [untamedwilds.UntamedWilds]: There's no species provided for the EntityType\n"
+        val accepted = root.resolve("jei-prototypes.log").also { it.writeText(start + warning.repeat(3400) + end) }
+        val overflow = root.resolve("jei-prototypes-overflow.log").also {
+            it.writeText(start + warning.repeat(3401) + end + warning)
+        }
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(3402, 3404), LogPolicy.findings(listOf(overflow)).map { it.line })
+    }
+
+    @Test
+    fun dedicatedSeedWarningsAreScopedToSingleplayerWorldSave(@TempDir root: Path) {
+        val version = "[11:00:59] [Render thread/WARN] [net.minecraftforge.common.ForgeHooks]: The following mods have version differences that were not resolved:\n" +
+            "unloaded_activity (version 0.6.3 -> MISSING)\n"
+        val remap = "[11:00:59] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry]: " +
+            "Registry minecraft:item: Object did not get ID it asked for. Name: theoneprobe:probe Expected: 3987 Got: 2330\n"
+        val missing = "[11:00:59] [Render thread/WARN] [net.minecraft.server.MinecraftServer]: Missing data pack mod:unloaded_activity\n"
+        val seeded = root.resolve("singleplayer/singleplayer-5.log")
+        seeded.parent.toFile().mkdirs()
+        seeded.writeText(version + remap + missing)
+        val ordinary = root.resolve("multiplayer/client-1.log")
+        ordinary.parent.toFile().mkdirs()
+        ordinary.writeText(version + remap + missing)
+        assertTrue(LogPolicy.findings(listOf(seeded)).isEmpty())
+        assertEquals(listOf(1, 3, 4), LogPolicy.findings(listOf(ordinary)).map { it.line })
+    }
+
+    @Test
+    fun singleplayerOpenAlCleanupIsAcceptedOnlyOnceDuringJeiLogout(@TempDir root: Path) {
+        val stop = "[13:15:35] [Render thread/INFO] [mezz.jei.forge.plugins.forge.ForgeGuiPlugin]: Stopping JEI GUI\n"
+        val error = "[13:15:35] [Render thread/ERROR] [com.mojang.blaze3d.audio.OpenAlUtil]: Cleanup: Invalid name parameter.\n"
+        val seeded = root.resolve("target-world-save/singleplayer-5.log")
+        seeded.parent.toFile().mkdirs()
+        seeded.writeText(stop + error + error)
+        val unscoped = root.resolve("multiplayer/client-1.log")
+        unscoped.parent.toFile().mkdirs()
+        unscoped.writeText(stop + error)
+        assertEquals(listOf(3), LogPolicy.findings(listOf(seeded)).map { it.line })
+        assertEquals(listOf(2), LogPolicy.findings(listOf(unscoped)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactPresenceFootstepsMissingAcoustic(@TempDir root: Path) {
+        val known = "[21:04:01] [Render thread/WARN] [PFSolver]: Tried to play a missing acoustic: MESSY_GROUND\n"
+        val accepted = root.resolve("known-missing-acoustic.log").also { it.writeText(known) }
+        val rejected = root.resolve("other-missing-acoustic.log").also {
+            it.writeText(
+                known + known +
+                    known.replace("MESSY_GROUND", "UNKNOWN_SURFACE"),
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(rejected)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyTheSixAetherCuriosOverrideTags(@TempDir root: Path) {
+        fun warning(
+            tag: String,
+            time: String = "06:58:52",
+            worker: String = "Worker-Main-21",
+            jar: String = "aether-1.20.1-1.5.2-neoforge.jar",
+        ) =
+            "[$time] [$worker/WARN] [artifacts.Artifacts]: " +
+                "Tag entries for curios:tags/items/aether_$tag.json cleared by $jar:packs/curios_override"
+        val tags = listOf("accessory", "cape", "gloves", "pendant", "ring", "shield")
+        val accepted = root.resolve("aether-curios-override.log").also {
+            it.writeText(
+                (tags.map { warning(it) } + tags.map {
+                    warning(it, time = "06:59:01", worker = "Worker-ResourceReload-3")
+                }).joinToString("\n", postfix = "\n"),
+            )
+        }
+        val rejected = root.resolve("changed-aether-curios-override.log").also {
+            it.writeText(
+                warning("accessory") + "\n" + warning("accessory") + "\n" +
+                    warning("other") + "\n" + warning("cape", jar = "different-aether.jar") + "\n",
+            )
+        }
+        val thirdBatch = root.resolve("third-aether-curios-batch.log").also {
+            it.writeText(
+                (tags.map { warning(it) } + tags.map {
+                    warning(it, time = "06:59:01", worker = "Worker-ResourceReload-3")
+                } + warning("accessory", time = "07:00:00", worker = "Worker-Main-22"))
+                    .joinToString("\n", postfix = "\n"),
+            )
+        }
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2, 3, 4), LogPolicy.findings(listOf(rejected)).map { it.line })
+        assertEquals(listOf(13), LogPolicy.findings(listOf(thirdBatch)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyTheCuratedCuriosBackTagOverride(@TempDir root: Path) {
+        val known = "[01:31:25] [Worker-Main-20/WARN] [artifacts.Artifacts]: " +
+            "Tag entries for curios:tags/items/back.json cleared by KubeJS Resource Pack [data]"
+        val accepted = root.resolve("curios-back.log").also {
+            it.writeText(List(3) { known }.joinToString("\n", postfix = "\n"))
+        }
+        val rejected = root.resolve("changed-curios-back.log").also {
+            it.writeText((List(4) { known } + known.replace("back.json", "belt.json") +
+                known.replace("KubeJS Resource Pack [data]", "another pack"))
+                .joinToString("\n", postfix = "\n"))
+        }
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(4, 5, 6), LogPolicy.findings(listOf(rejected)).map { it.line })
+    }
+
+    @Test
+    fun serverLifecycleLogAllowsOnlyThreeExactStartupWarningSets(@TempDir root: Path) {
+        fun aetherWarning(tag: String, time: String) =
+            "[$time] [Worker-Main-21/WARN] [artifacts.Artifacts]: " +
+                "Tag entries for curios:tags/items/aether_$tag.json cleared by " +
+                "aether-1.20.1-1.5.2-neoforge.jar:packs/curios_override"
+        val tags = listOf("accessory", "cape", "gloves", "pendant", "ring", "shield")
+        val starcatcher = "[06:58:52] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFile]: " +
+            "starcatcher-2.2.1-FORGE-1.20.1.jar contains an invalid 'accessTransformers' TOML entry. " +
+            "Should be e.g. accessTransformers = [\"META-INF/accesstransformer.cfg\", " +
+            "\"META-INF/extra_at.cfg\"] or accessTransformers = [] for no ATs. Falling back to default."
+        fun ironFrameItem(item: String) =
+            "[06:58:52] [C2ME worker #5/WARN] [net.minecraft.world.entity.decoration.ItemFrame]: " +
+                "Unable to load item from: {count:1,id:\"minecraft:$item\"}"
+        val threeStarts = (1..3).flatMap { start ->
+            listOf(
+                starcatcher,
+                *tags.map { aetherWarning(it, "06:58:5$start") }.toTypedArray(),
+            )
+        }
+        val accepted = root.resolve("server/server.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText((threeStarts + ironFrameItem("iron_sword") + ironFrameItem("iron_axe"))
+                .joinToString("\n", postfix = "\n"))
+        }
+        val overflow = root.resolve("overflow/server/server.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText((threeStarts + starcatcher + ironFrameItem("iron_sword") + ironFrameItem("iron_sword") +
+                ironFrameItem("iron_axe") + ironFrameItem("iron_axe"))
+                .joinToString("\n", postfix = "\n"))
+        }
+        val wrongPath = root.resolve("ordinary/server.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText(ironFrameItem("iron_sword") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(22, 24, 26), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongPath)).map { it.line })
+    }
+
+    @Test
+    fun c2meSerializesFeaturePlacementForCataclysmStructureCompatibility() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val config = Files.readString(root.resolve("config/c2me.toml"))
+        val threadedWorldGen = config.substringAfter("[threadedWorldGen]").substringBefore("[ioSystem]")
+
+        assertTrue(threadedWorldGen.contains("enabled = \"true\""))
+        assertTrue(threadedWorldGen.contains("allowThreadedFeatures = \"false\""))
+    }
+
+    @Test
+    fun logPolicyAcceptsOneBoundedAdChimneysDeferredTaskPerLog(@TempDir root: Path) {
+        fun warning(thread: String = "Render thread", duration: String = "7.318", mod: String = "adchimneys") =
+            "[07:03:06] [$thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+                "Mod '$mod' took $duration s to run a deferred task."
+
+        val acceptedClient = root.resolve("accepted-adchimneys-client.log").also {
+            it.writeText(warning() + "\n")
+        }
+        val acceptedServer = root.resolve("accepted-adchimneys-server.log").also {
+            it.writeText(warning(thread = "main", duration = "41.10") + "\n")
+        }
+        val rejected = root.resolve("rejected-adchimneys.log").also {
+            it.writeText(
+                warning(duration = "45.001") + "\n" +
+                    warning(thread = "Server thread") + "\n" +
+                    warning(mod = "othermod") + "\n",
+            )
+        }
+        val overflow = root.resolve("overflow-adchimneys.log").also {
+            it.writeText(warning() + "\n" + warning(duration = "8.785") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(acceptedClient, acceptedServer)).isEmpty())
+        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(rejected)).map { it.line })
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOneBoundedAdLodsDeferredTaskPerLog(@TempDir root: Path) {
+        fun warning(duration: String = "2.248", mod: String = "adlods") =
+            "[07:03:06] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+                "Mod '$mod' took $duration s to run a deferred task."
+
+        val accepted = root.resolve("accepted-adlods.log").also { it.writeText(warning() + "\n") }
+        val overflow = root.resolve("overflow-adlods.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val rejected = root.resolve("rejected-adlods.log").also {
+            it.writeText(warning(duration = "5.001") + "\n" + warning(mod = "othermod") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(rejected)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyFourExactC2meEarlyBlockEntityWarningsPerLog(@TempDir root: Path) {
+        fun warning(index: Int) =
+            "[16:58:0$index] [C2ME worker #$index/WARN] [net.minecraft.server.level.WorldGenRegion]: " +
+                "Tried to access a block entity before it was created. " +
+                "BlockPos{x=${1_010_182 + index}, y=46, z=1000215}"
+
+        val accepted = root.resolve("accepted-early-be.log").also {
+            it.writeText((1..4).joinToString(separator = "\n", postfix = "\n", transform = ::warning))
+        }
+        val overflow = root.resolve("overflow-early-be.log").also {
+            it.writeText((1..5).joinToString(separator = "\n", postfix = "\n", transform = ::warning))
+        }
+        val wrongShape = root.resolve("wrong-shape-early-be.log").also {
+            it.writeText(
+                warning(1).replace("C2ME worker #1", "Server thread") + "\n" +
+                    warning(2).replace("net.minecraft.server.level.WorldGenRegion", "net.minecraft.Util") + "\n" +
+                    warning(3).replace("before it was created", "after it was removed") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(5), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactRecoveredDistantHorizonsPhantomArrayPerLog(@TempDir root: Path) {
+        fun warning(reference: String = "1359776d") =
+            "[06:28:03] [DH-Phantom Array Recycler Thread[0]/WARN] " +
+                "[DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.pooling.PhantomArrayListPool]: " +
+                "Pool: [Render Reducer]. Unable to find checkout for phantom reference " +
+                "[java.lang.ref.PhantomReference@$reference], arrays will need to be recreated."
+
+        val accepted = root.resolve("accepted-dh-phantom.log").also {
+            it.writeText(warning() + "\n")
+        }
+        val overflow = root.resolve("overflow-dh-phantom.log").also {
+            it.writeText(warning() + "\n" + warning("2468ace0") + "\n")
+        }
+        val wrongShape = root.resolve("wrong-shape-dh-phantom.log").also {
+            it.writeText(
+                warning().replace("DH-Phantom Array Recycler Thread[0]", "Render thread") + "\n" +
+                    warning().replace("PhantomArrayListPool", "OtherPool") + "\n" +
+                    warning().replace("arrays will need to be recreated", "array was lost") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactDistantHorizonsInsufficientMemoryWarningPerLog(@TempDir root: Path) {
+        fun warning(thread: String = "DH-LOD Builder Thread[0]", message: String = "Insufficient memory detected") =
+            "[06:28:03] [$thread/WARN] " +
+                "[DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.pooling.PhantomArrayListPool]: " +
+                "§6Distant Horizons: $message.§r"
+
+        val accepted = root.resolve("accepted-dh-memory.log").also { it.writeText(warning() + "\n") }
+        val overflow = root.resolve("overflow-dh-memory.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val wrongShape = root.resolve("wrong-shape-dh-memory.log").also {
+            it.writeText(
+                warning(thread = "Render thread") + "\n" +
+                    warning(message = "Low memory detected") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+
+        val renderLoader = root.resolve("accepted-dh-render-loader-memory.log").also {
+            it.writeText(warning(thread = "DH-Render Loader Thread[0]") + "\n")
+        }
+        assertTrue(LogPolicy.findings(listOf(renderLoader)).isEmpty())
+        val updatePropagator = root.resolve("accepted-dh-update-propagator-memory.log").also {
+            it.writeText(warning(thread = "DH-Update Propagator Thread[0]") + "\n")
+        }
+        assertTrue(LogPolicy.findings(listOf(updatePropagator)).isEmpty())
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyTheExactRatlantisDistantHorizonsUnloadPaletteError(@TempDir root: Path) {
+        fun block(
+            closedDimension: String = "rats:ratlantis",
+            chunk: String = "C[0,-1]",
+            cause: String = "Caused by: net.minecraft.world.level.chunk.MissingPaletteEntryException: " +
+                "Missing Palette entry for index 2.",
+        ) = listOf(
+            "[08:47:58] [Render thread/INFO] [DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.level.DhClientLevel]: " +
+                "Closed [DhClientLevel] for [Wrapped{ClientLevel@token@$closedDimension}]",
+            "[08:47:58] [DH-LOD Builder Thread[0]/ERROR] " +
+                "[DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.generation.DhLightingEngine]: " +
+                "Unexpected lighting issue for center chunk: $chunk",
+            "net.minecraft.ReportedException: Getting block state",
+            "\tat net.minecraft.world.level.chunk.LevelChunk.m_8055_(LevelChunk.java:182)",
+            "\tat com.seibel.distanthorizons.core.generation.DhLightingEngine.lightChunk(DhLightingEngine.java:260)",
+            cause,
+        )
+
+        val accepted = root.resolve("target-font-ratlantis/fixture/client-1/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText(block().joinToString("\n", postfix = "\n"))
+        }
+        val duplicate = root.resolve("target-font-ratlantis/fixture/client-2/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText((block() + block()).joinToString("\n", postfix = "\n"))
+        }
+        val wrongDimension = root.resolve("target-font-ratlantis/fixture/client-3/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText(block(closedDimension = "the_bumblezone:the_bumblezone").joinToString("\n", postfix = "\n"))
+        }
+        val wrongChunk = root.resolve("target-font-ratlantis/fixture/client-4/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText(block(chunk = "C[1,-1]").joinToString("\n", postfix = "\n"))
+        }
+        val wrongCause = root.resolve("target-font-ratlantis/fixture/client-5/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText(block(cause = "Caused by: net.minecraft.world.level.chunk.MissingPaletteEntryException: " +
+                "Missing Palette entry for index 3.").joinToString("\n", postfix = "\n"))
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(8, 9), LogPolicy.findings(listOf(duplicate)).map { it.line })
+        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(wrongDimension)).map { it.line })
+        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(wrongChunk)).map { it.line })
+        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(wrongCause)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactEmptySalmonAmbientSoundWarningPerLog(@TempDir root: Path) {
+        fun warning(sound: String = "minecraft:entity.salmon.ambient") =
+            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
+                "Unable to play empty soundEvent: $sound"
+
+        val accepted = root.resolve("accepted-empty-salmon.log").also {
+            it.writeText(warning() + "\n")
+        }
+        val overflow = root.resolve("overflow-empty-salmon.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val wrongShape = root.resolve("wrong-shape-empty-salmon.log").also {
+            it.writeText(
+                warning().replace("Render thread/WARN", "Server thread/WARN") + "\n" +
+                    warning().replace("minecraft:entity.salmon.ambient", "minecraft:entity.dolphin.ambient") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactUntamedPlaceholderSoundWarningPerLog(@TempDir root: Path) {
+        fun warning(sound: String = "untamedwilds:nothing") =
+            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
+                "Unable to play empty soundEvent: $sound"
+
+        val accepted = root.resolve("accepted-untamed-placeholder-sound.log").also {
+            it.writeText(warning() + "\n")
+        }
+        val overflow = root.resolve("overflow-untamed-placeholder-sound.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val other = root.resolve("wrong-untamed-placeholder-sound.log").also {
+            it.writeText(warning("untamedwilds:missing") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(other)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyBoundsUntamedMissingSpeciesWarningToMultiplayerServerLogs(@TempDir root: Path) {
+        val warning = "[14:19:11] [Server thread/WARN] [untamedwilds.UntamedWilds]: " +
+            "There's no species provided for the EntityType"
+        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
+        val aggregate = multiplayer.resolve("server.log").also { it.writeText("$warning\n") }
+        val fixtureLog = multiplayer.resolve("fixture/server-extract/better-content-server/logs/latest.log")
+            .also { it.parent.createDirectories() }
+            .also { it.writeText("$warning\n") }
+        val overflow = multiplayer.resolve("fixture/server-extract/overflow/logs/latest.log")
+            .also { it.parent.createDirectories() }
+            .also { it.writeText("$warning\n$warning\n") }
+        val clientLog = multiplayer.resolve("fixture/client-1/logs/latest.log")
+            .also { it.parent.createDirectories() }
+            .also { it.writeText("$warning\n") }
+        val wrongShape = multiplayer.resolve("wrong-shape.log").also {
+            it.writeText(warning.replace("Server thread/WARN", "Render thread/WARN") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(aggregate, fixtureLog)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(clientLog)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactSlowGlfwInitializationDiagnosticPerMultiplayerClientLog(@TempDir root: Path) {
+        fun diagnostic(seconds: String = "1.265897709") =
+            "[14:57:27] [main/ERROR] [EARLYDISPLAY]: WARNING : glfwInit took $seconds seconds to start."
+
+        val aggregate = root.resolve("multiplayer/client-1.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText(diagnostic() + "\n")
+        }
+        val fixture = root.resolve("multiplayer/fixture/client-1/logs/latest.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText(diagnostic() + "\n")
+        }
+        val overflow = root.resolve("multiplayer/client-2.log").also {
+            it.writeText(diagnostic() + "\n" + diagnostic() + "\n")
+        }
+        val wrongSuite = root.resolve("singleplayer/client.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText(diagnostic() + "\n")
+        }
+        val wrongRecord = root.resolve("multiplayer/client-3.log").also {
+            it.writeText(diagnostic("0.500") + "\n")
+        }
+        val serverLog = root.resolve("multiplayer/server.log").also {
+            it.writeText(diagnostic() + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(aggregate, fixture)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 1, 1), LogPolicy.findings(listOf(wrongSuite, wrongRecord, serverLog)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactQuarkCrabIdleSoundWarningPerLog(@TempDir root: Path) {
+        fun warning(sound: String = "quark:entity.crab.idle") =
+            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
+                "Unable to play empty soundEvent: $sound"
+
+        val accepted = root.resolve("accepted-quark-crab-idle.log").also {
+            it.writeText(warning() + "\n")
+        }
+        val overflow = root.resolve("overflow-quark-crab-idle.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val other = root.resolve("wrong-quark-empty-sound.log").also {
+            it.writeText(warning("quark:entity.crab.hurt") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(other)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactEmptyCodAmbientSoundWarningPerLog(@TempDir root: Path) {
+        fun warning(sound: String = "minecraft:entity.cod.ambient") =
+            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
+                "Unable to play empty soundEvent: $sound"
+
+        val accepted = root.resolve("accepted-empty-cod.log").also { it.writeText(warning() + "\n") }
+        val overflow = root.resolve("overflow-empty-cod.log").also {
+            it.writeText(warning() + "\n" + warning() + "\n")
+        }
+        val wrongShape = root.resolve("wrong-shape-empty-cod.log").also {
+            it.writeText(
+                warning().replace("Render thread/WARN", "Server thread/WARN") + "\n" +
+                    warning("minecraft:entity.dolphin.ambient") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOneExactAquaticAmbientAndAllTheLeaksWarningPerLog(@TempDir root: Path) {
+        fun sound(sound: String) =
+            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
+                "Unable to play empty soundEvent: $sound"
+        val leaks = "[06:28:03] [Render thread/WARN] [AllTheLeaks]: " +
+            "Server not found while trying to clear leaked chunks"
+        val accepted = root.resolve("accepted-aquatic-leaks.log").also {
+            it.writeText(
+                sound("minecraft:entity.tropical_fish.ambient") + "\n" +
+                    sound("minecraft:entity.puffer_fish.ambient") + "\n" + leaks + "\n",
+            )
+        }
+        val overflow = root.resolve("overflow-aquatic-leaks.log").also {
+            it.writeText(
+                sound("minecraft:entity.tropical_fish.ambient") + "\n" +
+                    sound("minecraft:entity:tropical_fish.ambient") + "\n" +
+                    sound("minecraft:entity.puffer_fish.ambient") + "\n" +
+                    sound("minecraft:entity.puffer_fish.ambient") + "\n" + leaks + "\n" + leaks + "\n",
+            )
+        }
+        val wrongShape = root.resolve("wrong-shape-aquatic-leaks.log").also {
+            it.writeText(
+                sound("minecraft:entity.dolphin.ambient") + "\n" +
+                    leaks.replace("Render thread/WARN", "Server thread/WARN") + "\n",
+            )
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2, 4, 6), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyAcceptsOnlyOneExactInvalidImmersiveWeatheringIcicleWarningPerLog(@TempDir root: Path) {
+        val warning = "[06:28:03] [Server thread/WARN] [net.minecraft.world.level.chunk.LevelChunk]: " +
+            "Block entity minecraft:mob_spawner @ BlockPos{x=49, y=139, z=12} " +
+            "state Block{immersive_weathering:icicle}[thickness=tip,vertical_direction=down,waterlogged=false] " +
+            "invalid for ticking:"
+        val accepted = root.resolve("accepted-invalid-icicle.log").also { it.writeText(warning + "\n") }
+        val overflow = root.resolve("overflow-invalid-icicle.log").also {
+            it.writeText(warning + "\n" + warning + "\n")
+        }
+        val wrongShape = root.resolve("wrong-shape-invalid-icicle.log").also {
+            it.writeText(warning.replace("immersive_weathering:icicle", "minecraft:stone") + "\n")
+        }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    }
+
+    @Test
+    fun managedProcessCapturesOutputAndStops(@TempDir root: Path) {
+        val log = root.resolve("process.log")
+        ManagedProcess("fixture", listOf("sh", "-c", "echo ready; while :; do sleep 1; done"), root, log).use { process ->
+            process.waitForLog(Regex("ready"), Duration.ofSeconds(5), "fixture readiness")
+            assertTrue(process.alive)
+        }
+    }
+
+    @Test
+    fun packRunnerMutexPublishesOwnerAndFailsFastForContenders(@TempDir state: Path) {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val lock = root.resolve("pack-test-lock.main.kts")
+        val ready = state.resolve("ready")
+        val release = state.resolve("release")
+        val first = ProcessBuilder(
+            lock.toString(), "run", "test", "server", "--",
+            "sh", "-c", "test -f '${state.resolve("owner.json")}' && touch '$ready' && while [ ! -f '$release' ]; do sleep 0.1; done",
+        ).apply {
+            environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString()
+            environment().remove("BC_PACK_TEST_LOCK_TOKEN")
+            redirectErrorStream(true)
+            redirectOutput(state.resolve("holder.log").toFile())
+        }.start()
+        val holderTracker = ProcessTracker(first.toHandle())
+        try {
+            // Cold Kotlin script compilation must not expire the holder's lease.
+            val deadline = System.nanoTime() + Duration.ofSeconds(45).toNanos()
+            while (!Files.exists(ready) && first.isAlive && System.nanoTime() < deadline) Thread.sleep(50)
+            assertTrue(Files.exists(ready), "first runner never acquired the mutex; see holder.log")
+
+            val contender = ProcessBuilder(lock.toString(), "run", "test", "candidate", "--", "true")
+                .apply {
+                    environment()["BC_PACK_TEST_STATE_ROOT"] = state.toString()
+                    environment().remove("BC_PACK_TEST_LOCK_TOKEN")
+                    redirectErrorStream(true)
+                    redirectOutput(state.resolve("contender.log").toFile())
+                }.start()
+            val contenderTracker = ProcessTracker(contender.toHandle())
+            try {
+                assertTrue(contender.waitFor(45, java.util.concurrent.TimeUnit.SECONDS), "contender timed out; see contender.log")
+                assertEquals(75, contender.exitValue())
+            } finally {
+                contenderTracker.stop(Duration.ofSeconds(5))
+            }
+        } finally {
+            release.writeText("contender finished\n")
+            first.waitFor(10, java.util.concurrent.TimeUnit.SECONDS)
+            holderTracker.stop(Duration.ofSeconds(5))
+        }
+        assertEquals(0, first.exitValue())
+        assertTrue(Files.notExists(state.resolve("owner.json")))
+    }
+
+    @Test
+    fun coordinatorQueueAcceptsWorkspaceHandoffAndRejectsDuplicates(@TempDir state: Path) {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val queue = root.resolve("pack-test-queue.main.kts")
+        val handoff = state.resolve("handoff.json")
+        handoff.writeText("""{
+          "schema": "bc.pack_test_handoff.v1",
+          "request_id": "request-1",
+          "producer": {"agent": "workspace_coord"},
+          "authorization": {"explicit": true},
+          "callback": {"agent": "fixture", "pane_id": "w1:p1"},
+          "modpack": {"head": "head-1", "status": []},
+          "repositories": [],
+          "validations": [],
+          "artifacts": [],
+          "dependencies": [],
+          "scenarios": [],
+          "prior_evidence": [],
+          "selector": "dist",
+          "candidate": {
+            "client": {"path": "/candidate/client.zip", "sha256": "${"a".repeat(64)}"},
+            "server": {"path": "/candidate/server.zip", "sha256": "${"b".repeat(64)}"}
+          }
+        }""")
+        fun request(): Int = ProcessBuilder(queue.toString(), "request", handoff.toString())
+            .apply { environment()["BC_PACK_TEST_STATE_ROOT"] = state.resolve("coordination").toString() }
+            .start().waitFor()
+        assertEquals(0, request())
+        assertTrue(Files.list(state.resolve("coordination/queued")).use { it.count() } == 1L)
+        assertTrue(request() != 0)
+    }
+
+    private fun zip(path: Path, entries: Map<String, String>) {
+        path.parent.createDirectories()
+        ZipOutputStream(Files.newOutputStream(path)).use { output ->
+            entries.forEach { (name, value) ->
+                output.putNextEntry(ZipEntry(name))
+                output.write(value.toByteArray())
+                output.closeEntry()
+            }
+        }
+    }
+}

@@ -1,30 +1,99 @@
 # Progression
 
-This pack uses six technology eras. Machine Blocks are one-time capability
-proofs: only the explicitly named root machines consume them. Downstream
-recipes return to each mod's native manufactured parts.
+This pack uses six technology eras. Machine Blocks primarily prove capability
+at explicitly named root machines. Downstream recipes normally return to each
+mod's native manufactured parts; Rail Beetle Tier-II modules are an explicit
+exception described below. Their proof recipes
+produce batches of four Andesite, four Copper, four Brass, two Airtight, two
+Electrical, and one Space Machine Block.
 
 Progression is communicated by executable recipes, apparatus, native guides,
-item-hover annotations, and event or world feedback. FTB Quests records a small
-set of completed milestones but does not prescribe routes, expose recipe chains,
-or gate discovery through quest dependencies.
+item-hover annotations, loading lessons, contextual Threads, and event or world
+feedback. Learning surfaces do not impose an objective graph or grant quest rewards.
 
-## Era 1 — Hand Workshop
+## Prelude — Primitive Workshop
 
-Build native Tinkers' Construct tools, reach any active Dimension Font (Nether,
-Aether, Undergarden, or Otherside), and combine that Font's binder with sand and
-gravel for grout. Seared metallurgy owns alloy composition. Molten stone plus
-molten iron or zinc becomes molten Andesite Alloy, which is cast to Create's
-native item. The Hand Crank is the only positive SU source before the Nether.
+Before the first Dimension Font, crafting follows three material steps. Handworked
+goods begin with wood and twigs, rock, flint, bone, hides, wool, straw, string,
+Farmer's Delight rope, canvas, paper, and dyes. Hearth work adds charcoal or coal,
+clay, brick, glass, and cooked stone. Simple copper and iron ingots, nuggets,
+chains, and buckets then provide fittings. Redstone, plates, alloys, gears,
+casings, and Machine Blocks are not primitive-workshop reagents.
+
+Local handling is useful at this stage without becoming a logistics network.
+Quark's wooden chute ejects items into the world, Farmer's Delight's basket
+catches them, and Create's canvas-and-iron chute moves items vertically between
+inventories without power. Vanilla and copper hoppers, the Little Logistics fluid
+hopper, Quark pipes, and Supplementaries faucets and pulleys remain available as
+bounded local transport. Rain collection, cooking, temperature preparation,
+rustic storage and construction, boats, minecarts, ziplines, hang gliders, and
+primitive Eureka ships use the same workshop palette.
+
+Origin crops retain their native uses, but generic workshop goods do not depend
+on them. Farmer's Delight straw and canvas therefore provide early alternatives
+for sacks, awnings, doormats, feeding troughs, thatch, and wattle-and-daub, while
+coal provides the ordinary fire-pit route. Explicitly bamboo-, flax-, food-, or
+magic-themed content remains tied to its own material.
+
+An Overworld cave start can gather loose rock or flint, twigs, and hanging roots
+without an onboarding kit. Four hanging roots make one canvas, which binds a
+primitive hand axe. Cave floors also hold occasional fallen oak wood and rare
+azalea trees. These resources recur in newly generated caves; the chosen spawn
+point does not receive a guaranteed cache.
+
+## Era 1 — Hand Workshop and Tinkers' Construct
+
+Ore separation starts here rather than at the furnace. Use a String Mesh by hand
+on a geological chunk to recover one canonical primary unit. Heat remains a
+four-nugget emergency exit for metal chunks, but nonmetals emerge directly from
+separation and never require ceremonial smelting.
+
+Build native Tinkers' Construct tools and reach the Nether, Aether, Bumblezone,
+or Ratlantis Dimension Font. Each origin material makes its own named Font grout,
+and all four grouts smelt to the same Seared Brick. Seared metallurgy owns alloy
+composition: the automated path alloys molten stone with molten iron or zinc,
+then casts molten Andesite Alloy. A Melter can instead consume one andesite with
+10 mB of either molten metal to cast one native Create Andesite Alloy. The Hand
+Crank is the only positive SU source before the Nether.
 
 Font obelisks are powered only by internal charge. An unmodified Font stores
-15,000 charge, costs 600 charge to start, regenerates 0.25 each inactive tick,
-and has no join fee. An active run drains 80 charge plus 40 per participant each
+15,000 charge, costs 600 charge to start, regenerates 1.25 each inactive tick,
+and refills from empty in ten in-game minutes. It has no join fee. An active run drains 80 charge plus 40 per participant each
 second, giving a solo player 120 active seconds from a full unmodified Font.
 Generated capacity and efficiency modifiers may extend or shorten that baseline.
 Exhausting charge ends the run and returns its participants.
 
-## Era 2 — Powered Works
+Harvesting a generated Font breaks its dimension binding. The replanted Font cannot
+start an expedition, but it can support a World Condenser mounted two blocks above it.
+Players configure the Condenser's successor choices there; an operator commits the
+permanent reset on a supervised dedicated server.
+
+Bumblezone and Ratlantis are expedition-only: upstream portals, tokens, and hive
+teleportation are disabled. Ordinary vegetable patches generate naturally in the
+Overworld, but Bumblezone nurseries remain the origin of non-space food seed stock
+and yield two to four propagules from mature plants. Outside an authored origin,
+uprooting preserves one propagule with a ten-percent chance for a second; edible
+produce is never itself the planting item. The Field Cook and Embark selections
+therefore offer cabbage and tomatoes as food, not their seeds. The cultivar loot
+modifier runs after the pack's other global loot modifiers so grass cannot leak
+wheat or sage seed into the Overworld.
+
+## Era 2 — Create Powered Works
+
+The standard Sifter automates the same recipe language used by hand sifting.
+Milling a chunk into two feeds improves primary recovery; Crushing Wheels later
+produce three. Dry Sifting returns the primary product, while a waterlogged
+Sifter can expose coproducts appropriate to its installed mesh.
+
+Ratlantis is also the origin of scalable logistics. Courier lattices root bulk
+rat, Pretty Pipes, and portable-storage infrastructure; oratchalcum mechanisms
+root ordinary modules and Create's request network; arcane logistics cores root
+high modules and advanced automation. AE2's Energy Acceptor requires PowerGrid
+generation, Ratlantis logistics, OC2R computation, meteor material, and
+Impossible Matter together. Vanilla chests and hoppers, early Create movement,
+Eureka, Little Logistics docks, and Wares remain independent; usable Little
+Logistics vehicles and its high-throughput Rapid Hopper require a visible
+Ratlantis component.
 
 Craft `kubejs:andesite_machine_block` from one Seared Brick block, four
 Andesite Alloy, and four iron plates. It directly unlocks only the Millstone and
@@ -36,42 +105,77 @@ copper plates, one Nether brick, and two Andesite Alloy into
 `kubejs:copper_machine_block`. It directly roots water wheels, the Windmill
 Bearing, the Mechanical Pump, and the first optional primitive transport roots.
 
-## Era 3 — Precision Factory
+## Era 3 — Create Precision and Steam
+
+Brass Sifters provide the high-throughput physical separation route and expose
+all authored coproduct grades when waterlogged. A Spout is not a separator: it
+uses water to prepare crushed geology for the later pressure route and performs
+direct hydration, cleaning, stripping, and rusting operations formerly assigned
+to Bulk Washing.
 
 TCon alloying is the only brass composition route. Compact the Copper block,
 Brass Casing, four brass plates, two electron tubes, and polished rose quartz
 into `kubejs:brass_machine_block`. It directly unlocks the Deployer, Mechanical
-Crafter, and first precision transport controls. Precision Mechanisms and native
-components carry all later recipes.
+Crafter, the first steam engine, and precision transport controls. Precision Mechanisms and native
+components carry all later recipes. Quark's automatic Crafter is downstream of
+the Create Mechanical Crafter rather than an independent iron-and-redstone bypass.
 
-## Era 4 — Thermal & Pressure
+## Era 4 — PneumaticCraft and Heat Sync
 
-Create's heated Mixer makes Nether grout for Foundry access. Primitive
-compressed iron and pre-machinery rubber/iron seals keep the entry reachable.
-Mechanically craft `kubejs:airtight_machine_block` from the Brass block, four
-compressed iron ingots, two pressure tubes, and two seals. It directly roots the
-Rotational Compressor and the first Pressure Chamber interface.
+Four matching rinsed feeds at 2 bar yield four primary units plus the complete
+deterministic geological assay. This is the maximum-recovery route, especially
+for trace and precious coproducts.
 
-Contained PneumaticCraft processes establish sulfuric and hydrochloric acid.
+Native Nether grout is disabled. Foundry access instead uses a heated Create
+Mixer to combine rinsed Hotstone, rinsed Black Shale, and gravel into Scorched
+Bricks, making the geological, kinetic, and TConstruct systems meet at one
+visible boundary. Primitive compressed iron and dried-kelp/iron-plate pressure
+seals keep the pressure entry reachable. Mechanically craft
+`kubejs:airtight_machine_block` from the Brass block, four compressed iron
+ingots, two pressure tubes, and two seals. It directly roots the Rotational
+Compressor and the first Pressure Chamber interface.
+
+Sugar fermentation supplies renewable ethanol, and an open Create Basin oxidizes
+it into canonical ChemLib acetic acid. Acetic acid preserves Pickled Pickles and,
+with kelp-derived cellulose, makes reusable-capacity Acetate Membranes for hazardous
+ChemLib pollutants. Two membranes, two pressure seals, and compressed iron make an
+Airtight Upgrade. Use it on a Basin, Fluid Mixer, or Thermopneumatic Processing Plant
+before processing gas-state ChemLib inputs or outputs; sneak-use empty-handed to
+recover it.
+
+The sealed pressure chain electrolyzes water, oxidizes Black Shale sulfur through
+the vanadium contact process, and hydrates sulfur trioxide into sulfuric acid. The
+full Black Shale pressure assay supplies the catalyst's vanadium. Sulfuric acid then
+converts kelp-derived sodium chloride into hydrochloric acid and saltpeter into
+nitric acid. Nitric acid is PneumaticCraft's sole PCB etchant; its native etching
+acid is hidden and has no recipe. Registered phosphoric acid forms remain outside
+the survival chemistry surface until they have a distinct supported purpose. Gold
+concentrate with hydrochloric and nitric acid yields Platinum Group Residue in
+Create mixing. These routes have no Electrical Machine Block or PowerGrid gate.
 Heat Sync stores and moves process heat; its Boiler Heater consumes exactly
 1/2/3 heat for an active Create boiler's 1/2/3 heat level.
 
-## Era 5 — Electrical Control
+## Era 5 — PowerGrid and More Red
 
 Mechanically apply insulation/red-alloy wiring to Copper Casing for the first
 PowerGrid conductive casing. Pressure-craft `kubejs:electrical_machine_block`
 from Airtight proof, that casing, four copper plates, two primitive MoreRed
-wires, and an electron tube. It directly roots the first Pneumatic Dynamo and
-circuit-design station. Nitric acid and gold/PGM-only mixed-acid recovery begin
-here. PowerGrid parts, sensors, motors, and circuits carry later recipes.
+wires, and an electron tube. It directly roots PowerGrid's first stationary
+generator housing and the circuit-design station. PowerGrid is the sole
+stationary electrical-generation authority; PneumaticCraft remains the pressure
+and petroleum authority. Iron-and-coal steel composite smelts into canonical
+TCon steel for that machinery and later transition parts. PowerGrid parts, sensors, motors,
+and circuits carry later recipes.
 
-## Era 6 — Aerospace
+## Era 6 — Creating Space
 
 Pressure-assemble `kubejs:space_machine_block` from Electrical proof, two
 rocket casings, two Inconel sheets, two Hastelloy ingots, and two titanium
-plates. It directly roots the Rocket Engineer Table, Mechanical Electrolyzer,
-and Air Liquefier. Native frames, tanks, engines, guidance, propellants, and
-life-support parts carry the rest of the rocket graph.
+thermal plates. Rocket casings retain their aluminum-and-cobalt composition but
+craft in batches of four for the initial machine set. The Space Machine Block
+directly roots the Rocket Engineer Table, Mechanical Electrolyzer, and Air
+Liquefier. Native frames, tanks, engines, guidance, propellants, and life-support
+parts carry the rest of the rocket graph.
 
 ## Optional transport
 
@@ -81,7 +185,23 @@ in the Hand Workshop; rough mechanical experiments begin in Powered Works;
 precision trains and controls in Precision Factory; pressure-driven flight in
 Thermal & Pressure; sensors and gyros in Electrical Control. Aether materials
 gate stable high-performance flight, never primitive ships, basic Trackwork, or
-low-performance aircraft.
+low-performance aircraft. The Rail Beetle joins the Precision Factory branch by
+combining a Railway Casing, a Barrel, a Minecart, and two Electron Tubes. Its
+found example can also appear in an abandoned mineshaft chest; placing that marked
+item supplies 32 rails, 16 cobblestone supports, and 8 coal without advanced modules.
+baseline coal firebox, 4-block/second drive, 64-rail survey, two-cart drawgear,
+and one-wide/four-deep bridge work remain complete and practical. One engine
+cradle accepts conditional Create steam, PowerGrid flux, Ars Source, Blood
+lifeforce, Pneumatic air, Goety soul, or Malum spirit drives; an empty alternate
+drive falls back to fuel in the Beetle's working inventory. Freight belongs in the
+consist. Six module bays accept one module per family.
+Tier-I machinery begins in Precision Factory, mechanical and civil Tier-II
+modules mature in Thermal & Pressure, and efficiency, survey, and dispatch
+Tier-II modules require Electrical Control. Every Tier-II recipe consumes its
+Tier-I assembly. These nine module upgrades explicitly depart from root-only
+Machine Block use: the six mechanical/civil upgrades each consume two Airtight
+Machine Blocks; the three efficiency/survey/dispatch upgrades each consume two
+Electrical Machine Blocks.
 
 ## World compatibility
 

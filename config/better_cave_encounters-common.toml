@@ -1,0 +1,14 @@
+[director]
+	enabled = true
+	groupRadius = 64
+	spawnMinimumRadius = 28
+	spawnMaximumRadius = 64
+	spawnBlockLightLimit = 2
+	globalDirectorMobCap = 160
+	maximumSpawnsPerTick = 8
+	maximumSpawnsPerSecond = 24
+	#Number of blocks below the local leaf-ignoring terrain surface reserved before Director control begins.
+	#Keep this aligned with better_compat_fixes mobs.naturalSurfaceDepth; the Better Content pack uses 6.
+	surfaceReserveDepth = 6
+	#Seconds outside the Director-controlled depth range required to drain full pressure.
+	surfacePressureDecaySeconds = 480

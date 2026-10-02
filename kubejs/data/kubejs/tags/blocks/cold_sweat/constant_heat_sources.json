@@ -1,21 +1,65 @@
 {
   "replace": false,
   "values": [
-    { "id": "brewinandchewin:fiery_fondue_pot", "required": false },
-    { "id": "brewinandchewin:heating_cask", "required": false },
-    { "id": "deeperdarker:gloomy_geyser", "required": false },
-    { "id": "malum:block_of_blazing_quartz", "required": false },
-    { "id": "malum:tainted_iridescent_ether_brazier", "required": false },
-    { "id": "malum:iridescent_ether", "required": false },
-    { "id": "malum:twisted_iridescent_ether_brazier", "required": false },
-    { "id": "malum:iridescent_wall_ether_torch", "required": false },
-    { "id": "malum:wall_ether_torch", "required": false },
-    { "id": "malum:iridescent_ether_torch", "required": false },
-    { "id": "malum:twisted_ether_brazier", "required": false },
-    { "id": "malum:ether", "required": false },
-    { "id": "malum:ether_torch", "required": false },
-    { "id": "malum:tainted_ether_brazier", "required": false },
-    { "id": "#twilightforest:storage_blocks/fiery", "required": false },
-    { "id": "supplementaries:blaze_rod_block", "required": false }
+    {
+      "id": "brewinandchewin:fiery_fondue_pot",
+      "required": false
+    },
+    {
+      "id": "brewinandchewin:heating_cask",
+      "required": false
+    },
+    {
+      "id": "malum:block_of_blazing_quartz",
+      "required": false
+    },
+    {
+      "id": "malum:tainted_iridescent_ether_brazier",
+      "required": false
+    },
+    {
+      "id": "malum:iridescent_ether",
+      "required": false
+    },
+    {
+      "id": "malum:twisted_iridescent_ether_brazier",
+      "required": false
+    },
+    {
+      "id": "malum:iridescent_wall_ether_torch",
+      "required": false
+    },
+    {
+      "id": "malum:wall_ether_torch",
+      "required": false
+    },
+    {
+      "id": "malum:iridescent_ether_torch",
+      "required": false
+    },
+    {
+      "id": "malum:twisted_ether_brazier",
+      "required": false
+    },
+    {
+      "id": "malum:ether",
+      "required": false
+    },
+    {
+      "id": "malum:ether_torch",
+      "required": false
+    },
+    {
+      "id": "malum:tainted_ether_brazier",
+      "required": false
+    },
+    {
+      "id": "#twilightforest:storage_blocks/fiery",
+      "required": false
+    },
+    {
+      "id": "supplementaries:blaze_rod_block",
+      "required": false
+    }
   ]
 }

@@ -129,55 +129,6 @@
       "excluded_boss": false
     },
     {
-      "entity": "deeperdarker:sculk_centipede",
-      "armor": 0.0,
-      "armor_toughness": 0.0,
-      "max_health": 20.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "deeperdarker:sculk_leech",
-      "armor": 0.0,
-      "armor_toughness": 0.0,
-      "max_health": 4.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "deeperdarker:sculk_snapper",
-      "armor": 0.0,
-      "armor_toughness": 0.0,
-      "max_health": 12.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "deeperdarker:shattered",
-      "armor": 3.5,
-      "armor_toughness": 0.0,
-      "max_health": 50.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "deeperdarker:shriek_worm",
-      "armor": 0.0,
-      "armor_toughness": 0.0,
-      "max_health": 100.0,
-      "excluded_boss": true
-    },
-    {
-      "entity": "deeperdarker:sludge",
-      "armor": 0.0,
-      "armor_toughness": 0.0,
-      "max_health": 16.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "deeperdarker:stalker",
-      "armor": 4.0,
-      "armor_toughness": 0.0,
-      "max_health": 200.0,
-      "excluded_boss": true
-    },
-    {
       "entity": "fallout_wastelands_:blastmaster_raider",
       "armor": 0.2,
       "armor_toughness": 0.0,
@@ -2569,69 +2520,6 @@
       "armor": 0.0,
       "armor_toughness": 0.0,
       "max_health": 20.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "undergarden:forgotten",
-      "armor": 2.0,
-      "armor_toughness": 0.0,
-      "max_health": 20.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "undergarden:forgotten_guardian",
-      "armor": 10.0,
-      "armor_toughness": 5.0,
-      "max_health": 80.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "undergarden:muncher",
-      "armor": 0.0,
-      "armor_toughness": 5.0,
-      "max_health": 15.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "undergarden:nargoyle",
-      "armor": 0.0,
-      "armor_toughness": 0.0,
-      "max_health": 15.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "undergarden:rotbeast",
-      "armor": 3.0,
-      "armor_toughness": 0.0,
-      "max_health": 80.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "undergarden:rotling",
-      "armor": 0.0,
-      "armor_toughness": 0.0,
-      "max_health": 10.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "undergarden:rotwalker",
-      "armor": 3.0,
-      "armor_toughness": 0.0,
-      "max_health": 40.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "undergarden:sploogie",
-      "armor": 0.0,
-      "armor_toughness": 0.0,
-      "max_health": 20.0,
-      "excluded_boss": false
-    },
-    {
-      "entity": "undergarden:stoneborn",
-      "armor": 10.0,
-      "armor_toughness": 0.0,
-      "max_health": 50.0,
       "excluded_boss": false
     }
   ],

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:is_forest",
+    "#forge:is_mountain",
+    "#forge:is_swamp",
+    "#minecraft:is_forest",
+    "#minecraft:is_mountain",
+    "#minecraft:is_river",
+    "#minecraft:is_taiga"
+  ]
+}

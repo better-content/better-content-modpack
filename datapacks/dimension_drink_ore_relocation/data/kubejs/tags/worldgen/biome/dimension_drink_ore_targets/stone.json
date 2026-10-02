@@ -1,7 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "#kubejs:dimension_drink_ore_targets/sky",
-    "#kubejs:dimension_drink_ore_targets/deep"
-  ]
-}

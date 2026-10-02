@@ -226,5 +226,4 @@
 	#Controls visibility of the scanning progress HUD.
 	#When disabled, no progress bar will be shown even if scanning is enabled.
 	#Shows percentage of chunks scanned during world initialization and automatically hides when complete.
-	showScanProgressHUD = true
-
+	showScanProgressHUD = false

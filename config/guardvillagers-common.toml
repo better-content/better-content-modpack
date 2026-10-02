@@ -70,7 +70,7 @@
 	#Guards will attack all hostiles with this option, when set to false guards will only attack zombies and illagers.
 	"Guards attack all mobs?" = true
 	#Guards won't attack mobs in this list at all, for example, putting "minecraft:creeper" in this list will make guards ignore creepers.
-	"Mob Blacklist" = ["minecraft:villager", "minecraft:iron_golem", "minecraft:wandering_trader", "guardvillagers:guard", "minecraft:creeper", "alexsmobs:komodo_dragon", "minecraft:enderman"]
+	"Mob Blacklist" = ["minecraft:villager", "minecraft:iron_golem", "minecraft:wandering_trader", "guardvillagers:guard", "minecraft:creeper", "minecraft:enderman"]
 	#Guards will additionally attack mobs ids put in this list, for example, putting "minecraft:cow" in this list will make guards attack cows.
 	"Mob Whitelist" = []
 

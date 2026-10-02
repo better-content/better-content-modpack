@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:lukewarm_ocean",
+    "minecraft:ocean",
+    "minecraft:warm_ocean"
+  ]
+}

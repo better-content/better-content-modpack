@@ -3,8 +3,6 @@
   "values": [
     "aether:skyroot_slab",
     "ars_nouveau:archwood_slab",
-    "deeperdarker:bloom_slab",
-    "deeperdarker:echo_slab",
     "fallout_wastelands_:joshua_tree_slab",
     "fallout_wastelands_:molder_wood_slab",
     "immersive_weathering:charred_slab",
@@ -32,9 +30,6 @@
     "twilightforest:mining_slab",
     "twilightforest:time_slab",
     "twilightforest:transformation_slab",
-    "twilightforest:twilight_oak_slab",
-    "undergarden:grongle_slab",
-    "undergarden:smogstem_slab",
-    "undergarden:wigglewood_slab"
+    "twilightforest:twilight_oak_slab"
   ]
 }

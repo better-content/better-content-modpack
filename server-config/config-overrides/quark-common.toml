@@ -605,7 +605,7 @@
 
 	[tools.endermosh_music_disc]
 		"Play Endermosh During Enderdragon Fight" = false
-		"Add To End City Loot" = true
+		"Add To End City Loot" = false
 		"Loot Weight" = 5
 		"Loot Quality" = 1
 
@@ -731,7 +731,7 @@
 	"Hoe Harvesting" = true
 	"Horses Swim" = true
 	"Improved Sponges" = true
-	"Lock Rotation" = true
+	"Lock Rotation" = false
 	"Magma Keeps Concrete Powder" = true
 	"Map Washing" = true
 	"More Banner Layers" = true
@@ -1153,7 +1153,7 @@
 
 			[world.big_stone_clusters.myalite.dimensions]
 				"Is Blacklist" = false
-				Dimensions = ["minecraft:the_end"]
+				Dimensions = ["creatingspace:earth_orbit"]
 
 			[world.big_stone_clusters.myalite.biomes]
 
@@ -1164,7 +1164,7 @@
 
 				#Biome names this should spawn in. Must match both this and 'types' to spawn.
 				[world.big_stone_clusters.myalite.biomes.biomes]
-					Biomes = ["minecraft:end_highlands"]
+					Biomes = ["creatingspace:space"]
 					"Is Blacklist" = false
 
 	[world.blossom_trees]
@@ -1468,7 +1468,7 @@
 
 			[world.new_stone_types.myalite.dimensions]
 				"Is Blacklist" = false
-				Dimensions = ["minecraft:the_end"]
+				Dimensions = ["creatingspace:earth_orbit"]
 
 			[world.new_stone_types.myalite.oregen_lower]
 				#Allowed values: [-64,320]
@@ -1733,7 +1733,7 @@
 		#Disables mob griefing for only specific entities
 		"Enable Selective Mob Griefing" = true
 		#Force Elytra to only work in specific dimensions
-		"Enable Dimension Locked Elytra" = true
+		"Enable Dimension Locked Elytra" = false
 		#Makes falling blocks not able to be duped via dimension crossing
 		"Disable Falling Block Dupe" = true
 		#Fixes several piston physics exploits, most notably including TNT duping
@@ -1948,4 +1948,3 @@
 		"Destroy Lost Items" = false
 		#Set this to false to only allow the owner of a totem to collect its items rather than any player
 		"Allow Anyone To Collect" = true
-

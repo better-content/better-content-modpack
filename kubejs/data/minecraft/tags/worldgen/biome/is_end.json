@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "creatingspace:mars_plains",
+    "creatingspace:moon_cave",
+    "creatingspace:moon_plains",
+    "creatingspace:space",
+    "creatingspace:venus",
+    "creatingspace:venus_hellground"
+  ]
+}

@@ -3,7 +3,7 @@
 #	Namespaces:   '<minecraft>'
 #	Tags:         '#forge:stone'
 #	IDs:          'minecraft:stone'
-Blocks = ["minecraft:brick_wall", "minecraft:deepslate_brick_wall", "minecraft:end_stone_brick_wall", "minecraft:mossy_stone_brick_wall", "minecraft:nether_brick_fence", "minecraft:nether_brick_wall", "minecraft:polished_blackstone_brick_wall", "minecraft:red_nether_brick_wall", "minecraft:stone_brick_wall"]
+Blocks = ["minecraft:brick_wall", "minecraft:deepslate_brick_wall", "minecraft:end_stone_brick_wall", "minecraft:mossy_stone_brick_wall", "minecraft:nether_brick_fence", "minecraft:nether_brick_wall", "minecraft:polished_blackstone_brick_wall", "minecraft:red_nether_brick_wall", "minecraft:stone_brick_wall", "quark:nether_brick_fence_gate", "tconstruct:scorched_bricks_fence"]
 
 [Physics]
 	#The maximum weight the block(s) can support both horizontally and vertically.

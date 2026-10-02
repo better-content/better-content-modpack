@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#kubejs:undergarden_forage/wet",
-  "features": "farmersdelight:patch_wild_rice",
-  "step": "vegetal_decoration"
-}

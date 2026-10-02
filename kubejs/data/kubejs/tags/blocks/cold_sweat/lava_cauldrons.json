@@ -1,13 +1,37 @@
 {
   "replace": false,
   "values": [
-    { "id": "everythingcopper:copper_lava_cauldron", "required": false },
-    { "id": "everythingcopper:exposed_copper_lava_cauldron", "required": false },
-    { "id": "everythingcopper:weathered_copper_lava_cauldron", "required": false },
-    { "id": "everythingcopper:oxidized_copper_lava_cauldron", "required": false },
-    { "id": "everythingcopper:waxed_copper_lava_cauldron", "required": false },
-    { "id": "everythingcopper:waxed_exposed_copper_lava_cauldron", "required": false },
-    { "id": "everythingcopper:waxed_weathered_copper_lava_cauldron", "required": false },
-    { "id": "everythingcopper:waxed_oxidized_copper_lava_cauldron", "required": false }
+    {
+      "id": "everythingcopper:copper_lava_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:exposed_copper_lava_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:weathered_copper_lava_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:oxidized_copper_lava_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:waxed_copper_lava_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:waxed_exposed_copper_lava_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:waxed_weathered_copper_lava_cauldron",
+      "required": false
+    },
+    {
+      "id": "everythingcopper:waxed_oxidized_copper_lava_cauldron",
+      "required": false
+    }
   ]
 }

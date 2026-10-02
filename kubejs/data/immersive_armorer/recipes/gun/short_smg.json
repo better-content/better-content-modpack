@@ -1,0 +1,33 @@
+{
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 24
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/copper"
+      },
+      "count": 16
+    },
+    {
+      "item": {
+        "tag": "minecraft:logs"
+      },
+      "count": 4
+    },
+    {
+      "item": {
+        "item": "kubejs:electrical_instrumentation_module"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "gun",
+    "id": "immersive_armorer:short_smg"
+  },
+  "type": "tacz:gun_smith_table_crafting"
+}

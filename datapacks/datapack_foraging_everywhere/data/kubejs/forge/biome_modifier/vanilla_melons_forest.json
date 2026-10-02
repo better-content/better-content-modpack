@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#kubejs:undergarden_forage/forest",
-  "features": "minecraft:patch_melon_sparse",
-  "step": "vegetal_decoration"
-}

@@ -3,8 +3,6 @@
   "values": [
     "aether:skyroot_trapdoor",
     "ars_nouveau:archwood_trapdoor",
-    "deeperdarker:bloom_trapdoor",
-    "deeperdarker:echo_trapdoor",
     "fallout_wastelands_:molder_wood_trapdoor",
     "natures_spirit:aspen_trapdoor",
     "natures_spirit:cedar_trapdoor",
@@ -36,9 +34,6 @@
     "twilightforest:mining_trapdoor",
     "twilightforest:time_trapdoor",
     "twilightforest:transformation_trapdoor",
-    "twilightforest:twilight_oak_trapdoor",
-    "undergarden:grongle_trapdoor",
-    "undergarden:smogstem_trapdoor",
-    "undergarden:wigglewood_trapdoor"
+    "twilightforest:twilight_oak_trapdoor"
   ]
 }

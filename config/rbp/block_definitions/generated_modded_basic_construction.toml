@@ -1,0 +1,153 @@
+#A list of block IDs and tags that should be affected by this definition.
+#Entries can be supplied in the below formats:
+#	Namespaces:   '<minecraft>'
+#	Tags:         '#forge:stone'
+#	IDs:          'minecraft:stone'
+Blocks = [
+	"excavated_variants:red_sandstone_black_shale",
+	"excavated_variants:red_sandstone_brassroot",
+	"excavated_variants:red_sandstone_coal_measures",
+	"excavated_variants:red_sandstone_copper_bloom",
+	"excavated_variants:red_sandstone_cthonic_gold_ore",
+	"excavated_variants:red_sandstone_evaporite_beds",
+	"excavated_variants:red_sandstone_hotstone",
+	"excavated_variants:red_sandstone_ironstone",
+	"excavated_variants:red_sandstone_jade_ore",
+	"excavated_variants:red_sandstone_natural_quartz_ore",
+	"excavated_variants:red_sandstone_soulstone_ore",
+	"excavated_variants:red_sandstone_tin_quartz",
+	"excavated_variants:sandstone_black_shale",
+	"excavated_variants:sandstone_brassroot",
+	"excavated_variants:sandstone_coal_measures",
+	"excavated_variants:sandstone_copper_bloom",
+	"excavated_variants:sandstone_cthonic_gold_ore",
+	"excavated_variants:sandstone_evaporite_beds",
+	"excavated_variants:sandstone_hotstone",
+	"excavated_variants:sandstone_ironstone",
+	"excavated_variants:sandstone_jade_ore",
+	"excavated_variants:sandstone_natural_quartz_ore",
+	"excavated_variants:sandstone_soulstone_ore",
+	"excavated_variants:sandstone_tin_quartz",
+	"excavated_variants:unearthed_mudstone_black_shale",
+	"excavated_variants:unearthed_mudstone_brassroot",
+	"excavated_variants:unearthed_mudstone_coal_measures",
+	"excavated_variants:unearthed_mudstone_copper_bloom",
+	"excavated_variants:unearthed_mudstone_cthonic_gold_ore",
+	"excavated_variants:unearthed_mudstone_evaporite_beds",
+	"excavated_variants:unearthed_mudstone_hotstone",
+	"excavated_variants:unearthed_mudstone_ironstone",
+	"excavated_variants:unearthed_mudstone_jade_ore",
+	"excavated_variants:unearthed_mudstone_natural_quartz_ore",
+	"excavated_variants:unearthed_mudstone_soulstone_ore",
+	"excavated_variants:unearthed_mudstone_tin_quartz",
+	"excavated_variants:unearthed_siltstone_black_shale",
+	"excavated_variants:unearthed_siltstone_brassroot",
+	"excavated_variants:unearthed_siltstone_coal_measures",
+	"excavated_variants:unearthed_siltstone_copper_bloom",
+	"excavated_variants:unearthed_siltstone_cthonic_gold_ore",
+	"excavated_variants:unearthed_siltstone_evaporite_beds",
+	"excavated_variants:unearthed_siltstone_hotstone",
+	"excavated_variants:unearthed_siltstone_ironstone",
+	"excavated_variants:unearthed_siltstone_jade_ore",
+	"excavated_variants:unearthed_siltstone_natural_quartz_ore",
+	"excavated_variants:unearthed_siltstone_soulstone_ore",
+	"excavated_variants:unearthed_siltstone_tin_quartz",
+	"fallout_wastelands_:sandbags",
+	"fallout_wastelands_:wasteland_sand_stone",
+	"immersive_weathering:sandy_chiseled_stone_bricks",
+	"immersive_weathering:sandy_cobblestone",
+	"immersive_weathering:sandy_stone",
+	"immersive_weathering:sandy_stone_bricks",
+	"immersive_weathering:vitrified_sand",
+	"natures_spirit:chiseled_pink_sandstone",
+	"natures_spirit:cut_pink_sandstone",
+	"natures_spirit:pink_sandstone",
+	"natures_spirit:smooth_pink_sandstone",
+	"quark:carved_mud_bricks",
+	"quark:chiseled_soul_sandstone",
+	"quark:cut_soul_sandstone",
+	"quark:mud_brick_lattice",
+	"quark:mud_pillar",
+	"quark:red_sandstone_bricks",
+	"quark:sandstone_bricks",
+	"quark:smooth_soul_sandstone",
+	"quark:soul_sandstone",
+	"quark:soul_sandstone_bricks",
+	"thirst:sand_filter",
+	"unearthed:chiseled_mudstone",
+	"unearthed:chiseled_siltstone",
+	"unearthed:cut_mudstone",
+	"unearthed:cut_siltstone",
+	"unearthed:smooth_siltstone",
+]
+
+[Physics]
+	#The maximum weight the block(s) can support both horizontally and vertically.
+	#Range: > 0
+	SupportStrength = 88020
+
+	#Additional support strength to apply to the amount of weight the block(s) can support above when acting as a beam.
+	#A value of 1.0 will allow the block(s) to support an infinite amount of weight, whereas a value of 0.0 will not apply any additional strengthening.
+	#Range: 0.0 ~ 1.0
+	BeamStrength = 0.9
+
+	#The mass of the block(s), in kilograms.
+	#Range: 1.0 ~ 50000.0
+	Mass = 1200.0
+
+	#Whether the block(s) can hang from other blocks for support.
+	CanHang = true
+
+	#Whether the block(s) can attach to the sides of other blocks for support.
+	CanAttach = true
+
+	#Whether the block(s) can diagonally attach to other blocks for support.
+	CanAttachDiagonally = true
+
+	#The chance the block(s) will slide after falling and landing.
+	#Range: 0.0 ~ 1.0
+	SlideChance = 0.5
+
+	#An additional "dice roll" to apply to the base slide chance of the block(s), when being placed by an entity.
+	#Setting a value of 1.0 means the slide chance will remain unaffected.
+	#Range: 0.0 ~ 1.0
+	PlacementSlideModifier = 0.0
+
+	#A multiplier to apply to the damage caused by the block(s) when falling on entities.
+	#Range: 0.0 ~ 10.0
+	EntityDamageScale = 1.0
+
+	#Whether the block(s) should break instead of falling.
+	BreaksOnFalling = false
+
+	#The maximum force the block(s) can withstand before being broken.
+	#Range: > 0
+	Strength = 782400
+
+	#Whether the block(s) can be supported by liquids that are below.
+	FloatsOnLiquid = false
+
+	#This section allows you to extend the collision bounds for each specific face of the block(s).
+	#Note: Directions are relative to the orientation of the block(s) (excluding vertical axis), not the world itself.
+	[Physics.ExtendedCollisionBounds]
+		#Fully extends the collision bounds of the block(s) in the UP direction.
+		Up = false
+
+		#Fully extends the collision bounds of the block(s) in the DOWN direction.
+		Down = false
+
+		#Fully extends the collision bounds of the block(s) in the NORTH direction.
+		North = false
+
+		#Fully extends the collision bounds of the block(s) in the EAST direction.
+		East = false
+
+		#Fully extends the collision bounds of the block(s) in the SOUTH direction.
+		South = false
+
+		#Fully extends the collision bounds of the block(s) in the WEST direction.
+		West = false
+
+[ChunkAnalysis]
+	#Whether the block(s) should be processed during chunk analysis updates.
+	Enabled = true

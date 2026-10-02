@@ -1,0 +1,74 @@
+[Generation.Dragon]
+	"Generate Dragon Skeletons" = true
+	"Generate Dragon Skeleton Chance" = 10000
+	"Generate Dragon Cave Chance" = 10000
+	"Generate Dragon Roost Chance" = 10000
+
+[Generation.Structures-Features]
+	"Dangerous World Gen Dist From Spawn" = 10000
+	"Dangerous World Gen Dist Seperation" = 10000
+	"Generate Glaciers" = true
+	"Glacier Spawn Weight" = 1
+	"Generate Mausoleums" = true
+	"Generate Graveyards" = true
+	"Generate Gorgon Temple" = true
+
+[Dragons.Griefing]
+	"Dragon Griefing" = 0
+	"Tamed Dragon Griefing" = false
+
+[Mobs.Pixies]
+	"Spawn Pixies Chance" = 10000
+
+[Mobs.Cyclops]
+	"Spawn Cyclops Cave Chance" = 10000
+	"Spawn Wandering Cyclops Chance" = 10000
+
+[Mobs.Sirens]
+	"Spawn Sirens Chance" = 10000
+
+[Mobs.DeathWorms]
+	"Death Worm Spawn Weight" = 0
+
+[Mobs.Cockatrice]
+	"Spawn Cockatrices" = true
+	"Cockatrice Spawn Weight" = 1
+
+[Mobs.Stymphalians]
+	"Spawn Stymhphalian Bird Chance" = 10000
+
+[Mobs.Trolls]
+	"Spawn Trolls" = true
+	"Troll Spawn Weight" = 1
+
+[Mobs.Myrmex]
+	"Myrmex Colony Gen Chance" = 10000
+
+[Mobs.Amphitheres]
+	"Spawn Amphitheres" = true
+	"Amphithere Spawn Weight" = 1
+
+[Mobs.SeaSerpents]
+	"Spawn Sea Serpent Chance" = 10000
+
+[Mobs.Hippocampus]
+	"Spawn Hippocampus Chance" = 10000
+
+[Mobs.Hippogryph]
+	"Spawn Hippogryphs" = true
+	"Hippogryph Spawn Weight" = 1
+
+[Mobs.Others]
+	"Spawn Liches" = true
+	"Lich Spawn Weight" = 1
+	"Lich Spawn Chance" = 10000
+	"Hydra Caves Gen Chance" = 10000
+	"Villager Scribe House Weight" = 1
+
+[Items]
+	"Dragonsteel Sword Base Attack Strength" = 9.0
+	"Dragonsteel Base Armor" = 8
+	"Dragonsteel Base Armor Toughness" = 3.0
+	"Dragonsteel Base Durability" = 2500
+	"Dragonsteel Base Durability Equipment" = 2500
+	"Chunk Load Summon Crystal" = false

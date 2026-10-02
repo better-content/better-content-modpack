@@ -1,0 +1,79 @@
+{
+  "noise_scale": 768,
+  "cadence_seconds": {
+    "minimum": 300,
+    "maximum": 540
+  },
+  "warning_seconds": {
+    "minimum": 6,
+    "maximum": 20
+  },
+  "surge_seconds": 60,
+  "recovery_seconds": 120,
+  "deep_budget_per_player": 80,
+  "deep_active_target_per_player": 36,
+  "packet_interval_ticks": 80,
+  "maximize_directions": true,
+  "warning_sounds": [
+    "minecraft:entity.enderman.ambient",
+    "endermanoverhaul:cave_enderman_ambient",
+    "endermanoverhaul:tall_enderman_ambient"
+  ],
+  "roster": [
+    {
+      "entity": "minecraft:endermite",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "tconstruct:ender_slime",
+      "role": "common",
+      "minimum_depth": 0.15,
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8
+    },
+    {
+      "entity": "minecraft:enderman",
+      "role": "line",
+      "minimum_depth": 0.25,
+      "cost": 3,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 5
+    },
+    {
+      "entity": "endermanoverhaul:cave_enderman",
+      "role": "line",
+      "minimum_depth": 0.35,
+      "cost": 3,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 5
+    },
+    {
+      "entity": "endermanoverhaul:end_enderman",
+      "role": "line",
+      "minimum_depth": 0.55,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 4
+    },
+    {
+      "entity": "endermanoverhaul:end_islands_enderman",
+      "role": "heavy",
+      "minimum_depth": 0.75,
+      "cost": 7,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 2
+    },
+    {
+      "entity": "cataclysm:ender_golem",
+      "role": "heavy",
+      "minimum_depth": 0.86,
+      "cost": 14,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "forge:remove_spawns",
+  "biomes": [
+    "deep_lukewarm_ocean",
+    "lukewarm_ocean",
+    "warm_ocean"
+  ],
+  "entity_types": [
+    "thalassophobia:hammerhead_shark"
+  ]
+}

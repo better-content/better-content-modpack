@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#kubejs:undergarden_forage/forest",
-  "features": "ubesdelight:patch_wild_garlic",
-  "step": "vegetal_decoration"
-}

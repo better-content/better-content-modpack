@@ -1,27 +1,5 @@
 {
   "type": "minecraft:chest",
-  "pools": [
-    {
-      "bonus_rolls": 0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 8,
-                "min": 3
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "createdeco:brass_coin"
-        }
-      ],
-      "rolls": 1
-    }
-  ],
+  "pools": [],
   "random_sequence": "wares:agreement/village/taiga_requested_buy"
 }

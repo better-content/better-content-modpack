@@ -3,7 +3,7 @@
 	#True if you want to hold the right mouse button to aim
 	HoldToAim = true
 	#True if you want to hold the crawl button to crawl
-	HoldToCrawl = true
+	HoldToCrawl = false
 	#Try to reload automatically when the gun is empty
 	AutoReload = false
 

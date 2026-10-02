@@ -67,7 +67,7 @@
 		#Range: 0.1 ~ 1.7976931348623157E308
 		pullSpeed = 6.0
 		#Should the hook provide creative flight or not
-		creativeFlight = true
+		creativeFlight = false
 
 	#Blaze Hook Stats
 	[hook_stats.blaze]
@@ -102,4 +102,3 @@
 		pullSpeed = 48.0
 		#Should the hook provide creative flight or not
 		creativeFlight = false
-

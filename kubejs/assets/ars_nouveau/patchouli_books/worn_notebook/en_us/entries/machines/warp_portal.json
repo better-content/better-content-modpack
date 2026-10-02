@@ -1,5 +1,6 @@
 {
   "category": "ars_nouveau:machines",
+  "advancement": "minecraft:end/root",
   "icon": "ars_nouveau:warp_scroll",
   "name": "ars_nouveau.page.warp_portal",
   "pages": [

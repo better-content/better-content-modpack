@@ -2,24 +2,25 @@
 
 The modpack owns cross-mod progression policy, six Machine Blocks, genuinely
 cross-mod transition items, exact era-root recipes, optional transport gates,
-the milestone ledger, and player documentation. Owning mods keep lifecycle and
+learning surfaces, and player documentation. Owning mods keep lifecycle and
 runtime logic.
 
 | System | Owner | Pack boundary |
 | --- | --- | --- |
-| Deposits, chunks, samples, processing, grinding balls, canonical outputs | Realistic Ores | Supplies acid/era inputs only; no duplicate ore registration |
-| Radioactive profiles, disturbance persistence, emissions | Latent ChemLib | Provides progression recipes and milestone recognition only where the accomplishment remains salient |
+| Deposits, chunks, samples, Sifting/Spouting/pressure processing, canonical outputs | Realistic Ores | Physical and magical routes converge on shared products; no duplicate ore registration |
+| Radioactive profiles, disturbance persistence, emissions | Latent ChemLib | Provides progression recipes; the mod owns physical behavior and its gameplay events |
 | Heat storage/transport and Create Boiler Heater | Heat Sync | Provides era placement; native UI and hover own operating facts |
-| Dimension Font obelisks, travel sessions, charge, and arrival sites | Dimension Drink | Pack recipes and quests may point to Fonts; the mod owns neutral charge generation/drain, session lifecycle, chunk tickets, and destination placement |
-| Blood Altar bootstrap and tier reference | Blood Magic | Still-Beating Heart plus overworld materials opens the altar; Blood Magic's in-game guide remains the authoritative Tier 1-5 multiblock reference |
-| Occult physical components | Hexerei | Hexerei's mixing cauldron manufactures bounded physical Occultism components; Occultism retains rituals, spirit fire, bindings, and servants |
-| Occult storage | None | Controller, remote, and satchel acquisition routes are closed; Pretty Pipes is the practical logistics surface |
+| Dimension Font obelisks, travel sessions, charge, and arrival sites | Dimension Drink | Pack recipes and learning surfaces may point to Fonts; the mod owns neutral charge generation/drain, session lifecycle, chunk tickets, and destination placement |
+| Blood Altar bootstrap and tier reference | Blood Magic | Ordinary materials open the altar; a Heart Block made with one final-death fragment supplies 1 LP/t per installed fragment beside it. Blood Magic's in-game guide remains the authoritative Tier 1-5 multiblock reference. |
+| Occult physical components | Hexerei | The mixing cauldron uses iron and a vanilla cauldron; impure chalk requires Aether, Nether, Bumblezone, and Ratlantis trophies equally. Occultism retains rituals, spirit fire, bindings, servants, and the finite dimensional matrix |
+| Occult storage | None | Controllers, stabilizers, remotes, satchel, wormholes, mineshaft, and miners are closed; finite AE2 storage and visible Ratlantis-rooted logistics remain |
 | Vanilla boat durability, vessel-drop suppression, reinforced recipes | Better Content Fixes | No boat mutation or hiding scripts |
-| Coin acquisition, recipe policy, village commerce, loot replacement, and wandering-trader lifecycle | Better Content Economy | The standalone mod owns combat and chest income, non-convertible coin tiers, the exact 312-row villager catalogue, emerald-to-coin loot policy, scheduled themed offers, Wares agreements, and the optional Font map |
+| Player-kill spirit release, spirit commerce, seven village professions, and wandering-trader lifecycle | Better Content Economy | The standalone mod owns credited-kill release through Malum's animated spirit entities, the exact 245-offer villager catalogue, seven matching stations/outfits/behaviours, seven 13-good wandering stocks, and matching villager-egg offers; coins, emerald commerce, and eldritch/umbral trade are closed |
 | TCon alloy composition and casting | Tinkers' Construct | Removes bypasses and authors exact cross-mod alloy recipes |
 | Kinetic assembly | Create | Uses Machine Blocks only at listed direct roots |
-| Pressure chemistry | PneumaticCraft | Pack authors bounded cross-mod acid/root recipes |
-| Electrical components | PowerGrid and MoreRed | Electrical Block starts the first generator/design roots |
+| Acid and gas chemistry | ChemLib, PneumaticCraft, Create, Better Content Fixes | Pack authors canonical acid routes and renewable acetic uses; airtight machine upgrades retain gas-state ChemLib contents |
+| Electrical components and stationary generation | PowerGrid and MoreRed | Electrical Block starts PowerGrid's first generator/design roots; competing stationary generators are cut |
+| Dragon ecology and materials | Ice and Fire | Replaces vanilla dragon-boss products; rare Overworld ecology supplies tagged products and equal-stat Dragonsteel TCon materials |
 | Aerospace components | Creating Space | Space Block starts three aerospace roots |
 
 ## Stable pack IDs
@@ -41,8 +42,11 @@ Startup scripts register only the stable Machine Blocks and still-required
 pack transition items. Server scripts are grouped by progression era,
 transport, compatibility, utility, and narrow removal policy. Mandatory recipes
 use exact installed IDs; optional addon recipes use explicit mod-loaded guards.
-Scripts do not scan arbitrary recipe JSON, inspect namespaces, or silently skip
-mandatory roots.
+Ordinary integration scripts do not scan arbitrary recipe JSON, classify namespaces,
+or silently skip mandatory roots. The narrow crafting-policy contract is an explicit
+exception: its startup classifier checks loaded namespaces, and its final recipe
+report inspects recipe JSON for named cut-family leaks and consumers. This does not
+authorize a general audit framework; see [Crafting graph policy](crafting_policy.md).
 
 ## Item-hover annotations
 
@@ -53,33 +57,67 @@ and ordinary inventory hover show the same annotation. Static records live in
 generated from an existing authoritative config, such as formal glyph origins
 or the TConstruct/Epic Fight handling catalogue.
 
-Annotations correct a materially wrong or incomplete mental model. They do not
-repeat ingredients, layouts, attributes, or ordinary uses that EMI and native
-tooltips already communicate. Dynamic stack state remains owned by the source
-mod. World events, controls, onboarding, scouting, and other guidance without a
-natural item anchor remain on their event, HUD, or world surfaces.
+The registry uses `bc.hover_annotations.v2`. Every static record has a stable
+`concept_id` shared by equivalent item-local explanations, plus the owning
+domain and authoritative implementation path. Hover copy stays the concise
+local correction while Threads and loading briefs teach the broader model.
 
-## Achievement ledger
+Annotations cover every pack-owned transition family and every curriculum-important
+system with a natural item anchor when the native hover does not explain the pack's
+model. An existing native tooltip counts as coverage when it already teaches that
+model; the pack does not add a duplicate merely to claim ownership.
 
-FTB Quests is not a progression guide. Its live authored surface is three
-always-visible, independent ten-node chapters—World, Works, and Powers—plus six
-optional completionist chapters. Milestones record durable accomplishments and
-tease major possibilities; they contain no dependency graph, quest links,
-recipe chains, onboarding instructions, or item-local explanatory prose.
+Copy may identify a capability root, lifecycle, process authority, requirement,
+or another useful role beyond correcting an outright misconception. It still does
+not repeat ingredients, layouts, attributes, or ordinary uses that EMI and native
+tooltips already communicate. Dynamic stack state remains owned by the source mod.
+World events, controls, onboarding, scouting, and other guidance without a natural
+item anchor remain on their event, HUD, loading-lesson, Thread, or world surfaces.
 
-Gameplay criteria, stack predicates, dimension or structure tasks, and only
-then exact item tasks prove completion. Every player-visible completable quest
-awards an authored Create Deco coin that remains manually claimed. Deleted
-guide-node rewards are not redistributed. FTB visibility has no pack-authored
-unlock policy or book-burning bypass.
+## Learning surface hierarchy
 
-The wandering trader is one shared temporary world visitor. Its first scheduled
-arrival is after two active-server days, successful visits repeat every five
-days, and themes rotate through Naturalist, Surveyor, Quartermaster, and
-Antiquarian. Raw vanilla and third-party wandering offers are removed; only the
-curated themed stock, Wares agreement, and dimensional Font-map adapter are
-allowed, with every residual non-coin or secondary-cost offer disabled as an
-integration error.
+Better Content uses several cooperating learning surfaces rather than a single
+progression guide:
+
+| Surface | Authority |
+| --- | --- |
+| Loading lessons and the Threads Lessons reference | Spoiler-free fundamentals and changed mental models that should be available before the relevant event occurs |
+| Contextual Thread cards | Discovering a broader rule through authoritative play evidence, preserving it across the lineage, and handing off to a precise deeper surface |
+| Item-hover annotations | One- or two-line corrections tied naturally to a specific stack, identical in inventory and EMI hover |
+| EMI, Ponder, and native GuideME/Patchouli or system screens | Recipes, apparatus, multiblocks, exact operating instructions, and dynamic state owned by the implementing mod |
+| HUD, event, and world feedback | Immediate controls, warnings, scouting, rescue, and other guidance whose meaning depends on the live situation |
+
+Shared concepts align equivalent explanations, but each surface keeps its own
+depth. A loading lesson may lead to a known Thread and its native doorway; it
+does not reveal an unknown card. Hover annotations stay concise and never grow
+into lesson prose merely to reproduce another surface.
+
+Authoring and review follow [Learning surfaces](better_discovery_guides.md). There is no
+active achievement ledger or replacement reward system.
+
+## Spirit commerce
+
+The eight village professions correspond to sacred, wicked, arcane, aerial,
+aqueous, earthen, infernal, and Tempo spirits. Each has a
+matching coloured workstation, outfit, local utility behaviour, and 35-offer
+catalogue priced only in its own spirit at 1–8. Other employed villager
+professions are normalized into these eight; raw vanilla and third-party offers
+are removed. Eldritch and umbral spirits never appear in commerce.
+
+Wandering traders use the same eight identities, colours, and matching payment
+spirits. Every identity carries 13 themed goods plus one one-use offer of two
+matching spirits for two villager eggs already assigned to the corresponding
+profession. Player-credited kills immediately release Better Content spirits at the
+dying mob through Malum's floating, homing item entities. Malum-native mappings remain authoritative, including mapped passive
+animals such as cows, pigs, sheep, and chickens. Only the unmapped fallback is
+hostile-only: it deterministically releases two ordinary spirits. Spawner-origin
+mobs, already-soulless victims, and economy actors release none. The seven ordinary
+Better Content spirits replace Malum's ordinary spirit items in recipes and other
+pack uses; Eldritch and Umbral remain Malum items. Currency stacks to 64 without
+delivery receipts. The native Spirit Pouch is
+the sole supported specialist storage surface. Create Deco coins, coin stacks,
+wallets, coin recipes, emerald-priced offers, Wares/Font adapters, and specialist
+harvesting tools are inert or hidden.
 
 ## New worlds and backups
 

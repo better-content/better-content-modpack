@@ -35,7 +35,7 @@
 		#If true, filled copper cans and fluid gauges will show in JEI. If false only empty ones will show
 		showFilledFluidTanks = false
 		#If true, variants of our potion fluid for every potion will show in JEI. If false it will be hidden, but still usable.
-		showPotionFluid = true
+		showPotionFluid = false
 
 	#Settings related to modifiers
 	[client.modifiers]
@@ -75,4 +75,3 @@
 			#Location of the minimap on the screen.
 			#Allowed Values: TOP_LEFT, TOP, TOP_RIGHT, LEFT, RIGHT, BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT
 			location = "TOP_LEFT"
-

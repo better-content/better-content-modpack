@@ -1,0 +1,92 @@
+{
+  mod_id: 'kubejs',
+  provided_stones: [
+    {
+      id: 'gravel',
+      lang: { en_us: 'Gravel' },
+      block_id: 'minecraft:gravel',
+      types: ['gravel'],
+    },
+    {
+      id: 'aether_holystone',
+      lang: { en_us: 'Holystone' },
+      block_id: 'aether:holystone',
+      types: ['stone'],
+    },
+    {
+      id: 'aether_mossy_holystone',
+      lang: { en_us: 'Mossy Holystone' },
+      block_id: 'aether:mossy_holystone',
+      types: ['stone'],
+    },
+    {
+      id: 'blue_skies_turquoise_stone',
+      lang: { en_us: 'Turquoise Stone' },
+      block_id: 'blue_skies:turquoise_stone',
+      types: ['stone'],
+    },
+    {
+      id: 'blue_skies_lunar_stone',
+      lang: { en_us: 'Lunar Stone' },
+      block_id: 'blue_skies:lunar_stone',
+      types: ['stone'],
+    },
+    {
+      id: 'blue_skies_rimestone',
+      lang: { en_us: 'Rimestone' },
+      block_id: 'blue_skies:rimestone',
+      types: ['stone'],
+    },
+    {
+      id: 'blue_skies_taratite',
+      lang: { en_us: 'Taratite' },
+      block_id: 'blue_skies:taratite',
+      types: ['stone'],
+    },
+    {
+      id: 'blue_skies_umber',
+      lang: { en_us: 'Umber' },
+      block_id: 'blue_skies:umber',
+      types: ['stone'],
+    },
+    {
+      id: 'blue_skies_cinderstone',
+      lang: { en_us: 'Cinderstone' },
+      block_id: 'blue_skies:cinderstone',
+      types: ['stone'],
+    },
+  ],
+  provided_ores: [
+    {
+      id: 'jade_ore',
+      block_id: ['goety:jade_ore'],
+      lang: { en_us: 'Jade Ore' },
+      types: ['stone'],
+      stone: ['stone'],
+    },
+    {
+      id: 'natural_quartz_ore',
+      block_id: [
+        'malum:natural_quartz_ore',
+        'malum:deepslate_quartz_ore',
+      ],
+      lang: { en_us: 'Natural Quartz Ore' },
+      types: ['stone'],
+      stone: ['stone', 'deepslate'],
+    },
+    {
+      id: 'cthonic_gold_ore',
+      block_id: ['malum:cthonic_gold_ore'],
+      lang: { en_us: 'Cthonic Gold Ore' },
+      types: ['stone'],
+      stone: ['deepslate'],
+    },
+    {
+      id: 'iesnium_ore',
+      block_id: ['occultism:iesnium_ore_natural'],
+      lang: { en_us: 'Iesnium Ore' },
+      types: ['nether'],
+      stone: ['netherrack'],
+    },
+  ],
+}

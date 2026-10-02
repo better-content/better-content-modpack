@@ -2,7 +2,7 @@
 set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 MC_VERSION=1.20.1
-FORGE_VERSION=47.4.13
+FORGE_VERSION=47.4.22
 FORGE_COORD="$MC_VERSION-$FORGE_VERSION"
 fail() { printf 'package failed: %s\n' "$*" >&2; exit 1; }
 
@@ -16,7 +16,8 @@ copy_content() {
 
 resolve_artifacts() {
   local cache_root="${BC_PACKAGE_ARTIFACT_CACHE:-$HOME/.cache/bc/packwiz-downloads}"
-  python3 - "$ROOT" "$1" "$2" "$cache_root" <<'PY'
+  local manifest_root="${3:-$ROOT}"
+  python3 - "$manifest_root" "$1" "$2" "$cache_root" <<'PY'
 import fcntl, fnmatch, hashlib, os, pathlib, shutil, sys, tempfile, tomllib, urllib.request
 root, target, side, cache_root = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3], pathlib.Path(sys.argv[4]).expanduser()
 client_only = ('ambientsounds*','bettergrassify*','configured*','controlling*','DistantHorizons*','embeddium*','entityculling*','hold-my-items*','mouse-tweaks*','no-more-popups*','no-recipe-book*','oculus*','presence-footsteps*','shoulder-surfing*','sound-physics*','the-one-probe*','true-darkness*','darkness*')
@@ -55,12 +56,25 @@ def materialize(source, destination):
             destination.unlink()
         shutil.copy2(source, destination)
 
+manifest_files = []
 for folder in ('mods','resourcepacks','shaderpacks','tacz'):
-    for manifest in sorted((root / folder).glob('*.pw.toml')):
+    manifest_files.extend((folder, manifest) for manifest in sorted((root / folder).glob('*.pw.toml')))
+classified_paths = {manifest for _, manifest in manifest_files}
+ignored_roots = tuple(root / folder for folder in ('build', 'dist', 'generated', '.gradle', '.git'))
+unclassified = sorted(
+    path for path in root.rglob('*.pw.toml')
+    if path not in classified_paths and not any(ignored in path.parents for ignored in ignored_roots)
+)
+if unclassified:
+    raise SystemExit("unclassified Packwiz manifests: " + ', '.join(str(path) for path in unclassified))
+
+for folder, manifest in manifest_files:
         data = tomllib.loads(manifest.read_text())
         if data.get('side', 'both') not in ('both', side):
             continue
         name = data.get('filename', '')
+        if not name or pathlib.PurePath(name).name != name:
+            raise SystemExit(f"invalid artifact filename for {manifest}: {name!r}")
         if side == 'server' and any(fnmatch.fnmatch(name.lower(), pattern.lower()) for pattern in client_only):
             continue
         download_data = data.get('download', {})
@@ -69,7 +83,7 @@ for folder in ('mods','resourcepacks','shaderpacks','tacz'):
             cf = data.get('update', {}).get('curseforge', {})
             url = f"https://www.curseforge.com/api/v1/mods/{cf['project-id']}/files/{cf['file-id']}/download"
         if not url:
-            continue
+            raise SystemExit(f"manifest has no resolvable download URL: {manifest}")
         destination = target / folder / name
         destination.parent.mkdir(parents=True, exist_ok=True)
         algorithm = download_data.get('hash-format', '').replace('-', '').lower()
@@ -96,10 +110,19 @@ for folder in ('mods','resourcepacks','shaderpacks','tacz'):
                         temporary.unlink(missing_ok=True)
             materialize(cache, destination)
         else:
-            if destination.exists() or destination.is_symlink():
-                destination.unlink()
-            download(url, destination)
+            temporary = destination.with_name(f'.{destination.name}.tmp')
+            temporary.unlink(missing_ok=True)
+            download(url, temporary)
+            os.replace(temporary, destination)
             stats['uncached'] += 1
+        if not destination.is_file():
+            raise SystemExit(f"resolved artifact is missing beside manifest {manifest}: {destination}")
+        if not algorithm or not expected:
+            raise SystemExit(f"manifest must declare a digest: {manifest}")
+        actual = file_digest(destination, algorithm, manifest)
+        if actual != expected:
+            raise SystemExit(f"resolved artifact hash mismatch for {manifest}: expected {expected}, got {actual}")
+
 print(f"artifact cache: side={side} hits={stats['hits']} downloads={stats['downloads']} uncached={stats['uncached']}")
 PY
 }
@@ -138,8 +161,8 @@ install_server() {
   else
     printf '%s\n' '-Xms2G' '-Xmx8G' '-XX:+UseG1GC' '-Dfile.encoding=UTF-8' > "$server/user_jvm_args.txt"
   fi
-  cp "$ROOT/run.sh" "$ROOT/run-forge.sh" "$ROOT/world-lifecycle-manager-server.sh" "$server/"
-  chmod 0755 "$server/run.sh" "$server/run-forge.sh" "$server/world-lifecycle-manager-server.sh"
+  cp "$ROOT/run.sh" "$ROOT/run-forge.sh" "$ROOT/better-world-management-server.sh" "$server/"
+  chmod 0755 "$server/run.sh" "$server/run-forge.sh" "$server/better-world-management-server.sh"
 }
 
 package_runtime() {
@@ -149,6 +172,12 @@ package_runtime() {
   stage_side server "$1"
   stage_side client "$2"
   install_server "$1" true testing "$3"
+}
+
+archive_server_tree() {
+  local server_dir="$1" tree="$1/server-tree"
+  (cd "$tree" && zip -q -r "$server_dir/better-content.zip" better-content-server)
+  rm -rf -- "$tree"
 }
 
 package_dist() {
@@ -176,7 +205,6 @@ package_dist() {
   local escaped_version
   escaped_version="$(printf '%s' "$version" | sed 's/[&|\\]/\\&/g')"
   sed -i -E "0,/^version *=/{s|^version *=.*$|version = \"$escaped_version\"|}" "$ROOT/pack.toml"
-  (cd "$ROOT" && packwiz refresh >/dev/null)
   mkdir -p "$client_dir" "$stage"
   (cd "$ROOT" && packwiz curseforge export -o "$client_dir/better-content.zip" -s client -y)
   stage_side server "$stage"
@@ -197,12 +225,19 @@ user_jvm_args.txt for the host's available memory. Set eula=true only after acce
 Mojang's EULA. This archive is packaging output and carries no validation,
 verification, compatibility, or runtime-health claim.
 TXT
-  (cd "$server_dir/server-tree" && zip -q -r "$server_dir/better-content.zip" better-content-server)
+  archive_server_tree "$server_dir"
   printf 'version: %s\nclient: %s\nserver: %s\n' "$version" "$client_dir/better-content.zip" "$server_dir/better-content.zip"
 }
 
-case "${1:-}" in
-  runtime) shift; package_runtime "$@" ;;
-  dist) shift; package_dist "$@" ;;
-  *) fail 'usage: package.sh <runtime SERVER_DIR CLIENT_DIR PORT|dist>' ;;
-esac
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  case "${1:-}" in
+    runtime) shift; package_runtime "$@" ;;
+    resolve)
+      shift
+      (($# == 3)) || fail 'usage: package.sh resolve MANIFEST_ROOT TARGET SIDE'
+      resolve_artifacts "$2" "$3" "$1"
+      ;;
+    dist) shift; package_dist "$@" ;;
+    *) fail 'usage: package.sh <runtime SERVER_DIR CLIENT_DIR PORT|resolve MANIFEST_ROOT TARGET SIDE|dist>' ;;
+  esac
+fi

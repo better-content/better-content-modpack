@@ -1,0 +1,11 @@
+{
+  "parent": "the_bumblezone:teleportation/is_near_beehive",
+  "display": {
+    "icon": {"item": "the_bumblezone:pollen_puff"},
+    "title": {"translate": "advancements.the_bumblezone.teleport_to_bumblezone_piston.title"},
+    "description": {"text": "Enter The Bumblezone through a Dimensional Font."},
+    "frame": "task", "show_toast": true, "announce_to_chat": false, "hidden": false
+  },
+  "rewards": {"experience": 5},
+  "criteria": {"font_entry": {"trigger": "minecraft:changed_dimension", "conditions": {"to": "the_bumblezone:the_bumblezone"}}}
+}

@@ -1,0 +1,14 @@
+[dynamicHud]
+	#Fades inactive survival HUD elements while leaving chat, crosshair, status effects, boss bars, and full-screen effects unchanged.
+	#Sneak temporarily reveals every managed element; releasing sneak restarts the hold period.
+	enabled = true
+	#Seconds a changed HUD element stays fully visible before fading.
+	#Range: 0.0 ~ 60.0
+	holdSeconds = 5.0
+	#Seconds used for the linear fade from fully visible to hidden.
+	#Range: 0.0 ~ 10.0
+	fadeSeconds = 0.5
+	#Health remains visible below its maximum and at or below this fraction of its maximum.
+	#Hunger, thirst, and air remain visible whenever they are not full; severe Cold Sweat temperatures remain visible independently.
+	#Range: 0.0 ~ 1.0
+	dangerFraction = 1.0

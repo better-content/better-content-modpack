@@ -1,0 +1,215 @@
+[
+  {
+    "id": "wayfinder",
+    "title": "Wayfinder",
+    "blurb": "Scouting, maps, and route recovery",
+    "description": "Explore with a compass, maps, and a spyglass. Includes paper, torches, and a drinking bowl.",
+    "items": [
+      {
+        "item": "minecraft:compass",
+        "count": 1,
+        "slot": "weapon.offhand"
+      },
+      {
+        "item": "minecraft:map",
+        "count": 2,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:spyglass",
+        "count": 1,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:paper",
+        "count": 8,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:torch",
+        "count": 16,
+        "slot": "inventory"
+      },
+      {
+        "item": "thirst:terracotta_bowl",
+        "count": 1,
+        "slot": "inventory"
+      }
+    ]
+  },
+  {
+    "id": "field_cook",
+    "title": "Field Cook",
+    "blurb": "Food variety, seasonal planning, and hydration",
+    "description": "Start with varied food, rice for planting, a seasonal calendar, a waterskin, and a drinking bowl. Cabbage and tomatoes are food, not seeds.",
+    "items": [
+      {
+        "item": "sereneseasons:calendar",
+        "count": 1,
+        "slot": "weapon.offhand"
+      },
+      {
+        "item": "farmersdelight:cabbage",
+        "count": 16,
+        "slot": "inventory"
+      },
+      {
+        "item": "farmersdelight:tomato",
+        "count": 16,
+        "slot": "inventory"
+      },
+      {
+        "item": "farmersdelight:rice_panicle",
+        "count": 16,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:potato",
+        "count": 16,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:apple",
+        "count": 8,
+        "slot": "inventory"
+      },
+      {
+        "item": "cold_sweat:filled_waterskin",
+        "count": 1,
+        "slot": "inventory"
+      },
+      {
+        "item": "thirst:terracotta_bowl",
+        "count": 1,
+        "slot": "inventory"
+      }
+    ]
+  },
+  {
+    "id": "rail_scout",
+    "title": "Rail Scout",
+    "blurb": "Manual physical-route starter",
+    "description": "Build a short minecart route with unpowered rails and a minecart. Includes a compass, torches, and a drinking bowl.",
+    "items": [
+      {
+        "item": "minecraft:rail",
+        "count": 32,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:minecart",
+        "count": 1,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:compass",
+        "count": 1,
+        "slot": "weapon.offhand"
+      },
+      {
+        "item": "minecraft:torch",
+        "count": 16,
+        "slot": "inventory"
+      },
+      {
+        "item": "thirst:terracotta_bowl",
+        "count": 1,
+        "slot": "inventory"
+      }
+    ]
+  },
+  {
+    "id": "flood_runner",
+    "title": "Flood Runner",
+    "blurb": "Water-route survival",
+    "description": "Explore with rope, torches, dried kelp, a waterskin, and a drinking bowl.",
+    "items": [
+      {
+        "item": "minecraft:dried_kelp",
+        "count": 12,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:torch",
+        "count": 12,
+        "slot": "inventory"
+      },
+      {
+        "item": "cold_sweat:filled_waterskin",
+        "count": 1,
+        "slot": "inventory"
+      },
+      {
+        "item": "farmersdelight:rope",
+        "count": 12,
+        "slot": "inventory"
+      },
+      {
+        "item": "thirst:terracotta_bowl",
+        "count": 1,
+        "slot": "inventory"
+      }
+    ]
+  },
+  {
+    "id": "market_runner",
+    "title": "Spirit Runner",
+    "blurb": "A pouch and travel supplies",
+    "description": "Store spirits from your kills in a Spirit Pouch and trade at matching village markets. No spirits are included.",
+    "items": [
+      {
+        "item": "malum:spirit_pouch",
+        "count": 1,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:compass",
+        "count": 1,
+        "slot": "weapon.offhand"
+      },
+      {
+        "item": "minecraft:apple",
+        "count": 8,
+        "slot": "inventory"
+      },
+      {
+        "item": "thirst:terracotta_bowl",
+        "count": 1,
+        "slot": "inventory"
+      }
+    ]
+  },
+  {
+    "id": "trail_wrangler",
+    "title": "Trail Wrangler",
+    "blurb": "Mount, animal, and camp-route support",
+    "description": "Travel with animals using a saddle and leads. Includes candles, carrots, and a drinking bowl.",
+    "items": [
+      {
+        "item": "minecraft:saddle",
+        "count": 1,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:lead",
+        "count": 2,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:candle",
+        "count": 8,
+        "slot": "inventory"
+      },
+      {
+        "item": "minecraft:carrot",
+        "count": 12,
+        "slot": "inventory"
+      },
+      {
+        "item": "thirst:terracotta_bowl",
+        "count": 1,
+        "slot": "inventory"
+      }
+    ]
+  }
+]

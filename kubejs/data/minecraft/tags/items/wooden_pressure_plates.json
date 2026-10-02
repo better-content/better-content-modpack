@@ -3,8 +3,6 @@
   "values": [
     "aether:skyroot_pressure_plate",
     "ars_nouveau:archwood_pressure_plate",
-    "deeperdarker:bloom_pressure_plate",
-    "deeperdarker:echo_pressure_plate",
     "fallout_wastelands_:molder_wood_pressure_plate",
     "natures_spirit:aspen_pressure_plate",
     "natures_spirit:cedar_pressure_plate",
@@ -37,9 +35,6 @@
     "twilightforest:sorting_pressure_plate",
     "twilightforest:time_pressure_plate",
     "twilightforest:transformation_pressure_plate",
-    "twilightforest:twilight_oak_pressure_plate",
-    "undergarden:grongle_pressure_plate",
-    "undergarden:smogstem_pressure_plate",
-    "undergarden:wigglewood_pressure_plate"
+    "twilightforest:twilight_oak_pressure_plate"
   ]
 }

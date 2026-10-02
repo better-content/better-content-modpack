@@ -1,7 +1,0 @@
-{
-  "type": "dynamictrees:tree",
-  "config": {
-    "species": "dynamic_trees_dimension_compat:finley_wood",
-    "radius": 3
-  }
-}

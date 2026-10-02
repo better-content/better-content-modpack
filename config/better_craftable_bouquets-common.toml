@@ -1,0 +1,7 @@
+#Maximum flowers stored in a bouquet
+#Range: 1 ~ 64
+maxFlowersPerBouquet = 64
+#If true, flowers are consumed in creative mode
+consumeFlowersInCreative = false
+#If true, sneaking with flower can replace an occupied cell
+allowReplacementWhenSneaking = true

@@ -1,0 +1,13 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "the_bumblezone:crystal_canyon",
+    "the_bumblezone:howling_constructs"
+  ],
+  "spawners": {
+    "type": "the_bumblezone:beehemoth",
+    "weight": 6,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

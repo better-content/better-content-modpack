@@ -7,5 +7,12 @@
   phrases = [
 
     "Better Caves expected a ServerLevel, but got:",
-    "Liquid regions will not be generated for this chunk. This may be fatal!"
+    "Liquid regions will not be generated for this chunk. This may be fatal!",
+    "Empty height range:",
+    "Detected ParCool Limitation is not synced. Sending synchronization request...",
+    "Received passengers for unknown entity",
+    "Stop: Invalid name parameter.",
+    "Allocate new source: Invalid name parameter.",
+    "Tried to access a block entity before it was created.",
+    "Ignoring chunk since it's not in the view range:"
   ]

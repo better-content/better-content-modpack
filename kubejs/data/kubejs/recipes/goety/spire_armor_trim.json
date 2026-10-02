@@ -1,0 +1,18 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {"tag": "forge:skulls/dragon"},
+  "craftType": "end",
+  "soulCost": 100,
+  "duration": 60,
+  "ingredients": [
+    {"item": "minecraft:purpur_block"},
+    {"item": "minecraft:purpur_block"},
+    {"item": "minecraft:purpur_block"},
+    {"item": "minecraft:purpur_block"},
+    {"item": "goety:void_echo"},
+    {"item": "goety:void_echo"},
+    {"item": "minecraft:diamond"}
+  ],
+  "result": {"item": "minecraft:spire_armor_trim_smithing_template"}
+}
