@@ -428,8 +428,10 @@ object LogPolicy {
                 val acceptedIceAndFireDeferredTask = (singleplayerLog || multiplayerClientLog) &&
                     iceAndFireDuration != null &&
                     iceAndFireDuration <= 2.0 && ++acceptedIceAndFireDeferredTasks <= 1
-                val acceptedCollectiveUpdateNotice = (multiplayerServerLog || multiplayerClientLog) &&
-                    collectiveUpdateNotice.matches(line) && ++acceptedCollectiveUpdateNotices <= 1
+                val acceptedCollectiveUpdateNotice =
+                    (multiplayerServerLog || multiplayerClientLog || serverLifecycleAggregateLog) &&
+                        collectiveUpdateNotice.matches(line) && ++acceptedCollectiveUpdateNotices <=
+                        (if (serverLifecycleAggregateLog) 2 else 1)
                 val adPotherDuration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
                 val acceptedAdPotherDeferredTask = adPotherDuration != null && adPotherDuration <= 60.0 &&
                     ++acceptedAdPotherDeferredTasks <= 1

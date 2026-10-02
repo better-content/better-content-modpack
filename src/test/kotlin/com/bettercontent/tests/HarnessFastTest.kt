@@ -504,17 +504,24 @@ class HarnessFastTest {
     }
 
     @Test
-    fun logPolicyBoundsCollectiveUpdateNoticesToOnePerMultiplayerRuntimeLog(@TempDir root: Path) {
+    fun logPolicyBoundsCollectiveUpdateNoticesToRuntimeProcesses(@TempDir root: Path) {
         val multiplayer = root.resolve("multiplayer")
         val serverDir = multiplayer.resolve("fixture/server-extract/better-content-server/logs")
         val clientDir = multiplayer.resolve("fixture/client-1/logs")
+        val lifecycleDir = root.resolve("server")
         serverDir.createDirectories()
         clientDir.createDirectories()
+        lifecycleDir.createDirectories()
         val notice = "[03:11:22] [Collective Update Checker/WARN] [Collective]: " +
             "[Update] Collective has an update available: 8.40 -> 8.41\n"
         val server = serverDir.resolve("latest.log").also { it.writeText(notice) }
         val client = clientDir.resolve("latest.log").also { it.writeText(notice) }
         val repeated = clientDir.resolve("repeated.log").also { it.writeText(notice + notice) }
+        val lifecycle = lifecycleDir.resolve("server.log").also { it.writeText(notice + notice) }
+        val lifecycleOverflow = lifecycleDir.resolve("overflow/server/server.log").also {
+            it.parent.createDirectories()
+            it.writeText(notice + notice + notice)
+        }
         val outsideMultiplayer = root.resolve("singleplayer/client.log").also {
             it.parent.createDirectories()
             it.writeText(notice)
@@ -525,6 +532,8 @@ class HarnessFastTest {
 
         assertTrue(LogPolicy.findings(listOf(server, client)).isEmpty())
         assertEquals(listOf(2), LogPolicy.findings(listOf(repeated)).map { it.line })
+        assertTrue(LogPolicy.findings(listOf(lifecycle)).isEmpty())
+        assertEquals(listOf(3), LogPolicy.findings(listOf(lifecycleOverflow)).map { it.line })
         assertEquals(listOf(1), LogPolicy.findings(listOf(outsideMultiplayer)).map { it.line })
         assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
     }
