@@ -57,6 +57,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `every path-backed annotation owner and evidence reference resolves`() {
         registry.path("annotations").forEach { row ->
             row.path("owner").asText().split(';').map(String::trim).forEach { owner ->
@@ -227,6 +228,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `Dynamic Trees seed hover follows the pinned planting contract`() {
         val pin = Files.readString(root.resolve("mods/dynamictrees.pw.toml"))
         val row = registry.path("annotations").single { it.path("selector").path("tag").asText() == "dynamictrees:seeds" }
@@ -996,6 +998,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `Smeltery controller hover follows the pinned first Brass alloy route`() {
         val pin = Files.readString(root.resolve("mods/tinkers-construct.pw.toml"))
         val precision = Files.readString(root.resolve("kubejs/server_scripts/progression/30_precision_factory.js"))
@@ -1153,6 +1156,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `Serene Seasons calendar and sensor hovers match pinned season state`() {
         val pin = Files.readString(root.resolve("mods/serene-seasons.pw.toml"))
         val auditPath = root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ui10-season-sensor-audit.md").normalize()
@@ -1191,6 +1195,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `pollution hovers distinguish personal protection from local measurement`() {
         val pin = Files.readString(root.resolve("mods/pollution-of-the-realms.pw.toml"))
         val jarPath = pinnedModJar("AdPother-1.20.1-8.1.49.0-build.2294.jar")
@@ -1226,6 +1231,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `AdPother hovers follow pinned local readings and wearer protection`() {
         val pin = Files.readString(root.resolve("mods/pollution-of-the-realms.pw.toml"))
         val auditPath = root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ui10-pollution-audit.md").normalize()
@@ -1262,6 +1268,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `Weather2 alerts and forecast hovers match pinned registered behavior`() {
         val pin = Files.readString(root.resolve("mods/weather-storms-tornadoes.pw.toml"))
         val auditPath = root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ui10-weather2-audit.md").normalize()
@@ -1305,6 +1312,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `AE2 pattern hover distinguishes blank encoding from external processing`() {
         val pin = Files.readString(root.resolve("mods/applied-energistics-2.pw.toml"))
         val audit = Files.readString(root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ae2-pattern-role-audit.md").normalize())
@@ -1610,6 +1618,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `Malum natural quartz hover follows the pinned Forge gem tag`() {
         val pin = Files.readString(root.resolve("mods/malum.pw.toml"))
         val jar = pinnedModJar("malum-1.20.1-1.6.7.jar")

@@ -43,6 +43,7 @@ class GunManufacturingContractTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `visible functional Armorer muzzles have staged gunsmith acquisition`() {
         val catalogue = root.parent.resolve(
             "workspace_artifacts/evidence/better-content-v8-20260919/gun01-zip-catalogue.tsv",
@@ -74,6 +75,7 @@ class GunManufacturingContractTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `melee gun firing ammunition has authored workbench supply`() {
         val catalogue = root.parent.resolve(
             "workspace_artifacts/evidence/better-content-v8-20260919/gun01-zip-catalogue.tsv",
@@ -96,6 +98,7 @@ class GunManufacturingContractTest {
     }
 
     @Test
+    @Tag("workspace")
     fun `all external gun recipes retain native results and require their pack component`() {
         val catalogue = root.parent.resolve(
             "workspace_artifacts/evidence/better-content-v8-20260919/gun01-zip-catalogue.tsv",

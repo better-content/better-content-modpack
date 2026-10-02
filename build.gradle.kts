@@ -45,7 +45,11 @@ tasks.withType<Test>().configureEach {
 
 tasks.test {
     description = "Runs fast, Minecraft-free test-harness checks."
-    useJUnitPlatform { includeTags("fast") }
+    useJUnitPlatform {
+        includeTags("fast")
+        // These tests inspect lane-local evidence and downloaded mod JARs that CI does not create.
+        if (System.getenv("CI") == "true") excludeTags("workspace")
+    }
 }
 
 fun registerPackTest(name: String, tag: String, descriptionText: String) =

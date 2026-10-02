@@ -42,7 +42,7 @@ def checkout(manifest: Path, workspace: Path):
                                   text=True, capture_output=True)
         git("remote", "add", "origin", f"https://github.com/better-content/{record['repository']}.git")
         git("config", "core.sparseCheckout", "true")
-        (target / ".git/info/sparse-checkout").write_text("/src/\n")
+        (target / ".git/info/sparse-checkout").write_text("/src/\n/tools/\n/build.gradle\n/build.gradle.kts\n")
         git("fetch", "--depth=1", "--filter=blob:none", "origin", record["commit"])
         git("checkout", "--detach", "FETCH_HEAD")
         if git("rev-parse", "HEAD").stdout.strip() != record["commit"]:
