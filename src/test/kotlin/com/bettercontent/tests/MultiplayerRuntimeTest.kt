@@ -135,7 +135,7 @@ class MultiplayerRuntimeTest {
         prepareTargetJoin(needsInventory = true)
         assumeTrue(joined, "client join prerequisite failed")
         evidence.run.checkpoint("dimension traversal and TPS stabilization") {
-            val lead = clients.first()
+            var lead = clients.first()
             requirePlayersOnline("dimension traversal start", listOf(lead))
             val inventory = evidence.run.directory.resolve("dimensions.json")
             require(Files.isRegularFile(inventory)) { "dimension inventory was not prepared before client login" }
@@ -146,6 +146,8 @@ class MultiplayerRuntimeTest {
                 } ?: discovered
             targets.forEach { GeometrySmokePlan.isTerrain(it.id) }
             val locations = DimensionSmokePlan.positions.take(3)
+            var sweptDimensions = 0
+            var clientRestartAttempt = 0
             evidence.run.event("dimension_targets", mapOf(
                 "count" to targets.size,
                 "targets" to targets.map { mapOf("id" to it.id, "sources" to it.sources.sorted()) },
@@ -195,6 +197,18 @@ class MultiplayerRuntimeTest {
                     evidence.run.event("dimension_teleport_passed", mapOf("dimension" to target.id, "location" to index))
                 }
                 if (GeometrySmokePlan.isTerrain(target.id)) requireGeometry(target.id, geometry)
+                sweptDimensions++
+                if (evidence.run.target == null && sweptDimensions % 8 == 0 && sweptDimensions < targets.size) {
+                    clientRestartAttempt++
+                    lead.restartDedicated(clientRestartAttempt)
+                    requirePlayersOnline("dimension traversal client memory reset", listOf(lead))
+                    evidence.run.event("dimension_client_memory_reset", mapOf(
+                        "completed_dimensions" to sweptDimensions,
+                        "client" to lead.username,
+                        "attempt" to clientRestartAttempt,
+                        "reason" to "release accumulated client dimension state before continuing the full sweep",
+                    ))
+                }
             }
             val falloutLog = server.server.resolve("logs/latest.log")
             val falloutFarWrites = FalloutWorldgenEvidence.cityRuinFarWriteCount(falloutLog)

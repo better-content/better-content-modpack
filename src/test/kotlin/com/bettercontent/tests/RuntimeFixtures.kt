@@ -195,13 +195,14 @@ class ClientFixture(
     private val config = evidence.config
     private val pair = dedicated?.pair ?: CandidateLocator.locate(config.root)
     val client = evidence.fixture.resolve(if (slot == 0) "client" else "client-$slot").also { it.createDirectories() }
-    val log = evidence.directory.resolve(
+    var log = evidence.directory.resolve(
         when {
             dedicated == null -> if (slot == 0) "singleplayer.log" else "singleplayer-$slot.log"
             slot == 0 -> "client.log"
             else -> "client-$slot.log"
         },
     )
+        private set
     private val xvfbLog = evidence.directory.resolve(if (slot == 0) "xvfb.log" else "xvfb-$slot.log")
     private val display = ":${200 + ((ProcessHandle.current().pid() + slot) % 500)}"
     private var xvfb: ManagedProcess? = null
@@ -260,6 +261,22 @@ class ClientFixture(
     fun launchDedicated() {
         val server = requireNotNull(dedicated)
         launcher = launch(listOf("-s", "127.0.0.1", "-p", server.port.toString()))
+    }
+
+    fun restartDedicated(attempt: Int) {
+        requireNotNull(dedicated) { "dedicated client restart requires a server fixture" }
+        require(attempt > 0)
+        launcher?.close()
+        launcher = null
+        log = evidence.directory.resolve("client-$slot-restart-$attempt.log")
+        launchDedicated()
+        waitDedicatedJoin()
+        waitSettled()
+        evidence.event("dedicated_client_restarted", mapOf(
+            "client" to username,
+            "attempt" to attempt,
+            "log" to log.toString(),
+        ))
     }
 
     fun launchSingleplayer() {
