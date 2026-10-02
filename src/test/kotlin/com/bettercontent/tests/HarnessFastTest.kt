@@ -504,6 +504,32 @@ class HarnessFastTest {
     }
 
     @Test
+    fun logPolicyBoundsCollectiveUpdateNoticesToOnePerMultiplayerRuntimeLog(@TempDir root: Path) {
+        val multiplayer = root.resolve("multiplayer")
+        val serverDir = multiplayer.resolve("fixture/server-extract/better-content-server/logs")
+        val clientDir = multiplayer.resolve("fixture/client-1/logs")
+        serverDir.createDirectories()
+        clientDir.createDirectories()
+        val notice = "[03:11:22] [Collective Update Checker/WARN] [Collective]: " +
+            "[Update] Collective has an update available: 8.40 -> 8.41\n"
+        val server = serverDir.resolve("latest.log").also { it.writeText(notice) }
+        val client = clientDir.resolve("latest.log").also { it.writeText(notice) }
+        val repeated = clientDir.resolve("repeated.log").also { it.writeText(notice + notice) }
+        val outsideMultiplayer = root.resolve("singleplayer/client.log").also {
+            it.parent.createDirectories()
+            it.writeText(notice)
+        }
+        val unrelated = clientDir.resolve("unrelated.log").also {
+            it.writeText(notice.replace("Collective]:", "OtherMod]:"))
+        }
+
+        assertTrue(LogPolicy.findings(listOf(server, client)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(repeated)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(outsideMultiplayer)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
+    }
+
+    @Test
     fun logPolicyBoundsKnownStarcatcherMetadataWarning(@TempDir root: Path) {
         val warning = "[11:00:00] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFile]: " +
             "starcatcher-2.2.1-FORGE-1.20.1.jar contains an invalid 'accessTransformers' TOML entry. " +

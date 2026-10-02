@@ -131,6 +131,11 @@ object LogPolicy {
         "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
             "Mod 'iceandfire' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
     )
+    private val collectiveUpdateNotice = Regex(
+        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[[^]]+/WARN] \\[Collective]: " +
+            "\\[Update] Collective has an update available: [0-9]+\\.[0-9]+(?:\\.[0-9]+)? -> " +
+            "[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$",
+    )
     private val accepted = listOf(
         Regex("\\[net\\.minecraft\\.client\\.ClientRecipeBook]: Unknown recipe category: .*/the_deep_void:[a-z0-9_]+$"),
         Regex("\\[net\\.minecraft\\.client\\.ClientRecipeBook]: Unknown recipe category: cataclysm:weapon_fusion/cataclysm:weapon_infusion/[a-z0-9_]+$"),
@@ -334,6 +339,7 @@ object LogPolicy {
             var acceptedCampaignItemFrameIronAxes = 0
             var acceptedCampaignUnknownStepHeightAttributes = 0
             var acceptedIceAndFireDeferredTasks = 0
+            var acceptedCollectiveUpdateNotices = 0
             lines.forEachIndexed { index, line ->
                 val acceptedSeededWorldWarning = seededWorldLog && when {
                     line.contains("[net.minecraftforge.common.ForgeHooks]: The following mods have version differences that were not resolved:") &&
@@ -422,6 +428,8 @@ object LogPolicy {
                 val acceptedIceAndFireDeferredTask = (singleplayerLog || multiplayerClientLog) &&
                     iceAndFireDuration != null &&
                     iceAndFireDuration <= 2.0 && ++acceptedIceAndFireDeferredTasks <= 1
+                val acceptedCollectiveUpdateNotice = (multiplayerServerLog || multiplayerClientLog) &&
+                    collectiveUpdateNotice.matches(line) && ++acceptedCollectiveUpdateNotices <= 1
                 val adPotherDuration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
                 val acceptedAdPotherDeferredTask = adPotherDuration != null && adPotherDuration <= 60.0 &&
                     ++acceptedAdPotherDeferredTasks <= 1
@@ -449,6 +457,7 @@ object LogPolicy {
                     !acceptedCampaignItemFrameIronAxe && !acceptedCampaignUnknownStepHeightAttribute &&
                     !acceptedUntamedServerMissingSpecies &&
                     !acceptedIceAndFireDeferredTask &&
+                    !acceptedCollectiveUpdateNotice &&
                     !acceptedAdPotherDeferredTask && !acceptedUntamedJeiPrototype &&
                     !acceptedSeededWorldWarning && index !in acceptedRatlantisLightingErrors && !isAccepted(line)
                 ) {
