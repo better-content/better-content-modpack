@@ -6850,7 +6850,11 @@ hash = "70c7c34e0e719aa7f3e6535462303af2c49c2c833c91f90adda4f453de398e5d"
 
 [[files]]
 file = "kubejs/assets/minecraft/sounds.json"
-hash = "b6bab815635f2ea339b4de2e74c979794da7c3329f49949308026048fce70102"
+hash = "32c942af563a5524e5d15a55904cdf96514687dcca7876dac97b5ce2577d7299"
+
+[[files]]
+file = "kubejs/assets/minecraft/sounds/ui/better_button_click.ogg"
+hash = "8ef2901b7f9549fbfe0e4b6e8c3a8435518009fa73ed768bb63ef9794a6d645b"
 
 [[files]]
 file = "kubejs/assets/moreartifacts/textures/item/fire_dragon_eye.png"
@@ -10665,6 +10669,10 @@ file = "kubejs/inactive_review/no_easy_compression.js"
 hash = "24c62acdb6c0d3d64166b27deb0fe2b6e74eb59a8540bfe960cc27cefc6a8056"
 
 [[files]]
+file = "kubejs/server_scripts/compat/curios_backpack_slot.js"
+hash = "13952f51dbebcf8a24d7f73e2870a99c8fd6a7abae7da7f6118034faecd80e7b"
+
+[[files]]
 file = "kubejs/server_scripts/compat/retained/check__10_overworld_block_drops.js"
 hash = "34ea47bd461f5f5239187f4a4ac23694245130979738ac1dd49db6209ac7398a"
 
@@ -11140,7 +11148,7 @@ hash = "3f762378189f096dff335d389a62de24f0982a90e64acabfd0ca86e4797acfd3"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
-hash = "8d9c9a9d19165c2f42fa96555e54a816b0920520f878cc8db821ed411f13247f"
+hash = "cbb63251b3f50b039faa4ce5940297594f06e086a21a1685dc1ac2d7b2cb8f38"
 
 [[files]]
 file = "mods/better-craftable-bouquets-0.1.0.jar"
@@ -11156,7 +11164,7 @@ hash = "d60d28929c7ddc6a68de85d5933ecc2623e6262dbd8e49f43547ef516d6836a6"
 
 [[files]]
 file = "mods/better-deaths-door-1.0.0.jar"
-hash = "83e3d0107bb4f798575f85863a4c3fde7d8b93919af9ddd6e0756cff27b42448"
+hash = "ae685d834abfadf06f5af604db8b1239616f1453dc3bed23a7d5f1d2ae8c9d92"
 
 [[files]]
 file = "mods/better-dimension-fonts-1.0.0.jar"
@@ -11188,7 +11196,7 @@ hash = "7ec4703661f42856760d82024381db5b9ec3c53706d6b7eb602ee652845cbfdb"
 
 [[files]]
 file = "mods/better-journal-inventory-0.1.0.jar"
-hash = "df1d9819892a95531086ae6f6f3ebb904ce9747df75b9cbdd629f49ab347d69d"
+hash = "7b9ecd6db0c53f1086a8b929b3a1d6139192422938b5629267cd621a99577a6d"
 
 [[files]]
 file = "mods/better-magic-chunk-anchors-0.1.0.jar"
@@ -11252,7 +11260,7 @@ hash = "d097f4cd8329b67d93c051adc07d225568d85478f35314923dde281e6260d852"
 
 [[files]]
 file = "mods/better-spawns-1.0.0.jar"
-hash = "58a24fb1f3f8522214a3f9d24ccc5e72941ddcffecfe1f24a36128a7c160ecea"
+hash = "47d2c4e09d2914da57a9b7afafcfafa809efb5eae9da7d378120cff6a4f8a575"
 
 [[files]]
 file = "mods/better-spirit-commerce-1.0.1.jar"
@@ -11260,7 +11268,7 @@ hash = "f7a9c2b5fbf66ae51dd26cf46319cf6aac6f692ee8cbff9b0bb0179c6c3ea6af"
 
 [[files]]
 file = "mods/better-survival-hud-1.0.0.jar"
-hash = "898e2a3c06fe58077526ec3d5cf7757caaad0d48210610fe42eca0bcf5b226d4"
+hash = "fdd68f0ed5a14087c4cfc377e2320e132ad79c71edaa912318a92bfb0272f56e"
 
 [[files]]
 file = "mods/better-survival-physiology-0.1.1.jar"
@@ -11284,7 +11292,7 @@ hash = "6dc24b9c03922e0fa7f511ba47a680ef33d8f8810952d197c8751bba32f44997"
 
 [[files]]
 file = "mods/better-world-management-0.1.0.jar"
-hash = "49632e357005f251dcfa55900d652032e4f8face544109118b3430df0114f6f6"
+hash = "f054d29302531dfd2e8e89023f5e42de810f844c3f6794bab5aa834e85cca90e"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
