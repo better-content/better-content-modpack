@@ -128,7 +128,7 @@ key_Highlight drone locations:key.keyboard.f9
 key_key.curios.open.desc:key.keyboard.unknown
 key_key.better_spawns.open_menu:key.keyboard.k
 key_key.epicfight.show_tooltip:key.keyboard.left.shift
-key_key.epicfight.skill_gui:key.keyboard.k:SHIFT
+key_key.epicfight.skill_gui:key.keyboard.f6
 key_key.epicfight.config:key.keyboard.unknown
 key_key.epicfight.dodge:key.mouse.4
 key_key.epicfight.guard:key.mouse.right
