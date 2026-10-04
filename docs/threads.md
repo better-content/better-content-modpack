@@ -1,15 +1,15 @@
 # Threads
 
-Threads answers “what just happened to me?” through 53 discoveries. Each card gives the
+Threads answers “what just happened to me?” through 52 discoveries. Each card gives the
 experienced event, its cause, and a useful next step. Gameplay does not have separate
 reveal and completion stages. Exact recipes and apparatus remain in EMI, Ponder, and
 native guides; survival fundamentals remain in the 18 loading/Lessons entries.
 
 The canonical definitions, trigger routes, and art scene specifications live in
 [`Learning Surfaces authoring roster`](../../mod_source/better-discovery-guides/authoring/discoveries.json).
-All 53 cards have reviewed Journal copperplate illustrations. Their intended scenes
+All 52 active cards have reviewed Journal copperplate illustrations. Their intended scenes
 remain in the authoring roster. The packaged card
-catalogue is `bc.better_discovery_guides.cards.v1`; the mod network protocol is 1. The new mod
+catalogue is `bc.better_discovery_guides.cards.v3`; the mod network protocol is 2. The new mod
 identity starts fresh without saved-history migration. Cards, lessons, and tips are fixed
 packaged catalogues for each release.
 
@@ -39,9 +39,13 @@ work item, and current dedicated-server support does not require a second player
 
 The reader shows discovered cards only. All plus seven topic filters cover World, Body,
 Materials, Industry, Magic, Travel, and Lineage. Unread cards appear first; opening
-selects and automatically develops the oldest unread card. Continue or Space after
-reading selects and develops the next unread card across filters. A press that finishes
-the illustration animation cannot also skip the explanation. There is no timed advance.
+selects the oldest unread card. Its art and explanation appear immediately. Continue or
+Space selects the next unread card across filters. There is no timed advance.
+
+The text beside a card has no separate panel background and follows the menu field-note
+style with right-aligned lines. A strip below applicable explanations shows craftable
+result items. Hover for the tooltip and use configured EMI recipe or uses controls on an
+item to investigate it. Thread copy does not disclose recipe ingredients or layouts.
 
 World Lifecycle Manager preserves the archive across successors. A successor resets
 this generation's distinct-discovery score while preserving lifetime unique discoveries,
@@ -69,7 +73,7 @@ are documented in the [source teaching guide](../../mod_source/better-discovery-
 
 ## Review
 
-All 53 card illustrations and 18 loading illustrations follow the
+All 52 active card illustrations and 18 loading illustrations follow the
 [no-humans art direction](thread_art_direction.md). The Learning Surfaces repository's required
 local gate is `./gradlew verifyFull stageRuntimeJar`; isolated real-client fixtures
 review compact/wide journal and native death-screen rendering. Provider repositories

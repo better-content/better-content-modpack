@@ -35,7 +35,7 @@ copy. Possession must not be described as operating a machine, and intended futu
 behavior must not be presented as implemented.
 
 Preserve stable concept, Thread, and lesson identities when their meaning is unchanged.
-Learning Surfaces has 53 live cards across seven topics; the Lessons reference and loading
+Learning Surfaces has 52 live cards across seven topics; the Lessons reference and loading
 rotation share 18 lessons. The main-menu, Esc, and death contexts share 199 authored tips. Follow [Threads](threads.md) for the single-explanation schema,
 personal trigger evidence, native doorways, and lineage persistence. Domain mods
 own their gameplay events; Learning Surfaces adapters translate those events into card signals.
@@ -61,7 +61,10 @@ instructions. Replace internal design terms such as "bootstrap", "authority", an
 "progression branch" with what the player can do or needs. Keep concrete requirements,
 limits, costs, and warnings. Short copy does not need a minimum word count.
 
-Threads use a title, the event experienced, its cause, and a useful next action. Hover
+Threads use a title, the event experienced, its cause, and a useful next action. A Thread that
+points to a concrete craftable result shows an item beneath its explanation. Players use
+their configured EMI recipe and uses controls on that item; Thread copy never gives
+ingredient counts or a recipe layout. Hover
 annotations remain one or two lines totaling at most 24 words. Apply this tone to
 pack-authored guide notices, not to copied third-party guide prose or narrative design
 documents.
@@ -106,7 +109,7 @@ change artwork but cannot reload copy or trigger rules while running.
 
 All card and loading illustrations exclude humans, humanoids, humanlike spirits, body parts,
 silhouettes and mannequins. Use concrete objects, mechanisms, environments, and nonhumanoid
-creatures to explain the event. All 53 card illustrations and 18 loading/Lessons
+creatures to explain the event. All 52 active card illustrations and 18 loading/Lessons
 illustrations use reviewed Journal copperplate art; the card copy and triggers are active.
 
 ## Review and validation
@@ -115,7 +118,7 @@ illustrations use reviewed Journal copperplate art; the card copy and triggers a
   for contradictory copy or duplicated authority.
 - Check stable concepts, current native doorways, bounded copy, and relevant existing
   repository-local tests. Follow [Thread Art Direction](thread_art_direction.md) for art.
-- Review reader layout, loading presentation, and development crossfades manually when
+- Review reader layout, loading presentation, and item interactions manually when
   changed. Automated tests must not synthesize mouse movement or clicks.
 - Report changed player-visible behavior and verification. Run pack suites only when
   explicitly ordered through `test.main.kts`; otherwise state that pack testing was
