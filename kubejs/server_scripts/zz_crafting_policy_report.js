@@ -17,8 +17,7 @@ function bcPolicyCollectStrings(value, result) {
     }
 }
 
-function bcPolicyMatches(id, selector) {
-    if (selector.exact_id) return id === selector.exact_id
+function bcPolicyMatchesPrefix(id, selector) {
     var split = id.indexOf(':')
     var namespace = split < 0 ? '' : id.substring(0, split)
     var path = split < 0 ? id : id.substring(split + 1)
@@ -33,15 +32,39 @@ ServerEvents.recipes(function (event) {
     var exactCuts = (quarantine.items || []).concat([
         'minecraft:dragon_head', 'minecraft:dragon_egg', 'minecraft:dragon_breath'
     ])
-    var governed = []
+    var exactFamilies = Object.create(null)
+    var prefixFamilies = []
+    var exactCutLookup = Object.create(null)
+    exactCuts.forEach(function (item) { exactCutLookup[item] = true })
     ;(contract.families || []).forEach(function (family) {
         if (family.disposition === 'creative_or_technical' || family.disposition === 'supported') return
         ;(family.selectors || []).forEach(function (selector) {
-            if (!selector.tag) governed.push({ family: family.id, selector: selector })
+            if (selector.tag) return
+            var rule = { family: family.id, selector: selector }
+            if (selector.exact_id) {
+                if (!exactFamilies[selector.exact_id]) exactFamilies[selector.exact_id] = []
+                exactFamilies[selector.exact_id].push(rule)
+            } else {
+                prefixFamilies.push(rule)
+            }
         })
     })
 
     var findings = {}
+    function recordMatches(id, item, output) {
+        if (exactCutLookup[item]) {
+            findings[(output ? 'leak|' + id + '|quarantine|' : 'consumer|' + id + '|') + item] = true
+        }
+        var exact = exactFamilies[item]
+        if (exact) exact.forEach(function (rule) {
+            findings[(output ? 'leak|' : 'family-consumer|') + id + '|' + rule.family + '|' + item] = true
+        })
+        prefixFamilies.forEach(function (rule) {
+            if (bcPolicyMatchesPrefix(item, rule.selector)) {
+                findings[(output ? 'leak|' : 'family-consumer|') + id + '|' + rule.family + '|' + item] = true
+            }
+        })
+    }
     event.forEachRecipe({}, function (recipe) {
         var id = '' + recipe.getId()
         var data
@@ -58,22 +81,8 @@ ServerEvents.recipes(function (event) {
         bcPolicyCollectStrings(data.results, outputIds)
         bcPolicyCollectStrings(data.output, outputIds)
 
-        exactCuts.forEach(function (item) {
-            if (allIds.indexOf(item) >= 0) findings['consumer|' + id + '|' + item] = true
-            if (outputIds.indexOf(item) >= 0) findings['leak|' + id + '|quarantine|' + item] = true
-        })
-        governed.forEach(function (rule) {
-            allIds.forEach(function (item) {
-                if (bcPolicyMatches(item, rule.selector)) {
-                    findings['family-consumer|' + id + '|' + rule.family + '|' + item] = true
-                }
-            })
-            outputIds.forEach(function (item) {
-                if (bcPolicyMatches(item, rule.selector)) {
-                    findings['leak|' + id + '|' + rule.family + '|' + item] = true
-                }
-            })
-        })
+        allIds.forEach(function (item) { recordMatches(id, item, false) })
+        outputIds.forEach(function (item) { recordMatches(id, item, true) })
     })
 
     var keys = Object.keys(findings).sort()
