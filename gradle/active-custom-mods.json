@@ -354,18 +354,6 @@
       ]
     },
     {
-      "repository": "better-ratlantis-logistics",
-      "modId": "better_ratlantis_logistics",
-      "artifact": "better-ratlantis-logistics-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ],
-      "dependsOn": [
-        "better-bumblezone-crops"
-      ]
-    },
-    {
       "repository": "better-ore-geology",
       "modId": "better_ore_geology",
       "artifact": "better-ore-geology-0.2.0.jar",
@@ -471,6 +459,15 @@
       "repository": "better-world-management",
       "modId": "better_world_management",
       "artifact": "better-world-management-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "scalable-tnt",
+      "modId": "scalable_tnt",
+      "artifact": "scalable-tnt-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
