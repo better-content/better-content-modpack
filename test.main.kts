@@ -1,10 +1,16 @@
 #!/usr/bin/env kotlin
 
+import java.nio.file.Files
+import java.security.MessageDigest
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
 
 val root = __FILE__.canonicalFile.parentFile
+if (args.firstOrNull() in setOf("list", "plan", "run", "submit", "status", "wait", "evidence", "retry")) {
+    exitProcess(ProcessBuilder(root.resolve("test-control.main.kts").absolutePath, *args)
+        .directory(root).inheritIO().start().waitFor())
+}
 val selector = args.firstOrNull()
 var target: String? = null
 var retryOf: String? = null
@@ -18,9 +24,9 @@ while (argument < args.size) {
         else -> usage()
     }
 }
-val fontTargets = setOf("ratlantis", "bumblezone", "aether", "nether")
-val fontDimensions = setOf("rats:ratlantis", "the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether")
-val validTarget = target == null || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart-compat", "world-save") ||
+val fontTargets = setOf("bumblezone", "aether", "nether")
+val fontDimensions = setOf("the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether")
+val validTarget = target == null || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart", "restart-compat", "world-save") ||
     (target!!.startsWith("font:") && target!!.removePrefix("font:") in fontTargets) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
         target!!.removePrefix("dimension:") !in fontDimensions)
@@ -37,7 +43,7 @@ val targetMethod = when {
     target == "lineage-transition" -> "oneLineageTransitionCommitsAndArchivesCleanly"
     target == "join" -> "leadClientJoinsFreshDedicatedServer"
     target == "campaign" || target == "campaign-start" -> "threeSurvivalPlayersStartCampaigns"
-    target == "restart-compat" -> "debugServerRestartAndClientReconnectPreserveWorld"
+    target == "restart" || target == "restart-compat" -> "debugServerRestartAndClientReconnectPreserveWorld"
     target == "world-save" -> "debugFreshWorldBootSaveAndReopen"
     target == "fonts" || target?.startsWith("font:") == true -> "debugNativeFontRoundTrips"
     else -> "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations"
@@ -51,7 +57,7 @@ val taskBySelector = mapOf(
 )
 
 fun usage(): Nothing {
-    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target server-ready|cursed-pyramid|lineage-transition|join|fonts|font:NAME|dimensions|dimension:ID|campaign-start|campaign|restart-compat|world-save] [--retry-of RUN_ID] [--existing-candidate]")
+    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target server-ready|cursed-pyramid|lineage-transition|join|fonts|font:NAME|dimensions|dimension:ID|campaign-start|campaign|restart|restart-compat|world-save] [--retry-of RUN_ID] [--existing-candidate]")
     exitProcess(2)
 }
 
@@ -65,6 +71,11 @@ val selected = selector ?: usage()
 
 if (selected == "debug" && target == null && !existingCandidate) {
     exitProcess(ProcessBuilder(root.resolve("release.main.kts").absolutePath, "--debug")
+        .directory(root).inheritIO().start().waitFor())
+}
+
+if (selected == "dist" && target == null && System.getenv("BC_RELEASE_PREPARED") != "1") {
+    exitProcess(ProcessBuilder(root.resolve("release.main.kts").absolutePath)
         .directory(root).inheritIO().start().waitFor())
 }
 
@@ -119,9 +130,13 @@ fun gradle(suite: String, task: String, method: String? = null, evidenceSuite: S
         .directory(root)
         .inheritIO()
         .apply {
-            if (suite == "fast") environment().remove("BC_TEST_SELECTOR")
-            else environment()["BC_TEST_SELECTOR"] = suite
-            environment()["BC_TEST_TIER"] = selected
+            if (suite == "fast") {
+                environment().remove("BC_TEST_SELECTOR")
+                environment().remove("BC_TEST_TIER")
+            } else {
+                environment()["BC_TEST_SELECTOR"] = suite
+                environment()["BC_TEST_TIER"] = selected
+            }
             if (runId != null) environment()["BC_TEST_RUN_ID"] = runId
             if (method != null) {
                 environment()["BC_TEST_TARGET"] = target!!
@@ -143,11 +158,60 @@ if (selected == "dev") {
             .directory(root).inheritIO().start().waitFor()
     }
 } else {
-    statuses["fast"] = gradle("fast", "test")
-    statuses["diff"] = ProcessBuilder("git", "diff", "--check")
-        .directory(root).inheritIO().start().waitFor()
+    var priorDist = if (selected == "debug" && existingCandidate) System.getenv("BC_PRIOR_DIST_RUN_ID") else null
+    if (selected == "debug" && existingCandidate && priorDist == null) {
+        val prerequisiteId = "${runId}1"
+        val prerequisite = ProcessBuilder(__FILE__.absolutePath, "dist")
+            .directory(root).inheritIO().apply {
+                environment()["BC_RELEASE_PREPARED"] = "1"
+                environment()["BC_DIST_PREREQUISITE"] = "1"
+                environment()["BC_TEST_RUN_ID"] = prerequisiteId
+            }.start().waitFor()
+        statuses["dist-prerequisite"] = prerequisite
+        if (prerequisite == 0) priorDist = prerequisiteId
+    }
+    if (priorDist != null) {
+        val distEvidence = root.resolve("generated/test-evidence/$priorDist")
+        val required = listOf("candidate", "multiplayer")
+        val reportsPassed = required.all { suite ->
+                val report = distEvidence.resolve("$suite/run.json")
+                report.isFile && Regex("\"tier\"\\s*:\\s*\"dist\"").containsMatchIn(report.readText()) &&
+                    Regex("\"status\"\\s*:\\s*\"passed\"").containsMatchIn(report.readText()) &&
+                    Regex("\"run_id\"\\s*:\\s*\"${Regex.escape(priorDist!!)}\"").containsMatchIn(report.readText())
+            }
+        val candidateMatches = runCatching {
+            val selected = distEvidence.resolve("candidate/events.jsonl").readLines()
+                .first { "\"type\":\"candidate_selected\"" in it }
+            fun field(name: String): String = Regex("\"$name\":\"([^\"]+)\"").find(selected)
+                ?.groupValues?.get(1) ?: error("missing $name in Dist candidate receipt")
+            fun sha256(file: java.io.File): String {
+                val digest = MessageDigest.getInstance("SHA-256")
+                file.inputStream().use { input ->
+                    val buffer = ByteArray(1024 * 1024)
+                    while (true) {
+                        val size = input.read(buffer)
+                        if (size < 0) break
+                        digest.update(buffer, 0, size)
+                    }
+                }
+                return digest.digest().joinToString("") { "%02x".format(it) }
+            }
+            val candidates = Files.walk(root.resolve("dist").toPath()).use { stream ->
+                stream.filter { it.endsWith("better-content.zip") }.toList()
+            }
+            val client = candidates.single { it.parent.fileName.toString() == "client" }.toFile()
+            val server = candidates.single { it.parent.fileName.toString() == "server" }.toFile()
+            client.absolutePath == field("client") && server.absolutePath == field("server") &&
+                sha256(client) == field("client_sha256") && sha256(server) == field("server_sha256")
+        }.getOrDefault(false)
+        statuses["prior-dist"] = if (reportsPassed && candidateMatches) 0 else 1
+    } else if (statuses["dist-prerequisite"] == null) {
+        statuses["fast"] = gradle("fast", "test")
+        statuses["diff"] = ProcessBuilder("git", "diff", "--check")
+            .directory(root).inheritIO().start().waitFor()
+    }
     if (statuses.values.all { it == 0 }) {
-        statuses["candidate"] = gradle("candidate", "candidateTest")
+        statuses["candidate"] = if (priorDist == null) gradle("candidate", "candidateTest") else 0
         if (statuses.getValue("candidate") == 0) {
             val runtimeSuites = if (targetSuite != null) listOf(targetSuite) else if (selected == "debug") listOf("server", "multiplayer", "singleplayer")
                 else listOf("multiplayer")

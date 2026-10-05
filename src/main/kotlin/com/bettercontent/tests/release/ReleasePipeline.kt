@@ -252,6 +252,14 @@ internal fun build(
     val tasks = if (skipTests) listOf("stageRuntimeJar") else mod.tasks
     val buildCommand = listOf(repository.resolve("gradlew").toString(), "--no-daemon", "clean") + tasks
     runLogged(repository, buildCommand, log, providerBuildEnvironment(staging))
+    if (!skipTests && mod.repository != "better-exploration-load-control") {
+        val output = Files.readString(log)
+        if (output.contains(":runGameTestServer")) {
+            require(Regex("All [1-9][0-9]* required tests passed").containsMatchIn(output)) {
+                "${mod.repository} did not report a passing GameTest run; see $log"
+            }
+        }
+    }
     val jar = repository.resolve("build/libs").resolve(mod.artifact)
     require(Files.isRegularFile(jar)) { "${mod.repository} did not stage ${mod.artifact}" }
     require(jarDeclaresMod(jar, mod.modId)) { "${mod.artifact} does not declare ${mod.modId}" }

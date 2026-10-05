@@ -26,6 +26,7 @@ class DedicatedServerFixture(
     val log = evidence.directory.resolve("server.log")
     val port = freePort()
     private var process: ManagedProcess
+    private var starts = 1
 
     init {
         evidence.event("candidate_selected", mapOf(
@@ -155,7 +156,7 @@ class DedicatedServerFixture(
     fun stopGracefully() {
         if (process.alive) {
             send("stop")
-            runCatching { process.waitForLog(Regex("Stopping server"), Duration.ofMinutes(2), "server stop") }
+            process.waitForExit(Duration.ofMinutes(3), "server stop")
         }
         process.stop()
     }
@@ -164,7 +165,8 @@ class DedicatedServerFixture(
         require(!process.alive) { "server must be stopped before restart" }
         process = ManagedProcess("server-restart", listOf("./run.sh"), server, log, environment)
         evidence.event("server_restarted", mapOf("pid" to process.pid, "port" to port, "directory" to server.toString()))
-        waitReady(2)
+        starts++
+        waitReady(starts)
     }
 
     override fun close() = process.close()

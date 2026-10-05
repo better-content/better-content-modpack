@@ -81,8 +81,10 @@ class SingleplayerRuntimeTest {
             require(Files.readString(first.log).contains("BC_DEBUG_EMI_READY")) {
                 "world save exited before EMI finished baking recipes"
             }
-            val savedTime = Regex("BC_DEBUG_WORLD_SAVED game_time=(\\d+)").find(Files.readString(first.log))
-                ?.groupValues?.get(1)?.toLong() ?: error("world save marker has no game time")
+            val savedRecord = Regex("BC_DEBUG_WORLD_SAVED game_time=(\\d+) marker=([0-9a-f-]{36})")
+                .find(Files.readString(first.log)) ?: error("world save has no persisted marker")
+            val savedTime = savedRecord.groupValues[1].toLong()
+            val savedMarker = java.util.UUID.fromString(savedRecord.groupValues[2])
             first.close()
 
             val reopened = ClientFixture(evidence.run, username = "SmokeWorld", slot = 6).also { debugClients += it }
@@ -97,12 +99,17 @@ class SingleplayerRuntimeTest {
             }
             reopened.launchQuickPlayWorld("DebugWorld", "verify")
             reopened.waitForWorldProbe("BC_DEBUG_WORLD_LOADED mode=verify")
-            val reopenedTime = Regex("BC_DEBUG_WORLD_LOADED mode=verify game_time=(\\d+)")
-                .find(Files.readString(reopened.log))?.groupValues?.get(1)?.toLong()
-                ?: error("reopened world marker has no game time")
+            val reopenedRecord = Regex("BC_DEBUG_WORLD_LOADED mode=verify game_time=(\\d+) marker=([0-9a-f-]{36})")
+                .find(Files.readString(reopened.log)) ?: error("reopened world has no persisted marker")
+            val reopenedTime = reopenedRecord.groupValues[1].toLong()
+            val reopenedMarker = java.util.UUID.fromString(reopenedRecord.groupValues[2])
+            check(reopenedMarker == savedMarker) { "reopened world lost the saved marker" }
             check(reopenedTime >= savedTime) { "reopened world lost saved game time ($reopenedTime < $savedTime)" }
-            evidence.run.event("world_reopen_passed", mapOf("saved_game_time" to savedTime, "reopened_game_time" to reopenedTime))
+            evidence.run.event("world_reopen_passed", mapOf("saved_game_time" to savedTime,
+                "reopened_game_time" to reopenedTime, "saved_marker" to savedMarker.toString()))
             if (evidence.run.target != null) {
+                reopened.close()
+                LogPolicy.requireClean(collectLogs(evidence.run.directory))
                 seed.assertHashes()
                 first.assertHashes()
                 reopened.assertHashes()
@@ -112,13 +119,13 @@ class SingleplayerRuntimeTest {
 
     @Test @Order(3)
     fun singleplayerEvidenceIsCleanAndCandidatesAreUnchanged() {
-        assumeTrue(title, "title screen prerequisite failed")
         evidence.run.checkpoint("single-player log and hash audit") {
-            client.close()
+            if (evidence.run.target != "world-save") client.close()
             debugClients.forEach { it.close() }
             LogPolicy.requireClean(collectLogs(evidence.run.directory))
-            client.assertHashes()
+            if (evidence.run.target != "world-save") client.assertHashes()
             debugClients.forEach { it.assertHashes() }
+            seedServer?.assertHashes()
         }
     }
 }

@@ -51,9 +51,9 @@ if (jobs !in 1..4) {
     exitProcess(2)
 }
 val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "campaign-start", "campaign", "restart-compat", "cursed-pyramid", "lineage-transition", "world-save") ||
-    (target!!.startsWith("font:") && target!!.removePrefix("font:") in setOf("ratlantis", "bumblezone", "aether", "nether")) ||
+    (target!!.startsWith("font:") && target!!.removePrefix("font:") in setOf("bumblezone", "aether", "nether")) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
-        target!!.removePrefix("dimension:") !in setOf("rats:ratlantis", "the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether"))
+        target!!.removePrefix("dimension:") !in setOf("the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether"))
 if (!validTarget || args.count { it == "--jobs" } > 1 || args.count { it == "--skip-tests" } > 1 || args.count { it == "--debug" } > 1 ||
     args.count { it == "--target" } > 1 || args.count { it == "--retry-of" } > 1 ||
     (skipTests && (target != null || debugMode)) || (debugMode && target != null) || (retryOf != null && target == null) ||
@@ -74,10 +74,11 @@ if (System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
 
 val runId = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC)
     .format(java.time.Instant.now()) + "-" + ProcessHandle.current().pid()
+val forceRebuild = debugMode || (target == null && !skipTests)
 val evidence = root.resolve("generated/test-evidence/$runId")
 evidence.mkdirs()
 evidence.resolve("release-request.txt").writeText(
-    "run_id=$runId\njobs=$jobs\ntier=${if (debugMode) "debug" else if (target == null) "dist" else "targeted"}\ntarget=${target ?: ""}\nretry_of=${retryOf ?: ""}\nskip_tests=$skipTests\nforce_rebuild=$debugMode\ncommand=./release.main.kts --jobs $jobs${if (skipTests) " --skip-tests" else ""}${if (debugMode) " --debug" else ""}${target?.let { " --target $it" } ?: ""}\nstarted_at=${java.time.Instant.now()}\n",
+    "run_id=$runId\njobs=$jobs\ntier=${if (debugMode) "debug" else if (target == null) "dist" else "targeted"}\ntarget=${target ?: ""}\nretry_of=${retryOf ?: ""}\nskip_tests=$skipTests\nforce_rebuild=$forceRebuild\ncommand=./release.main.kts --jobs $jobs${if (skipTests) " --skip-tests" else ""}${if (debugMode) " --debug" else ""}${target?.let { " --target $it" } ?: ""}\nstarted_at=${java.time.Instant.now()}\n",
 )
 
 fun run(vararg command: String): Int = ProcessBuilder(*command)
@@ -98,7 +99,7 @@ val preparationCommand = mutableListOf(
     "-PreleaseJobs=$jobs",
 )
 if (skipTests) preparationCommand += "-PreleaseSkipTests=true"
-if (debugMode) preparationCommand += "-PreleaseForceRebuild=true"
+if (forceRebuild) preparationCommand += "-PreleaseForceRebuild=true"
 val preparation = run(*preparationCommand.toTypedArray())
 if (preparation != 0) {
     println("release run: $runId")
@@ -147,6 +148,8 @@ if (debugMode) {
         if (existingCandidate) command += "--existing-candidate"
         return ProcessBuilder(command).directory(root).inheritIO().apply {
             environment()["BC_TEST_RUN_ID"] = testRunId
+            environment()["BC_RELEASE_PREPARED"] = "1"
+            if (existingCandidate) environment()["BC_PRIOR_DIST_RUN_ID"] = distRunId
         }.start().waitFor()
     }
     record("pending", "pending")
@@ -178,6 +181,7 @@ retryOf?.let { testArgs += listOf("--retry-of", it) }
 val tests = if (skipTests) 0 else ProcessBuilder(testArgs)
     .directory(root)
     .inheritIO()
+    .apply { environment()["BC_RELEASE_PREPARED"] = "1" }
     .start()
     .waitFor()
 println("release run: $runId")

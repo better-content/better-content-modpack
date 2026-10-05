@@ -29,7 +29,7 @@ jobs:
           --manifest .github/ci-source-revisions.json
           --workspace "$GITHUB_WORKSPACE/.."
       - name: Compile and run Minecraft-free harness tests
-        run: ./test.main.kts fast
+        run: ./test.main.kts run dev
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4

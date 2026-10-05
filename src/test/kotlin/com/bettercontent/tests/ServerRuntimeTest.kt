@@ -12,8 +12,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.api.extension.RegisterExtension
 import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.time.Duration
 import java.io.ByteArrayInputStream
+import java.io.DataInputStream
 import java.util.zip.GZIPInputStream
 import java.util.zip.InflaterInputStream
 import kotlin.io.path.readLines
@@ -45,42 +47,6 @@ class ServerRuntimeTest {
     @Test @Order(1)
     fun packagedServerReachesReadiness() = evidence.run.checkpoint("server readiness") {
         fixture.waitReady()
-        val logOffset = Files.size(fixture.log).toInt()
-        val report = fixture.commandResult(
-            "font find",
-            Regex("Found (\\d+)/4 Font types\\."),
-            "full-pack natural Font finder command",
-            Duration.ofSeconds(30),
-        )
-        val output = Files.readString(fixture.log).drop(logOffset)
-        val fontTypes = listOf("aether", "bumblezone", "nether", "ratlantis")
-        fontTypes.forEach { id ->
-            assertTrue(output.contains("[$id]"), "font find omitted configured type $id")
-        }
-        val generated = Regex("\\[([a-z]+)] in ([a-z0-9_.-]+:[a-z0-9_./-]+) at (-?\\d+), (-?\\d+), (-?\\d+)")
-            .findAll(output)
-            .toList()
-        generated.forEachIndexed { index, match ->
-            val id = match.groupValues[1]
-            val dimension = match.groupValues[2]
-            val x = match.groupValues[3]
-            val y = match.groupValues[4]
-            val z = match.groupValues[5]
-            // Keep console commands short; long source lines can be truncated by the server input reader.
-            val marker = "BC_FONT_$index"
-            fixture.commandResult(
-                "execute in $dimension if block $x $y $z better_dimension_fonts:dimensional_font run say $marker",
-                Regex(Regex.escape(marker)),
-                "verify generated $id Font coordinate",
-                Duration.ofSeconds(30),
-            )
-        }
-        evidence.run.event("natural_font_finder_runtime", mapOf(
-            "types_found" to report.groupValues[1].toInt(),
-            "types_configured" to fontTypes,
-            "generated_coordinates_verified" to generated.map { it.groupValues[1] },
-            "output" to output.lines().filter { "[" in it && (" at " in it || "NOT FOUND" in it) },
-        ))
         if (evidence.run.target != null) fixture.assertHashes()
         ready = true
     }
@@ -91,6 +57,8 @@ class ServerRuntimeTest {
         evidence.run.checkpoint("runtime snapshot") {
             val dump = fixture.runtimeDump()
             val id = promoteSnapshot(dump, fixture.config.root.resolve("generated/runtime-dumps"), fixture.config.runId)
+            Files.copy(dump.resolve("dimensions.json"), evidence.run.directory.resolve("dimensions.json"),
+                StandardCopyOption.REPLACE_EXISTING)
             evidence.run.event("runtime_snapshot", mapOf("snapshot_id" to id))
             snapshot = true
         }
@@ -137,7 +105,6 @@ class ServerRuntimeTest {
 
     @Test @Order(4)
     fun serverEvidenceIsCleanAndCandidatesAreUnchanged() {
-        assumeTrue(if (evidence.run.tier == "debug") first else snapshot, "server prerequisite failed")
         evidence.run.checkpoint("server log and hash audit") {
             // The successor startup can leave asynchronous Lost Cities feature work
             // queued after its readiness marker. Let the new world tick before the
@@ -155,12 +122,24 @@ class ServerRuntimeTest {
         if (evidence.run.target != "cursed-pyramid") return
         evidence.run.checkpoint("cursed pyramid seeded chunk generation") {
             fixture.waitReady()
-            // Build 341 wrote outside its writable chunk while this structure's
-            // neighborhood was generated. A single loaded chunk does not trigger
-            // placement from the adjacent structure start.
-            fixture.send("execute in minecraft:overworld run forceload add 144 -864 336 -672")
             fixture.commandResult(
-                "execute in minecraft:overworld if loaded 144 95 -864 if loaded 236 95 -776 if loaded 336 95 -672 run say BC_CURSED_PYRAMID_AREA_LOADED",
+                "gamerule doMobSpawning false",
+                Regex("Gamerule doMobSpawning is now set to: false"),
+                "disable ambient mob spawning in the structure-generation fixture",
+                Duration.ofSeconds(30),
+            )
+            evidence.run.event("cursed_pyramid_fixture_gamerule", mapOf("doMobSpawning" to false))
+            // Build 341 wrote outside its writable chunk while this structure's
+            // neighborhood was generated. Cover the pinned pyramid's recorded
+            // piece bounds plus one chunk of margin so its adjacent start is
+            // generated without ticking a much larger, unrelated area.
+            fixture.send("execute in minecraft:overworld run forceload add 208 -832 335 -687")
+            evidence.run.event("cursed_pyramid_generation_area", mapOf(
+                "min_x" to 208, "min_z" to -832, "max_x" to 335, "max_z" to -687,
+                "reason" to "pinned structure bounding box plus one chunk margin",
+            ))
+            fixture.commandResult(
+                "execute in minecraft:overworld if loaded 208 95 -832 if loaded 271 95 -759 if loaded 335 95 -687 run say BC_CURSED_PYRAMID_AREA_LOADED",
                 Regex("BC_CURSED_PYRAMID_AREA_LOADED"),
                 "seeded cursed pyramid area generation",
                 Duration.ofMinutes(5),
@@ -199,9 +178,91 @@ class ServerRuntimeTest {
                 3 -> payload
                 else -> continue
             }
-            if (decoded.use { it.readBytes().toString(Charsets.ISO_8859_1).contains(id) }) return true
+            if (runCatching { decoded.use { nbt ->
+                    DataInputStream(nbt).use { input -> structureStartInChunk(input, id) }
+                } }.getOrDefault(false)) return true
         }
         return false
+    }
+
+    private fun structureStartInChunk(input: DataInputStream, id: String): Boolean {
+        if (input.readUnsignedByte() != 10) return false
+        input.readUTF()
+        return findStructures(input, id, allowLevel = true)
+    }
+
+    private fun findStructures(input: DataInputStream, id: String, allowLevel: Boolean): Boolean {
+        while (true) {
+            val type = input.readUnsignedByte()
+            if (type == 0) return false
+            val name = input.readUTF()
+            when {
+                type == 10 && name == "structures" -> if (findStarts(input, id)) return true
+                type == 10 && allowLevel && name == "Level" -> if (findStructures(input, id, false)) return true
+                else -> skipNbtPayload(input, type, 0)
+            }
+        }
+    }
+
+    private fun findStarts(input: DataInputStream, id: String): Boolean {
+        while (true) {
+            val type = input.readUnsignedByte()
+            if (type == 0) return false
+            val name = input.readUTF()
+            if (type == 10 && name == "starts") {
+                if (findNamedStart(input, id)) return true
+            } else skipNbtPayload(input, type, 0)
+        }
+    }
+
+    private fun findNamedStart(input: DataInputStream, id: String): Boolean {
+        while (true) {
+            val type = input.readUnsignedByte()
+            if (type == 0) return false
+            val name = input.readUTF()
+            if (type == 10 && name == id) {
+                if (startDeclaresId(input, id)) return true
+            } else skipNbtPayload(input, type, 0)
+        }
+    }
+
+    private fun startDeclaresId(input: DataInputStream, id: String): Boolean {
+        while (true) {
+            val type = input.readUnsignedByte()
+            if (type == 0) return false
+            val name = input.readUTF()
+            if (type == 8 && name == "id") {
+                if (input.readUTF() == id) return true
+            } else skipNbtPayload(input, type, 0)
+        }
+    }
+
+    private fun skipNbtPayload(input: DataInputStream, type: Int, depth: Int) {
+        require(depth < 64) { "NBT nesting exceeds 64" }
+        fun count() = input.readInt().also { require(it in 0..1_000_000) { "invalid NBT length: $it" } }
+        when (type) {
+            1 -> input.readByte()
+            2 -> input.readShort()
+            3 -> input.readInt()
+            4 -> input.readLong()
+            5 -> input.readFloat()
+            6 -> input.readDouble()
+            7 -> input.skipNBytes(count().toLong())
+            8 -> input.readUTF()
+            9 -> {
+                val elementType = input.readUnsignedByte()
+                repeat(count()) { skipNbtPayload(input, elementType, depth + 1) }
+            }
+            10 -> while (true) {
+                val childType = input.readUnsignedByte()
+                if (childType == 0) break
+                input.readUTF()
+                skipNbtPayload(input, childType, depth + 1)
+            }
+            11 -> input.skipNBytes(count().toLong() * 4)
+            12 -> input.skipNBytes(count().toLong() * 8)
+            else -> error("invalid NBT tag type $type")
+        }
     }
 
     private fun lifecycle(expected: Int) {

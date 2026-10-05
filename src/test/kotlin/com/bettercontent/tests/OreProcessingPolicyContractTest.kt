@@ -95,6 +95,9 @@ class OreProcessingPolicyContractTest {
         )
         val goodTags = mapper.readTree("""{"item_tags":{"forge:ores":[],"c:ores":[]}}""")
         RuntimeSnapshotValidator.validateOreProcessing(goodRecipes, goodTags)
+        assertThrows(IllegalArgumentException::class.java) {
+            RuntimeSnapshotValidator.validateOreProcessing(goodRecipes, goodTags, requireComplete = true)
+        }
 
         val barrierRecipes = mapper.readTree(
             """{"recipes":[{"id":"occultism:crushing/coal_dust","outputs":[{"kind":"item","id":"minecraft:barrier","count":4}]}]}""",

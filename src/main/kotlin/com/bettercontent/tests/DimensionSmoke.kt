@@ -20,7 +20,7 @@ object DimensionSmokePlan {
 
     // Dimension Drink explicitly requires its own one-call authorization for these
     // destinations. A console `execute in ... run tp` is meant to be denied.
-    private val fontOnlyDimensions = setOf("rats:ratlantis", "the_bumblezone:the_bumblezone")
+    private val fontOnlyDimensions = setOf("the_bumblezone:the_bumblezone")
 
     fun requiresFontTravel(id: String): Boolean = id in fontOnlyDimensions
 

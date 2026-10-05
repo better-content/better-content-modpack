@@ -12,7 +12,7 @@ class GeometrySmokePlanTest {
     @Test
     fun classifiesTheLoadedTerrainAndUtilityDimensions() {
         assertTrue(GeometrySmokePlan.isTerrain("the_bumblezone:the_bumblezone"))
-        assertTrue(GeometrySmokePlan.isTerrain("rats:ratlantis"))
+        assertTrue(GeometrySmokePlan.isTerrain("aether:the_aether"))
         assertFalse(GeometrySmokePlan.isTerrain("creatingspace:earth_orbit"))
         assertFalse(GeometrySmokePlan.isTerrain("ae2:spatial_storage"))
         assertThrows(IllegalArgumentException::class.java) { GeometrySmokePlan.isTerrain("unknown:new_dimension") }
@@ -33,21 +33,12 @@ class GeometrySmokePlanTest {
         val dimension = "aether:the_aether"
         val samples = listOf(
             GeometrySample(dimension, 9, mapOf("minecraft:air" to 900_000)),
-            GeometrySample(dimension, 9, mapOf("aether:holystone" to 20, "minecraft:air" to 899_980)),
-            GeometrySample(dimension, 9, mapOf("aether:cold_aercloud" to 50, "minecraft:air" to 899_950)),
+            GeometrySample(dimension, 9, mapOf("aether:holystone" to 500, "minecraft:air" to 899_500)),
+            GeometrySample(dimension, 9, mapOf("aether:cold_aercloud" to 600, "minecraft:air" to 899_400)),
         )
         val result = GeometrySmokePlan.assess(dimension, samples)
-        assertEquals(70L, result["non_air_blocks"])
-        assertEquals(70L, result["expected_family_blocks"])
+        assertEquals(1100L, result["non_air_blocks"])
+        assertEquals(1100L, result["expected_family_blocks"])
         assertEquals(true, result["passed"])
-    }
-
-    @Test
-    fun ratlantisRequiresRatsWorldBlocks() {
-        val dimension = "rats:ratlantis"
-        val generic = GeometrySample(dimension, 9, mapOf("unearthed:granodiorite" to 100_000))
-        val native = GeometrySample(dimension, 9, mapOf("rats:cheese_ore" to 20, "unearthed:granodiorite" to 100_000))
-        assertEquals(false, GeometrySmokePlan.assess(dimension, listOf(generic))["passed"])
-        assertEquals(true, GeometrySmokePlan.assess(dimension, listOf(native))["passed"])
     }
 }

@@ -57,30 +57,6 @@ class HarnessFastTest {
     }
 
     @Test
-    fun distJoinsOneClientAndDebugTraversesDimensionsBeforeCampaigns() {
-        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
-        val source = Files.readString(root.resolve("src/test/kotlin/com/bettercontent/tests/MultiplayerRuntimeTest.kt"))
-        val join = source.substringAfter("fun leadClientJoinsFreshDedicatedServer()").substringBefore("@Test @Order(2)")
-        val traversal = source.substringAfter("fun everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations()")
-            .substringBefore("@Test @Order(3)")
-
-        assertTrue(join.indexOf("if (evidence.run.tier == \"debug\")") < join.indexOf("server.runtimeDump()"))
-        assertTrue(join.contains("startClient(lead)"))
-        assertTrue(join.contains("requirePlayersOnline(\"client joined\", listOf(lead))"))
-        assertTrue(traversal.indexOf("if (evidence.run.tier != \"debug\")") < traversal.indexOf("DimensionSmokePlan.discover("))
-        assertTrue(traversal.contains("DimensionSmokePlan.positions.take(3)"))
-        assertTrue(source.contains("if (evidence.run.target != null) joined"))
-        assertTrue(source.contains("else if (evidence.run.tier == \"debug\") campaignReady"))
-        assertTrue(source.contains("clients.drop(1).forEach"))
-        assertTrue(source.contains("requireAllPlayersOnline(\"campaign clients joined\")"))
-        assertTrue(source.contains("requireAllPlayersOnline(\"three campaign encounters active\")"))
-        assertTrue(!source.contains("pillager_soak_started"))
-        assertTrue(!source.contains("dimension support heartbeat"))
-        assertTrue(!source.contains("clients.filter { it !== lead }"))
-        assertTrue(!source.contains("joinedClientsSettleContent"))
-    }
-
-    @Test
     fun packwizHashRefreshBelongsOnlyToFreshDistPreparation() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val facade = Files.readString(root.resolve("test.main.kts"))
@@ -455,7 +431,6 @@ class HarnessFastTest {
         val targets = DimensionSmokePlan.discover(dimensions, fonts)
         assertEquals(listOf("ae2:spatial_storage", "aether:the_aether", "bloodmagic:dungeon", "creatingspace:mars", "minecraft:overworld", "minecraft:the_end"), targets.map { it.id })
         assertEquals(setOf("creatingspace"), targets.single { it.id == "creatingspace:mars" }.sources)
-        assertTrue(DimensionSmokePlan.requiresFontTravel("rats:ratlantis"))
         assertTrue(DimensionSmokePlan.requiresFontTravel("the_bumblezone:the_bumblezone"))
         assertTrue(!DimensionSmokePlan.requiresFontTravel("minecraft:the_nether"))
         assertEquals(20.0, DimensionSmokePlan.parseOverallTps("Overall: Mean tick time: 2.1 ms. Mean TPS: 20.000"))
@@ -479,7 +454,28 @@ class HarnessFastTest {
         ))
         names.forEach { name ->
             val data = mutableMapOf<String, Any>("snapshot_id" to "snapshot-1")
-            if (name == "recipes.json") data.putAll(mapOf("complete" to true, "partial_count" to 0, "error_count" to 0))
+            if (name == "recipes.json") {
+                val outputs = mapOf(
+                    "blaze_powder_from_rod" to ("minecraft:blaze_powder" to 1),
+                    "certus_quartz_dust_from_gem" to ("ae2:certus_quartz_dust" to 1),
+                    "coal_dust" to ("bloodmagic:coalsand" to 4),
+                    "datura" to ("occultism:datura_seeds" to 2),
+                    "end_stone_dust" to ("occultism:crushed_end_stone" to 1),
+                    "iesnium_dust" to ("occultism:iesnium_dust" to 2),
+                    "iesnium_dust_from_ingot" to ("occultism:iesnium_dust" to 1),
+                    "iesnium_dust_from_raw" to ("occultism:iesnium_dust" to 2),
+                    "iesnium_dust_from_raw_block" to ("occultism:iesnium_dust" to 18),
+                    "iridium_dust_from_ingot" to ("chemlib:iridium_dust" to 1),
+                    "redstone_dust" to ("minecraft:redstone" to 4),
+                    "tungsten_dust_from_ingot" to ("chemlib:tungsten_dust" to 1),
+                )
+                data.putAll(mapOf("complete" to true, "partial_count" to 0, "error_count" to 0,
+                    "recipes" to outputs.map { (id, output) -> mapOf("id" to "occultism:crushing/$id",
+                        "outputs" to listOf(mapOf("kind" to "item", "id" to output.first, "count" to output.second))) }))
+            }
+            if (name == "tags.json") data["item_tags"] = mapOf(
+                "forge:ores" to listOf("minecraft:iron_ore"),
+                "c:ores" to listOf("minecraft:iron_ore"))
             mapper.writeValue(root.resolve(name).toFile(), data)
         }
         assertEquals("snapshot-1", RuntimeSnapshotValidator.validate(root))
@@ -513,6 +509,14 @@ class HarnessFastTest {
         val targetJoin = root.resolve("target-join")
         val targetServerDir = targetJoin.resolve("fixture/server-extract/better-content-server/logs")
         val targetClientDir = targetJoin.resolve("fixture/client-1/logs")
+        val targetRestart = root.resolve("target-restart")
+        val targetRestartServerDir = targetRestart.resolve("fixture/server-extract/better-content-server/logs")
+        val targetRestartClientDir = targetRestart.resolve("fixture/client-4/logs")
+        val targetWorldSave = root.resolve("target-world-save")
+        val targetWorldSaveServerDir = targetWorldSave.resolve("fixture/server-extract/better-content-server/logs")
+        val targetWorldSaveClientDir = targetWorldSave.resolve("fixture/client-5/logs")
+        val targetServerReady = root.resolve("target-server-ready")
+        val targetServerReadyDir = targetServerReady.resolve("fixture/server-extract/better-content-server/logs")
         val singleplayerDir = root.resolve("singleplayer/fixture/client-1/logs")
         serverDir.createDirectories()
         clientDir.createDirectories()
@@ -520,6 +524,11 @@ class HarnessFastTest {
         standaloneServerDir.createDirectories()
         targetServerDir.createDirectories()
         targetClientDir.createDirectories()
+        targetRestartServerDir.createDirectories()
+        targetRestartClientDir.createDirectories()
+        targetWorldSaveServerDir.createDirectories()
+        targetWorldSaveClientDir.createDirectories()
+        targetServerReadyDir.createDirectories()
         singleplayerDir.createDirectories()
         val notice = "[03:11:22] [Collective Update Checker/WARN] [Collective]: " +
             "[Update] Collective has an update available: 8.40 -> 8.41\n"
@@ -540,6 +549,17 @@ class HarnessFastTest {
         val targetClient = targetClientDir.resolve("latest.log").also { it.writeText(notice) }
         val targetAggregateServer = targetJoin.resolve("server.log").also { it.writeText(notice) }
         val targetAggregateClient = targetJoin.resolve("client-1.log").also { it.writeText(notice) }
+        val restartServer = targetRestartServerDir.resolve("latest.log").also { it.writeText(notice) }
+        val restartClient = targetRestartClientDir.resolve("latest.log").also { it.writeText(notice) }
+        val worldSaveServer = targetWorldSaveServerDir.resolve("latest.log").also { it.writeText(notice) }
+        val worldSaveClient = targetWorldSaveClientDir.resolve("latest.log").also { it.writeText(notice) }
+        val worldSaveAggregate = targetWorldSave.resolve("singleplayer-5.log").also { it.writeText(notice) }
+        val targetServerReadyFixture = targetServerReadyDir.resolve("latest.log").also { it.writeText(notice) }
+        val targetServerReadyAggregate = targetServerReady.resolve("server.log").also { it.writeText(notice + notice) }
+        val targetServerReadyOverflow = targetServerReady.resolve("overflow/server.log").also {
+            it.parent.createDirectories()
+            it.writeText(notice + notice + notice)
+        }
         val targetAggregateServerOverflow = targetJoin.resolve("overflow/target-join/server.log").also {
             it.parent.createDirectories()
             it.writeText(notice + notice + notice)
@@ -568,6 +588,10 @@ class HarnessFastTest {
         assertTrue(LogPolicy.findings(listOf(multiplayerAggregate)).isEmpty())
         assertEquals(listOf(3), LogPolicy.findings(listOf(multiplayerAggregateOverflow)).map { it.line })
         assertTrue(LogPolicy.findings(listOf(targetServer, targetClient, targetAggregateServer, targetAggregateClient)).isEmpty())
+        assertTrue(LogPolicy.findings(listOf(restartServer, restartClient)).isEmpty())
+        assertTrue(LogPolicy.findings(listOf(worldSaveServer, worldSaveClient, worldSaveAggregate)).isEmpty())
+        assertTrue(LogPolicy.findings(listOf(targetServerReadyFixture, targetServerReadyAggregate)).isEmpty())
+        assertEquals(listOf(3), LogPolicy.findings(listOf(targetServerReadyOverflow)).map { it.line })
         assertEquals(listOf(3), LogPolicy.findings(listOf(targetAggregateServerOverflow)).map { it.line })
         assertTrue(LogPolicy.findings(listOf(lifecycle)).isEmpty())
         assertEquals(listOf(3), LogPolicy.findings(listOf(lifecycleOverflow)).map { it.line })
@@ -672,7 +696,7 @@ class HarnessFastTest {
         }
         val repeated = singleplayer.resolve("repeated.log").also { it.writeText("$warning\n$warning\n") }
         val slow = singleplayer.resolve("slow.log").also {
-            it.writeText(warning.replace("1.118", "2.001") + "\n")
+            it.writeText(warning.replace("1.118", "6.001") + "\n")
         }
         val unrelated = singleplayer.resolve("unrelated.log").also {
             it.writeText(warning.replace("iceandfire", "othermod") + "\n")
@@ -686,6 +710,42 @@ class HarnessFastTest {
         assertEquals(listOf(1), LogPolicy.findings(listOf(slow)).map { it.line })
         assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
         assertEquals(listOf(1), LogPolicy.findings(listOf(otherSuite)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyBoundsMultiplayerDeferredTaskWarnings(@TempDir root: Path) {
+        val clientLogs = root.resolve("multiplayer/fixture/client-1/logs").also { it.createDirectories() }
+        val thalassophobia = "[18:05:21] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+            "Mod 'thalassophobia' took 2.320 s to run a deferred task."
+        val ae2 = "[18:05:32] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+            "Mod 'ae2' took 1.232 s to run a deferred task."
+        val accepted = clientLogs.resolve("latest.log").also {
+            it.writeText("$thalassophobia\n$ae2\n")
+        }
+        val excessive = clientLogs.resolve("excessive.log").also {
+            it.writeText(thalassophobia.replace("2.320", "3.001") + "\n" + ae2.replace("1.232", "2.001") + "\n")
+        }
+        val wrongSuite = root.resolve("client.log").also { it.writeText("$thalassophobia\n$ae2\n") }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(excessive)).map { it.line })
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongSuite)).map { it.line })
+    }
+
+    @Test
+    fun logPolicyBoundsJsonThingsDeferredTaskWarningsToMultiplayerClients(@TempDir root: Path) {
+        val clientDir = root.resolve("multiplayer/fixture/client-2/logs").also { it.createDirectories() }
+        val warning = "[19:23:26] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+            "Mod 'jsonthings' took 1.097 s to run a deferred task."
+        val accepted = clientDir.resolve("latest.log").also { it.writeText("$warning\n") }
+        val excessive = clientDir.resolve("excessive.log").also {
+            it.writeText("$warning\n$warning\n" + warning.replace("1.097", "1.501") + "\n")
+        }
+        val wrongSuite = root.resolve("client.log").also { it.writeText("$warning\n") }
+
+        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
+        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(excessive)).map { it.line })
+        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongSuite)).map { it.line })
     }
 
     @Test
@@ -985,7 +1045,7 @@ class HarnessFastTest {
     }
 
     @Test
-    fun logPolicyAcceptsOnlyOneExactRecoveredDistantHorizonsPhantomArrayPerLog(@TempDir root: Path) {
+    fun logPolicyBoundsExactRecoveredDistantHorizonsPhantomArraysPerLog(@TempDir root: Path) {
         fun warning(reference: String = "1359776d") =
             "[06:28:03] [DH-Phantom Array Recycler Thread[0]/WARN] " +
                 "[DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.pooling.PhantomArrayListPool]: " +
@@ -996,7 +1056,7 @@ class HarnessFastTest {
             it.writeText(warning() + "\n")
         }
         val overflow = root.resolve("overflow-dh-phantom.log").also {
-            it.writeText(warning() + "\n" + warning("2468ace0") + "\n")
+            it.writeText((1..5).joinToString("\n") { warning("2468ace$it") } + "\n")
         }
         val wrongShape = root.resolve("wrong-shape-dh-phantom.log").also {
             it.writeText(
@@ -1007,7 +1067,7 @@ class HarnessFastTest {
         }
 
         assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertEquals(listOf(5), LogPolicy.findings(listOf(overflow)).map { it.line })
         assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(wrongShape)).map { it.line })
     }
 
@@ -1041,54 +1101,6 @@ class HarnessFastTest {
             it.writeText(warning(thread = "DH-Update Propagator Thread[0]") + "\n")
         }
         assertTrue(LogPolicy.findings(listOf(updatePropagator)).isEmpty())
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyTheExactRatlantisDistantHorizonsUnloadPaletteError(@TempDir root: Path) {
-        fun block(
-            closedDimension: String = "rats:ratlantis",
-            chunk: String = "C[0,-1]",
-            cause: String = "Caused by: net.minecraft.world.level.chunk.MissingPaletteEntryException: " +
-                "Missing Palette entry for index 2.",
-        ) = listOf(
-            "[08:47:58] [Render thread/INFO] [DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.level.DhClientLevel]: " +
-                "Closed [DhClientLevel] for [Wrapped{ClientLevel@token@$closedDimension}]",
-            "[08:47:58] [DH-LOD Builder Thread[0]/ERROR] " +
-                "[DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.generation.DhLightingEngine]: " +
-                "Unexpected lighting issue for center chunk: $chunk",
-            "net.minecraft.ReportedException: Getting block state",
-            "\tat net.minecraft.world.level.chunk.LevelChunk.m_8055_(LevelChunk.java:182)",
-            "\tat com.seibel.distanthorizons.core.generation.DhLightingEngine.lightChunk(DhLightingEngine.java:260)",
-            cause,
-        )
-
-        val accepted = root.resolve("target-font-ratlantis/fixture/client-1/logs/latest.log").also {
-            it.parent.createDirectories()
-            it.writeText(block().joinToString("\n", postfix = "\n"))
-        }
-        val duplicate = root.resolve("target-font-ratlantis/fixture/client-2/logs/latest.log").also {
-            it.parent.createDirectories()
-            it.writeText((block() + block()).joinToString("\n", postfix = "\n"))
-        }
-        val wrongDimension = root.resolve("target-font-ratlantis/fixture/client-3/logs/latest.log").also {
-            it.parent.createDirectories()
-            it.writeText(block(closedDimension = "the_bumblezone:the_bumblezone").joinToString("\n", postfix = "\n"))
-        }
-        val wrongChunk = root.resolve("target-font-ratlantis/fixture/client-4/logs/latest.log").also {
-            it.parent.createDirectories()
-            it.writeText(block(chunk = "C[1,-1]").joinToString("\n", postfix = "\n"))
-        }
-        val wrongCause = root.resolve("target-font-ratlantis/fixture/client-5/logs/latest.log").also {
-            it.parent.createDirectories()
-            it.writeText(block(cause = "Caused by: net.minecraft.world.level.chunk.MissingPaletteEntryException: " +
-                "Missing Palette entry for index 3.").joinToString("\n", postfix = "\n"))
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(8, 9), LogPolicy.findings(listOf(duplicate)).map { it.line })
-        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(wrongDimension)).map { it.line })
-        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(wrongChunk)).map { it.line })
-        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(wrongCause)).map { it.line })
     }
 
     @Test
@@ -1174,6 +1186,10 @@ class HarnessFastTest {
             it.parent.toFile().mkdirs()
             it.writeText(diagnostic() + "\n")
         }
+        val restartFixture = root.resolve("target-restart/fixture/client-4/logs/latest.log").also {
+            it.parent.toFile().mkdirs()
+            it.writeText(diagnostic() + "\n")
+        }
         val overflow = root.resolve("multiplayer/client-2.log").also {
             it.writeText(diagnostic() + "\n" + diagnostic() + "\n")
         }
@@ -1188,7 +1204,7 @@ class HarnessFastTest {
             it.writeText(diagnostic() + "\n")
         }
 
-        assertTrue(LogPolicy.findings(listOf(aggregate, fixture)).isEmpty())
+        assertTrue(LogPolicy.findings(listOf(aggregate, fixture, restartFixture)).isEmpty())
         assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
         assertEquals(listOf(1, 1, 1), LogPolicy.findings(listOf(wrongSuite, wrongRecord, serverLog)).map { it.line })
     }

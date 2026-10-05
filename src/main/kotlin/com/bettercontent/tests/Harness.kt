@@ -100,8 +100,12 @@ object PackTestHandoff {
         }
         val requestId = document.path("request_id").asText()
         require(requestId.isNotBlank()) { "pack-test handoff has no request ID" }
-        System.getenv("BC_TEST_SELECTOR")?.takeIf { it.isNotBlank() && it != "fast" }?.let { selector ->
-            require(document.path("selector").asText() == selector) { "pack-test selector differs from the handoff" }
+        System.getenv("BC_TEST_TIER")?.takeIf { it in setOf("dist", "debug") }?.let { selector ->
+            val queuedDebugDist = selector == "dist" && System.getenv("BC_DIST_PREREQUISITE") == "1" &&
+                document.path("selector").asText() == "debug"
+            require(document.path("selector").asText() == selector || queuedDebugDist) {
+                "pack-test selector differs from the handoff"
+            }
         }
         System.getenv("BC_TEST_TARGET")?.takeIf(String::isNotBlank)?.let { target ->
             require(document.path("target").asText() == target) { "pack-test target differs from the handoff" }
@@ -198,7 +202,7 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
     private val started = Instant.now()
     val tier: String = System.getenv("BC_TEST_TIER")?.takeIf { it in setOf("dist", "debug") } ?: "legacy"
     val target: String? = System.getenv("BC_TEST_TARGET")?.takeIf(String::isNotBlank)
-    private var failure: String? = null
+    private val failures = mutableListOf<String>()
 
     init {
         event("suite_started", mapOf("suite" to suite, "source_suite" to sourceSuite, "tier" to tier,
@@ -235,7 +239,8 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
             action()
             event("checkpoint_passed", mapOf("name" to name))
         } catch (error: Throwable) {
-            failure = "$name: ${error.message ?: error::class.java.name}"
+            val failure = "$name: ${error.message ?: error::class.java.name}"
+            failures += failure
             event("checkpoint_failed", mapOf("name" to name, "error" to failure))
             throw error
         }
@@ -244,18 +249,26 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
     fun capture(name: String, command: List<String>, cwd: Path = config.root) {
         val output = directory.resolve(name)
         try {
-            ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true).redirectOutput(output.toFile())
-                .start().waitFor(30, TimeUnit.SECONDS)
-        } catch (ignored: Exception) {
-            output.writeText("evidence capture failed: ${ignored.message}\n")
+            val process = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true)
+                .redirectOutput(output.toFile()).start()
+            if (!process.waitFor(30, TimeUnit.SECONDS)) {
+                process.destroyForcibly()
+                process.waitFor()
+                error("evidence capture timed out: $name")
+            }
+            check(process.exitValue() == 0) { "evidence capture exited ${process.exitValue()}: $name" }
+        } catch (error: Exception) {
+            failures += "evidence capture $name: ${error.message ?: error::class.java.name}"
+            output.writeText("evidence capture failed: ${error.message}\n")
+            throw error
         }
     }
 
     fun finish(success: Boolean) {
-        if (!success && failure == null) failure = "suite failed outside a named checkpoint"
-        event("suite_finished", mapOf("success" to success, "failure" to failure))
+        if (!success && failures.isEmpty()) failures += "suite failed outside a named checkpoint"
+        event("suite_finished", mapOf("success" to success, "failures" to failures.toList()))
         writeSummary(if (success) "passed" else "failed")
-        if (success && fixture.exists()) fixture.toFile().deleteRecursively()
+        if (success && fixture.exists()) check(fixture.toFile().deleteRecursively()) { "failed to remove passed fixture: $fixture" }
         println("evidence: ${directory.absolutePathString()}")
     }
 
@@ -272,7 +285,8 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
             "status" to status,
             "started_at" to started.toString(),
             "updated_at" to Instant.now().toString(),
-            "failure" to failure,
+            "failure" to failures.firstOrNull(),
+            "failures" to failures.toList(),
             "evidence" to directory.absolutePathString(),
             "fixture" to fixture.absolutePathString(),
         )
@@ -330,6 +344,9 @@ class ManagedProcess(
         val deadline = System.nanoTime() + timeout.toNanos()
         while (System.nanoTime() < deadline) {
             val text = if (log.exists()) log.readText() else ""
+            check("[net.minecraft.server.Main]: Failed to start the minecraft server" !in text) {
+                "$name reported a fatal server startup failure before $description; see $log"
+            }
             if (pattern.findAll(text).count() >= expected) return
             check(process.isAlive) { "$name exited before $description; see $log" }
             Thread.sleep(500)
@@ -357,6 +374,16 @@ class ManagedProcess(
     fun stop(timeout: Duration = Duration.ofSeconds(20)) {
         runCatching { input.close() }
         tracker.stop(timeout)
+    }
+
+    fun waitForExit(timeout: Duration, description: String) {
+        val deadline = System.nanoTime() + timeout.toNanos()
+        while (System.nanoTime() < deadline) {
+            if (!process.isAlive && tracker.trackedPids().none { ProcessHandle.of(it).orElse(null)?.isAlive == true }) return
+            Thread.sleep(250)
+        }
+        captureDiagnostics(log.parent.resolve("$name-exit-timeout"))
+        error("timed out waiting for $description to exit; see $log")
     }
 
     override fun close() = stop()

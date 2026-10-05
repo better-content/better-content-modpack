@@ -470,7 +470,6 @@ class HoverAnnotationLearningSurfaceTest {
             "nether" to "minecraft:netherrack",
             "aether" to "aether:aether_dirt",
             "bumblezone" to "the_bumblezone:porous_honeycomb_block",
-            "ratlantis" to "rats:marbled_cheese_raw",
         )
 
         assertTrue(expected.all { (dimension, material) ->
@@ -478,7 +477,7 @@ class HoverAnnotationLearningSurfaceTest {
         })
         assertEquals(expected.keys.map { "kubejs:${it}_font_grout" }.toSet(), selectedItems)
         assertTrue(workshop.contains("event.smelting('tconstruct:seared_brick', font[2])"))
-        assertTrue(row.path("lines").map { it.asText() }.single().contains("All four Font variants smelt into the same Seared Brick"))
+        assertTrue(row.path("lines").map { it.asText() }.single().contains("All three Font variants smelt into the same Seared Brick"))
     }
 
     @Test
@@ -875,7 +874,7 @@ class HoverAnnotationLearningSurfaceTest {
                 "kubejs/server_scripts/utility/hooks_drones_gates.js",
             ),
             "kubejs:impossible_support_matrix" to listOf(
-                "kubejs/server_scripts/progression/20_better_ratlantis_logistics.js",
+                "kubejs/server_scripts/progression/20_logistics_roots.js",
                 "kubejs/server_scripts/compat/retained/refactor__balance__166_tome_of_blood_post_ae2_gates.js",
             ),
             "kubejs:mountain_beryl_lens" to listOf(
@@ -977,7 +976,7 @@ class HoverAnnotationLearningSurfaceTest {
         val fontGrouts = registry.path("annotations").single { it.path("concept_id").asText() == "matter.metallurgy.provenance" && it.path("selector").has("items") }
         val fontIds = setOf(
             "kubejs:nether_font_grout", "kubejs:aether_font_grout",
-            "kubejs:bumblezone_font_grout", "kubejs:ratlantis_font_grout",
+            "kubejs:bumblezone_font_grout",
         )
 
         assertTrue(hand.contains("event.remove({ type: 'create:mixing', output: 'create:andesite_alloy' })"))
@@ -992,7 +991,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(hand.contains("event.smelting('tconstruct:seared_brick', font[2])"))
         assertEquals(fontIds, fontGrouts.path("selector").path("items").map { it.asText() }.toSet())
         assertTrue(grout.path("lines").single().asText().contains("material from any active Font"))
-        assertTrue(fontGrouts.path("lines").single().asText().contains("All four Font variants smelt into the same Seared Brick"))
+        assertTrue(fontGrouts.path("lines").single().asText().contains("All three Font variants smelt into the same Seared Brick"))
     }
 
     @Test
@@ -1124,7 +1123,6 @@ class HoverAnnotationLearningSurfaceTest {
             "better_craftable_bouquets:bouquet_grid",
             "better_spirit_commerce:sacred_reliquary",
             "malum:spirit_pouch",
-            "better_ratlantis_logistics:courier_lattice",
             "better_rail_beetle:route_beacon",
             "better_player_traces:foot_traffic_probe",
             "better_tinkers_loot_affixes:affixed_part_cache",
@@ -1656,19 +1654,6 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
-    fun `Ratlantis bait hover distinguishes taming from ordinary cheese`() {
-        val source = Files.readString(root.resolve("../mod_source/better-ratlantis-logistics/src/main/java/com/bettercontent/betterratlantislogistics/RatlantisLogistics.java").normalize())
-        val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_ratlantis_logistics:ratlantean_bait" }
-        assertEquals("Use to tame wild rats. Ordinary cheese cannot tame them.", row.path("lines").single().asText())
-        assertTrue(row.path("owner").asText().contains("RatlantisLogistics.java"))
-        assertTrue(source.contains("heldId.equals(new ResourceLocation(\"rats\", \"cheese\"))"))
-        assertTrue(source.contains("if (held.getItem() != RATLANTEAN_BAIT.get()) return"))
-        assertTrue(source.contains("rat.wildTrust += 10 + rat.getRandom().nextInt(10)"))
-        assertTrue(source.contains("rat.cheeseFeedings >= 15"))
-        assertTrue(source.contains("RatUtils.tameRat(rat, rat.level())"))
-    }
-
-    @Test
     fun `Heart Block hover matches fragment installation and adjacent altar output`() {
         val sourceRoot = root.resolve("../mod_source/better-rpg-progression/src/main/kotlin/com/bettercontent/betterrpgprogression/common").normalize()
         val block = Files.readString(sourceRoot.resolve("block/HeartBlock.kt"))
@@ -1698,23 +1683,23 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(altarSource.contains("event.shaped('bloodmagic:altar'"))
         listOf("minecraft:obsidian", "minecraft:gold_block", "minecraft:bone_block", "minecraft:furnace", "minecraft:deepslate", "minecraft:cauldron")
             .forEach { assertTrue(altarSource.contains(it), it) }
-        assertEquals("Craft from iron and a cauldron. Four Font trophies are for impure chalk.", cauldron.path("lines").single().asText())
+        assertEquals("Craft from iron and a cauldron. Three Font trophies are for impure chalk.", cauldron.path("lines").single().asText())
         assertTrue(cauldron.path("owner").asText().contains("refactor__balance__63_fonts_hexerei_occultism_chalk.js"))
         assertTrue(cauldronSource.contains("event.shaped('hexerei:mixing_cauldron'"))
         assertTrue(cauldronSource.contains("I: 'minecraft:iron_ingot',"))
         assertTrue(cauldronSource.contains("C: 'minecraft:cauldron'"))
-        assertTrue(cauldronSource.contains("Every impure chalk preparation proves all four expedition Fonts equally"))
-        listOf("aether:ambrosium_shard", "minecraft:blaze_powder", "the_bumblezone:honey_crystal_shards", "rats:gem_of_ratlantis")
+        assertTrue(cauldronSource.contains("Every impure chalk preparation proves all three expedition Fonts"))
+        listOf("aether:ambrosium_shard", "minecraft:blaze_powder", "the_bumblezone:honey_crystal_shards")
             .forEach { assertTrue(cauldronSource.contains(it), it) }
     }
 
     @Test
-    fun `Pretty Pipes annotations expose all three visible Ratlantis gates`() {
+    fun `Pretty Pipes annotations expose the three Font material gates`() {
         val text = Files.readString(root.resolve("kubejs/config/hover_annotations.json"))
-        val recipes = Files.readString(root.resolve("kubejs/server_scripts/progression/20_better_ratlantis_logistics.js"))
-        assertTrue(text.contains("four lattices make the first 32 pipes"))
-        assertTrue(text.contains("Oratchalcum Mechanism"))
-        assertTrue(text.contains("Arcane Logistics Core"))
+        val recipes = Files.readString(root.resolve("kubejs/server_scripts/progression/20_logistics_roots.js"))
+        assertTrue(text.contains("one craft makes eight pipes"))
+        assertTrue(text.contains("Blaze Rod"))
+        assertTrue(text.contains("Enchanted Gravitite"))
         val highModules = listOf(
             "high_crafting_module", "high_extraction_module", "high_filter_module",
             "high_high_priority_module", "high_low_priority_module", "high_retrieval_module",
@@ -1725,22 +1710,16 @@ class HoverAnnotationLearningSurfaceTest {
         val pipe = registry.path("annotations").single { it.path("selector").path("item").asText() == "prettypipes:pipe" }
         val blank = registry.path("annotations").single { it.path("selector").path("item").asText() == "prettypipes:blank_module" }
         val advanced = registry.path("annotations").single { it.path("selector").path("items").any { item -> item.asText() == "prettypipes:high_speed_module" } }
-        val mechanism = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_ratlantis_logistics:oratchalcum_mechanism" }
-        val logisticsCore = registry.path("annotations").single { it.path("selector").path("item").asText() == "better_ratlantis_logistics:arcane_logistics_core" }
-        assertTrue(pipe.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
-        assertTrue(blank.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
-        assertTrue(advanced.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
-        assertTrue(mechanism.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
-        assertTrue(logisticsCore.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
-        assertTrue(pipe.path("lines").single().asText().contains("four lattices make the first 32 pipes"))
-        assertTrue(blank.path("lines").single().asText().contains("Oratchalcum Mechanism"))
-        assertTrue(advanced.path("lines").single().asText().contains("Arcane Logistics Core"))
-        assertTrue(mechanism.path("lines").single().asText().contains("ordinary pipe modules and Create request-network integration"))
-        assertTrue(logisticsCore.path("lines").single().asText().contains("high-tier pipe modules and advanced logistics automation"))
+        assertTrue(pipe.path("owner").asText().contains("20_logistics_roots.js"))
+        assertTrue(blank.path("owner").asText().contains("20_logistics_roots.js"))
+        assertTrue(advanced.path("owner").asText().contains("20_logistics_roots.js"))
+        assertTrue(pipe.path("lines").single().asText().contains("one craft makes eight pipes"))
+        assertTrue(blank.path("lines").single().asText().contains("Blaze Rod"))
+        assertTrue(advanced.path("lines").single().asText().contains("Enchanted Gravitite"))
         assertTrue(recipes.contains("event.shaped('8x prettypipes:pipe'"))
-        assertTrue(recipes.contains("L: 'better_ratlantis_logistics:courier_lattice'"))
-        assertTrue(recipes.contains("M: 'better_ratlantis_logistics:oratchalcum_mechanism'"))
-        assertTrue(recipes.contains("C: 'better_ratlantis_logistics:arcane_logistics_core'"))
+        assertTrue(recipes.contains("L: 'the_bumblezone:honey_crystal_shards'"))
+        assertTrue(recipes.contains("M: 'minecraft:blaze_rod'"))
+        assertTrue(recipes.contains("C: 'aether:enchanted_gravitite'"))
         assertTrue(recipes.contains("event.shapeless('create:redstone_requester'"))
         assertTrue(recipes.contains("event.remove({ output: 'ae2:energy_acceptor' })"))
         highModules.forEach { assertTrue(recipes.contains("$it: {"), it) }
@@ -1750,7 +1729,7 @@ class HoverAnnotationLearningSurfaceTest {
     fun `early handling annotations expose the primitive and automatic boundary`() {
         val text = Files.readString(root.resolve("kubejs/config/hover_annotations.json"))
         val primitive = Files.readString(root.resolve("kubejs/server_scripts/progression/00_primitive_workshop.js"))
-        val ratlantis = Files.readString(root.resolve("kubejs/server_scripts/progression/20_better_ratlantis_logistics.js"))
+        val ratlantis = Files.readString(root.resolve("kubejs/server_scripts/progression/20_logistics_roots.js"))
         val precision = Files.readString(root.resolve("kubejs/server_scripts/progression/30_precision_factory.js"))
         assertTrue(text.contains("Passive vertical transfer from canvas and iron fittings"))
         assertTrue(text.contains("Automatic crafting begins after Create's Mechanical Crafter."))
@@ -1769,9 +1748,9 @@ class HoverAnnotationLearningSurfaceTest {
         val copy = rapidHopper.path("lines").map { it.asText() }.joinToString(" ")
         assertTrue(ratlantis.contains("event.remove({ id: 'littlelogistics:rapid_hopper' })"))
         assertTrue(ratlantis.contains("event.shaped('littlelogistics:rapid_hopper'"))
-        assertTrue(ratlantis.contains("L: 'better_ratlantis_logistics:courier_lattice'"))
-        assertTrue(rapidHopper.path("owner").asText().contains("20_better_ratlantis_logistics.js"))
-        assertTrue(copy.contains("requires a Courier Lattice from Ratlantis"))
+        assertTrue(ratlantis.contains("L: 'the_bumblezone:honey_crystal_shards'"))
+        assertTrue(rapidHopper.path("owner").asText().contains("20_logistics_roots.js"))
+        assertTrue(copy.contains("requires Honey Crystal Shards from the Bumblezone"))
     }
 
     @Test

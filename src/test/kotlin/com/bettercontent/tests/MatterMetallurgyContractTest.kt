@@ -21,12 +21,11 @@ class MatterMetallurgyContractTest {
     )
 
     @Test
-    fun `four font grouts retain origin identity and share the seared exit`() {
+    fun `three font grouts retain origin identity and share the seared exit`() {
         val origins = mapOf(
             "nether" to "minecraft:netherrack",
             "aether" to "aether:aether_dirt",
             "bumblezone" to "the_bumblezone:porous_honeycomb_block",
-            "ratlantis" to "rats:marbled_cheese_raw",
         )
         origins.forEach { (font, binder) ->
             val grout = "kubejs:${font}_font_grout"
@@ -42,7 +41,7 @@ class MatterMetallurgyContractTest {
 
     @Test
     fun `font grout inventory models use distinct dimension textures`() {
-        listOf("aether", "nether", "ratlantis", "bumblezone").forEach { font ->
+        listOf("aether", "nether", "bumblezone").forEach { font ->
             val model = root.resolve("kubejs/assets/kubejs/models/item/${font}_font_grout.json")
             assertTrue(Files.isRegularFile(model), "missing inventory model for $font Font grout")
             val contents = Files.readString(model)

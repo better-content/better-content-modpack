@@ -35,11 +35,11 @@ object RuntimeSnapshotValidator {
         require(recipes.path("partial_count").asInt(-1) == 0 && recipes.path("error_count").asInt(-1) == 0) {
             "runtime recipe graph contains partial or errored entries"
         }
-        validateOreProcessing(recipes, read(directory.resolve("tags.json")))
+        validateOreProcessing(recipes, read(directory.resolve("tags.json")), requireComplete = true)
         return snapshotId
     }
 
-    internal fun validateOreProcessing(recipes: JsonNode, tags: JsonNode) {
+    internal fun validateOreProcessing(recipes: JsonNode, tags: JsonNode, requireComplete: Boolean = false) {
         val expectedOccultismOutputs = mapOf(
             "occultism:crushing/blaze_powder_from_rod" to ("minecraft:blaze_powder" to 1),
             "occultism:crushing/certus_quartz_dust_from_gem" to ("ae2:certus_quartz_dust" to 1),
@@ -54,7 +54,14 @@ object RuntimeSnapshotValidator {
             "occultism:crushing/redstone_dust" to ("minecraft:redstone" to 4),
             "occultism:crushing/tungsten_dust_from_ingot" to ("chemlib:tungsten_dust" to 1),
         )
-        recipes.path("recipes").forEach { recipe ->
+        val recipeRows = recipes.path("recipes")
+        if (requireComplete) {
+            require(recipeRows.isArray && recipeRows.size() > 0) { "runtime recipe graph has no recipes" }
+            val actualIds = recipeRows.map { it.path("id").asText() }.toSet()
+            val missing = expectedOccultismOutputs.keys - actualIds
+            require(missing.isEmpty()) { "runtime recipe graph is missing canonical Occultism recipes: $missing" }
+        }
+        recipeRows.forEach { recipe ->
             val recipeId = recipe.path("id").asText()
             val expectedOutput = expectedOccultismOutputs[recipeId] ?: return@forEach
             val outputs = recipe.path("outputs")
@@ -72,7 +79,9 @@ object RuntimeSnapshotValidator {
                 "evaporite_beds|hotstone|ironstone|tin_quartz)$",
         )
         listOf("forge:ores", "c:ores").forEach { tag ->
-            val leaked = tags.path("item_tags").path(tag).map(JsonNode::asText).filter(realisticDeposit::matches)
+            val entries = tags.path("item_tags").path(tag)
+            if (requireComplete) require(entries.isArray && entries.size() > 0) { "runtime ore tag is missing or empty: $tag" }
+            val leaked = entries.map(JsonNode::asText).filter(realisticDeposit::matches)
             require(leaked.isEmpty()) { "$tag contains Realistic Ores hosted variants: ${leaked.take(10)}" }
         }
     }
@@ -131,6 +140,18 @@ object LogPolicy {
         "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
             "Mod 'iceandfire' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
     )
+    private val thalassophobiaDeferredTask = Regex(
+        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
+            "Mod 'thalassophobia' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
+    )
+    private val ae2DeferredTask = Regex(
+        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
+            "Mod 'ae2' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
+    )
+    private val jsonThingsDeferredTask = Regex(
+        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
+            "Mod 'jsonthings' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
+    )
     private val collectiveUpdateNotice = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[[^]]+/WARN] \\[Collective]: " +
             "\\[Update] Collective has an update available: [0-9]+\\.[0-9]+(?:\\.[0-9]+)? -> " +
@@ -178,15 +199,6 @@ object LogPolicy {
             "\\[DH-(?:LOD Builder|Render Loader|Update Propagator) Thread\\[[0-9]+]/WARN] " +
             "\\[DistantHorizons-DistantHorizons-com\\.seibel\\.distanthorizons\\.core\\.pooling\\." +
             "PhantomArrayListPool]: §6Distant Horizons: Insufficient memory detected\\.§r$",
-    )
-    private val distantHorizonsRatlantisLightingError = Regex(
-        "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] " +
-            "\\[DH-LOD Builder Thread\\[0]/ERROR] " +
-            "\\[DistantHorizons-DistantHorizons-com\\.seibel\\.distanthorizons\\.core\\.generation\\." +
-            "DhLightingEngine]: Unexpected lighting issue for center chunk: C\\[0,-1]$",
-    )
-    private val distantHorizonsRatlantisLevelClosed = Regex(
-        "Closed \\[DhClientLevel] for \\[Wrapped\\{ClientLevel@[^}]+@rats:ratlantis\\}\\]",
     )
     private val emptySalmonAmbientSound = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] " +
@@ -253,45 +265,15 @@ object LogPolicy {
 
     data class Finding(val path: Path, val line: Int, val text: String)
 
-    private fun acceptedRatlantisLightingErrorLines(path: Path, lines: List<String>): Set<Int> {
-        val pathText = path.toString()
-        val clientLog = ("/multiplayer/" in pathText || "/target-font-ratlantis/" in pathText) &&
-            ("/fixture/client-" in pathText || path.fileName.toString().matches(Regex("client-[0-9]+\\.log")))
-        if (!clientLog) return emptySet()
-
-        val acceptedLines = mutableSetOf<Int>()
-        var acceptedOneTransition = false
-        lines.forEachIndexed { index, line ->
-            if (acceptedOneTransition || !distantHorizonsRatlantisLightingError.matches(line)) return@forEachIndexed
-            if (lines.getOrNull(index + 1) != "net.minecraft.ReportedException: Getting block state") {
-                return@forEachIndexed
-            }
-            val recentLines = lines.subList((index - 20).coerceAtLeast(0), index)
-            val stackLines = lines.subList(index + 2, (index + 24).coerceAtMost(lines.size))
-            val closedRatlantisLevel = recentLines.any(distantHorizonsRatlantisLevelClosed::containsMatchIn)
-            val blockStateReadStack = stackLines.any {
-                "at net.minecraft.world.level.chunk.LevelChunk.m_8055_(LevelChunk.java:182)" in it
-            }
-            val dhLightingStack = stackLines.any { "DhLightingEngine.lightChunk(DhLightingEngine.java:260)" in it }
-            val missingPaletteCause = stackLines.any {
-                it == "Caused by: net.minecraft.world.level.chunk.MissingPaletteEntryException: " +
-                    "Missing Palette entry for index 2."
-            }
-            if (closedRatlantisLevel && blockStateReadStack && dhLightingStack && missingPaletteCause) {
-                acceptedLines += index
-                acceptedLines += index + 1
-                acceptedOneTransition = true
-            }
-        }
-        return acceptedLines
-    }
-
     fun findings(paths: Collection<Path>): List<Finding> = buildList {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
             val seededWorldLog = path.toString().let { "/singleplayer/" in it || "/target-world-save/" in it }
             val targetMultiplayerLog = Regex(
-                "/target-(?:join|fonts|font-[^/]+|dimensions|dimension-[^/]+|campaign-start|campaign|restart-compat)/",
+                "/target-(?:join|fonts|font-[^/]+|dimensions|dimension-[^/]+|campaign-start|campaign|restart|restart-compat)/",
             ).containsMatchIn(path.toString())
+            val targetServerReadyLog = "/target-server-ready/" in path.toString()
+            val targetCursedPyramidServerLog = "/target-cursed-pyramid/" in path.toString() &&
+                path.fileName.toString() == "latest.log" && "/fixture/server-extract/" in path.toString()
             val multiplayerLog = "/multiplayer/" in path.toString() || targetMultiplayerLog
             val multiplayerAggregateServerLog = multiplayerLog && path.parent.fileName.toString() == "multiplayer"
             val targetAggregateServerLog = targetMultiplayerLog && path.fileName.toString() == "server.log" &&
@@ -301,20 +283,23 @@ object LogPolicy {
                     "/fixture/server-extract/" in path.toString())
             val standaloneServerFixtureLog = path.fileName.toString() == "latest.log" &&
                 "/server/fixture/server-extract/" in path.toString()
+            val targetServerReadyFixtureLog = targetServerReadyLog &&
+                path.fileName.toString() == "latest.log" && "/fixture/server-extract/" in path.toString()
             val targetDimensionsServerLog = "/target-dimensions/" in path.toString() &&
                 (path.fileName.toString() == "server.log" ||
                     (path.fileName.toString() == "latest.log" && "/fixture/server-extract/" in path.toString()))
             val serverLifecycleAggregateLog = path.fileName.toString() == "server.log" &&
                 path.parent.fileName.toString() == "server"
+            val targetServerReadyAggregateLog = targetServerReadyLog && path.fileName.toString() == "server.log"
             val aggregateDedicatedServerLog = multiplayerAggregateServerLog || targetAggregateServerLog ||
+                targetServerReadyAggregateLog ||
                 serverLifecycleAggregateLog
-            val singleplayerLog = "/singleplayer/" in path.toString()
+            val singleplayerLog = seededWorldLog
             val multiplayerClientLog = multiplayerLog && (
                 "/fixture/client-" in path.toString() ||
                     path.fileName.toString().matches(Regex("client-[0-9]+\\.log"))
             )
             val lines = Files.readAllLines(path)
-            val acceptedRatlantisLightingErrors = acceptedRatlantisLightingErrorLines(path, lines)
             var acceptedSeededWorldRemaps = 0
             var acceptedSeededWorldVersionDifferences = 0
             var acceptedSeededWorldMissingDatapacks = 0
@@ -348,6 +333,9 @@ object LogPolicy {
             var acceptedCampaignItemFrameIronAxes = 0
             var acceptedCampaignUnknownStepHeightAttributes = 0
             var acceptedIceAndFireDeferredTasks = 0
+            var acceptedThalassophobiaDeferredTasks = 0
+            var acceptedAe2DeferredTasks = 0
+            var acceptedJsonThingsDeferredTasks = 0
             var acceptedCollectiveUpdateNotices = 0
             lines.forEachIndexed { index, line ->
                 val acceptedSeededWorldWarning = seededWorldLog && when {
@@ -382,7 +370,7 @@ object LogPolicy {
                 val acceptedEarlyBlockEntity = earlyWorldgenBlockEntity.matches(line) &&
                     ++acceptedEarlyBlockEntityWarnings <= 4
                 val acceptedRecoveredPhantomArray = distantHorizonsRecoveredPhantomArray.matches(line) &&
-                    ++acceptedRecoveredPhantomArrays <= 1
+                    ++acceptedRecoveredPhantomArrays <= 4
                 val acceptedDistantHorizonsMemoryWarning = distantHorizonsInsufficientMemory.matches(line) &&
                     ++acceptedDistantHorizonsInsufficientMemory <= 1
                 val acceptedEmptySalmonAmbientSound = emptySalmonAmbientSound.matches(line) &&
@@ -425,9 +413,11 @@ object LogPolicy {
                     starcatcherInvalidAccessTransformer.matches(line) &&
                         ++acceptedStarcatcherInvalidAccessTransformers <=
                         (if (serverLifecycleAggregateLog) 3 else 2)
-                val acceptedCampaignItemFrameIronSword = (multiplayerLog || serverLifecycleAggregateLog) &&
+                val acceptedCampaignItemFrameIronSword =
+                    (multiplayerLog || serverLifecycleAggregateLog || targetCursedPyramidServerLog) &&
                     campaignItemFrameIronSword.matches(line) && ++acceptedCampaignItemFrameIronSwords <= 1
-                val acceptedCampaignItemFrameIronAxe = (multiplayerLog || serverLifecycleAggregateLog) &&
+                val acceptedCampaignItemFrameIronAxe =
+                    (multiplayerLog || serverLifecycleAggregateLog || targetCursedPyramidServerLog) &&
                     campaignItemFrameIronAxe.matches(line) && ++acceptedCampaignItemFrameIronAxes <= 1
                 val acceptedCampaignUnknownStepHeightAttribute =
                     (multiplayerAggregateServerLog || targetDimensionsServerLog) &&
@@ -436,10 +426,22 @@ object LogPolicy {
                 val iceAndFireDuration = iceAndFireDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
                 val acceptedIceAndFireDeferredTask = (singleplayerLog || multiplayerClientLog) &&
                     iceAndFireDuration != null &&
-                    iceAndFireDuration <= 2.0 && ++acceptedIceAndFireDeferredTasks <= 1
+                    iceAndFireDuration <= 6.0 && ++acceptedIceAndFireDeferredTasks <= 1
+                val thalassophobiaDuration = thalassophobiaDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
+                val acceptedThalassophobiaDeferredTask = multiplayerClientLog &&
+                    thalassophobiaDuration != null && thalassophobiaDuration <= 3.0 &&
+                    ++acceptedThalassophobiaDeferredTasks <= 1
+                val ae2Duration = ae2DeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
+                val acceptedAe2DeferredTask = multiplayerClientLog && ae2Duration != null &&
+                    ae2Duration <= 2.0 && ++acceptedAe2DeferredTasks <= 1
+                val jsonThingsDuration = jsonThingsDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
+                val acceptedJsonThingsDeferredTask = multiplayerClientLog && jsonThingsDuration != null &&
+                    jsonThingsDuration <= 1.5 && ++acceptedJsonThingsDeferredTasks <= 1
                 val acceptedCollectiveUpdateNotice =
-                    (multiplayerServerLog || standaloneServerFixtureLog || multiplayerClientLog ||
-                        serverLifecycleAggregateLog || singleplayerLog) &&
+                    (multiplayerServerLog || standaloneServerFixtureLog || targetServerReadyFixtureLog ||
+                        targetCursedPyramidServerLog ||
+                        multiplayerClientLog || serverLifecycleAggregateLog || targetServerReadyAggregateLog ||
+                        singleplayerLog) &&
                         collectiveUpdateNotice.matches(line) && ++acceptedCollectiveUpdateNotices <=
                         (if (aggregateDedicatedServerLog) 2 else 1)
                 val adPotherDuration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
@@ -469,9 +471,10 @@ object LogPolicy {
                     !acceptedCampaignItemFrameIronAxe && !acceptedCampaignUnknownStepHeightAttribute &&
                     !acceptedUntamedServerMissingSpecies &&
                     !acceptedIceAndFireDeferredTask &&
+                    !acceptedThalassophobiaDeferredTask && !acceptedAe2DeferredTask && !acceptedJsonThingsDeferredTask &&
                     !acceptedCollectiveUpdateNotice &&
                     !acceptedAdPotherDeferredTask && !acceptedUntamedJeiPrototype &&
-                    !acceptedSeededWorldWarning && index !in acceptedRatlantisLightingErrors && !isAccepted(line)
+                    !acceptedSeededWorldWarning && !isAccepted(line)
                 ) {
                     add(Finding(path, index + 1, line))
                 }

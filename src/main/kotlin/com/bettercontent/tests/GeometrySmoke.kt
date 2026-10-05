@@ -24,7 +24,6 @@ object GeometrySmokePlan {
     private val terrainProfiles: Map<String, (String) -> Boolean> = mapOf(
         "minecraft:overworld" to { id -> id in ground || id.startsWith("unearthed:") },
         "lostcities:lostcity" to { id -> id in ground || id.startsWith("unearthed:") },
-        "rats:ratlantis" to { id -> id.startsWith("rats:") },
         "minecraft:the_nether" to { id -> id in nether },
         "minecraft:the_end" to { id -> id.startsWith("minecraft:end_stone") || id.startsWith("minecraft:purpur") },
         "aether:the_aether" to { id -> id.startsWith("aether:") },
@@ -68,11 +67,16 @@ object GeometrySmokePlan {
             .fold(0L) { sum, entry -> sum + entry.value }
         val nonAir = histogram.filterKeys { it !in air && it !in harnessBlocks }.values.sum()
         val native = histogram.filterKeys(terrainProfiles.getValue(dimension)).values.sum()
-        val passed = nonAir >= 64 && native >= 16
+        // Terrain dimensions produced at least 1,532 native blocks in
+        // retained Debug evidence, so a stronger floor catches mostly empty or
+        // wrong-generator worlds without depending on a lucky biome.
+        val requiredNative = 256L
+        val requiredNonAir = 1024L
+        val passed = nonAir >= requiredNonAir && native >= requiredNative
         return mapOf(
             "dimension" to dimension, "samples" to samples.size, "chunks" to samples.sumOf { it.chunks },
             "non_air_blocks" to nonAir, "expected_family_blocks" to native,
-            "required_non_air_blocks" to 64, "required_expected_family_blocks" to 16,
+            "required_non_air_blocks" to requiredNonAir, "required_expected_family_blocks" to requiredNative,
             "passed" to passed,
         )
     }

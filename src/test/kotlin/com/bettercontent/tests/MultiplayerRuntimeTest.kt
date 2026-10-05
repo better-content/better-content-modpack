@@ -24,6 +24,7 @@ class MultiplayerRuntimeTest {
         var dimensions = false
         var campaignReady = false
         var fontRoundTrips = false
+        var clientRestartAttempt = 0
 
         private val usernames = (1..3).map { "SmokeClient$it" }
         private val positions = listOf(
@@ -80,9 +81,13 @@ class MultiplayerRuntimeTest {
             )
             // The recipe graph exporter performs a large synchronous write on the server thread.
             // Run it before clients connect so its pause cannot trip their network heartbeat.
-            val dump = server.runtimeDump()
+            val dimensionsSource = if (evidence.run.target == null) {
+                evidence.run.directory.parent.resolve("server/dimensions.json").let {
+                    if (Files.isRegularFile(it)) it else server.runtimeDump().resolve("dimensions.json")
+                }
+            } else server.runtimeDump().resolve("dimensions.json")
             Files.copy(
-                dump.resolve("dimensions.json"),
+                dimensionsSource,
                 evidence.run.directory.resolve("dimensions.json"),
                 StandardCopyOption.REPLACE_EXISTING,
             )
@@ -147,7 +152,6 @@ class MultiplayerRuntimeTest {
             targets.forEach { GeometrySmokePlan.isTerrain(it.id) }
             val locations = DimensionSmokePlan.positions.take(3)
             var sweptDimensions = 0
-            var clientRestartAttempt = 0
             evidence.run.event("dimension_targets", mapOf(
                 "count" to targets.size,
                 "targets" to targets.map { mapOf("id" to it.id, "sources" to it.sources.sorted()) },
@@ -252,6 +256,24 @@ class MultiplayerRuntimeTest {
             assumeTrue(dimensions, "dimension traversal prerequisite failed")
         }
         evidence.run.checkpoint("three-player campaigns active") {
+            if (evidence.run.target == null) {
+                val lead = clients.first()
+                server.send("execute in minecraft:overworld run tp ${lead.username} 0 316 0")
+                server.commandResult(
+                    "execute as ${lead.username} at @s if dimension minecraft:overworld if entity @s[x=0,y=316,z=0,distance=..1] run say BC_CAMPAIGN_PHASE_RESET_${lead.username}",
+                    Regex("BC_CAMPAIGN_PHASE_RESET_${lead.username}"),
+                    "return lead client to the campaign world before fixture reset",
+                    Duration.ofSeconds(30),
+                )
+                server.stopGracefully()
+                server.restart()
+                lead.restartDedicated(++clientRestartAttempt)
+                requirePlayersOnline("campaign phase fixture reset", listOf(lead))
+                evidence.run.event("campaign_phase_fixture_reset", mapOf(
+                    "server" to "restarted", "lead_client" to lead.username,
+                    "reason" to "release dimension sweep memory before loading three campaign clients",
+                ))
+            }
             clients.drop(1).forEach {
                 startClient(it)
                 // Keep newly joined clients out of ordinary campaign eligibility
@@ -292,13 +314,7 @@ class MultiplayerRuntimeTest {
                 for ((attempt, offset) in offsets.withIndex()) {
                     val targetX = x + offset.first
                     val targetZ = z + offset.second
-                    server.send("execute in minecraft:overworld run tp ${client.username} $targetX 316 $targetZ")
-                    server.commandResult(
-                        "execute as ${client.username} at @s run say BC_PILLAGER_POSITION_${index + 1}_$attempt",
-                        Regex("BC_PILLAGER_POSITION_${index + 1}_$attempt"),
-                        "position ${client.username} attempt $attempt",
-                        Duration.ofSeconds(90),
-                    )
+                    placeCampaignPlayer(client.username, index + 1, attempt, targetX, targetZ)
                     val result = server.commandResult(
                         "better_pillager_campaigns harness spawn scout immediate ${client.username} 5",
                         Regex("Harness started immediate scout .*${Regex.escape(client.username)}|" +
@@ -393,26 +409,35 @@ class MultiplayerRuntimeTest {
             }
             return
         }
-        assumeTrue(campaignReady, "campaign prerequisite failed")
+        if (evidence.run.target == "restart") prepareTargetJoin()
+        assumeTrue(if (evidence.run.target == "restart") joined else campaignReady, "restart prerequisite failed")
         evidence.run.checkpoint("server restart and client reconnect") {
+            server.send("execute in minecraft:overworld run kill @e[type=iceandfire:deathworm]")
+            server.send("execute in minecraft:overworld run kill @e[type=iceandfire:multipart]")
             server.commandResult(
-                "kill @e[type=minecraft:pillager]",
-                Regex("Killed [0-9]+ entities"),
-                "clear campaign pillagers before server restart",
+                "execute in minecraft:overworld run say BC_DEATHWORM_PARTS_CLEARED",
+                Regex("BC_DEATHWORM_PARTS_CLEARED"),
+                "clear Ice and Fire multipart entities before server restart",
                 Duration.ofSeconds(30),
             )
             val before = gameTime()
             server.commandResult(
-                "execute in minecraft:overworld run setblock 0 100 0 minecraft:diamond_block",
+                "execute in minecraft:overworld run setblock 0 100 0 minecraft:bedrock",
                 Regex("Changed the block at 0, 100, 0"),
                 "persistent world marker",
+                Duration.ofSeconds(30),
+            )
+            server.commandResult(
+                "execute in minecraft:overworld if block 0 100 0 minecraft:bedrock run say BC_RESTART_MARKER_BEFORE_SAVE",
+                Regex("BC_RESTART_MARKER_BEFORE_SAVE"),
+                "verify persistence marker before save",
                 Duration.ofSeconds(30),
             )
             clients.forEach { it.close() }
             server.stopGracefully()
             server.restart()
             server.commandResult(
-                "execute in minecraft:overworld if block 0 100 0 minecraft:diamond_block run say BC_RESTART_WORLD_PERSISTED",
+                "execute in minecraft:overworld if block 0 100 0 minecraft:bedrock run say BC_RESTART_WORLD_PERSISTED",
                 Regex("BC_RESTART_WORLD_PERSISTED"),
                 "world marker after restart",
                 Duration.ofSeconds(30),
@@ -434,12 +459,11 @@ class MultiplayerRuntimeTest {
         }
         prepareTargetJoin()
         assumeTrue(joined, "client join prerequisite failed")
-        evidence.run.checkpoint("four native Font round trips and geometry") {
+        evidence.run.checkpoint("three native Font round trips and geometry") {
             val player = clients.first()
             server.send("gamemode spectator ${player.username}")
             server.send("clear ${player.username}")
             val fonts = linkedMapOf(
-                "ratlantis" to "rats:ratlantis",
                 "bumblezone" to "the_bumblezone:the_bumblezone",
                 "aether" to "aether:the_aether",
                 "nether" to "minecraft:the_nether",
@@ -449,14 +473,16 @@ class MultiplayerRuntimeTest {
                     listOf(template to (fonts[template] ?: error("unknown Font target: $template")))
                 } ?: fonts.toList()
             selectedFonts.forEachIndexed { index, (template, dimension) ->
-                val originOffset = clientLogOffset(player)
+                // The first join may already have reported chunk 0,0. Moving only
+                // vertically to the Font platform does not emit a new chunk marker.
+                val originOffset = if (index == 0) 0 else clientLogOffset(player)
                 server.send("execute in minecraft:overworld run tp ${player.username} 0 320 0")
                 server.commandResult(
-                    "execute as ${player.username} at @s if dimension minecraft:overworld run say BC_FONT_ORIGIN_$template",
+                    "execute as ${player.username} at @s if dimension minecraft:overworld if entity @s[x=0,y=320,z=0,distance=..1] run say BC_FONT_ORIGIN_$template",
                     Regex("BC_FONT_ORIGIN_$template"), "Font origin $template", Duration.ofSeconds(90),
                 )
                 // Later iterations start in the same chunk just confirmed by the prior return.
-                if (index == 0) waitForClientPosition(player, "minecraft:overworld", originOffset)
+                if (index == 0) waitForClientPosition(player, "minecraft:overworld", originOffset, 0, 0)
                 val enterOffset = clientLogOffset(player)
                 server.commandResult(
                     "execute as ${player.username} at @s run font harness_enter $template",
@@ -498,15 +524,6 @@ class MultiplayerRuntimeTest {
 
     @Test @Order(6)
     fun multiplayerEvidenceIsCleanAndCandidatesAreUnchanged() {
-        assumeTrue(
-            if (evidence.run.target != null) joined
-            else if (evidence.run.tier == "debug") campaignReady
-            else joined,
-            "multiplayer prerequisite failed",
-        )
-        if (evidence.run.tier == "debug" && evidence.run.target == null) {
-            assumeTrue(fontRoundTrips, "Font round-trip prerequisite failed")
-        }
         evidence.run.checkpoint("multiplayer log and hash audit") {
             clients.forEach { it.close() }
             server.stopGracefully()
@@ -547,16 +564,27 @@ class MultiplayerRuntimeTest {
         )
     }
 
-    private fun clientLogOffset(client: ClientFixture): Int =
-        if (Files.isRegularFile(client.log)) Files.size(client.log).toInt() else 0
+    private fun clientLogOffset(client: ClientFixture): Long =
+        if (Files.isRegularFile(client.log)) Files.size(client.log) else 0L
 
     private fun waitForClientPosition(
-        client: ClientFixture, dimension: String, offset: Int, chunkX: Int? = null, chunkZ: Int? = null,
+        client: ClientFixture, dimension: String, offset: Long, chunkX: Int? = null, chunkZ: Int? = null,
     ) {
         val marker = Regex("BC_DEBUG_CLIENT_POSITION dimension=${Regex.escape(dimension)} chunk_x=(-?\\d+) chunk_z=(-?\\d+)")
         val deadline = System.nanoTime() + Duration.ofSeconds(90).toNanos()
         while (System.nanoTime() < deadline) {
-            val text = if (Files.isRegularFile(client.log)) Files.readString(client.log).drop(offset) else ""
+            val text = if (Files.isRegularFile(client.log)) {
+                java.nio.channels.FileChannel.open(client.log).use { channel ->
+                    val size = channel.size()
+                    if (size <= offset) "" else {
+                        require(size - offset <= Int.MAX_VALUE) { "client log window is too large: ${client.log}" }
+                        val bytes = java.nio.ByteBuffer.allocate((size - offset).toInt())
+                        channel.position(offset)
+                        while (bytes.hasRemaining() && channel.read(bytes) > 0) Unit
+                        String(bytes.array(), 0, bytes.position(), Charsets.UTF_8)
+                    }
+                }
+            } else ""
             if (marker.findAll(text).any { (chunkX == null || it.groupValues[1].toInt() == chunkX) &&
                     (chunkZ == null || it.groupValues[2].toInt() == chunkZ) }) return
             check(client.processAlive()) { "${client.username} exited before client-side arrival in $dimension; see ${client.log}" }
@@ -610,9 +638,9 @@ class MultiplayerRuntimeTest {
     }
 
     private fun prepareCampaignPlatform(index: Int, x: Int, z: Int) {
-        // Four loaded corridors give the in-game route retry distinct western, northern,
-        // eastern, and southern approaches when local terrain or a mob blocks one path.
-        // Each strip stays narrow enough to avoid generating a large distant square.
+        // Four loaded 33-block-wide corridors give spawn sampling a flat approach at
+        // every cardinal location in the configured 48–72 block range. Keep their
+        // width aligned with the forceload strips above so candidate chunks stay loaded.
         server.commandResult(
             "execute in minecraft:overworld run forceload add ${x - 80} ${z - 16} ${x + 80} ${z + 16}",
             Regex("Marked \\[-?[0-9]+, -?[0-9]+\\] chunks in minecraft:overworld from \\[-?[0-9]+, -?[0-9]+\\] to \\[-?[0-9]+, -?[0-9]+\\] to be force loaded"),
@@ -625,10 +653,10 @@ class MultiplayerRuntimeTest {
             "forceload north-south campaign platform $index",
             Duration.ofMinutes(2),
         )
-        server.send("execute in minecraft:overworld run fill ${x - 72} 315 ${z - 5} ${x + 72} 315 ${z + 5} minecraft:grass_block")
-        server.send("execute in minecraft:overworld run fill ${x - 72} 316 ${z - 5} ${x + 72} 319 ${z + 5} minecraft:air")
-        server.send("execute in minecraft:overworld run fill ${x - 5} 315 ${z - 72} ${x + 5} 315 ${z + 72} minecraft:grass_block")
-        server.send("execute in minecraft:overworld run fill ${x - 5} 316 ${z - 72} ${x + 5} 319 ${z + 72} minecraft:air")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 315 ${z - 16} ${x + 72} 315 ${z + 16} minecraft:grass_block")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 316 ${z - 16} ${x + 72} 319 ${z + 16} minecraft:air")
+        server.send("execute in minecraft:overworld run fill ${x - 16} 315 ${z - 72} ${x + 16} 315 ${z + 72} minecraft:grass_block")
+        server.send("execute in minecraft:overworld run fill ${x - 16} 316 ${z - 72} ${x + 16} 319 ${z + 72} minecraft:air")
         server.commandResult(
             "execute in minecraft:overworld run say BC_PILLAGER_PLATFORM_$index",
             Regex("BC_PILLAGER_PLATFORM_$index"),
@@ -641,10 +669,10 @@ class MultiplayerRuntimeTest {
         // Spawn preparation can replace blocks in the central chunks after the early prewarm.
         // Rebuild the already loaded corridors immediately before this player's path proof.
         // Avoid another forceload here: it can stall the server long enough to lose clients.
-        server.send("execute in minecraft:overworld run fill ${x - 72} 315 ${z - 5} ${x + 72} 315 ${z + 5} minecraft:grass_block")
-        server.send("execute in minecraft:overworld run fill ${x - 72} 316 ${z - 5} ${x + 72} 319 ${z + 5} minecraft:air")
-        server.send("execute in minecraft:overworld run fill ${x - 5} 315 ${z - 72} ${x + 5} 315 ${z + 72} minecraft:grass_block")
-        server.send("execute in minecraft:overworld run fill ${x - 5} 316 ${z - 72} ${x + 5} 319 ${z + 72} minecraft:air")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 315 ${z - 16} ${x + 72} 315 ${z + 16} minecraft:grass_block")
+        server.send("execute in minecraft:overworld run fill ${x - 72} 316 ${z - 16} ${x + 72} 319 ${z + 16} minecraft:air")
+        server.send("execute in minecraft:overworld run fill ${x - 16} 315 ${z - 72} ${x + 16} 315 ${z + 72} minecraft:grass_block")
+        server.send("execute in minecraft:overworld run fill ${x - 16} 316 ${z - 72} ${x + 16} 319 ${z + 72} minecraft:air")
         server.commandResult(
             "execute in minecraft:overworld if block $x 315 $z minecraft:grass_block run say BC_PILLAGER_PLATFORM_READY_$index",
             Regex("BC_PILLAGER_PLATFORM_READY_$index"),
@@ -652,6 +680,66 @@ class MultiplayerRuntimeTest {
             Duration.ofSeconds(30),
         )
         evidence.run.event("campaign_platform_repaired", mapOf("index" to index, "x" to x, "z" to z))
+    }
+
+    private fun placeCampaignPlayer(username: String, playerIndex: Int, positionAttempt: Int, x: Int, z: Int) {
+        val marker = "BC_PILLAGER_GROUNDED_${playerIndex}_$positionAttempt"
+        val grounded =
+            "execute as $username at @s if dimension minecraft:overworld " +
+                "if entity @s[x=$x,y=316,z=$z,distance=..1] " +
+                "if block ~ ~-1 ~ minecraft:grass_block run say $marker"
+        var lastFailure: RuntimeException? = null
+        repeat(3) { landingAttempt ->
+            // Place the player's feet directly on the pad floor. The follow-up command
+            // confirms both the expected position and grass support before path validation.
+            server.send("execute in minecraft:overworld run tp $username $x 316 $z")
+            runCatching {
+                server.commandResult(
+                    grounded,
+                    Regex(marker),
+                    "ground $username for campaign position $positionAttempt (landing ${landingAttempt + 1})",
+                    Duration.ofSeconds(6),
+                    retryInterval = Duration.ofSeconds(1),
+                )
+            }.onSuccess {
+                evidence.run.event("campaign_player_grounded", mapOf(
+                    "player" to username, "position_attempt" to positionAttempt,
+                    "landing_attempt" to landingAttempt + 1, "x" to x, "y" to 316, "z" to z,
+                ))
+                return
+            }.onFailure { failure ->
+                lastFailure = failure as? RuntimeException ?: IllegalStateException(failure)
+                evidence.run.event("campaign_player_landing_retry", mapOf(
+                    "player" to username, "position_attempt" to positionAttempt,
+                    "landing_attempt" to landingAttempt + 1, "x" to x, "z" to z,
+                    "error" to failure.message,
+                ))
+                // Freshly generated campaign chunks can replace the temporary
+                // platform after its first verification. Diagnose that separately
+                // from a failed teleport, then rebuild it before the next attempt.
+                val floorMarker = "BC_PILLAGER_FLOOR_${playerIndex}_$positionAttempt"
+                val floorPresent = runCatching {
+                    server.commandResult(
+                        "execute in minecraft:overworld if block $x 315 $z minecraft:grass_block run say $floorMarker",
+                        Regex(floorMarker), "campaign floor after failed landing $username",
+                        Duration.ofSeconds(2), retryInterval = Duration.ofSeconds(1),
+                    )
+                }.isSuccess
+                evidence.run.event("campaign_player_landing_diagnosis", mapOf(
+                    "player" to username, "position_attempt" to positionAttempt,
+                    "landing_attempt" to landingAttempt + 1, "floor_present" to floorPresent,
+                    "x" to x, "z" to z,
+                ))
+                if (!floorPresent && landingAttempt < 2) {
+                    val (centerX, centerZ) = positions[playerIndex - 1]
+                    verifyCampaignPlatform(playerIndex, centerX, centerZ)
+                }
+            }
+        }
+        throw IllegalStateException(
+            "$username did not settle on the campaign pad at ($x, 316, $z) after three teleports",
+            lastFailure,
+        )
     }
 
     private fun waitForStableTps(target: DimensionTarget, location: Int) {
