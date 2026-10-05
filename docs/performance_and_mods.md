@@ -7,10 +7,10 @@ Generated runtimes and old profiling directories are not authorities for active 
 
 ## Active integration state
 
-The Bumblezone 7.13.4 and Rats 8.1.3 are the active Font-only expedition realms replacing the
+The Bumblezone 7.13.4 is the active Font-only expedition realm replacing the
 retired Undergarden and Deeper Darker routes. `better_bumblezone_crops` owns Bumblezone food flora and
-propagation. `better_ratlantis_logistics` owns the three visible logistics components, bait-only trust,
-finite Rats work behaviors, and tube traversal repair. Nature's Spirit remains the canonical mahogany
+propagation. The three visible logistics roots are pack recipes in
+`kubejs/server_scripts/progression/20_logistics_roots.js`. Nature's Spirit remains the canonical mahogany
 wood and progression authority; `better_hexerei_dynamic_trees` restores dynamic Hexerei mahogany, willow,
 and witch hazel trees. The CurseForge Dynamic Trees addons for Aether and Twilight Forest remain
 active, along with `better_malum_dynamic_trees`.

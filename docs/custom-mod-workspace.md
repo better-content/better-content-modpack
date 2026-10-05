@@ -22,17 +22,16 @@ Fresh-dist preparation refreshes the tracked pack index after the deployed set s
 Do not run Dist or Debug unless the user separately requests pack-level testing.
 
 When the user explicitly requests a fresh tested distribution, run `./release.main.kts` from the
-modpack. It requires clean active source repositories, reuses valid source-identical bundled JARs,
-runs documented verification for changed or unannotated sources, stages and validates their fresh
-JARs, deploys the staged set as a group, refreshes the pack, invokes `dist.sh` once, and runs
-the Dist tier against those exact candidates. The
+modpack. It requires clean active source repositories, runs documented verification and fresh-builds
+all active source JARs, deploys the staged set as a group, refreshes the pack, invokes `dist.sh`
+once, and runs the Dist tier against those exact candidates. The
 machine-readable release inventory is `gradle/active-custom-mods.json`; this table documents the
 same active set for humans. Inventory `dependsOn` edges are release-build order constraints. They
 stage typed Better Content API providers before their consumers: Dimension Drink before Economy,
 Dynamic Survival HUD before Better
 Content Fixes and Revival, WLM before Class Selector, Revival before its three consumers, every domain-event
 provider before Threads, Heat Sync before Latent Chemlib and Airtight Machinery, and Bumblezone Cultivars
-before Ratlantis Logistics so rats use the typed propagule catalogue.
+before any Rats content that consumes the typed propagule catalogue.
 This directed build graph is intentionally acyclic; Threads is the downstream event listener and
 no provider depends on it.
 
@@ -40,7 +39,7 @@ no provider depends on it.
 artifact reuse, stages changed sources without verification, and skips pack suites. There is no
 implicit forced-rebuild mode.
 
-Direct full `./test.main.kts debug` explicitly selects forced rebuild mode: all 44 active
+Direct full `./test.main.kts debug` selects the same forced rebuild mode: all 45 active
 repositories must be clean, every manifest-listed verification runs, and every runtime JAR is
 rebuilt after `clean` regardless of matching source metadata. It packages one new candidate
 pair and runs complete Dist and Debug on identical ZIP hashes. Targeted and queued Debug
@@ -104,7 +103,7 @@ legacy JARs are rebuilt, and every staged release artifact retains the source me
 
 ## Canonical Active Inventory
 
-The active set contains 44 custom mods.
+The active set contains 45 custom mods.
 
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
@@ -139,7 +138,6 @@ The active set contains 44 custom mods.
 | [better-player-traces](https://github.com/better-content/better-player-traces) | `better_player_traces` | `better-player-traces-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-craftable-bouquets](https://github.com/better-content/better-craftable-bouquets) | `better_craftable_bouquets` | `better-craftable-bouquets-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-rail-beetle](https://github.com/better-content/better-rail-beetle) | `better_rail_beetle` | `better-rail-beetle-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-ratlantis-logistics](https://github.com/better-content/better-ratlantis-logistics) | `better_ratlantis_logistics` | `better-ratlantis-logistics-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-ore-geology](https://github.com/better-content/better-ore-geology) | `better_ore_geology` | `better-ore-geology-0.2.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-block-placement-preview](https://github.com/better-content/better-block-placement-preview) | `better_block_placement_preview` | `better-block-placement-preview-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-regolith-farming](https://github.com/better-content/better-regolith-farming) | `better_regolith_farming` | `better-regolith-farming-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
@@ -152,6 +150,7 @@ The active set contains 44 custom mods.
 | [better-village-fortifications](https://github.com/better-content/better-village-fortifications) | `better_village_fortifications` | `better-village-fortifications-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-drinking-water](https://github.com/better-content/better-drinking-water) | `better_drinking_water` | `better-drinking-water-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-world-management](https://github.com/better-content/better-world-management) | `better_world_management` | `better-world-management-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [scalable-tnt](https://github.com/better-content/scalable-tnt) | `scalable_tnt` | `scalable-tnt-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 
 ## Validation-Only Repositories
 
@@ -161,5 +160,10 @@ explicitly activated.
 
 | Repository | Reason | Local validation and staging |
 |---|---|---|
+| [burnt-grass-compat](https://github.com/better-content/burnt-grass-compat) | The standalone compatibility addon is retained for source validation; the active wildfire mod owns the current pack behavior. | `./gradlew verifyFull` |
 | [dynamic-trees-dimension-compat](https://github.com/better-content/dynamic-trees-dimension-compat) | The addon requires The Undergarden, which the pack retired. | `./gradlew runData verifyFull` |
-| [scalable-tnt](https://github.com/better-content/scalable-tnt) | TNT-01 source prototype; validation-only until unit-only authoring is reviewed and runtime/integration/balance acceptance is authorized. | `./gradlew test` |
+
+## Retired repositories
+
+- `better-ratlantis-logistics` — retired 2026-10-04 with the Ratlantis cut. The repository remains
+  checked out under `mod_source/` for history only; it is not built, not staged, and not bundled.

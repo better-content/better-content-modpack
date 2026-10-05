@@ -16,7 +16,28 @@ Pack-level tiers run only when explicitly requested:
 ./test.main.kts debug
 ```
 
-Direct full Debug requires clean active custom-mod repositories. It runs each of the 44 active
+Agents can use `test-control.main.kts` for JSON lines with stable run IDs and evidence paths.
+`run` prints a running record immediately, then a final record; `status` and `wait` work from
+another terminal while it runs. `wait` returns 4 when its bounded timeout expires, 1 for a failed
+run, and 0 for a passed run. `evidence` lists recorded files. For example:
+
+```sh
+./test-control.main.kts list
+./test-control.main.kts plan debug
+./test-control.main.kts run source --repo better-regolith-farming
+./test-control.main.kts run debug
+./test-control.main.kts status RUN_ID
+./test-control.main.kts wait RUN_ID --timeout-ms 30000
+./test-control.main.kts evidence RUN_ID
+./test-control.main.kts retry debug --target font:aether --retry-of RUN_ID
+```
+
+`run source --all` verifies all 47 local source repositories in dependency order and stages
+provider JARs for dependent builds. Full Dist and Debug use the same fresh release path as the
+direct tier commands below. `submit --handoff /absolute/path/to/handoff.json` sends a prepared
+immutable-candidate request to the shared queue.
+
+Direct full Dist and Debug require clean active custom-mod repositories. They run each of the 45 active
 mods' manifest-listed verification tasks and rebuilds every runtime JAR after `clean`, even when
 the bundled JAR records the same source revision. It stages the JARs in dependency order,
 deploys the validated set, refreshes Packwiz, packages once, then runs complete Dist and Debug
@@ -24,7 +45,7 @@ on the new ZIP pair. Release evidence links the Dist and Debug run IDs and candi
 
 After inspecting a failed run, use a targeted retry to check a fix without starting every Debug
 scenario. Each retry makes a fresh fixture and records separate `target-*` evidence; it cannot be
-mistaken for a full-tier pass. Supported targets are `server-ready` (Debug), `join` (Dist or Debug), `font:ratlantis`,
+mistaken for a full-tier pass. Supported targets are `server-ready` (Debug), `join` (Dist or Debug),
 `font:bumblezone`, `font:aether`, `font:nether`, `fonts`, `dimension:<id>` for a directly
 teleportable dimension, `dimensions`, `campaign-start` (three live encounters and platform repair),
 `campaign` (three live client encounters), `restart-compat` (saved Flesh spread
@@ -121,7 +142,7 @@ three-client Survival campaign check.
 For terrain dimensions, Debug counts block IDs in 3×3 already loaded chunks at each visit. A
 dimension passes when the combined samples contain at least 64 non-air blocks and 16 blocks from
 its broad expected family. Space and utility dimensions have no terrain threshold. Each of the
-Ratlantis, Bumblezone, Aether, and Nether Fonts is also activated through the same server-side
+Bumblezone, Aether, and Nether Fonts is also activated through the same server-side
 block interaction used by right-click; the real client must arrive, pass a geometry probe, and
 return through the in-world return Font interaction. The histograms and assessments are retained
 with the run evidence. These checks show representative block content, not exact terrain shape or
@@ -194,15 +215,13 @@ Only an explicit fresh-dist request authorizes:
 ```
 
 The release command consumes `gradle/active-custom-mods.json`, requires clean active repositories,
-compares each local source `HEAD` with the revision embedded in its currently bundled JAR, and
-records that local-only update check in release evidence. It never fetches or modifies remotes.
-It reuses unchanged bundled runtime JARs whose embedded source revision matches the clean checkout,
-and runs the documented verification only for changed repositories. It annotates and deploys all
+and records each local source `HEAD` in release evidence. It never fetches or modifies remotes.
+Full Dist and Debug verify and rebuild every active source after `clean`. They annotate and deploy all
 staged runtime JARs together, refreshes Packwiz hashes and checks the diff, runs `dist.sh`
 exactly once, and then runs the complete Dist tier. Targeted and queued Debug can test that
 unchanged ZIP pair when explicitly requested. Direct full Debug forces verification and rebuilding
 of every active mod, then packages once and runs complete Dist and Debug. Release evidence records
-each mod's `reused` or `rebuilt` mode and JAR hash.
+each mod's build mode and JAR hash.
 Legacy JARs without source metadata are replaced during this bootstrap run.
 
 `--skip-tests` is the explicit untested-release path. It still reuses valid source-identical

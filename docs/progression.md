@@ -48,9 +48,9 @@ on a geological chunk to recover one canonical primary unit. Heat remains a
 four-nugget emergency exit for metal chunks, but nonmetals emerge directly from
 separation and never require ceremonial smelting.
 
-Build native Tinkers' Construct tools and reach the Nether, Aether, Bumblezone,
-or Ratlantis Dimension Font. Each origin material makes its own named Font grout,
-and all four grouts smelt to the same Seared Brick. Seared metallurgy owns alloy
+Build native Tinkers' Construct tools and reach the Nether, Aether, or
+Bumblezone Dimension Font. Each origin material makes its own named Font grout,
+and all three grouts smelt to the same Seared Brick. Seared metallurgy owns alloy
 composition: the automated path alloys molten stone with molten iron or zinc,
 then casts molten Andesite Alloy. A Melter can instead consume one andesite with
 10 mB of either molten metal to cast one native Create Andesite Alloy. The Hand
@@ -68,7 +68,7 @@ start an expedition, but it can support a World Condenser mounted two blocks abo
 Players configure the Condenser's successor choices there; an operator commits the
 permanent reset on a supervised dedicated server.
 
-Bumblezone and Ratlantis are expedition-only: upstream portals, tokens, and hive
+Bumblezone is expedition-only: upstream portals, tokens, and hive
 teleportation are disabled. Ordinary vegetable patches generate naturally in the
 Overworld, but Bumblezone nurseries remain the origin of non-space food seed stock
 and yield two to four propagules from mature plants. Outside an authored origin,
@@ -85,15 +85,15 @@ Milling a chunk into two feeds improves primary recovery; Crushing Wheels later
 produce three. Dry Sifting returns the primary product, while a waterlogged
 Sifter can expose coproducts appropriate to its installed mesh.
 
-Ratlantis is also the origin of scalable logistics. Courier lattices root bulk
-rat, Pretty Pipes, and portable-storage infrastructure; oratchalcum mechanisms
-root ordinary modules and Create's request network; arcane logistics cores root
-high modules and advanced automation. AE2's Energy Acceptor requires PowerGrid
-generation, Ratlantis logistics, OC2R computation, meteor material, and
-Impossible Matter together. Vanilla chests and hoppers, early Create movement,
-Eureka, Little Logistics docks, and Wares remain independent; usable Little
-Logistics vehicles and its high-throughput Rapid Hopper require a visible
-Ratlantis component.
+The Font materials are also the origin of scalable logistics. Bumblezone
+honey crystal shards root bulk transport, the first Pretty Pipes network, and
+portable-storage infrastructure; Nether blaze rods root ordinary modules and
+Create's request network; Aether enchanted gravitite roots high modules and
+advanced automation. AE2's Energy Acceptor requires PowerGrid generation, Aether
+material, OC2R computation, meteor material, and Impossible Matter together. Vanilla chests and hoppers, early Create movement,
+Eureka, Little Logistics docks, and Wares remain independent; Little
+Logistics vehicles keep their upstream recipes, and the high-throughput Rapid
+Hopper requires a visible Bumblezone material.
 
 Craft `kubejs:andesite_machine_block` from one Seared Brick block, four
 Andesite Alloy, and four iron plates. It directly unlocks only the Millstone and
