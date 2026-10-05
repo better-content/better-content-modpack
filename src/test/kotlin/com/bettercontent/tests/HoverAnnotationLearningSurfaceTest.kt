@@ -1874,7 +1874,7 @@ class HoverAnnotationLearningSurfaceTest {
                 }
             }
             val movement = lessons.path("briefs").first { it.path("id").asText() == "movement" }.path("body").asText()
-            assertTrue(movement.contains("directional double-tap dodging is disabled"))
+            assertTrue(movement.contains("directional double-tap dodging is off"))
             assertTrue(!movement.contains("double taps also dodge"))
         }
 

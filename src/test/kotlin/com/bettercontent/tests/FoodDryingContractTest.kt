@@ -65,7 +65,7 @@ class FoodDryingContractTest {
         val thermalSource = Files.readString(
             heatSync.resolve("src/main/kotlin/com/bettercontent/betterindustrialheat/food/FoodThermalService.kt"),
         )
-        assertTrue(thermalSource.contains("stack.`is`(HeatSyncThermalTags.DRIED_FOODS) -> Profile(\"dried\", 1.0, null, meat)"))
-        assertTrue(thermalSource.contains("profile.id == \"dried\" || profile.id == \"preserved\" -> 0.1"))
+        assertTrue(thermalSource.contains("stack.`is`(HeatSyncThermalTags.DRIED_FOODS) -> Profile(\"dried\", 1.0, true, meat)"))
+        assertTrue(thermalSource.contains("storage == Storage.COLD || profile.preserved -> 0.1"))
     }
 }
