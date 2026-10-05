@@ -7,7 +7,7 @@
 	#Range: 0 ~ 1000
 	heartsPerMilestone = 1
 	#A list of numbers of unique foods you need to eat to unlock each milestone, in ascending order. Naturally, adding more milestones lets you earn more hearts.
-	milestones = [30, 60, 90, 119, 149, 179, 209, 238, 268, 298, 328, 357, 387, 417, 446]
+	milestones = [30, 60, 89, 119, 149, 178, 208, 238, 267, 297, 327, 356, 386, 416, 445]
 
 [filtering]
 	#Foods in this list won't affect the player's health nor show up in the food book.
@@ -160,7 +160,6 @@
 		"better_industrial_heat:dried_salmon",
 		"better_industrial_heat:spoiled_meat",
 		"better_industrial_heat:spoiled_produce",
-		"better_ratlantis_logistics:ratlantean_bait",
 		"born_in_chaos_v1:bloody_gadfly_eye",
 		"born_in_chaos_v1:caramel_pepper",
 		"born_in_chaos_v1:chocolate_heart",

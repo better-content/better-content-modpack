@@ -3,8 +3,7 @@
 var BC_FONT_BINDERS = [
     ['nether', 'minecraft:netherrack', 'kubejs:nether_font_grout'],
     ['aether', 'aether:aether_dirt', 'kubejs:aether_font_grout'],
-    ['bumblezone', 'the_bumblezone:porous_honeycomb_block', 'kubejs:bumblezone_font_grout'],
-    ['ratlantis', 'rats:marbled_cheese_raw', 'kubejs:ratlantis_font_grout']
+    ['bumblezone', 'the_bumblezone:porous_honeycomb_block', 'kubejs:bumblezone_font_grout']
 ]
 
 ServerEvents.recipes(function (event) {

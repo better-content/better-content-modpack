@@ -1,9 +1,0 @@
-{
-  "replace": true,
-  "values": [
-    {
-      "id": "rats:ratlantis",
-      "required": false
-    }
-  ]
-}

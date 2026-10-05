@@ -10,5 +10,5 @@
   "has_guide_entry":true,"rarity":"uncommon",
   "size_and_weight":{"average_size_cm":235.0,"average_weight_grams":7000.0,"deviation_size_cm":25.0,"deviation_weight_grams":700.0},
   "skips_minigame":false,"weather":"all",
-  "world_restrictions":{"above_y":-2147483648,"below_y":2147483647,"biomes":[],"biomes_blacklist":[],"biomes_blacklist_tags":[],"biomes_tags":[],"dimensions":["rats:ratlantis"],"dimensions_blacklist":[],"fluids":["minecraft:water"],"seasons":["all"]}
+  "world_restrictions":{"above_y":-2147483648,"below_y":2147483647,"biomes":[],"biomes_blacklist":[],"biomes_blacklist_tags":[],"biomes_tags":[],"dimensions":["minecraft:overworld"],"dimensions_blacklist":[],"fluids":["minecraft:water"],"seasons":["all"]}
 }

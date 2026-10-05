@@ -1171,10 +1171,6 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "better_ratlantis_logistics": {
-      "primary_role": "edge_provider",
-      "support_state": "not_applicable"
-    },
     "rats": {
       "primary_role": "content",
       "support_state": "not_applicable"
@@ -1233,6 +1229,10 @@
     },
     "better_runtime_diagnostics": {
       "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "scalable_tnt": {
+      "primary_role": "content",
       "support_state": "not_applicable"
     },
     "satako": {
@@ -1522,7 +1522,6 @@
     "technology.petroleum_splitting": "pneumaticcraft",
     "materials.mahogany": "natures_spirit",
     "survival.hand_fishing": "starcatcher",
-    "dimensions.ratlantis_entry": "better_dimension_fonts",
     "world.dragon_ecology": "iceandfire"
   },
   "families": [
@@ -2245,17 +2244,18 @@
       ]
     },
     {
-      "capability": "ratlantis.logistics",
+      "capability": "logistics.tiers",
       "required_proofs": [
-        "rats:gem_of_ratlantis",
-        "better_ratlantis_logistics:courier_lattice"
+        "the_bumblezone:honey_crystal_shards",
+        "minecraft:blaze_rod",
+        "aether:enchanted_gravitite"
       ]
     },
     {
       "capability": "ae2.network",
       "required_proofs": [
         "powergrid:generator_housing",
-        "better_ratlantis_logistics:arcane_logistics_core",
+        "aether:enchanted_gravitite",
         "oc2r:computer",
         "ae2:sky_stone_block",
         "kubejs:impossible_support_matrix",
@@ -2267,8 +2267,7 @@
       "required_proofs": [
         "aether:ambrosium_shard",
         "minecraft:blaze_powder",
-        "the_bumblezone:honey_crystal_shards",
-        "rats:gem_of_ratlantis"
+        "the_bumblezone:honey_crystal_shards"
       ]
     },
     {

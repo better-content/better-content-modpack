@@ -8,13 +8,13 @@ ServerEvents.recipes(function (event) {
         'create_aquatic_ambitions:channeling/heart_of_the_sea'
     ].forEach(function (id) { event.remove({ id: id }) })
 
-    // The Conduit Cage is the return trip's Ratlantis logistics workshop.
-    // Keep the native Conduit, alloy, rods, and fluid pipe visible in the craft.
+    // The Conduit Cage is the marine workshop's machinery gate. Keep the
+    // native Conduit, alloy, rods, and fluid pipe visible in the craft.
     event.remove({ id: 'create:crafting/materials/mechanical_conduit' })
     event.shaped('create_aquatic_ambitions:mechanical_conduit',
         ['IMI', 'IAI', 'PUP'], {
             I: 'create_aquatic_ambitions:prismarine_alloy_rod',
-            M: 'better_ratlantis_logistics:oratchalcum_mechanism',
+            M: 'minecraft:blaze_rod',
             A: 'minecraft:conduit',
             P: 'create_aquatic_ambitions:prismarine_alloy',
             U: 'create:fluid_pipe'
