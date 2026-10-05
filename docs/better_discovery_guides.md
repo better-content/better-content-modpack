@@ -36,7 +36,7 @@ behavior must not be presented as implemented.
 
 Preserve stable concept, Thread, and lesson identities when their meaning is unchanged.
 Learning Surfaces has 52 live cards across seven topics; the Lessons reference and loading
-rotation share 18 lessons. The main-menu, Esc, and death contexts share 199 authored tips. Follow [Threads](threads.md) for the single-explanation schema,
+rotation share 18 lessons. The main-menu, Esc, and death contexts share 135 authored tips. Follow [Threads](threads.md) for the single-explanation schema,
 personal trigger evidence, native doorways, and lineage persistence. Domain mods
 own their gameplay events; Learning Surfaces adapters translate those events into card signals.
 
@@ -56,12 +56,23 @@ Use clear, direct language on every Better Content-owned learning surface. Name 
 mechanic, explain the rule, then give a useful action. Titles describe their subject;
 proper names such as Threads, Source, and Dimensional Fonts remain unchanged.
 
-Do not add lore, metaphors, personification, rhetorical invitations, or filler to
-instructions. Replace internal design terms such as "bootstrap", "authority", and
-"progression branch" with what the player can do or needs. Keep concrete requirements,
-limits, costs, and warnings. Short copy does not need a minimum word count.
+Write like a person explaining something once. Vary sentence length and information
+order; no corpus-wide template, no monopoly on one verb or clause shape, and no fixed
+sentence count per entry. Contractions are welcome. Prefer concrete nouns over
+nominalizations and state real consequences instead of abstract compliance. Facts stay
+exact: keep concrete requirements, limits, costs, and warnings. Short copy does not need
+a minimum word count.
 
-Threads use a title, the event experienced, its cause, and a useful next action. A Thread that
+Do not invent lore. Better Content has an established world vocabulary - Threads, Source,
+Dimensional Fonts, Death's Door, lineage and successor worlds, trading spirits, and the
+named dimensions - and copy may lean lightly on it for texture, but it introduces no new
+history, personification, or mythology. Replace internal design terms such as "bootstrap",
+"authority", and "progression branch" with what the player can do or needs. No filler and
+no rhetorical invitations to read on.
+
+Threads use a title, the event experienced, its cause, and a useful next action. The cause
+states why the event happened; significance that is not causation does not belong in the
+cause. A Thread that
 points to a concrete craftable result shows an item beneath its explanation. Players use
 their configured EMI recipe and uses controls on that item; Thread copy never gives
 ingredient counts or a recipe layout. Hover
@@ -129,7 +140,7 @@ framework. Durable guidance belongs here; raw evidence belongs outside living do
 
 ## Main-menu, Esc-menu, and death tips
 
-The fixed 199-tip catalogue declares each tip's eligible surface, requirements, relevant
+The fixed 135-tip catalogue declares each tip's eligible surface, requirements, relevant
 mods, concept, and mechanical source. The main menu chooses one stable preparation or
 possibility tip per application launch. Esc selects practical advice from current
 server context when opened and keeps it still while the screen is open. A stale context
