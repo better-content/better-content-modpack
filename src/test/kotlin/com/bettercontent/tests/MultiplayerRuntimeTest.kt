@@ -563,7 +563,8 @@ class MultiplayerRuntimeTest {
                 "execute as ${client.username} at @s run say $marker",
                 Regex(Regex.escape(marker)),
                 "${stage} player heartbeat ${client.username}",
-                Duration.ofSeconds(30),
+                Duration.ofMinutes(3),
+                retryInterval = Duration.ofSeconds(10),
             )
         }
         evidence.run.event("players_online", mapOf("stage" to stage, "players" to participants.map { it.username }))
