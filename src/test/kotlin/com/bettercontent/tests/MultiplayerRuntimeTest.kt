@@ -123,15 +123,16 @@ class MultiplayerRuntimeTest {
         evidence.run.checkpoint("inventory parity matrix") {
             val match = server.commandResult(
                 "journalparity",
-                Regex("journal-parity-summary \\{\\\"status\\\":\\\"passed\\\",\\\"passed\\\":(\\d+),\\\"total\\\":(\\d+)\\}"),
+                Regex("journal-parity-summary \\{[^}]*\\}"),
                 "journal parity report",
                 timeout = Duration.ofMinutes(3),
-                retryInterval = Duration.ofSeconds(10),
+                retryInterval = Duration.ofSeconds(30),
             )
-            evidence.run.event("inventory_parity", mapOf(
-                "passed" to match.groupValues[1],
-                "total" to match.groupValues[2],
-            ))
+            val report = match.value
+            evidence.run.event("inventory_parity", mapOf("report" to report))
+            check(report.contains("\"status\":\"passed\"")) {
+                "inventory parity report failed: $report"
+            }
         }
     }
 
