@@ -17,6 +17,8 @@ multiplayer suite on every release); **jvm** = asserted by mod unit tests;
 | 3 | Pick up (place anywhere) | left/right pickup, place into any bag cell | probe |
 | 4 | Split | right-click splits a stack onto the cursor / into a cell | probe |
 | 5 | Merge | same-item placement merges up to stack and slot limits | probe |
+| 5b | Conservation | no interaction creates or destroys items; movement rows assert per-item totals before/after | probe |
+| 5c | Nearest-cell placement | quick-move fills the nearest free cell (visible-first), never a far corner | probe |
 | 6 | Left drag (even split) | drag across bag cells distributes evenly | probe |
 | 7 | Right drag (one each) | one item per cell | jvm + probe (left variant) |
 | 8 | Shift-click bag → hotbar | vanilla quick-move semantics | probe |
@@ -38,10 +40,29 @@ multiplayer suite on every release); **jvm** = asserted by mod unit tests;
 | 24 | Reconnect / resize while holding | vanilla menu state handling | visual |
 | 25 | Foreign surfaces | bag window on the player grid + surplus block (27-71), no scrolling; exotic menus stay native with a warning | jvm (classification) + visual |
 | 26 | Surplus quick-move | surplus cells shift to hotbar then bag window | jvm (rules) + probe (journal equivalent) |
-| 27 | EMI R/U and fill | works on bag, craft, armor, curio cells (real slots) | visual |
+| 27 | EMI quick fill | fill button gathers from the bag via the registered MenuType handler and writes the grid | probe (registration) + visual |
+| 27b | EMI R/U and fill cells | works on bag, craft, armor, curio cells (real slots) | visual |
 | 28 | Curios equip effects | `CurioSlot` callbacks fire on equip/unequip | visual |
 | 29 | Creative inventory | native creative UI; bag window is the main grid | visual |
 | 30 | Death drops | bag item drops with contents (storage lives in the item) | visual |
+
+## Integration shape (the layer beyond behavior)
+
+Parity is three contracts, not one: semantics (hosted vanilla), shape and
+affordances (fill order, visible placement, index conventions), and extension
+registries (per-mod contracts keyed on identity). The journal must satisfy all
+three or tooling silently degrades:
+
+- **EMI recipe fill** dispatches on `MenuType`-registered `EmiRecipeHandler`s
+  and only coerces for vanilla `InventoryScreen`. The journal registers a
+  `StandardRecipeHandler` for its menu type (`JournalEmiPlugin`, asserted by
+  the `journal-emi-handler registered` client-log marker in the harness).
+- **Fill order**: quick-move fills the nearest free cell (forward). Vanilla's
+  reverse-fill quirk is harmless in a 27-cell grid and hostile in a 72-slot
+  bag; this is a deliberate, tested deviation.
+- **Viewer/tool checks per surface** (EMI fill, recipe book, curios) remain
+  visual rows; any row marked visual is re-verified at the pointer-action
+  acceptance run.
 
 ## Documented deviations
 

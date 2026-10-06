@@ -133,6 +133,12 @@ class MultiplayerRuntimeTest {
             check(report.contains("\"status\":\"passed\"")) {
                 "inventory parity report failed: $report"
             }
+            val clientLog = evidence.run.directory.resolve("client-1.log")
+            val clientText = if (Files.isRegularFile(clientLog)) Files.readString(clientLog) else ""
+            check(clientText.contains("journal-emi-handler registered")) {
+                "EMI recipe-fill handler did not register; quick fill will be inert"
+            }
+            evidence.run.event("inventory_parity", mapOf("emi_handler" to "registered"))
         }
     }
 
