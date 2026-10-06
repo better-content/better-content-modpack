@@ -117,6 +117,24 @@ class MultiplayerRuntimeTest {
         }
     }
 
+    @Test @Order(2)
+    fun inventoryParityMatrixPasses() {
+        assumeTrue(joined, "client join prerequisite failed")
+        evidence.run.checkpoint("inventory parity matrix") {
+            val match = server.commandResult(
+                "journalparity",
+                Regex("journal-parity-summary \\{\\\"status\\\":\\\"passed\\\",\\\"passed\\\":(\\d+),\\\"total\\\":(\\d+)\\}"),
+                "journal parity report",
+                timeout = Duration.ofMinutes(3),
+                retryInterval = Duration.ofSeconds(10),
+            )
+            evidence.run.event("inventory_parity", mapOf(
+                "passed" to match.groupValues[1],
+                "total" to match.groupValues[2],
+            ))
+        }
+    }
+
     private fun prepareTargetJoin(needsInventory: Boolean = false) {
         if (joined || evidence.run.target == null) return
         server.waitReady()
