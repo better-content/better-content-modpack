@@ -49,7 +49,58 @@ quick-craft, double-click collect, overflow, live bag replacement and chest/craf
 host menus. Client rows cover inventory opening, canvas result shift, reopen, number swap,
 actual registered EMI handler fill, recipe-book requests from beyond the 27-cell face, and
 replacement synchronization. Client stability must be accompanied by authoritative comparison;
-registration markers alone do not prove fill behavior.
+registration markers alone do not prove fill behavior. Journal EMI acceptance does not by itself
+prove foreign crafting-screen access beyond the first 27 bag cells. The pinned native EMI
+crafting handler's bounded source range cannot establish that additional coverage.
+
+### Proven candidate and pending completion
+
+Build405 focused run `20261008T090510Z-97343` passed the existing **202/202** full
+manifest rows. Initial merged-output preservation, actual client disconnect/reconnect, and
+fresh dedicated-server restart passed full-count/NBT/capability checks. The final strict audit
+reported zero log findings, suite success, and complete cleanup with no surviving PIDs.
+Retained evidence: `generated/test-evidence/20261008T090510Z-97343/target-journal-inventory/`.
+Its candidate hashes were:
+
+- client: `cf5da1fd7e74ee6a063d516868fb701bcc2c8130497f9d51b762a2c3e4bf2a9b`;
+- server: `883e2d703b117c2fd3e0b6a72971bdb91d60fb93cbf526814fc2ca3507b6d423`.
+
+This was targeted multiplayer evidence, **not** complete Dist/Debug or integrated-server
+save/reopen acceptance. Full Debug's `SingleplayerRuntimeTest.debugFreshWorldBootSaveAndReopen`
+launches an integrated world in save mode, waits for its journal save checkpoint, and launches
+a fresh client using the saved world and same support identity in verify mode. Its strict
+journal verify report is required before claiming integrated persistence. Human pixel/pointer
+acceptance also remains pending and follows the automated gates.
+
+The canonical source manifest now includes four additional full-only real-client foreign EMI
+rows in its **206-row** full matrix, with sentinel coverage remaining **36**:
+`client.foreign_emi_fill`, `client.foreign_emi_refill`, `client.foreign_emi_background`, and
+`client.foreign_emi_failed_fill`. They must independently prove beyond-face inputs, refill,
+background updates without page jumps, and failed-fill non-revelation/conservation. Their
+combined source gate passed 120 JVM tests, runtime-mapping checks, fixture isolation and JAR
+staging at source revision `7caeeee85885d5cb1cfc4435d359812e5584a141`; pack Dev passed.
+Runtime acceptance remains pending; build405 does not prove these new rows.
+Runtime report validation continues to derive exact expected IDs/layers/totals from the
+hashed support manifest rather than accepting a hardcoded total.
+
+### Actual viewport and page evidence
+
+The build405 `client.pagination_chest` response records a real native `ContainerScreen` /
+`ChestMenu`, viewport **1280×720**, GUI dimensions **427×240**, native capacity **120**, and
+**three** storage pages. Traversal passed for all 120 cells with an empty layout-limit value.
+`client.pagination_compact` passed all 120 journal cells across **two** pages at the same
+viewport/GUI dimensions. The earlier `client.geometry_compact` row explicitly used a resize
+action, so this evidence does not claim that the entire old matrix avoided resizing.
+The next source matrix removes that automated OS resize action and replaces the two old
+geometry rows with `client.geometry_native` and `client.geometry_rebind`: actual unchanged
+viewport observation and normal server-authored backpack tier rebind, respectively. Wide/compact
+layout math remains covered locally; multi-viewport pixel/pointer acceptance is human-only.
+
+The new foreign crafting rows must use the actual current viewport and GUI scale, without
+OS-window resize or GUI-scale changes, and must establish multiple pages naturally for the
+120-cell bag. Chest coverage is not proof of crafting-screen geometry. The SAME-equipped
+native `BackpackScreen` has its own native layout and is not a supplemental Chrome
+`pagination_all` target.
 
 Remaining human gates: actual EMI button/R/U hover targeting, cross-surface mouse drags,
 Sophisticated upgrade/filter controls, Curios effects, exotic-menu warnings, creative behavior,
@@ -71,6 +122,19 @@ its original/supplement hashes are recorded and unknown-namespace rejection rema
 
 Keep failed fixtures/logs and first useful diagnosis. Record process cleanup and all hashes.
 Fresh distribution and pack tests still require explicit user authorization.
+
+## Approved foreign EMI adapter boundary
+
+The contained foreign crafting adapter is separately authorized to use supported EMI handler
+registration and a pinned-version-guarded **public method in an internal registry**:
+`EmiRecipeFiller.getAllHandlers`. The exception permits moving **only the owned adapter** to
+the front of the handler list while preserving all other handlers and their relative order.
+It is not general authorization to mutate EMI internals. No EMI bytecode mixin, upstream
+algorithm edit, dependency upgrade, or log filtering is permitted. The owned adapter and
+its priority decision require actual foreign-screen fixture evidence; successful plugin
+registration alone is insufficient. This narrow ordering exception does not change the
+ordinary game-mode dispatch, readiness, count/NBT synchronization, or contents-authority
+contracts.
 
 ## Compatibility boundaries
 

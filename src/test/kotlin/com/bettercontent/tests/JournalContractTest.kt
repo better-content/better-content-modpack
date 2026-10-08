@@ -3,6 +3,8 @@ package com.bettercontent.tests
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -81,6 +83,26 @@ class JournalContractTest {
             assertThrows(Exception::class.java) { JournalContractValidator.validate(json, identity, expected) }
         }
     }
+    @Test fun canonicalManifestKeepsForeignEmiCoverageFullOnly() {
+        val manifest = TestConfig.load().root.parent.resolve(
+            "mod_source/better-journal-inventory/src/testSupport/resources/journal-contract-manifest.json",
+        )
+        val json = Files.readString(manifest)
+        val full = JournalContractValidator.manifest(json, "full")
+        val sentinel = JournalContractValidator.manifest(json, "sentinel")
+        assertEquals(206, full.size)
+        assertEquals(36, sentinel.size)
+        val foreignIds = setOf(
+            "client.foreign_emi_fill", "client.foreign_emi_refill",
+            "client.foreign_emi_background", "client.foreign_emi_failed_fill",
+        )
+        assertEquals(foreignIds, full.filter { it.id.startsWith("client.foreign_emi_") }.map { it.id }.toSet())
+        foreignIds.forEach { id ->
+            assertTrue(JournalScenario(id, "client") in full, "missing full client scenario: $id")
+            assertFalse(sentinel.any { it.id == id }, "foreign EMI scenario must remain full-only: $id")
+        }
+    }
+
     @Test fun manifestIsStrictAndFullIncludesSentinel() {
         val json = """{"schema":"bc.journal.manifest.v1","sentinel":[{"id":"output","layer":"server"}],"full":[{"id":"output","layer":"server"},{"id":"save","layer":"persistence"}]}"""
         assertEquals(1, JournalContractValidator.manifest(json, "sentinel").size)
