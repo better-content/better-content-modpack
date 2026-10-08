@@ -1,7 +1,7 @@
 # Journal inventory contract
 
 The equipped backpack is the player's storage of record: hotbar 0–8, bag face at inventory
-9–35, full bag through the journal's fixed block (up to 72 cells, no scrolling). Interaction
+9–35, full native bag capacity through the journal's growing, paginated real-slot block (no storage scrolling). Interaction
 uses real vanilla slots, but routing, ownership, synchronization, persistence and presentation
 are separate contracts. “The result slot emptied” is not successful transfer acceptance.
 
@@ -75,7 +75,6 @@ Fresh distribution and pack tests still require explicit user authorization.
 ## Compatibility boundaries
 
 Mods directly reading `Inventory.items` main slots bypass the bag face and see empty stacks.
-Bag capacity exposed by the journal is capped at 72. Unsupported foreign menus stay native;
+Native bag capacity, filters and stack limits belong to Sophisticated Backpacks; the journal neither caps nor duplicates them. Server binding descriptors and matching integer-count metadata supplement ordinary vanilla item/NBT synchronization; they are not a custom inventory action/prediction protocol. Stale menu bindings and retained Forge views fail closed. Supported menus preserve host IDs and append only non-aliased storage; off-page slots retain stable IDs but have no hit targets. Unsupported foreign menus stay native;
 vanilla hosting is not proof that every mod-specific registry or callback contract is satisfied.
-Nearest reachable/free placement is deliberate; reverse-fill into an invisible corner is not
-acceptable simply because an internal stack count is correct.
+Routing stays independent of the current page. Positive authoritative changes after an explicit action reveal the first affected destination; background changes do not jump pages. Full-capacity access, native upgrades, actual API/capability paths, natural synchronization and merge-only lifecycle persistence require fixture evidence on the candidate. Unintegrated raw-field consumers remain explicit limitations, not universal compatibility claims. Native creative behavior is retained.
