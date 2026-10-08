@@ -141,10 +141,12 @@ class MultiplayerRuntimeTest {
             clients.first().assertHashes()
             evidence.run.event("journal_contract", mapOf("report" to report,
                 "manual_visual_gate" to "pending; automated contract does not certify rendered layout"))
-            server.auditLogs()
         }
         if (evidence.run.tier == "debug") journalDedicatedPersistence()
         else evidence.run.event("scenario_omitted", mapOf("name" to "journal dedicated persistence", "tier" to evidence.run.tier))
+        // Collect independent persistence evidence before the mandatory strict log verdict.
+        // Unrelated world-spawn errors must still fail the suite, not hide later observations.
+        server.auditLogs()
     }
 
     private fun journalCheckpoint(operation: String, phase: String) {

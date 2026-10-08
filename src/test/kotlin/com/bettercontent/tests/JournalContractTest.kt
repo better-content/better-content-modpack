@@ -13,6 +13,13 @@ import java.io.ByteArrayOutputStream
 
 @Tag("fast")
 class JournalContractTest {
+    @Test fun persistenceObservationIsNotShortCircuitedByTheStillMandatoryLogAudit() {
+        val source = Files.readString(java.nio.file.Path.of("src/test/kotlin/com/bettercontent/tests/MultiplayerRuntimeTest.kt"))
+        val method = source.substringAfter("fun journalInventoryContractPasses()").substringBefore("private fun journalCheckpoint")
+        org.junit.jupiter.api.Assertions.assertTrue(method.indexOf("journalDedicatedPersistence()") >= 0)
+        org.junit.jupiter.api.Assertions.assertTrue(method.indexOf("server.auditLogs()") > method.indexOf("journalDedicatedPersistence()"))
+    }
+
     private val mapper = jacksonObjectMapper()
     private val identity = JournalContractIdentity("20261007T230000Z-1", "SmokeClient1", "sentinel",
         "a".repeat(64), "b".repeat(64), "c".repeat(64), "d".repeat(64))
