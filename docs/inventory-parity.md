@@ -78,8 +78,8 @@ with sentinel coverage remaining **36**:
 `client.foreign_emi_fill`, `client.foreign_emi_refill`, `client.foreign_emi_background`, and
 `client.foreign_emi_failed_fill`. They must independently prove beyond-face inputs, refill,
 background updates without page jumps, and failed-fill non-revelation/conservation. Their
-combined source gate passed 137 JVM tests, runtime-mapping checks, fixture isolation and JAR
-staging at source revision `2f67f4e877852faf0e1ed901d2783b038d8a0c98`.
+combined source gate passed 147 JVM tests, runtime-mapping checks, fixture isolation and JAR
+staging at source revision `0c3be2023066174a0739a4a692caf74b2e609f5d`.
 `client.foreign_grid_return` and `client.foreign_grid_return_blocked` independently require
 ordinary native QUICK_MOVE delivery into the hidden final cell or exact blocked conservation.
 The bounded input-return extension preserves native IDs10..45 first, then uses only validated
@@ -108,6 +108,21 @@ rejects trees/liquids/entities/block entities, records selected/current player/s
 and places once through the ordinary provider. No artificial support, relocation, exemption,
 re-placement or forced reopening is used. Player restoration precedes the exact table invariant;
 a missing/changed table still fails cleanup without overwriting unexpected blocks.
+Build409 run `20261008T120014Z-1206958` proved208/208, exact fixture restoration and all six
+actual foreign source/result/return/intent/reveal/negative-control oracles. Direct native return
+revealed its destination while vanilla state remained1. The upgraded native120/Omega/MAX/filter
+checkpoint survived genuine reconnect and a fresh dedicated restart with exact full persisted
+UUID/count/NBT/settings/upgrades and two fresh pure Forge129-cell/filter/limit/bound observations.
+Its overall suite nevertheless FAILED strict6 from native nonfinite-rotation errors and a native
+UntamedWilds creative-species warning. Process cleanup completed and both ZIP hashes remained
+unchanged; behavior/persistence success does not waive audit failure or qualify full Debug/human
+acceptance. Retain its entire failed fixture.
+The next source adds only explicitly gated fixture diagnostics: bounded INFO actor/caller evidence
+at rejected native rotation entries and loaded-but-both-species-caches-missing creative lookup.
+Native methods, errors, return values, species registration, contents and audit criteria remain
+unchanged. Separate support refmap/config/manifest and exact runtime targets are audited, with
+both directions of production/fixture exclusion. This is causal observation, NOT a fault repair;
+a nonreproduction cannot establish that build409's native faults were fixed.
 Runtime report validation continues to derive exact expected IDs/layers/totals from the
 hashed support manifest rather than accepting a hardcoded total.
 
