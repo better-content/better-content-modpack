@@ -67,7 +67,7 @@
     },
     {
       "repository": "better-malum-dynamic-trees",
-      "commit": "3afab47d38683036e71983b29f31e302bb717305"
+      "commit": "b16a267e143af1a5cb47281c5dae775d298aab77"
     },
     {
       "repository": "better-exploration-load-control",
@@ -135,7 +135,7 @@
     },
     {
       "repository": "better-runtime-diagnostics",
-      "commit": "2e86a30dac02d6cd6125f88984cc3e6b88b5bd43"
+      "commit": "98c1767775fa4175e4e97e08e2a6a719fd956aae"
     },
     {
       "repository": "better-settlement-roads",

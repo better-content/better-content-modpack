@@ -61,10 +61,14 @@ class SingleplayerRuntimeTest {
         if (evidence.run.target == null) assumeTrue(title, "title screen prerequisite failed")
         evidence.run.checkpoint("fresh world boot save and reopen") {
             if (evidence.run.target == null) client.close()
-            val seed = DedicatedServerFixture(evidence.run).also { seedServer = it }
+            evidence.run.event("blight_locus_seed_provenance", BlightLocusPersistence.Observation(
+                BlightLocusPersistence.SEED, emptySet()).evidence("new_fixture_seed_requested"))
+            val seed = DedicatedServerFixture(evidence.run, seed = BlightLocusPersistence.SEED).also { seedServer = it }
             seed.waitReady()
             seed.stopGracefully()
             val sourceWorld = seed.server.resolve("world")
+            val seedLoci = BlightLocusPersistence.read(sourceWorld)
+            evidence.run.event("blight_locus_claims_observed", seedLoci.evidence("seed_normal_stop"))
             require(Files.isRegularFile(sourceWorld.resolve("level.dat"))) { "seed server did not create a world save" }
 
             val first = ClientFixture(evidence.run, username = "SmokeWorld", slot = 5,
@@ -89,6 +93,8 @@ class SingleplayerRuntimeTest {
             val savedTime = savedRecord.groupValues[1].toLong()
             val savedMarker = java.util.UUID.fromString(savedRecord.groupValues[2])
             first.close()
+            val savedLoci = BlightLocusPersistence.read(firstSave, seedLoci.claims)
+            evidence.run.event("blight_locus_claims_observed", savedLoci.evidence("integrated_save_normal_close"))
 
             val reopened = ClientFixture(evidence.run, username = "SmokeWorld", slot = 6,
                 journalContractSupport = requireNotNull(first.journalSupport)).also { debugClients += it }
@@ -116,8 +122,15 @@ class SingleplayerRuntimeTest {
                 "reopen_fixture" to reopened.client.resolve("saves/DebugWorld").toString()))
             evidence.run.event("world_reopen_passed", mapOf("saved_game_time" to savedTime,
                 "reopened_game_time" to reopenedTime, "saved_marker" to savedMarker.toString()))
+            // Request native exit only after the actual checkpoint and marker/time oracles passed.
+            reopened.requestNormalVerifyExit()
+            // Process termination alone cannot prove that the reopened integrated world saved.
+            reopened.waitForWorldProbe("BC_DEBUG_WORLD_EXITED")
+            reopened.close()
+            val reopenedLoci = BlightLocusPersistence.read(
+                reopened.client.resolve("saves/DebugWorld"), savedLoci.claims)
+            evidence.run.event("blight_locus_claims_observed", reopenedLoci.evidence("integrated_reopen_normal_close"))
             if (evidence.run.target != null) {
-                reopened.close()
                 LogPolicy.requireClean(collectLogs(evidence.run.directory))
                 seed.assertHashes()
                 first.assertHashes()

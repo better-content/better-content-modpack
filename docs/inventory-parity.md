@@ -113,16 +113,63 @@ actual foreign source/result/return/intent/reveal/negative-control oracles. Dire
 revealed its destination while vanilla state remained1. The upgraded native120/Omega/MAX/filter
 checkpoint survived genuine reconnect and a fresh dedicated restart with exact full persisted
 UUID/count/NBT/settings/upgrades and two fresh pure Forge129-cell/filter/limit/bound observations.
-Its overall suite nevertheless FAILED strict6 from native nonfinite-rotation errors and a native
-UntamedWilds creative-species warning. Process cleanup completed and both ZIP hashes remained
+Its overall suite nevertheless FAILED strict6 from native nonfinite-rotation errors and native
+UntamedWilds no-species warnings. Process cleanup completed and both ZIP hashes remained
 unchanged; behavior/persistence success does not waive audit failure or qualify full Debug/human
 acceptance. Retain its entire failed fixture.
 The next source adds only explicitly gated fixture diagnostics: bounded INFO actor/caller evidence
-at rejected native rotation entries and loaded-but-both-species-caches-missing creative lookup.
+at rejected native rotation entries and loaded-but-both-species-caches-missing native lookup.
 Native methods, errors, return values, species registration, contents and audit criteria remain
 unchanged. Separate support refmap/config/manifest and exact runtime targets are audited, with
 both directions of production/fixture exclusion. This is causal observation, NOT a fault repair;
 a nonreproduction cannot establish that build409's native faults were fixed.
+
+Build410 focused run `20261008T130947Z-1647920` passed208/208, restoration, upgraded reconnect
+and fresh dedicated restart, unchanged hashes and complete cleanup under the existing log policy.
+It did not reproduce the rotation entries/errors. It **did** reproduce species warnings: server
+saved-shark loading before login and client creative enumeration during JEI recipe synchronization.
+Audit0 is not an absence of those raw warnings or a species repair; no new exemption was added.
+
+Build411 full Dist `20261008T132332Z-17336311` and Debug server checks passed. Its full Debug
+multiplayer run `20261008T132332Z-17336312` independently proved208/208, restoration, upgraded
+reconnect/dedicated restart and dimension traversal, then failed three-player startup and aborted
+the dependent restart test. Its server was killed with exit137; historical OOM attribution remains
+inconclusive. The interrupted metadata has no final audit or certified cleanup and must not be
+rewritten as a completed pass. Integrated testing was not reached.
+
+Same411 focused recovery `20261008T153906Z-2347363/target-world-save` failed seed-server readiness
+before any integrated client/checkpoint. This separate run completed cleanup with no survivors,
+audit0 and suite success=false. Repeated actual JVM thread dumps identified an owned
+`BlightLocusBootstrap` same-chunk FULL lookup inside Forge's pre-FULL `ChunkEvent.Load` callback;
+this is unrelated to inventory and consistent with Forge's documented loading-deadlock warning.
+The contained owned fix defers admission to a native server END tick with nonblocking chunk
+availability and transient unload-safe metadata. It preserves natural site selection, valid-ground
+checks, persisted claim format and native Malum(2,4,4) event/generator, including native neighbor
+access. Its30 unit/source tests and2 repository Forge GameTests passed; these are not the packed
+Forge/C2ME runtime regression. This product change requires a new canonical candidate, not a
+claim that411 was repaired.
+
+Harness-only processor/Mesa budgets preserve all original heap profiles, mods, rendering,
+viewports, timeouts, three simultaneous live players and TPS/oracles. A new fresh fixture may use
+the failed world's captured native seed `2345578283189886729` through the existing seed parameter;
+never modify/reseed the retained failed world. Native selected-locus claim and subsequent save/
+reopen preservation are independent causal evidence; unrelated random-seed readiness is insufficient.
+The strict observer reads native typed LONG seed and TAG_List(TAG_Long) claims without writes,
+rejects missing/duplicate/lost claims and allows additional naturally claimed sites.
+
+The reopened fixture's process closure is not itself a certified save. An opt-in, exact
+nonce/run/player/world-root/request-directory-bound lifecycle signal requests normal native exit
+only after actual journal VERIFY and the matching loaded marker/time oracles. The client waits
+for actual EMI readiness, captures current native identities, sets its one-shot guard before
+`disconnect()/clearLevel()` and reports correlated exit only after return and server-thread
+termination. Absent/stale/mismatched/nonregular/symlink/oversized requests remain inert; default
+VERIFY and SAVE behavior remain unchanged without the opt-in. This does not force ticks/saves,
+change markers or write/repair NBT. Strict post-exit disk checks, fresh reopen and final audits
+remain independent; the marker alone cannot waive a native save failure.
+
+Full new-candidate Dist/Debug, upgraded integrated persistence, final audits/hashes/cleanup and human
+pointer/visual acceptance remain required. Historical409 rotation faults remain unidentified.
+
 Runtime report validation continues to derive exact expected IDs/layers/totals from the
 hashed support manifest rather than accepting a hardcoded total.
 

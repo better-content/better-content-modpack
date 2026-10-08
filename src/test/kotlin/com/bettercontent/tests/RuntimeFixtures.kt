@@ -3,6 +3,9 @@ package com.bettercontent.tests
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import java.nio.file.StandardOpenOption
+import java.nio.file.LinkOption
+import java.util.UUID
 import java.time.Duration
 import kotlin.io.path.createDirectories
 import kotlin.io.path.exists
@@ -49,6 +52,7 @@ class DedicatedServerFixture(
         server = roots.single()
         disableScheduledBackupsForRuntimeFixture(server)
         if (allowLongClientLogin) configureDedicatedServerMemory(server)
+        configureFixtureServerProcessorBudget(server)
         replaceExact(server.resolve("eula.txt"), "eula=false", "eula=true")
         replaceExact(server.resolve("server.properties"), "online-mode=true", "online-mode=false")
         val properties = server.resolve("server.properties")
@@ -84,6 +88,7 @@ class DedicatedServerFixture(
             args.toFile().appendText("\n${support.properties}\n")
         }
         process = ManagedProcess("server", listOf("./run.sh"), server, log, environment)
+        recordServerResourceBudget()
         evidence.event("server_started", mapOf("pid" to process.pid, "port" to port, "directory" to server.toString()))
     }
 
@@ -172,9 +177,16 @@ class DedicatedServerFixture(
     fun restart() {
         require(!process.alive) { "server must be stopped before restart" }
         process = ManagedProcess("server-restart", listOf("./run.sh"), server, log, environment)
+        recordServerResourceBudget()
         evidence.event("server_restarted", mapOf("pid" to process.pid, "port" to port, "directory" to server.toString()))
         starts++
         waitReady(starts)
+    }
+
+    private fun recordServerResourceBudget() {
+        val arguments = activeFixtureServerArguments(server.resolve("user_jvm_args.txt").readText())
+        evidence.event("fixture_resource_budget", fixtureResourceBudgetEvidence("dedicated-server", arguments, 8) +
+            mapOf("launcher_pid" to process.pid))
     }
 
     override fun close() = process.close()
@@ -187,6 +199,59 @@ private fun configureDedicatedServerMemory(server: Path) {
     val replacement = text.replace("-Xms4G", "-Xms1G").replace("-Xmx16G", "-Xmx6G")
     require(replacement != text) { "production server JVM memory contract is missing" }
     jvmArgs.toFile().writeText(replacement)
+}
+
+// Supported HotSpot/Mesa scheduling budgets, not heap caps, renderer bypasses or game criteria.
+// LP_NUM_THREADS: https://docs.mesa3d.org/envvars.html#envvar-LP_NUM_THREADS
+private val fixtureJvmToken = Regex("""(?:[^\s"'\\]|\\.|"(?:\\.|[^"\\])*"|'[^']*')+""")
+private val fixtureProcessorFlag = Regex("-XX:ActiveProcessorCount=\\S+")
+private fun isFixtureProcessorFlag(token: String): Boolean = fixtureProcessorFlag.matches(
+    token.removeSurrounding("\"").removeSurrounding("'"),
+)
+
+internal fun fixtureJvmTokens(arguments: String): List<String> {
+    var end = 0
+    val tokens = fixtureJvmToken.findAll(arguments).map { match ->
+        require(arguments.substring(end, match.range.first).isBlank()) { "Malformed fixture JVM arguments" }
+        end = match.range.last + 1
+        match.value
+    }.toList()
+    require(arguments.substring(end).isBlank()) { "Malformed fixture JVM arguments" }
+    return tokens
+}
+
+internal fun normalizeFixtureProcessorBudget(arguments: String, processors: Int): String {
+    require(processors > 0) { "Fixture processor budget must be positive" }
+    val preserved = fixtureJvmTokens(arguments).filterNot(::isFixtureProcessorFlag)
+    return (preserved + "-XX:ActiveProcessorCount=$processors").joinToString(" ")
+}
+
+internal fun activeFixtureServerArguments(text: String): String = text.lineSequence()
+    .filterNot { it.trimStart().startsWith("#") }.joinToString(" ")
+
+internal fun configureFixtureServerProcessorBudget(server: Path) {
+    val file = server.resolve("user_jvm_args.txt")
+    require(file.isRegularFile()) { "fixture server is missing user_jvm_args.txt" }
+    // Preserve comments and every non-processor argument, including the caller's existing heap contract.
+    val preserved = file.readText().lineSequence().map { line ->
+        if (line.trimStart().startsWith("#")) line
+        else fixtureJvmTokens(line).filterNot(::isFixtureProcessorFlag).joinToString(" ")
+    }.joinToString("\n").trimEnd()
+    file.toFile().writeText("$preserved\n-XX:ActiveProcessorCount=8\n")
+}
+
+internal fun fixtureResourceBudgetEvidence(role: String, arguments: String, processors: Int): Map<String, Any> {
+    val tokens = fixtureJvmTokens(arguments)
+    require(tokens.filter(::isFixtureProcessorFlag) == listOf("-XX:ActiveProcessorCount=$processors")) {
+        "Fixture JVM processor budget is missing or duplicated"
+    }
+    fun heap(prefix: String): String = tokens.lastOrNull { it.matches(Regex("${Regex.escape(prefix)}[0-9]+[kKmMgG]?")) }
+        ?.removePrefix(prefix) ?: "unspecified"
+    return mapOf(
+        "role" to role, "measurement" to "launch_arguments", "jvm_processor_count" to processors,
+        "minimum_heap" to heap("-Xms"), "maximum_heap" to heap("-Xmx"),
+        "gc_flags" to tokens.filter { it.matches(Regex("-XX:[+-]Use[A-Za-z0-9]+GC")) }.distinct().take(4),
+    )
 }
 
 internal fun disableScheduledBackupsForRuntimeFixture(server: Path) {
@@ -209,6 +274,9 @@ class ClientFixture(
     val journalSupport = journalContractSupport ?: dedicated?.journalSupport?.takeIf { it.identity.player == username }
         ?: if (enableJournalContract) JournalFixtureSupport(evidence, pair, username) else null
     private var quickPlayLogOffset = 0
+    private var verifyExitBinding: FixtureVerifyExitBinding? = null
+    private var journalVerifyObserved = false
+    private var verifyLoadedObserved = false
     val client = evidence.fixture.resolve(if (slot == 0) "client" else "client-$slot").also { it.createDirectories() }
     var log = evidence.directory.resolve(
         when {
@@ -319,9 +387,22 @@ class ClientFixture(
     fun launchQuickPlayWorld(world: String, mode: String) {
         require(mode == "save" || mode == "verify")
         quickPlayLogOffset = if (log.exists()) log.readText().length else 0
+        journalVerifyObserved = false
+        verifyLoadedObserved = false
+        verifyExitBinding = fixtureVerifyExitBinding(mode, world, dedicated != null, journalSupport != null,
+            config.runId, username, uuid, evidence.fixture, client, journalSupport?.bridge)
+        verifyExitBinding?.let { binding ->
+            evidence.event("journal_verify_exit_configured", mapOf("measurement" to "launch_request_binding",
+                "nonce" to binding.nonce.toString(), "world_root" to binding.worldRoot.toString(),
+                "request" to binding.requestFile.toString(), "native_exit_observed" to false))
+        }
+        val exitArgs = verifyExitBinding?.properties.orEmpty()
         val journalArgs = journalSupport?.let { "${it.properties} -Dbc.journal.contract.singleplayer=$mode" }.orEmpty()
-        val jvmArgs = "$clientJvmArgs $journalArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
-            "-Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")} -Dbc.pack_test.world=$mode"
+        val jvmArgs = normalizeFixtureProcessorBudget(
+            "$clientJvmArgs $journalArgs $exitArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
+                "-Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")} -Dbc.pack_test.world=$mode",
+            4,
+        )
         val command = listOf(
             "pipx", "run", "--spec", "portablemc==4.4.1", "python",
             config.root.resolve("src/test/resources/quickplay_world.py").toString(),
@@ -329,25 +410,40 @@ class ClientFixture(
             username, uuid, world,
         )
         launcher = ManagedProcess("minecraft-client", command, client, log, clientEnvironment())
+        recordClientResourceBudget(jvmArgs, "quickplay", requireNotNull(launcher).pid)
     }
 
     private fun launch(connection: List<String>): ManagedProcess {
         val environment = clientEnvironment()
+        val jvmArgs = normalizeFixtureProcessorBudget(
+            "$clientJvmArgs ${journalSupport?.properties.orEmpty()} -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false -Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")}",
+            4,
+        )
         val command = mutableListOf(
             "pipx", "run", "--spec", "portablemc==4.4.1", "portablemc",
             "--main-dir", config.clientMain.toString(), "--work-dir", client.toString(), "--timeout", "120",
             "start", "--jvm", config.java.toString(),
-            "--jvm-args=$clientJvmArgs ${journalSupport?.properties.orEmpty()} -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false -Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")}",
+            "--jvm-args=$jvmArgs",
             "--resolution", "1280x720", "-u", username, "-i", uuid,
         )
         command += connection
         command += "forge:1.20.1-47.4.22"
-        return ManagedProcess("minecraft-client", command, client, log, environment)
+        val process = ManagedProcess("minecraft-client", command, client, log, environment)
+        recordClientResourceBudget(jvmArgs, "portablemc", process.pid)
+        return process
+    }
+
+    private fun recordClientResourceBudget(arguments: String, path: String, pid: Long) {
+        evidence.event("fixture_resource_budget", fixtureResourceBudgetEvidence("client", arguments, 4) + mapOf(
+            "client" to username, "launch_path" to path, "launcher_pid" to pid,
+            "lp_num_threads" to 2, "software_renderer" to true,
+        ))
     }
 
     private fun clientEnvironment() = mapOf(
             "DISPLAY" to display,
             "LIBGL_ALWAYS_SOFTWARE" to "1",
+            "LP_NUM_THREADS" to "2",
             "MESA_GL_VERSION_OVERRIDE" to "4.6",
             "MESA_GLSL_VERSION_OVERRIDE" to "460",
             "ALSOFT_DRIVERS" to "null",
@@ -369,6 +465,7 @@ class ClientFixture(
                 assertHashes()
                 evidence.event("journal_singleplayer_checkpoint", mapOf("operation" to operation,
                     "report" to report, "client_log" to log.toString()))
+                if (operation == "verify") journalVerifyObserved = true
                 return
             }
             check(process.alive) { "client exited before journal singleplayer $operation checkpoint; see $log" }
@@ -378,9 +475,41 @@ class ClientFixture(
         error("timed out waiting for journal singleplayer $operation checkpoint; see $log")
     }
 
-    fun waitForWorldProbe(marker: String) = requireNotNull(launcher).waitForLog(
-        Regex(Regex.escape(marker)), Duration.ofMinutes(10), "singleplayer world probe $marker",
-    )
+    /** Lifecycle request only: caller must have observed actual Journal VERIFY and native LOADED. */
+    fun requestNormalVerifyExit() {
+        val binding = requireNotNull(verifyExitBinding) { "normal verify exit is not configured for this fixture" }
+        val request = writeFixtureVerifyExitRequest(binding, journalVerifyObserved, verifyLoadedObserved)
+        evidence.event("journal_verify_exit_requested", mapOf("nonce" to binding.nonce.toString(),
+            "request" to request.toString(), "world_root" to binding.worldRoot.toString(),
+            "player_uuid" to binding.playerId.toString(), "native_exit_observed" to false))
+    }
+
+    fun waitForWorldProbe(marker: String) {
+        val binding = verifyExitBinding
+        val pattern = if (marker == "BC_DEBUG_WORLD_EXITED" && binding != null) binding.exitMarker
+            else Regex(Regex.escape(marker))
+        val process = requireNotNull(launcher)
+        if (binding != null && marker in setOf("BC_DEBUG_WORLD_LOADED mode=verify", "BC_DEBUG_WORLD_EXITED")) {
+            // A previous launch's uncorrelated LOADED must not authorize this fresh verification exit.
+            val deadline = System.nanoTime() + Duration.ofMinutes(10).toNanos()
+            var observed = false
+            while (System.nanoTime() < deadline) {
+                val suffix = if (log.exists()) log.readText().drop(quickPlayLogOffset) else ""
+                if (pattern.containsMatchIn(suffix)) { observed = true; break }
+                check(process.alive) { "client exited before fresh singleplayer world probe $marker; see $log" }
+                Thread.sleep(250)
+            }
+            if (!observed) {
+                process.captureDiagnostics(evidence.directory.resolve("journal-verify-native-exit-timeout"))
+                error("timed out waiting for fresh singleplayer world probe $marker; see $log")
+            }
+        } else process.waitForLog(pattern, Duration.ofMinutes(10), "singleplayer world probe $marker")
+        if (marker == "BC_DEBUG_WORLD_LOADED mode=verify" && binding != null) verifyLoadedObserved = true
+        if (marker == "BC_DEBUG_WORLD_EXITED" && binding != null)
+            evidence.event("journal_verify_native_exit_observed", mapOf("nonce" to binding.nonce.toString(),
+                "world_root" to binding.worldRoot.toString(), "boundary" to "native_clearLevel_return_server_terminated",
+                "saved_data_acceptance" to "requires_independent_post_exit_checks"))
+    }
 
     private fun configureRuntimeClientProfile() {
         val options = client.resolve("options.txt")
@@ -470,6 +599,68 @@ class ClientFixture(
     override fun close() {
         closeAll(launcher, xvfb)
     }
+}
+
+internal data class FixtureVerifyExitBinding(
+    val nonce: UUID, val runId: String, val playerName: String, val playerId: UUID,
+    val fixtureRoot: Path, val worldRoot: Path, val requestDir: Path,
+) {
+    val requestFile: Path get() = requestDir.resolve("verify-exit-$nonce.request")
+    val properties: String get() = mapOf("nonce" to nonce.toString(), "player_uuid" to playerId.toString(),
+        "fixture_root" to fixtureRoot.toString(), "world_root" to worldRoot.toString(), "request_dir" to requestDir.toString())
+        .entries.joinToString(" ") { (key, value) ->
+            require(value.none { it.isWhitespace() || it == '"' || it == '\'' }) { "unsafe verify exit property" }
+            "-Dbc.pack_test.verify_exit.$key=$value"
+        }
+    val payload: String get() = linkedMapOf("schema" to "bc.pack_test.verify_exit.v1", "mode" to "verify",
+        "nonce" to nonce.toString(), "run_id" to runId, "player_name" to playerName, "player_uuid" to playerId.toString(),
+        "fixture_root" to fixtureRoot.toString(), "world_root" to worldRoot.toString(), "request_dir" to requestDir.toString())
+        .entries.joinToString("\n", postfix = "\n") { (key, value) -> "$key=$value" }
+    val exitMarker: Regex get() = Regex(Regex.escape("BC_DEBUG_WORLD_EXITED mode=verify run_id=$runId nonce=$nonce " +
+        "player=$playerName player_uuid=$playerId world_root=$worldRoot") + "(?:\\r?\\n|$)")
+}
+
+private fun canonicalVerifyExitDirectory(path: Path): Path {
+    require(path.isAbsolute && path.normalize() == path && Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS) &&
+        path.toRealPath() == path) { "verify exit requires canonical nonsymlink owned directories" }
+    var ancestor: Path? = path
+    while (ancestor != null) {
+        require(!Files.isSymbolicLink(ancestor)) { "verify exit directory ancestry must not contain symlinks" }
+        ancestor = ancestor.parent
+    }
+    return path
+}
+
+internal fun fixtureVerifyExitBinding(mode: String, world: String, dedicated: Boolean, journal: Boolean,
+    runId: String, player: String, playerUuid: String, fixture: Path, client: Path, bridge: Path?,
+): FixtureVerifyExitBinding? {
+    if (mode != "verify" || world != "DebugWorld" || dedicated || !journal) return null
+    require(runId.matches(Regex("[0-9]{8}T[0-9]{6}Z-[0-9]+")) && player.matches(Regex("[A-Za-z0-9_]{1,16}")))
+    require(playerUuid.matches(Regex("[0-9a-f]{32}"))) { "verify exit requires the actual fixture launch UUID" }
+    val dashedUuid = "${playerUuid.substring(0, 8)}-${playerUuid.substring(8, 12)}-${playerUuid.substring(12, 16)}-" +
+        "${playerUuid.substring(16, 20)}-${playerUuid.substring(20)}"
+    val root = canonicalVerifyExitDirectory(fixture.toAbsolutePath())
+    val worldRoot = canonicalVerifyExitDirectory(client.toAbsolutePath().resolve("saves/DebugWorld"))
+    val dir = canonicalVerifyExitDirectory(requireNotNull(bridge))
+    require(root.fileName.toString() == "fixture" && root.parent?.parent?.fileName?.toString() == runId &&
+        dir == root.resolve("journal-contract") && worldRoot.startsWith(root)) { "verify exit must bind this new owned run fixture" }
+    val binding = FixtureVerifyExitBinding(UUID.randomUUID(), runId, player, UUID.fromString(dashedUuid), root, worldRoot, dir)
+    require(!Files.exists(binding.requestFile, LinkOption.NOFOLLOW_LINKS)) { "stale verify exit request" }
+    require(binding.payload.toByteArray(Charsets.UTF_8).size <= 2048)
+    binding.properties // Validate launch encoding before any process starts.
+    return binding
+}
+
+internal fun writeFixtureVerifyExitRequest(binding: FixtureVerifyExitBinding, verified: Boolean, loaded: Boolean): Path {
+    require(verified && loaded) { "normal verify exit requires actual Journal VERIFY and matching native LOADED" }
+    canonicalVerifyExitDirectory(binding.fixtureRoot)
+    canonicalVerifyExitDirectory(binding.worldRoot)
+    canonicalVerifyExitDirectory(binding.requestDir)
+    require(binding.requestDir == binding.fixtureRoot.resolve("journal-contract") && binding.worldRoot.startsWith(binding.fixtureRoot))
+    val bytes = binding.payload.toByteArray(Charsets.UTF_8)
+    require(bytes.size <= 2048)
+    Files.write(binding.requestFile, bytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)
+    return binding.requestFile
 }
 
 private const val DEFAULT_CLIENT_JVM_ARGS = "-Xms2G -Xmx12G"
