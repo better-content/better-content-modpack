@@ -78,8 +78,8 @@ with sentinel coverage remaining **36**:
 `client.foreign_emi_fill`, `client.foreign_emi_refill`, `client.foreign_emi_background`, and
 `client.foreign_emi_failed_fill`. They must independently prove beyond-face inputs, refill,
 background updates without page jumps, and failed-fill non-revelation/conservation. Their
-combined source gate passed 127 JVM tests, runtime-mapping checks, fixture isolation and JAR
-staging at source revision `a83a4c11e790f8df0097d9d8c472334867bebd2a`.
+combined source gate passed 137 JVM tests, runtime-mapping checks, fixture isolation and JAR
+staging at source revision `d416a4d0fa54a7cdf8c2d05cecbd7bc43a383496`.
 `client.foreign_grid_return` and `client.foreign_grid_return_blocked` independently require
 ordinary native QUICK_MOVE delivery into the hidden final cell or exact blocked conservation.
 The bounded input-return extension preserves native IDs10..45 first, then uses only validated
@@ -89,6 +89,15 @@ see `docs/native-emi-server-transport.md`.
 Runtime acceptance remains pending. Build406 passed202/206, but all four EMI rows exited before
 action because the old server package lacked EMI; strict findings were zero and cleanup complete.
 Its failed fixture is retained; neither build405 nor406 proves the new208 rows.
+Build407 reached205/208 with genuine native server EMI source/return/intent/reveal observations
+and passing background/failed-fill/blocked controls. Fill/refill failed the native result oracle
+because the fixture's null server level access skipped normal result calculation; the fixture
+now uses an ordinary native crafting-table provider and restores its owned block normally.
+Direct grid return delivered the exact item but did not reveal it: outbound count dedup now
+compares detached authoritative contents plus state, since accepted native prediction need not
+increment vanilla state. No state is forced, result oracle waived, or prediction suppressed.
+Build407 had zero strict findings and complete cleanup; persistence was not reached. Its
+failed fixture remains retained, and the next full208/persistence verdict remains pending.
 Runtime report validation continues to derive exact expected IDs/layers/totals from the
 hashed support manifest rather than accepting a hardcoded total.
 
