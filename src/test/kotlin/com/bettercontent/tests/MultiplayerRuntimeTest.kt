@@ -94,21 +94,8 @@ class MultiplayerRuntimeTest {
                 evidence.run.directory.resolve("dimensions.json"),
                 StandardCopyOption.REPLACE_EXISTING,
             )
-            if (evidence.run.target == null) {
-                // Full Debug needs distant corridors ready before clients connect. Campaign
-                // targets prepare their own pads; other focused targets do not use them.
-                positions.forEachIndexed { index, (x, z) -> prepareCampaignPlatform(index + 1, x, z) }
-                repeat(3) { sample ->
-                    server.commandResult(
-                        "forge tps",
-                        Regex("Overall: Mean tick time: [0-9.]+ ms\\. Mean TPS: 20\\.[0-9]+"),
-                        "prewarm recovery TPS sample ${sample + 1}",
-                        Duration.ofMinutes(3),
-                        retryInterval = Duration.ofSeconds(30),
-                    )
-                    if (sample < 2) Thread.sleep(10_000)
-                }
-            }
+            // Keep initial join and journal/native Font fixtures independent of campaign
+            // terrain. Campaign platforms and their recovery samples belong to that phase.
         }
         val lead = clients.first()
         startClient(lead)
@@ -210,7 +197,7 @@ class MultiplayerRuntimeTest {
         joined = true
     }
 
-    @Test @Order(3)
+    @Test @Order(4)
     fun everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "dimension traversal and TPS stabilization", "tier" to evidence.run.tier))
@@ -309,7 +296,7 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    @Test @Order(4)
+    @Test @Order(5)
     fun threeSurvivalPlayersStartCampaigns() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "three-player campaigns", "tier" to evidence.run.tier))
@@ -346,6 +333,9 @@ class MultiplayerRuntimeTest {
                 )
                 server.stopGracefully()
                 server.restart()
+                // Native journal/Font/traversal evidence is complete before any campaign
+                // floor is installed. Prewarm with no connected clients, just as before.
+                prepareCampaignTerrainAndRecover()
                 lead.restartDedicated(++clientRestartAttempt)
                 requirePlayersOnline("campaign phase fixture reset", listOf(lead))
                 evidence.run.event("campaign_phase_fixture_reset", mapOf(
@@ -449,7 +439,7 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    @Test @Order(5)
+    @Test @Order(6)
     fun debugServerRestartAndClientReconnectPreserveWorld() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "restart and reconnect", "tier" to evidence.run.tier))
@@ -530,7 +520,7 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    @Test @Order(2)
+    @Test @Order(3)
     fun debugNativeFontRoundTrips() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "native Font round trip", "tier" to evidence.run.tier))
@@ -601,7 +591,7 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    @Test @Order(6)
+    @Test @Order(7)
     fun multiplayerEvidenceIsCleanAndCandidatesAreUnchanged() {
         evidence.run.checkpoint("multiplayer log and hash audit") {
             clients.forEach { it.close() }
@@ -715,6 +705,20 @@ class MultiplayerRuntimeTest {
             Duration.ofSeconds(30),
         )
         return result.groupValues[1].toLong()
+    }
+
+    private fun prepareCampaignTerrainAndRecover() {
+        positions.forEachIndexed { index, (x, z) -> prepareCampaignPlatform(index + 1, x, z) }
+        repeat(3) { sample ->
+            server.commandResult(
+                "forge tps",
+                Regex("Overall: Mean tick time: [0-9.]+ ms\\. Mean TPS: 20\\.[0-9]+"),
+                "prewarm recovery TPS sample ${sample + 1}",
+                Duration.ofMinutes(3),
+                retryInterval = Duration.ofSeconds(30),
+            )
+            if (sample < 2) Thread.sleep(10_000)
+        }
     }
 
     private fun prepareCampaignPlatform(index: Int, x: Int, z: Int) {
