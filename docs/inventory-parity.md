@@ -73,13 +73,22 @@ journal verify report is required before claiming integrated persistence. Human 
 acceptance also remains pending and follows the automated gates.
 
 The canonical source manifest now includes four additional full-only real-client foreign EMI
-rows in its **206-row** full matrix, with sentinel coverage remaining **36**:
+rows, plus two direct native crafting-input return rows, in its **208-row** full matrix,
+with sentinel coverage remaining **36**:
 `client.foreign_emi_fill`, `client.foreign_emi_refill`, `client.foreign_emi_background`, and
 `client.foreign_emi_failed_fill`. They must independently prove beyond-face inputs, refill,
 background updates without page jumps, and failed-fill non-revelation/conservation. Their
-combined source gate passed 120 JVM tests, runtime-mapping checks, fixture isolation and JAR
-staging at source revision `7caeeee85885d5cb1cfc4435d359812e5584a141`; pack Dev passed.
-Runtime acceptance remains pending; build405 does not prove these new rows.
+combined source gate passed 127 JVM tests, runtime-mapping checks, fixture isolation and JAR
+staging at source revision `a83a4c11e790f8df0097d9d8c472334867bebd2a`.
+`client.foreign_grid_return` and `client.foreign_grid_return_blocked` independently require
+ordinary native QUICK_MOVE delivery into the hidden final cell or exact blocked conservation.
+The bounded input-return extension preserves native IDs10..45 first, then uses only validated
+appended cells for any residual. These direct rows do not pretend to execute EMI's client-only
+fallback branch. The same pinned EMI server component enables its supported native fill route;
+see `docs/native-emi-server-transport.md`.
+Runtime acceptance remains pending. Build406 passed202/206, but all four EMI rows exited before
+action because the old server package lacked EMI; strict findings were zero and cleanup complete.
+Its failed fixture is retained; neither build405 nor406 proves the new208 rows.
 Runtime report validation continues to derive exact expected IDs/layers/totals from the
 hashed support manifest rather than accepting a hardcoded total.
 
@@ -108,7 +117,12 @@ death drops, carried-stack layering, and compact/wide pixel alignment. Follow
 `mod_source/better-journal-inventory/docs/inventory-acceptance.md` (workspace-relative).
 Integrated-server journal-specific checkpoint results remain separate from the existing general
 singleplayer world-marker gate and must not be advertised as passed without their strict
-save/verify reports. A fixture-only namespace classification is added to copied KubeJS policy;
+save/verify reports. The new shared checkpoint seeds a native netherite120 bag, one legal Omega
+upgrade, tagged off-face counts300 and Integer.MAX_VALUE, and an empty NBT-sensitive memory
+filter. It retains the real merge-only60+4=64 target, exact native settings/upgrade NBT comparison,
+and a separate pure fresh UP/main Forge129-cell observation after reopen. Setup is save-only;
+verify neither reseeds nor repairs missing UUID/root/settings data. This stronger checkpoint is
+not yet runtime-qualified by the historical plain-bag checkpoints. A fixture-only namespace classification is added to copied KubeJS policy;
 its original/supplement hashes are recorded and unknown-namespace rejection remains enabled.
 
 ## Running

@@ -90,7 +90,7 @@ class JournalContractTest {
         val json = Files.readString(manifest)
         val full = JournalContractValidator.manifest(json, "full")
         val sentinel = JournalContractValidator.manifest(json, "sentinel")
-        assertEquals(206, full.size)
+        assertEquals(208, full.size)
         assertEquals(36, sentinel.size)
         val foreignIds = setOf(
             "client.foreign_emi_fill", "client.foreign_emi_refill",
@@ -100,6 +100,12 @@ class JournalContractTest {
         foreignIds.forEach { id ->
             assertTrue(JournalScenario(id, "client") in full, "missing full client scenario: $id")
             assertFalse(sentinel.any { it.id == id }, "foreign EMI scenario must remain full-only: $id")
+        }
+        val nativeReturnIds = setOf("client.foreign_grid_return", "client.foreign_grid_return_blocked")
+        assertEquals(nativeReturnIds, full.filter { it.id.startsWith("client.foreign_grid_return") }.map { it.id }.toSet())
+        nativeReturnIds.forEach { id ->
+            assertTrue(JournalScenario(id, "client") in full, "missing native return client scenario: $id")
+            assertFalse(sentinel.any { it.id == id }, "native return scenario must remain full-only: $id")
         }
     }
 
