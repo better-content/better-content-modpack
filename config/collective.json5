@@ -1,0 +1,5 @@
+{
+  // Disable Collective's optional asynchronous online update checker in this pinned pack.
+  // This is the native feature switch, not a logging filter; other native defaults remain intact.
+  "enableUpdateChecker": false
+}
