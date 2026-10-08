@@ -167,8 +167,50 @@ VERIFY and SAVE behavior remain unchanged without the opt-in. This does not forc
 change markers or write/repair NBT. Strict post-exit disk checks, fresh reopen and final audits
 remain independent; the marker alone cannot waive a native save failure.
 
-Full new-candidate Dist/Debug, upgraded integrated persistence, final audits/hashes/cleanup and human
-pointer/visual acceptance remain required. Historical409 rotation faults remain unidentified.
+Final-candidate full Dist/Debug and audits/hashes/cleanup remain required for automated signoff.
+Human pointer/visual playtesting is independent acceptance, not a prerequisite to delivering the
+qualified distribution. Historical409 rotation faults remain unidentified.
+
+### Build412 recovery and remaining qualification
+
+Build412 focused captured-seed save/reopen `20261008T173623Z-2876123` passed natural claim
+persistence, native120/Omega/MAX/filter/settings/upgrades/UUID/full-NBT, fresh Forge129, genuine
+normal exit and post-exit native disk checks, with audit0/unchanged hashes/complete cleanup.
+Full Dist `20261008T175946Z-29951231` passed. Full Debug `20261008T175946Z-2995123` failed:
+server and complete single-player groups passed, but multiplayer failed journal181/208, Aether
+native geometry1003/1024, campaign heartbeat and strict EMI teardown audit. Its normal cleanup
+completed with no survivors; dependent campaign restart was aborted. No partial pass waives those
+failures. Exact single-player snapshot and native before/after/Forge/filter comparisons passed.
+
+Source-only phase correction `a24000c1` isolates campaign terrain preparation from native join,
+journal, Font and traversal tests and gives the seven phases distinct orders. The initial full
+fixture previously installed a high one-layer campaign floor before natural crafting checks;
+login316 is not the unrecorded coordinate at the actual failing crafting search, so a precise
+terrain rejection cause or runtime repair is not claimed. Four new fast guards and all272 Dev
+checks passed. Natural support/reach/restoration and all campaign/TPS/resource oracles stay intact.
+
+The Aether sampler was correct: all nine saved FULL chunks exactly matched the original census,
+with963 Aether blocks plus40 Dynamic Trees Aether blocks;619 copper and one return seal remained
+excluded. Authorized Fonts source `28faa27bdddcd0e98f4d4fff65033c5f49c27042` rejects sparse NEW
+first-arrival candidates within the existing search radius. It requires1024 actual Aether-namespace
+blocks in the same nine centered chunks after projecting the unchanged return court writes,
+before placement. No pad counts, terrain repair, enlarged sampling, rescue seed or reduced
+threshold is used. Search-local counts are freshly rechecked before acceptance; cached arrival
+sites and other dimensions remain unchanged. A rejected new Aether entry spends no opening
+entry charge or player binding and cannot clear natural mobs at an unarrived site; ordinary
+preparation/activation/rollback lifecycle writes remain. Local84 JVM tests (including21 new
+regressions),12 negative evidence guards, all50 executed Forge GameTests, real Mixin mapping
+regeneration and runtime JAR staging passed. First staging failure from missing incremental
+Java annotation-processor output remains retained; no mapping file was fabricated. These local
+Forge47.4.13 results are not packed Forge47.4.22/C2ME qualification.
+
+All three campaign clients timed out before cleanup during severe host memory pressure; this is
+not proven OOM attribution or direct bee NBT mutation. JEI runtime disappearance during EMI
+background work caused comparator/index diagnostics; vanilla recipe deletion is not established.
+The human restarted the host;20:54 available RAM46GiB/free swap24GiB improves headroom but is
+not a runtime pass. The new canonical candidate still needs focused Font and complete unchanged
+Dist/Debug evidence. Build412's separately sealed ZIPs remain exact; original411 physical ZIP
+retention was missed before packager cleanup, although its failed worlds/logs/fingerprints remain.
 
 Runtime report validation continues to derive exact expected IDs/layers/totals from the
 hashed support manifest rather than accepting a hardcoded total.
@@ -203,7 +245,8 @@ upgrade, tagged off-face counts300 and Integer.MAX_VALUE, and an empty NBT-sensi
 filter. It retains the real merge-only60+4=64 target, exact native settings/upgrade NBT comparison,
 and a separate pure fresh UP/main Forge129-cell observation after reopen. Setup is save-only;
 verify neither reseeds nor repairs missing UUID/root/settings data. This stronger checkpoint is
-not yet runtime-qualified by the historical plain-bag checkpoints. A fixture-only namespace classification is added to copied KubeJS policy;
+qualified by build412's actual upgraded integrated save/reopen reports, not by the historical
+plain-bag checkpoints. A fixture-only namespace classification is added to copied KubeJS policy;
 its original/supplement hashes are recorded and unknown-namespace rejection remains enabled.
 
 ## Running
