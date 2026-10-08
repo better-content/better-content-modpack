@@ -79,7 +79,7 @@ with sentinel coverage remaining **36**:
 `client.foreign_emi_failed_fill`. They must independently prove beyond-face inputs, refill,
 background updates without page jumps, and failed-fill non-revelation/conservation. Their
 combined source gate passed 137 JVM tests, runtime-mapping checks, fixture isolation and JAR
-staging at source revision `d416a4d0fa54a7cdf8c2d05cecbd7bc43a383496`.
+staging at source revision `2f67f4e877852faf0e1ed901d2783b038d8a0c98`.
 `client.foreign_grid_return` and `client.foreign_grid_return_blocked` independently require
 ordinary native QUICK_MOVE delivery into the hidden final cell or exact blocked conservation.
 The bounded input-return extension preserves native IDs10..45 first, then uses only validated
@@ -98,6 +98,16 @@ compares detached authoritative contents plus state, since accepted native predi
 increment vanilla state. No state is forced, result oracle waived, or prediction suppressed.
 Build407 had zero strict findings and complete cleanup; persistence was not reached. Its
 failed fixture remains retained, and the next full208/persistence verdict remains pending.
+Build408 ended181/208 before the first foreign action: the ordinary table disappeared and the
+menu closed; remaining foreign/native failures cascaded from that missing fixture table.
+Fixture restoration failed with two strict cleanup findings, while process cleanup completed.
+Persistence was not reached. Retained physics configuration/native falling behavior and saved
+terrain strongly support an unsupported-table diagnosis, but no per-placement/fall trace was
+captured. Setup now searches reachable empty space atop four existing solid support cells,
+rejects trees/liquids/entities/block entities, records selected/current player/support geometry,
+and places once through the ordinary provider. No artificial support, relocation, exemption,
+re-placement or forced reopening is used. Player restoration precedes the exact table invariant;
+a missing/changed table still fails cleanup without overwriting unexpected blocks.
 Runtime report validation continues to derive exact expected IDs/layers/totals from the
 hashed support manifest rather than accepting a hardcoded total.
 
