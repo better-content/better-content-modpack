@@ -1,83 +1,81 @@
-# Inventory parity contract
+# Journal inventory contract
 
-The journal inventory is a presentation layer over vanilla storage semantics: the
-equipped backpack is the player's inventory (hotbar 0-8, bag face at main indices
-9-35, full bag through the journal menu's bag block), and all interaction runs
-through vanilla `AbstractContainerMenu` behavior on real slots. This document is
-the executable spec for "behaves like a normal inventory".
+The equipped backpack is the player's storage of record: hotbar 0–8, bag face at inventory
+9–35, full bag through the journal's fixed block (up to 72 cells, no scrolling). Interaction
+uses real vanilla slots, but routing, ownership, synchronization, persistence and presentation
+are separate contracts. “The result slot emptied” is not successful transfer acceptance.
 
-Coverage keys: **probe** = asserted by `/journalparity` in-game (runs in the
-multiplayer suite on every release); **jvm** = asserted by mod unit tests;
-**visual** = pointer/pixel rows for the acceptance run (XTest rig or human).
+## Independent gates
 
-| # | Behavior | Expected | Coverage |
-| --- | --- | --- | --- |
-| 1 | Journal opens as a normal menu | `E` opens a networked `JournalMenu`; sync/prediction vanilla | probe |
-| 2 | Main face mapping | inventory 9-35 shows bag 0-26 on both peers | probe |
-| 3 | Pick up (place anywhere) | left/right pickup, place into any bag cell | probe |
-| 4 | Split | right-click splits a stack onto the cursor / into a cell | probe |
-| 5 | Merge | same-item placement merges up to stack and slot limits | probe |
-| 5b | Conservation | no interaction creates or destroys items; movement rows assert per-item totals before/after | probe |
-| 5c | Nearest-cell placement | quick-move fills the nearest free cell (visible-first), never a far corner | probe |
-| 6 | Left drag (even split) | drag across bag cells distributes evenly | probe |
-| 7 | Right drag (one each) | one item per cell | jvm + probe (left variant) |
-| 8 | Shift-click bag → hotbar | vanilla quick-move semantics | probe |
-| 9 | Shift-click hotbar → bag | vanilla quick-move semantics | probe |
-| 10 | Shift-click container → bag window | native host quick-move (fills player face = bag window) | jvm (rules) + visual |
-| 11 | Number-key swap | swap hotbar N with any bag cell | probe |
-| 12 | Throw | drop-key drops from bag cells | probe |
-| 13 | Double-click collect | gathers matching stacks to the cursor | probe |
-| 14 | Craft result computes | grid change produces the vanilla result in the result slot | probe (flagship) |
-| 15 | Craft take consumes grid | taking the result consumes one per input; remainder items returned | probe |
-| 16 | Craft result shift-click | output moves to storage; grid consumed | probe |
-| 17 | Recipe book gather | gather sees the full bag (beyond the 27-slot face) | probe |
-| 18 | Recipe book consume | `findSlotMatchingUnusedItem` + remove consume bag slots (incl. >27) | probe |
-| 19 | Recipe book fill / craft-all | UI click-to-fill and craft-all draw from the bag | visual |
-| 20 | Pickup routing | pickup fills hotbar, then bag; overflow returns to the world | probe |
-| 21 | Close-return | closing returns craft-grid contents to storage | probe |
-| 22 | Bag absent | storage inert; pickup fills hotbar then world | jvm (routing) |
-| 23 | Bag swap mid-open | live rebinding; vanilla sync reconciles | visual |
-| 24 | Reconnect / resize while holding | vanilla menu state handling | visual |
-| 25 | Foreign surfaces | bag window on the player grid + surplus block (27-71), no scrolling; exotic menus stay native with a warning | jvm (classification) + visual |
-| 26 | Surplus quick-move | surplus cells shift to hotbar then bag window | jvm (rules) + probe (journal equivalent) |
-| 27 | EMI quick fill | fill button gathers from the bag via the registered MenuType handler and writes the grid | probe (registration) + visual |
-| 27b | EMI R/U and fill cells | works on bag, craft, armor, curio cells (real slots) | visual |
-| 28 | Curios equip effects | `CurioSlot` callbacks fire on equip/unequip | visual |
-| 29 | Creative inventory | native creative UI; bag window is the main grid | visual |
-| 30 | Death drops | bag item drops with contents (storage lives in the item) | visual |
+| Gate | Evidence | Does not establish |
+| --- | --- | --- |
+| JVM / Dev | Accounting oracle, routing/face rules, mixin registration, JSON/report/coverage validation and helper exclusion | Minecraft interaction or rendering |
+| Server semantics | Actual menu code with known loaded recipes; exact input/output/remainder deltas, destination and lifecycle assertions | Client dispatch or visible pixels |
+| Client synchronization | Normal inventory-key opening and game-mode click/recipe dispatch; correlated server/client snapshots after network synchronization | Pointer hover targeting or pixel correctness |
+| Persistence | Dedicated disconnect/reconnect and graceful restart, integrated save/reopen; merged crafted output, saved bag UUID, counts and complete stack NBT | Any lifecycle or candidate not actually exercised |
+| Human visual/pointer | Actual gestures on exact candidate, native screenshots plus before/after state | Any untested surface/fixture combination |
 
-## Integration shape (the layer beyond behavior)
+Never summarize server parity alone as complete inventory acceptance. Manual results remain
+`pending` unless a human actually executes the acceptance matrix.
 
-Parity is three contracts, not one: semantics (hosted vanilla), shape and
-affordances (fill order, visible placement, index conventions), and extension
-registries (per-mod contracts keyed on identity). The journal must satisfy all
-three or tooling silently degrades:
+## Fixture-only machinery
 
-- **EMI recipe fill** dispatches on `MenuType`-registered `EmiRecipeHandler`s
-  and only coerces for vanilla `InventoryScreen`. The journal registers a
-  `StandardRecipeHandler` for its menu type (`JournalEmiPlugin`, asserted by
-  the `journal-emi-handler registered` client-log marker in the harness).
-- **Fill order**: quick-move fills the nearest free cell (forward). Vanilla's
-  reverse-fill quirk is harmless in a 27-cell grid and hostile in a 72-slot
-  bag; this is a deliberate, tested deviation.
-- **Viewer/tool checks per surface** (EMI fill, recipe book, curios) remain
-  visual rows; any row marked visual is re-verified at the pointer-action
-  acceptance run.
+The old production `/journalparity` destructive first-online-player command is removed.
+`better-journal-test-support.jar` is built separately by the journal repository and injected
+ONLY into isolated server/client fixtures. It contains no replacements for production menu,
+UI or mixin classes; production and release archives exclude test machinery. Candidate hashes
+and support hashes are recorded separately and asserted unchanged.
 
-## Documented deviations
+`journalcontract PLAYER RUN sentinel|full` requires exact fixture player/run JVM identities,
+rejects duplicate runs, isolates scenarios, and emits `bc.journal.contract.v1` JSON. The harness
+requires exact manifest IDs/layers, unique rows, valid counts, identity hashes, completion and
+successful cleanup; missing/malformed/stale/duplicate/pending results cannot pass. Readiness
+may be retried, destructive scenario commands may not. Reports and bridge evidence are retained.
 
-- Mods reading `player.getInventory().items` field slots 9-35 directly see empty
-  stacks; the bag is the storage of record. The ecosystem overwhelmingly uses
-  `getItem`/`setItem`/`add`, which are fully face-aware.
-- Bag storage beyond 72 slots is capped; beyond-capacity upgrades are ignored.
-- The recipe book's own grid-fill UI is vanilla; its gather view covers the full
-  bag, while the visible inventory face remains 27 slots (vanilla semantics).
+Accounting counts each physical location once, distinguishes full NBT stack identity, excludes
+computed result previews, and includes scenario drops. Ordinary moves conserve items; known
+crafts assert recipe transformations and container remainders. An unchanged log→plank ledger
+is not a valid crafting oracle. Output must reach storage, not merely exist as a dropped entity.
 
-## Running the parity suite
+## Coverage
 
-- Mod JVM tests: `./gradlew test` in `mod_source/better-journal-inventory`.
-- In-game probe: `journalparity` (permission 2) on a running server; the
-  multiplayer pack suite runs it automatically (`inventoryParityMatrixPasses`)
-  and asserts `journal-parity-summary {"status":"passed",...}`.
-- Visual rows: the pointer-action acceptance run (XTest rig or human) per the
-  original acceptance-matrix procedure, screenshots retained with the run.
+Dist runs a bounded sentinel matrix: no bag, basic/diamond bag, canvas/planks/honey crafting,
+matching/empty/full and limited destinations, shared movements, and client-path assertions.
+Debug expands deterministic crafting across all supported tiers and states and adds dedicated
+persistence. The manifest inside the hashed support JAR is authoritative for automated rows.
+
+Shared rows cover split/place/merge, NBT distinction, number swaps, throw accounting, left/right
+quick-craft, double-click collect, overflow, live bag replacement and chest/crafting/furnace
+host menus. Client rows cover inventory opening, canvas result shift, reopen, number swap,
+actual registered EMI handler fill, recipe-book requests from beyond the 27-cell face, and
+replacement synchronization. Client stability must be accompanied by authoritative comparison;
+registration markers alone do not prove fill behavior.
+
+Remaining human gates: actual EMI button/R/U hover targeting, cross-surface mouse drags,
+Sophisticated upgrade/filter controls, Curios effects, exotic-menu warnings, creative behavior,
+death drops, carried-stack layering, and compact/wide pixel alignment. Follow
+`mod_source/better-journal-inventory/docs/inventory-acceptance.md` (workspace-relative).
+Integrated-server journal-specific checkpoint results remain separate from the existing general
+singleplayer world-marker gate and must not be advertised as passed without their strict
+save/verify reports. A fixture-only namespace classification is added to copied KubeJS policy;
+its original/supplement hashes are recorded and unknown-namespace rejection remains enabled.
+
+## Running
+
+- Journal local gate: `./gradlew verifyFull stageRuntimeJar` in the source repository.
+- Pack Dev: `./test.main.kts dev`.
+- Existing candidate diagnosis: `./test.main.kts dist --target journal-inventory`;
+  `./test.main.kts debug --target journal-inventory --retry-of RUN_ID` for the full focused matrix.
+- New candidate for proven fixes: authorized `./release.main.kts --target journal-inventory
+  --retry-of RUN_ID`; final release: `./release.main.kts --debug`, complete Dist/Debug on unchanged ZIPs.
+
+Keep failed fixtures/logs and first useful diagnosis. Record process cleanup and all hashes.
+Fresh distribution and pack tests still require explicit user authorization.
+
+## Compatibility boundaries
+
+Mods directly reading `Inventory.items` main slots bypass the bag face and see empty stacks.
+Bag capacity exposed by the journal is capped at 72. Unsupported foreign menus stay native;
+vanilla hosting is not proof that every mod-specific registry or callback contract is satisfied.
+Nearest reachable/free placement is deliberate; reverse-fill into an invisible corner is not
+acceptable simply because an internal stack count is correct.

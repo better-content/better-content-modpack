@@ -70,6 +70,12 @@ class CandidateContractTest {
     }
 
     @Test
+    fun candidatesExcludeJournalTestSupport() {
+        JournalCandidateExclusion.validate(pair.client)
+        JournalCandidateExclusion.validate(pair.server)
+    }
+
+    @Test
     @Order(4)
     fun contractChecksDoNotMutateCandidates() {
         assertEquals(pair.clientSha256, Hashes.sha256(pair.client))

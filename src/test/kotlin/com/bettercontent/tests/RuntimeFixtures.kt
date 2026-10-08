@@ -18,9 +18,12 @@ class DedicatedServerFixture(
     private val environment: Map<String, String> = emptyMap(),
     private val allowLongClientLogin: Boolean = false,
     private val seed: Long? = null,
+    enableJournalContract: Boolean = false,
+    journalPlayer: String = "SmokeClient1",
 ) : AutoCloseable {
     val config = evidence.config
     val pair = CandidateLocator.locate(config.root)
+    val journalSupport = if (enableJournalContract) JournalFixtureSupport(evidence, pair, journalPlayer) else null
     val serverExtract = evidence.fixture.resolve("server-extract")
     val server: Path
     val log = evidence.directory.resolve("server.log")
@@ -75,6 +78,11 @@ class DedicatedServerFixture(
                 .replace("view-distance=10", "view-distance=4")
         }
         properties.toFile().writeText(runtimeProperties)
+        journalSupport?.let { support ->
+            support.install(server)
+            val args = server.resolve("user_jvm_args.txt")
+            args.toFile().appendText("\n${support.properties}\n")
+        }
         process = ManagedProcess("server", listOf("./run.sh"), server, log, environment)
         evidence.event("server_started", mapOf("pid" to process.pid, "port" to port, "directory" to server.toString()))
     }
@@ -193,9 +201,14 @@ class ClientFixture(
     val username: String = evidence.config.username,
     private val slot: Int = 0,
     private val clientJvmArgs: String = DEFAULT_CLIENT_JVM_ARGS,
+    enableJournalContract: Boolean = false,
+    journalContractSupport: JournalFixtureSupport? = null,
 ) : AutoCloseable {
     private val config = evidence.config
     private val pair = dedicated?.pair ?: CandidateLocator.locate(config.root)
+    val journalSupport = journalContractSupport ?: dedicated?.journalSupport?.takeIf { it.identity.player == username }
+        ?: if (enableJournalContract) JournalFixtureSupport(evidence, pair, username) else null
+    private var quickPlayLogOffset = 0
     val client = evidence.fixture.resolve(if (slot == 0) "client" else "client-$slot").also { it.createDirectories() }
     var log = evidence.directory.resolve(
         when {
@@ -209,9 +222,16 @@ class ClientFixture(
     private val display = ":${200 + ((ProcessHandle.current().pid() + slot) % 500)}"
     private var xvfb: ManagedProcess? = null
     private var launcher: ManagedProcess? = null
+    private var priorJoinCount = 0
     val uuid = offlineUuid(username)
 
     init {
+        journalSupport?.let { support ->
+            require(support.identity.player == username && support.identity.runId == config.runId &&
+                support.identity.clientSha256 == pair.clientSha256 && support.identity.serverSha256 == pair.serverSha256) {
+                "client journal supplement identity differs from fixture"
+            }
+        }
         evidence.event("candidate_selected", mapOf(
             "client" to pair.client.toString(),
             "client_sha256" to pair.clientSha256,
@@ -253,6 +273,7 @@ class ClientFixture(
             evidence.directory.resolve(if (slot == 0) "client-artifacts.log" else "client-$slot-artifacts.log"),
         )
         TaczFixtureSupport.assertResolvedArtifacts(client, config.root)
+        journalSupport?.install(client)
         if (dedicated != null || slot == 5 || slot == 6) configureRuntimeClientProfile()
         client.resolve("saves").createDirectories()
         xvfb = ManagedProcess("xvfb-$slot", listOf("Xvfb", display, "-screen", "0", "1280x720x24", "-nolisten", "tcp"), client, xvfbLog)
@@ -262,7 +283,17 @@ class ClientFixture(
 
     fun launchDedicated() {
         val server = requireNotNull(dedicated)
+        val pattern = Regex("${Regex.escape(username)} joined the game")
+        priorJoinCount = if (server.log.exists()) pattern.findAll(server.log.readText()).count() else 0
         launcher = launch(listOf("-s", "127.0.0.1", "-p", server.port.toString()))
+    }
+
+    /** Stop just Minecraft, keeping the imported fixture and its Xvfb display for reconnect. */
+    fun disconnectDedicated() {
+        requireNotNull(dedicated) { "dedicated disconnect requires a server fixture" }
+        launcher?.close()
+        launcher = null
+        evidence.event("dedicated_client_disconnected", mapOf("client" to username, "log" to log.toString()))
     }
 
     fun restartDedicated(attempt: Int) {
@@ -287,7 +318,9 @@ class ClientFixture(
 
     fun launchQuickPlayWorld(world: String, mode: String) {
         require(mode == "save" || mode == "verify")
-        val jvmArgs = "$clientJvmArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
+        quickPlayLogOffset = if (log.exists()) log.readText().length else 0
+        val journalArgs = journalSupport?.let { "${it.properties} -Dbc.journal.contract.singleplayer=$mode" }.orEmpty()
+        val jvmArgs = "$clientJvmArgs $journalArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
             "-Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")} -Dbc.pack_test.world=$mode"
         val command = listOf(
             "pipx", "run", "--spec", "portablemc==4.4.1", "python",
@@ -304,7 +337,7 @@ class ClientFixture(
             "pipx", "run", "--spec", "portablemc==4.4.1", "portablemc",
             "--main-dir", config.clientMain.toString(), "--work-dir", client.toString(), "--timeout", "120",
             "start", "--jvm", config.java.toString(),
-            "--jvm-args=$clientJvmArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false -Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")}",
+            "--jvm-args=$clientJvmArgs ${journalSupport?.properties.orEmpty()} -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false -Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")}",
             "--resolution", "1280x720", "-u", username, "-i", uuid,
         )
         command += connection
@@ -319,6 +352,31 @@ class ClientFixture(
             "MESA_GLSL_VERSION_OVERRIDE" to "460",
             "ALSOFT_DRIVERS" to "null",
         )
+
+    fun waitJournalCheckpoint(operation: String) {
+        val support = requireNotNull(journalSupport) { "QuickPlay journal checkpoint requires fixture support" }
+        require(operation in setOf("save", "verify"))
+        val pattern = Regex(Regex.escape(JournalContractValidator.CHECKPOINT_MARKER) + "([^\\r\\n]+)")
+        val process = requireNotNull(launcher)
+        val deadline = System.nanoTime() + Duration.ofMinutes(10).toNanos()
+        while (System.nanoTime() < deadline) {
+            val suffix = if (log.exists()) log.readText().drop(quickPlayLogOffset) else ""
+            pattern.find(suffix)?.let { match ->
+                val json = match.groupValues[1]
+                evidence.directory.resolve("journal-singleplayer-$operation-report.json").toFile().writeText(json + "\n")
+                val report = JournalContractValidator.validateCheckpoint(json, support.identity, operation)
+                support.assertStable()
+                assertHashes()
+                evidence.event("journal_singleplayer_checkpoint", mapOf("operation" to operation,
+                    "report" to report, "client_log" to log.toString()))
+                return
+            }
+            check(process.alive) { "client exited before journal singleplayer $operation checkpoint; see $log" }
+            Thread.sleep(250)
+        }
+        process.captureDiagnostics(evidence.directory.resolve("journal-singleplayer-$operation-timeout"))
+        error("timed out waiting for journal singleplayer $operation checkpoint; see $log")
+    }
 
     fun waitForWorldProbe(marker: String) = requireNotNull(launcher).waitForLog(
         Regex(Regex.escape(marker)), Duration.ofMinutes(10), "singleplayer world probe $marker",
@@ -363,7 +421,8 @@ class ClientFixture(
 
     fun waitDedicatedJoin() {
         val server = requireNotNull(dedicated)
-        server.waitLog(Regex("${Regex.escape(username)} joined the game"), "dedicated client join", Duration.ofMinutes(10))
+        server.waitLogCount(Regex("${Regex.escape(username)} joined the game"), priorJoinCount + 1,
+            "fresh dedicated client join", Duration.ofMinutes(10))
     }
 
     fun processAlive(): Boolean = launcher?.alive == true
