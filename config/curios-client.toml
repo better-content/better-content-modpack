@@ -4,7 +4,7 @@
 	#Set to true to enable rendering curios
 	renderCurios = true
 	#Set to true to enable the Curios GUI button
-	enableButton = false
+	enableButton = true
 	#The X-Offset for the Curios GUI button
 	#Range: -100 ~ 100
 	buttonXOffset = 0
