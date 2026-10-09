@@ -20,7 +20,7 @@ class RetirementAuditTest {
             "src/test/kotlin/com/bettercontent/tests/MultiplayerRuntimeTest.kt","src/test/kotlin/com/bettercontent/tests/SingleplayerRuntimeTest.kt")) {
             val s=Files.readString(Path.of(name))
             for(token in listOf("native-inventory","nativeinventorycontract","nativeinventorycheckpoint","bc.native.inventory","bc.journal.contract",
-                "enableJournalContract","JournalContractValidator","JournalFixtureSupport","waitJournalCheckpoint","setInvulnerable"))assertFalse(s.contains(token),"$name: $token")
+                "enableJournalContract","JournalContractValidator","JournalFixtureSupport","waitJournalCheckpoint","disconnectDedicated","setInvulnerable"))assertFalse(s.contains(token),"$name: $token")
         }
     }
     @Test fun diagnosticClassificationAddsOnlyAnInfrastructureNamespaceAndKeepsBlocking() {

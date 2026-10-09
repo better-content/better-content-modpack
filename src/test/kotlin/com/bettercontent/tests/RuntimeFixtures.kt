@@ -348,14 +348,6 @@ class ClientFixture(
         launcher = launch(listOf("-s", "127.0.0.1", "-p", server.port.toString()))
     }
 
-    /** Stop just Minecraft, keeping the imported fixture and its Xvfb display for reconnect. */
-    fun disconnectDedicated() {
-        requireNotNull(dedicated) { "dedicated disconnect requires a server fixture" }
-        launcher?.close()
-        launcher = null
-        evidence.event("dedicated_client_disconnected", mapOf("client" to username, "log" to log.toString()))
-    }
-
     fun restartDedicated(attempt: Int) {
         requireNotNull(dedicated) { "dedicated client restart requires a server fixture" }
         require(attempt > 0)
