@@ -50,7 +50,7 @@ if (jobs !in 1..4) {
     System.err.println("release jobs must be between 1 and 4")
     exitProcess(2)
 }
-val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "campaign-start", "campaign", "restart-compat", "cursed-pyramid", "lineage-transition", "world-save", "journal-inventory") ||
+val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "campaign-start", "campaign", "restart-compat", "cursed-pyramid", "lineage-transition", "world-save", "native-inventory") ||
     (target!!.startsWith("font:") && target!!.removePrefix("font:") in setOf("bumblezone", "aether", "nether")) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
         target!!.removePrefix("dimension:") !in setOf("the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether"))

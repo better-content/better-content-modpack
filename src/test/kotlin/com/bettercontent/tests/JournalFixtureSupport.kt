@@ -8,9 +8,9 @@ import kotlin.io.path.readText
 
 /** This supplement belongs to the disposable fixture, never to the candidate or pack mods/. */
 class JournalFixtureSupport(private val evidence: EvidenceRun, pair: CandidatePair, player: String) {
-    private val source = evidence.config.root.parent.resolve("mod_source/better-journal-inventory/build/libs/better-journal-test-support.jar")
+    private val source = evidence.config.root.parent.resolve("mod_source/better-journal-inventory/build/libs/better-native-inventory-test-support.jar")
     val mode = if (evidence.tier == "debug") "full" else "sentinel"
-    val bridge = evidence.fixture.resolve("journal-contract").toAbsolutePath().normalize()
+    val bridge = evidence.fixture.resolve("native-inventory-contract").toAbsolutePath().normalize()
     val identity: JournalContractIdentity
     val expected: Set<JournalScenario>
     val properties: String
@@ -22,7 +22,7 @@ class JournalFixtureSupport(private val evidence: EvidenceRun, pair: CandidatePa
         JournalCandidateExclusion.validate(pair.client)
         JournalCandidateExclusion.validate(pair.server)
         val manifest = ZipFile(source.toFile()).use { jar ->
-            val entry = requireNotNull(jar.getEntry("journal-contract-manifest.json")) { "support JAR lacks scenario manifest" }
+            val entry = requireNotNull(jar.getEntry("native-inventory-manifest.json")) { "support JAR lacks scenario manifest" }
             jar.getInputStream(entry).bufferedReader().use { it.readText() }
         }
         expected = JournalContractValidator.manifest(manifest, mode)
@@ -46,13 +46,13 @@ class JournalFixtureSupport(private val evidence: EvidenceRun, pair: CandidatePa
         properties = mapOf(
             "run_id" to identity.runId, "player" to player, "mode" to mode,
             "client_sha256" to identity.clientSha256, "server_sha256" to identity.serverSha256,
-            "journal_sha256" to journalHash, "support_sha256" to identity.supportSha256,
+            "presentation_sha256" to journalHash, "support_sha256" to identity.supportSha256,
             "dir" to bridge.toString(), "manifest" to manifestPath.toString(),
         ).entries.joinToString(" ") { (key, value) ->
             require(value.none { it.isWhitespace() || it == '"' || it == '\'' }) { "unsafe fixture JVM property" }
-            "-Dbc.journal.contract.$key=$value"
+            "-Dbc.native.inventory.$key=$value"
         }
-        evidence.directory.resolve("journal-contract-manifest.json").toFile().writeText(manifest)
+        evidence.directory.resolve("native-inventory-manifest.json").toFile().writeText(manifest)
         evidence.event("journal_fixture_support", mapOf("source" to source.toString(), "mode" to mode,
             "run_id" to identity.runId, "player" to player, "candidate_client_sha256" to identity.clientSha256,
             "candidate_server_sha256" to identity.serverSha256, "journal_sha256" to journalHash,
@@ -93,7 +93,7 @@ class JournalFixtureSupport(private val evidence: EvidenceRun, pair: CandidatePa
     }
 
     fun preserveBridge() {
-        val output = evidence.directory.resolve("journal-contract-bridge").also { it.createDirectories() }
+        val output = evidence.directory.resolve("native-inventory-contract-bridge").also { it.createDirectories() }
         Files.walk(bridge).use { files -> files.filter { Files.isRegularFile(it) }.forEach { source ->
             val target = output.resolve(bridge.relativize(source))
             target.parent.createDirectories()

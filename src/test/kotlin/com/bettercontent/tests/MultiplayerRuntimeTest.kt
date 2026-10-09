@@ -52,7 +52,7 @@ class MultiplayerRuntimeTest {
                 evidence.run,
                 mapOf("JAVA_TOOL_OPTIONS" to harnessOptions),
                 allowLongClientLogin = true,
-                enableJournalContract = evidence.run.target == null || evidence.run.target == "journal-inventory",
+                enableJournalContract = evidence.run.target == null || evidence.run.target == "native-inventory",
                 journalPlayer = usernames.first(),
             )
             clients = usernames.mapIndexed { index, username ->
@@ -115,13 +115,13 @@ class MultiplayerRuntimeTest {
             val support = requireNotNull(server.journalSupport)
             val identity = support.identity
             val match = server.commandResult(
-                "journalcontract ${identity.player} ${identity.runId} ${identity.mode}",
+                "nativeinventorycontract ${identity.player} ${identity.runId} ${identity.mode}",
                 Regex(Regex.escape(JournalContractValidator.MARKER) + "([^\\r\\n]+)"),
                 "journal contract report",
                 timeout = Duration.ofMinutes(5),
             )
             val json = match.groupValues[1]
-            evidence.run.directory.resolve("journal-contract-report.json").toFile().writeText(json + "\n")
+            evidence.run.directory.resolve("native-inventory-contract-report.json").toFile().writeText(json + "\n")
             val report = JournalContractValidator.validate(json, identity, support.expected)
             support.assertStable()
             server.assertHashes()
@@ -140,7 +140,7 @@ class MultiplayerRuntimeTest {
         val support = requireNotNull(server.journalSupport)
         val identity = support.identity
         val match = server.commandResult(
-            "journalcheckpoint ${identity.player} ${identity.runId} $operation",
+            "nativeinventorycheckpoint ${identity.player} ${identity.runId} $operation",
             Regex(Regex.escape(JournalContractValidator.CHECKPOINT_MARKER) + "([^\\r\\n]+)"),
             "journal checkpoint $phase $operation",
             timeout = Duration.ofMinutes(2),

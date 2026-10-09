@@ -27,9 +27,9 @@ class JournalContractTest {
         "a".repeat(64), "b".repeat(64), "c".repeat(64), "d".repeat(64))
     private val expected = setOf(JournalScenario("output", "server"), JournalScenario("dispatch", "client"))
     private fun valid(): ObjectNode = mapper.valueToTree(mapOf(
-        "schema" to "bc.journal.contract.v1", "run_id" to identity.runId, "player" to identity.player,
+        "schema" to "bc.native_inventory.contract.v1", "run_id" to identity.runId, "player" to identity.player,
         "mode" to identity.mode, "candidate_client_sha256" to identity.clientSha256,
-        "candidate_server_sha256" to identity.serverSha256, "journal_sha256" to identity.journalSha256,
+        "candidate_server_sha256" to identity.serverSha256, "presentation_sha256" to identity.journalSha256,
         "support_sha256" to identity.supportSha256, "status" to "passed", "cleanup" to "passed",
         "expected_total" to 2, "total" to 2, "passed" to 2,
         "rows" to expected.map { mapOf("id" to it.id, "layer" to it.layer, "status" to "passed", "detail" to "observed") },
@@ -43,7 +43,7 @@ class JournalContractTest {
     }
     @Test fun rejectsEveryMissingIdentityAndMismatchedIdentity() {
         listOf("schema", "run_id", "player", "mode", "candidate_client_sha256", "candidate_server_sha256",
-            "journal_sha256", "support_sha256").forEach { field ->
+            "presentation_sha256", "support_sha256").forEach { field ->
             reject(valid().also { it.remove(field) })
             reject(valid().also { it.put(field, "wrong") })
             reject(valid().also { it.put(field, 1) })
@@ -83,46 +83,38 @@ class JournalContractTest {
             assertThrows(Exception::class.java) { JournalContractValidator.validate(json, identity, expected) }
         }
     }
-    @Test fun canonicalManifestKeepsForeignEmiCoverageFullOnly() {
+    @Test fun nativeManifestStartsWithNoBackpackClientCraftAndKeepsNativeObligationsInDist() {
         val manifest = TestConfig.load().root.parent.resolve(
-            "mod_source/better-journal-inventory/src/testSupport/resources/journal-contract-manifest.json",
+            "mod_source/better-journal-inventory/src/testSupport/resources/native-inventory-manifest.json",
         )
         val json = Files.readString(manifest)
         val full = JournalContractValidator.manifest(json, "full")
         val sentinel = JournalContractValidator.manifest(json, "sentinel")
-        assertEquals(208, full.size)
-        assertEquals(36, sentinel.size)
-        val foreignIds = setOf(
-            "client.foreign_emi_fill", "client.foreign_emi_refill",
-            "client.foreign_emi_background", "client.foreign_emi_failed_fill",
-        )
-        assertEquals(foreignIds, full.filter { it.id.startsWith("client.foreign_emi_") }.map { it.id }.toSet())
-        foreignIds.forEach { id ->
-            assertTrue(JournalScenario(id, "client") in full, "missing full client scenario: $id")
-            assertFalse(sentinel.any { it.id == id }, "foreign EMI scenario must remain full-only: $id")
-        }
-        val nativeReturnIds = setOf("client.foreign_grid_return", "client.foreign_grid_return_blocked")
-        assertEquals(nativeReturnIds, full.filter { it.id.startsWith("client.foreign_grid_return") }.map { it.id }.toSet())
-        nativeReturnIds.forEach { id ->
-            assertTrue(JournalScenario(id, "client") in full, "missing native return client scenario: $id")
-            assertFalse(sentinel.any { it.id == id }, "native return scenario must remain full-only: $id")
-        }
+        assertEquals(27, full.size)
+        assertEquals(JournalScenario("native.player.empty", "client"), full.first())
+        assertEquals(full, sentinel, "Dist may not omit native client accounting scenarios")
+        for (menu in listOf("player", "table")) for (state in listOf("empty", "merge", "hotbar_full", "main_full", "one_output", "full", "honey"))
+            assertTrue(JournalScenario("native.$menu.$state", "client") in full)
+        for (id in listOf("native.emi.inventory", "native.emi.table", "native.recipe_book.inventory", "native.recipe_book.table", "native.chest", "native.furnace", "native.click_sequence", "native.machine.empty", "native.backpack_independence", "native.backpack_open", "native.curios_policy", "native.theme.reload", "native.theme.disabled"))
+            assertTrue(JournalScenario(id, "client") in full)
+        assertTrue(full.all { it.id.startsWith("native.") && it.layer == "client" })
+        assertThrows(Exception::class.java) { JournalContractValidator.manifest(json.replace("bc.native_inventory.manifest.v1", "bc.journal.manifest.v1"), "full") }
     }
 
     @Test fun manifestIsStrictAndFullIncludesSentinel() {
-        val json = """{"schema":"bc.journal.manifest.v1","sentinel":[{"id":"output","layer":"server"}],"full":[{"id":"output","layer":"server"},{"id":"save","layer":"persistence"}]}"""
+        val json = """{"schema":"bc.native_inventory.manifest.v1","sentinel":[{"id":"output","layer":"server"}],"full":[{"id":"output","layer":"server"},{"id":"save","layer":"persistence"}]}"""
         assertEquals(1, JournalContractValidator.manifest(json, "sentinel").size)
         assertEquals(2, JournalContractValidator.manifest(json, "full").size)
         listOf("{}", "[]", json.replace("persistence", "unknown"), json.replace("save", "output"),
             json.replace("\"full\"", "\"other\""), json.replace("\"id\":\"output\"", "\"id\":\"\""),
-            """{"schema":"bc.journal.manifest.v1","sentinel":[],"full":[]}""",
-            """{"schema":"bc.journal.manifest.v1","sentinel":[{"id":"a","layer":"server"}],"full":[{"id":"b","layer":"server"}]}""").forEach {
+            """{"schema":"bc.native_inventory.manifest.v1","sentinel":[],"full":[]}""",
+            """{"schema":"bc.native_inventory.manifest.v1","sentinel":[{"id":"a","layer":"server"}],"full":[{"id":"b","layer":"server"}]}""").forEach {
             assertThrows(Exception::class.java) { JournalContractValidator.manifest(it, "full") }
         }
     }
 
     @Test fun checkpointRequiresFreshIdentityOperationSuccessAndDetail() {
-        fun report(): ObjectNode = mapper.valueToTree(mapOf("schema" to "bc.journal.checkpoint.v1",
+        fun report(): ObjectNode = mapper.valueToTree(mapOf("schema" to "bc.native_inventory.checkpoint.v1",
             "run_id" to identity.runId, "player" to identity.player, "operation" to "verify",
             "status" to "passed", "detail" to "matched persisted bag, hotbar, NBT and backpack identity"))
         assertEquals("passed", JournalContractValidator.validateCheckpoint(report().toString(), identity, "verify").path("status").asText())
@@ -189,7 +181,7 @@ class JournalContractTest {
         org.junit.jupiter.api.Assertions.assertTrue("first.waitJournalCheckpoint(\"save\")" in singleplayer)
         org.junit.jupiter.api.Assertions.assertTrue("reopened.waitJournalCheckpoint(\"verify\")" in singleplayer)
         val fixtures = Files.readString(root.resolve("src/test/kotlin/com/bettercontent/tests/RuntimeFixtures.kt"))
-        org.junit.jupiter.api.Assertions.assertTrue("-Dbc.journal.contract.singleplayer=\$mode" in fixtures)
+        org.junit.jupiter.api.Assertions.assertTrue("-Dbc.native.inventory.singleplayer=\$mode" in fixtures)
         org.junit.jupiter.api.Assertions.assertTrue("log.readText().drop(quickPlayLogOffset)" in fixtures)
         val install = Files.readString(root.resolve("src/test/kotlin/com/bettercontent/tests/JournalFixtureSupport.kt"))
         org.junit.jupiter.api.Assertions.assertTrue("root.toAbsolutePath().normalize().startsWith(evidence.fixture.toAbsolutePath().normalize())" in install)
@@ -206,7 +198,10 @@ class JournalContractTest {
         val dir = Files.createTempDirectory(TestConfig.load().root.resolve("build/tmp/tests"), "journal-exclusion-")
         try {
             val support = zip(mapOf("META-INF/mods.toml" to "modId=\"better_journal_test_support\"".toByteArray()))
+            val nativeSupport = zip(mapOf("META-INF/mods.toml" to "modId=\"better_native_inventory_test_support\"".toByteArray()))
             val invalid = listOf(
+                mapOf("overrides/mods/better-native-inventory-test-support.jar" to nativeSupport),
+                mapOf("server/mods/renamed-native.jar" to nativeSupport),
                 mapOf("overrides/mods/better-journal-test-support.jar" to support),
                 mapOf("server/mods/renamed.jar" to support),
                 mapOf("overrides/mods/support.pw.toml" to "name = 'better_journal_test_support'".toByteArray()),

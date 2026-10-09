@@ -397,7 +397,7 @@ class ClientFixture(
                 "request" to binding.requestFile.toString(), "native_exit_observed" to false))
         }
         val exitArgs = verifyExitBinding?.properties.orEmpty()
-        val journalArgs = journalSupport?.let { "${it.properties} -Dbc.journal.contract.singleplayer=$mode" }.orEmpty()
+        val journalArgs = journalSupport?.let { "${it.properties} -Dbc.native.inventory.singleplayer=$mode" }.orEmpty()
         val jvmArgs = normalizeFixtureProcessorBudget(
             "$clientJvmArgs $journalArgs $exitArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
                 "-Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")} -Dbc.pack_test.world=$mode",

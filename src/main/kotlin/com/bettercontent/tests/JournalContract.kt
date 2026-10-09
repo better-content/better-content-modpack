@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
-/** Expected identities are fixture-derived, never taken from the report being validated. */
+/** Native-only schemas. Expected identities are fixture-derived, never trusted from the report.
+ * Historical type names are retained for lifecycle callers, not the retired overhaul protocol. */
 data class JournalContractIdentity(
     val runId: String, val player: String, val mode: String,
     val clientSha256: String, val serverSha256: String, val journalSha256: String, val supportSha256: String,
@@ -16,14 +17,14 @@ object JournalContractValidator {
     private val mapper = jacksonObjectMapper()
         .enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
         .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
-    const val MARKER = "journal-contract-report "
-    const val CHECKPOINT_MARKER = "journal-checkpoint-report "
+    const val MARKER = "native-inventory-contract-report "
+    const val CHECKPOINT_MARKER = "native-inventory-checkpoint-report "
 
     fun validateCheckpoint(json: String, identity: JournalContractIdentity, operation: String): JsonNode {
         require(operation in setOf("save", "verify")) { "invalid journal checkpoint operation" }
         val report = mapper.readTree(json)
         require(report.isObject) { "journal checkpoint must be an object" }
-        mapOf("schema" to "bc.journal.checkpoint.v1", "run_id" to identity.runId,
+        mapOf("schema" to "bc.native_inventory.checkpoint.v1", "run_id" to identity.runId,
             "player" to identity.player, "operation" to operation, "status" to "passed").forEach { (field, value) ->
             val actual = report.path(field)
             require(actual.isTextual && actual.textValue() == value && value.isNotBlank()) {
@@ -40,7 +41,7 @@ object JournalContractValidator {
         require(mode in setOf("sentinel", "full")) { "invalid manifest mode" }
         val document = mapper.readTree(json)
         require(document.isObject && document.fieldNames().asSequence().toSet() == setOf("schema", "sentinel", "full") &&
-            document.path("schema").isTextual && document.path("schema").textValue() == "bc.journal.manifest.v1") {
+            document.path("schema").isTextual && document.path("schema").textValue() == "bc.native_inventory.manifest.v1") {
             "journal manifest must have bc.journal.manifest.v1 schema, sentinel and full arrays"
         }
         val manifests = listOf("sentinel", "full").associateWith { name ->
@@ -70,10 +71,10 @@ object JournalContractValidator {
             return node.path(field).textValue()
         }
         val identities = mapOf(
-            "schema" to "bc.journal.contract.v1", "run_id" to identity.runId,
+            "schema" to "bc.native_inventory.contract.v1", "run_id" to identity.runId,
             "player" to identity.player, "mode" to identity.mode,
             "candidate_client_sha256" to identity.clientSha256, "candidate_server_sha256" to identity.serverSha256,
-            "journal_sha256" to identity.journalSha256, "support_sha256" to identity.supportSha256,
+            "presentation_sha256" to identity.journalSha256, "support_sha256" to identity.supportSha256,
         )
         require(identity.mode in setOf("sentinel", "full")) { "invalid journal mode" }
         identities.forEach { (field, value) ->

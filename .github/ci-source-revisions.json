@@ -51,7 +51,7 @@
     },
     {
       "repository": "better-deaths-door",
-      "commit": "5d2ccb70867dc6be738a76523f8a9adf11e17cdd"
+      "commit": "33c617d9f04297d00c0aacae34f5e9d5493cccd1"
     },
     {
       "repository": "better-survival-hud",
@@ -131,7 +131,7 @@
     },
     {
       "repository": "better-rpg-progression",
-      "commit": "eeb347334b6fbb7e8b1991bfa7dcca4713b1e035"
+      "commit": "482118efd55d1fac96d6c9d7bdebc1e0c36b86ca"
     },
     {
       "repository": "better-runtime-diagnostics",
@@ -179,7 +179,7 @@
     },
     {
       "repository": "better-journal-inventory",
-      "commit": "0c3be2023066174a0739a4a692caf74b2e609f5d"
+      "commit": "0c184db35da35ee123e72bb99cad29e96ddc4a61"
     },
     {
       "repository": "scalable-tnt",
