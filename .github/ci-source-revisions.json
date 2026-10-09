@@ -135,7 +135,7 @@
     },
     {
       "repository": "better-runtime-diagnostics",
-      "commit": "98c1767775fa4175e4e97e08e2a6a719fd956aae"
+      "commit": "046fac7f70e3866e15b01278353b60c8595df502"
     },
     {
       "repository": "better-settlement-roads",
@@ -179,7 +179,7 @@
     },
     {
       "repository": "better-journal-inventory",
-      "commit": "3ad4f4be04e18ad26e5b3f8b39b23197d4087e03"
+      "commit": "13d7d8dc3da1d9bc3fc190b1f3222529036201bf"
     },
     {
       "repository": "scalable-tnt",

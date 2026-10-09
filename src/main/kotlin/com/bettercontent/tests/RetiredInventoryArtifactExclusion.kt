@@ -6,12 +6,13 @@ import java.util.zip.ZipFile
 import java.util.zip.ZipInputStream
 
 /** Reject both retired and native disposable support, even if renamed. */
-object JournalCandidateExclusion {
-    private val supportIds = listOf("better_journal_test_support", "better_native_inventory_test_support")
+object RetiredInventoryArtifactExclusion {
+    private val supportIds = listOf("better_journal_test_support", "better_native_inventory_test_support", "better_runtime_test_support")
     private fun forbiddenName(name: String) = supportIds.any { name.contains(it, ignoreCase = true) } ||
-        listOf("better-journal-test-support", "better-native-inventory-test-support").any { name.contains(it, ignoreCase = true) }
+        listOf("better-journal-test-support", "better-native-inventory-test-support", "better-runtime-test-support").any { name.contains(it, ignoreCase = true) }
     private fun forbiddenClass(name: String) = name.startsWith("com/bettercontent/journaltestsupport/") ||
         name.startsWith("com/bettercontent/nativeinventorytestsupport/") ||
+        name.startsWith("com/bettercontent/runtimetestsupport/") ||
         name.startsWith("com/bettercontent/betterjournalinventory/JournalMenu") ||
         name.startsWith("com/bettercontent/betterjournalinventory/JournalInventoryScreen") ||
         name.startsWith("com/bettercontent/betterjournalinventory/Storage") ||

@@ -21,12 +21,11 @@ class DedicatedServerFixture(
     private val environment: Map<String, String> = emptyMap(),
     private val allowLongClientLogin: Boolean = false,
     private val seed: Long? = null,
-    enableJournalContract: Boolean = false,
-    journalPlayer: String = "SmokeClient1",
+
 ) : AutoCloseable {
     val config = evidence.config
     val pair = CandidateLocator.locate(config.root)
-    val journalSupport = if (enableJournalContract) JournalFixtureSupport(evidence, pair, journalPlayer) else null
+    val diagnosticSupport = RuntimeDiagnosticSupport(evidence, pair, "SmokeClient1")
     val serverExtract = evidence.fixture.resolve("server-extract")
     val server: Path
     val log = evidence.directory.resolve("server.log")
@@ -82,7 +81,7 @@ class DedicatedServerFixture(
                 .replace("view-distance=10", "view-distance=4")
         }
         properties.toFile().writeText(runtimeProperties)
-        journalSupport?.let { support ->
+        diagnosticSupport.let { support ->
             support.install(server)
             val args = server.resolve("user_jvm_args.txt")
             args.toFile().appendText("\n${support.properties}\n")
@@ -141,6 +140,7 @@ class DedicatedServerFixture(
     fun assertHashes() {
         require(Hashes.sha256(pair.client) == pair.clientSha256) { "client candidate changed during test" }
         require(Hashes.sha256(pair.server) == pair.serverSha256) { "server candidate changed during test" }
+        diagnosticSupport.assertStable()
     }
 
     fun auditLogs(extra: Collection<Path> = emptyList()) {
@@ -266,16 +266,14 @@ class ClientFixture(
     val username: String = evidence.config.username,
     private val slot: Int = 0,
     private val clientJvmArgs: String = DEFAULT_CLIENT_JVM_ARGS,
-    enableJournalContract: Boolean = false,
-    journalContractSupport: JournalFixtureSupport? = null,
+
 ) : AutoCloseable {
     private val config = evidence.config
     private val pair = dedicated?.pair ?: CandidateLocator.locate(config.root)
-    val journalSupport = journalContractSupport ?: dedicated?.journalSupport?.takeIf { it.identity.player == username }
-        ?: if (enableJournalContract) JournalFixtureSupport(evidence, pair, username) else null
+    val diagnosticSupport = dedicated?.diagnosticSupport ?: RuntimeDiagnosticSupport(evidence, pair, username)
     private var quickPlayLogOffset = 0
     private var verifyExitBinding: FixtureVerifyExitBinding? = null
-    private var journalVerifyObserved = false
+    private var lifecycleVerified = false
     private var verifyLoadedObserved = false
     val client = evidence.fixture.resolve(if (slot == 0) "client" else "client-$slot").also { it.createDirectories() }
     var log = evidence.directory.resolve(
@@ -294,12 +292,6 @@ class ClientFixture(
     val uuid = offlineUuid(username)
 
     init {
-        journalSupport?.let { support ->
-            require(support.identity.player == username && support.identity.runId == config.runId &&
-                support.identity.clientSha256 == pair.clientSha256 && support.identity.serverSha256 == pair.serverSha256) {
-                "client journal supplement identity differs from fixture"
-            }
-        }
         evidence.event("candidate_selected", mapOf(
             "client" to pair.client.toString(),
             "client_sha256" to pair.clientSha256,
@@ -341,7 +333,7 @@ class ClientFixture(
             evidence.directory.resolve(if (slot == 0) "client-artifacts.log" else "client-$slot-artifacts.log"),
         )
         TaczFixtureSupport.assertResolvedArtifacts(client, config.root)
-        journalSupport?.install(client)
+        diagnosticSupport.install(client)
         if (dedicated != null || slot == 5 || slot == 6) configureRuntimeClientProfile()
         client.resolve("saves").createDirectories()
         xvfb = ManagedProcess("xvfb-$slot", listOf("Xvfb", display, "-screen", "0", "1280x720x24", "-nolisten", "tcp"), client, xvfbLog)
@@ -387,19 +379,20 @@ class ClientFixture(
     fun launchQuickPlayWorld(world: String, mode: String) {
         require(mode == "save" || mode == "verify")
         quickPlayLogOffset = if (log.exists()) log.readText().length else 0
-        journalVerifyObserved = false
+        lifecycleVerified = false
         verifyLoadedObserved = false
-        verifyExitBinding = fixtureVerifyExitBinding(mode, world, dedicated != null, journalSupport != null,
-            config.runId, username, uuid, evidence.fixture, client, journalSupport?.bridge)
+        val lifecycleDir = evidence.fixture.resolve("world-lifecycle").toAbsolutePath().also { it.createDirectories() }
+        verifyExitBinding = fixtureVerifyExitBinding(mode, world, dedicated != null,
+            config.runId, username, uuid, evidence.fixture, client, lifecycleDir)
         verifyExitBinding?.let { binding ->
-            evidence.event("journal_verify_exit_configured", mapOf("measurement" to "launch_request_binding",
+            evidence.event("lifecycle_verify_exit_configured", mapOf("measurement" to "launch_request_binding",
                 "nonce" to binding.nonce.toString(), "world_root" to binding.worldRoot.toString(),
                 "request" to binding.requestFile.toString(), "native_exit_observed" to false))
         }
         val exitArgs = verifyExitBinding?.properties.orEmpty()
-        val journalArgs = journalSupport?.let { "${it.properties} -Dbc.native.inventory.singleplayer=$mode" }.orEmpty()
+        val diagnosticArgs = diagnosticSupport.properties
         val jvmArgs = normalizeFixtureProcessorBudget(
-            "$clientJvmArgs $journalArgs $exitArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
+            "$clientJvmArgs $diagnosticArgs $exitArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
                 "-Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")} -Dbc.pack_test.world=$mode",
             4,
         )
@@ -416,7 +409,7 @@ class ClientFixture(
     private fun launch(connection: List<String>): ManagedProcess {
         val environment = clientEnvironment()
         val jvmArgs = normalizeFixtureProcessorBudget(
-            "$clientJvmArgs ${journalSupport?.properties.orEmpty()} -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false -Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")}",
+            "$clientJvmArgs ${diagnosticSupport.properties} -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false -Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")}",
             4,
         )
         val command = mutableListOf(
@@ -449,37 +442,15 @@ class ClientFixture(
             "ALSOFT_DRIVERS" to "null",
         )
 
-    fun waitJournalCheckpoint(operation: String) {
-        val support = requireNotNull(journalSupport) { "QuickPlay journal checkpoint requires fixture support" }
-        require(operation in setOf("save", "verify"))
-        val pattern = Regex(Regex.escape(JournalContractValidator.CHECKPOINT_MARKER) + "([^\\r\\n]+)")
-        val process = requireNotNull(launcher)
-        val deadline = System.nanoTime() + Duration.ofMinutes(10).toNanos()
-        while (System.nanoTime() < deadline) {
-            val suffix = if (log.exists()) log.readText().drop(quickPlayLogOffset) else ""
-            pattern.find(suffix)?.let { match ->
-                val json = match.groupValues[1]
-                evidence.directory.resolve("journal-singleplayer-$operation-report.json").toFile().writeText(json + "\n")
-                val report = JournalContractValidator.validateCheckpoint(json, support.identity, operation)
-                support.assertStable()
-                assertHashes()
-                evidence.event("journal_singleplayer_checkpoint", mapOf("operation" to operation,
-                    "report" to report, "client_log" to log.toString()))
-                if (operation == "verify") journalVerifyObserved = true
-                return
-            }
-            check(process.alive) { "client exited before journal singleplayer $operation checkpoint; see $log" }
-            Thread.sleep(250)
+    /** Lifecycle oracle only; no storage checkpoint may authorize exit. */
+    fun requestNormalVerifyExit(savedMarker: UUID, reopenedMarker: UUID, savedTime: Long, reopenedTime: Long) {
+        require(verifyLoadedObserved && savedMarker == reopenedMarker && savedTime >= 0 && reopenedTime >= savedTime) {
+            "normal verify exit requires native LOADED and matching marker/nondecreasing time"
         }
-        process.captureDiagnostics(evidence.directory.resolve("journal-singleplayer-$operation-timeout"))
-        error("timed out waiting for journal singleplayer $operation checkpoint; see $log")
-    }
-
-    /** Lifecycle request only: caller must have observed actual Journal VERIFY and native LOADED. */
-    fun requestNormalVerifyExit() {
+        lifecycleVerified = true
         val binding = requireNotNull(verifyExitBinding) { "normal verify exit is not configured for this fixture" }
-        val request = writeFixtureVerifyExitRequest(binding, journalVerifyObserved, verifyLoadedObserved)
-        evidence.event("journal_verify_exit_requested", mapOf("nonce" to binding.nonce.toString(),
+        val request = writeFixtureVerifyExitRequest(binding, lifecycleVerified, verifyLoadedObserved)
+        evidence.event("lifecycle_verify_exit_requested", mapOf("nonce" to binding.nonce.toString(),
             "request" to request.toString(), "world_root" to binding.worldRoot.toString(),
             "player_uuid" to binding.playerId.toString(), "native_exit_observed" to false))
     }
@@ -500,13 +471,13 @@ class ClientFixture(
                 Thread.sleep(250)
             }
             if (!observed) {
-                process.captureDiagnostics(evidence.directory.resolve("journal-verify-native-exit-timeout"))
+                process.captureDiagnostics(evidence.directory.resolve("lifecycle-verify-native-exit-timeout"))
                 error("timed out waiting for fresh singleplayer world probe $marker; see $log")
             }
         } else process.waitForLog(pattern, Duration.ofMinutes(10), "singleplayer world probe $marker")
         if (marker == "BC_DEBUG_WORLD_LOADED mode=verify" && binding != null) verifyLoadedObserved = true
         if (marker == "BC_DEBUG_WORLD_EXITED" && binding != null)
-            evidence.event("journal_verify_native_exit_observed", mapOf("nonce" to binding.nonce.toString(),
+            evidence.event("lifecycle_verify_native_exit_observed", mapOf("nonce" to binding.nonce.toString(),
                 "world_root" to binding.worldRoot.toString(), "boundary" to "native_clearLevel_return_server_terminated",
                 "saved_data_acceptance" to "requires_independent_post_exit_checks"))
     }
@@ -594,6 +565,7 @@ class ClientFixture(
     fun assertHashes() {
         require(Hashes.sha256(pair.client) == pair.clientSha256) { "client candidate changed during test" }
         require(Hashes.sha256(pair.server) == pair.serverSha256) { "server candidate changed during test" }
+        diagnosticSupport.assertStable()
     }
 
     override fun close() {
@@ -606,7 +578,7 @@ internal data class FixtureVerifyExitBinding(
     val fixtureRoot: Path, val worldRoot: Path, val requestDir: Path,
 ) {
     val requestFile: Path get() = requestDir.resolve("verify-exit-$nonce.request")
-    val properties: String get() = mapOf("nonce" to nonce.toString(), "player_uuid" to playerId.toString(),
+    val properties: String get() = mapOf("run_id" to runId, "player" to playerName, "nonce" to nonce.toString(), "player_uuid" to playerId.toString(),
         "fixture_root" to fixtureRoot.toString(), "world_root" to worldRoot.toString(), "request_dir" to requestDir.toString())
         .entries.joinToString(" ") { (key, value) ->
             require(value.none { it.isWhitespace() || it == '"' || it == '\'' }) { "unsafe verify exit property" }
@@ -631,19 +603,19 @@ private fun canonicalVerifyExitDirectory(path: Path): Path {
     return path
 }
 
-internal fun fixtureVerifyExitBinding(mode: String, world: String, dedicated: Boolean, journal: Boolean,
-    runId: String, player: String, playerUuid: String, fixture: Path, client: Path, bridge: Path?,
+internal fun fixtureVerifyExitBinding(mode: String, world: String, dedicated: Boolean,
+    runId: String, player: String, playerUuid: String, fixture: Path, client: Path, lifecycleDir: Path,
 ): FixtureVerifyExitBinding? {
-    if (mode != "verify" || world != "DebugWorld" || dedicated || !journal) return null
+    if (mode != "verify" || world != "DebugWorld" || dedicated) return null
     require(runId.matches(Regex("[0-9]{8}T[0-9]{6}Z-[0-9]+")) && player.matches(Regex("[A-Za-z0-9_]{1,16}")))
     require(playerUuid.matches(Regex("[0-9a-f]{32}"))) { "verify exit requires the actual fixture launch UUID" }
     val dashedUuid = "${playerUuid.substring(0, 8)}-${playerUuid.substring(8, 12)}-${playerUuid.substring(12, 16)}-" +
         "${playerUuid.substring(16, 20)}-${playerUuid.substring(20)}"
     val root = canonicalVerifyExitDirectory(fixture.toAbsolutePath())
     val worldRoot = canonicalVerifyExitDirectory(client.toAbsolutePath().resolve("saves/DebugWorld"))
-    val dir = canonicalVerifyExitDirectory(requireNotNull(bridge))
+    val dir = canonicalVerifyExitDirectory(lifecycleDir)
     require(root.fileName.toString() == "fixture" && root.parent?.parent?.fileName?.toString() == runId &&
-        dir == root.resolve("journal-contract") && worldRoot.startsWith(root)) { "verify exit must bind this new owned run fixture" }
+        dir == root.resolve("world-lifecycle") && worldRoot.startsWith(root)) { "verify exit must bind this new owned run fixture" }
     val binding = FixtureVerifyExitBinding(UUID.randomUUID(), runId, player, UUID.fromString(dashedUuid), root, worldRoot, dir)
     require(!Files.exists(binding.requestFile, LinkOption.NOFOLLOW_LINKS)) { "stale verify exit request" }
     require(binding.payload.toByteArray(Charsets.UTF_8).size <= 2048)
@@ -652,11 +624,11 @@ internal fun fixtureVerifyExitBinding(mode: String, world: String, dedicated: Bo
 }
 
 internal fun writeFixtureVerifyExitRequest(binding: FixtureVerifyExitBinding, verified: Boolean, loaded: Boolean): Path {
-    require(verified && loaded) { "normal verify exit requires actual Journal VERIFY and matching native LOADED" }
+    require(verified && loaded) { "normal verify exit requires lifecycle marker/time verification and matching native LOADED" }
     canonicalVerifyExitDirectory(binding.fixtureRoot)
     canonicalVerifyExitDirectory(binding.worldRoot)
     canonicalVerifyExitDirectory(binding.requestDir)
-    require(binding.requestDir == binding.fixtureRoot.resolve("journal-contract") && binding.worldRoot.startsWith(binding.fixtureRoot))
+    require(binding.requestDir == binding.fixtureRoot.resolve("world-lifecycle") && binding.worldRoot.startsWith(binding.fixtureRoot))
     val bytes = binding.payload.toByteArray(Charsets.UTF_8)
     require(bytes.size <= 2048)
     Files.write(binding.requestFile, bytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)

@@ -70,9 +70,9 @@ class CandidateContractTest {
     }
 
     @Test
-    fun candidatesExcludeJournalTestSupport() {
-        JournalCandidateExclusion.validate(pair.client)
-        JournalCandidateExclusion.validate(pair.server)
+    fun candidatesExcludeRetiredStorageAndDiagnosticSupport() {
+        RetiredInventoryArtifactExclusion.validate(pair.client)
+        RetiredInventoryArtifactExclusion.validate(pair.server)
     }
 
     @Test

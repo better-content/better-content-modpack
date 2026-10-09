@@ -269,7 +269,7 @@ object LogPolicy {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
             val seededWorldLog = path.toString().let { "/singleplayer/" in it || "/target-world-save/" in it }
             val targetMultiplayerLog = Regex(
-                "/target-(?:join|fonts|font-[^/]+|dimensions|dimension-[^/]+|campaign-start|campaign|restart|restart-compat|native-inventory)/",
+                "/target-(?:join|fonts|font-[^/]+|dimensions|dimension-[^/]+|campaign-start|campaign|restart|restart-compat)/",
             ).containsMatchIn(path.toString())
             val targetServerReadyLog = "/target-server-ready/" in path.toString()
             val targetCursedPyramidServerLog = "/target-cursed-pyramid/" in path.toString() &&

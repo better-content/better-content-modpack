@@ -98,7 +98,7 @@ class BlightLocusPersistenceTest {
         assertThrows(IllegalArgumentException::class.java) { BlightLocusPersistence.read(world) }
     }
 
-    @Test fun observationsAreReadOnlyAndPostCloseHookRetainsOriginalJournalAndAuditGates() = fixture { world ->
+    @Test fun observationsAreReadOnlyAndPostCloseHookRetainsLifecycleAndAuditGates() = fixture { world ->
         writeWorld(world)
         val level = Files.readAllBytes(world.resolve("level.dat"))
         val claims = Files.readAllBytes(world.resolve(BlightLocusPersistence.CLAIM_FILE))
@@ -112,7 +112,8 @@ class BlightLocusPersistenceTest {
         assertTrue(source.contains("reopened.waitForWorldProbe(\"BC_DEBUG_WORLD_EXITED\")"))
         assertTrue(source.indexOf("reopened.waitForWorldProbe(\"BC_DEBUG_WORLD_EXITED\")") < source.indexOf("reopened.close()"))
         assertTrue(source.indexOf("reopened.close()") < source.indexOf("val reopenedLoci = BlightLocusPersistence.read("))
-        for (required in listOf("first.waitJournalCheckpoint(\"save\")", "reopened.waitJournalCheckpoint(\"verify\")",
+        assertFalse(source.contains("waitJournalCheckpoint")); assertFalse(source.contains("journalSupport"))
+        for (required in listOf("reopened.requestNormalVerifyExit(savedMarker, reopenedMarker, savedTime, reopenedTime)",
             "check(reopenedMarker == savedMarker)", "check(reopenedTime >= savedTime)", "LogPolicy.requireClean", "reopened.assertHashes()"))
             assertTrue(source.contains(required), required)
         val helper = Files.readString(Path.of("src/test/kotlin/com/bettercontent/tests/BlightLocusPersistence.kt"))

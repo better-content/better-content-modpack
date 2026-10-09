@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 /** Classifies only the harness supplement in a disposable copy; enforcement remains blocking. */
-object JournalFixturePolicy {
-    const val NAMESPACE = "better_native_inventory_test_support"
+object RuntimeDiagnosticPolicy {
+    const val NAMESPACE = "better_runtime_test_support"
     private val mapper = jacksonObjectMapper().enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
         .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
 

@@ -14,19 +14,19 @@ class FixtureVerifyWorldExitTest {
         val owner = Path.of("build/verify-exit-test", UUID.randomUUID().toString()).toAbsolutePath()
         val root = owner.resolve("20261008T170000Z-123/singleplayer/fixture")
         val client = root.resolve("client-6")
-        val bridge = root.resolve("journal-contract")
+        val bridge = root.resolve("world-lifecycle")
         Files.createDirectories(client.resolve("saves/DebugWorld"))
         Files.createDirectories(bridge)
         try { block(root, client, bridge) } finally { owner.toFile().deleteRecursively() }
     }
     private fun binding(root: Path, client: Path, bridge: Path) = requireNotNull(fixtureVerifyExitBinding(
-        "verify", "DebugWorld", false, true, "20261008T170000Z-123", "SmokeWorld", offlineUuid("SmokeWorld"), root, client, bridge))
+        "verify", "DebugWorld", false, "20261008T170000Z-123", "SmokeWorld", offlineUuid("SmokeWorld"), root, client, bridge))
 
-    @Test fun `only explicit journal integrated DebugWorld verify configures signal`() {
+    @Test fun `only owned integrated DebugWorld verify configures signal`() {
         fixture { root, client, bridge ->
-            fun result(mode: String = "verify", world: String = "DebugWorld", dedicated: Boolean = false, journal: Boolean = true) =
-                fixtureVerifyExitBinding(mode, world, dedicated, journal, "20261008T170000Z-123", "SmokeWorld", offlineUuid("SmokeWorld"), root, client, bridge)
-            assertNull(result(mode = "save")); assertNull(result(world = "world")); assertNull(result(dedicated = true)); assertNull(result(journal = false))
+            fun result(mode: String = "verify", world: String = "DebugWorld", dedicated: Boolean = false) =
+                fixtureVerifyExitBinding(mode, world, dedicated, "20261008T170000Z-123", "SmokeWorld", offlineUuid("SmokeWorld"), root, client, bridge)
+            assertNull(result(mode = "save")); assertNull(result(world = "world")); assertNull(result(dedicated = true))
             val valid = binding(root, client, bridge)
             assertFalse(Files.exists(valid.requestFile))
             assertEquals(UUID.nameUUIDFromBytes("OfflinePlayer:SmokeWorld".toByteArray()), valid.playerId)
@@ -81,10 +81,11 @@ class FixtureVerifyWorldExitTest {
 
     @Test fun `source lifecycle guard keeps observations timeouts and budgets independent`() {
         val source = Files.readString(Path.of("src/test/kotlin/com/bettercontent/tests/RuntimeFixtures.kt"))
-        val checkpoint = source.substring(source.indexOf("fun waitJournalCheckpoint"), source.indexOf("fun requestNormalVerifyExit"))
-        assertTrue(checkpoint.indexOf("validateCheckpoint") < checkpoint.indexOf("journalVerifyObserved = true"))
+        assertFalse(source.contains("waitJournalCheckpoint")); assertFalse(source.contains("journalSupport"))
         val request = source.substring(source.indexOf("fun requestNormalVerifyExit"), source.indexOf("fun waitForWorldProbe"))
-        assertTrue(request.contains("journalVerifyObserved, verifyLoadedObserved"))
+        assertTrue(request.contains("lifecycleVerified, verifyLoadedObserved"))
+        assertTrue(request.contains("savedMarker == reopenedMarker")); assertTrue(request.contains("reopenedTime >= savedTime"))
+        assertTrue(request.indexOf("require(verifyLoadedObserved") < request.indexOf("writeFixtureVerifyExitRequest"))
         assertFalse(request.contains("saveEverything")); assertFalse(request.contains("level.dat")); assertFalse(request.contains("close()"))
         assertTrue(source.contains("Duration.ofMinutes(10), \"singleplayer world probe"))
         assertTrue(source.contains("binding.exitMarker"))

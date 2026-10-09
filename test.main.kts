@@ -26,7 +26,7 @@ while (argument < args.size) {
 }
 val fontTargets = setOf("bumblezone", "aether", "nether")
 val fontDimensions = setOf("the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether")
-val validTarget = target == null || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart", "restart-compat", "world-save", "native-inventory") ||
+val validTarget = target == null || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart", "restart-compat", "world-save") ||
     (target!!.startsWith("font:") && target!!.removePrefix("font:") in fontTargets) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
         target!!.removePrefix("dimension:") !in fontDimensions)
@@ -42,7 +42,6 @@ val targetMethod = when {
     target == "cursed-pyramid" -> "cursedPyramidSeededGenerationAndLogAudit"
     target == "lineage-transition" -> "oneLineageTransitionCommitsAndArchivesCleanly"
     target == "join" -> "leadClientJoinsFreshDedicatedServer"
-    target == "native-inventory" -> "journalInventoryContractPasses"
     target == "campaign" || target == "campaign-start" -> "threeSurvivalPlayersStartCampaigns"
     target == "restart" || target == "restart-compat" -> "debugServerRestartAndClientReconnectPreserveWorld"
     target == "world-save" -> "debugFreshWorldBootSaveAndReopen"
@@ -58,12 +57,12 @@ val taskBySelector = mapOf(
 )
 
 fun usage(): Nothing {
-    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target server-ready|cursed-pyramid|lineage-transition|join|fonts|font:NAME|dimensions|dimension:ID|campaign-start|campaign|restart|restart-compat|world-save|native-inventory] [--retry-of RUN_ID] [--existing-candidate]")
+    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target server-ready|cursed-pyramid|lineage-transition|join|fonts|font:NAME|dimensions|dimension:ID|campaign-start|campaign|restart|restart-compat|world-save] [--retry-of RUN_ID] [--existing-candidate]")
     exitProcess(2)
 }
 
 if (selector !in setOf("dev", "dist", "debug") || !validTarget ||
-    (target != null && (selector == "dev" || (selector == "dist" && target !in setOf("join", "native-inventory")))) ||
+    (target != null && (selector == "dev" || (selector == "dist" && target != "join"))) ||
     (retryOf != null && target == null) ||
     (existingCandidate && (selector != "debug" || target != null || args.count { it == "--existing-candidate" } != 1)) ||
     (retryOf != null && !Regex("\\d{8}T\\d{6}Z-\\d+").matches(retryOf!!)) ||

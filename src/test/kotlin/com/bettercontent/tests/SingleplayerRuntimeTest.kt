@@ -40,7 +40,7 @@ class SingleplayerRuntimeTest {
             }) {
                 evidence.run.event("process_cleanup", it)
             }
-            debugClients.mapNotNull { it.journalSupport }.distinct().forEach { it.preserveBridge() }
+            debugClients.map { it.diagnosticSupport }.distinct().forEach { it.preserveBridge() }
         }
     }
 
@@ -71,8 +71,7 @@ class SingleplayerRuntimeTest {
             evidence.run.event("blight_locus_claims_observed", seedLoci.evidence("seed_normal_stop"))
             require(Files.isRegularFile(sourceWorld.resolve("level.dat"))) { "seed server did not create a world save" }
 
-            val first = ClientFixture(evidence.run, username = "SmokeWorld", slot = 5,
-                enableJournalContract = true).also { debugClients += it }
+            val first = ClientFixture(evidence.run, username = "SmokeWorld", slot = 5).also { debugClients += it }
             first.prepare()
             val firstSave = first.client.resolve("saves/DebugWorld")
             require(sourceWorld.toFile().copyRecursively(firstSave.toFile())) { "failed to stage fresh world" }
@@ -83,7 +82,6 @@ class SingleplayerRuntimeTest {
             Files.createDirectories(initialSpawnState.parent)
             Files.writeString(initialSpawnState, "fallback\n")
             first.launchQuickPlayWorld("DebugWorld", "save")
-            first.waitJournalCheckpoint("save")
             first.waitForWorldProbe("BC_DEBUG_WORLD_EXITED")
             require(Files.readString(first.log).contains("BC_DEBUG_EMI_READY")) {
                 "world save exited before EMI finished baking recipes"
@@ -96,8 +94,7 @@ class SingleplayerRuntimeTest {
             val savedLoci = BlightLocusPersistence.read(firstSave, seedLoci.claims)
             evidence.run.event("blight_locus_claims_observed", savedLoci.evidence("integrated_save_normal_close"))
 
-            val reopened = ClientFixture(evidence.run, username = "SmokeWorld", slot = 6,
-                journalContractSupport = requireNotNull(first.journalSupport)).also { debugClients += it }
+            val reopened = ClientFixture(evidence.run, username = "SmokeWorld", slot = 6).also { debugClients += it }
             reopened.prepare()
             require(firstSave.toFile().copyRecursively(reopened.client.resolve("saves/DebugWorld").toFile())) {
                 "failed to stage saved world for reopen"
@@ -109,21 +106,18 @@ class SingleplayerRuntimeTest {
             }
             reopened.launchQuickPlayWorld("DebugWorld", "verify")
             reopened.waitForWorldProbe("BC_DEBUG_WORLD_LOADED mode=verify")
-            reopened.waitJournalCheckpoint("verify")
             val reopenedRecord = Regex("BC_DEBUG_WORLD_LOADED mode=verify game_time=(\\d+) marker=([0-9a-f-]{36})")
                 .find(Files.readString(reopened.log)) ?: error("reopened world has no persisted marker")
             val reopenedTime = reopenedRecord.groupValues[1].toLong()
             val reopenedMarker = java.util.UUID.fromString(reopenedRecord.groupValues[2])
             check(reopenedMarker == savedMarker) { "reopened world lost the saved marker" }
             check(reopenedTime >= savedTime) { "reopened world lost saved game time ($reopenedTime < $savedTime)" }
-            requireNotNull(first.journalSupport).assertStable()
-            evidence.run.event("journal_singleplayer_persistence_passed", mapOf("player" to first.username,
-                "run_id" to evidence.run.config.runId, "save_fixture" to firstSave.toString(),
-                "reopen_fixture" to reopened.client.resolve("saves/DebugWorld").toString()))
+            first.diagnosticSupport.assertStable()
+            reopened.diagnosticSupport.assertStable()
             evidence.run.event("world_reopen_passed", mapOf("saved_game_time" to savedTime,
                 "reopened_game_time" to reopenedTime, "saved_marker" to savedMarker.toString()))
             // Request native exit only after the actual checkpoint and marker/time oracles passed.
-            reopened.requestNormalVerifyExit()
+            reopened.requestNormalVerifyExit(savedMarker, reopenedMarker, savedTime, reopenedTime)
             // Process termination alone cannot prove that the reopened integrated world saved.
             reopened.waitForWorldProbe("BC_DEBUG_WORLD_EXITED")
             reopened.close()

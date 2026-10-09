@@ -52,8 +52,6 @@ class MultiplayerRuntimeTest {
                 evidence.run,
                 mapOf("JAVA_TOOL_OPTIONS" to harnessOptions),
                 allowLongClientLogin = true,
-                enableJournalContract = evidence.run.target == null || evidence.run.target == "native-inventory",
-                journalPlayer = usernames.first(),
             )
             clients = usernames.mapIndexed { index, username ->
                 ClientFixture(evidence.run, server, username, index + 1,
@@ -68,7 +66,7 @@ class MultiplayerRuntimeTest {
                 if (::clients.isInitialized) addAll(clients)
                 if (::server.isInitialized) add(server)
             }) { evidence.run.event("process_cleanup", it) }
-            if (::server.isInitialized) server.journalSupport?.preserveBridge()
+            if (::server.isInitialized) server.diagnosticSupport.preserveBridge()
         }
     }
 
@@ -104,82 +102,6 @@ class MultiplayerRuntimeTest {
         if (evidence.run.target != null) {
             server.assertHashes()
             lead.assertHashes()
-        }
-    }
-
-    @Test @Order(2)
-    fun journalInventoryContractPasses() {
-        prepareTargetJoin()
-        assumeTrue(joined, "client join prerequisite failed")
-        evidence.run.checkpoint("journal inventory contract") {
-            val support = requireNotNull(server.journalSupport)
-            val identity = support.identity
-            val match = server.commandResult(
-                "nativeinventorycontract ${identity.player} ${identity.runId} ${identity.mode}",
-                Regex(Regex.escape(JournalContractValidator.MARKER) + "([^\\r\\n]+)"),
-                "journal contract report",
-                timeout = Duration.ofMinutes(5),
-            )
-            val json = match.groupValues[1]
-            evidence.run.directory.resolve("native-inventory-contract-report.json").toFile().writeText(json + "\n")
-            val report = JournalContractValidator.validate(json, identity, support.expected)
-            support.assertStable()
-            server.assertHashes()
-            clients.first().assertHashes()
-            evidence.run.event("journal_contract", mapOf("report" to report,
-                "manual_visual_gate" to "pending; automated contract does not certify rendered layout"))
-        }
-        if (evidence.run.tier == "debug") journalDedicatedPersistence()
-        else evidence.run.event("scenario_omitted", mapOf("name" to "journal dedicated persistence", "tier" to evidence.run.tier))
-        // Collect independent persistence evidence before the mandatory strict log verdict.
-        // Unrelated world-spawn errors must still fail the suite, not hide later observations.
-        server.auditLogs()
-    }
-
-    private fun journalCheckpoint(operation: String, phase: String) {
-        val support = requireNotNull(server.journalSupport)
-        val identity = support.identity
-        val match = server.commandResult(
-            "nativeinventorycheckpoint ${identity.player} ${identity.runId} $operation",
-            Regex(Regex.escape(JournalContractValidator.CHECKPOINT_MARKER) + "([^\\r\\n]+)"),
-            "journal checkpoint $phase $operation",
-            timeout = Duration.ofMinutes(2),
-        )
-        val json = match.groupValues[1]
-        evidence.run.directory.resolve("journal-checkpoint-$phase-$operation.json").toFile().writeText(json + "\n")
-        val report = JournalContractValidator.validateCheckpoint(json, identity, operation)
-        evidence.run.event("journal_checkpoint", mapOf("phase" to phase, "report" to report))
-        support.assertStable()
-        server.assertHashes()
-        clients.first().assertHashes()
-    }
-
-    private fun journalDedicatedPersistence() {
-        val lead = clients.first()
-        fun disconnectAndWaitForSave() {
-            lead.disconnectDedicated()
-            server.commandResult(
-                "execute unless entity @a[name=${lead.username}] run say BC_JOURNAL_PLAYER_OFFLINE_${evidence.run.config.runId}",
-                Regex("BC_JOURNAL_PLAYER_OFFLINE_${Regex.escape(evidence.run.config.runId)}"),
-                "journal player saved on disconnect",
-                timeout = Duration.ofSeconds(90), retryInterval = Duration.ofSeconds(2),
-            )
-        }
-        evidence.run.checkpoint("journal inventory survives dedicated reconnect") {
-            journalCheckpoint("save", "initial")
-            disconnectAndWaitForSave()
-            lead.restartDedicated(++clientRestartAttempt)
-            requirePlayersOnline("journal client reconnect", listOf(lead))
-            journalCheckpoint("verify", "client-reconnect")
-        }
-        evidence.run.checkpoint("journal inventory survives server restart") {
-            disconnectAndWaitForSave()
-            server.stopGracefully()
-            server.restart()
-            lead.restartDedicated(++clientRestartAttempt)
-            requirePlayersOnline("journal server restart reconnect", listOf(lead))
-            journalCheckpoint("verify", "server-restart")
-            server.auditLogs()
         }
     }
 
