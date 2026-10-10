@@ -550,7 +550,8 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(recipe.contains("event.shaped('better_airtight_machines:airtight_upgrade'"))
         assertTrue(interaction.contains("held.is(ChemistryContent.AIRTIGHT_UPGRADE.get())"))
         assertTrue(interaction.contains("holder.betterContentFixes" + "$" + "setAirtight(true)"))
-        assertTrue(escape.contains("if (isAirtight(holder)) return;"))
+        assertTrue(escape.contains("if (isAirtight(holder) || InventoryScanPolicy.hasPendingLoot(holder)") &&
+            escape.contains("|| !InventoryScanPolicy.neighborhoodLoaded(level, origin)) return;"))
         assertTrue(owner.contains("AirtightUpgradeInteraction.java"))
         assertTrue(owner.contains("GasEscapeHandler.java"))
         assertEquals(
@@ -591,7 +592,8 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(basin.contains("implements AirtightUpgradeHolder"))
         assertTrue(mixer.contains("implements AirtightUpgradeHolder"))
         assertTrue(plant.contains("implements AirtightUpgradeHolder"))
-        assertTrue(escape.contains("if (isAirtight(holder)) return;"))
+        assertTrue(escape.contains("if (isAirtight(holder) || InventoryScanPolicy.hasPendingLoot(holder)") &&
+            escape.contains("|| !InventoryScanPolicy.neighborhoodLoaded(level, origin)) return;"))
         assertTrue(copy.contains("Seal a Create Basin or PneumaticCraft Mixer/Plant"))
         assertTrue(copy.contains("Sneak-use empty-handed to remove the upgrade"))
         assertTrue(row.path("owner").asText().contains("GasEscapeHandler.java"))
