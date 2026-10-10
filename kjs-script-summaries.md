@@ -25,7 +25,7 @@ Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 - `kubejs/server_scripts/compat/retained/check__40_dirt_grass_compat.js` — Unifies compatible dirt and grass blocks under shared tags.
 - `kubejs/server_scripts/compat/retained/check__50_sand_compat.js` — Unifies compatible sand blocks and items under shared tags.
 - `kubejs/server_scripts/compat/retained/check__56_standardize_starcatcher_fishing.js` — Removes competing fishing-rod routes so Starcatcher owns meaningful fishing progression.
-- `kubejs/server_scripts/compat/retained/check__75_stone_cobble_tag_compat.js` — Broadens stone/cobblestone inputs only for 66 explicitly reviewed functional recipe IDs, preserves native material-specific recipes, and retains the furnace recipe for any tagged stone or cobblestone; see `docs/stone-cobble-compatibility.md`.
+- `kubejs/server_scripts/compat/retained/check__75_stone_cobble_tag_compat.js` — Keeps stone/cobblestone inputs generic by default except for an explicit whitelist of 125 rock-identity recipe IDs; preserves generic machinery, tools, template duplication, and future uses plus the furnace material union; see `docs/stone-cobble-compatibility.md`.
 - `kubejs/server_scripts/compat/retained/check__90_sand_tag_compat.js` — Rewrites recipes to accept the unified sand tag.
 - `kubejs/server_scripts/compat/retained/check__95_remove_native_chunkloaders.js` — Removes native chunk-loader recipes in favor of the pack’s magic-gated anchors.
 - `kubejs/server_scripts/compat/retained/refactor__balance__110_extreme_y_band_reward_gates.js` — Uses high-altitude and deep-underground materials to gate powerful terrain-reward utilities.

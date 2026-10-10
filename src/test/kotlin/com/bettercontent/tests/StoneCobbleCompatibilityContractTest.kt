@@ -16,7 +16,7 @@ class StoneCobbleCompatibilityContractTest {
     private val script = root.resolve("kubejs/server_scripts/compat/retained/check__75_stone_cobble_tag_compat.js")
 
     @Test
-    fun `actual recipe handler broadens only exact functional recipe ids`() {
+    fun `actual recipe handler keeps generics default and protects identity whitelist`() {
         val fixture = root.resolve("src/test/resources/stone-cobble-compat-contract.cjs")
         val process = ProcessBuilder("node", fixture.toString(), script.toString()).redirectErrorStream(true).start()
         val finished = process.waitFor(15, TimeUnit.SECONDS)
@@ -25,18 +25,19 @@ class StoneCobbleCompatibilityContractTest {
         val output = process.inputStream.bufferedReader().readText()
         assertEquals(0, process.exitValue(), output)
         val result = jacksonObjectMapper().readTree(output)
-        assertTrue(result.path("functional_recipes").asInt() > 0)
-        assertEquals(2 * result.path("functional_recipes").asInt(), result.path("replacements").asInt())
-        assertTrue(result.path("protected_recipes").asInt() >= 25)
+        assertTrue(result.path("identity_recipes").asInt() >= 100)
+        assertEquals(2, result.path("replacements").asInt())
+        assertTrue(result.path("generic_examples").asInt() >= 35)
         assertTrue(result.path("furnace_preserved").asBoolean())
+        assertTrue(result.path("tcon_preserved").asBoolean())
     }
 
     @Test
-    fun `no active script restores blanket stone or cobblestone rewriting`() {
+    fun `no active script bypasses rock identity filtering with unconditional rewriting`() {
         val blanket = Regex("replaceInput\\s*\\(\\s*\\{\\s*}\\s*,\\s*['\"]minecraft:(?:stone|cobblestone)['\"]")
         Files.walk(root.resolve("kubejs/server_scripts")).use { paths ->
             paths.filter { Files.isRegularFile(it) && it.toString().endsWith(".js") }.forEach { path ->
-                assertFalse(blanket.containsMatchIn(Files.readString(path)), "blanket rock substitution in $path")
+                assertFalse(blanket.containsMatchIn(Files.readString(path)), "unconditional rock substitution bypasses identity whitelist in $path")
             }
         }
     }
@@ -44,7 +45,7 @@ class StoneCobbleCompatibilityContractTest {
     @Test
     fun `variant tags remain available for native functional tools and furnace`() {
         val tags = Files.readString(root.resolve("kubejs/server_scripts/compat/retained/check__30_stone_cobble_compat.js"))
-        for (tag in listOf("forge:stone", "forge:cobblestone", "minecraft:stone_tool_materials", "minecraft:stone_crafting_materials")) {
+        for (tag in listOf("forge:stone", "forge:cobblestone", "minecraft:stone_tool_materials", "minecraft:stone_crafting_materials", "forge:normal_stone", "tconstruct:workstation_rock")) {
             assertTrue(tags.contains("'$tag'"), "keep shared rock/tool tag $tag")
         }
         assertTrue(tags.contains("event.add('kubejs:furnace_materials', '#forge:stone')"))
