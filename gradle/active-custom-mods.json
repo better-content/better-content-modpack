@@ -16,6 +16,10 @@
     "test-control.main.kts",
     "scripts/prepare_dev_inputs.py",
     "scripts/testing_session.py",
+    "scripts/bounded_facade.py",
+    "scripts/BoundedFacade.main.kts",
+    "pack-test-lock.main.kts",
+    "pack-test-queue.main.kts",
     "package.sh",
     "dist.sh",
     ".github/ci-source-revisions.json"
@@ -426,6 +430,7 @@
       "modId": "better_runtime_diagnostics",
       "artifact": "better-runtime-diagnostics-0.1.0.jar",
       "supportArtifacts": ["build/libs/better-runtime-test-support.jar"],
+      "dependsOn": ["better-spawns"],
       "tasks": [
         "build",
         "stageRuntimeJar"

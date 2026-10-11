@@ -53,6 +53,17 @@ class DisposalTests(unittest.TestCase):
         with patch.object(m, 'process_references', return_value=[]):
             return m.apply(self.root, self.plan() if decisions is None else decisions, transaction)
 
+    def test_nested_authored_module_outputs_are_discovered_and_inputs_preserved(self):
+        source = self.file('better-content-modpack/planner/build.gradle.kts', '// authored module')
+        output = self.file('better-content-modpack/planner/build/result.bin', 'generated')
+        self.git('add', 'planner/build.gradle.kts')
+        targets, _ = m.discover(self.root)
+        self.assertIn(output.parent, targets)
+        self.assertEqual('delete', self.action(output.parent))
+        self.apply()
+        self.assertFalse(output.exists())
+        self.assertEqual('// authored module', source.read_text())
+
     def test_latest_complete_pair_survives_but_old_builds_and_latest_staging_do_not(self):
         for number in (8, 9):
             for side in ('client', 'server'):

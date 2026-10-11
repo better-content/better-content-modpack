@@ -20,11 +20,12 @@ class SingleplayerRuntimeTest {
         var seedServer: DedicatedServerFixture? = null
         val debugClients = mutableListOf<ClientFixture>()
         var title = false
+        fun titleClientOrNull(): ClientFixture? = if (::client.isInitialized) client else null
 
         @JvmStatic
         @BeforeAll
         fun start() {
-            if (evidence.run.target == "world-save") return
+            if (evidence.run.target in setOf("world-save", "world-startup")) return
             client = ClientFixture(evidence.run)
             client.prepare()
             client.launchSingleplayer()
@@ -53,6 +54,50 @@ class SingleplayerRuntimeTest {
     }
 
     @Test @Order(2)
+    fun debugNativeUnseededWorldStartup() {
+        if (evidence.run.tier != "debug") return
+        evidence.run.checkpoint("native unseeded integrated world startup") {
+            titleClientOrNull()?.close()
+            val fresh = ClientFixture(evidence.run, username = "FreshWorld", slot = 7,
+                clientJvmArgs = "-Xms2G -Xmx12G", productionWorldStartup = true).also { debugClients += it }
+            fresh.prepare()
+            val nonce = java.util.UUID.randomUUID()
+            val deadline = ScenarioDeadline(java.time.Duration.ofMinutes(15))
+            evidence.run.event("scenario_contract", mapOf("scenario" to "native-unseeded-integrated-startup",
+                "startup_budget_seconds" to 900, "native_exit_budget_seconds" to 120,
+                "inputs" to "bound candidate, absent save, random native normal world, real production spawn selection",
+                "oracles" to listOf("production resolved spawn marker", "real onboarding Survival", "40 native server ticks", "native stop and level.dat"),
+                "resources" to "12 GiB heap, 8 processors, software renderer; production DH generation/renderer/workers/radius",
+                "cleanup" to "nonce-bound native stop, owned fixture tree"))
+            val world = fresh.launchFreshWorld(nonce)
+            fresh.waitForWorldProbe("BC_FRESH_READY run=${evidence.run.config.runId} nonce=$nonce root=$world", deadline.requireRemaining())
+            fresh.waitSettled(deadline.requireRemaining())
+            val text = Files.readString(fresh.log)
+            require(text.contains("BC_FRESH_CREATE run=${evidence.run.config.runId} nonce=$nonce root=$world preexisting=false"))
+            require(text.contains("BC_FRESH_ONBOARDING run=${evidence.run.config.runId} nonce=$nonce"))
+            require(Files.readString(world.resolve("data/better_world_management/initial-spawn-v1.tsv")).trim() == "resolved")
+            val ready = Regex("BC_FRESH_READY run=${Regex.escape(evidence.run.config.runId)} nonce=$nonce root=${Regex.escape(world.toString())} seed=(-?\\d+) spawn_state=resolved mode=survival first_tick=(\\d+) last_tick=(\\d+) dimension=(\\S+) chunk_x=(-?\\d+) chunk_z=(-?\\d+)")
+                .find(text) ?: error("native startup emitted malformed ready evidence")
+            require(ready.groupValues[3].toLong() - ready.groupValues[2].toLong() >= 40)
+            fresh.capture("native-fresh-world.png")
+            evidence.run.event("native_unseeded_startup_passed", mapOf("nonce" to nonce.toString(), "root" to world.toString(),
+                "observed_seed" to ready.groupValues[1], "native_tick_span" to ready.groupValues[3].toLong() - ready.groupValues[2].toLong(),
+                "dimension" to ready.groupValues[4], "spawn_state" to "resolved", "pointer_injection" to false))
+            fresh.diagnosticSupport.assertStable()
+            deadline.requireRemaining()
+            val exit = fresh.diagnosticSupport.bridge.resolve("fresh-exit-$nonce.request")
+            Files.writeString(exit, "${evidence.run.config.runId}\n$nonce\n$world\n")
+            fresh.waitForWorldProbe("BC_FRESH_EXITED run=${evidence.run.config.runId} nonce=$nonce root=$world", java.time.Duration.ofMinutes(2))
+            evidence.run.event("native_unseeded_exit_observed", mapOf("nonce" to nonce.toString(), "root" to world.toString(),
+                "boundary" to "native_clearLevel_return_server_terminated"))
+            fresh.close()
+            require(Files.isRegularFile(world.resolve("level.dat"))) { "normal native world stop did not produce level.dat" }
+            fresh.assertHashes()
+            LogPolicy.requireClean(collectLogs(evidence.run.directory))
+        }
+    }
+
+    @Test @Order(3)
     fun debugSeededWorldSaveAndReopen() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "seeded integrated world persistence", "tier" to evidence.run.tier))
@@ -133,13 +178,13 @@ class SingleplayerRuntimeTest {
         }
     }
 
-    @Test @Order(3)
+    @Test @Order(4)
     fun singleplayerEvidenceIsCleanAndCandidatesAreUnchanged() {
         evidence.run.checkpoint("single-player log and hash audit") {
-            if (evidence.run.target != "world-save") client.close()
+            titleClientOrNull()?.close()
             debugClients.forEach { it.close() }
             LogPolicy.requireClean(collectLogs(evidence.run.directory))
-            if (evidence.run.target != "world-save") client.assertHashes()
+            titleClientOrNull()?.assertHashes()
             debugClients.forEach { it.assertHashes() }
             seedServer?.assertHashes()
         }

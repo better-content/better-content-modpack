@@ -1,4 +1,5 @@
 #!/usr/bin/env kotlin
+@file:Import("scripts/BoundedFacade.main.kts")
 
 import java.nio.file.Files
 import java.security.MessageDigest
@@ -8,8 +9,7 @@ import kotlin.system.exitProcess
 
 val root = __FILE__.canonicalFile.parentFile
 if (args.firstOrNull() in setOf("list", "plan", "run", "submit", "status", "wait", "evidence", "retry")) {
-    exitProcess(ProcessBuilder(root.resolve("test-control.main.kts").absolutePath, *args)
-        .directory(root).inheritIO().start().waitFor())
+    exitProcess(superviseFacade(root, listOf(root.resolve("test-control.main.kts").absolutePath) + args))
 }
 val selector = args.firstOrNull()
 var target: String? = null
@@ -30,14 +30,14 @@ while (argument < args.size) {
 }
 val fontTargets = setOf("bumblezone", "aether", "nether")
 val fontDimensions = setOf("the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether")
-val validTarget = target == null || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart", "restart-compat", "world-save") ||
+val validTarget = target == null || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart", "restart-compat", "world-save", "world-startup", "deep-void") ||
     (target!!.startsWith("font:") && target!!.removePrefix("font:") in fontTargets) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
         target!!.removePrefix("dimension:") !in fontDimensions)
 val targetSuite = when {
     target == null -> null
     target == "server-ready" || target == "cursed-pyramid" || target == "lineage-transition" -> "server"
-    target == "world-save" -> "singleplayer"
+    target in setOf("world-save", "world-startup") -> "singleplayer"
     else -> "multiplayer"
 }
 val targetMethod = when {
@@ -49,6 +49,8 @@ val targetMethod = when {
     target == "campaign" || target == "campaign-start" -> "threeSurvivalPlayersStartCampaigns"
     target == "restart" || target == "restart-compat" -> "debugServerRestartAndClientReconnectPreserveWorld"
     target == "world-save" -> "debugSeededWorldSaveAndReopen"
+    target == "world-startup" -> "debugNativeUnseededWorldStartup"
+    target == "deep-void" -> "debugNativeDeepVoidEntry"
     target == "fonts" || target?.startsWith("font:") == true -> "debugNativeFontRoundTrips"
     else -> "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations"
 }
@@ -77,27 +79,22 @@ val selected = selector ?: usage()
 if (candidateBinding != null && selected == "debug" && target == null) existingCandidate = true
 verificationSession?.let {
     if (!Regex("[a-f0-9]{32}").matches(it)) usage()
-    val status = ProcessBuilder("python3", "-B", root.resolve("scripts/testing_session.py").absolutePath, "status", it)
-        .directory(root).inheritIO().start().waitFor()
+    val status = superviseFacade(root, listOf("python3", "-B", root.resolve("scripts/testing_session.py").absolutePath, "status", it), budgetSeconds = 60)
     if (status != 0) exitProcess(status)
 }
 val sessionArgs = verificationSession?.let { listOf("--verification-session", it) } ?: emptyList()
 
 if (selected == "debug" && target == null && !existingCandidate) {
-    exitProcess(ProcessBuilder(listOf(root.resolve("release.main.kts").absolutePath, "--debug") + sessionArgs)
-        .directory(root).inheritIO().start().waitFor())
+    exitProcess(superviseFacade(root, listOf(root.resolve("release.main.kts").absolutePath, "--debug") + sessionArgs))
 }
 
 if (selected == "dist" && target == null && candidateBinding == null && System.getenv("BC_RELEASE_PREPARED") != "1") {
-    exitProcess(ProcessBuilder(listOf(root.resolve("release.main.kts").absolutePath) + sessionArgs)
-        .directory(root).inheritIO().start().waitFor())
+    exitProcess(superviseFacade(root, listOf(root.resolve("release.main.kts").absolutePath) + sessionArgs))
 }
 
 if (selected != "dev" && System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
-    val status = ProcessBuilder(
-        root.resolve("pack-test-lock.main.kts").absolutePath,
-        "run", "test", if (target == null) selected else "$selected:$target", "--", __FILE__.absolutePath, *args,
-    ).directory(root).inheritIO().start().waitFor()
+    val status = superviseFacade(root, listOf(root.resolve("pack-test-lock.main.kts").absolutePath,
+        "run", "test", if (target == null) selected else "$selected:$target", "--", __FILE__.absolutePath) + args)
     exitProcess(status)
 }
 
@@ -140,28 +137,15 @@ fun gradle(suite: String, task: String, method: String? = null, evidenceSuite: S
         }
         command += listOf("--tests", "com.bettercontent.tests.$testClass.$method")
     }
-    val process = ProcessBuilder(command)
-        .directory(root)
-        .inheritIO()
-        .apply {
-            if (suite == "fast") {
-                environment().remove("BC_TEST_SELECTOR")
-                environment().remove("BC_TEST_TIER")
-            } else {
-                environment()["BC_TEST_SELECTOR"] = suite
-                environment()["BC_TEST_TIER"] = selected
-            }
-            if (runId != null) environment()["BC_TEST_RUN_ID"] = runId
-            candidateBinding?.let { environment()["BC_CANDIDATE_BINDING"] = java.io.File(it).absolutePath }
-            retryOf?.let { environment()["BC_TEST_RETRY_OF"] = it }
-            if (method != null) {
-                environment()["BC_TEST_TARGET"] = target!!
-                environment()["BC_TEST_EVIDENCE_SUITE"] = targetEvidenceSuite!!
-                retryOf?.let { environment()["BC_TEST_RETRY_OF"] = it }
-            }
-        }
-        .start()
-    val status = process.waitFor()
+    val environment = buildMap {
+        if (suite != "fast") { put("BC_TEST_SELECTOR", suite); put("BC_TEST_TIER", selected) }
+        if (runId != null) put("BC_TEST_RUN_ID", runId)
+        candidateBinding?.let { put("BC_CANDIDATE_BINDING", java.io.File(it).absolutePath) }
+        retryOf?.let { put("BC_TEST_RETRY_OF", it) }
+        if (method != null) { put("BC_TEST_TARGET", target!!); put("BC_TEST_EVIDENCE_SUITE", targetEvidenceSuite!!) }
+    }
+    val status = superviseFacade(root, command, budgetSeconds = if (suite == "fast") 1200 else 14400,
+        environment = environment, removedEnvironment = if (suite == "fast") setOf("BC_TEST_SELECTOR", "BC_TEST_TIER") else emptySet())
     if (status != 0 || suite == "fast") return status
     return if (validateFreshEvidence(evidenceSuite, startedAt)) 0 else 1
 }
@@ -170,20 +154,15 @@ val statuses = linkedMapOf<String, Int>()
 if (selected == "dev") {
     statuses["fast"] = gradle("fast", "test")
     if (statuses.getValue("fast") == 0) {
-        statuses["diff"] = ProcessBuilder("git", "diff", "--check")
-            .directory(root).inheritIO().start().waitFor()
+        statuses["diff"] = superviseFacade(root, listOf("git", "diff", "--check"), budgetSeconds = 30)
     }
 } else {
     var priorDist = if (selected == "debug" && existingCandidate) System.getenv("BC_PRIOR_DIST_RUN_ID") else null
     if (selected == "debug" && existingCandidate && priorDist == null) {
         val prerequisiteId = "${runId}1"
-        val prerequisite = ProcessBuilder(listOf(__FILE__.absolutePath, "dist") +
-            (candidateBinding?.let { listOf("--candidate-binding", it) } ?: emptyList()))
-            .directory(root).inheritIO().apply {
-                environment()["BC_RELEASE_PREPARED"] = "1"
-                environment()["BC_DIST_PREREQUISITE"] = "1"
-                environment()["BC_TEST_RUN_ID"] = prerequisiteId
-            }.start().waitFor()
+        val prerequisite = superviseFacade(root, listOf(__FILE__.absolutePath, "dist") +
+            (candidateBinding?.let { listOf("--candidate-binding", it) } ?: emptyList()),
+            environment = mapOf("BC_RELEASE_PREPARED" to "1", "BC_DIST_PREREQUISITE" to "1", "BC_TEST_RUN_ID" to prerequisiteId))
         statuses["dist-prerequisite"] = prerequisite
         if (prerequisite == 0) priorDist = prerequisiteId
     }
@@ -224,8 +203,7 @@ if (selected == "dev") {
         statuses["prior-dist"] = if (reportsPassed && candidateMatches) 0 else 1
     } else if (statuses["dist-prerequisite"] == null) {
         statuses["fast"] = gradle("fast", "test")
-        statuses["diff"] = ProcessBuilder("git", "diff", "--check")
-            .directory(root).inheritIO().start().waitFor()
+        statuses["diff"] = superviseFacade(root, listOf("git", "diff", "--check"), budgetSeconds = 30)
     }
     if (statuses.values.all { it == 0 }) {
         statuses["candidate"] = if (priorDist == null) gradle("candidate", "candidateTest") else 0

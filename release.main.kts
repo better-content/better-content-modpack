@@ -1,4 +1,5 @@
 #!/usr/bin/env kotlin
+@file:Import("scripts/BoundedFacade.main.kts")
 
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -59,7 +60,7 @@ if (jobs !in 1..4) {
     System.err.println("release jobs must be between 1 and 4")
     exitProcess(2)
 }
-val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "campaign-start", "campaign", "restart-compat", "cursed-pyramid", "lineage-transition", "world-save") ||
+val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "campaign-start", "campaign", "restart-compat", "cursed-pyramid", "lineage-transition", "world-save", "world-startup", "deep-void") ||
     (target!!.startsWith("font:") && target!!.removePrefix("font:") in setOf("bumblezone", "aether", "nether")) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
         target!!.removePrefix("dimension:") !in setOf("the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether"))
@@ -79,7 +80,7 @@ if (System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
         "run", "release", if (skipTests) "release-skip-tests" else if (debugMode) "debug" else target?.let { "target:$it" } ?: "dist", "--", __FILE__.absolutePath,
     )
     command.addAll(args)
-    exitProcess(ProcessBuilder(command).directory(root).inheritIO().start().waitFor())
+    exitProcess(superviseFacade(root, command))
 }
 
 val runId = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC)
@@ -91,17 +92,12 @@ evidence.resolve("release-request.txt").writeText(
     "run_id=$runId\njobs=$jobs\ntier=${if (debugMode) "debug" else if (target == null) "dist" else "targeted"}\ntarget=${target ?: ""}\nretry_of=${retryOf ?: ""}\nskip_tests=$skipTests\nforce_rebuild=$forceRebuild\ncommand=./release.main.kts --jobs $jobs${if (skipTests) " --skip-tests" else ""}${if (debugMode) " --debug" else ""}${target?.let { " --target $it" } ?: ""}\nstarted_at=${java.time.Instant.now()}\n",
 )
 
-fun run(vararg command: String): Int = ProcessBuilder(*command)
-    .directory(root)
-    .inheritIO()
-    .apply {
-        environment()["BC_TEST_RUN_ID"] = runId
-        verificationSession?.let { environment()["BC_VERIFICATION_SESSION"] = it }
-        target?.let { environment()["BC_RELEASE_TARGET"] = it }
-        if (debugMode) environment()["BC_RELEASE_DEBUG"] = "1"
-    }
-    .start()
-    .waitFor()
+fun run(vararg command: String): Int = superviseFacade(root, command.toList(), environment = buildMap {
+    put("BC_TEST_RUN_ID", runId)
+    verificationSession?.let { put("BC_VERIFICATION_SESSION", it) }
+    target?.let { put("BC_RELEASE_TARGET", it) }
+    if (debugMode) put("BC_RELEASE_DEBUG", "1")
+})
 
 val preparationCommand = mutableListOf(
     root.resolve("gradlew").absolutePath,
@@ -121,10 +117,9 @@ if (preparation != 0) {
 if (debugMode) {
     val provenance = evidence.resolve("release/provenance.json")
     fun field(name: String): String {
-        val process = ProcessBuilder("jq", "-er", ".candidates.$name", provenance.toString())
-            .directory(root).redirectError(ProcessBuilder.Redirect.INHERIT).start()
-        val value = process.inputStream.bufferedReader().readText().trim()
-        require(process.waitFor() == 0 && value.isNotBlank()) { "missing candidate $name in $provenance" }
+        val (status, output) = captureFacade(root, listOf("jq", "-er", ".candidates.$name", provenance.toString()))
+        val value = output.trim()
+        require(status == 0 && value.isNotBlank()) { "missing candidate $name in $provenance" }
         return value
     }
     fun sha256(path: String): String {
@@ -158,11 +153,11 @@ if (debugMode) {
         val command = mutableListOf(root.resolve("test.main.kts").absolutePath, tier,
             "--candidate-binding", provenance.absolutePath)
         if (existingCandidate) command += "--existing-candidate"
-        return ProcessBuilder(command).directory(root).inheritIO().apply {
-            environment()["BC_TEST_RUN_ID"] = testRunId
-            environment()["BC_RELEASE_PREPARED"] = "1"
-            if (existingCandidate) environment()["BC_PRIOR_DIST_RUN_ID"] = distRunId
-        }.start().waitFor()
+        return superviseFacade(root, command, environment = buildMap {
+            put("BC_TEST_RUN_ID", testRunId)
+            put("BC_RELEASE_PREPARED", "1")
+            if (existingCandidate) put("BC_PRIOR_DIST_RUN_ID", distRunId)
+        })
     }
     record("pending", "pending")
     require(candidateUnchanged()) { "fresh candidate changed before Dist; see $summary" }
@@ -191,12 +186,7 @@ val testArgs = mutableListOf(root.resolve("test.main.kts").absolutePath, if (tar
 if (!skipTests) testArgs += listOf("--candidate-binding", evidence.resolve("release/provenance.json").absolutePath)
 target?.let { testArgs += listOf("--target", it) }
 retryOf?.let { testArgs += listOf("--retry-of", it) }
-val tests = if (skipTests) 0 else ProcessBuilder(testArgs)
-    .directory(root)
-    .inheritIO()
-    .apply { environment()["BC_RELEASE_PREPARED"] = "1" }
-    .start()
-    .waitFor()
+val tests = if (skipTests) 0 else superviseFacade(root, testArgs, environment = mapOf("BC_RELEASE_PREPARED" to "1"))
 println("release run: $runId")
 println("evidence: ${evidence.absolutePath}")
 if (skipTests) println("tests: skipped by explicit request")

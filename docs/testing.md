@@ -111,6 +111,9 @@ Use the coordinator's stable conversation ID (`PI_SESSION_ID` in Pi; explicitly 
 ```sh
 ./test-control.main.kts session begin --owner-session "$PI_SESSION_ID"
 ./test-control.main.kts session status SESSION_ID
+./test-control.main.kts session admit SESSION_ID --helper-session HELPER_CONVERSATION_ID
+./test-control.main.kts session revoke SESSION_ID --helper-session HELPER_CONVERSATION_ID
+./test-control.main.kts session begin --owner-session "$PI_SESSION_ID" --replace IDLE_OWNED_SESSION_ID
 ./release.main.kts --debug --verification-session SESSION_ID
 ./test-control.main.kts run source --all --verification-session SESSION_ID
 ./release.main.kts --debug --verification-session SESSION_ID --rebuild-all
@@ -133,18 +136,23 @@ decision fail rather than acquiring the previous verification ID. Declared `supp
 missing/corrupt supplements require rebuilding their provider. Changed providers invalidate
 consumers. The manifest's `verificationInputs` declare external pack contracts/upstream pins and
 shared build inputs; changes conservatively require a full baseline. Embedded source metadata
-alone is insufficient. Session status currently reports stored invalidations, not a live rescan.
+alone is insufficient. Session status adds an observational live rescan of shared inputs,
+source/task identities, production/support bytes and the provider/consumer closure. It does not
+advance verification or authorize reuse; preparation rechecks under the receipt lock.
 
-Same conversation identity survives compaction/reconnection. Different owners are rejected;
+Same conversation identity survives compaction/reconnection. Only explicitly owner-admitted
+helper conversation identities can share it; receipt ownership never changes. Different owners are rejected;
 uncertain liveness is not permission to adopt a receipt. Explicit end refuses during preparation.
 After stopping and confirming complete cleanup of an interrupted owned tree, its owner may use
 `session end SESSION_ID --confirm-terminated-run RUN_ID`; this refuses if the coordinator PID
 still exists. That confirmation is an explicit cleanup assertion, not inference from PID absence.
-End unused sessions explicitly. Automatic owner-liveness reconciliation and helper identity
-admission are not yet implemented; helpers must not invent identities or adopt foreign receipts.
+End unused sessions explicitly. Admission/revocation and explicit replacement refuse an active
+coordinator. End/replacement is owner-only; a helper cannot transfer ownership or revive a receipt.
+Uncertain owner liveness remains fail-closed and requires explicit owner reconciliation, never
+cross-conversation adoption. Receipts are task-lifetime data and are removed on handoff.
 Synthetic receipt tests do not establish completed cold source-build or Debug acceptance.
-Snapshot dependency verification remains a reproducibility boundary until owning builds have
-immutable resolved inputs.
+The two Librarian snapshot users pin the exact timestamped implementation via plugin resolution,
+not merely a dated marker that still depends on a floating implementation.
 
 After inspecting a failed run, use a targeted retry to check a fix without starting every Debug
 scenario. Each retry makes a fresh fixture and records separate `target-*` evidence; it cannot be
@@ -154,7 +162,9 @@ teleportable dimension, `dimensions`, `campaign-start` (three live encounters an
 `campaign` (three live client encounters), `restart-compat` (saved Flesh spread
 restart and Untamed whale client spawn), `lineage-transition` (Debug lifecycle successor commit
 and archive), `cursed-pyramid` (pinned seed, saved structure record,
-and strict log audit in its surrounding chunks), and `world-save` (Debug). The `campaign-start` fixture
+and strict log audit in its surrounding chunks), `world-save` (seeded persistence),
+`world-startup` (unseeded native integrated creation), and `deep-void` (networked native entry)
+(the last three are Debug). The `campaign-start` fixture
 uses the packaged spawn rules and removes a strip of campaign floor to verify that the
 campaign-phase repair restores pathable geometry. For example:
 
@@ -186,8 +196,9 @@ Direct full Debug uses unchanged candidate hashes from its newly packaged Dist r
 dedicated-server startup/runtime snapshot, three
 fresh locations per directly teleportable dimension with strict three-sample TPS and Font-only
 direct-travel guards, one lineage transition and archive, three live client campaigns,
-server restart/client reconnect, four native Font round trips, and singleplayer startup/world
-boot/save/reopen.
+server restart/client reconnect, four native Font round trips, native networked extended-bottom
+Deep Void entry with negative controls, and singleplayer title screen, unseeded native creation,
+and separately seeded save/reopen.
 
 Dist, Debug, and `release.main.kts` share one kernel-backed runner mutex. The
 supported entry points acquire it automatically and publish current ownership at
@@ -218,9 +229,14 @@ pair.
 Short-lived harness commands use file-backed output, bounded execution and bounded diagnostic/
 cleanup phases. Owned Linux process groups close the fast-parent-exit race for inherited-group
 children, in addition to retained observed descendants. Deliberately detached, never-observed
-escapees are not covered by that mechanism. JVM-level cancellation and all control-facade waits
-still need a complete audit; thread interruption and ordinary fixture shutdown are not proof of
-all signal/cancellation paths. The Node recipe-handler contract retains its 15-second budget;
+escapees are not covered by that JVM tracker alone. Public release/test/control/lock/queue
+invocations additionally use a Linux subreaper supervisor that retains PID/start identities,
+reaps adopted descendants during execution and cleans them on parent loss, signal or deadline.
+Its outer cap is eight hours; runtime Gradle groups are capped at four hours and Dev at twenty
+minutes. Captured control/Git queries have thirty-second budgets and four-MiB output limits.
+Diagnostic/TERM/KILL/reap phases are separately bounded; failed cleanup remains a failure with
+retained ownership metadata. These mechanism contracts do not prove arbitrary external daemon
+cleanup or Minecraft acceptance. The Node recipe-handler contract retains its 15-second budget;
 passing repeated/concurrent observations cannot establish the cause of an earlier timeout.
 
 The tiers run internal Gradle tasks `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
@@ -235,11 +251,23 @@ diagnostics; Debug also collects runtime data. The single-player group records t
 title screen without injecting input. Failed fixtures remain available during the active task only.
 Automated tests must not synthesize mouse movement or mouse
 clicks. Threads reader development, the Quark chat emote picker, the World Condenser configuration
-screen, and the Create World menu are manual visual gates. Debug's current non-pointer world probe tests
-integrated boot and reopen of a dedicated-server-seeded save, not ordinary fresh-world creation
-or the menu. Its spawn fallback marker isolates persistence, not production spawn-search
-acceptance. Unseeded startup and tick-correlated networked extended-bottom Deep Void entry
-remain required additions, not coverage implied by this existing suite. Before rerunning, inspect the existing run and report its
+screen, and the Create World menu are manual visual gates. The seeded persistence probe's
+fallback marker isolates persistence; it is not production spawn-search acceptance. The separate
+unseeded probe creates an absent normal world with a native random seed, observes the production
+resolved marker, uses the typed production onboarding action, and requires Survival and forty
+correlated native ticks before native disconnect/save. It does not author a spawn marker or test
+the Create World GUI. Its profile uses twelve-GiB heap/eight processors/software rendering while
+preserving production Distant Horizons generation, renderer, six workers and radius 32.
+
+The native Deep Void probe arms one real Survival network player at the actual extended-bottom
+boundary. Highest/lowest native END-tick observations correlate run/nonce/player/tick, exact
+config and capability state, source threshold and resulting destination. Above-boundary and
+disabled-switch negatives precede entry; entry additionally requires the real client arrival.
+The supplement does not invoke the upstream procedure or teleport into the destination. Native
+fixtures restore temporary switches and bind supplement/candidate hashes.
+
+These authored scenarios still require a recorded full unchanged-candidate native run; local
+contract/source passes are not runtime acceptance. Before rerunning, inspect the existing run and report its
 ID, hashes, failed or aborted cases, evidence path, retained fixture, and process cleanup state.
 Cleanup retains observed process descendants after their parent exits and checks termination after
 graceful and forced shutdown. Every fixture is closed even when an earlier close fails. The
@@ -304,6 +332,29 @@ the complete modpack, real server tick, and real campaign materialization path.
 Debug's lifecycle smoke verifies one lineage transition, its committed archive, and final clean state.
 It intentionally avoids a second generation; longer persistence matrices require separate explicit
 authorization.
+
+## Runtime scenario contracts
+
+All runtime groups consume the exact bound production ZIP pair and gate-produced diagnostic
+support bytes, extracted into fresh owned fixtures. Candidate/support hashes and strict logs
+are checked at completion; hash drift, missing observations, process survivors and a budget
+expiry fail rather than skip or retry. Each group has a four-hour outer controller cap including
+setup and diagnostics. Individual readiness, command, client-arrival and polling budgets remain
+tighter; no nested operation may reset the TPS stabilization deadline. Resource arguments and
+fixture-only changes are recorded in `fixture_resource_budget`/profile events. Software rendering
+is disclosed and is not a hardware-accelerated performance or manual visual acceptance claim.
+
+| Scenario family | Inputs and observable oracle | Inner budget/resource contract |
+| --- | --- | --- |
+| Title/server readiness and Dist join | Fresh extracts; native title/server-ready markers and real online player heartbeat | Existing bounded startup/join waits; one client, recorded heap/CPU/software-renderer profile |
+| Unseeded integrated startup | Absent save, native random normal world, production spawn selection/onboarding; resolved marker, Survival, forty correlated ticks, native stop and `level.dat` | Fifteen-minute absolute startup budget plus two-minute native exit; 12 GiB/eight processors, production DH settings |
+| Seeded persistence | Authored seed/probe state, dedicated-created save and explicit fallback marker; native save/reopen observations | Bounded world-open/save/exit waits; isolated seeded profile, never labeled production fresh startup |
+| Native Deep Void | Extended-bottom native world, exact upstream artifact, real Survival player; above/disabled negatives, same-tick native entry and client destination | Ten-minute absolute scenario budget with at-most-two-minute tick waits and at-most-ninety-second client/return waits |
+| Dimension/Font traversal | Runtime-discovered registries/config, three fresh positions, server/client chunk reports, direct-denial guard and block-family/geometry oracles | Ninety-second arrivals; at least 18 TPS in three consecutive samples within one 180-second stabilization deadline; bounded nested calls |
+| Campaign/repair | Three real Survival clients, fixture corridors, native routed encounters and repair geometry | Recorded three-client resource profile, bounded routed-stage/heartbeat waits; rejected routes recorded, not waived |
+| Restart/Flesh/whale | Current fixture saved state, native restart/reconnect and client spawn observations | Bounded stop/restart/client waits; fresh evidence and unchanged candidate hashes |
+| Lifecycle/snapshot/pyramid | Native completion schema and snapshot ID, one committed lineage archive, pinned structure seed and saved structure record | Bounded native command/completion waits; one generation only; saved evidence belongs to the current run |
+| Final audits/cleanup | Current logs, ZIP/support digests and all owned identities | Bounded diagnostic/TERM/KILL/reap phases; retain failure during diagnosis, dispose at handoff |
 
 ## Task registration and handoff
 

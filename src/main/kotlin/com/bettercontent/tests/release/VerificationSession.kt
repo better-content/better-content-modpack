@@ -29,6 +29,8 @@ internal data class VerificationReceipt(
     val mods: Map<String, VerifiedArtifact> = emptyMap(),
     val invalidations: List<String> = listOf("baseline not started"),
     val active_run: String? = null,
+    val helpers: Set<String> = emptySet(),
+    val shared_context: Map<String, String> = emptyMap(),
 )
 
 /** Conservative invalidation, including the full transitive consumer closure. */
@@ -138,7 +140,7 @@ internal class VerificationSession(
         locked {
             require(read().active_run == runId) { "session ownership changed during verification" }
             save(receipt.copy(generation = receipt.generation + if (fullBaseline) 1 else 0,
-                baseline = "complete", shared_fingerprint = shared, mods = verified,
+                baseline = "complete", shared_fingerprint = shared, shared_context = sharedContext(), mods = verified,
                 invalidations = emptyList(), active_run = null))
         }
         completed = true
@@ -156,7 +158,7 @@ internal class VerificationSession(
     private fun read(): VerificationReceipt {
         require(Files.size(path) <= 1024 * 1024) { "oversized session receipt" }
         val value: VerificationReceipt = mapper.readValue(path.toFile())
-        require(value.schema == "bc.testing_session.v1" && value.owner == owner && value.session_id == id) {
+        require(value.schema == "bc.testing_session.v1" && (value.owner == owner || owner in value.helpers) && value.session_id == id) {
             "verification session belongs to another conversation"
         }
         return value
@@ -166,6 +168,7 @@ internal class VerificationSession(
         val temporary = Files.createTempFile(directory, ".receipt-", ".json")
         try {
             mapper.writeValue(temporary.toFile(), value)
+            require(Files.size(temporary) <= 1024 * 1024) { "session receipt exceeds bounded size" }
             Files.move(temporary, path, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
         } finally { Files.deleteIfExists(temporary) }
     }
@@ -178,7 +181,12 @@ internal class VerificationSession(
         }
     }
 
-    private fun sharedIdentity(): String {
+    private fun sharedContext(): Map<String, String> = sharedEntries().toMap() + mapOf(
+        "_patterns" to sharedInputs.joinToString("\u0000"), "_java_home" to System.getProperty("java.home"))
+
+    private fun sharedIdentity(): String = fingerprint(sharedEntries())
+
+    private fun sharedEntries(): List<Pair<String, String>> {
         // Pack contracts are external verification inputs. Release-produced JAR/index files
         // cannot be included: deployment changes them by design. All other tracked pack inputs
         // conservatively require a fresh baseline, rather than silently bypassing a custom gate.
@@ -190,13 +198,13 @@ internal class VerificationSession(
             .split('\u0000').filter { it.isNotBlank() }.distinct()
             .filter { name -> matchers.any { it.matches(Path.of(name)) } }
             .filterNot { it == "index.toml" || (it.startsWith("mods/") && it.endsWith(".jar")) || it.startsWith(".worklane/") }
-        return fingerprint(names.map { it to fileIdentity(root.resolve(it)) } + listOf(
+        return names.map { it to fileIdentity(root.resolve(it)) } + listOf(
             "input_patterns" to sharedInputs.joinToString("\u0000"),
             "manifest" to fileIdentity(root.resolve("gradle/active-custom-mods.json")),
             "java" to (System.getProperty("java.version") + ":" + System.getProperty("java.home")),
             "toolchain" to fileIdentity(Path.of(System.getProperty("java.home")).resolve("release")),
             "sdk" to fileIdentity(root.resolve("docs/toolchains.md")),
-        ))
+        )
     }
 }
 

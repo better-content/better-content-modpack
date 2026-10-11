@@ -1,4 +1,5 @@
 #!/usr/bin/env kotlin
+@file:Import("scripts/BoundedFacade.main.kts")
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -78,9 +79,7 @@ private fun requestOptions(scope: String, start: Int): Map<String, String> {
 private data class SourceMod(val repository: String, val artifact: String, val tasks: List<String>, val dependencies: List<String>)
 
 private fun capture(command: List<String>, cwd: Path = root): Pair<Int, String> {
-    val process = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true).start()
-    val output = process.inputStream.bufferedReader().use { it.readText() }
-    return process.waitFor() to output
+    return captureFacade(root.toFile(), command, cwd.toFile())
 }
 
 private fun activeMods(): List<SourceMod> {
@@ -125,9 +124,8 @@ private fun writeControl(id: String, fields: Map<String, Any?>) {
 
 private fun launch(command: List<String>, cwd: Path, log: Path, environment: Map<String, String> = emptyMap()): Int {
     Files.createDirectories(log.parent)
-    val process = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true)
-        .redirectOutput(log.toFile()).apply { environment().putAll(environment) }.start()
-    return process.waitFor()
+    return superviseFacade(root.toFile(), command, cwd.toFile(),
+        if (cwd.startsWith(workspace.resolve("mod_source"))) 2700 else 28800, log.toFile(), environment)
 }
 
 private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, Any?> {
@@ -222,14 +220,12 @@ private fun readStatus(id: String): String {
 
 when (args.firstOrNull()) {
     "session" -> {
-        exitProcess(ProcessBuilder(listOf("python3", "-B", root.resolve("scripts/testing_session.py").toString()) + args.drop(1))
-            .directory(root.toFile()).inheritIO().start().waitFor())
+        exitProcess(superviseFacade(root.toFile(), listOf("python3", "-B", root.resolve("scripts/testing_session.py").toString()) + args.drop(1), budgetSeconds = 60))
     }
     "begin", "finish" -> {
         // Task lifetime is explicit: never delete a candidate between tests.
-        exitProcess(ProcessBuilder(listOf("python3", "-B",
-            root.resolve("scripts/workspace-maintenance.py").toString()) + args)
-            .directory(root.toFile()).inheritIO().start().waitFor())
+        exitProcess(superviseFacade(root.toFile(), listOf("python3", "-B",
+            root.resolve("scripts/workspace-maintenance.py").toString()) + args, budgetSeconds = 300))
     }
     "list" -> {
         if (args.size != 1) fail("list accepts no options")

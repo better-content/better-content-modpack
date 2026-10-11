@@ -25,6 +25,7 @@ class MultiplayerFixturePhaseTest {
             .findAll(source).map { it.groupValues[2] to it.groupValues[1].toInt() }.toList()
         assertEquals(listOf(
             "leadClientJoinsFreshDedicatedServer" to 1,
+            "debugNativeDeepVoidEntry" to 2,
             "debugNativeFontRoundTrips" to 3,
             "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations" to 4,
             "threeSurvivalPlayersStartCampaigns" to 5,
@@ -35,7 +36,7 @@ class MultiplayerFixturePhaseTest {
 
     @Test fun initialNativeFixturesDoNotPrepareCampaignTerrain() {
         for (name in listOf("start", "leadClientJoinsFreshDedicatedServer",
-            "debugNativeFontRoundTrips",
+            "debugNativeDeepVoidEntry", "debugNativeFontRoundTrips",
             "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations")) {
             val fixture = body(name)
             for (operation in listOf("prepareCampaignPlatform(", "prepareCampaignTerrainAndRecover(",

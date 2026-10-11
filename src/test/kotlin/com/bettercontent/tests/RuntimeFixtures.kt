@@ -266,6 +266,7 @@ class ClientFixture(
     val username: String = evidence.config.username,
     private val slot: Int = 0,
     private val clientJvmArgs: String = DEFAULT_CLIENT_JVM_ARGS,
+    private val productionWorldStartup: Boolean = false,
 
 ) : AutoCloseable {
     private val config = evidence.config
@@ -368,6 +369,25 @@ class ClientFixture(
         launcher = launch(emptyList())
     }
 
+    fun launchFreshWorld(nonce: UUID): Path {
+        require(productionWorldStartup && dedicated == null) { "native creation requires a standalone production startup profile" }
+        val name = "Fresh-$nonce"
+        val world = client.resolve("saves/$name").toAbsolutePath().normalize()
+        require(!Files.exists(world)) { "unseeded native startup cannot receive a preexisting save" }
+        val args = mapOf("name" to name, "nonce" to nonce.toString(), "root" to world.toString(), "uuid" to uuid.toString())
+            .entries.joinToString(" ") { (key, value) ->
+                require(value.none { it.isWhitespace() || it == '\"' || it == '\'' })
+                "-Dbc.pack_test.fresh.$key=$value"
+            }
+        evidence.event("native_fresh_world_contract", mapOf("nonce" to nonce.toString(), "world_root" to world.toString(),
+            "creation_api" to "WorldOpenFlows.createFreshLevel", "preset" to "minecraft:normal", "seed" to "native_random",
+            "preexisting_save" to false, "spawn_state_injected" to false, "production_spawn_search" to true,
+            "onboarding" to "ClientOnboardingActions.submitSpawnOnly", "processor_count" to 8,
+            "heap" to "12G", "startup_deadline_seconds" to 900, "pointer_injection" to false))
+        launcher = launch(emptyList(), args)
+        return world
+    }
+
     fun launchQuickPlayWorld(world: String, mode: String) {
         require(mode == "save" || mode == "verify")
         quickPlayLogOffset = if (log.exists()) log.readText().length else 0
@@ -398,11 +418,11 @@ class ClientFixture(
         recordClientResourceBudget(jvmArgs, "quickplay", requireNotNull(launcher).pid)
     }
 
-    private fun launch(connection: List<String>): ManagedProcess {
+    private fun launch(connection: List<String>, extraArguments: String = ""): ManagedProcess {
         val environment = clientEnvironment()
         val jvmArgs = normalizeFixtureProcessorBudget(
-            "$clientJvmArgs ${diagnosticSupport.properties} -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false -Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")}",
-            4,
+            "$clientJvmArgs ${diagnosticSupport.properties} $extraArguments -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false -Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")}",
+            if (productionWorldStartup) 8 else 4,
         )
         val command = mutableListOf(
             "pipx", "run", "--spec", "portablemc==4.4.1", "portablemc",
@@ -419,7 +439,8 @@ class ClientFixture(
     }
 
     private fun recordClientResourceBudget(arguments: String, path: String, pid: Long) {
-        evidence.event("fixture_resource_budget", fixtureResourceBudgetEvidence("client", arguments, 4) + mapOf(
+        evidence.event("fixture_resource_budget", fixtureResourceBudgetEvidence(
+            if (productionWorldStartup) "integrated-startup-client" else "client", arguments, if (productionWorldStartup) 8 else 4) + mapOf(
             "client" to username, "launch_path" to path, "launcher_pid" to pid,
             "lp_num_threads" to 2, "software_renderer" to true,
         ))
@@ -447,14 +468,14 @@ class ClientFixture(
             "player_uuid" to binding.playerId.toString(), "native_exit_observed" to false))
     }
 
-    fun waitForWorldProbe(marker: String) {
+    fun waitForWorldProbe(marker: String, timeout: Duration = Duration.ofMinutes(10)) {
         val binding = verifyExitBinding
         val pattern = if (marker == "BC_DEBUG_WORLD_EXITED" && binding != null) binding.exitMarker
             else Regex(Regex.escape(marker))
         val process = requireNotNull(launcher)
         if (binding != null && marker in setOf("BC_DEBUG_WORLD_LOADED mode=verify", "BC_DEBUG_WORLD_EXITED")) {
             // A previous launch's uncorrelated LOADED must not authorize this fresh verification exit.
-            val deadline = System.nanoTime() + Duration.ofMinutes(10).toNanos()
+            val deadline = System.nanoTime() + timeout.toNanos()
             var observed = false
             while (System.nanoTime() < deadline) {
                 val suffix = if (log.exists()) log.readText().drop(quickPlayLogOffset) else ""
@@ -466,7 +487,7 @@ class ClientFixture(
                 process.captureDiagnostics(evidence.directory.resolve("lifecycle-verify-native-exit-timeout"))
                 error("timed out waiting for fresh singleplayer world probe $marker; see $log")
             }
-        } else process.waitForLog(pattern, Duration.ofMinutes(10), "singleplayer world probe $marker")
+        } else process.waitForLog(pattern, timeout, "singleplayer world probe $marker")
         if (marker == "BC_DEBUG_WORLD_LOADED mode=verify" && binding != null) verifyLoadedObserved = true
         if (marker == "BC_DEBUG_WORLD_EXITED" && binding != null)
             evidence.event("lifecycle_verify_native_exit_observed", mapOf("nonce" to binding.nonce.toString(),
@@ -492,10 +513,12 @@ class ClientFixture(
         // races the integrated server during the save/reopen fixture's world unload.
         val distantHorizons = client.resolve("config/DistantHorizons.toml")
         require(distantHorizons.isRegularFile()) { "runtime client is missing Distant Horizons config: $distantHorizons" }
-        replaceExact(distantHorizons, "numberOfThreads = 6", "numberOfThreads = 1")
-        replaceExact(distantHorizons, "lodChunkRenderDistanceRadius = 32", "lodChunkRenderDistanceRadius = 4")
-        replaceExact(distantHorizons, "enableDistantGeneration = true", "enableDistantGeneration = false")
-        replaceExact(distantHorizons, "rendererMode = \"DEFAULT\"", "rendererMode = \"DISABLED\"")
+        if (!productionWorldStartup) {
+            replaceExact(distantHorizons, "numberOfThreads = 6", "numberOfThreads = 1")
+            replaceExact(distantHorizons, "lodChunkRenderDistanceRadius = 32", "lodChunkRenderDistanceRadius = 4")
+            replaceExact(distantHorizons, "enableDistantGeneration = true", "enableDistantGeneration = false")
+            replaceExact(distantHorizons, "rendererMode = \"DEFAULT\"", "rendererMode = \"DISABLED\"")
+        }
         evidence.event(if (dedicated != null) "dedicated_client_fixture_profile" else "singleplayer_client_fixture_profile", mapOf(
             "client" to username,
             "complete_modpack" to true,
@@ -503,10 +526,10 @@ class ClientFixture(
                 "render_distance" to 4,
                 "simulation_distance" to 5,
                 "max_fps" to 30,
-                "distant_horizons_threads" to 1,
-                "distant_horizons_lod_radius" to 4,
-                "distant_horizons_generation" to false,
-                "distant_horizons_renderer" to "DISABLED",
+                "distant_horizons_threads" to if (productionWorldStartup) 6 else 1,
+                "distant_horizons_lod_radius" to if (productionWorldStartup) 32 else 4,
+                "distant_horizons_generation" to productionWorldStartup,
+                "distant_horizons_renderer" to if (productionWorldStartup) "DEFAULT" else "DISABLED",
             ),
         ))
     }
@@ -519,8 +542,8 @@ class ClientFixture(
 
     fun processAlive(): Boolean = launcher?.alive == true
 
-    fun waitSettled() {
-        val deadline = System.nanoTime() + Duration.ofMinutes(10).toNanos()
+    fun waitSettled(timeout: Duration = Duration.ofMinutes(10)) {
+        val deadline = System.nanoTime() + timeout.toNanos()
         val settleUntil = System.nanoTime() + Duration.ofSeconds(config.settleSeconds).toNanos()
         while (System.nanoTime() < deadline) {
             val text = if (log.exists()) log.readText() else ""

@@ -45,7 +45,7 @@ class MultiplayerRuntimeTest {
             val harnessOptions = listOf(
                 inheritedJavaOptions,
                 "-Dbetter_pillager_campaigns.harness=true",
-                if (evidence.run.tier == "debug") "-Dbc.pack_test.debug=true" else "",
+                if (evidence.run.tier == "debug") "-Dbc.pack_test.debug=true -Dbc.pack_test.deepvoid=true" else "",
             )
                 .filter(String::isNotBlank).joinToString(" ")
             server = DedicatedServerFixture(
@@ -117,6 +117,57 @@ class MultiplayerRuntimeTest {
         startClient(lead)
         requirePlayersOnline("target client joined", listOf(lead))
         joined = true
+    }
+
+    @Test @Order(2)
+    fun debugNativeDeepVoidEntry() {
+        if (evidence.run.tier != "debug") return
+        prepareTargetJoin()
+        assumeTrue(joined, "client join prerequisite failed")
+        evidence.run.checkpoint("networked extended-bottom native Deep Void entry") {
+            val player = clients.first()
+            val deadline = ScenarioDeadline(Duration.ofMinutes(10))
+            evidence.run.event("scenario_contract", mapOf("scenario" to "native-networked-deepvoid", "budget_seconds" to 600,
+                "inputs" to "bound production candidate, exact native Deep Void, fresh extended-bottom network world",
+                "oracles" to listOf("above negative", "disabled-switch negative", "same-tick native transfer", "real client arrival"),
+                "resources" to "fixture_resource_budget events", "cleanup" to "restore config, owned fixture tree; no candidate mutation"))
+            server.commandResult("gamemode survival ${player.username}", Regex("Set ${Regex.escape(player.username)}'s game mode to Survival Mode"),
+                "real player Survival eligibility", minOf(Duration.ofSeconds(30), deadline.requireRemaining()))
+            for (kind in listOf("above", "disabled", "entry")) {
+                val nonce = java.util.UUID.randomUUID()
+                val request = server.diagnosticSupport.bridge.resolve("deepvoid.request")
+                require(!Files.exists(request)) { "previous native Deep Void arm was not consumed" }
+                val offset = clientLogOffset(player)
+                Files.writeString(request, "${evidence.run.config.runId}\n$nonce\n${player.uuid}\n$kind\n")
+                val marker = "run=${evidence.run.config.runId} nonce=$nonce case=$kind uuid=${player.uuid}"
+                server.waitLog(Regex(Regex.escape("BC_DEEPVOID_AFTER $marker")), "native tick result $kind", minOf(Duration.ofMinutes(2), deadline.requireRemaining()))
+                val lines = Files.readAllLines(server.log)
+                val before = NativeDeepVoidContract.parseBefore(lines.single { "BC_DEEPVOID_BEFORE $marker " in it })
+                val after = NativeDeepVoidContract.parseAfter(lines.single { "BC_DEEPVOID_AFTER $marker " in it })
+                NativeDeepVoidContract.requireNativeDecision(before, after, evidence.run.config.runId, nonce, java.util.UUID.fromString(player.uuid), kind)
+                evidence.run.event("native_deepvoid_tick_decision", mapOf("nonce" to nonce.toString(), "case" to kind,
+                    "player_uuid" to player.uuid.toString(), "native_tick" to before.tick, "source_dimension" to before.dimension,
+                    "actual_bottom" to before.bottom, "actual_threshold" to before.threshold, "armed_y" to before.y,
+                    "void_enabled" to before.voidEnabled, "other_enabled" to before.otherEnabled, "end_enabled" to before.endEnabled,
+                    "after_dimension" to after.dimension, "native_entry_capability" to after.natural,
+                    "client_sha256" to server.pair.clientSha256, "server_sha256" to server.pair.serverSha256))
+                if (kind == "entry") {
+                    waitForClientPosition(player, "the_deep_void:deep_void", offset, budget = minOf(Duration.ofSeconds(90), deadline.requireRemaining()))
+                    requirePlayersOnline("native Deep Void entry retained real network player", listOf(player))
+                    player.capture("native-deepvoid-entry.png")
+                    evidence.run.event("native_deepvoid_client_arrived", mapOf("nonce" to nonce.toString(),
+                        "player_uuid" to player.uuid.toString(), "dimension" to "the_deep_void:deep_void"))
+                }
+                deadline.requireRemaining()
+            }
+            // Restore the scenario's source dimension only AFTER the native transfer/client oracles.
+            server.commandResult("execute in minecraft:overworld run tp ${player.username} 0 320 0",
+                Regex("Teleported ${Regex.escape(player.username)}"), "return after native Deep Void proof", minOf(Duration.ofSeconds(90), deadline.requireRemaining()))
+            server.diagnosticSupport.assertStable()
+            server.assertHashes(); player.assertHashes()
+            deadline.requireRemaining()
+            if (evidence.run.target != null) LogPolicy.requireClean(collectLogs(evidence.run.directory))
+        }
     }
 
     @Test @Order(4)
@@ -561,9 +612,10 @@ class MultiplayerRuntimeTest {
 
     private fun waitForClientPosition(
         client: ClientFixture, dimension: String, offset: Long, chunkX: Int? = null, chunkZ: Int? = null,
+        budget: Duration = Duration.ofSeconds(90),
     ) {
         val marker = Regex("BC_DEBUG_CLIENT_POSITION dimension=${Regex.escape(dimension)} chunk_x=(-?\\d+) chunk_z=(-?\\d+)")
-        val deadline = System.nanoTime() + Duration.ofSeconds(90).toNanos()
+        val deadline = System.nanoTime() + budget.toNanos()
         while (System.nanoTime() < deadline) {
             val text = if (Files.isRegularFile(client.log)) {
                 java.nio.channels.FileChannel.open(client.log).use { channel ->

@@ -100,6 +100,15 @@ def discover(workspace):
                     add(p, 'repository output/fixture')
             elif p.suffix in {'.log', '.hprof'}:
                 add(p, 'runtime log/dump')
+    # Authored nested Gradle modules are build owners too. Do not search generated
+    # trees or traverse symlinks; existing input/protected-path rules still apply.
+    for repo in repos:
+        for base, dirs, files in os.walk(repo, followlinks=False):
+            dirs[:] = [name for name in dirs if name not in REPO_OUTPUTS and name != '.git'
+                       and name != 'run' and not name.startswith('run-') and not (Path(base) / name).is_symlink()]
+            if Path(base) != repo and ('build.gradle' in files or 'build.gradle.kts' in files):
+                for name in ('build', '.gradle', '.kotlin'):
+                    add(Path(base) / name, 'repository output/fixture')
     artifacts = workspace / 'workspace_artifacts'
     if artifacts.is_dir():
         for p in artifacts.iterdir():

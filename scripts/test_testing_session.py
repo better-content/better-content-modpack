@@ -4,6 +4,7 @@ import contextlib
 import io
 import json
 import os
+import subprocess
 from pathlib import Path
 import tempfile
 import unittest
@@ -78,6 +79,52 @@ class SessionTests(unittest.TestCase):
                 with contextlib.redirect_stdout(io.StringIO()):
                     sessions.main()
             self.assertFalse(path.exists())
+
+    def test_helpers_require_owner_admission_and_cannot_end_or_replace_owner(self):
+        receipt = sessions.begin(self.root, 'conversation')
+        sid = receipt['session_id']
+        base = ['testing_session.py', '--root', str(self.root)]
+        def invoke(owner, args):
+            with patch.dict(os.environ, {'PI_SESSION_ID': owner}), patch('sys.argv', base + args), contextlib.redirect_stdout(io.StringIO()):
+                sessions.main()
+        with self.assertRaises(ValueError):
+            sessions.load(self.root, sid, 'helper', allow_helpers=True)
+        invoke('conversation', ['admit', sid, '--helper-session', 'helper'])
+        self.assertEqual('conversation', sessions.load(self.root, sid, 'helper', allow_helpers=True)['owner'])
+        with self.assertRaises(ValueError):
+            invoke('helper', ['end', sid])
+        with self.assertRaises(ValueError):
+            invoke('helper', ['begin', '--owner-session', 'helper', '--replace', sid])
+        invoke('conversation', ['revoke', sid, '--helper-session', 'helper'])
+        with self.assertRaises(ValueError):
+            sessions.load(self.root, sid, 'helper', allow_helpers=True)
+        invoke('conversation', ['begin', '--owner-session', 'conversation', '--replace', sid])
+        self.assertFalse(sessions.session_path(self.root, sid).exists())
+
+    def test_live_status_detects_missing_artifacts_source_changes_and_shared_changes(self):
+        root = self.root / 'workspace/pack'
+        source = root.parent / 'mod_source/fixture'
+        root.mkdir(parents=True); source.mkdir(parents=True)
+        for repo in (root, source):
+            subprocess.run(['git', 'init', '-q'], cwd=repo, check=True, timeout=5)
+            (repo / 'source.txt').write_text('authored')
+            subprocess.run(['git', 'add', '.'], cwd=repo, check=True, timeout=5)
+            subprocess.run(['git', '-c', 'user.email=test@example.invalid', '-c', 'user.name=Test', 'commit', '-qm', 'fixture'], cwd=repo, check=True, timeout=5)
+        (root / 'gradle').mkdir(); (root / 'mods').mkdir()
+        manifest = {'verificationInputs': ['source.txt'], 'mods': [{'repository': 'fixture', 'artifact': 'fixture.jar', 'tasks': ['verifyFull']}]}
+        (root / 'gradle/active-custom-mods.json').write_text(json.dumps(manifest))
+        jar = root / 'mods/fixture.jar'; jar.write_text('verified artifact bytes')
+        receipt = dict(baseline='complete', shared_context={'_patterns': 'source.txt', '_java_home': '/nonexistent',
+            'source.txt': sessions.file_identity(root / 'source.txt'), 'manifest': sessions.file_identity(root / 'gradle/active-custom-mods.json'),
+            'sdk': 'missing', 'toolchain': 'missing'}, mods={'fixture': {'source': sessions.source_identity(source),
+                'tasks': ['verifyFull'], 'sha256': sessions.file_identity(jar)}})
+        self.assertTrue(sessions.inspect_live(root, receipt)['valid_reuse'])
+        jar.unlink()
+        self.assertEqual(['fixture'], sessions.inspect_live(root, receipt)['affected_providers'])
+        jar.write_text('verified artifact bytes'); (source / 'source.txt').write_text('changed source')
+        self.assertEqual(['fixture'], sessions.inspect_live(root, receipt)['affected_providers'])
+        (source / 'source.txt').write_text('authored'); (root / 'source.txt').write_text('changed contract')
+        self.assertIn('full baseline required: shared verification inputs changed', sessions.inspect_live(root, receipt)['invalidations'])
 
     def test_identity_is_stable_conversation_not_pane(self):
         with patch.dict(os.environ, {'PI_SESSION_ID': 'stable-conversation', 'HERDR_PANE_ID': 'new-pane'}):

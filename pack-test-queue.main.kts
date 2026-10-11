@@ -1,4 +1,5 @@
 #!/usr/bin/env kotlin
+@file:Import("scripts/BoundedFacade.main.kts")
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -22,10 +23,9 @@ val directories = listOf("queued", "running", "completed", "failed").associateWi
 }
 
 fun jq(path: Path, expression: String): String {
-    val process = ProcessBuilder("jq", "-er", expression, path.toString()).redirectError(ProcessBuilder.Redirect.INHERIT).start()
-    val output = process.inputStream.bufferedReader().readText().trim()
-    require(process.waitFor() == 0) { "invalid pack-test handoff: $path" }
-    return output
+    val (status, output) = captureFacade(root.toFile(), listOf("jq", "-er", expression, path.toString()))
+    require(status == 0) { "invalid pack-test handoff: $path" }
+    return output.trim()
 }
 
 fun manifests(directory: Path): List<Path> = Files.list(directory).use { stream ->
@@ -69,12 +69,10 @@ when (args.firstOrNull()) {
         jq(running, ".target // \"\"").takeIf(String::isNotBlank)?.let { command += listOf("--target", it) }
         jq(running, ".retry_of // \"\"").takeIf(String::isNotBlank)?.let { command += listOf("--retry-of", it) }
         if (selector == "debug" && "--target" !in command) command += "--existing-candidate"
-        val builder = ProcessBuilder(command).directory(root.toFile()).inheritIO()
-        builder.environment()["BC_PACK_TEST_HANDOFF"] = running.toString()
-        builder.environment()["BC_PACK_TEST_STATE_ROOT"] = stateRoot.toString()
-        builder.environment()["BC_TEST_CLIENT_SHA256"] = jq(running, ".candidate.client.sha256")
-        builder.environment()["BC_TEST_SERVER_SHA256"] = jq(running, ".candidate.server.sha256")
-        val status = builder.start().waitFor()
+        val status = superviseFacade(root.toFile(), command, environment = mapOf(
+            "BC_PACK_TEST_HANDOFF" to running.toString(), "BC_PACK_TEST_STATE_ROOT" to stateRoot.toString(),
+            "BC_TEST_CLIENT_SHA256" to jq(running, ".candidate.client.sha256"),
+            "BC_TEST_SERVER_SHA256" to jq(running, ".candidate.server.sha256")))
         if (status == 75) {
             Files.move(running, queued, StandardCopyOption.ATOMIC_MOVE)
             println("request: ${jq(queued, ".request_id")}")

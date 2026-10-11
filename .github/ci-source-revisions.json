@@ -131,11 +131,11 @@
     },
     {
       "repository": "better-rpg-progression",
-      "commit": "482118efd55d1fac96d6c9d7bdebc1e0c36b86ca"
+      "commit": "1f1f9686d06f6746f22e353bb2ca363389ecc290"
     },
     {
       "repository": "better-runtime-diagnostics",
-      "commit": "046fac7f70e3866e15b01278353b60c8595df502"
+      "commit": "09f9d40838498516c97814edbdc9b0f348c56a78"
     },
     {
       "repository": "better-settlement-roads",
@@ -143,7 +143,7 @@
     },
     {
       "repository": "better-survival-physiology",
-      "commit": "48e407eaff2e7248d52a0a5a729c13d156c868a7"
+      "commit": "7c21a780074c5a0b761523dc1e030eca14e41ccd"
     },
     {
       "repository": "better-tinkers-loot-affixes",

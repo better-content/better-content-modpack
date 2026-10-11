@@ -63,6 +63,22 @@ class VerificationSessionTest {
         }
         root.parent.toFile().deleteRecursively()
     }
+    @Test fun `only owner-admitted helper shares baseline without replacing coordinator identity`() {
+        val root = fixture(); val id = begin(root); verify(root, id)
+        val path = root.resolve(".worklane/testing-sessions/$id.json")
+        val receipt: VerificationReceipt = mapper.readValue(path.toFile())
+        mapper.writeValue(path.toFile(), receipt.copy(helpers = setOf("admitted-helper")))
+        VerificationSession(root, mods, "helper-reuse", false, "admitted-helper", id).use {
+            assertTrue(it.affected.isEmpty()); it.commit(built(root))
+        }
+        val after: VerificationReceipt = mapper.readValue(path.toFile())
+        assertEquals("conversation", after.owner)
+        assertTrue(after.shared_context.isNotEmpty())
+        assertThrows(IllegalArgumentException::class.java) {
+            VerificationSession(root, mods, "unadmitted", false, "unadmitted-helper", id)
+        }
+        root.parent.toFile().deleteRecursively()
+    }
     @Test fun `source and provider hash invalidate consumers while independent remains reusable`() {
         val root = fixture(); val id = begin(root); verify(root, id)
         Files.writeString(root.parent.resolve("mod_source/provider/source.txt"), "changed")

@@ -1,4 +1,5 @@
 #!/usr/bin/env kotlin
+@file:Import("scripts/BoundedFacade.main.kts")
 
 import java.nio.channels.FileChannel
 import java.nio.channels.OverlappingFileLockException
@@ -47,12 +48,12 @@ val lockPath = stateRoot.resolve("runner.lock")
 val ownerPath = stateRoot.resolve("owner.json")
 val inherited = System.getenv("BC_PACK_TEST_LOCK_TOKEN")?.takeIf(String::isNotBlank)
 
-fun runChild(token: String): Int {
-    val builder = ProcessBuilder(command).inheritIO()
-    builder.environment()["BC_PACK_TEST_LOCK_TOKEN"] = token
-    builder.environment()["BC_PACK_TEST_LOCK_OWNER"] = ownerPath.toString()
-    return builder.start().waitFor()
-}
+@Volatile var childSupervisor: Process? = null
+val cleanupMutex = Any()
+fun runChild(token: String): Int = superviseFacade(__FILE__.canonicalFile.parentFile, command,
+    cwd = java.io.File(System.getProperty("user.dir")),
+    environment = mapOf("BC_PACK_TEST_LOCK_TOKEN" to token, "BC_PACK_TEST_LOCK_OWNER" to ownerPath.toString()),
+    onStarted = { childSupervisor = it })
 
 if (inherited != null) {
     if (ownerToken(ownerPath) != inherited) {
@@ -75,6 +76,7 @@ val heldLock = lock ?: run {
     exitProcess(75)
 }
 
+require(!Files.exists(ownerPath)) { "prior runner owner metadata remains; reconcile its owned-process cleanup before starting another candidate" }
 val token = UUID.randomUUID().toString()
 val pid = ProcessHandle.current().pid()
 val owner = """{
@@ -96,14 +98,19 @@ val owner = """{
 writeAtomic(ownerPath, owner)
 
 var cleaned = false
-fun cleanup() {
-    if (cleaned) return
-    cleaned = true
-    runCatching {
-        if (ownerToken(ownerPath) == token) Files.deleteIfExists(ownerPath)
+fun cleanup() = synchronized(cleanupMutex) {
+    if (!cleaned) {
+        cleaned = true
+        var complete = true
+        childSupervisor?.let { child ->
+            child.destroy()
+            complete = runCatching { child.waitFor(12, java.util.concurrent.TimeUnit.SECONDS) && child.exitValue() != 125 }.getOrDefault(false)
+            if (!complete) System.err.println("pack-test cancellation cleanup unproved; preserve owner metadata for reconciliation")
+        }
+        if (complete) runCatching { if (ownerToken(ownerPath) == token) Files.deleteIfExists(ownerPath) }
+        runCatching { heldLock.release() }
+        runCatching { channel.close() }
     }
-    runCatching { heldLock.release() }
-    runCatching { channel.close() }
 }
 Runtime.getRuntime().addShutdownHook(Thread(::cleanup, "pack-test-lock-cleanup"))
 val status = try {
