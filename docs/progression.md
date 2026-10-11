@@ -85,11 +85,17 @@ Milling a chunk into two feeds improves primary recovery; Crushing Wheels later
 produce three. Dry Sifting returns the primary product, while a waterlogged
 Sifter can expose coproducts appropriate to its installed mesh.
 
-The Font materials are also the origin of scalable logistics. Bumblezone
-honey crystal shards root bulk transport, the first Pretty Pipes network, and
-portable-storage infrastructure; Nether blaze rods root ordinary modules and
-Create's request network; Aether enchanted gravitite roots high modules and
-advanced automation. AE2's Energy Acceptor requires PowerGrid generation, Aether
+Font materials root the other scalable logistics branches: Bumblezone honey
+crystal shards supply portable-storage automation, rat work orders, and the
+Rapid Hopper; Nether blaze rods root Create's request network. Pretty Pipes
+instead develops certus-and-redstone routing intelligence before AE2 processors:
+one certus crystal makes eight pipes, and certus supplies blank and high modules.
+Items remain physical cargo in connected inventories, not matter-to-energy
+storage. One finite Sky Stone block anchors an Item Terminal, with none added
+for its Crafting Terminal upgrade; a Pressurizer costs one more. Its optional
+acceleration runs on basic PneumaticCraft air, consuming 10 mL per item while
+retaining 2 bar in a 1,000 mL chamber. Ordinary transport needs no air.
+AE2's Energy Acceptor still requires PowerGrid generation, Aether
 material, OC2R computation, meteor material, and Impossible Matter together. Vanilla chests and hoppers, early Create movement,
 Eureka, Little Logistics docks, and Wares remain independent; Little
 Logistics vehicles keep their upstream recipes, and the high-throughput Rapid

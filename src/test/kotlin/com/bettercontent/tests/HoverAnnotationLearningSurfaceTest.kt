@@ -2,6 +2,7 @@ package com.bettercontent.tests
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
@@ -1735,12 +1736,12 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
-    fun `Pretty Pipes annotations expose the three Font material gates`() {
+    fun `Pretty Pipes annotations teach certus logic and device-only sky stone`() {
         val text = Files.readString(root.resolve("kubejs/config/hover_annotations.json"))
         val recipes = Files.readString(root.resolve("kubejs/server_scripts/progression/20_logistics_roots.js"))
         assertTrue(text.contains("one craft makes eight pipes"))
-        assertTrue(text.contains("Blaze Rod"))
-        assertTrue(text.contains("Enchanted Gravitite"))
+        assertTrue(text.contains("routing logic without AE2 processors"))
+        assertTrue(text.contains("Items remain physical cargo, not energy"))
         val highModules = listOf(
             "high_crafting_module", "high_extraction_module", "high_filter_module",
             "high_high_priority_module", "high_low_priority_module", "high_retrieval_module",
@@ -1755,12 +1756,22 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(blank.path("owner").asText().contains("20_logistics_roots.js"))
         assertTrue(advanced.path("owner").asText().contains("20_logistics_roots.js"))
         assertTrue(pipe.path("lines").single().asText().contains("one craft makes eight pipes"))
-        assertTrue(blank.path("lines").single().asText().contains("Blaze Rod"))
-        assertTrue(advanced.path("lines").single().asText().contains("Enchanted Gravitite"))
+        assertTrue(blank.path("lines").single().asText().contains("Certus and redstone"))
+        assertTrue(advanced.path("lines").single().asText().contains("certus routing logic"))
+        val devices = listOf("item_terminal", "crafting_terminal", "pressurizer").associateWith { name ->
+            registry.path("annotations").single { it.path("selector").path("item").asText() == "prettypipes:$name" }
+        }
+        assertTrue(devices.getValue("item_terminal").path("lines").single().asText().contains("One Sky Stone"))
+        assertTrue(devices.getValue("crafting_terminal").path("lines").single().asText().contains("no additional Sky Stone"))
+        val pressureCopy = devices.getValue("pressurizer").path("lines").joinToString(" ") { it.asText() }
+        assertTrue(pressureCopy.contains("PneumaticCraft air above 2 bar"))
+        assertTrue(pressureCopy.contains("10 mL per item"))
         assertTrue(recipes.contains("event.shaped('8x prettypipes:pipe'"))
         assertTrue(recipes.contains("L: 'the_bumblezone:honey_crystal_shards'"))
-        assertTrue(recipes.contains("M: 'minecraft:blaze_rod'"))
-        assertTrue(recipes.contains("C: 'aether:enchanted_gravitite'"))
+        assertTrue(recipes.contains("['QRQ', 'SPS', 'QRQ']"))
+        assertTrue(recipes.contains("C: 'ae2:certus_quartz_crystal'"))
+        assertFalse(recipes.contains("tier/nether_blank_module"))
+        assertFalse(recipes.contains("tier/aether_"))
         assertTrue(recipes.contains("event.shapeless('create:redstone_requester'"))
         assertTrue(recipes.contains("event.remove({ output: 'ae2:energy_acceptor' })"))
         highModules.forEach { assertTrue(recipes.contains("$it: {"), it) }

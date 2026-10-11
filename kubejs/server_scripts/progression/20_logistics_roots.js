@@ -1,7 +1,6 @@
-// Scalable logistics roots in the three Font materials. Bumblezone honey
-// crystal shards root bulk transport, Nether blaze rods root ordinary pipe
-// modules, and Aether enchanted gravitite roots high-tier automation. Every
-// component is consumed in the recipe the player can inspect.
+// Pretty Pipes is certus-based physical logistics before AE2 processors and
+// matter-to-energy storage. Sky Stone anchors durable network devices only.
+// Other logistics branches retain their visible Font-material roots.
 var BC_DISABLED_INPUTLESS_RAT_OUTPUTS = [
     'rats:rat_upgrade_ore_doubling',
     'rats:rat_upgrade_fisherman',
@@ -22,57 +21,56 @@ ServerEvents.recipes(function (event) {
     event.remove({ output: 'rats:chunky_cheese_token' })
     event.remove({ output: 'rats:ratlantis_portal' })
 
-    // The first Bumblezone trip supplies the shards for a useful 32-pipe
-    // network. Modules then expose two additional visible tiers instead of
-    // charging hidden inventory costs after crafting.
+    // Growable certus supplies routing logic without taxing every pipe or
+    // module with finite meteor stone. Four crafts make a 32-pipe network.
     event.remove({ output: 'prettypipes:pipe' })
     event.shaped('8x prettypipes:pipe', ['RGR', 'ILI', 'RGR'], {
         R: 'minecraft:redstone', G: '#forge:glass', I: 'minecraft:iron_bars',
-        L: 'the_bumblezone:honey_crystal_shards'
+        L: 'ae2:certus_quartz_crystal'
     }).id('kubejs:logistics_roots/root/pretty_pipes')
 
-    // Ordinary modules are Nether-rooted.
+    // Certus and redstone provide logic without AE2 processors.
     event.remove({ output: 'prettypipes:blank_module' })
-    event.shaped('prettypipes:blank_module', ['QMQ', 'SPS', 'QRQ'], {
-        Q: 'ae2:certus_quartz_crystal', M: 'minecraft:blaze_rod',
+    event.shaped('prettypipes:blank_module', ['QRQ', 'SPS', 'QRQ'], {
+        Q: 'ae2:certus_quartz_crystal',
         S: 'minecraft:stone_slab', P: 'prettypipes:pipe', R: 'minecraft:redstone'
-    }).id('kubejs:logistics_roots/tier/nether_blank_module')
+    }).id('kubejs:logistics_roots/proto_ae2/blank_module')
 
-    // High modules are Aether-rooted.
+    // High modules refine the same certus logic.
     var BC_PRETTY_PIPES_HIGH_MODULES = {
         high_crafting_module: {
             pattern: ['GCG', 'GMG', 'GIG'],
-            key: { G: 'minecraft:gold_ingot', C: 'aether:enchanted_gravitite',
+            key: { G: 'minecraft:gold_ingot', C: 'ae2:certus_quartz_crystal',
                 M: 'prettypipes:medium_crafting_module', I: 'minecraft:iron_ingot' }
         },
         high_extraction_module: {
             pattern: ['GCG', 'GMG', 'GGG'],
-            key: { G: 'minecraft:gold_ingot', C: 'aether:enchanted_gravitite',
+            key: { G: 'minecraft:gold_ingot', C: 'ae2:certus_quartz_crystal',
                 M: 'prettypipes:medium_extraction_module' }
         },
         high_filter_module: {
             pattern: ['GCG', 'BMB', 'GBG'],
-            key: { G: 'minecraft:gold_ingot', C: 'aether:enchanted_gravitite',
+            key: { G: 'minecraft:gold_ingot', C: 'ae2:certus_quartz_crystal',
                 B: 'minecraft:iron_bars', M: 'prettypipes:medium_filter_module' }
         },
         high_high_priority_module: {
             pattern: ['PCP', 'PMP', 'PPP'],
-            key: { C: 'aether:enchanted_gravitite', P: 'minecraft:paper',
+            key: { C: 'ae2:certus_quartz_crystal', P: 'minecraft:paper',
                 M: 'prettypipes:medium_high_priority_module' }
         },
         high_low_priority_module: {
             pattern: ['PCP', 'PMP', 'PPP'],
-            key: { C: 'aether:enchanted_gravitite', P: '#forge:cobblestone',
+            key: { C: 'ae2:certus_quartz_crystal', P: '#forge:cobblestone',
                 M: 'prettypipes:medium_low_priority_module' }
         },
         high_retrieval_module: {
             pattern: ['RCR', 'GMG', 'RGR'],
-            key: { R: 'minecraft:redstone_block', C: 'aether:enchanted_gravitite',
+            key: { R: 'minecraft:redstone_block', C: 'ae2:certus_quartz_crystal',
                 G: 'minecraft:gold_ingot', M: 'prettypipes:medium_retrieval_module' }
         },
         high_speed_module: {
             pattern: ['GCG', 'BMB', 'GBG'],
-            key: { G: 'minecraft:gold_ingot', C: 'aether:enchanted_gravitite',
+            key: { G: 'minecraft:gold_ingot', C: 'ae2:certus_quartz_crystal',
                 B: 'minecraft:sugar', M: 'prettypipes:medium_speed_module' }
         }
     }
@@ -80,8 +78,23 @@ ServerEvents.recipes(function (event) {
         var recipe = BC_PRETTY_PIPES_HIGH_MODULES[module]
         event.remove({ output: 'prettypipes:' + module })
         event.shaped('prettypipes:' + module, recipe.pattern, recipe.key)
-            .id('kubejs:logistics_roots/tier/aether_' + module)
+            .id('kubejs:logistics_roots/proto_ae2/' + module)
     })
+
+    // One finite meteor stone per network device, not per pipe or module.
+    event.remove({ output: 'prettypipes:item_terminal' })
+    event.shaped('prettypipes:item_terminal', ['SPI', 'RCE', 'IPD'], {
+        S: 'ae2:sky_stone_block', P: 'minecraft:ender_pearl', I: 'minecraft:iron_block',
+        R: 'prettypipes:high_retrieval_module', C: '#forge:chests',
+        E: 'prettypipes:high_extraction_module', D: 'minecraft:diamond'
+    }).id('kubejs:logistics_roots/proto_ae2/item_terminal')
+
+    // The native crafting-terminal upgrade inherits its terminal's Sky Stone.
+    event.remove({ output: 'prettypipes:pressurizer' })
+    event.shaped('prettypipes:pressurizer', ['TST', 'SBS', 'TST'], {
+        T: 'minecraft:iron_ingot', S: 'prettypipes:high_speed_module',
+        B: 'ae2:sky_stone_block'
+    }).id('kubejs:logistics_roots/proto_ae2/pressurizer')
 
     event.remove({ output: 'sophisticatedstorage:hopper_upgrade' })
     event.shaped('sophisticatedstorage:hopper_upgrade', ['IRI', 'HLH', ' U '], {

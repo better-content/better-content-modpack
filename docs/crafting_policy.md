@@ -49,11 +49,16 @@ drinkable potions and every splash, lingering, and tipped-arrow variant. Plain
 water bottles, including Thirst purity metadata, remain supported. Food effects,
 status effects, and mod-owned flask systems are outside this cut.
 
-Pretty Pipes uses a visible three-tier Font-material ladder. Each honey-crystal
-pipe recipe yields eight pipes, so the first Bumblezone expedition supports
-a 32-pipe starter network. A blank module visibly consumes a Nether Blaze Rod. The seven
-high crafting, extraction, filter, high-priority, low-priority, retrieval, and speed modules each
-visibly consume one Aether Enchanted Gravitite; their low and medium recipes retain upstream costs.
+Pretty Pipes is certus-based physical logistics before AE2 processors or
+matter-to-energy storage. One Certus Quartz crystal yields eight pipes; blank
+modules use certus and redstone, and each of the seven high modules adds one
+certus crystal to its medium module. Low/medium modules retain upstream costs.
+Finite Sky Stone is reserved for network devices: one raw block per Item
+Terminal and Pressurizer. The native Crafting Terminal upgrade inherits its
+Item Terminal's stone without charging another. No pipe or module consumes
+Sky Stone. Better Content Fixes replaces the Pressurizer's FE input with native
+PneumaticCraft air: 1,000 mL volume, 10 mL per accelerated item, retaining at
+least 2 bar after payment. Ordinary unaccelerated transport remains available.
 
 Selectors are family-level wherever possible: namespace, tag, ID prefix, or an
 exact ID when no stable family exists. Capability roots prove the first
