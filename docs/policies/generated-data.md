@@ -8,14 +8,28 @@ dumps/logs, agent sessions/history/images, dependency caches, and repository bui
 outputs. This environment is **not a save backup service or historical archive**. No world is
 sentimentally protected; dead-build worlds are not a reason to keep a build alive. Current
 candidates, latest passes, unresolved failures and sealed distributions receive no automatic
-retention exemption. Authored/operating inputs remain inputs as defined in
+retention exemption except the latest complete packaged ZIP pair defined below. Authored/operating inputs remain inputs as defined in
 [workspace.md](workspace.md); never classify `.codex`, `.cache`, or an art directory wholesale.
+
+## Latest packaged build retention
+
+Always retain the client/server `better-content.zip` pair from the highest numbered complete
+`better-content-modpack/dist/build-N/` directory. Both files and their directories must be ordinary
+non-symlink paths. A newer partial build does not replace the retained complete pair. Once a newer
+complete pair exists, the older pair becomes disposable unless an independent active consumer or
+explicit delivery pin still needs it. With no complete pair, there is no build-retention exception.
+
+Retention is independent of validation: the latest packaged build can be failed or untested; do not
+call it the latest passing build or infer acceptance from its presence. Keep only the two ZIPs, not
+expanded staging, worlds, evidence, logs, caches or source-build JARs. Cleanup reports these exact
+paths as protected by latest-build policy and rechecks the selection before deletion. Tests never
+use this retention rule to obtain historical reports or undeclared prerequisites.
 
 ## Task lifetime
 
 Keep outputs while their task/consumer is active, including diagnosis, retries and sequential
 tests of one unchanged candidate. Before final success, failure, cancellation or blocked handoff,
-report results and dispose of the task's outputs. Report deleted paths as deleted, not available
+report results and dispose of the task's outputs except the latest complete packaged ZIP pair. Report deleted paths as deleted, not available
 for later inspection. An old passing result is not fresh runtime verification.
 
 Stop owned producers gracefully before finishing; do not kill unrelated agents or remove files

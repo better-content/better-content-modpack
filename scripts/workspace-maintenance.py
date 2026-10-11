@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Task-lifetime disposal. No candidate/evidence verdict grants retention."""
+"""Task-lifetime disposal, retaining only the latest complete packaged ZIP pair."""
 from __future__ import annotations
 import argparse
 import contextlib
@@ -65,6 +65,22 @@ def git_inputs(repo):
         return [repo / os.fsdecode(p) for p in r.stdout.split(b'\0') if p]
     # Unknown/untracked data outside explicit output roots is never classified.
     return git('ls-files', '-z') + git('ls-files', '--others', '--exclude-standard', '-z')
+
+
+def latest_build_outputs(workspace):
+    """Retain the highest numbered complete ZIP pair, independently of test verdicts."""
+    dist = workspace / 'better-content-modpack/dist'
+    if not dist.is_dir() or dist.is_symlink():
+        return []
+    complete = []
+    for build in dist.iterdir():
+        number = re.fullmatch(r'build-([0-9]+)', build.name)
+        if not number or build.is_symlink() or not build.is_dir():
+            continue
+        pair = [build / side / 'better-content.zip' for side in ('client', 'server')]
+        if all(not p.parent.is_symlink() and not p.is_symlink() and p.is_file() for p in pair):
+            complete.append((int(number[1]), pair))
+    return max(complete, key=lambda entry: entry[0])[1] if complete else []
 
 
 def discover(workspace):
@@ -322,7 +338,9 @@ def plan(workspace, refs=None, tasks=None):
     targets, repos = discover(workspace)
     refs = process_references(workspace) if refs is None else refs
     tasks = load_tasks(workspace) if tasks is None else tasks
-    boundaries = [p for _, p in refs]
+    retained = latest_build_outputs(workspace)
+    dist = workspace / 'better-content-modpack/dist'
+    boundaries = [p for _, p in refs] + retained
     leased_roots = []
     for task in tasks.values():
         until = task.get('pin_until')
@@ -337,7 +355,9 @@ def plan(workspace, refs=None, tasks=None):
         path, category = pending.pop()
         descendants = any(beneath(p, path) for p in boundaries)
         fully_leased = path in boundaries or any(beneath(path, p) for p in leased_roots)
-        if category == 'disposable review/delivery/evidence' and descendants and not fully_leased \
+        splittable = category == 'disposable review/delivery/evidence' or (
+            category == 'repository output/fixture' and beneath(path, dist))
+        if splittable and descendants and not fully_leased \
                 and path.is_dir() and not path.is_symlink():
             pending.extend((p, category) for p in path.iterdir())
         else:
@@ -345,6 +365,7 @@ def plan(workspace, refs=None, tasks=None):
     targets = dict(sorted(expanded.items(), key=lambda item: str(item[0])))
     inputs = [p for repo in repos for p in git_inputs(repo)]
     operating = [workspace / value for value in PROTECTED if exists(workspace / value)]
+    operating += retained
     inputs += operating
     protected_by_target = {}
     for p in inputs:
@@ -378,7 +399,10 @@ def plan(workspace, refs=None, tasks=None):
         if blocker:
             reasons.append(blocker)
         if protected:
-            reasons.append('authored, tracked or installed operating inputs inside output tree')
+            if any(beneath(p, path) for p in retained):
+                reasons.append('latest complete packaged build; retention does not imply validation')
+            else:
+                reasons.append('authored, tracked or installed operating inputs inside output tree')
         if owners:
             reasons.append('active consumer')
         try:
@@ -497,6 +521,8 @@ def apply(workspace, decisions, transaction=None):
         fresh_refs = process_references(workspace)
         tasks = load_tasks(workspace)
         path = Path(d['path'])
+        if any(beneath(p, path) or beneath(path, p) for p in latest_build_outputs(workspace)):
+            raise RuntimeError('target became latest retained build; replan before deletion: ' + str(path))
         consumers = any(beneath(p, path) for _, p in fresh_refs)
         if d['category'] == 'shared rebuildable Gradle cache':
             consumers |= any(beneath(p, workspace / '.gradle') for _, p in fresh_refs)

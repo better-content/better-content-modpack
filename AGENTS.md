@@ -5,7 +5,8 @@ Forge 1.20.1 content/integration repository. Read [docs/README.md](docs/README.m
 
 - [Testing/releases](docs/testing.md): explicit user authorization; supported facades and locks.
 - [Disposable data](docs/policies/generated-data.md): all development worlds/saves, failed fixtures,
-  evidence, candidates, sessions, caches and build outputs end at task handoff; no archive exemptions.
+  evidence, superseded candidates, sessions, caches and build outputs end at task handoff;
+  retain only the latest complete packaged client/server ZIP pair, not its fixtures/evidence.
 - [Inventory parity](docs/inventory-parity.md): both native paths and same-artifact real acceptance.
 - [Player teaching](docs/better_discovery_guides.md): read before teaching changes.
 - [Custom-mod inventory/bootstrap](docs/custom-mod-workspace.md) and [SDK inventory](docs/toolchains.md).

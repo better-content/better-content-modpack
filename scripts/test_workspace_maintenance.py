@@ -53,6 +53,42 @@ class DisposalTests(unittest.TestCase):
         with patch.object(m, 'process_references', return_value=[]):
             return m.apply(self.root, self.plan() if decisions is None else decisions, transaction)
 
+    def test_latest_complete_pair_survives_but_old_builds_and_latest_staging_do_not(self):
+        for number in (8, 9):
+            for side in ('client', 'server'):
+                self.file(f'better-content-modpack/dist/build-{number}/{side}/better-content.zip')
+        staging = self.file('better-content-modpack/dist/build-9/client/staging/world/data')
+        self.file('better-content-modpack/dist/build-10/client/better-content.zip')
+        pair = m.latest_build_outputs(self.root)
+        self.assertEqual(2, len(pair))
+        for p in pair:
+            self.assertEqual('protect_input', self.action(p))
+        self.apply()
+        self.assertTrue(all(p.exists() for p in pair))
+        self.assertFalse((self.pack / 'dist/build-8').exists())
+        self.assertFalse((self.pack / 'dist/build-10').exists())
+        self.assertFalse(staging.exists())
+
+    def test_new_complete_pair_supersedes_prior_pair_without_reading_verdicts(self):
+        for side in ('client', 'server'):
+            self.file(f'better-content-modpack/dist/build-9/{side}/better-content.zip')
+        self.file('better-content-modpack/generated/run.json', 'failed or malformed')
+        for side in ('client', 'server'):
+            self.file(f'better-content-modpack/dist/build-10/{side}/better-content.zip')
+        self.apply()
+        self.assertFalse((self.pack / 'dist/build-9').exists())
+        self.assertTrue(all(p.exists() for p in m.latest_build_outputs(self.root)))
+
+    def test_partial_build_completed_after_plan_is_not_deleted(self):
+        for side in ('client', 'server'):
+            self.file(f'better-content-modpack/dist/build-9/{side}/better-content.zip')
+        self.file('better-content-modpack/dist/build-10/client/better-content.zip')
+        decisions = self.plan()
+        self.file('better-content-modpack/dist/build-10/server/better-content.zip')
+        with self.assertRaisesRegex(RuntimeError, 'latest retained build'):
+            self.apply(decisions)
+        self.assertTrue(all(p.exists() for p in m.latest_build_outputs(self.root)))
+
     def test_worlds_failures_current_candidates_and_malformed_reports_are_disposable(self):
         for name in ('build', 'generated', 'dist', 'run-gametest', 'saves'):
             self.file('better-content-modpack/' + name + '/world/data', 'failed/current/sealed')

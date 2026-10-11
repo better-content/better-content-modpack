@@ -57,7 +57,7 @@ No source/audit/lifecycle/Dist result substitutes for visual or interaction proo
 
 During an active task, retain enough captures/logs/hashes for actual review and first-failure
 diagnosis; do not relabel a failed candidate as passed or weaken safety assertions for a retry.
-At final handoff dispose of worlds, captures, ZIPs and evidence under
+At final handoff dispose of worlds, captures, superseded ZIPs and evidence under
 [generated-data.md](policies/generated-data.md), regardless of result. This workspace is not a
 save backup service. Do not claim recovery of historical item loss or fresh runtime verification
 from source-only checks. Current source requirements survive; historical artifact paths do not.

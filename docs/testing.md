@@ -249,11 +249,13 @@ ends. Queue handoffs remain active consumers until their callbacks/delivery comp
 
 Before final success/failure/cancellation/blocked handoff, report results, stop owned producers,
 then run `maintenance.main.kts finish --task TASK_ID --apply`. Caches/provider/build JARs are
-removed once idle, along with evidence, ZIPs and worlds regardless of verdict. Active consumers
+removed once idle, along with evidence, superseded ZIPs and worlds regardless of verdict.
+The latest complete packaged ZIP pair remains retained under the disposal policy. Active consumers
 are reported as incomplete cleanup, not historical retention. See the canonical
 [disposal policy](policies/generated-data.md) for audit, pins, resume and safety behavior.
 Successful packaging can remove expanded staging sooner; failed staging lasts only for the
-active task's diagnosis. No current-candidate/latest-pass/unresolved-failure exception survives.
+active task's diagnosis. Apart from the latest complete packaged ZIP pair, no
+current-candidate/latest-pass/unresolved-failure exception survives.
 
 ## Fresh distributions
 
