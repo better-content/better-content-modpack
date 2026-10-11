@@ -7,6 +7,14 @@ Generated runtimes and old profiling directories are not authorities for active 
 
 ## Active integration state
 
+The Deep Void `1.98.1` native fall entry is adapted by Better Compat Fixes to the source dimension's
+actual minimum build height minus six blocks. Its vanilla absolute `TeleportHeight` is superseded;
+players must fall below the real world, not merely cross vanilla Y=-70 inside extended terrain.
+Normal/any-dimension entry retains native `<` and End entry retains native `<=`; native enable
+switches, dimension eligibility and the teleport operation remain owned by The Deep Void.
+The owning [compatibility source](../../mod_source/better-compat-fixes/README.md) documents the
+pinned procedure, native branch GameTest and production-artifact verification.
+
 The Bumblezone 7.13.4 is the active Font-only expedition realm replacing the
 retired Undergarden and Deeper Darker routes. `better_bumblezone_crops` owns Bumblezone food flora and
 propagation. The three visible logistics roots are pack recipes in
