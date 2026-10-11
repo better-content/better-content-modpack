@@ -30,6 +30,7 @@ PROTECTED = ['.codex/auth.json', '.codex/config.toml', '.codex/AGENTS.md',
              '.codex/hooks.json', '.codex/packages', '.codex/plugins', '.codex/skills',
              '.pi/agent/auth.json', '.pi/agent/settings.json', '.pi/agent/extensions',
              '.sdkman', '.local/bin', '.local/lib', '.gradle/jdks',
+             '.cache/ms-playwright', '.cache/selenium',
              'better-content-modpack/mods', 'workspace_artifacts/README.md']
 
 
@@ -131,6 +132,7 @@ def discover(workspace):
                 p = Path(base) / name
                 if p not in tracked:
                     add(p, 'rebuildable downloaded dependency')
+    add(workspace / 'go/pkg/mod', 'shared rebuildable dependency cache')
     npm = workspace / '.npm'
     for name in ('_cacache', '_logs', '_npx'):
         add(npm / name, 'rebuildable npm cache')
@@ -286,7 +288,7 @@ def scan_boundary(path, workspace):
 
 
 def shared_build_output(path, category):
-    return category == 'shared rebuildable Gradle cache' or (
+    return category in {'shared rebuildable Gradle cache', 'shared rebuildable dependency cache'} or (
         category == 'repository output/fixture' and path.name in {'build', '.gradle', '.kotlin'})
 
 
@@ -316,6 +318,8 @@ def plan(workspace, refs=None, tasks=None):
             expanded[path] = category
     targets = dict(sorted(expanded.items(), key=lambda item: str(item[0])))
     inputs = [p for repo in repos for p in git_inputs(repo)]
+    operating = [workspace / value for value in PROTECTED if exists(workspace / value)]
+    inputs += operating
     protected_by_target = {}
     for p in inputs:
         for boundary in (p, *p.parents):
@@ -325,7 +329,7 @@ def plan(workspace, refs=None, tasks=None):
     for path, category in targets.items():
         safe_path(workspace, path)
         reasons = []
-        protected = protected_by_target.get(path, [])
+        protected = protected_by_target.get(path, []) + [str(p) for p in operating if beneath(path, p)]
         owners = [str(pid) for pid, p in refs if beneath(p, path)]
         # A mapped Gradle distribution/cache implies a shared build consumer.
         if category == 'shared rebuildable Gradle cache':
@@ -345,7 +349,7 @@ def plan(workspace, refs=None, tasks=None):
                 owners.append('task:' + task_id)
         action = 'protect_input' if protected else 'defer_active' if owners else 'delete'
         if protected:
-            reasons.append('tracked or nonignored authored inputs inside output tree')
+            reasons.append('authored, tracked or installed operating inputs inside output tree')
         if owners:
             reasons.append('active consumer')
         try:
@@ -393,6 +397,8 @@ def delete_checked(path, workspace, expected):
                 if (opened.st_dev, opened.st_ino) != (s.st_dev, s.st_ino) or \
                         opened.st_dev != workspace.stat().st_dev or mount_id(fd) != anchor_mount:
                     raise ValueError('directory substituted or mount boundary')
+                if not opened.st_mode & stat.S_IWUSR:
+                    os.fchmod(fd, (opened.st_mode & 0o777) | 0o700)
                 for child in os.listdir(fd):
                     remove(fd, child)
             finally:

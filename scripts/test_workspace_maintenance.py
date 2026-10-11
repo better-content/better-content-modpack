@@ -226,6 +226,15 @@ class DisposalTests(unittest.TestCase):
         self.assertEqual('keep', source.read_text())
         self.assertEqual('active', m.load_tasks(self.root)['task']['state'])
 
+    def test_readonly_dependency_cache_is_disposed_without_touching_installed_tools(self):
+        p = self.file('go/pkg/mod/vendor/package/source.go')
+        p.parent.chmod(0o555)
+        browser = self.file('.cache/ms-playwright/chromium/bin/browser')
+        self.assertEqual('protect_input', self.action(browser.parents[2]))
+        self.apply(self.plan())
+        self.assertFalse(p.exists())
+        self.assertTrue(browser.exists())
+
     def test_provider_build_outputs_deleted_source_graph_untouched(self):
         p = self.file('better-content-modpack/build/providers/api.jar')
         graph = self.file('better-content-modpack/gradle/active-custom-mods.json', '{"dependsOn":["provider"]}')
