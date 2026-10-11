@@ -12,9 +12,6 @@
     "creatingspace:venus": {
       "deltaV": 2200
     },
-    "lostcities:lostcity": {
-      "deltaV": 1200
-    },
     "twilightforest:twilight_forest": {
       "deltaV": 1000
     },

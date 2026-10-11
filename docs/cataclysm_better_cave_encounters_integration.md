@@ -15,7 +15,7 @@ This pack integrates L_Ender's Cataclysm 3.31 for Forge 1.20.1 with Lionfish API
 | Scylla | Acropolis | Aether skyroot biomes |
 | Maledictus | Frosted Prison | The Deep Void |
 
-The Cursed Pyramid and Ancient Factory share the Fallout destination but use their own structure spacing and biome tags. The Ruined Citadel needs a fixed elevated start because Earth orbit is void terrain; its custom structure lays its pieces relative to the start point. Acropolis was previously globally disabled in Structurify; that suppression is removed so its Aether biome placement can take effect. All eight arenas are explicitly denied in Lost Cities. Existing generated chunks are unchanged; arenas relocate in newly generated terrain.
+The Cursed Pyramid and Ancient Factory share the Fallout destination but use their own structure spacing and biome tags. The Ruined Citadel needs a fixed elevated start because Earth orbit is void terrain; its custom structure lays its pieces relative to the start point. Acropolis was previously globally disabled in Structurify; that suppression is removed so its Aether biome placement can take effect. Lost Cities is disabled; its eight arena exclusions are retained under `disabled/lost-cities/config/incontrol/structure.json`, outside active configuration. Existing generated chunks are unchanged; arenas relocate in newly generated terrain.
 
 ## Depth Director miniboss roster
 
@@ -32,7 +32,7 @@ Each selected miniboss is a one-at-a-time heavy encounter, gated to deep ecology
 
 These rewards stay in Cataclysm's native loot tables, so boss preparation materials are found by engaging the corresponding Depth Director encounter. The pack does not add a second reward path or replace Cataclysm drops.
 
-Natural spawning is denied for all nine Cataclysm minibosses: the six in the roster and Wadjet, Amethyst Crab, and Clawdian. This keeps the selected six in Depth Director encounters while retaining Cataclysm's ambient Deeplings, Koboletons, and other non-miniboss ecology. The DD profiles remain dimension-eligible under Depth Director's normal rules, including Lost Cities; Flesh That Hates remains exclusive to its Lost Cities planet and is not part of these profiles.
+Natural spawning is denied for all nine Cataclysm minibosses: the six in the roster and Wadjet, Amethyst Crab, and Clawdian. This keeps the selected six in Depth Director encounters while retaining Cataclysm's ambient Deeplings, Koboletons, and other non-miniboss ecology. The DD profiles remain dimension-eligible under Depth Director's normal rules. Lost Cities is disabled and is no longer an active destination; Flesh That Hates is not part of these profiles, and its existing behavior is unchanged by that cut.
 
 ## Change boundary
 

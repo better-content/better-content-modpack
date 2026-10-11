@@ -104,7 +104,8 @@
 	#Serializes Lost Cities feature placement only in the lostcities:lostcity dimension when Lost Cities, Distant Horizons, and C2ME are all loaded.
 	#This keeps Lost Cities structures, Distant Horizons generation, and C2ME threaded settings active while avoiding shared Lost Cities generation-state races from DH/C2ME worker threads.
 	#Disable only when diagnosing Lost Cities/Distant Horizons/C2ME compatibility behavior.
-	serializeDhC2meFeaturePlacement = true
+	#Lost Cities is disabled in this pack; implementation and original setting are retained.
+	serializeDhC2meFeaturePlacement = false
 	#Cancels stale Distant Horizons client full-data requests rejected during Lost Cities dimension switches.
 	#Distant Horizons 2.4.5 can complete these rejected requests as failed results with a null Throwable, then log a NullPointerException in onWorldGenTaskComplete.
 	#This does not disable DH generation; it drops only the already-rejected client request future.

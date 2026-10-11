@@ -161,8 +161,7 @@ damage, or death-dependent side effects worth checking against the accepted-deat
 boundary. [Enhanced AI](../mods/enhanced-ai.pw.toml),
 [Farsighted Mobs](../mods/farsighted-mobs-forge.pw.toml),
 [In Control](../mods/in-control.pw.toml), [The Deep Void](../mods/the-deep-void.pw.toml),
-[Lost Cities](../mods/the-lost-cities.pw.toml), and
-[Cataclysm](../mods/cataclysm.pw.toml) affect where and how dangerous encounters
+and [Cataclysm](../mods/cataclysm.pw.toml) affect where and how dangerous encounters
 occur. World Lifecycle Manager selects the initial shared spawn in fresh worlds.
 [Tectonic](../mods/tectonic.pw.toml), [Nature's Spirit](../mods/natures-spirit.pw.toml),
 [Large Ore Deposits](../mods/large-ore-deposits.pw.toml), and

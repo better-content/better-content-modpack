@@ -2,6 +2,8 @@
 /.gradle/
 /.github/
 docs
+# Retained inactive mod manifests and integration customizations; never export.
+/disabled/
 /.kjs-script-summaries.md.kate-swp
 /kjs-script-summaries.md
 /build.gradle.kts

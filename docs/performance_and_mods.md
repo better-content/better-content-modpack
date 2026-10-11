@@ -135,14 +135,19 @@ profiles, measurements, and sorted SHA-256 manifest under
 `workspace_artifacts/evidence/performance-fonts/<UTC>/`; do not treat paused time, maintenance
 commands, or the pre-event-driven Heat Sync profile as a gameplay baseline.
 
-Lost Cities, Twilight Forest, and Fallout Wastelands are Creating Space destinations declared under
-`kubejs/data/*/creatingspace/rocket_accessible_dimension/`. The Flesh That Hates belongs exclusively
-to the Lost Cities planet. Its mobs and ecology are planet-scoped: do not add them to the Overworld,
-Depth Director regions or encounters, or any other dimension, including as repurposed minibosses.
-The mod remains active on its intended planet; its six Mushroom Fields structures are disabled by
-`datapacks/worldgen_compat_fixes`, and `better_compat_fixes` disables its unconditional client
-proximity-music scan. Its entities, combat, evolution, and ordinary Records-channel sounds remain
-active there.
+Twilight Forest and Fallout Wastelands are Creating Space destinations declared under
+`kubejs/data/*/creatingspace/rocket_accessible_dimension/`. Lost Cities is disabled: its manifest,
+profiles, rocket destination and structure exclusions are retained outside active content under
+[`disabled/lost-cities/`](../disabled/lost-cities/README.md). Its Earth-orbit adjacency and crafting
+namespace are inactive; compatibility implementations remain in `better_compat_fixes`, guarded by
+mod presence/version, with the pack's Lost Cities serialization setting explicitly off.
+
+The Flesh That Hates remains installed and unchanged; the former Lost Cities ownership is no longer
+an active integration. This cut does not add or retarget TFTH ecology to another dimension or to
+Depth Director encounters. Its six Mushroom Fields structures remain disabled by
+`datapacks/worldgen_compat_fixes`, and `better_compat_fixes` still disables its unconditional client
+proximity-music scan. Existing entity, combat, evolution and ordinary Records-channel sound behavior
+is unchanged.
 
 `datapacks/hyle_deep` owns the exhaustive Hyle/Unearthed deep-stone pass beginning at Y -64.
 `better_compat_fixes` moves Hyle and SGI terrain conforming to decoration tail, completes only
