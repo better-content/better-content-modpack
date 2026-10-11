@@ -28,6 +28,31 @@ is not permission to reuse unverified leftover output. Documentation checks esta
 contract consistency, not proof of native behavior or runtime acceptance; native-input tests
 must inspect the authoritative implementation or data directly.
 
+## Correctness, performance and diagnostic verdicts
+
+Correctness gates block on failed assertions, crashes, registry/script failures, unclassified
+warning/error records, startup/join timeouts, candidate-hash changes and incomplete process cleanup.
+Existing narrow compatibility classifications remain independently tested; there is no blanket
+warning/error exemption and no mod-specific waiver for a failed launch.
+
+Exact native Forge `DeferredWorkQueue` WARN messages reporting elapsed deferred startup work on
+`main` or `Render thread` are **performance diagnostics**, not failed operations. The parser requires
+the complete timestamp/logger/message, a valid mod namespace, and a positive finite duration in
+`ms`, `s`, `min` or `h`. Malformed messages, other loggers/threads, ERROR severity and additional
+failure payloads remain correctness findings. This category replaces the old per-mod duration and
+occurrence allowances; it is not an `adpother` exception or a raised threshold for one candidate.
+
+Every runtime suite records `startup_performance_diagnostics`: source paths/lines, normalized seconds,
+observation counts and per-mod maxima, including on failed runs. Aggregate/native logs can duplicate
+observations, so timings are not summed. These records are diagnostic-only: a correctness pass is
+not a claim of acceptable startup performance or representative gameplay performance.
+
+Explicit performance gates remain separate and blocking: existing end-to-end startup/join deadlines,
+heartbeats, and Debug's measured TPS requirements are unchanged. Do not turn a timing notice into
+a gameplay verdict or declare a performance regression repaired from a successful retry. New
+performance budgets require a documented workload/resource profile and measured acceptance criterion,
+not a threshold tuned to a retained historical run. No Debug scope is implied by this separation.
+
 ## Public tiers
 
 The public test interface has three cumulative tiers. Dev needs no packaged candidate and can

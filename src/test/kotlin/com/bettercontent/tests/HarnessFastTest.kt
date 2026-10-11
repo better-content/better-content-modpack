@@ -728,70 +728,72 @@ class HarnessFastTest {
     }
 
     @Test
-    fun logPolicyBoundsIceAndFireDeferredTaskWarning(@TempDir root: Path) {
-        val singleplayer = root.resolve("singleplayer").also { it.createDirectories() }
-        val multiplayerClientLogs = root.resolve("multiplayer/fixture/client-3/logs").also { it.createDirectories() }
-        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
-        val warning = "[06:40:51] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
-            "Mod 'iceandfire' took 1.118 s to run a deferred task."
-        val accepted = singleplayer.resolve("client.log").also { it.writeText("$warning\n") }
-        val acceptedCampaignLog = multiplayerClientLogs.resolve("latest.log").also { it.writeText("$warning\n") }
-        val acceptedCampaignCopy = multiplayer.resolve("client-3.log").also { it.writeText("$warning\n") }
-        val repeatedCampaign = multiplayerClientLogs.resolve("repeated.log").also {
-            it.writeText("$warning\n$warning\n")
+    fun startupTimingsNormalizeUnitsAndPreserveRecordProvenance(@TempDir root: Path) {
+        val durations = listOf("1102 ms", "1.102 s", "1.102 min", "1.102 h")
+        val seconds = listOf(1.102, 1.102, 66.12, 3967.2)
+        val threads = listOf("main", "Render thread", "main", "Render thread")
+        val notices = durations.mapIndexed { index, duration ->
+            "[12:00:00] [${threads[index]}/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+                "Mod 'startup_mod$index' took $duration to run a deferred task."
         }
-        val repeated = singleplayer.resolve("repeated.log").also { it.writeText("$warning\n$warning\n") }
-        val slow = singleplayer.resolve("slow.log").also {
-            it.writeText(warning.replace("1.118", "6.001") + "\n")
+        val log = root.resolve("startup.log").also {
+            it.writeText((listOf("[12:00:00] [main/INFO] ready") + notices).joinToString("\n", postfix = "\n"))
         }
-        val unrelated = singleplayer.resolve("unrelated.log").also {
-            it.writeText(warning.replace("iceandfire", "othermod") + "\n")
-        }
-        val otherSuite = root.resolve("client.log").also { it.writeText("$warning\n") }
 
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertTrue(LogPolicy.findings(listOf(acceptedCampaignLog, acceptedCampaignCopy)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(repeatedCampaign)).map { it.line })
-        assertEquals(listOf(2), LogPolicy.findings(listOf(repeated)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(slow)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(otherSuite)).map { it.line })
+        val timings = LogPolicy.startupTimings(listOf(log))
+        assertEquals(durations.size, timings.size)
+        timings.forEachIndexed { index, timing ->
+            assertEquals(log, timing.path)
+            assertEquals(index + 2, timing.line)
+            assertEquals(notices[index], timing.text)
+            assertEquals("startup_mod$index", timing.mod)
+            assertEquals(threads[index], timing.thread)
+            assertEquals(seconds[index], timing.seconds, 1e-9)
+        }
+        assertTrue(LogPolicy.findings(listOf(log)).isEmpty())
     }
 
     @Test
-    fun logPolicyBoundsMultiplayerDeferredTaskWarnings(@TempDir root: Path) {
-        val clientLogs = root.resolve("multiplayer/fixture/client-1/logs").also { it.createDirectories() }
-        val thalassophobia = "[18:05:21] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
-            "Mod 'thalassophobia' took 2.320 s to run a deferred task."
-        val ae2 = "[18:05:32] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
-            "Mod 'ae2' took 1.232 s to run a deferred task."
-        val accepted = clientLogs.resolve("latest.log").also {
-            it.writeText("$thalassophobia\n$ae2\n")
-        }
-        val excessive = clientLogs.resolve("excessive.log").also {
-            it.writeText(thalassophobia.replace("2.320", "3.001") + "\n" + ae2.replace("1.232", "2.001") + "\n")
-        }
-        val wrongSuite = root.resolve("client.log").also { it.writeText("$thalassophobia\n$ae2\n") }
+    fun startupTimingsReportRepeatsOtherModsAndLongDurationsInEverySuite(@TempDir root: Path) {
+        val mods = listOf("iceandfire", "thalassophobia", "ae2", "jsonthings", "adpother", "adchimneys", "adlods", "othermod")
+        val notices = mods.flatMap { mod ->
+            listOf("main", "Render thread").map { thread ->
+                "[12:00:00] [$thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+                    "Mod '$mod' took 900.125 h to run a deferred task."
+            }
+        }.let { records -> records + List(5) { records.first() } }
+        val paths = listOf("unscoped/startup.log", "singleplayer/client.log", "multiplayer/server.log", "target-join/client-1.log")
+            .map { name -> root.resolve(name).also {
+                it.parent.createDirectories()
+                it.writeText(notices.joinToString("\n", postfix = "\n"))
+            } }
 
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(excessive)).map { it.line })
-        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongSuite)).map { it.line })
+        assertTrue(LogPolicy.findings(paths).isEmpty())
+        val timings = LogPolicy.startupTimings(paths)
+        assertEquals(paths.size * notices.size, timings.size)
+        paths.forEach { path ->
+            val records = timings.filter { it.path == path }
+            assertEquals((1..notices.size).toList(), records.map { it.line })
+            assertEquals(notices, records.map { it.text })
+            assertEquals(mods.toSet(), records.map { it.mod }.toSet())
+            records.forEach { assertEquals(900.125 * 3600.0, it.seconds, 1e-9) }
+        }
     }
 
     @Test
-    fun logPolicyBoundsJsonThingsDeferredTaskWarningsToMultiplayerClients(@TempDir root: Path) {
-        val clientDir = root.resolve("multiplayer/fixture/client-2/logs").also { it.createDirectories() }
-        val warning = "[19:23:26] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
-            "Mod 'jsonthings' took 1.097 s to run a deferred task."
-        val accepted = clientDir.resolve("latest.log").also { it.writeText("$warning\n") }
-        val excessive = clientDir.resolve("excessive.log").also {
-            it.writeText("$warning\n$warning\n" + warning.replace("1.097", "1.501") + "\n")
+    fun startupTimingsRejectMalformedNonPositiveAndNonFiniteDurationsOrUnits(@TempDir root: Path) {
+        fun notice(duration: String, unit: String = "s") =
+            "[12:00:00] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+                "Mod 'example' took $duration $unit to run a deferred task."
+        val invalid = listOf("", "0", "0.000", "-1", "NaN", "Infinity", "1.2.3", "9".repeat(400)).map { notice(it) } +
+            listOf("", "ns", "seconds", "minutes", "hours", "MS").map { notice("1.102", it) } +
+            notice("9".repeat(307), "h")
+        val log = root.resolve("malformed-startup.log").also {
+            it.writeText(invalid.joinToString("\n", postfix = "\n"))
         }
-        val wrongSuite = root.resolve("client.log").also { it.writeText("$warning\n") }
 
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(excessive)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongSuite)).map { it.line })
+        assertTrue(LogPolicy.startupTimings(listOf(log)).isEmpty())
+        assertEquals((1..invalid.size).toList(), LogPolicy.findings(listOf(log)).map { it.line })
     }
 
     @Test
@@ -835,23 +837,43 @@ class HarnessFastTest {
     }
 
     @Test
-    fun logPolicyAcceptsOnlyBoundedAdPotherDeferredTasks(@TempDir root: Path) {
-        val accepted = root.resolve("accepted-deferred.log").also {
-            it.writeText(
-                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 46.450 s to run a deferred task.\n",
-            )
-        }
-        val rejected = root.resolve("rejected-deferred.log").also {
-            it.writeText(
-                "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 60.001 s to run a deferred task.\n" +
-                    "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'othermod' took 1.533 s to run a deferred task.\n" +
-                    "[13:55:28] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 6.577 s to run a deferred task.\n" +
-                    "[13:55:28] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: Mod 'adpother' took 6.500 s to run a deferred task.\n",
-            )
+    fun startupTimingsRejectWrongLoggerThreadOrSeverity(@TempDir root: Path) {
+        val notice = "[12:00:00] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+            "Mod 'example' took 1.102 s to run a deferred task."
+        val invalid = listOf(
+            notice.replace("net.minecraftforge.fml.DeferredWorkQueue", "example.DeferredWorkQueue"),
+            notice.replace("net.minecraftforge.fml.DeferredWorkQueue", "net.minecraftforge.fml.DeferredWorkQueue.Other"),
+            notice.replace("main/WARN", "Server thread/WARN"),
+            notice.replace("main/WARN", "modloading-worker-0/WARN"),
+            notice.replace("main/WARN", "render thread/WARN"),
+            notice.replace("main/WARN", "main/ERROR"),
+            notice.replace("main/WARN", "main/FATAL"),
+        )
+        val log = root.resolve("wrong-startup-envelope.log").also {
+            it.writeText(invalid.joinToString("\n", postfix = "\n"))
         }
 
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(1, 2, 4), LogPolicy.findings(listOf(rejected)).map { it.line })
+        assertTrue(LogPolicy.startupTimings(listOf(log)).isEmpty())
+        assertEquals((1..invalid.size).toList(), LogPolicy.findings(listOf(log)).map { it.line })
+    }
+
+    @Test
+    fun startupTimingsRequireValidModNamespacesRatherThanAModAllowlist(@TempDir root: Path) {
+        fun notice(mod: String) = "[12:00:00] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+            "Mod '$mod' took 1.102 min to run a deferred task."
+        val validMods = listOf("a", "new_mod9", "previously_unknown_mod")
+        val valid = root.resolve("valid-startup-namespaces.log").also {
+            it.writeText(validMods.joinToString("\n", postfix = "\n", transform = ::notice))
+        }
+        val invalidMods = listOf("", "Uppercase", "9mod", "_mod", "hyphen-mod", "namespace:mod", "mod name")
+        val invalid = root.resolve("invalid-startup-namespaces.log").also {
+            it.writeText(invalidMods.joinToString("\n", postfix = "\n", transform = ::notice))
+        }
+
+        assertEquals(validMods, LogPolicy.startupTimings(listOf(valid)).map { it.mod })
+        assertTrue(LogPolicy.findings(listOf(valid)).isEmpty())
+        assertTrue(LogPolicy.startupTimings(listOf(invalid)).isEmpty())
+        assertEquals((1..invalidMods.size).toList(), LogPolicy.findings(listOf(invalid)).map { it.line })
     }
 
     @Test
@@ -1018,50 +1040,51 @@ class HarnessFastTest {
     }
 
     @Test
-    fun logPolicyAcceptsOneBoundedAdChimneysDeferredTaskPerLog(@TempDir root: Path) {
-        fun warning(thread: String = "Render thread", duration: String = "7.318", mod: String = "adchimneys") =
-            "[07:03:06] [$thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
-                "Mod '$mod' took $duration s to run a deferred task."
-
-        val acceptedClient = root.resolve("accepted-adchimneys-client.log").also {
-            it.writeText(warning() + "\n")
-        }
-        val acceptedServer = root.resolve("accepted-adchimneys-server.log").also {
-            it.writeText(warning(thread = "main", duration = "41.10") + "\n")
-        }
-        val rejected = root.resolve("rejected-adchimneys.log").also {
-            it.writeText(
-                warning(duration = "45.001") + "\n" +
-                    warning(thread = "Server thread") + "\n" +
-                    warning(mod = "othermod") + "\n",
-            )
-        }
-        val overflow = root.resolve("overflow-adchimneys.log").also {
-            it.writeText(warning() + "\n" + warning(duration = "8.785") + "\n")
+    fun startupTimingsRejectExtraPayloadInsteadOfHidingErrors(@TempDir root: Path) {
+        val notice = "[12:00:00] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+            "Mod 'example' took 1.102 s to run a deferred task."
+        val invalid = listOf(
+            "$notice Registry Object not present: example:missing",
+            "$notice java.lang.IllegalStateException: failed",
+            "$notice java.lang.OutOfMemoryError: Java heap space",
+            "$notice extra payload",
+            "unrelated prefix $notice",
+            notice.replace("to run a deferred task.", "to run a deferred task; failed."),
+        )
+        val log = root.resolve("startup-with-extra-payload.log").also {
+            it.writeText(invalid.joinToString("\n", postfix = "\n"))
         }
 
-        assertTrue(LogPolicy.findings(listOf(acceptedClient, acceptedServer)).isEmpty())
-        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(rejected)).map { it.line })
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
+        assertTrue(LogPolicy.startupTimings(listOf(log)).isEmpty())
+        assertEquals((1..invalid.size).toList(), LogPolicy.findings(listOf(log)).map { it.line })
+        assertEquals(invalid, LogPolicy.findings(listOf(log)).map { it.text })
     }
 
     @Test
-    fun logPolicyAcceptsOneBoundedAdLodsDeferredTaskPerLog(@TempDir root: Path) {
-        fun warning(duration: String = "2.248", mod: String = "adlods") =
-            "[07:03:06] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
-                "Mod '$mod' took $duration s to run a deferred task."
-
-        val accepted = root.resolve("accepted-adlods.log").also { it.writeText(warning() + "\n") }
-        val overflow = root.resolve("overflow-adlods.log").also {
-            it.writeText(warning() + "\n" + warning() + "\n")
+    fun startupTimingNoticesDoNotHideSeparateNativeFailures(@TempDir root: Path) {
+        val notice = "[12:00:00] [Render thread/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+            "Mod 'othermod' took 900.125 h to run a deferred task."
+        val errors = listOf(
+            "[12:00:00] [main/ERROR] [net.minecraftforge.fml.javafmlmod.FMLModContainer]: " +
+                "java.lang.NullPointerException: Registry Object not present: example:missing",
+            "[12:00:00] [main/ERROR] [net.minecraftforge.fml.javafmlmod.FMLModContainer]: " +
+                "java.lang.ExceptionInInitializerError: failed",
+            "[12:00:00] [main/FATAL] [net.minecraftforge.fml.ModLoader]: fatal error has been detected",
+            "ReportedException: exception in server tick loop",
+            "java.lang.OutOfMemoryError: Java heap space",
+        )
+        val log = root.resolve("native-failures-after-startup.log").also {
+            it.writeText((listOf(notice) + errors).joinToString("\n", postfix = "\n"))
         }
-        val rejected = root.resolve("rejected-adlods.log").also {
-            it.writeText(warning(duration = "5.001") + "\n" + warning(mod = "othermod") + "\n")
-        }
 
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(rejected)).map { it.line })
+        val timing = LogPolicy.startupTimings(listOf(log)).single()
+        assertEquals(notice, timing.text)
+        assertEquals(1, timing.line)
+        assertEquals("othermod", timing.mod)
+        val findings = LogPolicy.findings(listOf(log))
+        assertEquals((2..(errors.size + 1)).toList(), findings.map { it.line })
+        assertEquals(errors, findings.map { it.text })
+        assertThrows(IllegalArgumentException::class.java) { LogPolicy.requireClean(listOf(log)) }
     }
 
     @Test

@@ -39,6 +39,19 @@ class EvidenceExtension(private val suite: String) : BeforeAllCallback, AfterAll
                 "first" to findings.take(5).map { "${it.path}:${it.line}: ${it.text}" }))
             if (findings.isNotEmpty()) successful = false
         }
+        val timings = LogPolicy.startupTimings(collectLogs(run.directory))
+        run.event("startup_performance_diagnostics", mapOf(
+            "verdict" to "diagnostic_only",
+            "observation_count" to timings.size,
+            "per_mod_max_seconds" to timings.groupBy { it.mod }.mapValues { (_, rows) -> rows.maxOf { it.seconds } },
+            "note" to "Raw observations may repeat across aggregate/native logs; durations are not summed. " +
+                "Startup/join timeouts and explicit runtime performance assertions remain blocking.",
+            "samples" to timings.take(25).map { timing -> mapOf(
+                "path" to timing.path.toString(), "line" to timing.line,
+                "mod" to timing.mod, "thread" to timing.thread,
+                "seconds" to timing.seconds, "text" to timing.text,
+            ) },
+        ))
         run.finish(successful)
     }
 }

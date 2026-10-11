@@ -99,7 +99,7 @@ object LogPolicy {
             "ThreadingDetector:|ReportedException:",
         RegexOption.IGNORE_CASE,
     )
-    private val warningOrError = Regex("(?:/WARN]|/ERROR]|\\[(?:WARN|ERROR)])")
+    private val warningErrorOrFatal = Regex("(?:/WARN]|/ERROR]|/FATAL]|\\[(?:WARN|ERROR|FATAL)])")
     private val untamedJeiPrototypeWarning = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[untamedwilds\\.UntamedWilds]: " +
             "There's no species provided for the EntityType$",
@@ -136,22 +136,6 @@ object LogPolicy {
             "\\[net\\.minecraft\\.world\\.entity\\.ai\\.attributes\\.AttributeMap]: " +
             "Ignoring unknown attribute 'forge:step_height'$",
     )
-    private val iceAndFireDeferredTask = Regex(
-        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
-            "Mod 'iceandfire' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
-    )
-    private val thalassophobiaDeferredTask = Regex(
-        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
-            "Mod 'thalassophobia' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
-    )
-    private val ae2DeferredTask = Regex(
-        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
-            "Mod 'ae2' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
-    )
-    private val jsonThingsDeferredTask = Regex(
-        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
-            "Mod 'jsonthings' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
-    )
     private val collectiveUpdateNotice = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[[^]]+/WARN] \\[Collective]: " +
             "\\[Update] Collective has an update available: [0-9]+\\.[0-9]+(?:\\.[0-9]+)? -> " +
@@ -164,21 +148,9 @@ object LogPolicy {
         Regex("Detected setBlock in a far chunk .*currently generating: ResourceKey\\[minecraft:worldgen/placed_feature / natures_spirit:marsh_water_placed]$"),
         Regex("\\[Server thread/WARN] \\[net\\.minecraft\\.network\\.Connection]: handleDisconnection\\(\\) called twice$"),
     )
-    private val adPotherDeferredTask = Regex(
-        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
-            "Mod 'adpother' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
-    )
-    private val adLodsDeferredTask = Regex(
-        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
-            "Mod 'adlods' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
-    )
     private val presenceFootstepsMissingMessyGroundAcoustic = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[Render thread/WARN] \\[PFSolver]: " +
             "Tried to play a missing acoustic: MESSY_GROUND$",
-    )
-    private val adChimneysDeferredTask = Regex(
-        "\\[(?:main|Render thread)/WARN] \\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
-            "Mod 'adchimneys' took ([0-9]+(?:\\.[0-9]+)?) s to run a deferred task\\.$",
     )
     private val earlyWorldgenBlockEntity = Regex(
         "\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[C2ME worker #[0-9]+/WARN] " +
@@ -265,6 +237,41 @@ object LogPolicy {
 
     data class Finding(val path: Path, val line: Int, val text: String)
 
+    data class StartupTiming(
+        val path: Path, val line: Int, val text: String,
+        val mod: String, val thread: String, val seconds: Double,
+    )
+
+    // Forge's lifecycle queue reports elapsed startup work, not a failed operation.
+    // Parse the entire native message; never classify ERRORs or arbitrary warnings this way.
+    private val startupTiming = Regex(
+        "^\\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \\[(main|Render thread)/WARN] " +
+            "\\[net\\.minecraftforge\\.fml\\.DeferredWorkQueue]: " +
+            "Mod '([a-z][a-z0-9_]*)' took ([0-9]+(?:\\.[0-9]+)?) (ms|s|min|h) to run a deferred task\\.$",
+    )
+
+    private fun startupTiming(line: String): Pair<MatchResult, Double>? {
+        val match = startupTiming.matchEntire(line) ?: return null
+        val value = match.groupValues[3].toDoubleOrNull() ?: return null
+        val seconds = value * when (match.groupValues[4]) {
+            "ms" -> 0.001
+            "s" -> 1.0
+            "min" -> 60.0
+            "h" -> 3600.0
+            else -> return null
+        }
+        return if (seconds.isFinite() && seconds > 0.0) match to seconds else null
+    }
+
+    fun startupTimings(paths: Collection<Path>): List<StartupTiming> = buildList {
+        paths.distinct().filter { Files.isRegularFile(it) }.forEach { path ->
+            Files.readAllLines(path).forEachIndexed { index, text ->
+                val (match, seconds) = startupTiming(text) ?: return@forEachIndexed
+                add(StartupTiming(path, index + 1, text, match.groupValues[2], match.groupValues[1], seconds))
+            }
+        }
+    }
+
     fun findings(paths: Collection<Path>): List<Finding> = buildList {
         paths.filter { Files.isRegularFile(it) }.forEach { path ->
             val seededWorldLog = path.toString().let { "/singleplayer/" in it || "/target-world-save/" in it }
@@ -312,8 +319,6 @@ object LogPolicy {
             var acceptedEarlyBlockEntityWarnings = 0
             var acceptedRecoveredPhantomArrays = 0
             var acceptedDistantHorizonsInsufficientMemory = 0
-            var acceptedAdChimneysDeferredTasks = 0
-            var acceptedAdLodsDeferredTasks = 0
             var acceptedEmptySalmonAmbientSounds = 0
             var acceptedEmptyTropicalFishAmbientSounds = 0
             var acceptedEmptyPufferFishAmbientSounds = 0
@@ -326,16 +331,11 @@ object LogPolicy {
             var acceptedCuratedCuriosBackOverrides = 0
             var acceptedInvalidImmersiveWeatheringIcicles = 0
             var acceptedDeepVoidPhysicsFallbacks = 0
-            var acceptedAdPotherDeferredTasks = 0
             var acceptedPresenceFootstepsMissingMessyGroundAcoustics = 0
             var acceptedStarcatcherInvalidAccessTransformers = 0
             var acceptedCampaignItemFrameIronSwords = 0
             var acceptedCampaignItemFrameIronAxes = 0
             var acceptedCampaignUnknownStepHeightAttributes = 0
-            var acceptedIceAndFireDeferredTasks = 0
-            var acceptedThalassophobiaDeferredTasks = 0
-            var acceptedAe2DeferredTasks = 0
-            var acceptedJsonThingsDeferredTasks = 0
             var acceptedCollectiveUpdateNotices = 0
             lines.forEachIndexed { index, line ->
                 val acceptedSeededWorldWarning = seededWorldLog && when {
@@ -423,20 +423,6 @@ object LogPolicy {
                     (multiplayerAggregateServerLog || targetDimensionsServerLog) &&
                     campaignUnknownStepHeightAttribute.matches(line) &&
                     ++acceptedCampaignUnknownStepHeightAttributes <= 2
-                val iceAndFireDuration = iceAndFireDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
-                val acceptedIceAndFireDeferredTask = (singleplayerLog || multiplayerClientLog) &&
-                    iceAndFireDuration != null &&
-                    iceAndFireDuration <= 6.0 && ++acceptedIceAndFireDeferredTasks <= 1
-                val thalassophobiaDuration = thalassophobiaDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
-                val acceptedThalassophobiaDeferredTask = multiplayerClientLog &&
-                    thalassophobiaDuration != null && thalassophobiaDuration <= 3.0 &&
-                    ++acceptedThalassophobiaDeferredTasks <= 1
-                val ae2Duration = ae2DeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
-                val acceptedAe2DeferredTask = multiplayerClientLog && ae2Duration != null &&
-                    ae2Duration <= 2.0 && ++acceptedAe2DeferredTasks <= 1
-                val jsonThingsDuration = jsonThingsDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
-                val acceptedJsonThingsDeferredTask = multiplayerClientLog && jsonThingsDuration != null &&
-                    jsonThingsDuration <= 1.5 && ++acceptedJsonThingsDeferredTasks <= 1
                 val acceptedCollectiveUpdateNotice =
                     (multiplayerServerLog || standaloneServerFixtureLog || targetServerReadyFixtureLog ||
                         targetCursedPyramidServerLog ||
@@ -444,20 +430,10 @@ object LogPolicy {
                         singleplayerLog) &&
                         collectiveUpdateNotice.matches(line) && ++acceptedCollectiveUpdateNotices <=
                         (if (aggregateDedicatedServerLog) 2 else 1)
-                val adPotherDuration = adPotherDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
-                val acceptedAdPotherDeferredTask = adPotherDuration != null && adPotherDuration <= 60.0 &&
-                    ++acceptedAdPotherDeferredTasks <= 1
-                val adChimneysDuration = adChimneysDeferredTask.find(line)
-                    ?.groupValues?.get(1)?.toDoubleOrNull()
-                val acceptedAdChimneysDeferredTask = adChimneysDuration != null &&
-                    adChimneysDuration <= 45.0 && ++acceptedAdChimneysDeferredTasks <= 1
-                val adLodsDuration = adLodsDeferredTask.find(line)?.groupValues?.get(1)?.toDoubleOrNull()
-                val acceptedAdLodsDeferredTask = adLodsDuration != null &&
-                    adLodsDuration <= 5.0 && ++acceptedAdLodsDeferredTasks <= 1
-                if ((fatal.containsMatchIn(line) || warningOrError.containsMatchIn(line)) &&
+                if ((fatal.containsMatchIn(line) || warningErrorOrFatal.containsMatchIn(line)) &&
+                    startupTiming(line) == null &&
                     !acceptedEarlyBlockEntity && !acceptedRecoveredPhantomArray &&
                     !acceptedDistantHorizonsMemoryWarning &&
-                    !acceptedAdChimneysDeferredTask && !acceptedAdLodsDeferredTask &&
                     !acceptedEmptySalmonAmbientSound &&
                     !acceptedEmptyTropicalFishAmbientSound && !acceptedEmptyPufferFishAmbientSound &&
                     !acceptedEmptyCodAmbientSound && !acceptedEmptyUntamedPlaceholderSound &&
@@ -470,10 +446,7 @@ object LogPolicy {
                     !acceptedStarcatcherInvalidAccessTransformer && !acceptedCampaignItemFrameIronSword &&
                     !acceptedCampaignItemFrameIronAxe && !acceptedCampaignUnknownStepHeightAttribute &&
                     !acceptedUntamedServerMissingSpecies &&
-                    !acceptedIceAndFireDeferredTask &&
-                    !acceptedThalassophobiaDeferredTask && !acceptedAe2DeferredTask && !acceptedJsonThingsDeferredTask &&
-                    !acceptedCollectiveUpdateNotice &&
-                    !acceptedAdPotherDeferredTask && !acceptedUntamedJeiPrototype &&
+                    !acceptedCollectiveUpdateNotice && !acceptedUntamedJeiPrototype &&
                     !acceptedSeededWorldWarning && !isAccepted(line)
                 ) {
                     add(Finding(path, index + 1, line))
