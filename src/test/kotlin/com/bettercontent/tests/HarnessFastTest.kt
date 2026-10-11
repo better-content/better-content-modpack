@@ -415,8 +415,14 @@ class HarnessFastTest {
         zip(root.resolve("dist/a/client/better-content.zip"), mapOf("manifest.json" to "{}"))
         zip(root.resolve("dist/b/server/better-content.zip"), mapOf("server/eula.txt" to "eula=false"))
 
-        val error = assertThrows(IllegalArgumentException::class.java) { CandidateLocator.locate(root) }
-        assertTrue(error.message!!.contains("different releases"))
+        // Full tiers set a real binding. Discovery's synthetic fixture must neither
+        // consume that binding nor mutate the parent JVM's production environment.
+        val classpath = listOf(CandidateDiscoveryFixtureProbe::class.java, CandidateLocator::class.java, kotlin.Unit::class.java)
+            .map { Path.of(it.protectionDomain.codeSource.location.toURI()).toString() }.distinct().joinToString(java.io.File.pathSeparator)
+        val output = BoundedCommand.capture(root, listOf("env", "-u", "BC_CANDIDATE_BINDING", "-u", "BC_PACK_TEST_HANDOFF",
+            Path.of(System.getProperty("java.home"), "bin/java").toString(), "-cp", classpath,
+            CandidateDiscoveryFixtureProbe::class.java.name, root.toString()), Duration.ofSeconds(15))
+        assertTrue(output.contains("different releases"), output)
     }
 
     @Test
