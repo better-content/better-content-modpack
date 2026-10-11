@@ -14,6 +14,20 @@ than full custom-mod builds. Source changes retain the owning repository's docum
 All worlds/saves/candidates/evidence/caches are task-lifetime data under
 [generated-data.md](policies/generated-data.md), not permanent acceptance archives.
 
+## Test input boundary
+
+Tests must never require generated results retained from an earlier run: historical reports,
+audit prose, catalogue dumps, screenshots, worlds, or a latest-pass directory are not fixtures
+or golden baselines. Required inputs are authored/versioned fixtures, source/configuration,
+or reproducibly fetched upstream artifacts verified against committed pins. Declare and prepare
+those inputs explicitly so an empty output/cache workspace can run the documented gate.
+
+Tests may inspect outputs created by the current invocation to verify the system under test;
+provider/support JARs must likewise be built or explicitly prepared for that invocation. This
+is not permission to reuse unverified leftover output. Documentation checks establish authored
+contract consistency, not proof of native behavior or runtime acceptance; native-input tests
+must inspect the authoritative implementation or data directly.
+
 ## Public tiers
 
 The public test interface has three cumulative tiers. Dev needs no packaged candidate and can
