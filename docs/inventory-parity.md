@@ -3,9 +3,9 @@
 ## Scope and authority
 
 This is the sole shared implementation/acceptance contract for inventory GUI and compatibility
-changes in any Better Content repository. The Journal is one player-facing inventory backed by
-two native paths, not two separate features. Detailed Journal mechanics and local commands
-belong in [its repository](../../mod_source/better-journal-inventory/README.md).
+changes in any Better Content repository. The Journal decorates native personal inventory;
+Sophisticated Backpacks opens separately and is not combined with it. Detailed Journal mechanics
+and local commands belong in [its repository](../../mod_source/better-journal-inventory/README.md).
 
 ## Mandatory native paths
 
@@ -13,10 +13,12 @@ Every affected change covers both:
 
 1. **No backpack:** native CuriosScreen/CuriosScreenV2 and CuriosContainer variants, including
    vanilla InventoryScreen/InventoryMenu fallback.
-2. **Equipped backpack:** native Sophisticated Backpacks screen/menu, combined equipment and
-   menu-local personal crafting component.
+2. **Equipped backpack:** the same vanilla/Curios personal inventory still opens for ordinary
+   inventory access, with native equipment and personal crafting. The backpack opens separately
+   through Sophisticated's native controls, without Journal side panels, appended equipment/model
+   or an injected personal crafting component.
 
-Matching artwork does not imply shared crafting menus, callbacks, output slots or packets.
+Separate native screens retain independent crafting menus, callbacks, output slots and packets.
 Share integration where practical without replacing native authority. Minecraft owns the 27 main
 and nine hotbar slots. Curios, Aether and Sophisticated Backpacks own their native storage and
 protocols. Do not reintroduce retired custom storage backends, transfer/prediction engines,
@@ -24,9 +26,12 @@ inventory aliases, Sort/Stack/Trash Cursor/Undo, fake installed upgrades, person
 initialization or custom EMI storage handlers. Keep fixture commands/worlds out of production JARs.
 
 Polymorph uses its native selector/widget and server selection authority on both paths, not a
-decorative icon. Personal EMI defaults to the native personal 2×2 matrix; explicit installed
-native crafting-tab selection uses its independent 3×3 matrix. No carried/nested backpack search
-or silent root repair. Keep native player/equipment areas and original Record/EMI panels.
+decorative icon. Personal EMI uses vanilla/Curios' native personal 2×2 matrix;
+separate backpack installed crafting upgrades retain their independent native 3×3 matrix and EMI
+integration. No carried/nested backpack search or silent root repair. Keep native player/equipment
+areas and original Record/EMI panels on personal inventory. Do not redirect ordinary inventory to
+a backpack, append/lock/move its equipment slots, reserve combined-screen space, inject crafting
+descriptors or intercept native backpack opening/transfer/tab-selection protocols.
 
 ## Acceptance before claiming completion
 
@@ -36,8 +41,9 @@ or silent root repair. Keep native player/equipment areas and original Record/EM
   artifact**. Exercise the affected native behavior on both. For Polymorph this includes an actual
   conflicting recipe, visible selector/choices, and correct server output after each selection.
 - Identify artifact hashes and native screen/menu types; cover Curios variants/vanilla fallback,
-  or explicitly mark them unverified. Review representative equipped sizes, compact views,
-  original panels, reload/disabled/foreign fallbacks when affected by the change.
+  or explicitly mark them unverified. Review ordinary inventory with an equipped bag and separate
+  native backpacks of representative sizes, narrow views, original personal-inventory panels and
+  reload/disabled/foreign fallbacks when affected by the change.
 - Native API verification and actual human pointer verification are distinct verdicts. Automated
   tests must not synthesize pointer/mouse movement/clicks/scroll/resize. A mocked GUI, static check,
   successful client join or equipped-only frame cannot replace paired visual acceptance.
