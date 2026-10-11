@@ -3,6 +3,7 @@ package com.bettercontent.tests
 import com.bettercontent.tests.release.ActiveMod
 import com.bettercontent.tests.release.annotateJar
 import com.bettercontent.tests.release.build
+import com.bettercontent.tests.release.withForgeCacheLock
 import com.bettercontent.tests.release.packageResolveCommand
 import com.bettercontent.tests.release.jarDeclaresMod
 import com.bettercontent.tests.release.readSourceCommit
@@ -29,10 +30,55 @@ import java.util.jar.JarFile
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import kotlin.io.path.createDirectories
+import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
 @Tag("fast")
 class HarnessFastTest {
+    @Test
+    fun sharedForgeCacheHasOnlyOneWriterAndReadersWait(@TempDir workspace: Path) {
+        val pool = java.util.concurrent.Executors.newFixedThreadPool(2)
+        val entered = java.util.concurrent.CountDownLatch(1)
+        val attempted = java.util.concurrent.CountDownLatch(1)
+        val release = java.util.concurrent.CountDownLatch(1)
+        val secondEntered = java.util.concurrent.CountDownLatch(1)
+        val artifact = workspace.resolve("mapped.jar")
+        try {
+            val writer = pool.submit {
+                withForgeCacheLock(workspace) {
+                    artifact.writeText("incomplete")
+                    entered.countDown()
+                    assertTrue(release.await(5, java.util.concurrent.TimeUnit.SECONDS))
+                    artifact.writeText("complete")
+                }
+            }
+            val reader = pool.submit {
+                assertTrue(entered.await(5, java.util.concurrent.TimeUnit.SECONDS))
+                attempted.countDown()
+                withForgeCacheLock(workspace) {
+                    secondEntered.countDown()
+                    assertEquals("complete", artifact.readText())
+                }
+            }
+            assertTrue(attempted.await(5, java.util.concurrent.TimeUnit.SECONDS))
+            assertTrue(!secondEntered.await(150, java.util.concurrent.TimeUnit.MILLISECONDS))
+            release.countDown()
+            writer.get(5, java.util.concurrent.TimeUnit.SECONDS)
+            reader.get(5, java.util.concurrent.TimeUnit.SECONDS)
+        } finally {
+            release.countDown()
+            pool.shutdownNow()
+        }
+    }
+
+    @Test
+    fun forgeCacheLockIsReleasedAfterFailure(@TempDir workspace: Path) {
+        assertThrows(IllegalStateException::class.java) {
+            withForgeCacheLock(workspace) { error("simulated build failure") }
+        }
+        assertEquals("next build", withForgeCacheLock(workspace) { "next build" })
+    }
+
     @Test
     fun runtimeFixtureDisablesWallClockScheduledBackups(@TempDir root: Path) {
         val config = root.resolve("config").also { it.createDirectories() }.resolve("ftbbackups2.json")

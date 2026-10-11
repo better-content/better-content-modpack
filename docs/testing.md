@@ -24,7 +24,7 @@ run while other developers share the workspace:
 ```
 
 Dev runs the fast Minecraft-free contracts and `git diff --check`; it does not refresh Packwiz
-hashes. Cold-cache source inspection rehydrates only the native JARs named by its tests through
+hashes. Cold-cache source inspection rehydrates only the native JAR/ZIP archives named by its tests through
 `scripts/prepare_dev_inputs.py`, verifies each active pin's hash and exercises that rehydration's
 synthetic tests. These downloads remain disposable dependencies; no Minecraft launch, deployment
 or distribution is performed. Fresh-dist preparation refreshes them once after source and pack changes settle.
@@ -235,6 +235,13 @@ unchanged ZIP pair when explicitly requested. Direct full Debug forces verificat
 of every active mod, then packages once and runs complete Dist and Debug. Release evidence records
 each mod's build mode and JAR hash.
 Legacy JARs without source metadata are replaced during this bootstrap run.
+
+Release workers may concurrently inspect/reuse/stage artifacts, but source Gradle invocations
+share a workspace-level Forge cache lock. ForgeGradle's generated MCP/mapped JARs are not safe
+for concurrent generation or reading during generation, especially after cache disposal. The
+lock serializes complete source verification/staging invocations without skipping any gate or
+changing Forge pins. Do not launch uncoordinated manual source Gradle builds against the same
+cache during release preparation.
 
 `--skip-tests` is the explicit untested-release path. It still reuses valid source-identical
 bundled JARs. Changed or unannotated sources build through `stageRuntimeJar` without the custom-mod

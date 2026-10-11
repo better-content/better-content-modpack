@@ -4,7 +4,7 @@ import io
 from pathlib import Path
 import tempfile
 import unittest
-from prepare_dev_inputs import ensure_pin
+from prepare_dev_inputs import ensure_pin, required_inputs
 
 
 class PinnedInputsTests(unittest.TestCase):
@@ -49,6 +49,21 @@ class PinnedInputsTests(unittest.TestCase):
         self.cache.symlink_to(self.root, target_is_directory=True)
         with self.assertRaises(ValueError):
             ensure_pin(self.pin, self.cache, self.open)
+
+    def test_inputs_are_discovered_across_tests_and_pin_domains(self):
+        tests = self.root / 'src/test/kotlin'
+        tests.mkdir(parents=True)
+        (tests / 'Native.kt').write_text('pinnedModJar("native.jar")')
+        (tests / 'Guns.kt').write_text('pinnedGunPack("pack.zip")')
+        for domain, name in [('mods', 'native.jar'), ('tacz', 'pack.zip')]:
+            directory = self.root / domain
+            directory.mkdir()
+            (directory / 'input.pw.toml').write_text(f'filename = "{name}"\n')
+        self.assertEqual([('mods', 'native.jar'), ('tacz', 'pack.zip')],
+                         [(domain, pin['filename']) for domain, pin in required_inputs(self.root)])
+        (tests / 'Missing.kt').write_text('pinnedModJar("missing.jar")')
+        with self.assertRaises(ValueError):
+            required_inputs(self.root)
 
     def test_curseforge_pin_uses_exact_file_id_and_filename(self):
         self.pin['download'].pop('url')

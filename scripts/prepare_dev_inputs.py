@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rehydrate hash-pinned native JARs for Minecraft-free source inspection only."""
+"""Rehydrate hash-pinned native archives for Minecraft-free source inspection only."""
 import hashlib
 from pathlib import Path
 import re
@@ -55,22 +55,31 @@ def ensure_pin(pin, cache, opener=urllib.request.urlopen):
     return target
 
 
+def required_inputs(root):
+    tests = '\n'.join(path.read_text() for path in (root / 'src/test/kotlin').rglob('*.kt'))
+    inputs = []
+    for domain, helper in [('mods', 'pinnedModJar'), ('tacz', 'pinnedGunPack')]:
+        names = set(re.findall(rf'{helper}\("([^"\n]+)"\)', tests))
+        pins = {}
+        for path in (root / domain).glob('*.pw.toml'):
+            with path.open('rb') as stream:
+                pin = tomllib.load(stream)
+            if pin['filename'] in names:
+                if pin['filename'] in pins:
+                    raise ValueError('duplicate native source-test Packwiz pin')
+                pins[pin['filename']] = pin
+        if names != pins.keys():
+            raise ValueError(f'native source-test archive lacks an active {domain} Packwiz pin')
+        inputs.extend((domain, pins[name]) for name in sorted(names))
+    return inputs
+
+
 def main():
     root = Path(__file__).resolve().parents[1]
-    tests = (root / 'src/test/kotlin/com/bettercontent/tests/HoverAnnotationLearningSurfaceTest.kt').read_text()
-    names = set(re.findall(r'pinnedModJar\("([^"\n]+)"\)', tests))
-    pins = {}
-    for path in (root / 'mods').glob('*.pw.toml'):
-        with path.open('rb') as stream:
-            pin = tomllib.load(stream)
-        if pin['filename'] in names:
-            pins[pin['filename']] = pin
-    if names != pins.keys():
-        raise ValueError('native source-test JAR lacks an active Packwiz pin')
-    cache = Path.home() / '.cache/bc/packwiz-downloads/mods'
-    for name in sorted(names):
-        ensure_pin(pins[name], cache)
-    print(f'Prepared {len(names)} hash-pinned native JARs for source inspection; no refresh/deployment/runtime launch.')
+    inputs = required_inputs(root)
+    for domain, pin in inputs:
+        ensure_pin(pin, Path.home() / '.cache/bc/packwiz-downloads' / domain)
+    print(f'Prepared {len(inputs)} hash-pinned native archives for source inspection; no refresh/deployment/runtime launch.')
 
 
 if __name__ == '__main__':

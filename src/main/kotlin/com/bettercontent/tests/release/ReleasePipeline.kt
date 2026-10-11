@@ -251,7 +251,9 @@ internal fun build(
     }
     val tasks = if (skipTests) listOf("stageRuntimeJar") else mod.tasks
     val buildCommand = listOf(repository.resolve("gradlew").toString(), "--no-daemon", "clean") + tasks
-    runLogged(repository, buildCommand, log, providerBuildEnvironment(staging))
+    withForgeCacheLock(workspace) {
+        runLogged(repository, buildCommand, log, providerBuildEnvironment(staging))
+    }
     if (!skipTests && mod.repository != "better-exploration-load-control") {
         val output = Files.readString(log)
         if (output.contains(":runGameTestServer")) {

@@ -9,6 +9,10 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.security.MessageDigest
 import java.util.zip.ZipFile
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.FieldVisitor
+import org.objectweb.asm.Opcodes
 
 @Tag("fast")
 class HoverAnnotationLearningSurfaceTest {
@@ -240,6 +244,12 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(audit.contains("plantSapling"))
         assertTrue(audit.contains("biomeSuitability"))
         assertTrue(audit.contains("No stump lookup or stump-targeted planting occurs"))
+        ZipFile(pinnedModJar("DynamicTrees-1.20.1-1.4.10.jar").toFile()).use { jar ->
+            val seed = jar.getInputStream(checkNotNull(jar.getEntry("com/ferreusveritas/dynamictrees/item/Seed.class")))
+                .use { it.readBytes().toString(Charsets.ISO_8859_1) }
+            listOf("doPlanting", "plantSapling", "biomeSuitability").forEach { assertTrue(seed.contains(it)) }
+            assertTrue(!seed.lowercase().contains("stump"))
+        }
         assertTrue(copy.contains("suitable soil and biome"))
         assertTrue(!copy.contains("stump"))
     }
@@ -1000,7 +1010,7 @@ class HoverAnnotationLearningSurfaceTest {
     fun `Smeltery controller hover follows the pinned first Brass alloy route`() {
         val pin = Files.readString(root.resolve("mods/tinkers-construct.pw.toml"))
         val precision = Files.readString(root.resolve("kubejs/server_scripts/progression/30_precision_factory.js"))
-        val audit = Files.readString(root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ui10-brass-smeltery-audit.md").normalize())
+        val audit = Files.readString(root.resolve("docs/native-learning-contracts.md"))
         val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "tconstruct:smeltery_controller" }
         val copy = row.path("lines").map { it.asText() }.single()
 
@@ -1010,6 +1020,17 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(audit.contains("data/tconstruct/recipes/smeltery/alloys/molten_brass.json"))
         assertTrue(audit.contains("90 mB molten copper") && audit.contains("90 mB molten zinc"))
         assertTrue(audit.contains("605 K") && audit.contains("180 mB molten brass"))
+        ZipFile(pinnedModJar("TConstruct-1.20.1-3.11.2.166.jar").toFile()).use { jar ->
+            val recipe = jacksonObjectMapper().readTree(jar.getInputStream(checkNotNull(jar.getEntry(
+                "data/tconstruct/recipes/smeltery/alloys/molten_brass.json"
+            ))))
+            assertEquals("tconstruct:alloy", recipe.path("type").asText())
+            assertEquals(mapOf("forge:molten_copper" to 90, "forge:molten_zinc" to 90),
+                recipe.path("inputs").associate { it.path("tag").asText() to it.path("amount").asInt() })
+            assertEquals("forge:molten_brass", recipe.path("result").path("tag").asText())
+            assertEquals(180, recipe.path("result").path("amount").asInt())
+            assertEquals(605, recipe.path("temperature").asInt())
+        }
         assertTrue(row.path("owner").asText() == "kubejs/server_scripts/progression/30_precision_factory.js")
         assertTrue(copy.contains("full Smeltery") && copy.contains("first Brass"))
     }
@@ -1155,7 +1176,7 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Serene Seasons calendar and sensor hovers match pinned season state`() {
         val pin = Files.readString(root.resolve("mods/serene-seasons.pw.toml"))
-        val auditPath = root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ui10-season-sensor-audit.md").normalize()
+        val auditPath = root.resolve("docs/native-learning-contracts.md")
         val audit = Files.readString(auditPath)
         val jarPath = pinnedModJar("SereneSeasons-forge-1.20.1-9.1.0.2.jar")
         val sha1 = MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jarPath)).joinToString("") { "%02x".format(it) }
@@ -1166,7 +1187,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(pin.contains("706d3eaf79ce5b33a30f3ad1aaa88a2a4483abf6"))
         assertEquals("706d3eaf79ce5b33a30f3ad1aaa88a2a4483abf6", sha1)
         assertTrue(row.path("owner").asText().contains("mods/serene-seasons.pw.toml"))
-        assertTrue(row.path("evidence").any { it.asText().endsWith("ui10-season-sensor-audit.md") })
+        assertTrue(row.path("evidence").any { it.asText() == "docs/native-learning-contracts.md" })
         assertEquals("Reads the current season; crop suitability and weather still change over the seasonal cycle.", calendarRow.path("lines").single().asText())
         assertEquals("Outputs a 0–15 redstone signal that tracks progress through the current season.", row.path("lines").single().asText())
         assertTrue(audit.contains("CalendarItem.class") && audit.contains("getSeasonCycleTicks") && audit.contains("0–15"))
@@ -1228,7 +1249,7 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `AdPother hovers follow pinned local readings and wearer protection`() {
         val pin = Files.readString(root.resolve("mods/pollution-of-the-realms.pw.toml"))
-        val auditPath = root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ui10-pollution-audit.md").normalize()
+        val auditPath = root.resolve("docs/native-learning-contracts.md")
         val audit = Files.readString(auditPath)
         val jarPath = pinnedModJar("AdPother-1.20.1-8.1.49.0-build.2294.jar")
         val sha1 = MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jarPath)).joinToString("") { "%02x".format(it) }
@@ -1264,7 +1285,7 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Weather2 alerts and forecast hovers match pinned registered behavior`() {
         val pin = Files.readString(root.resolve("mods/weather-storms-tornadoes.pw.toml"))
-        val auditPath = root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ui10-weather2-audit.md").normalize()
+        val auditPath = root.resolve("docs/native-learning-contracts.md")
         val audit = Files.readString(auditPath)
         val jarPath = pinnedModJar("weather2-1.20.1-2.8.3.jar")
         val sha1 = MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jarPath)).joinToString("") { "%02x".format(it) }
@@ -1307,7 +1328,7 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `AE2 pattern hover distinguishes blank encoding from external processing`() {
         val pin = Files.readString(root.resolve("mods/applied-energistics-2.pw.toml"))
-        val audit = Files.readString(root.resolve("../workspace_artifacts/evidence/better-content-v8-20260919/ae2-pattern-role-audit.md").normalize())
+        val audit = Files.readString(root.resolve("docs/native-learning-contracts.md"))
         val row = registry.path("annotations").single { annotation ->
             annotation.path("selector").path("items").any { it.asText() == "ae2:blank_pattern" }
         }
@@ -1320,6 +1341,24 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(audit.contains("`BLANK_PATTERN` is `ItemDefinition<MaterialItem>`"))
         assertTrue(audit.contains("`CRAFTING_PATTERN` is `ItemDefinition<CraftingPatternItem>`"))
         assertTrue(audit.contains("`PROCESSING_PATTERN` is `ItemDefinition<ProcessingPatternItem>`"))
+        ZipFile(pinnedModJar("appliedenergistics2-forge-15.4.10.jar").toFile()).use { jar ->
+            val signatures = mutableMapOf<String, String?>()
+            val bytes = jar.getInputStream(checkNotNull(jar.getEntry("appeng/core/definitions/AEItems.class")))
+                .use { it.readBytes() }
+            ClassReader(bytes).accept(object : ClassVisitor(Opcodes.ASM9) {
+                override fun visitField(access: Int, name: String, descriptor: String, signature: String?, value: Any?): FieldVisitor? {
+                    signatures[name] = signature
+                    return null
+                }
+            }, ClassReader.SKIP_CODE or ClassReader.SKIP_DEBUG or ClassReader.SKIP_FRAMES)
+            mapOf(
+                "BLANK_PATTERN" to "appeng/items/materials/MaterialItem",
+                "CRAFTING_PATTERN" to "appeng/crafting/pattern/CraftingPatternItem",
+                "PROCESSING_PATTERN" to "appeng/crafting/pattern/ProcessingPatternItem",
+            ).forEach { (name, type) ->
+                assertEquals("Lappeng/core/definitions/ItemDefinition<L$type;>;", signatures[name], name)
+            }
+        }
         assertTrue(copy.contains("Encode a Blank Pattern"))
         assertTrue(copy.contains("processing sends inputs to an external machine"))
         assertTrue(!copy.contains("execute the craft"))

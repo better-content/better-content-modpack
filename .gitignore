@@ -5,6 +5,7 @@
 /forge-*-installer.jar
 /forge-*-installer.jar.log
 .gradle/
+.kotlin/
 build/
 .idea/
 tools/runtime-probe/.gradle/

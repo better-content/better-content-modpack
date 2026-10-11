@@ -2,16 +2,44 @@ package com.bettercontent.tests
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.zip.ZipFile
 
 @Tag("fast")
 class GunManufacturingContractTest {
     private val root = Path.of(System.getProperty("bc.repo.root"))
     private val mapper = jacksonObjectMapper()
+    private fun pinnedGunPack(filename: String): Path =
+        Path.of(System.getProperty("user.home"), ".cache/bc/packwiz-downloads/tacz", filename)
+    private val gunPacks = mapOf(
+        "applied_armorer" to pinnedGunPack("Applied Armorer-v1.1.4.1-for114+.zip"),
+        "create_armorer" to pinnedGunPack("Create Armorer-v1.2.0.1-for117.zip"),
+        "immersive_armorer" to pinnedGunPack("Immersive Armorer-v1.2.1-for117.zip"),
+    )
+
+    private fun assertNativeUncraftedItem(namespace: String, category: String, id: String) {
+        ZipFile(gunPacks.getValue(namespace).toFile()).use { archive ->
+            val entry = archive.getEntry("data/$namespace/index/$category/$id.json")
+            assertNotNull(entry)
+            val index = mapper.readTree(archive.getInputStream(entry))
+            assertFalse(index.path("hidden").asBoolean(false), "$namespace:$id must be visible")
+            val display = index.path("display").asText()
+            assertTrue(display.isNotBlank(), "$namespace:$id must have a native display")
+            assertNotNull(archive.getEntry("assets/${display.substringBefore(':')}/display/$category/${display.substringAfter(':')}.json"))
+            if (category == "attachments") {
+                val data = index.path("data").asText()
+                assertNotNull(archive.getEntry("data/${data.substringBefore(':')}/data/$category/${data.substringAfter(':')}.json"))
+            }
+            assertNull(archive.getEntry("data/$namespace/recipes/$category/$id.json"), "$namespace:$id should lack a native recipe")
+        }
+    }
 
     @Test
     fun `gun component families have Create pressure and AE manufacturing paths`() {
@@ -44,14 +72,8 @@ class GunManufacturingContractTest {
 
     @Test
     fun `visible functional Armorer muzzles have staged gunsmith acquisition`() {
-        val catalogue = root.parent.resolve(
-            "workspace_artifacts/evidence/better-content-v8-20260919/gun01-zip-catalogue.tsv",
-        )
-        val missingRoutes = Files.readAllLines(catalogue).drop(1)
-            .map { it.split('\t') }
-            .filter { it[4] in setOf("muzzle_commander", "muzzle_refit_ap_grenade") }
-        assertEquals(2, missingRoutes.size)
-        assertTrue(missingRoutes.all { it[3] == "attachments" && it[5] == "false" && it[6] == "false" })
+        assertNativeUncraftedItem("applied_armorer", "attachments", "muzzle_commander")
+        assertNativeUncraftedItem("create_armorer", "attachments", "muzzle_refit_ap_grenade")
 
         val script = Files.readString(
             root.resolve("kubejs/server_scripts/compat/retained/refactor__balance__171_tacz_manufacturing_gates.js"),
@@ -75,14 +97,8 @@ class GunManufacturingContractTest {
 
     @Test
     fun `melee gun firing ammunition has authored workbench supply`() {
-        val catalogue = root.parent.resolve(
-            "workspace_artifacts/evidence/better-content-v8-20260919/gun01-zip-catalogue.tsv",
-        )
-        val meleeAmmo = Files.readAllLines(catalogue).drop(1)
-            .map { it.split('\t') }
-            .filter { it[4] in setOf("melee", "melee_weapon") }
-        assertEquals(2, meleeAmmo.size)
-        assertTrue(meleeAmmo.all { it[3] == "ammo" && it[5] == "false" && it[6] == "false" })
+        assertNativeUncraftedItem("applied_armorer", "ammo", "melee")
+        assertNativeUncraftedItem("create_armorer", "ammo", "melee_weapon")
 
         val script = Files.readString(
             root.resolve("kubejs/server_scripts/compat/retained/refactor__balance__171_tacz_manufacturing_gates.js"),
@@ -97,14 +113,14 @@ class GunManufacturingContractTest {
 
     @Test
     fun `all external gun recipes retain native results and require their pack component`() {
-        val catalogue = root.parent.resolve(
-            "workspace_artifacts/evidence/better-content-v8-20260919/gun01-zip-catalogue.tsv",
-        )
-        val externalGuns = Files.readAllLines(catalogue).drop(1)
-            .map { it.split('\t') }
-            .filter { it[3] == "guns" }
-            .map { "${it[2]}:gun/${it[4]}" }
-            .toSet()
+        val externalGuns = gunPacks.flatMap { (namespace, path) ->
+            ZipFile(path.toFile()).use { archive ->
+                val prefix = "data/$namespace/index/guns/"
+                archive.entries().asSequence().map { it.name }
+                    .filter { it.startsWith(prefix) && it.endsWith(".json") }
+                    .map { "$namespace:gun/${it.removePrefix(prefix).removeSuffix(".json")}" }.toList()
+            }
+        }.toSet()
         assertEquals(39, externalGuns.size)
 
         val script = Files.readString(

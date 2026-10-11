@@ -43,6 +43,7 @@ standing policies or human authorization.
 ### Teaching and visual authoring
 
 - [Discovery guides](better_discovery_guides.md): sole shared teaching/authoring policy.
+- [Native learning contracts](native-learning-contracts.md): pinned upstream boundaries and direct source-inspection checks.
 - [Threads](threads.md): contextual discovery, lineage and facsimiles.
 - [Thread art direction](thread_art_direction.md): visual grammar and canonical authored masters.
 - [Render geometry](distant_horizons_render_geometry.md): pinned DH source boundary, not pixel proof.
