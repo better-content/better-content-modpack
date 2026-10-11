@@ -6,7 +6,7 @@ their mechanics. The tables below distinguish **implemented** behavior from
 **conditional** third-party behavior and **proposed** work. A manifest establishes
 that a mod is installed; it does not establish that every native feature activates
 in this pack. See [the workspace inventory](custom-mod-workspace.md) for custom-mod
-identities and [the docs policy](README.md#doc-policy) for evidence precedence.
+identities and [the docs policy](README.md#documentation-contract) for evidence precedence.
 
 ## Intended experience
 

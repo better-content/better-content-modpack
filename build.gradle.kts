@@ -91,17 +91,3 @@ tasks.register<JavaExec>("prepareFreshDist") {
         providers.gradleProperty("releaseForceRebuild").orElse("false").get(),
     )
 }
-
-tasks.register<JavaExec>("workspaceMaintenance") {
-    group = "maintenance"
-    description = "Audits or prunes superseded pack evidence and distribution staging."
-    dependsOn(tasks.classes)
-    classpath = sourceSets.main.get().runtimeClasspath
-    mainClass.set("com.bettercontent.tests.maintenance.WorkspaceMaintenanceKt")
-    args(
-        layout.projectDirectory.asFile.absolutePath,
-        providers.gradleProperty("maintenanceMode").orElse("audit").get(),
-        providers.gradleProperty("maintenanceApply").orElse("false").get(),
-    )
-    providers.gradleProperty("maintenanceTransaction").orNull?.let { args(it) }
-}

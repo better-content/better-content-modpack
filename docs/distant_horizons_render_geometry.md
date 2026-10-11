@@ -1,11 +1,13 @@
 # Distant Horizons 2.4.5 render geometry audit
 
-This audit records the source geometry for the exact pinned Forge 1.20.1 artifact:
+This living integration document records the source geometry boundary for the pinned Forge
+1.20.1 artifact, not a claim of current runtime visual acceptance:
 
 - File: `DistantHorizons-2.4.5-b-1.20.1-fabric-forge.jar`
 - CurseForge project/file: `508933/7375280`
 - Packwiz SHA-1: `ce3814dd5971edda4d04c3a42ef0df5c6cf8e10d`
-- Inspected copy: retained multiplayer fixture at `generated/test-evidence/20260913T220011Z-357174/multiplayer/fixture/client-1/mods/`
+- Authority: current `mods/distant-horizons.pw.toml` pin and upstream artifact source.
+  Historical fixture copies are disposable under [generated-data.md](policies/generated-data.md).
 
 ## Transform path
 

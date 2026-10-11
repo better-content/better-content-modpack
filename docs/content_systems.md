@@ -119,9 +119,9 @@ the sole supported specialist storage surface. Create Deco coins, coin stacks,
 wallets, coin recipes, emerald-priced offers, Wares/Font adapters, and specialist
 harvesting tools are inert or hidden.
 
-## New worlds and backups
+## New-world baseline
 
-The refactor supplies no old-world identity migration. Create a tested backup
-before updating an existing world. New worlds are the supported baseline because
-deposit identities, placed small chunks, disturbed radioactivity, and Machine
-Block identities all participate in saved state.
+The refactor supplies no old-world identity migration. New worlds are the supported baseline
+because deposit identities, placed small chunks, disturbed radioactivity and Machine Block
+identities participate in saved state. This development environment is not a save-backup service:
+all worlds/saves are disposed of at task handoff under [generated-data.md](policies/generated-data.md).

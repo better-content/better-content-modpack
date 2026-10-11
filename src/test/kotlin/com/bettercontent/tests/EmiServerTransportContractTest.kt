@@ -39,17 +39,17 @@ class EmiServerTransportContractTest {
         assertEquals("580555", scalar("update.curseforge", "project-id"))
     }
 
-    @Test fun supportedPackagingRequirementSeparatesPendingReturnAcceptanceFromClientOnlyBranchCoverage() {
+    @Test fun supportedPackagingRequirementSeparatesNativeTransportFromBehavioralAcceptance() {
         val proof = Files.readString(Path.of("docs/native-emi-server-transport.md"))
+            .replace(Regex("\\s+"), " ")
         for (required in listOf(
             "supported packaging requirement", "not fixture spoofing", "1.1.24+1.20.1+forge",
             "8081375", "ea320200878e4a49196760234a22da763671520a",
             "EmiForge", "PlayerLoggedInEvent", "PingS2CPacket", "EmiClient.onServer",
-            "FillRecipeC2SPacket", "Client-only native clearing/return limitation",
-            "moveItemStackTo(stack, 10, 46, false)", "not fixed by this packaging change",
-            "does not mutate EMI bytecode", "208 full / 36 sentinel", "pending fix acceptance",
-            "client.foreign_grid_return", "client.foreign_grid_return_blocked",
-            "does **not** prove", "persistence", "strict log audit", "cleanup"
+            "FillRecipeC2SPacket", "EmiRecipeFiller.clientFill", "quickMoveStack",
+            "does not mutate EMI bytecode", "native menu", "not current requirements",
+            "runtime acceptance", "persistence", "strict log audit", "cleanup",
+            "inventory-parity.md", "generated-data.md"
         )) assertTrue(proof.contains(required), "Missing supported-transport contract statement: $required")
     }
 }

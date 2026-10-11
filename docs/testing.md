@@ -1,5 +1,21 @@
 # Testing and fresh distributions
 
+## Scope and authorization
+
+This is the sole shared test/release procedure for Better Content. Repository-local source
+checks do not authorize cross-repository builds, deployment, Packwiz refresh, packaging or
+pack suites. Ordinary changes use the smallest relevant local check. Runtime pack tests and
+fresh distributions require explicit user orders, never an inferred risk assessment. State
+when pack testing is intentionally omitted. `dist.sh` packages once; it is not validation.
+Only release preparation refreshes tracked Packwiz hashes; authoring/deployment steps do not.
+
+Docs-only changes use `python3 -B scripts/check_documentation.py` and `git diff --check` rather
+than full custom-mod builds. Source changes retain the owning repository's documented gate.
+All worlds/saves/candidates/evidence/caches are task-lifetime data under
+[generated-data.md](policies/generated-data.md), not permanent acceptance archives.
+
+## Public tiers
+
 The public test interface has three cumulative tiers. Dev needs no packaged candidate and can
 run while other developers share the workspace:
 
@@ -32,13 +48,14 @@ run, and 0 for a passed run. `evidence` lists recorded files. For example:
 ./test-control.main.kts retry debug --target font:aether --retry-of RUN_ID
 ```
 
-`run source --all` verifies all 47 local source repositories in dependency order and stages
-provider JARs for dependent builds. Full Dist and Debug use the same fresh release path as the
+`run source --all` verifies the active manifest repositories plus the two supported validation-only
+repositories in dependency order and stages provider JARs for dependent builds. Retired Ratlantis
+is not offered by source control; checkout count is not a build requirement. Full Dist and Debug use the same fresh release path as the
 direct tier commands below. `submit --handoff /absolute/path/to/handoff.json` sends a prepared
 immutable-candidate request to the shared queue.
 
-Direct full Dist and Debug require clean active custom-mod repositories. They run each of the 45 active
-mods' manifest-listed verification tasks and rebuilds every runtime JAR after `clean`, even when
+Direct full Dist and Debug require clean active custom-mod repositories. They run every active
+mod's manifest-listed verification tasks and rebuild every runtime JAR after `clean`, even when
 the bundled JAR records the same source revision. It stages the JARs in dependency order,
 deploys the validated set, refreshes Packwiz, packages once, then runs complete Dist and Debug
 on the new ZIP pair. Release evidence links the Dist and Debug run IDs and candidate hashes.
@@ -111,7 +128,8 @@ Dev writes ordinary Gradle XML and HTML reports only. Dist and Debug use a run I
 structured evidence beneath `generated/test-evidence/<run-id>/`: incremental JSON events, a
 `bc.modpack_test_run.v1` summary, and candidate hashes. Runtime groups add logs and timeout
 diagnostics; Debug also collects runtime data. The single-player group records the customized
-title screen without injecting input. Failed fixtures are retained. Automated tests must not synthesize mouse movement or mouse
+title screen without injecting input. Failed fixtures remain available during the active task only.
+Automated tests must not synthesize mouse movement or mouse
 clicks. Threads reader development, the Quark chat emote picker, the World Condenser configuration
 screen, and the Create World menu are manual visual gates. Debug's non-pointer world probe tests
 fresh save boot and reopen, not the menu. Before rerunning, inspect the existing run and report its
@@ -119,15 +137,14 @@ ID, hashes, failed or aborted cases, evidence path, retained fixture, and proces
 Cleanup retains observed process descendants after their parent exits and checks termination after
 graceful and forced shutdown. Every fixture is closed even when an earlier close fails. The
 `process_cleanup` event reports `complete=false`, surviving PIDs, and an error when cleanup fails;
-the suite then fails and retains its fixture and original failure evidence. `complete=true` means
+the suite then fails and keeps its fixture and original failure evidence until task handoff. `complete=true` means
 all tracked processes have exited. Dev tests ordinary, forced, and orphaned-child
 shutdown without launching Minecraft.
 
 A runtime snapshot is evidence for a target only when its snapshot ID appears in that run's server
 events and the run's `candidate_selected` hashes match the target under discussion. Completeness
-makes a snapshot usable evidence; recency alone does not make it current. Preserve unmatched
-snapshots as historical candidate evidence and do not use their volatile totals as claims about the
-tracked pack.
+makes a snapshot usable evidence; recency alone does not make it current. Do not use unmatched
+snapshots or their volatile totals as claims about the tracked pack; dispose of them at handoff.
 
 The better-runtime-diagnostics completion schema is `bc.runtime_dump_completion.v3` and includes
 `dimensions.json` (`bc.dimensions.v1`). Debug multiplayer traversal discovers targets at run time
@@ -181,28 +198,20 @@ Debug's lifecycle smoke verifies one lineage transition, its committed archive, 
 It intentionally avoids a second generation; longer persistence matrices require separate explicit
 authorization.
 
-## Evidence maintenance
+## Task registration and handoff
 
-Inspect retention decisions without changing the workspace:
+Before source verification, a release, or a multi-command test/retry sequence, register its task
+and consumed/output boundaries with `maintenance.main.kts begin --task TASK_ID --path PATH`.
+All tests/retries in that task keep the same candidate alive until diagnosis/testing/delivery
+ends. Queue handoffs remain active consumers until their callbacks/delivery complete.
 
-```sh
-./maintenance.main.kts audit
-```
-
-After reviewing that output, explicitly apply the guarded prune with:
-
-```sh
-./maintenance.main.kts prune --apply
-```
-
-The command records repository state before pruning and refuses to continue if that state changes.
-It also refuses pack processes, unsafe paths, and candidate-hash changes. It retains the evidence matching the current ZIP pair, the newest passed
-report for a suite missing from that run, and any failure without a later passing result. Pruning
-writes a `bc.workspace_maintenance.v1` transaction manifest beneath the Worklane state directory.
-If deletion stops after validation, inspect the manifest and run
-`./maintenance.main.kts prune --resume TRANSACTION_ID` to finish deleting its quarantine.
-Successful packaging removes its expanded server staging tree after the server ZIP is complete;
-failed packaging keeps staging for diagnosis.
+Before final success/failure/cancellation/blocked handoff, report results, stop owned producers,
+then run `maintenance.main.kts finish --task TASK_ID --apply`. Caches/provider/build JARs are
+removed once idle, along with evidence, ZIPs and worlds regardless of verdict. Active consumers
+are reported as incomplete cleanup, not historical retention. See the canonical
+[disposal policy](policies/generated-data.md) for audit, pins, resume and safety behavior.
+Successful packaging can remove expanded staging sooner; failed staging lasts only for the
+active task's diagnosis. No current-candidate/latest-pass/unresolved-failure exception survives.
 
 ## Fresh distributions
 

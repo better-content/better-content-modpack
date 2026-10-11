@@ -29,12 +29,15 @@ they do not require a whole-image tint or the retired four-suit composition rule
 The 52 active card scenes and teaching definitions are maintained in
 [`authoring/discoveries.json`](../../mod_source/better-discovery-guides/authoring/discoveries.json).
 [`art-grammar.txt`](../../mod_source/better-discovery-guides/authoring/art-grammar.txt)
-contains the shared generation prompt. Exact prompts, original image-generation paths,
-reviewed masters, contact sheets, and hashes are retained in
-`/home/dev/workspace_artifacts/reviews/journal-art-20260927/`.
+contains the shared generation prompt. Current authored card masters live in
+[`authoring/masters/`](../../mod_source/better-discovery-guides/authoring/masters/),
+and loading masters in [`authoring/lessons/`](../../mod_source/better-discovery-guides/authoring/lessons/).
+These are source inputs, not historical review captures.
 
-`authoring/prepare_art.py REVIEW_BUNDLE` creates deterministic runtime derivatives and
-facsimile model overrides. It does not generate new artwork. Visually inspect every
-master for forbidden figures, subject accuracy, text artifacts, and small-scale clarity,
-then review the actual compact/wide reader and loading surfaces. Preserve earlier
-review bundles as superseded evidence rather than mixing them into the shipped roster.
+`authoring/prepare_art.py` uses those canonical inputs to create deterministic runtime derivatives
+and facsimile model overrides; an optional active-task `REVIEW_BUNDLE` can override them during
+review. It does not generate new artwork. Visually inspect every master for forbidden figures,
+subject accuracy, text artifacts and small-scale clarity, then inspect actual compact/wide reader
+and loading surfaces when runtime review is explicitly authorized. Contact sheets, original
+imagegen/session outputs and earlier review bundles are disposed of at handoff under
+[generated-data.md](policies/generated-data.md), not archived as superseded evidence.

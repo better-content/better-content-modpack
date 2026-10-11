@@ -90,8 +90,13 @@ private fun activeMods(): List<SourceMod> {
     }.toList()
 }
 
-private fun allSourceNames(): List<String> = Files.list(workspace.resolve("mod_source")).use { stream ->
-    stream.filter(Files::isDirectory).map { it.fileName.toString() }.sorted().toList()
+private fun allSourceNames(): List<String> {
+    val supported = activeMods().map { it.repository }.toSet() +
+        setOf("burnt-grass-compat", "dynamic-trees-dimension-compat")
+    return Files.list(workspace.resolve("mod_source")).use { stream ->
+        stream.filter { Files.isDirectory(it.resolve(".git")) && it.fileName.toString() in supported }
+            .map { it.fileName.toString() }.sorted().toList()
+    }
 }
 
 private fun sourceTasks(name: String, active: List<SourceMod>): List<String> = when (name) {
@@ -124,7 +129,7 @@ private fun launch(command: List<String>, cwd: Path, log: Path, environment: Map
 private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, Any?> {
     val active = activeMods()
     val names = if (all) allSourceNames() else listOf(selected ?: fail("source run needs --repo or --all"))
-    if (names.size != 47 && all) fail("source inventory must contain 47 repositories; found ${names.size}")
+    if (all && !names.containsAll(active.map { it.repository })) fail("active source inventory is incomplete")
     val completed = linkedMapOf<String, String>()
     val staged = controlPath(id).parent.resolve("source-jars")
     Files.createDirectories(staged)
@@ -196,6 +201,12 @@ private fun readStatus(id: String): String {
 }
 
 when (args.firstOrNull()) {
+    "begin", "finish" -> {
+        // Task lifetime is explicit: never delete a candidate between tests.
+        exitProcess(ProcessBuilder(listOf("python3", "-B",
+            root.resolve("scripts/workspace-maintenance.py").toString()) + args)
+            .directory(root.toFile()).inheritIO().start().waitFor())
+    }
     "list" -> {
         if (args.size != 1) fail("list accepts no options")
         val active = activeMods()
@@ -287,5 +298,5 @@ when (args.firstOrNull()) {
             exitProcess(if ("\"state\":\"passed\"" in status) 0 else if ("\"state\":\"running\"" in status) 4 else 1)
         }
     }
-    else -> fail("usage: test.main.kts <list|plan|run|submit|status|wait|evidence|retry> ...")
+    else -> fail("usage: test-control.main.kts <list|plan|run|submit|status|wait|evidence|retry|begin|finish> ...")
 }

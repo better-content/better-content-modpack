@@ -1,55 +1,95 @@
-# Better Content Docs
+# Better Content documentation
 
-This directory contains the pack's living documentation. Add another focused living document when a durable subject no longer fits an existing one; the repository remains the source of truth and the documents summarize current intent and operating state.
+## Start here: authority map
 
-## Current Docs
+This is the single navigation entry point for maintained Better Content documentation. There is
+one canonical owner per standing shared rule; repository entry points link here rather than
+copying policies. All shared Better Content policy is versioned in this modpack repository.
 
-- `README.md`: docs index, pack thesis, and living-doc policy.
-- `progression.md`: progression spine, gates, chokepoints, pinnacle powers, and deadlock checks.
-- `content_systems.md`: recipes, materials, chemistry, casings, loot, trades, and content surfaces.
-- `crafting_policy.md`: enforceable crafting-graph definition, selector rules, invariants, and known debt.
-- `balance_policy.md`: canonical register of upstream departures, owners, acquisition channels, rationale, and verification.
-- `better_discovery_guides.md`: learning-surface ownership, authoring, evidence, and review policy.
-- `death_system.md`: death-tension intent, player lifecycle, current pack rules, ownership, third-party surfaces, and integration seams.
-- `realistic_ore_processing.md`: theory, invariants, yield semantics, authoring rules, and maintenance contract for geological deposit processing.
-- `refactor_manifests.md`: current executable-script, progression, and custom-system ownership manifests.
-- `weapon_balance_philosophy.md`: cross-system weapon balance doctrine, measurement rules, exceptions, and the current TCon/Epic Fight implementation.
-- `performance_and_mods.md`: current mod state, runtime policy, performance configuration, worldgen constraints, and compatibility ownership.
-- `custom-mod-workspace.md`: canonical custom-mod repositories, identities, artifacts, validation, and deployment workflow.
-- `better_survival_physiology.md`: canonical aspect identities and their parallel stat, bodily-state, geological, visual, and audio expression.
-- `threads.md`: contextual Thread discovery, reader, lineage collection, and cosmetic facsimile contract.
-- `thread_art_direction.md`: the illustrated deck's reproducible impossible-archive visual grammar and card briefs.
-- `lineage_endgame.md`: durable entropy caching, Condemnation, strategic curse, and mechanics-first lore model.
-- `testing.md`: Dev/Dist/Debug boundaries, evidence ownership, and the fresh-distribution workflow.
+| Subject | Canonical owner |
+|---|---|
+| Lane environment, tools and Herdr | `/home/dev/.config/agent-guidance/lane.md` (same frozen guide for Pi/Codex) |
+| Polyrepo layout, ownership, commits and source/input boundary | [Workspace policy](policies/workspace.md) |
+| Worlds/saves, outputs, caches and task-handoff disposal | [Generated data](policies/generated-data.md) |
+| Shared tests, release procedure and authorization | [Testing](testing.md) |
+| Native inventory implementation/acceptance | [Inventory parity](inventory-parity.md) |
+| Local build commands and unique mod constraints | Owning repository `AGENTS.md` / `README.md` |
+| Repository identities, provider graph and staging | [Custom-mod workspace](custom-mod-workspace.md); executable `gradle/active-custom-mods.json` |
+| Installed local SDKs/tools | [Toolchains](toolchains.md) |
 
-## Pack Thesis
+Current explicit user instructions determine task scope/authorization. Source/configuration
+establish implemented behavior. Exact-candidate observations establish runtime results only for
+that candidate during the active task. Design intent is not implementation, and a historical
+pass is not fresh verification. If source and documented intent conflict, resolve the specific
+owner decision rather than declaring either universally authoritative. Mark undiscoverable facts
+`UNKNOWN`; do not invent acceptance. Task plans/claims and cached fixture instructions are not
+standing policies or human authorization.
 
-Better Content is a Forge 1.20.1 expert-pack content layer built around systems natural to its world. The current working model calls those systems **world spines**. Matter, Place, and Life make expected reality mechanically present; Blood, Fonts, and Traces Into Lineage each propose a different supernatural “what if.” History is a cross-cutting persistence rule, while Society emerges where embodied actors, local resources, and remembered consequences meet.
+## Living subjects
 
-“Tech,” “magic,” and “adventure” remain useful player-facing packages, but they are not assumed to be causal roots. Tech chiefly packages organized mastery of Matter under Place constraints. Formal magic records and reproduces powers whose authority comes from a magical root. Adventure packages travel, danger, discovery, and exchange across several roots. This distinction is a working model for evaluating progression, not a claim that the current implementation already conforms to it.
+### Progression, matter and gameplay
 
-Geological deposits, Y-band locality, processing ladders, machine casing tiers, spirit/villager markets, obelisk and dimension routes, body systems, persistent traces, and the death/respawn life-length loop are all progression surfaces through which those roots meet.
+- [Progression](progression.md): spine, gates, acquisition and deadlock checks.
+- [Content systems](content_systems.md): recipes, materials, machines, loot, trades and surfaces.
+- [Crafting policy](crafting_policy.md): graph, selectors, invariants and known debt.
+- [Balance policy](balance_policy.md): upstream departures, owners and verification.
+- [Realistic ore processing](realistic_ore_processing.md): geological processing and yields.
+- [Stone/cobble compatibility](stone-cobble-compatibility.md).
+- [Food progression](food_progression.md) and [body/aspect identities](better_survival_physiology.md).
+- [Death system](death_system.md), [lineage/endgame](lineage_endgame.md).
+- [Weapon balance](weapon_balance_philosophy.md).
+- [Dimension ecology](dimension_ecology.md).
 
-The main source trees are `kubejs/`, `config/`, `defaultconfigs/`, `datapacks/`, `globalresources/`, `resourcepacks/`, `shaderpacks/`, active `mods/*.pw.toml`, and bundled custom jars in `mods/`. Root `dist.sh` is the package-once primitive, `test.main.kts` exposes Dev, Dist, and Debug tiers, and `release.main.kts` owns explicitly requested fresh Dist candidates; `package.sh` remains the internal packager.
+### Teaching and visual authoring
 
-Runtime directories, raw logs, crash reports, screenshots, profiler dumps, generated runtime dumps, and local launcher state are not documentation. Keep them under `~/.cache/bc`, `server-instance/`, `server-template/`, or `generated/` unless explicitly requested otherwise.
+- [Discovery guides](better_discovery_guides.md): sole shared teaching/authoring policy.
+- [Threads](threads.md): contextual discovery, lineage and facsimiles.
+- [Thread art direction](thread_art_direction.md): visual grammar and canonical authored masters.
+- [Render geometry](distant_horizons_render_geometry.md): pinned DH source boundary, not pixel proof.
 
-## Doc Policy
+### Integration and acquisition
 
-Do not add new one-off audits, pass reports, JSON summaries, raw logs, RAM dumps, or diagnostics under `docs/`. Fold durable conclusions into the closest living doc and leave raw evidence in the run root.
+- [Performance/mod integration](performance_and_mods.md).
+- [Cataclysm/cave encounters](cataclysm_better_cave_encounters_integration.md).
+- [Untamed Wilds](untamed_wilds_integration.md).
+- [Native EMI transport](native-emi-server-transport.md).
+- [Native material-cost startup ordering](native-material-cost-prewarm.md).
+- [Malum Soulwood](malum_soulwood_acquisition.md).
+- [PneumaticCraft capability](pneumaticcraft_capability_acquisition.md).
+- [Tech component acquisition](tech01_component_acquisition.md).
+- [Script/ownership manifests](refactor_manifests.md), [script summaries](../kjs-script-summaries.md).
 
-When progression behavior changes, update `progression.md` and/or `content_systems.md`. When crafting-graph scope, mod categorization, item-support policy, exception families, or durable integration findings change, update `crafting_policy.md` and the affected `balance_policy.md` row. When player-facing teaching or authoring policy changes, update `better_discovery_guides.md`. When the Realistic Ores processing model, yields, assays, media, solvents, or extension rules change, update `realistic_ore_processing.md`. When executable script inventory or cross-repository ownership changes, update `refactor_manifests.md` and the root `kjs-script-summaries.md`. When Systemic Salience mappings or presentation change, update `better_survival_physiology.md`. When weapon references, normalized bands, compensation rules, generic-effect valuation, animation coverage, alternate modes, or signature exceptions change, update `weapon_balance_philosophy.md`. When custom-mod ownership, identity, validation, or deployment changes, update `custom-mod-workspace.md`. When mod composition, performance, or runtime compatibility changes, update `performance_and_mods.md`. Pack-level suites are run only on explicit user instruction through `test.main.kts`, as defined in the root `AGENTS.md` and summarized in `testing.md`.
+## Pack thesis
 
-Claims in these docs must be checked against their current implementation or evidence authority.
-The tracked pack, including its Packwiz manifests, bundled custom JARs, config, data, and scripts,
-defines the current target; owning custom-mod source defines the mechanics represented by those
-JARs. Complete generated snapshots and named test evidence establish observed runtime state only for
-the exact candidate hashes recorded by the same run. Match a snapshot ID to its server-run events
-and `candidate_selected` hashes before calling it current. An unmatched or older snapshot remains
-historical candidate evidence even when it is the latest complete snapshot. Design intent, future
-systems, candidate art, and manual-playtest surfaces must remain explicitly labeled. Documentation
-and implementation have no blanket precedence when they conflict; stop and obtain an owner decision
-for the specific behavior, then reconcile both sides. If an ID, mod, recipe, config, or runtime
-result cannot be confirmed, write `UNKNOWN` or frame it as a future candidate.
+Better Content is a Forge 1.20.1 expert-pack content layer built around systems natural to its
+world: Matter, Place and Life make expected reality mechanically present; Blood, Fonts and
+Traces Into Lineage introduce distinct supernatural premises. History is a cross-cutting gameplay
+persistence rule; Society emerges from actors, resources and consequences. This is a design
+model, not a claim that every implementation already conforms.
 
-Do not add historical notes, generated Markdown reports, old schema notes, or retired tool matrices to the tracked tree. Fold durable conclusions into these living files and keep raw evidence outside the repository; do not recreate `quarantine/docs/`. Do not classify `.txt` files by extension alone: many launcher, Forge, FancyMenu, KubeJS, shaderpack, and mod files are live config or runtime inputs.
+Tech, magic and adventure are player-facing packages rather than assumed causal roots.
+Geological deposits, local processing, machine tiers, spirit markets, Fonts, bodily systems,
+traces and the death/respawn loop are progression surfaces connecting those roots.
+
+## Documentation contract
+
+Keep current durable guidance in the closest living subject. Each document states purpose/scope,
+its owner/source authority and relevant operating/verification boundaries, with related links
+where useful. Mod-specific design stays in that source repository; shared policy links to it.
+READMEs describe purpose and local use; AGENTS files describe unique agent constraints and exact
+local commands. Do not duplicate shared testing, retention or inventory-acceptance prose.
+
+Update the subject and ownership/script inventories when implementation changes. Use current
+manifests and source to reconcile names, counts, commands and API claims. Do not hard-code an
+active-mod count in multiple documents. Machine-readable catalogs stay authoritative for their
+own data rather than becoming competing narrative policy.
+
+Do not add one-off audits, pass reports, raw logs, dumps, snapshots, historical plans or diagnostic
+JSON under docs, or recreate `quarantine/docs/`. During active tasks, outputs live in classified
+disposable roots; at handoff they are removed under [generated-data.md](policies/generated-data.md).
+Do not copy old acceptance claims or advertise deleted evidence paths as still available.
+Changelogs and license notices are repository history/legal metadata, not retention authorities.
+Runtime `.txt` files may be live configuration; do not classify by extension alone.
+
+The lightweight link/ownership contract is `python3 -B scripts/check_documentation.py` from the
+modpack. It examines maintained Git/source docs, not generated fixtures or installed vendor docs.

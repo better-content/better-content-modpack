@@ -1,13 +1,11 @@
 # Native startup policy: pinned updates and casting-cache ordering
 
-## Scope and retained evidence
+## Scope and authority
 
-The focused build403 run `20261008T063512Z-3343772` passed all 202 journal rows,
-initial merge, real client reconnect, and fresh-server-restart full-NBT persistence
-checks. Its final strict log audit failed. The retained `checkpoint_failed` event
-names Collective's update-check warning and TConstruct's inconsistent material cost,
-as well as two separately owned EMI/Sophisticated issues. Process cleanup completed
-with no surviving PIDs. Those observations are not a strict-suite pass.
+This document owns the native startup/configuration and construction-order boundary.
+The authoritative inputs are `config/collective.json5` and
+`kubejs/server_scripts/policy/native_material_cost_prewarm.js`. Historical build reports
+are disposable, not inspectable standing dependencies or fresh runtime proof.
 
 This change disables an optional network feature through its native setting and
 changes native recipe construction order. It does not upgrade dependencies, filter
@@ -30,9 +28,8 @@ Pinned TConstruct `3.11.2.166` has these native recipes:
 - `tconstruct:tools/parts/fake_storage_block_casting`: `item_cost: 9`;
 - `tconstruct:tools/parts/fake_storage_block_composite`: `item_cost: 9`.
 
-Inspection of the retained candidate's mod recipe resources found no competing
-fake-storage casting JSON with a different cost. The pack scripts do not override
-those costs. This does not substitute for a live effective-recipe observation.
+The pack scripts do not override those costs. Resource/source inspection does not
+substitute for a live effective-recipe observation.
 
 `MaterialCastingRecipe` construction calls the public native
 `MaterialCastingLookup.registerItemCost(IMaterialItem, int)`. Composite casting
@@ -78,6 +75,6 @@ Read-only bytecode inspection established:
 
 The focused Dev source guards verify the native feature key, supported priority,
 exact four filters, public cache call, and absence of recipe/cache mutation. These
-checks are not native runtime proof. No packaging, refresh, commit, or pack retry is
-performed by this authoring change; combined gates and the next immutable-candidate
-release remain coordinator-owned.
+checks are not native runtime proof. Packaging, refresh and pack retry remain separately authorized under
+[testing.md](testing.md). Task evidence follows
+[generated-data.md](policies/generated-data.md); no old fixture is permanently retained.

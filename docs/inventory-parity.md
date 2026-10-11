@@ -1,42 +1,69 @@
-# Native combined inventory — audit-based authority and explicit UI acceptance
+# Native inventory parity and acceptance
 
-The backpack-backed overhaul is removed. Minecraft owns nine hotbar/27 main slots regardless of backpack equipment; Curios, Aether and Sophisticated Backpacks retain native authority. The approved journal integration now adds native equipment/Curios extra slots and genuine menu-local personal 2×2 crafting only to the equipped personal `BackpackContainer`, with restored original Record and EMI panels. This narrowly supersedes the former presentation-only/no-appended-slots boundary. Custom Sort/Stack/Trash Cursor/Undo remain retired.
+## Scope and authority
 
-The user's revised scope supersedes the27-row qualification requirement: **audit only for inventory; remove all custom storage fixtures from implementation; keep other independent tests**. Native/third-party storage semantics are not independently requalified. Historical player ingredient/output loss remains unexplained; affected worlds are untouched.
+This is the sole shared implementation/acceptance contract for inventory GUI and compatibility
+changes in any Better Content repository. The Journal is one player-facing inventory backed by
+two native paths, not two separate features. Detailed Journal mechanics and local commands
+belong in [its repository](../../mod_source/better-journal-inventory/README.md).
 
-## Exact acceptance gates
+## Mandatory native paths
 
-1. **Production/artifact audit:** no retired menus/screens/backends, inventory aliases, capability replacement, storage click/transfer/prediction/channel engines or custom EMI inventory handlers. Explicitly permit only pinned native equipped-context selection/guarding, native extra-slot schema/reconstruction, a transient genuine 2×2 component and scoped native EMI metadata/target/source integration. Native storage/player handlers and existing protocols remain authoritative; no fake installed upgrade, personal NBT or root initialization/substitution. Added-slot layout is permitted; GUI scale/window mutation and synthetic pointer/mouse/scroll/resize are not. Twelve one-slot Curios policy/Aether consolidation and original panels remain. Theme palette, alpha/dimensions/UV/coloured pixels,64MiB cache/release/exclusions/native fallback retain their source tests.
-2. **Local source/pack Dev:** changed repositories' documented checks, production-retirement/removal guards, diagnostic mapping/non-cancellation/isolation, lifecycle protocol rejection tests and scoped diff checks.
-3. **Storage-free world lifecycle:** fresh seeded dedicated world boots/stops gracefully; typed Blight claims read from disk; staged integrated world reaches EMI readiness, saves marker/time and closes normally; separate client reopens with lineage state; marker equality/nondecreasing time; narrowly bound genuine verify save/exit; post-exit typed Blight preservation; logs/hashes/process cleanup. No item seed, craft action, ledger, backpack NBT/root oracle or storage reconnect/restart.
-4. **Baseline complete Dist:** fast/diff, exact candidate structural/content checks, full-pack dedicated boot, real client join/readiness/heartbeat, strict logs/observational audits, unchanged candidate hashes and process cleanup. No custom storage fixture is installed or invoked.
+Every affected change covers both:
 
-5. **Actual inventory UI acceptance:** inspect real full-pack framebuffer captures at 3440×1440/scale3 for native no-bag Curios/recipebook, small/large equipped combined views, fixed player/personal/equipment areas, original side panels, EMI 2×2/native explicitly selected 3×3, Record/Index/Favorites, compact/reload/disabled/foreign fallbacks. Use fresh disposable worlds only. Real human gestures or normal native API actions; no synthetic pointer/mouse/scroll/resize. Pointer-only controls lacking review remain explicitly unverified, not fully accepted. On loss/duplication stop and retain world/logs; no repair/reseed.
+1. **No backpack:** native CuriosScreen/CuriosScreenV2 and CuriosContainer variants, including
+   vanilla InventoryScreen/InventoryMenu fallback.
+2. **Equipped backpack:** native Sophisticated Backpacks screen/menu, combined equipment and
+   menu-local personal crafting component.
 
-Full Debug dimensions/campaigns/extended restart remain deferred. Source/compile/audit/lifecycle/Dist cannot substitute for visual or interaction proof. Build420 keeps its valid audit/lifecycle/Dist verdicts but its inventory UI is unaccepted and superseded by these requirements. No weaker seed/time budget/dependency set/warning policy or lucky retry is allowed.
+Matching artwork does not imply shared crafting menus, callbacks, output slots or packets.
+Share integration where practical without replacing native authority. Minecraft owns the 27 main
+and nine hotbar slots. Curios, Aether and Sophisticated Backpacks own their native storage and
+protocols. Do not reintroduce retired custom storage backends, transfer/prediction engines,
+inventory aliases, Sort/Stack/Trash Cursor/Undo, fake installed upgrades, personal NBT/root
+initialization or custom EMI storage handlers. Keep fixture commands/worlds out of production JARs.
 
-## Removed implementation and retained diagnostics
+Polymorph uses its native selector/widget and server selection authority on both paths, not a
+decorative icon. Personal EMI defaults to the native personal 2×2 matrix; explicit installed
+native crafting-tab selection uses its independent 3×3 matrix. No carried/nested backpack search
+or silent root repair. Keep native player/equipment areas and original Record/EMI panels.
 
-The27-case driver, storage commands/targets, schemas/manifests/properties, backpack checkpoint, packet-action observer, combat isolation and all journal storage test build/staging/harness plumbing are deleted, not toggled off. No compatibility aliases remain. Departing source/history/support JAR and harness snapshot are preserved outside active repositories at `/home/dev/workspace_artifacts/reviews/native-storage-fixtures-retired-20261009/`. Prior storage reports retain their original outcome.
+## Acceptance before claiming completion
 
-Nonfinite-rotation/Untamed-species observers now belong to separate test-only runtime diagnostics under better-runtime-diagnostics. Only `bc.pack_test.diagnostics.*` metadata is used; probes cannot cancel or replace native behavior/warnings. Copied fixture policy classifies only this diagnostic namespace and keeps blocking unknown namespaces. All retired/backend/test-support artifacts, including renamed copies and the diagnostic supplement, are forbidden in distributions.
+- Audit source and actual packaged artifacts for native authority and absence of retired engines.
+- Run the changed repositories' documented local checks and authorized pack checks.
+- Inspect real in-game captures of **both no-backpack and equipped states using the same changed
+  artifact**. Exercise the affected native behavior on both. For Polymorph this includes an actual
+  conflicting recipe, visible selector/choices, and correct server output after each selection.
+- Identify artifact hashes and native screen/menu types; cover Curios variants/vanilla fallback,
+  or explicitly mark them unverified. Review representative equipped sizes, compact views,
+  original panels, reload/disabled/foreign fallbacks when affected by the change.
+- Native API verification and actual human pointer verification are distinct verdicts. Automated
+  tests must not synthesize pointer/mouse movement/clicks/scroll/resize. A mocked GUI, static check,
+  successful client join or equipped-only frame cannot replace paired visual acceptance.
 
-The genuine verify-exit protocol keeps `bc.pack_test.verify_exit.v1` and exact payload fields/limits, using `bc.pack_test.verify_exit.*` run/player properties and exact `fixture/world-lifecycle` request directory. Canonical/symlink-safe paths, UUID/run/world/nonce, native reference identity, EMI readiness, loaded observation, marker/time oracle and one-shot native exit remain mandatory. Storage checkpoint eligibility is removed; lifecycle eligibility is not weakened.
+Skipping either native path or its real visual/behavioral verification is an implementation and
+acceptance failure for the owning assistant, not completion or inventory-wide partial success.
+Without explicit deployment/runtime authorization, perform local checks and state **paired visual
+acceptance pending**. This contract does not authorize unsolicited deployment or a distribution.
 
-## Commands and immutable release
+## Independent runtime gates and reporting
 
-- Journal: `./gradlew verifyFull stageRuntimeJar`.
-- Runtime diagnostics: `./gradlew build`.
-- Pack Dev: `./test.main.kts dev`.
-- One canonical fresh candidate/focused lifecycle: `./release.main.kts --target world-save`.
-- Complete unchanged prepared Dist: `BC_RELEASE_PREPARED=1 ./test.main.kts dist`.
+Inventory source/artifact audit does not independently requalify third-party storage semantics.
+Do not recreate the removed 27-case custom storage qualification driver, commands, fixtures or
+ledger. Keep independent diagnostic mapping/isolation, storage-free world-lifecycle/Blight and
+baseline Dist checks in their owning harness; full Debug remains separately authorized.
+No source/audit/lifecycle/Dist result substitutes for visual or interaction proof.
 
-Seal candidate/provenance once and audit actual ZIP/JAR bytes. Source/content corrections require a new candidate. Preserve first useful failure/logs/fixtures/hashes/cleanup; never relabel old failed candidates under revised criteria. Handoff lists audit scope, revisions, ZIP hashes, run IDs, cleanup, Java17 fresh-instance instructions and remaining manual acceptance. A focused pass alone is not complete Dist.
+During an active task, retain enough captures/logs/hashes for actual review and first-failure
+diagnosis; do not relabel a failed candidate as passed or weaken safety assertions for a retry.
+At final handoff dispose of worlds, captures, ZIPs and evidence under
+[generated-data.md](policies/generated-data.md), regardless of result. This workspace is not a
+save backup service. Do not claim recovery of historical item loss or fresh runtime verification
+from source-only checks. Current source requirements survive; historical artifact paths do not.
 
-## Manual checklist and world safety
+## Related policies
 
-Use a fresh disposable instance/world. No bag opens native Curios with twelve visible slots and native 2×2/recipebook. An initialized equipped `curios / better_backpack / 0` opens native Sophisticated with its bag grid/scrolling, native 27+9 player slots, native equipment/Curios and always-visible personal 2×2; no carried/nested search. Missing roots fall back without repair. Personal EMI defaults to 2×2, explicit native crafting-tab selection chooses independent native 3×3, closing the tab returns to personal. Review native controls, equip/reject/unequip, crafting/result interactions, tooltips/cursor, original Record/EMI navigation, representative nutrition/aspects/body/Mend, compact/reload/disabled/foreign views. Record actual visual and human interaction verdicts separately. No automated pointer pass is implied.
-
-The original overhaul archive remains `/home/dev/workspace_artifacts/reviews/inventory-overhaul-retired-20261008/`; failed398–419 evidence and sealed ZIPs remain unchanged. Original411ZIPs are unavailable and must not be reconstructed. Historical413 is superseded/unsafe for important worlds.
-
-No affected user-world access/migration/repair, existing backpack-root initialization or recovered-item claims. Back up important worlds before upgrading; fresh Java17 client/server instances only for qualification. Do not downgrade after saving with the replacement.
+- [Workspace authority](policies/workspace.md)
+- [Testing and release authorization](testing.md)
+- [Journal-specific acceptance](../../mod_source/better-journal-inventory/docs/inventory-acceptance.md)
