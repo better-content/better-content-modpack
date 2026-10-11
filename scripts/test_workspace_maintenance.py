@@ -248,6 +248,23 @@ class DisposalTests(unittest.TestCase):
         self.assertEqual('delete', self.action(path))
         namespace = self.file('.tmp/.X11-unix/operating-socket')
         self.assertEqual('protect_input', self.action(namespace.parent))
+        lock = self.file('.tmp/.X42-lock', str(os.getpid()))
+        original = Path.read_text
+        def read(path, *args, **kwargs):
+            return 'Xvfb' if path == Path(f'/proc/{os.getpid()}/comm') else original(path, *args, **kwargs)
+        with patch.object(Path, 'read_text', read):
+            self.assertEqual('defer_active', self.action(lock, refs=m.process_references(self.root)))
+
+    def test_parent_consumer_is_not_ignored(self):
+        import sys
+        p = self.file('.cache/parent/output')
+        code = ('import importlib.util,json,sys; from pathlib import Path; '
+                's=importlib.util.spec_from_file_location("m",sys.argv[1]); '
+                'm=importlib.util.module_from_spec(s); s.loader.exec_module(m); '
+                'print(json.dumps([(pid,str(p)) for pid,p in m.process_references(Path(sys.argv[2]))]))')
+        with p.open() as handle:
+            result = subprocess.check_output([sys.executable, '-B', '-c', code, m.__file__, str(self.root)], text=True)
+        self.assertIn([os.getpid(), str(p)], json.loads(result))
 
     def test_provider_build_outputs_deleted_source_graph_untouched(self):
         p = self.file('better-content-modpack/build/providers/api.jar')

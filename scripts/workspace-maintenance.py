@@ -30,7 +30,7 @@ PROTECTED = ['.codex/auth.json', '.codex/config.toml', '.codex/AGENTS.md',
              '.codex/hooks.json', '.codex/packages', '.codex/plugins', '.codex/skills',
              '.pi/agent/auth.json', '.pi/agent/settings.json', '.pi/agent/extensions',
              '.sdkman', '.local/bin', '.local/lib', '.gradle/jdks',
-             '.cache/ms-playwright', '.cache/selenium', '.tmp/.ICE-unix', '.tmp/.X11-unix',
+             '.cache/ms-playwright', '.cache/selenium', '.tmp/.ICE-unix', '.tmp/.X11-unix', '.tmp/.font-unix', '.tmp/.XIM-unix',
              'better-content-modpack/mods', 'workspace_artifacts/README.md']
 
 
@@ -146,14 +146,9 @@ def discover(workspace):
 
 def process_references(workspace):
     """Collect live cwd/open files/maps/absolute argv without emitting secrets."""
+    # The cleanup interpreter is dependency-free; callers may still consume compiled
+    # Kotlin script caches, sessions or output FDs and must not be exempted.
     ignored = {os.getpid()}
-    pid = os.getppid()
-    while pid > 1 and pid not in ignored:
-        ignored.add(pid)
-        try:
-            pid = int(Path(f'/proc/{pid}/stat').read_text().rsplit(')', 1)[1].split()[1])
-        except (OSError, ValueError):
-            break
     refs = []
     for proc in Path('/proc').iterdir():
         if not proc.name.isdigit() or int(proc.name) in ignored:
@@ -203,6 +198,14 @@ def process_references(workspace):
         fields = line.split()
         if len(fields) >= 8 and fields[7].startswith(str(workspace) + '/'):
             refs.append(('unix-socket:' + fields[6], Path(fields[7])))
+    # X servers close their PID lock FD after initialization but still need the lock.
+    for lock in (workspace / '.tmp').glob('.X*-lock'):
+        try:
+            pid = int(lock.read_text().strip())
+            if Path(f'/proc/{pid}/comm').read_text().strip() in {'Xvfb', 'Xorg', 'Xwayland'}:
+                refs.append((pid, lock))
+        except (OSError, ValueError):
+            pass
     # Pi does not continuously hold its session FD open. Herdr publishes identities.
     session = os.environ.get('HERDR_SESSION')
     if session:
