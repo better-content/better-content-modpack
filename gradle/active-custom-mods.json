@@ -1,5 +1,25 @@
 {
   "schema": "bc.active_custom_mods.v1",
+  "verificationInputs": [
+    "gradle/**",
+    "build.gradle.kts",
+    "settings.gradle.kts",
+    "gradle.properties",
+    "docs/**",
+    "config/**",
+    "kubejs/**",
+    "datapacks/**",
+    "mods/*.pw.toml",
+    "src/main/kotlin/**",
+    "release.main.kts",
+    "test.main.kts",
+    "test-control.main.kts",
+    "scripts/prepare_dev_inputs.py",
+    "scripts/testing_session.py",
+    "package.sh",
+    "dist.sh",
+    ".github/ci-source-revisions.json"
+  ],
   "mods": [
     {
       "repository": "better-airtight-machines",
@@ -405,6 +425,7 @@
       "repository": "better-runtime-diagnostics",
       "modId": "better_runtime_diagnostics",
       "artifact": "better-runtime-diagnostics-0.1.0.jar",
+      "supportArtifacts": ["build/libs/better-runtime-test-support.jar"],
       "tasks": [
         "build",
         "stageRuntimeJar"

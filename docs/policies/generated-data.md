@@ -25,6 +25,17 @@ expanded staging, worlds, evidence, logs, caches or source-build JARs. Cleanup r
 paths as protected by latest-build policy and rechecks the selection before deletion. Tests never
 use this retention rule to obtain historical reports or undeclared prerequisites.
 
+## Conversation verification receipts
+
+The bounded control receipts under the modpack's `.worklane/testing-sessions/` are not evidence
+archives. They contain only live-conversation source/artifact/input verification metadata, as
+specified in [testing.md](../testing.md). They can survive task handoffs only for their owning
+active conversation; logs, reports, build outputs, caches and worlds still cannot. Another
+conversation cannot adopt an old receipt. Explicit session end removes it; uncertain owner
+liveness requires reconciliation, not inferred permission to reuse or delete it. Missing outputs
+at the next authorized preparation invalidate artifact reuse. Automatic owner replacement
+cleanup is not yet implemented; end receipts explicitly.
+
 ## Task lifetime
 
 Keep outputs while their task/consumer is active, including diagnosis, retries and sequential

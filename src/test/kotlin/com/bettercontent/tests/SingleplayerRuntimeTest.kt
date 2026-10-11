@@ -53,13 +53,13 @@ class SingleplayerRuntimeTest {
     }
 
     @Test @Order(2)
-    fun debugFreshWorldBootSaveAndReopen() {
+    fun debugSeededWorldSaveAndReopen() {
         if (evidence.run.tier != "debug") {
-            evidence.run.event("scenario_omitted", mapOf("name" to "fresh world boot save reopen", "tier" to evidence.run.tier))
+            evidence.run.event("scenario_omitted", mapOf("name" to "seeded integrated world persistence", "tier" to evidence.run.tier))
             return
         }
         if (evidence.run.target == null) assumeTrue(title, "title screen prerequisite failed")
-        evidence.run.checkpoint("fresh world boot save and reopen") {
+        evidence.run.checkpoint("seeded integrated world persistence") {
             if (evidence.run.target == null) client.close()
             evidence.run.event("blight_locus_seed_provenance", BlightLocusPersistence.Observation(
                 BlightLocusPersistence.SEED, emptySet()).evidence("new_fixture_seed_requested"))

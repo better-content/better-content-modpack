@@ -50,6 +50,13 @@ object Hashes {
 
 object CandidateLocator {
     fun locate(root: Path): CandidatePair {
+        System.getenv("BC_CANDIDATE_BINDING")?.takeIf(String::isNotBlank)?.let {
+            val pair = CandidateBinding.select(root, Path.of(it))
+            System.getenv("BC_PACK_TEST_HANDOFF")?.takeIf(String::isNotBlank)?.let { handoff ->
+                PackTestHandoff.validate(Path.of(handoff), pair)
+            }
+            return pair
+        }
         val dist = root.resolve("dist")
         require(dist.isDirectory()) { "dist/ is absent; an explicit fresh dist is required before pack-level testing" }
         val clients = Files.walk(dist).use { stream ->
@@ -249,17 +256,11 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
     fun capture(name: String, command: List<String>, cwd: Path = config.root) {
         val output = directory.resolve(name)
         try {
-            val process = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true)
-                .redirectOutput(output.toFile()).start()
-            if (!process.waitFor(30, TimeUnit.SECONDS)) {
-                process.destroyForcibly()
-                process.waitFor()
-                error("evidence capture timed out: $name")
-            }
-            check(process.exitValue() == 0) { "evidence capture exited ${process.exitValue()}: $name" }
+            val status = BoundedCommand.run(cwd, command, output, Duration.ofSeconds(30))
+            check(status == 0) { "evidence capture exited $status: $name" }
         } catch (error: Exception) {
             failures += "evidence capture $name: ${error.message ?: error::class.java.name}"
-            output.writeText("evidence capture failed: ${error.message}\n")
+            Files.writeString(output.resolveSibling(output.fileName.toString() + ".failure.txt"), "evidence capture failed: ${error.message}\n")
             throw error
         }
     }
@@ -309,12 +310,12 @@ class ManagedProcess(
 
     init {
         log.parent.createDirectories()
-        val builder = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true)
+        val builder = ProcessBuilder(listOf("setsid", "--wait") + command).directory(cwd.toFile()).redirectErrorStream(true)
             .redirectOutput(ProcessBuilder.Redirect.appendTo(log.toFile()))
         builder.environment().putAll(environment)
         process = builder.start()
         input = process.outputStream.bufferedWriter()
-        tracker = ProcessTracker(process.toHandle())
+        tracker = ProcessTracker(process.toHandle(), process.pid())
     }
 
     val alive: Boolean get() = process.isAlive
@@ -334,7 +335,7 @@ class ManagedProcess(
             val text = if (log.exists()) log.readText() else ""
             if (pattern.containsMatchIn(text)) return
             check(process.isAlive) { "$name exited before $description; see $log" }
-            Thread.sleep(500)
+            TimeUnit.NANOSECONDS.sleep(minOf(500_000_000, (deadline - System.nanoTime()).coerceAtLeast(0)))
         }
         captureDiagnostics(log.parent.resolve("$name-timeout"))
         error("timed out waiting for $description; see $log")
@@ -349,7 +350,7 @@ class ManagedProcess(
             }
             if (pattern.findAll(text).count() >= expected) return
             check(process.isAlive) { "$name exited before $description; see $log" }
-            Thread.sleep(500)
+            TimeUnit.NANOSECONDS.sleep(minOf(500_000_000, (deadline - System.nanoTime()).coerceAtLeast(0)))
         }
         captureDiagnostics(log.parent.resolve("$name-timeout"))
         error("timed out waiting for $description; see $log")
@@ -357,18 +358,25 @@ class ManagedProcess(
 
     fun captureDiagnostics(prefix: Path) {
         prefix.parent.createDirectories()
+        val deadline = ScenarioDeadline(Duration.ofSeconds(30))
+        val errors = mutableListOf<String>()
         runCatching {
-            ProcessBuilder("ps", "-ef", "--forest").redirectOutput(prefix.resolveSibling("${prefix.name}-processes.txt").toFile()).start().waitFor()
+            val status = BoundedCommand.run(log.parent, listOf("ps", "-o", "pid,ppid,etime,pcpu,pmem,stat,comm", "-p",
+                tracker.trackedPids().sorted().take(64).joinToString(",")),
+                prefix.resolveSibling("${prefix.name}-processes.txt"), minOf(Duration.ofSeconds(5), deadline.requireRemaining()))
+            check(status == 0) { "process diagnostic exited $status" }
+        }.exceptionOrNull()?.let { errors += it.toString() }
+        val handles = tracker.trackedPids().sorted().take(64).mapNotNull { ProcessHandle.of(it).orElse(null) }
+        handles.filter { it.isAlive && it.info().command().orElse("").endsWith("/java") }.forEach { handle ->
+            if (!deadline.remaining().isZero) runCatching {
+                val status = BoundedCommand.run(log.parent, listOf("jcmd", handle.pid().toString(), "Thread.print"),
+                    prefix.resolveSibling("${prefix.name}-${handle.pid()}-threads.txt"),
+                    minOf(Duration.ofSeconds(15), deadline.requireRemaining()))
+                check(status == 0) { "thread diagnostic exited $status" }
+            }.exceptionOrNull()?.let { errors += it.toString() }
         }
-        val handles = sequenceOf(process.toHandle()) + process.descendants().toList().asSequence()
-        handles.filter { it.isAlive }.forEach { handle ->
-            runCatching {
-                ProcessBuilder("jcmd", handle.pid().toString(), "Thread.print")
-                    .redirectErrorStream(true)
-                    .redirectOutput(prefix.resolveSibling("${prefix.name}-${handle.pid()}-threads.txt").toFile())
-                    .start().waitFor(15, TimeUnit.SECONDS)
-            }
-        }
+        runCatching { Files.writeString(prefix.resolveSibling("${prefix.name}-diagnostic-status.txt"),
+            "diagnostic_budget_seconds=30\ntracked=${tracker.trackedPids()}\nerrors=${errors.take(64)}\n") }
     }
 
     fun stop(timeout: Duration = Duration.ofSeconds(20)) {
@@ -391,21 +399,12 @@ class ManagedProcess(
 
 object Commands {
     fun run(command: List<String>, cwd: Path, log: Path, environment: Map<String, String> = emptyMap()) {
-        log.parent.createDirectories()
-        val builder = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true).redirectOutput(log.toFile())
-        builder.environment().putAll(environment)
-        val process = builder.start()
-        val status = process.waitFor()
+        val status = BoundedCommand.run(cwd, command, log, Duration.ofMinutes(30), environment)
         check(status == 0) { "command failed ($status): ${command.joinToString(" ")}; see $log" }
     }
 
     fun runWithInput(command: List<String>, cwd: Path, log: Path, input: String, environment: Map<String, String> = emptyMap()) {
-        log.parent.createDirectories()
-        val builder = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true).redirectOutput(log.toFile())
-        builder.environment().putAll(environment)
-        val process = builder.start()
-        process.outputStream.bufferedWriter().use { it.write(input) }
-        val status = process.waitFor()
+        val status = BoundedCommand.run(cwd, command, log, Duration.ofMinutes(30), environment, input)
         check(status == 0) { "command failed ($status): ${command.joinToString(" ")}; see $log" }
     }
 }

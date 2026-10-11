@@ -87,7 +87,7 @@ run, and 0 for a passed run. `evidence` lists recorded files. For example:
 ./test-control.main.kts status RUN_ID
 ./test-control.main.kts wait RUN_ID --timeout-ms 30000
 ./test-control.main.kts evidence RUN_ID
-./test-control.main.kts retry debug --target font:aether --retry-of RUN_ID
+./test-control.main.kts retry debug --target font:aether --retry-of RUN_ID --candidate-binding /absolute/path/to/release/provenance.json
 ```
 
 `run source --all` verifies the active manifest repositories plus the two supported validation-only
@@ -96,11 +96,55 @@ is not offered by source control; checkout count is not a build requirement. Ful
 direct tier commands below. `submit --handoff /absolute/path/to/handoff.json` sends a prepared
 immutable-candidate request to the shared queue.
 
-Direct full Dist and Debug require clean active custom-mod repositories. They run every active
-mod's manifest-listed verification tasks and rebuild every runtime JAR after `clean`, even when
-the bundled JAR records the same source revision. It stages the JARs in dependency order,
-deploys the validated set, refreshes Packwiz, packages once, then runs complete Dist and Debug
-on the new ZIP pair. Release evidence links the Dist and Debug run IDs and candidate hashes.
+Direct full Dist and Debug require clean active custom-mod repositories. The first authorized
+preparation in a verification session runs every active mod's verification tasks and clean
+runtime rebuild, even when the bundled JAR records the same source revision. Later preparation
+rebuilds changed/missing/hash-mismatched providers and their transitive consumers. It stages and
+deploys the coherent set, refreshes Packwiz and packages once. Runtime suites still use fresh
+fixtures; the receipt never replaces pack acceptance. Release evidence binds tier IDs and hashes.
+
+### Conversation-scoped source verification
+
+Use the coordinator's stable conversation ID (`PI_SESSION_ID` in Pi; explicitly set
+`BC_OWNER_SESSION` for a launcher without that identity), never a pane or PID:
+
+```sh
+./test-control.main.kts session begin --owner-session "$PI_SESSION_ID"
+./test-control.main.kts session status SESSION_ID
+./release.main.kts --debug --verification-session SESSION_ID
+./test-control.main.kts run source --all --verification-session SESSION_ID
+./release.main.kts --debug --verification-session SESSION_ID --rebuild-all
+./test-control.main.kts session end SESSION_ID
+```
+
+Opening a receipt or ordinary source/Dev checks does not authorize preparation or establish a
+baseline. Source-control checks validate ownership but do not advance the release receipt.
+Only successful canonical preparation establishes verified deployable artifacts. Without a
+session, tested preparation uses a full invocation-scoped baseline and removes its receipt on
+completion/failure. `--skip-tests` cannot consume a verified receipt.
+
+The atomic bounded receipt in `.worklane/testing-sessions/` records owner, generation, shared
+input fingerprint, per-repository source identity, verified JAR/provider hashes, tasks and latest
+successful verification ID. It contains no worlds, logs or historical result catalogue. A failed
+or incomplete baseline cannot authorize reuse. Identity includes HEAD, tracked/nonignored files
+and status; a later HEAD cannot be attached to a built JAR. Artifact changes after a reuse
+decision fail rather than acquiring the previous verification ID. Declared `supportArtifacts`
+(e.g. the isolated native diagnostic supplement) are gate-produced, hash-bound inputs too;
+missing/corrupt supplements require rebuilding their provider. Changed providers invalidate
+consumers. The manifest's `verificationInputs` declare external pack contracts/upstream pins and
+shared build inputs; changes conservatively require a full baseline. Embedded source metadata
+alone is insufficient. Session status currently reports stored invalidations, not a live rescan.
+
+Same conversation identity survives compaction/reconnection. Different owners are rejected;
+uncertain liveness is not permission to adopt a receipt. Explicit end refuses during preparation.
+After stopping and confirming complete cleanup of an interrupted owned tree, its owner may use
+`session end SESSION_ID --confirm-terminated-run RUN_ID`; this refuses if the coordinator PID
+still exists. That confirmation is an explicit cleanup assertion, not inference from PID absence.
+End unused sessions explicitly. Automatic owner-liveness reconciliation and helper identity
+admission are not yet implemented; helpers must not invent identities or adopt foreign receipts.
+Synthetic receipt tests do not establish completed cold source-build or Debug acceptance.
+Snapshot dependency verification remains a reproducibility boundary until owning builds have
+immutable resolved inputs.
 
 After inspecting a failed run, use a targeted retry to check a fix without starting every Debug
 scenario. Each retry makes a fresh fixture and records separate `target-*` evidence; it cannot be
@@ -115,16 +159,26 @@ uses the packaged spawn rules and removes a strip of campaign floor to verify th
 campaign-phase repair restores pathable geometry. For example:
 
 ```sh
-./test.main.kts debug --target font:aether --retry-of 20260926T070341Z-1044833
-./test.main.kts debug --target fonts
+./test.main.kts debug --target font:aether --retry-of RUN_ID --candidate-binding /absolute/path/to/release/provenance.json
+./test.main.kts debug --target fonts --candidate-binding /absolute/path/to/release/provenance.json
 ```
 
 Targeted runs still perform fast checks and candidate validation, then start only the selected
 runtime fixture and its required setup. They check candidate hashes, process cleanup, and strict
 logs. Findings are recorded in the target evidence and fail that targeted run. If a source fix
 needs a new JAR, use `./release.main.kts --target font:aether --retry-of RUN_ID` to package once
-and test that target. Direct full Debug later rebuilds all active mods and runs complete Dist and
-Debug on its new, unchanged ZIP pair.
+and test that target. Direct full Debug later uses the session's affected-source verification
+and runs complete Dist and Debug on its new, unchanged ZIP pair.
+
+Full retries also accept `--retry-of RUN_ID --candidate-binding PATH` without a target. The
+binding is canonical tested release `release/provenance.json` with exact paths, ZIP SHA-256,
+source commits and production/runtime input fingerprint. Mismatches fail rather than silently
+selecting another candidate. Bound full Debug runs a fresh Dist prerequisite and complete Debug.
+Harness-only edits can retain hashes; production/source changes require canonical preparation
+and a new binding. Legacy provenance without runtime/support fingerprints cannot authorize reuse.
+Targeted fixtures also require a binding or a coordinator handoff whose `artifacts` explicitly
+pin the prepared runtime-support path and SHA-256. A leftover support JAR is not an input merely
+because it exists. Prior run IDs establish diagnostic lineage, not a prior-pass waiver.
 
 Dist includes Dev, candidate contracts, a real full-pack client joining a fresh dedicated server,
 an online player heartbeat, strict logs, and candidate hashes. It does not run dimension travel.
@@ -161,6 +215,14 @@ revalidates the exact candidate paths and hashes before use.
 Queued full Debug runs against that pinned pair and does not rebuild sources or package another
 pair.
 
+Short-lived harness commands use file-backed output, bounded execution and bounded diagnostic/
+cleanup phases. Owned Linux process groups close the fast-parent-exit race for inherited-group
+children, in addition to retained observed descendants. Deliberately detached, never-observed
+escapees are not covered by that mechanism. JVM-level cancellation and all control-facade waits
+still need a complete audit; thread interruption and ordinary fixture shutdown are not proof of
+all signal/cancellation paths. The Node recipe-handler contract retains its 15-second budget;
+passing repeated/concurrent observations cannot establish the cause of an earlier timeout.
+
 The tiers run internal Gradle tasks `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
 `singleplayerTest`. Dist sequences fast checks, the candidate gate, and the multiplayer runtime
 group. Debug runs the same gates and all three runtime groups to collect diagnostic evidence.
@@ -173,8 +235,11 @@ diagnostics; Debug also collects runtime data. The single-player group records t
 title screen without injecting input. Failed fixtures remain available during the active task only.
 Automated tests must not synthesize mouse movement or mouse
 clicks. Threads reader development, the Quark chat emote picker, the World Condenser configuration
-screen, and the Create World menu are manual visual gates. Debug's non-pointer world probe tests
-fresh save boot and reopen, not the menu. Before rerunning, inspect the existing run and report its
+screen, and the Create World menu are manual visual gates. Debug's current non-pointer world probe tests
+integrated boot and reopen of a dedicated-server-seeded save, not ordinary fresh-world creation
+or the menu. Its spawn fallback marker isolates persistence, not production spawn-search
+acceptance. Unseeded startup and tick-correlated networked extended-bottom Deep Void entry
+remain required additions, not coverage implied by this existing suite. Before rerunning, inspect the existing run and report its
 ID, hashes, failed or aborted cases, evidence path, retained fixture, and process cleanup state.
 Cleanup retains observed process descendants after their parent exits and checks termination after
 graceful and forced shutdown. Every fixture is closed even when an earlier close fails. The
@@ -269,11 +334,12 @@ Only an explicit fresh-dist request authorizes:
 
 The release command consumes `gradle/active-custom-mods.json`, requires clean active repositories,
 and records each local source `HEAD` in release evidence. It never fetches or modifies remotes.
-Full Dist and Debug verify and rebuild every active source after `clean`. They annotate and deploy all
-staged runtime JARs together, refreshes Packwiz hashes and checks the diff, runs `dist.sh`
+Tested preparation clean-rebuilds and verifies the session's required provider/consumer closure,
+with a full initial baseline. It annotates and deploys the coherent staged set, refreshes Packwiz
+hashes and checks the diff, runs `dist.sh`
 exactly once, and then runs the complete Dist tier. Targeted and queued Debug can test that
-unchanged ZIP pair when explicitly requested. Direct full Debug forces verification and rebuilding
-of every active mod, then packages once and runs complete Dist and Debug. Release evidence records
+unchanged ZIP pair when explicitly requested. Direct full Debug uses conversation-scoped source verification,
+then packages once and runs complete Dist and Debug. Release evidence records
 each mod's build mode and JAR hash.
 Legacy JARs without source metadata are replaced during this bootstrap run.
 

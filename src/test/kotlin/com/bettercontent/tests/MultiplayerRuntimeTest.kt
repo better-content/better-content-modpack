@@ -749,28 +749,31 @@ class MultiplayerRuntimeTest {
     }
 
     private fun waitForStableTps(target: DimensionTarget, location: Int) {
-        val deadline = System.nanoTime() + Duration.ofSeconds(180).toNanos()
+        val deadline = ScenarioDeadline(Duration.ofSeconds(180))
+        val started = System.nanoTime()
+        evidence.run.event("dimension_tps_window", mapOf("dimension" to target.id, "location" to location,
+            "budget_seconds" to 180, "required_samples" to 3, "required_tps" to 18,
+            "phase" to "post-readiness stabilization", "concurrent_clients" to 1,
+            "renderer" to "CPU/software OpenGL", "cold_generation_excluded_from_window" to false))
         var consecutive = 0
         var sample = 0
         val required = 3
-        while (System.nanoTime() < deadline && consecutive < required) {
-            Thread.sleep(10_000)
+        while (!deadline.remaining().isZero && consecutive < required) {
+            deadline.sleep(Duration.ofSeconds(10))
             val result = server.commandResult(
                 "forge tps",
                 Regex("Overall.*?Mean TPS:\\s*[0-9]+(?:\\.[0-9]+)?", RegexOption.IGNORE_CASE),
                 "TPS sample ${target.id} location $location",
-                // A newly generated dimension can take longer than one
-                // sampling interval to publish its next report. Keep the
-                // sample open long enough to observe recovery instead of
-                // converting that expected generation pause into a timeout.
-                Duration.ofSeconds(90),
+                minOf(Duration.ofSeconds(90), deadline.requireRemaining()),
             )
+            deadline.requireRemaining()
             val tps = DimensionSmokePlan.parseOverallTps(result.value)
             consecutive = if (tps >= 18.0) consecutive + 1 else 0
             evidence.run.event("dimension_tps_sample", mapOf(
                 "dimension" to target.id, "location" to location, "sample" to ++sample,
                 "mean_tps" to tps, "required_tps" to 18.0, "consecutive_passing" to consecutive,
-                "mode" to evidence.run.tier,
+                "mode" to evidence.run.tier, "elapsed_seconds" to (System.nanoTime() - started) / 1_000_000_000.0,
+                "remaining_seconds" to deadline.remaining().toNanos() / 1_000_000_000.0,
             ))
         }
         require(consecutive >= required) {

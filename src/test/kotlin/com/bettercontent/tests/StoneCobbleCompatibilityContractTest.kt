@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 @Tag("fast")
 class StoneCobbleCompatibilityContractTest {
@@ -18,12 +18,7 @@ class StoneCobbleCompatibilityContractTest {
     @Test
     fun `actual recipe handler keeps generics default and protects identity whitelist`() {
         val fixture = root.resolve("src/test/resources/stone-cobble-compat-contract.cjs")
-        val process = ProcessBuilder("node", fixture.toString(), script.toString()).redirectErrorStream(true).start()
-        val finished = process.waitFor(15, TimeUnit.SECONDS)
-        if (!finished) process.destroyForcibly().waitFor()
-        assertTrue(finished, "Minecraft-free Node recipe-handler contract timed out")
-        val output = process.inputStream.bufferedReader().readText()
-        assertEquals(0, process.exitValue(), output)
+        val output = BoundedCommand.capture(root, listOf("node", fixture.toString(), script.toString()), Duration.ofSeconds(15))
         val result = jacksonObjectMapper().readTree(output)
         assertTrue(result.path("identity_recipes").asInt() >= 100)
         assertEquals(2, result.path("replacements").asInt())

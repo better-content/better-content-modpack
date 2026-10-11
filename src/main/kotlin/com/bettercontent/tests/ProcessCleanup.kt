@@ -10,7 +10,7 @@ class ProcessCleanupException(val survivingPids: List<Long>) : IllegalStateExcep
 )
 
 /** Retains observed descendants even after their original parent exits. */
-internal class ProcessTracker(root: ProcessHandle) {
+internal class ProcessTracker(private val root: ProcessHandle, private val ownedGroup: Long? = null) {
     private val handles = ConcurrentHashMap<Long, ProcessHandle>().apply { put(root.pid(), root) }
     private val observer = Executors.newSingleThreadScheduledExecutor { action ->
         Thread(action, "process-tree-${root.pid()}").apply { isDaemon = true }
@@ -22,6 +22,23 @@ internal class ProcessTracker(root: ProcessHandle) {
     }
 
     private fun discover() {
+        // setsid keeps the command's group distinct from every other lane consumer. The
+        // group survives an immediately exiting parent, closing the polling race for
+        // ordinary inherited-group children. Already observed new-session children remain
+        // tracked by identity. This is not a claim to catch deliberately detached escapees.
+        if (ownedGroup != null && !root.isAlive) {
+            java.nio.file.Files.newDirectoryStream(java.nio.file.Path.of("/proc")).use { entries ->
+                entries.filter { it.fileName.toString().toLongOrNull() != null }.forEach { directory ->
+                    runCatching {
+                        val fields = java.nio.file.Files.readString(directory.resolve("stat"))
+                            .substringAfterLast(')').trim().split(' ')
+                        if (fields.getOrNull(2)?.toLongOrNull() == ownedGroup) {
+                            ProcessHandle.of(directory.fileName.toString().toLong()).ifPresent { handles.putIfAbsent(it.pid(), it) }
+                        }
+                    }
+                }
+            }
+        }
         handles.values.toList().filter { it.isAlive }.forEach { handle ->
             handle.descendants().use { descendants -> descendants.forEach { handles.putIfAbsent(it.pid(), it) } }
         }

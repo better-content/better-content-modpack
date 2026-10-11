@@ -16,10 +16,9 @@ class ProviderStagingTest {
         val staged = Files.createDirectories(root.resolve("staged-jars"))
         Files.writeString(staged.resolve("provider-1.0.jar"), "reused provider fixture")
         // An unchanged provider is staged without a sibling build/libs directory.
-        val process = ProcessBuilder("sh", "-c", "test -f \"\$BC_CUSTOM_MOD_JAR_DIR/provider-1.0.jar\"")
-            .directory(root.toFile())
-            .apply { environment().putAll(providerBuildEnvironment(staged)) }.start()
-        assertEquals(0, process.waitFor())
+        assertEquals(0, BoundedCommand.run(root,
+            listOf("sh", "-c", "test -f \"\$BC_CUSTOM_MOD_JAR_DIR/provider-1.0.jar\""),
+            root.resolve("provider-contract.log"), java.time.Duration.ofSeconds(10), providerBuildEnvironment(staged)))
         assertTrue(Files.notExists(root.resolve("provider/build/libs")))
     }
 

@@ -13,6 +13,8 @@ var skipTests = false
 var debugMode = false
 var target: String? = null
 var retryOf: String? = null
+var verificationSession: String? = null
+var rebuildAll = false
 var index = 0
 while (index < args.size) {
     when (args[index]) {
@@ -24,6 +26,11 @@ while (index < args.size) {
             jobs = args[index + 1].toIntOrNull() ?: 0
             index += 2
         }
+        "--verification-session" -> {
+            verificationSession = args.getOrNull(index + 1) ?: error("--verification-session needs a session ID")
+            index += 2
+        }
+        "--rebuild-all" -> { rebuildAll = true; index++ }
         "--skip-tests" -> {
             skipTests = true
             index++
@@ -46,6 +53,8 @@ while (index < args.size) {
         }
     }
 }
+if (verificationSession != null && !Regex("[a-f0-9]{32}").matches(verificationSession!!)) error("invalid verification session ID")
+require(!(skipTests && (verificationSession != null || rebuildAll))) { "unverified release cannot consume verification receipts" }
 if (jobs !in 1..4) {
     System.err.println("release jobs must be between 1 and 4")
     exitProcess(2)
@@ -56,6 +65,7 @@ val validTarget = target == null || target in setOf("join", "fonts", "dimensions
         target!!.removePrefix("dimension:") !in setOf("the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether"))
 if (!validTarget || args.count { it == "--jobs" } > 1 || args.count { it == "--skip-tests" } > 1 || args.count { it == "--debug" } > 1 ||
     args.count { it == "--target" } > 1 || args.count { it == "--retry-of" } > 1 ||
+    args.count { it == "--verification-session" } > 1 || args.count { it == "--rebuild-all" } > 1 ||
     (skipTests && (target != null || debugMode)) || (debugMode && target != null) || (retryOf != null && target == null) ||
     (retryOf != null && (!Regex("\\d{8}T\\d{6}Z-\\d+").matches(retryOf!!) ||
         !root.resolve("generated/test-evidence/$retryOf").isDirectory))) {
@@ -74,7 +84,7 @@ if (System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
 
 val runId = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC)
     .format(java.time.Instant.now()) + "-" + ProcessHandle.current().pid()
-val forceRebuild = debugMode || (target == null && !skipTests)
+val forceRebuild = rebuildAll
 val evidence = root.resolve("generated/test-evidence/$runId")
 evidence.mkdirs()
 evidence.resolve("release-request.txt").writeText(
@@ -86,6 +96,7 @@ fun run(vararg command: String): Int = ProcessBuilder(*command)
     .inheritIO()
     .apply {
         environment()["BC_TEST_RUN_ID"] = runId
+        verificationSession?.let { environment()["BC_VERIFICATION_SESSION"] = it }
         target?.let { environment()["BC_RELEASE_TARGET"] = it }
         if (debugMode) environment()["BC_RELEASE_DEBUG"] = "1"
     }
@@ -144,7 +155,8 @@ if (debugMode) {
         sha256(client) == clientHash && sha256(server) == serverHash
     }.getOrDefault(false)
     fun testTier(tier: String, testRunId: String, existingCandidate: Boolean): Int {
-        val command = mutableListOf(root.resolve("test.main.kts").absolutePath, tier)
+        val command = mutableListOf(root.resolve("test.main.kts").absolutePath, tier,
+            "--candidate-binding", provenance.absolutePath)
         if (existingCandidate) command += "--existing-candidate"
         return ProcessBuilder(command).directory(root).inheritIO().apply {
             environment()["BC_TEST_RUN_ID"] = testRunId
@@ -176,6 +188,7 @@ if (debugMode) {
 }
 
 val testArgs = mutableListOf(root.resolve("test.main.kts").absolutePath, if (target == null || target == "join") "dist" else "debug")
+if (!skipTests) testArgs += listOf("--candidate-binding", evidence.resolve("release/provenance.json").absolutePath)
 target?.let { testArgs += listOf("--target", it) }
 retryOf?.let { testArgs += listOf("--retry-of", it) }
 val tests = if (skipTests) 0 else ProcessBuilder(testArgs)

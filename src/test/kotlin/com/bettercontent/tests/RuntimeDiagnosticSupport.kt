@@ -17,6 +17,18 @@ class RuntimeDiagnosticSupport(private val evidence: EvidenceRun, pair: Candidat
     private val policies = mutableMapOf<Path, String>()
     val properties: String
     init {
+        val mapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
+        val binding = System.getenv("BC_CANDIDATE_BINDING")?.takeIf(String::isNotBlank)?.let { mapper.readTree(Path.of(it).toFile()) }
+        val boundHash = if (binding != null) {
+            binding.path("mods").single { it.path("repository").asText() == "better-runtime-diagnostics" }
+                .path("support_hashes").path("build/libs/better-runtime-test-support.jar").asText()
+        } else {
+            val handoff = requireNotNull(evidence.config.handoff) { "runtime support needs a canonical candidate binding or explicit handoff artifact pin" }
+            val artifacts = mapper.readTree(handoff.toFile()).path("artifacts")
+            artifacts.singleOrNull { it.path("path").asText() == source.toString() }?.path("sha256")?.asText()
+                ?: error("handoff does not pin the prepared runtime support artifact")
+        }
+        require(boundHash == sourceHash) { "runtime support artifact is missing/unverified for this candidate" }
         RetiredInventoryArtifactExclusion.validate(pair.client)
         RetiredInventoryArtifactExclusion.validate(pair.server)
         val runtimeHash=ZipFile(pair.server.toFile()).use { zip ->

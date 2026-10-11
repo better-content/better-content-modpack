@@ -10,9 +10,9 @@ import java.nio.file.Path
 class WorkspaceMaintenanceTest {
     @Test
     fun disposableWorkspaceContracts() {
-        val root = Path.of(System.getProperty("bc.repo.root")).toFile()
-        val process = ProcessBuilder("python3", "-B", "scripts/test_workspace_maintenance.py")
-            .directory(root).inheritIO().start()
-        assertEquals(0, process.waitFor(), "workspace disposal contracts failed")
+        val root = Path.of(System.getProperty("bc.repo.root"))
+        val output = BoundedCommand.capture(root, listOf("python3", "-B", "scripts/test_workspace_maintenance.py"),
+            java.time.Duration.ofMinutes(2))
+        org.junit.jupiter.api.Assertions.assertTrue(output.contains("OK"), output)
     }
 }

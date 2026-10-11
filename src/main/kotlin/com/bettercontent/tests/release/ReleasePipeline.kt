@@ -26,10 +26,13 @@ data class ActiveMod(
     val artifact: String,
     val tasks: List<String>,
     val dependsOn: List<String> = emptyList(),
+    val supportArtifacts: List<String> = emptyList(),
 )
 
-data class ActiveModManifest(val schema: String, val mods: List<ActiveMod>)
-data class BuiltMod(val definition: ActiveMod, val commit: String, val jar: Path, val sha256: String, val mode: String)
+data class ActiveModManifest(val schema: String, val mods: List<ActiveMod>,
+    val verificationInputs: List<String> = listOf("**"))
+data class BuiltMod(val definition: ActiveMod, val commit: String, val jar: Path, val sha256: String, val mode: String,
+    val supportHashes: Map<String, String> = emptyMap())
 data class SourceUpdate(
     val repository: String,
     val artifact: String,
@@ -121,6 +124,8 @@ fun main(args: Array<String>) {
         "custom source uses forbidden reflection; see ${evidence.resolve("reflection-source-audit.tsv")}"
     }
 
+    val verification = if (skipTests) null else VerificationSession(root, manifest.mods, runId, forceRebuild, sharedInputs = manifest.verificationInputs)
+    try {
     val dependencyWarmup = root.resolve("build/release-dependency-warmup/$runId")
     try {
         runLogged(root, packageResolveCommand(root, dependencyWarmup), evidence.resolve("dependency-cache.log"))
@@ -138,7 +143,13 @@ fun main(args: Array<String>) {
         val executor = Executors.newFixedThreadPool(jobs)
         val futures = ready.associateWith { mod ->
             executor.submit(Callable {
-                build(root, workspace, evidence, staging, mod, sourceUpdatesByRepository.getValue(mod.repository), skipTests, forceRebuild)
+                val update = sourceUpdatesByRepository.getValue(mod.repository)
+                val mustBuild = verification?.affected?.contains(mod.repository) ?: forceRebuild
+                build(root, workspace, evidence, staging, mod,
+                    if (verification != null && !mustBuild) update.copy(status = "same") else update,
+                    skipTests, mustBuild).also { item ->
+                        if (verification != null && !mustBuild) verification.requireReusable(item)
+                    }
             })
         }
         executor.shutdown()
@@ -170,6 +181,13 @@ fun main(args: Array<String>) {
         "staged custom-mod bytecode uses forbidden reflection; see ${evidence.resolve("reflection-bytecode-audit.tsv")}"
     }
 
+    verification?.checkInputs()
+    built.forEach { item ->
+        require(Hashes.sha256(item.jar) == item.sha256) { "verified staged artifact changed: ${item.jar}" }
+        if (!skipTests) require(supportArtifactHashes(workspace.resolve("mod_source/${item.definition.repository}"), item.definition) == item.supportHashes) {
+            "verified support artifact changed: ${item.definition.repository}"
+        }
+    }
     val modsDirectory = root.resolve("mods")
     built.forEach { item ->
         Files.list(modsDirectory).use { stream ->
@@ -180,7 +198,8 @@ fun main(args: Array<String>) {
     }
     manifest.mods.forEach { mod ->
         val deployed = modsDirectory.resolve(mod.artifact)
-        require(Files.isRegularFile(deployed) && jarDeclaresMod(deployed, mod.modId)) {
+        require(Files.isRegularFile(deployed) && jarDeclaresMod(deployed, mod.modId) &&
+            Hashes.sha256(deployed) == built.single { it.definition == mod }.sha256) {
             "deployment lost or misidentified ${mod.artifact}"
         }
     }
@@ -196,6 +215,9 @@ fun main(args: Array<String>) {
         "target" to System.getenv("BC_RELEASE_TARGET"),
         "tests_skipped" to skipTests,
         "force_rebuild" to forceRebuild,
+        "verification_session" to verification?.id,
+        "full_session_baseline" to verification?.fullBaseline,
+        "runtime_input_sha256" to com.bettercontent.tests.runtimeInputIdentity(root),
         "candidates" to mapOf(
             "client" to candidates.client.toString(),
             "client_sha256" to candidates.clientSha256,
@@ -219,12 +241,16 @@ fun main(args: Array<String>) {
                 "artifact" to it.definition.artifact,
                 "sha256" to it.sha256,
                 "mode" to it.mode,
+                "support_hashes" to it.supportHashes,
             )
         },
     )
     mapper.writerWithDefaultPrettyPrinter().writeValue(evidence.resolve("provenance.json").toFile(), provenance)
+    verification?.commit(built)
     println("fresh candidate prepared once; tests have not run yet")
+    println("verification session: ${verification?.id ?: "unverified release"}")
     println("release evidence: $evidence")
+    } finally { verification?.close() }
 }
 
 internal fun build(
@@ -247,8 +273,11 @@ internal fun build(
         }
         Files.copy(bundled, staged, StandardCopyOption.REPLACE_EXISTING)
         val commit = sourceUpdate.localCommit
-        return BuiltMod(mod, commit, staged, Hashes.sha256(staged), "reused")
+        return BuiltMod(mod, commit, staged, Hashes.sha256(staged), "reused",
+            if (skipTests) emptyMap() else supportArtifactHashes(repository, mod))
     }
+    val initialSource = sourceIdentity(repository)
+    val expectedCommit = sourceUpdate.localCommit
     val tasks = if (skipTests) listOf("stageRuntimeJar") else mod.tasks
     val buildCommand = listOf(repository.resolve("gradlew").toString(), "--no-daemon", "clean") + tasks
     withForgeCacheLock(workspace) {
@@ -267,8 +296,12 @@ internal fun build(
     require(jarDeclaresMod(jar, mod.modId)) { "${mod.artifact} does not declare ${mod.modId}" }
     Files.copy(jar, staged, StandardCopyOption.REPLACE_EXISTING)
     val commit = capture(repository, listOf("git", "rev-parse", "HEAD")).trim()
-    annotateJar(staged, mod, commit)
-    return BuiltMod(mod, commit, staged, Hashes.sha256(staged), "rebuilt")
+    require(commit == expectedCommit && sourceIdentity(repository) == initialSource) {
+        "${mod.repository} source changed during verification; refusing later-HEAD annotation"
+    }
+    annotateJar(staged, mod, expectedCommit)
+    return BuiltMod(mod, commit, staged, Hashes.sha256(staged), "rebuilt",
+        if (skipTests) emptyMap() else supportArtifactHashes(repository, mod))
 }
 
 internal fun sourceUpdateStatus(localCommit: String, bundledCommit: String?): String = when {
@@ -359,15 +392,11 @@ internal fun providerBuildEnvironment(staging: Path): Map<String, String> =
 
 private fun runLogged(cwd: Path, command: List<String>, log: Path, environment: Map<String, String> = emptyMap()) {
     log.parent.createDirectories()
-    val process = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true).redirectOutput(log.toFile())
-        .apply { environment().putAll(environment) }.start()
-    val status = process.waitFor()
+    val status = com.bettercontent.tests.BoundedCommand.run(cwd, command, log,
+        java.time.Duration.ofMinutes(45), environment)
     require(status == 0) { "command failed ($status): ${command.joinToString(" ")}; see $log" }
 }
 
 private fun capture(cwd: Path, command: List<String>): String {
-    val process = ProcessBuilder(command).directory(cwd.toFile()).redirectErrorStream(true).start()
-    val output = process.inputStream.bufferedReader().use { it.readText() }
-    require(process.waitFor() == 0) { "command failed: ${command.joinToString(" ")}" }
-    return output
+    return com.bettercontent.tests.BoundedCommand.capture(cwd, command, java.time.Duration.ofSeconds(30))
 }

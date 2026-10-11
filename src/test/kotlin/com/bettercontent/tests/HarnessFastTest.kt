@@ -377,6 +377,9 @@ class HarnessFastTest {
             return result
         }
         git("init", "-q")
+        // Authored source identity excludes declared build outputs, not arbitrary new files.
+        Files.writeString(repository.resolve(".gitignore"), "build/\ninvoked-tasks.txt\n")
+        git("add", ".gitignore")
         git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--allow-empty", "-qm", "fixture")
         val commit = git("rev-parse", "HEAD")
         val jarContents = mapOf("META-INF/mods.toml" to "[[mods]]\nmodId=\"fixture_mod\"\n")

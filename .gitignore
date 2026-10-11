@@ -41,6 +41,9 @@ generated/validation/contract_completeness_summary.json
 generated/visual-iteration/
 exports/
 
+# Live conversation verification metadata, never authored evidence.
+/.worklane/testing-sessions/
+
 # Local run artifacts
 logs/
 /error.txt

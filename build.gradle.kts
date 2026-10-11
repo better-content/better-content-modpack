@@ -47,6 +47,7 @@ tasks.test {
     description = "Runs fast, Minecraft-free test-harness checks."
     useJUnitPlatform { includeTags("fast") }
     doFirst {
+        exec { commandLine("python3", "-B", "scripts/test_testing_session.py") }
         exec { commandLine("python3", "-B", "scripts/test_prepare_dev_inputs.py") }
         exec { commandLine("python3", "-B", "scripts/prepare_dev_inputs.py") }
     }

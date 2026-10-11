@@ -69,8 +69,9 @@ but API drift in an expected pinned integration is a visible validation failure.
 
 Bundled/staged JARs record repository, mod ID and source HEAD in
 `META-INF/better-content-source.properties`. Source identity checks are local-only—no fetch/pull/
-merge or remote contact. Full tested releases force verified clean rebuilds; targeted and explicit
-test-free flows can reuse source-identical annotated JARs according to the release implementation.
+merge or remote contact. Tested releases require a conversation-scoped full verified clean baseline, then affected-source
+verification with exact receipt-bound artifacts. Explicit test-free flows can reuse annotated
+source-identical JARs without a verification claim.
 [Testing](testing.md) defines those modes, without a second conflicting procedure here.
 
 ## Disposal and related guidance

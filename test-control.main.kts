@@ -55,18 +55,22 @@ private fun options(start: Int, allowed: Set<String>): Map<String, String> {
 private fun requestOptions(scope: String, start: Int): Map<String, String> {
     if (scope !in setOf("dev", "dist", "debug", "source")) fail("unknown scope: $scope")
     val source = scope == "source"
-    val result = options(start, if (source) setOf("--repo", "--all")
-        else setOf("--target", "--retry-of", "--existing-candidate"))
+    val result = options(start, if (source) setOf("--repo", "--all", "--verification-session")
+        else setOf("--target", "--retry-of", "--existing-candidate", "--verification-session", "--candidate-binding"))
+    result["--verification-session"]?.let { session ->
+        val (status, output) = capture(listOf("python3", "-B", root.resolve("scripts/testing_session.py").toString(), "status", session))
+        if (status != 0) fail(output.trim())
+    }
     if (source) {
         if ((result["--repo"] != null) == (result["--all"] == "true"))
             fail("source needs exactly one of --repo or --all")
         result["--repo"]?.let { if (it !in allSourceNames()) fail("unknown source repository: $it") }
     } else {
         val target = result["--target"]
-        if (result["--retry-of"] != null && target == null) fail("--retry-of needs --target")
+        if (result["--retry-of"] != null && result["--candidate-binding"] == null) fail("--retry-of needs --candidate-binding")
         if (result["--existing-candidate"] == "true" && (scope != "debug" || target != null))
             fail("--existing-candidate needs full debug")
-        if (scope == "dev" && result.isNotEmpty()) fail("dev accepts no options")
+        if (scope == "dev" && result.keys.any { it != "--verification-session" }) fail("dev accepts only --verification-session")
     }
     return result
 }
@@ -128,7 +132,13 @@ private fun launch(command: List<String>, cwd: Path, log: Path, environment: Map
 
 private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, Any?> {
     val active = activeMods()
-    val names = if (all) allSourceNames() else listOf(selected ?: fail("source run needs --repo or --all"))
+    val requested = selected ?: if (all) "" else fail("source run needs --repo or --all")
+    val closure = mutableSetOf<String>()
+    fun include(name: String) {
+        if (closure.add(name)) active.firstOrNull { it.repository == name }?.dependencies.orEmpty().forEach(::include)
+    }
+    if (!all) include(requested)
+    val names = if (all) allSourceNames() else closure.sorted()
     if (all && !names.containsAll(active.map { it.repository })) fail("active source inventory is incomplete")
     val completed = linkedMapOf<String, String>()
     val staged = controlPath(id).parent.resolve("source-jars")
@@ -136,19 +146,27 @@ private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, 
     val pending = names.toMutableSet()
     while (pending.isNotEmpty()) {
         val ready = pending.sorted().filter { name ->
-            !all || active.firstOrNull { it.repository == name }?.dependencies.orEmpty().all { it in completed }
+            active.firstOrNull { it.repository == name }?.dependencies.orEmpty().all { it in completed }
         }
         if (ready.isEmpty()) fail("source dependency graph contains a cycle or missing provider")
         ready.forEach { name ->
             val mod = active.firstOrNull { it.repository == name }
-            if (all && mod != null && mod.dependencies.any { completed[it] != "passed" }) {
+            if (mod != null && mod.dependencies.any { completed[it] != "passed" }) {
                 completed[name] = "blocked-by-provider"
             } else {
                 val repo = workspace.resolve("mod_source/$name")
                 val tasks = sourceTasks(name, active)
-                val status = launch(listOf(repo.resolve("gradlew").toString(), "--no-daemon") + tasks,
-                    repo, controlPath(id).parent.resolve("source-$name.log"),
-                    if (all) mapOf("BC_CUSTOM_MOD_JAR_DIR" to staged.toString()) else emptyMap())
+                val cacheLock = workspace.resolve(".worklane/forge-cache.lock")
+                Files.createDirectories(cacheLock.parent)
+                require(!Files.isSymbolicLink(cacheLock) && !Files.isSymbolicLink(cacheLock.parent)) { "unsafe Forge cache lock" }
+                val status = java.nio.channels.FileChannel.open(cacheLock, java.nio.file.StandardOpenOption.CREATE,
+                    java.nio.file.StandardOpenOption.WRITE).use { channel ->
+                    channel.lock().use {
+                        launch(listOf(repo.resolve("gradlew").toString(), "--no-daemon") + tasks,
+                            repo, controlPath(id).parent.resolve("source-$name.log"),
+                            mapOf("BC_CUSTOM_MOD_JAR_DIR" to staged.toString()))
+                    }
+                }
                 val sourceLog = controlPath(id).parent.resolve("source-$name.log")
                 val output = Files.readString(sourceLog)
                 val gameTestsMissing = name != "better-exploration-load-control" &&
@@ -159,7 +177,7 @@ private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, 
                     gameTestsMissing -> "failed (GameTest run did not pass)"
                     else -> "passed"
                 }
-                if (completed[name] == "passed" && all && mod != null) {
+                if (completed[name] == "passed" && mod != null) {
                     val jar = repo.resolve("build/libs").resolve(mod.artifact)
                     if (Files.isRegularFile(jar)) Files.copy(jar, staged.resolve(mod.artifact), StandardCopyOption.REPLACE_EXISTING)
                     else completed[name] = "failed (missing staged JAR)"
@@ -179,6 +197,8 @@ private fun runtimeRun(id: String, tier: String, option: Map<String, String>): M
     option["--target"]?.let { command += listOf("--target", it) }
     option["--retry-of"]?.let { command += listOf("--retry-of", it) }
     if (option["--existing-candidate"] == "true") command += "--existing-candidate"
+    option["--verification-session"]?.let { command += listOf("--verification-session", it) }
+    option["--candidate-binding"]?.let { command += listOf("--candidate-binding", it) }
     val log = controlPath(id).parent.resolve("run.log")
     val status = launch(command, root, log, mapOf("BC_TEST_RUN_ID" to id))
     val output = Files.readString(log)
@@ -201,6 +221,10 @@ private fun readStatus(id: String): String {
 }
 
 when (args.firstOrNull()) {
+    "session" -> {
+        exitProcess(ProcessBuilder(listOf("python3", "-B", root.resolve("scripts/testing_session.py").toString()) + args.drop(1))
+            .directory(root.toFile()).inheritIO().start().waitFor())
+    }
     "begin", "finish" -> {
         // Task lifetime is explicit: never delete a candidate between tests.
         exitProcess(ProcessBuilder(listOf("python3", "-B",
@@ -246,8 +270,8 @@ when (args.firstOrNull()) {
         val scope = args.getOrNull(1) ?: fail("run needs dev, dist, debug, or source")
         val opt = requestOptions(scope, 2)
         if (args[0] == "retry" && scope == "source") fail("source runs cannot be retried by pack run ID")
-        if (args[0] == "retry" && (opt["--target"] == null || opt["--retry-of"] == null))
-            fail("retry needs --target and --retry-of")
+        if (args[0] == "retry" && (opt["--retry-of"] == null || opt["--candidate-binding"] == null))
+            fail("retry needs --retry-of and --candidate-binding; --target is optional")
         val id = runId()
         writeControl(id, mapOf("state" to "running", "scope" to scope, "target" to opt["--target"],
             "retry_of" to opt["--retry-of"], "evidence" to controlPath(id).parent.toString()))

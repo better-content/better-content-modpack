@@ -15,12 +15,16 @@ val selector = args.firstOrNull()
 var target: String? = null
 var retryOf: String? = null
 var existingCandidate = false
+var verificationSession: String? = null
+var candidateBinding: String? = null
 var argument = 1
 while (argument < args.size) {
     when (args[argument]) {
         "--target" -> { target = args.getOrNull(argument + 1) ?: usage(); argument += 2 }
         "--retry-of" -> { retryOf = args.getOrNull(argument + 1) ?: usage(); argument += 2 }
         "--existing-candidate" -> { existingCandidate = true; argument++ }
+        "--verification-session" -> { verificationSession = args.getOrNull(argument + 1) ?: usage(); argument += 2 }
+        "--candidate-binding" -> { candidateBinding = args.getOrNull(argument + 1) ?: usage(); argument += 2 }
         else -> usage()
     }
 }
@@ -44,7 +48,7 @@ val targetMethod = when {
     target == "join" -> "leadClientJoinsFreshDedicatedServer"
     target == "campaign" || target == "campaign-start" -> "threeSurvivalPlayersStartCampaigns"
     target == "restart" || target == "restart-compat" -> "debugServerRestartAndClientReconnectPreserveWorld"
-    target == "world-save" -> "debugFreshWorldBootSaveAndReopen"
+    target == "world-save" -> "debugSeededWorldSaveAndReopen"
     target == "fonts" || target?.startsWith("font:") == true -> "debugNativeFontRoundTrips"
     else -> "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations"
 }
@@ -57,25 +61,35 @@ val taskBySelector = mapOf(
 )
 
 fun usage(): Nothing {
-    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--target server-ready|cursed-pyramid|lineage-transition|join|fonts|font:NAME|dimensions|dimension:ID|campaign-start|campaign|restart|restart-compat|world-save] [--retry-of RUN_ID] [--existing-candidate]")
+    System.err.println("usage: ./test.main.kts <dev|dist|debug> [--verification-session SESSION_ID] [--target TARGET] [--retry-of RUN_ID] [--candidate-binding /absolute/path/to/release/provenance.json] [--existing-candidate]; targets/retries require candidate binding or a pinned queue handoff")
     exitProcess(2)
 }
 
 if (selector !in setOf("dev", "dist", "debug") || !validTarget ||
     (target != null && (selector == "dev" || (selector == "dist" && target != "join"))) ||
-    (retryOf != null && target == null) ||
+    (retryOf != null && candidateBinding == null) ||
+    (target != null && candidateBinding == null && System.getenv("BC_PACK_TEST_HANDOFF").isNullOrBlank()) ||
+    (candidateBinding != null && (selector == "dev" || !java.io.File(candidateBinding!!).isFile)) ||
     (existingCandidate && (selector != "debug" || target != null || args.count { it == "--existing-candidate" } != 1)) ||
     (retryOf != null && !Regex("\\d{8}T\\d{6}Z-\\d+").matches(retryOf!!)) ||
     (retryOf != null && !root.resolve("generated/test-evidence/$retryOf").isDirectory)) usage()
 val selected = selector ?: usage()
+if (candidateBinding != null && selected == "debug" && target == null) existingCandidate = true
+verificationSession?.let {
+    if (!Regex("[a-f0-9]{32}").matches(it)) usage()
+    val status = ProcessBuilder("python3", "-B", root.resolve("scripts/testing_session.py").absolutePath, "status", it)
+        .directory(root).inheritIO().start().waitFor()
+    if (status != 0) exitProcess(status)
+}
+val sessionArgs = verificationSession?.let { listOf("--verification-session", it) } ?: emptyList()
 
 if (selected == "debug" && target == null && !existingCandidate) {
-    exitProcess(ProcessBuilder(root.resolve("release.main.kts").absolutePath, "--debug")
+    exitProcess(ProcessBuilder(listOf(root.resolve("release.main.kts").absolutePath, "--debug") + sessionArgs)
         .directory(root).inheritIO().start().waitFor())
 }
 
-if (selected == "dist" && target == null && System.getenv("BC_RELEASE_PREPARED") != "1") {
-    exitProcess(ProcessBuilder(root.resolve("release.main.kts").absolutePath)
+if (selected == "dist" && target == null && candidateBinding == null && System.getenv("BC_RELEASE_PREPARED") != "1") {
+    exitProcess(ProcessBuilder(listOf(root.resolve("release.main.kts").absolutePath) + sessionArgs)
         .directory(root).inheritIO().start().waitFor())
 }
 
@@ -138,6 +152,8 @@ fun gradle(suite: String, task: String, method: String? = null, evidenceSuite: S
                 environment()["BC_TEST_TIER"] = selected
             }
             if (runId != null) environment()["BC_TEST_RUN_ID"] = runId
+            candidateBinding?.let { environment()["BC_CANDIDATE_BINDING"] = java.io.File(it).absolutePath }
+            retryOf?.let { environment()["BC_TEST_RETRY_OF"] = it }
             if (method != null) {
                 environment()["BC_TEST_TARGET"] = target!!
                 environment()["BC_TEST_EVIDENCE_SUITE"] = targetEvidenceSuite!!
@@ -161,7 +177,8 @@ if (selected == "dev") {
     var priorDist = if (selected == "debug" && existingCandidate) System.getenv("BC_PRIOR_DIST_RUN_ID") else null
     if (selected == "debug" && existingCandidate && priorDist == null) {
         val prerequisiteId = "${runId}1"
-        val prerequisite = ProcessBuilder(__FILE__.absolutePath, "dist")
+        val prerequisite = ProcessBuilder(listOf(__FILE__.absolutePath, "dist") +
+            (candidateBinding?.let { listOf("--candidate-binding", it) } ?: emptyList()))
             .directory(root).inheritIO().apply {
                 environment()["BC_RELEASE_PREPARED"] = "1"
                 environment()["BC_DIST_PREREQUISITE"] = "1"
