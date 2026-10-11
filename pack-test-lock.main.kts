@@ -49,11 +49,17 @@ val ownerPath = stateRoot.resolve("owner.json")
 val inherited = System.getenv("BC_PACK_TEST_LOCK_TOKEN")?.takeIf(String::isNotBlank)
 
 @Volatile var childSupervisor: Process? = null
+@Volatile var childCleanupUnproved = true
 val cleanupMutex = Any()
-fun runChild(token: String): Int = superviseFacade(__FILE__.canonicalFile.parentFile, command,
-    cwd = java.io.File(System.getProperty("user.dir")),
-    environment = mapOf("BC_PACK_TEST_LOCK_TOKEN" to token, "BC_PACK_TEST_LOCK_OWNER" to ownerPath.toString()),
-    onStarted = { childSupervisor = it })
+fun runChild(token: String): Int {
+    childCleanupUnproved = true
+    val status = superviseFacade(__FILE__.canonicalFile.parentFile, command,
+        cwd = java.io.File(System.getProperty("user.dir")),
+        environment = mapOf("BC_PACK_TEST_LOCK_TOKEN" to token, "BC_PACK_TEST_LOCK_OWNER" to ownerPath.toString()),
+        onStarted = { childSupervisor = it })
+    childCleanupUnproved = status == 125
+    return status
+}
 
 if (inherited != null) {
     if (ownerToken(ownerPath) != inherited) {
@@ -86,6 +92,7 @@ val owner = """{
   "started_at": "${Instant.now()}",
   "kind": "${json(kind)}",
   "selector": "${json(selector)}",
+  "owner_session": "${json(System.getenv("BC_OWNER_SESSION") ?: System.getenv("PI_SESSION_ID"))}",
   "agent": "${json(System.getenv("HERDR_AGENT_NAME") ?: System.getenv("CODEX_AGENT_NAME"))}",
   "herdr_session": "${json(System.getenv("HERDR_SESSION"))}",
   "herdr_pane_id": "${json(System.getenv("HERDR_PANE_ID"))}",
@@ -101,7 +108,7 @@ var cleaned = false
 fun cleanup() = synchronized(cleanupMutex) {
     if (!cleaned) {
         cleaned = true
-        var complete = true
+        var complete = !childCleanupUnproved
         childSupervisor?.let { child ->
             child.destroy()
             complete = runCatching { child.waitFor(12, java.util.concurrent.TimeUnit.SECONDS) && child.exitValue() != 125 }.getOrDefault(false)

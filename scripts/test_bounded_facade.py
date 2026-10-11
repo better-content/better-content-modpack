@@ -58,6 +58,25 @@ class SupervisorTests(unittest.TestCase):
         finally:
             if process.poll() is None:
                 process.kill(); process.communicate(timeout=2)
+    def test_runner_retains_metadata_on_unproved_cleanup_and_refuses_replacement(self):
+        state = self.root / 'lock-state'
+        environment = dict(os.environ, BC_PACK_TEST_STATE_ROOT=str(state))
+        environment.pop('BC_PACK_TEST_LOCK_TOKEN', None)
+        environment.pop('BC_PACK_TEST_LOCK_OWNER', None)
+        command = [str(SCRIPT.parent.parent / 'pack-test-lock.main.kts'), 'run', 'test', 'synthetic', '--',
+                   sys.executable, '-c']
+        def run(program):
+            with self.log.open('wb') as output:
+                return subprocess.run(command + [program], env=environment, stdout=output, stderr=subprocess.STDOUT, timeout=60).returncode
+        self.assertEqual(125, run('raise SystemExit(125)'), self.log.read_text())
+        owner = state / 'owner.json'
+        token = json.loads(owner.read_text())['token']
+        self.assertNotEqual(0, run('raise SystemExit(0)'))
+        self.assertEqual(token, json.loads(owner.read_text())['token'])
+        owner.unlink()  # isolated fixture: this synthetic command created no descendant
+        self.assertEqual(0, run('raise SystemExit(0)'), self.log.read_text())
+        self.assertFalse(owner.exists())
+
     def test_symlink_log_ancestry_is_rejected_before_launch(self):
         link = self.root / 'alias'
         link.symlink_to(self.root, target_is_directory=True)
