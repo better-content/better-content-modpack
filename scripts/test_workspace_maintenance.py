@@ -235,6 +235,20 @@ class DisposalTests(unittest.TestCase):
         self.assertFalse(p.exists())
         self.assertTrue(browser.exists())
 
+    def test_live_unix_socket_is_deferred_and_namespace_is_operating_input(self):
+        import socket
+        path = self.root / '.tmp/service.sock'
+        path.parent.mkdir()
+        endpoint = socket.socket(socket.AF_UNIX)
+        endpoint.bind(str(path))
+        try:
+            self.assertEqual('defer_active', self.action(path, refs=m.process_references(self.root)))
+        finally:
+            endpoint.close()
+        self.assertEqual('delete', self.action(path))
+        namespace = self.file('.tmp/.X11-unix/operating-socket')
+        self.assertEqual('protect_input', self.action(namespace.parent))
+
     def test_provider_build_outputs_deleted_source_graph_untouched(self):
         p = self.file('better-content-modpack/build/providers/api.jar')
         graph = self.file('better-content-modpack/gradle/active-custom-mods.json', '{"dependsOn":["provider"]}')

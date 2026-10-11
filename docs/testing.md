@@ -24,7 +24,10 @@ run while other developers share the workspace:
 ```
 
 Dev runs the fast Minecraft-free contracts and `git diff --check`; it does not refresh Packwiz
-hashes. Fresh-dist preparation refreshes them once after source and pack changes settle.
+hashes. Cold-cache source inspection rehydrates only the native JARs named by its tests through
+`scripts/prepare_dev_inputs.py`, verifies each active pin's hash and exercises that rehydration's
+synthetic tests. These downloads remain disposable dependencies; no Minecraft launch, deployment
+or distribution is performed. Fresh-dist preparation refreshes them once after source and pack changes settle.
 Pack-level tiers run only when explicitly requested:
 
 ```sh

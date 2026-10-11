@@ -30,7 +30,7 @@ PROTECTED = ['.codex/auth.json', '.codex/config.toml', '.codex/AGENTS.md',
              '.codex/hooks.json', '.codex/packages', '.codex/plugins', '.codex/skills',
              '.pi/agent/auth.json', '.pi/agent/settings.json', '.pi/agent/extensions',
              '.sdkman', '.local/bin', '.local/lib', '.gradle/jdks',
-             '.cache/ms-playwright', '.cache/selenium',
+             '.cache/ms-playwright', '.cache/selenium', '.tmp/.ICE-unix', '.tmp/.X11-unix',
              'better-content-modpack/mods', 'workspace_artifacts/README.md']
 
 
@@ -98,7 +98,7 @@ def discover(workspace):
         base = workspace / name
         if base.is_dir():
             for p in base.iterdir():
-                add(p, 'temporary data/cache')
+                add(p, 'shared rebuildable dependency cache' if p == workspace / '.cache/bc' else 'temporary data/cache')
     for name in GRADLE_OUTPUTS:
         add(workspace / '.gradle' / name, 'shared rebuildable Gradle cache')
     for name in CODEX_OUTPUTS:
@@ -198,6 +198,11 @@ def process_references(workspace):
                 continue
             if proc.stat().st_uid == os.getuid():
                 raise RuntimeError('cannot inspect process ' + str(pid)) from error
+    # AF_UNIX FDs appear as socket:[inode], not as filesystem paths in /proc/PID/fd.
+    for line in Path('/proc/net/unix').read_text().splitlines()[1:]:
+        fields = line.split()
+        if len(fields) >= 8 and fields[7].startswith(str(workspace) + '/'):
+            refs.append(('unix-socket:' + fields[6], Path(fields[7])))
     # Pi does not continuously hold its session FD open. Herdr publishes identities.
     session = os.environ.get('HERDR_SESSION')
     if session:
