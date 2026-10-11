@@ -295,6 +295,24 @@ def scan_boundary(path, workspace):
                 raise ValueError('unexpected mount boundary: ' + str(p))
 
 
+def permission_blocker(path):
+    uid = os.getuid()
+    parent, child = path.parent.stat(), path.lstat()
+    if parent.st_mode & stat.S_ISVTX and parent.st_uid != uid and child.st_uid != uid:
+        return 'foreign-owned target in a sticky directory: ' + str(path)
+    if path.is_dir() and not path.is_symlink():
+        for base, dirs, files in os.walk(path, followlinks=False):
+            directory = Path(base)
+            info = directory.stat()
+            if info.st_uid != uid and not os.access(directory, os.W_OK):
+                return 'foreign owner controls directory: ' + str(directory)
+            if info.st_mode & stat.S_ISVTX and info.st_uid != uid:
+                for name in dirs + files:
+                    if (directory / name).lstat().st_uid != uid:
+                        return 'foreign-owned entry in sticky directory: ' + str(directory / name)
+    return None
+
+
 def shared_build_output(path, category):
     return category in {'shared rebuildable Gradle cache', 'shared rebuildable dependency cache'} or (
         category == 'repository output/fixture' and path.name in {'build', '.gradle', '.kotlin'})
@@ -356,6 +374,9 @@ def plan(workspace, refs=None, tasks=None):
             if active and shared_build_output(path, category) and task.get('uses_build_cache', True):
                 owners.append('task:' + task_id)
         action = 'protect_input' if protected else 'defer_active' if owners else 'delete'
+        blocker = permission_blocker(path) if action == 'delete' else None
+        if blocker:
+            reasons.append(blocker)
         if protected:
             reasons.append('authored, tracked or installed operating inputs inside output tree')
         if owners:
@@ -369,7 +390,7 @@ def plan(workspace, refs=None, tasks=None):
             reasons.append('active changing payload: size unavailable')
         decisions.append({'path': str(path), 'category': category, 'action': action,
                           'owners': sorted(set(owners)), 'protected_inputs': protected,
-                          'reasons': reasons, 'bytes': size, 'identity': signature(path)})
+                          'reasons': reasons, 'bytes': size, 'identity': signature(path), 'blocked_permission': blocker})
     for relative in PROTECTED:
         p = workspace / relative
         if exists(p) and not any(d['path'] == str(p) for d in decisions):
@@ -433,6 +454,12 @@ def delete_checked(path, workspace, expected):
         os.close(fd)
 
 
+class DisposalBlocked(RuntimeError):
+    def __init__(self, removed, blocked, transaction):
+        super().__init__('permission-controlled disposable targets remain')
+        self.removed, self.blocked, self.transaction = removed, blocked, transaction
+
+
 def apply(workspace, decisions, transaction=None):
     state = workspace / '.worklane/disposal'
     if state.parent.is_symlink() or state.is_symlink():
@@ -459,8 +486,9 @@ def apply(workspace, decisions, transaction=None):
                 pending.append(d)
     else:
         pending = [d for d in decisions if d['action'] == 'delete']
+    blocked = []
     def checkpoint():
-        atomic_json(workspace, record, {'schema': SCHEMA, 'workspace': str(workspace), 'pending': pending})
+        atomic_json(workspace, record, {'schema': SCHEMA, 'workspace': str(workspace), 'pending': pending + blocked})
     checkpoint()
     removed = []
     while pending:
@@ -488,11 +516,19 @@ def apply(workspace, decisions, transaction=None):
         repo = next((p for p in path.parents if (p / '.git').exists()), None)
         if repo and any(beneath(p, path) for p in git_inputs(repo)):
             raise RuntimeError('target now contains authored input: ' + str(path))
-        delete_checked(Path(d['path']), workspace, d['identity'])
-        removed.append(d['path'])
+        try:
+            delete_checked(Path(d['path']), workspace, d['identity'])
+        except PermissionError as error:
+            # Never chmod/chown foreign owners or mislabel their outputs as inputs.
+            blocked.append({**d, 'blocked_permission': str(error)})
+        else:
+            removed.append(d['path'])
         pending.pop(0)
         if len(removed) % 10 == 0:
             checkpoint()
+    if blocked:
+        checkpoint()
+        raise DisposalBlocked(removed, blocked, record.stem)
     record.unlink()
     return removed
 
@@ -523,7 +559,7 @@ def main(argv=None):
     if args.command == 'audit':
         decisions = plan(workspace)
         print(json.dumps({'schema': SCHEMA, 'workspace': str(workspace), 'decisions': decisions,
-                          'reclaimable_bytes': sum(d['bytes'] for d in decisions if d['action'] == 'delete')}, indent=2))
+                          'reclaimable_bytes': sum(d['bytes'] for d in decisions if d['action'] == 'delete' and not d.get('blocked_permission'))}, indent=2))
         return 0
     lock_root = workspace / '.worklane'
     lock_root.mkdir(exist_ok=True)
@@ -553,7 +589,12 @@ def main(argv=None):
             tasks[args.task]['state'] = 'finished'
             save_tasks(workspace, tasks)
         decisions = plan(workspace)
-        removed = apply(workspace, decisions, getattr(args, 'resume', None))
+        blocked = []
+        transaction = None
+        try:
+            removed = apply(workspace, decisions, getattr(args, 'resume', None))
+        except DisposalBlocked as error:
+            removed, blocked, transaction = error.removed, error.blocked, error.transaction
         if args.command == 'finish':
             tasks = load_tasks(workspace)
             # An explicit pin survives finish only until its declared expiration.
@@ -568,9 +609,10 @@ def main(argv=None):
             save_tasks(workspace, tasks)
         remaining = [d for d in decisions if d['action'] == 'defer_active']
         print(json.dumps({'schema': SCHEMA, 'removed_count': len(removed),
-                          'removed_bytes': sum(d['bytes'] for d in decisions if d['action'] == 'delete'),
-                          'deferred': remaining}, indent=2))
-        return 3 if remaining else 0
+                          'removed_bytes': sum(d['bytes'] for d in decisions if d['path'] in set(removed)),
+                          'deferred': remaining, 'blocked_permission': blocked,
+                          'resume_transaction': transaction}, indent=2))
+        return 3 if remaining or blocked else 0
     finally:
         os.close(fd)
 

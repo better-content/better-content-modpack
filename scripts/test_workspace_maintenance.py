@@ -266,6 +266,40 @@ class DisposalTests(unittest.TestCase):
             result = subprocess.check_output([sys.executable, '-B', '-c', code, m.__file__, str(self.root)], text=True)
         self.assertIn([os.getpid(), str(p)], json.loads(result))
 
+    def test_permission_blocker_does_not_prevent_other_idle_disposal(self):
+        blocked = self.file('.tmp/blocked/output')
+        idle = self.file('.tmp/idle/output')
+        original = m.delete_checked
+        def delete(path, *args, **kwargs):
+            if path == blocked.parent:
+                raise PermissionError('foreign owner')
+            return original(path, *args, **kwargs)
+        with patch.object(m, 'delete_checked', delete), patch.object(m, 'process_references', return_value=[]):
+            with self.assertRaises(m.DisposalBlocked) as result:
+                m.apply(self.root, self.plan())
+        self.assertTrue(blocked.exists())
+        self.assertFalse(idle.exists())
+        self.assertEqual([str(idle.parent)], result.exception.removed)
+        self.assertEqual(str(blocked.parent), result.exception.blocked[0]['path'])
+        self.apply(self.plan(), transaction=result.exception.transaction)
+        self.assertFalse(blocked.exists())
+        self.assertEqual([], list((self.root / '.worklane/disposal').glob('*.json')))
+
+    def test_audit_reports_permission_blocker_without_calling_it_an_input(self):
+        import contextlib
+        import io
+        p = self.file('.tmp/foreign/output')
+        out = io.StringIO()
+        with patch.object(m, 'permission_blocker', return_value='foreign owner'), \
+                patch.object(m, 'process_references', return_value=[]), contextlib.redirect_stdout(out):
+            m.main(['--workspace', str(self.root), 'audit'])
+        report = json.loads(out.getvalue())
+        decision = next(d for d in report['decisions'] if d['path'] == str(p.parent))
+        self.assertEqual('delete', decision['action'])
+        self.assertEqual('foreign owner', decision['blocked_permission'])
+        self.assertEqual(0, report['reclaimable_bytes'])
+        self.assertTrue(p.exists())
+
     def test_provider_build_outputs_deleted_source_graph_untouched(self):
         p = self.file('better-content-modpack/build/providers/api.jar')
         graph = self.file('better-content-modpack/gradle/active-custom-mods.json', '{"dependsOn":["provider"]}')

@@ -51,8 +51,11 @@ Register a task **before** producing or consuming disposable files. Repeat `--pa
 output/input boundary it consumes, including exact candidate paths; tasks also hold the shared
 build-cache lease. `finish` closes the lease and disposes eligible idle outputs. The command never
 stops processes itself: the caller first shuts down its producers and coordinates with other
-owners. Exit 3 means idle deletion succeeded but active targets remain; exit 1 means unsafe or
-interrupted cleanup. `audit` does not mutate anything. Failed fixture/report contents and missing
+owners. Read-only consumers use `begin --no-build-cache` to avoid a needless provider/cache lease.
+Exit 3 means active or permission-blocked disposable targets remain; exit 1 means unsafe or
+interrupted cleanup. Foreign-owned outputs are still disposable, not promoted to authored inputs:
+report the blocker and ask their owner/host administrator to release permissions, then resume.
+Never escalate privileges or silently claim the purge is complete. `audit` does not mutate anything. Failed fixture/report contents and missing
 candidates do not prevent deletion.
 
 Temporary delivery pins use `begin --task DELIVERY_ID --path PATH --pin-until UNIX_SECONDS` with
@@ -73,7 +76,7 @@ unlinked without traversing their targets; ancestor symlinks, path escapes, targ
 and unexpected mount boundaries are rejected. Unknown paths outside classified output roots
 are inputs until inspected, not blanket deletion targets.
 
-Only bounded live-task metadata and incomplete transaction records exist under `.worklane/`.
+Cleanup stores only bounded live-task metadata and incomplete transaction records under `.worklane/`.
 Completed transactions are removed, not accumulated as history. The final handoff reports
 measured space reclaimed and exact active deferrals in text; it does not create another archive,
 Git bundle, evidence backup or compatibility link. `workspace_artifacts/README.md` is merely a
