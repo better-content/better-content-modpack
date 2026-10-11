@@ -210,6 +210,22 @@ class DisposalTests(unittest.TestCase):
                 m.delete_checked(p.parent, self.root, m.signature(p.parent))
         self.assertTrue(p.exists())
 
+    def test_registry_and_predictable_temporary_symlinks_do_not_redirect_state(self):
+        source = self.file('authored-input.txt', 'keep')
+        state = self.root / '.worklane'
+        state.mkdir()
+        registry = state / 'disposable-tasks.json'
+        registry.symlink_to(source)
+        with self.assertRaises(ValueError):
+            m.load_tasks(self.root)
+        with self.assertRaises(ValueError):
+            m.save_tasks(self.root, {'task': {'state': 'active'}})
+        registry.unlink()
+        (state / 'disposable-tasks.new').symlink_to(source)
+        m.save_tasks(self.root, {'task': {'state': 'active'}})
+        self.assertEqual('keep', source.read_text())
+        self.assertEqual('active', m.load_tasks(self.root)['task']['state'])
+
     def test_provider_build_outputs_deleted_source_graph_untouched(self):
         p = self.file('better-content-modpack/build/providers/api.jar')
         graph = self.file('better-content-modpack/gradle/active-custom-mods.json', '{"dependsOn":["provider"]}')

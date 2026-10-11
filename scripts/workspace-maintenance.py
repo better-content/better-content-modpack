@@ -118,6 +118,8 @@ def discover(workspace):
     if minecraft.is_dir():
         for name in ('saves', 'logs', 'crash-reports', 'screenshots'):
             add(minecraft / name, 'development world/runtime data')
+    for name in ('forge-1.20.1-47.4.22-installer.jar.log', 'info:-'):
+        add(workspace / name, 'abandoned installer/image diagnostic output')
     for name in ('bc-debug-refresh', 'bc-plan-dispatch', 'journal-debug'):
         add(workspace / '.local/state' / name, 'old task orchestration state')
     # Preserve tracked launcher libraries; remove only untracked download files.
@@ -210,8 +212,28 @@ def process_references(workspace):
     return refs
 
 
+def atomic_json(workspace, path, value):
+    safe_path(workspace, path)
+    if path.is_symlink():
+        raise ValueError('unsafe state file')
+    temp = path.with_name(path.name + '.' + uuid.uuid4().hex + '.new')
+    fd = os.open(temp, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+    try:
+        with os.fdopen(fd, 'w') as stream:
+            json.dump(value, stream)
+            stream.write('\n')
+            stream.flush()
+            os.fsync(stream.fileno())
+        temp.replace(path)
+    finally:
+        if exists(temp):
+            temp.unlink()
+
+
 def load_tasks(workspace):
-    p = workspace / '.worklane/disposable-tasks.json'
+    p = safe_path(workspace, workspace / '.worklane/disposable-tasks.json')
+    if p.is_symlink():
+        raise ValueError('unsafe task registry')
     if not p.exists():
         return {}
     data = json.loads(p.read_text())
@@ -221,15 +243,14 @@ def load_tasks(workspace):
 
 
 def save_tasks(workspace, tasks):
-    p = workspace / '.worklane/disposable-tasks.json'
+    p = safe_path(workspace, workspace / '.worklane/disposable-tasks.json')
+    if p.is_symlink():
+        raise ValueError('unsafe task registry')
     if not tasks:
         p.unlink(missing_ok=True)
         return
     p.parent.mkdir(parents=True, exist_ok=True)
-    temp = p.with_suffix('.new')
-    temp.write_text(json.dumps({'schema': SCHEMA, 'tasks': tasks}, indent=2) + '\n')
-    temp.chmod(0o600)
-    temp.replace(p)
+    atomic_json(workspace, p, {'schema': SCHEMA, 'tasks': tasks})
 
 
 def safe_path(workspace, value):
@@ -262,6 +283,11 @@ def scan_boundary(path, workspace):
             s = p.lstat()
             if not stat.S_ISLNK(s.st_mode) and (s.st_dev != device or os.path.ismount(p)):
                 raise ValueError('unexpected mount boundary: ' + str(p))
+
+
+def shared_build_output(path, category):
+    return category == 'shared rebuildable Gradle cache' or (
+        category == 'repository output/fixture' and path.name in {'build', '.gradle', '.kotlin'})
 
 
 def plan(workspace, refs=None, tasks=None):
@@ -315,7 +341,7 @@ def plan(workspace, refs=None, tasks=None):
                 p = safe_path(workspace, value)
                 if active and (beneath(p, path) or beneath(path, p)):
                     owners.append('task:' + task_id)
-            if active and category == 'shared rebuildable Gradle cache' and task.get('uses_build_cache', True):
+            if active and shared_build_output(path, category) and task.get('uses_build_cache', True):
                 owners.append('task:' + task_id)
         action = 'protect_input' if protected else 'defer_active' if owners else 'delete'
         if protected:
@@ -420,10 +446,7 @@ def apply(workspace, decisions, transaction=None):
     else:
         pending = [d for d in decisions if d['action'] == 'delete']
     def checkpoint():
-        temp = record.with_suffix('.new')
-        temp.write_text(json.dumps({'schema': SCHEMA, 'workspace': str(workspace), 'pending': pending}) + '\n')
-        temp.chmod(0o600)
-        temp.replace(record)
+        atomic_json(workspace, record, {'schema': SCHEMA, 'workspace': str(workspace), 'pending': pending})
     checkpoint()
     removed = []
     while pending:
@@ -445,7 +468,7 @@ def apply(workspace, decisions, transaction=None):
             active = until > time.time() if until is not None else task.get('state', 'active') == 'active'
             if active and (any(beneath(safe_path(workspace, p), path) or beneath(path, safe_path(workspace, p))
                                for p in task.get('paths', [])) or
-                           (d['category'] == 'shared rebuildable Gradle cache' and task.get('uses_build_cache', True))):
+                           (shared_build_output(path, d['category']) and task.get('uses_build_cache', True))):
                 raise RuntimeError('target leased during deletion')
         # Concurrent source authoring changes an output tree into an input boundary.
         repo = next((p for p in path.parents if (p / '.git').exists()), None)
@@ -454,7 +477,8 @@ def apply(workspace, decisions, transaction=None):
         delete_checked(Path(d['path']), workspace, d['identity'])
         removed.append(d['path'])
         pending.pop(0)
-        checkpoint()
+        if len(removed) % 10 == 0:
+            checkpoint()
     record.unlink()
     return removed
 
