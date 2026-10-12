@@ -41,6 +41,37 @@ or human acceptance is claimed.
 - Complete and verify the hydraulic reclamation and finite actor loops, persistence, two-client play,
   performance, visual readability and the exact extracted standalone payload before player review.
 
+## Complicated Bees: Forestry-style bee swarms
+
+**Status:** Wanted; deferred and outside current implementation scope.
+
+**Goal:** Forestry-style visual bee swarms around Complicated Bees nests and working apiaries,
+so inhabited nests and productive colonies feel alive rather than like static blocks.
+
+### Proposed approach — not yet approved
+
+- Prefer studying actual Forestry swarm/bee-rendering code as the behavioral and visual reference,
+  and adapting or reusing suitable code where licensing and version compatibility permit, rather
+  than approximating the effect from memory. The exact Forestry version and source paths remain
+  to be selected and inspected.
+- Keep swarms cosmetic and client-side; do not introduce simulated bee entities, alter genetics
+  or production, or imply activity when an apiary is inactive. Decide separately how wild nests
+  signal occupancy and how swarm density reflects colony activity.
+- Bound particle/render cost and viewing distance for dense apiary installations; respect client
+  particle settings and provide an appropriate reduction/disable option.
+
+### Source baseline and conditions for revisiting
+
+The pack pin is recorded in [the Complicated Bees manifest](../mods/complicated-bees.pw.toml).
+Source inspection of upstream `v1.20.1-3.4.6` found no ambient bee-particle emission in nests or
+apiaries; its existing bee particle is emitted by the Bee Staff projectile, not colony activity.
+This is an implementation gap, not a verified rendering failure.
+
+Before activation, inspect the chosen Forestry implementation and license, choose the owning
+integration repository, and establish how client visuals receive colony activity without adding
+unnecessary network traffic. Explicit implementation approval and separately authorized native
+visual/performance verification are required; this entry authorizes neither.
+
 ## EMI: recipes with available ingredients first
 
 **Status:** Wanted; deferred and outside current implementation scope.
