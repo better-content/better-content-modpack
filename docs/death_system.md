@@ -38,7 +38,12 @@ especially for solo and multiplayer travel, distant deaths, and repeated deaths.
    another accepted HP-damaging hit either adds one maim or begins final death;
    existing injuries determine the death roll. Healing can restore positive HP
    after the zero-crossing healing lock, while injuries require treatment.
-   Explicit special-kill sources, command kill, and the void bypass the Door.
+   Explicit special-kill sources, command kill, and the void bypass the Door. Catastrophic falls
+   also bypass when final accepted HP damage after mitigation and absorption reaches twice the
+   player's maximum HP immediately before the hit, including when already at the Door. Canceled
+   catastrophic deaths do not manufacture a maim. Heartbeat sound runs for 30 seconds of game ticks
+   after entry or the latest accepted HP/absorption damage at the Door, independently of trauma;
+   healing and confirmed final death stop it. The saved deadline survives reconnects.
    Revival's current rules say totems do not prevent player death. Its
    [source README](https://github.com/better-content/better-deaths-door)
    owns exact probabilities, treatment, and exceptions.
@@ -58,7 +63,11 @@ especially for solo and multiplayer travel, distant deaths, and repeated deaths.
    death using their own Forge hooks; their effects are listed below.
 4. **Respawn.** [Class Selector](https://github.com/better-content/better-spawns)
    returns an onboarded player to the separately locked personal starting
-   location, with scripted sound and particle effects. Its personal spawn takes
+   location, with scripted sound and particle effects. Its crying-obsidian-looking
+   `better_spawns:respawn_marker` is a separate identity exempted from RBP's physics-operation
+   admission, not an exemption for ordinary crying obsidian. Existing personal return points
+   upgrade at that coordinate on the next respawn; no world-wide block replacement runs.
+   Its personal spawn takes
    priority over ordinary non-forced bed and anchor changes. The native death
    screen remains visible because `do_immediate_respawn=false` in
    [Global Game Rules](../config/globalgamerules-common.toml). The configured

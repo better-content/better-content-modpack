@@ -15,7 +15,7 @@
     },
     {
       "repository": "better-compat-fixes",
-      "commit": "d75f1e48251373b7b9ec687604a496d5bfb44978"
+      "commit": "fb539320e6992807dddf2445388cffaee994e4ce"
     },
     {
       "repository": "better-discovery-guides",
@@ -31,7 +31,7 @@
     },
     {
       "repository": "better-spawns",
-      "commit": "ab634db5277057cb0634e41cba0c1399e89fc2e7"
+      "commit": "278763b9f3983e04fe3a381db8ca735d0a462185"
     },
     {
       "repository": "better-create-train-fuel",
@@ -51,7 +51,7 @@
     },
     {
       "repository": "better-deaths-door",
-      "commit": "33c617d9f04297d00c0aacae34f5e9d5493cccd1"
+      "commit": "2d0ccc372adc8e6458bcc3788d5df4c9670c68dc"
     },
     {
       "repository": "better-survival-hud",
@@ -179,7 +179,7 @@
     },
     {
       "repository": "better-journal-inventory",
-      "commit": "6b134bf0a6b7a7734b2311c3090d7eb4d7450480"
+      "commit": "8efce1590d1a054725c1dd54f818aefa78498960"
     },
     {
       "repository": "scalable-tnt",

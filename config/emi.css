@@ -202,12 +202,12 @@
 	/**
 	 * The pages in the right sidebar
 	 */
-	right-sidebar-pages: index, craftables, favorites;
+	right-sidebar-pages: index, craftables;
 
 	/**
 	 * The subpanels in the right sidebar
 	 */
-	right-sidebar-subpanels: none;
+	right-sidebar-subpanels: favorites 3;
 
 	/**
 	 * How many columns and rows of ingredients to limit the right sidebar to

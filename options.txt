@@ -235,7 +235,7 @@ key_key.moreartifacts.dragon.eye:key.keyboard.d:ALT
 key_key.aether.open_accessories.desc:key.keyboard.unknown
 key_key.aether.gravitite_jump_ability.desc:key.keyboard.space
 key_key.aether.invisibility_toggle.desc:key.keyboard.i:ALT
-key_key.sophisticatedcore.sort:key.keyboard.unknown
+key_key.sophisticatedcore.sort:key.mouse.middle
 key_key.sophisticatedcore.transfer_to_storage:key.keyboard.left.bracket
 key_key.sophisticatedcore.transfer_to_inventory:key.keyboard.right.bracket
 key_key.better_rpg_progression.open_stats:key.keyboard.o
@@ -267,7 +267,6 @@ key_key.better_content_threads.open_reader:key.keyboard.m
 key_artifacts.key.helium_flamingo.activate:key.keyboard.unknown
 key_artifacts.key.night_vision_goggles.toggle:key.keyboard.unknown
 key_artifacts.key.universal_attractor.toggle:key.keyboard.unknown
-key_key.inventorysorter.sort:key.mouse.middle
 key_dropoff.key.dump:key.keyboard.unknown
 key_dropoff.key.deposit:key.keyboard.unknown
 key_create.keyinfo.toolmenu:key.keyboard.left.alt
@@ -315,8 +314,8 @@ key_quark.keybind.patreon_emote.jet:key.keyboard.unknown
 key_quark.keybind.patreon_emote.exorcist:key.keyboard.unknown
 key_quark.keybind.patreon_emote.zombie:key.keyboard.unknown
 key_quark.keybind.change_hotbar:key.keyboard.unknown
-key_quark.keybind.sort_player:key.keyboard.unknown
-key_quark.keybind.sort_container:key.keyboard.unknown
+key_quark.keybind.sort_player:key.mouse.middle
+key_quark.keybind.sort_container:key.mouse.middle
 key_quark.keybind.lock_rotation:key.keyboard.unknown
 key_quark.keybind.narrator_readout:key.keyboard.unknown
 key_quark.keybind.narrator_full_readout:key.keyboard.unknown

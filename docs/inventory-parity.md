@@ -33,6 +33,23 @@ areas and original Record/EMI panels on personal inventory. Do not redirect ordi
 a backpack, append/lock/move its equipment slots, reserve combined-screen space, inject crafting
 descriptors or intercept native backpack opening/transfer/tab-selection protocols.
 
+## Native controls and presentation defaults
+
+Tracked client defaults bind Quark's **Sort Player Inventory** / **Sort Container** and
+Sophisticated Core's **Sort** to middle mouse. Better Compat Fixes selects one existing Quark
+callback using the hovered native slot, and leaves separate Sophisticated screens to their native
+sort handler; it does not implement sorting/storage itself. The obsolete Inventory Sorter binding
+is removed. Existing installations retain their saved options: set those three controls to middle
+mouse manually if needed; do not overwrite personal options automatically.
+
+Ordinary EMI defaults reserve three native Favorites rows alongside Index, without a duplicate
+Favorites page (pinned EMI removes duplicate subpanel types). Journal retains its fitted concurrent
+layout. A presentation-only native-page fallback preserves Favorites access when native capacities
+cannot coexist, and restores the ordinary subpanel on screen/geometry changes. Existing EMI
+preferences can be configured through EMI's sidebar settings; no custom grid or backpack Journal
+decoration is introduced. Mend/Cancel and progress/status use the shared server-authoritative
+Death's Door treatment view on both personal-inventory paths.
+
 ## Acceptance before claiming completion
 
 - Audit source and actual packaged artifacts for native authority and absence of retired engines.

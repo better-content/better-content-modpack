@@ -35,6 +35,28 @@ transform patch. This is not a runtime visual acceptance: camera movement, FOV c
 Oculus/shader combinations, terrain seams, and depth/fade appearance still require the
 separate candidate/runtime visual review.
 
-`config/DistantHorizons.toml` keeps LOD transparency `DISABLED`; the pack performance guide
-documents this as the compatibility setting for DH/Oculus/shader depth composition. DH
-remains enabled. This setting is independent of the transform finding above.
+## Oculus / Complementary opaque-depth boundary
+
+`config/DistantHorizons.toml` keeps LOD transparency `DISABLED`; DH remains enabled. This
+setting is independent of the geometry transforms above, but requires an opaque-depth correction
+for Oculus `1.8.0` with Complementary Reimagined `r5.8.1`:
+
+- DH skips the transparent LOD pass when transparency is disabled.
+- Oculus refreshes its separate opaque-depth copy only at the transparent-pass event. Its
+  `dhDepthTex1` sampler otherwise exposes an unpopulated or stale copy in this mode.
+- Complementary uses `dhDepthTex1` to reconstruct DH positions for TAA history reprojection;
+  incorrect depth can therefore misalign history during camera translation/view bobbing.
+
+The [Better Compat Fixes source](../../mod_source/better-compat-fixes/README.md) supplies a
+client-only, exact-version-gated correction: disabled transparency uses the connected live DH
+depth, which is already opaque-only. Enabled transparency and unavailable/cleared framebuffer
+states preserve Oculus' native opaque-copy result. No camera transform, TAA weighting or
+transparency setting is changed. Source changes do not update the pack's bundled JAR; deployment
+and visual acceptance remain separate from this implemented source contract.
+
+Pinned upstream authorities:
+[DH core `eb231793`, LodRenderer](https://gitlab.com/jeseibel/distant-horizons-core/-/blob/eb2317934f313494caf8e11f7b2b8dff2e054e82/core/src/main/java/com/seibel/distanthorizons/core/render/renderer/LodRenderer.java),
+[Oculus `b3b27813`, LodRendererEvents](https://github.com/Asek3/Oculus/blob/b3b278134f719afe32ba8b6b5d3a93f052175afc/src/main/java/net/irisshaders/iris/compat/dh/LodRendererEvents.java), and
+[Complementary `08e1c2ad`, TAA](https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/08e1c2ada5eaf2fc36f08516c316b3d3c3677d8e/shaders/lib/antialiasing/taa.glsl).
+These sources establish the depth contract, not a verified runtime cause for every blur/bobbing
+symptom. Same-artifact in-game verification remains pending.
