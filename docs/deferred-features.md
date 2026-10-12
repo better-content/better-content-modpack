@@ -14,6 +14,33 @@ entry after moving any still-relevant guidance to the proper living subject; do 
 historical completion reports here. See the [documentation authority map](README.md),
 [workspace policy](policies/workspace.md) and [testing policy](testing.md).
 
+## Abyssal City: gameplay completion and pack integration
+
+**Status:** Private source checkpoint published; gameplay completion and pack integration are deferred
+and outside current work scope. This is not a completed or accepted MVP.
+
+**Owning source:** [better-content/better-abyssal-city](https://github.com/better-content/better-abyssal-city)
+(private; organization access required). Its README owns implementation details and verification
+boundaries. The prototype is not installed in the pack; publication does not authorize deployment.
+
+**Goal:** An explorable layered underwater city with dangerous mystery fluid, player sealing and
+pumping/reclamation, finite local Gatherer/Warden ecology, and persistent intercity travel.
+
+The published prototype implements city planning/generation, structural fixtures and experimental
+traversal tooling. Generation readiness remains incomplete; hydraulics, actors and integrated
+multiplayer/performance/visual/distributable acceptance remain unfinished. No gameplay-ready ZIP
+or human acceptance is claimed.
+
+### Conditions for revisiting
+
+- Explicitly authorize resuming the isolated MVP and, separately, any main-pack integration.
+- Resolve native ordinary-loading/physics-cache diagnostics and clarify the headless audio boundary.
+- Prefer compositional navigability verification: validated pieces and connection contracts,
+  assembled-world obstruction/connectivity checks, and short representative native client journeys.
+  Do not rely on an exhaustive player-steering marathon or assume correct composition from piece tests alone.
+- Complete and verify the hydraulic reclamation and finite actor loops, persistence, two-client play,
+  performance, visual readability and the exact extracted standalone payload before player review.
+
 ## EMI: recipes with available ingredients first
 
 **Status:** Wanted; deferred and outside current implementation scope.
