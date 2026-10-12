@@ -29,6 +29,7 @@ GRADLE_OUTPUTS = {'caches', 'wrapper', 'daemon', 'native', '.tmp', 'workers',
 PROTECTED = ['.codex/auth.json', '.codex/config.toml', '.codex/AGENTS.md',
              '.codex/hooks.json', '.codex/packages', '.codex/plugins', '.codex/skills',
              '.pi/agent/auth.json', '.pi/agent/settings.json', '.pi/agent/extensions',
+             '.pi/agent/sessions',  # User conversation history, including inactive chats.
              '.sdkman', '.local/bin', '.local/lib', '.gradle/jdks',
              '.cache/ms-playwright', '.cache/selenium', '.tmp/.ICE-unix', '.tmp/.X11-unix', '.tmp/.font-unix', '.tmp/.XIM-unix',
              'better-content-modpack/mods', 'workspace_artifacts/README.md']
@@ -136,10 +137,6 @@ def discover(workspace):
     pi = workspace / '.pi/agent'
     for name in ('web-search-cache', 'models-store.json'):
         add(pi / name, 'agent generated cache')
-    sessions = pi / 'sessions'
-    if sessions.is_dir():
-        for p in sessions.rglob('*.jsonl'):
-            add(p, 'agent session')
     minecraft = workspace / '.minecraft'
     if minecraft.is_dir():
         for name in ('saves', 'logs', 'crash-reports', 'screenshots'):
@@ -435,6 +432,9 @@ def plan(workspace, refs=None, tasks=None):
 
 def delete_checked(path, workspace, expected):
     safe_path(workspace, path)
+    history = workspace / '.pi/agent/sessions'
+    if beneath(path, history) or beneath(history, path):
+        raise ValueError('protected Pi conversation history: ' + str(path))
     if not exists(path):
         return
     if signature(path) != expected:

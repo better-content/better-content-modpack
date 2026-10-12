@@ -4,12 +4,21 @@
 
 This is the sole Better Content retention/disposal policy. It covers all development worlds and
 saves, runtime instances, candidates/distributions, test evidence, failed fixtures, captures,
-dumps/logs, agent sessions/history/images, dependency caches, and repository build/provider JAR
-outputs. This environment is **not a save backup service or historical archive**. No world is
-sentimentally protected; dead-build worlds are not a reason to keep a build alive. Current
+dumps/logs, disposable agent sessions/history/images (excluding Pi conversation history), dependency
+caches, and repository build/provider JAR outputs. This environment is **not a save backup service
+or historical archive**. No world is sentimentally protected; dead-build worlds are not a reason to keep a build alive. Current
 candidates, latest passes, unresolved failures and sealed distributions receive no automatic
 retention exemption except the latest complete packaged ZIP pair defined below. Authored/operating inputs remain inputs as defined in
 [workspace.md](workspace.md); never classify `.codex`, `.cache`, or an art directory wholesale.
+
+## Pi conversation history is protected
+
+Pi chat history under `/home/dev/.pi/agent/sessions/` is user-owned input, not disposable task
+output. Preserve the entire tree, including inactive/ended conversations and associated files,
+at handoff and during pruning. Live-consumer checks are not its retention condition. Cleanup
+must not discover it as disposable or delete it through an old plan/transaction. Only an explicit
+user request to delete the specified history authorizes removal; task completion is not permission.
+Pi's rebuildable search/model caches remain disposable independently of conversation history.
 
 ## Latest packaged build retention
 

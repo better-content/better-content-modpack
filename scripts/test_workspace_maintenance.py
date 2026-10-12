@@ -131,6 +131,37 @@ class DisposalTests(unittest.TestCase):
                      'better-content-modpack/generated/authored.txt'):
             self.assertTrue((self.root / path).exists())
 
+    def test_inactive_pi_history_is_protected_while_pi_caches_remain_disposable(self):
+        history = self.file('.pi/agent/sessions/--home-dev--/old.jsonl', 'user conversation')
+        attachment = self.file('.pi/agent/sessions/--home-dev--/images/capture.png', 'chat attachment')
+        cache = self.file('.pi/agent/web-search-cache/result.json')
+        models = self.file('.pi/agent/models-store.json')
+        root = self.root / '.pi/agent/sessions'
+        targets, _ = m.discover(self.root)
+        self.assertFalse(any(m.beneath(p, root) or m.beneath(root, p) for p in targets))
+        self.assertEqual('protect_input', self.action(root))
+        self.apply()
+        self.assertEqual('user conversation', history.read_text())
+        self.assertEqual('chat attachment', attachment.read_text())
+        self.assertFalse(cache.exists())
+        self.assertFalse(models.exists())
+
+    def test_old_pi_deletion_plan_and_resume_cannot_delete_history(self):
+        history = self.file('.pi/agent/sessions/--home-dev--/old.jsonl', 'keep')
+        old = {'path': str(history), 'category': 'agent session', 'action': 'delete',
+               'identity': m.signature(history)}
+        with self.assertRaisesRegex(ValueError, 'protected Pi conversation history'):
+            self.apply([old])
+        self.assertEqual('keep', history.read_text())
+        record = next((self.root / '.worklane/disposal').glob('*.json'))
+        with self.assertRaisesRegex(ValueError, 'now active or unclassified'):
+            self.apply(transaction=record.stem)
+        self.assertEqual('keep', history.read_text())
+        for path in (history, history.parent, self.root / '.pi/agent'):
+            with self.assertRaisesRegex(ValueError, 'protected Pi conversation history'):
+                m.delete_checked(path, self.root, m.signature(path))
+        self.assertEqual('keep', history.read_text())
+
     def test_active_fd_cwd_and_sqlite_family_defer(self):
         p = self.file('workspace_artifacts/reviews/scoped/world/data')
         self.assertEqual('defer_active', self.action(p, refs=[(42, p)]))

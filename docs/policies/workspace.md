@@ -24,10 +24,13 @@ areas. Claims are advisory and can be stale; only their owner edits/removes them
 are coordination, not user instructions. Exact messaging conventions belong to the global guide.
 
 Authored source, Git history, tracked pack content and bundled production JARs, installed SDKs,
-credentials, agent configuration/hooks/packages/skills, and deliberately authored art/audio are
-inputs. They must not be removed by disposal. Generated copies, fixtures, candidates, saves,
-captures, build outputs, session history and caches are not inputs merely because they are useful
-historically. See [generated-data.md](generated-data.md) for their complete lifecycle.
+credentials, agent configuration/hooks/packages/skills, Pi conversation history, and deliberately
+authored art/audio are inputs. They must not be removed by disposal. Pi history under
+`/home/dev/.pi/agent/sessions/` remains protected even when its conversation is inactive or ended;
+only an explicit user request to delete the specified history authorizes removal. Generated copies,
+fixtures, candidates, saves, captures, build outputs, other agent session history and caches are
+not inputs merely because they are useful historically. See [generated-data.md](generated-data.md)
+for their complete lifecycle.
 
 ## Validation, commits and publication
 
