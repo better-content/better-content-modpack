@@ -1,12 +1,20 @@
 hash-format = "sha256"
 
 [[files]]
-file = ".kotlin/sessions/kotlin-compiler-12017154931217397628.salive"
+file = ".worklane/testing-sessions/.lock"
 hash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 
 [[files]]
+file = ".worklane/testing-sessions/a120669fc1bf4255ad635a2dbe221451.json"
+hash = "7b5ef63d9e70e4dacb16be0f455babd072dfaa0c652de41d954e6943abff9a9c"
+
+[[files]]
+file = ".worklane/testing-sessions/e59e7da84c4f49ed8a1dc289b574a47a.json"
+hash = "c9dda57b41dfb7454a87d6c3a52ce6c6f2bddc1a88361e2335d7627bcdae312e"
+
+[[files]]
 file = "AGENTS.md"
-hash = "0202eaf1c82b838336bd0f3523b52755fc11439827c2ab5bc56f51998ff6ae6e"
+hash = "6cdbacd03871b1c49a139ce321727974308754e77abd888937ad2e561b80cab9"
 
 [[files]]
 file = "LICENSE"
@@ -2174,7 +2182,7 @@ hash = "ba8143c549f98ca6a96210964191c8039dce10ec1b5dd954ee29bd781e48f8db"
 
 [[files]]
 file = "config/better_compat_fixes-common.toml"
-hash = "02458b63dc1ec193c48d54705dcc96c038e7e6f85d7ac2f562c67bb6a1713a19"
+hash = "8bcc8c1c248ed4802fb0db23d09aeefce9522649d5919e9d271aaebc6b5eba65"
 
 [[files]]
 file = "config/better_craftable_bouquets-client.toml"
@@ -2654,7 +2662,7 @@ hash = "4b42b6bd60c47de877c46b478917668c45d6dc32c8595a52674650609ce5e86b"
 
 [[files]]
 file = "config/incontrol/structure.json"
-hash = "a399083ecb3c6bbeed1a28c2d9565f4982db093d1b725ada389f808bc34751c1"
+hash = "80e35c1e67ee4355429dfa6da5114df9248bb304cd0708972d559f067734854a"
 
 [[files]]
 file = "config/incontrol/summonaid.json"
@@ -2711,78 +2719,6 @@ hash = "01d75dd7be8fbe04ec4e19bdf36fd1f5cd40daa74bd366b6533cb8e65a62dec5"
 [[files]]
 file = "config/lootr-common.toml"
 hash = "67a6571c1a4b6a371507cca4a71dceb710b8842d9aa1318a63751b4cf042d0a2"
-
-[[files]]
-file = "config/lostcities/common.toml"
-hash = "9c28e8f1e127b86da5ae2e26d2d11abcdafe3e178d4e8b2c4097a4d5435f9359"
-
-[[files]]
-file = "config/lostcities/profiles/ancient.json"
-hash = "31c9bf6cacee6543d069f85ea87402a705ba792dea2b34b89f09160f295ce1ff"
-
-[[files]]
-file = "config/lostcities/profiles/atlantis.json"
-hash = "e7a74ced3b905f411fff864fdcbeaca8223b3d43aa66170e7d2984fe6eb1685f"
-
-[[files]]
-file = "config/lostcities/profiles/bio_wasteland.json"
-hash = "c96974b5578ecaf44946a8315cfb3836a09b2e5cb3c9691d427219ca7cac0f7d"
-
-[[files]]
-file = "config/lostcities/profiles/biosphere.json"
-hash = "96e81559ff71eb8ac523359617fdfad4cce2d32f7d11b9a8263f234b028bdee1"
-
-[[files]]
-file = "config/lostcities/profiles/biosphere_caves.json"
-hash = "289e3b69d25be8a410ad91ec0d5e52f7128c52000c28d5d74ee351e86bc906af"
-
-[[files]]
-file = "config/lostcities/profiles/cavern.json"
-hash = "debd794c328df0bd558aa12d2a1ce8f3f4aceee810d888b4a97b32bf5b5a6aa6"
-
-[[files]]
-file = "config/lostcities/profiles/default.json"
-hash = "0b028deb83ad53d69489aecc07ca9f2beeb423d5613d8ce94912e36e598eb4ff"
-
-[[files]]
-file = "config/lostcities/profiles/floating.json"
-hash = "2eee391a2873f3e05cbd79e62e30bf7528307ba110b38710221e40b54cf9e054"
-
-[[files]]
-file = "config/lostcities/profiles/largecities.json"
-hash = "7430b0fdfe91185f6a48b428d897f3a5893db4dba75364692affed08ff21cca3"
-
-[[files]]
-file = "config/lostcities/profiles/nodamage.json"
-hash = "25fdd253f3c62240d9b06f155b9988ea15eccde390aa830fd56f094a786b358a"
-
-[[files]]
-file = "config/lostcities/profiles/onlycities.json"
-hash = "41ad71131d485c79a7bed335b4aaacb682bd10e9d1954a46753f485cb7939414"
-
-[[files]]
-file = "config/lostcities/profiles/rarecities.json"
-hash = "76f9e254418649d88530b4a30c52abd086202154a50f20b6ac5b196c77e65dc6"
-
-[[files]]
-file = "config/lostcities/profiles/safe.json"
-hash = "34065b6165550946cc3ab7d3e9580a40f9c61a8d6b0d9cbe550194ca54fed57f"
-
-[[files]]
-file = "config/lostcities/profiles/space.json"
-hash = "5682af103d170cc62e1ce79cea08bc0266e7f2bedabfb1a1bb3a857b76c61de8"
-
-[[files]]
-file = "config/lostcities/profiles/tallbuildings.json"
-hash = "d8fd948b573beb78ddd3e441a26b9ab7e698cfdf834f8c971a9cdb932eea829c"
-
-[[files]]
-file = "config/lostcities/profiles/void_outside.json"
-hash = "5429e2cb10a302c6c371610a17cf63821e99e90c60310167a7494001131c647c"
-
-[[files]]
-file = "config/lostcities/profiles/wasteland.json"
-hash = "3e6bc5b724a89da157ee71b2966d17821689827b81c9897690b97e3127c0d023"
 
 [[files]]
 file = "config/malum-client.toml"
@@ -4671,10 +4607,6 @@ hash = "00614cdf28d0dcf104cd8ac2a43cdf5892b0a767df15f09e261c2153d71c82ed"
 [[files]]
 file = "defaultconfigs/littlelogistics-server.toml"
 hash = "4ca9daf4798192c0f7a751deefa8a798d8777f270421ee38ffcef75ad20706f8"
-
-[[files]]
-file = "defaultconfigs/lostcities-server.toml"
-hash = "0e6b539571eec889003005501f659e5289127a64c0153b4a78c505151444d25c"
 
 [[files]]
 file = "defaultconfigs/mantle-server.toml"
@@ -7462,7 +7394,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "cf61c7987a1a05f4c94073be313f46228f263e48969fc6ecdff376854f710fda"
+hash = "a5212ea1ab8e78a4e749f97b5a76f35f0521183f741f9e018c4b4f3d7831ec00"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -7474,7 +7406,7 @@ hash = "43a53f08fa5a32fdc0cdf5563bbf28962aae46070ef7562b8738ee3f20b77918"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "44daae1664ed20501f562ef9e4cfb90de6d8c62c7b4acf4d2daab6cfdf2d4229"
+hash = "6497f1b1856adf039fbe2ea82c85fde7ea022537cbc7dc07a5e919d51d94f074"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -8126,7 +8058,7 @@ hash = "bef4d172fc1bfb34d342e79090726c4a0c272dd404783c3ea022b992e0e0415e"
 
 [[files]]
 file = "kubejs/data/creatingspace/creatingspace/rocket_accessible_dimension/earth_orbit.json"
-hash = "9175c358b5b53702756539ada750f72de9fbe753ca829ba0eb21d3d7824da5d9"
+hash = "8da61570283633cca409e26255cfa890e6f918eee97467be81021de6a3c0722d"
 
 [[files]]
 file = "kubejs/data/creatingspace/structures/crashed_rocket.nbt"
@@ -9093,10 +9025,6 @@ file = "kubejs/data/kubejs/recipes/primitive/rock_hand_axe.json"
 hash = "11ac63444b7e0dd099b22ebbcbe8c01b741f52f30890e269bf717b1254c7917a"
 
 [[files]]
-file = "kubejs/data/kubejs/recipes/primitive/straw_string.json"
-hash = "97843e1a5b39c56f46b165cda41c4190befe30c9236da0b16d880d768c2c4e1d"
-
-[[files]]
 file = "kubejs/data/kubejs/recipes/starcatcher/primitive_hook_bone.json"
 hash = "fcb70e13de321889d45b0d491e33d092eb53e5859c5679eb707680b7a12c0ec2"
 
@@ -9367,10 +9295,6 @@ hash = "7959e4f47b878eda763826da8022a68199a2bb8049af338c83322b25a499e784"
 [[files]]
 file = "kubejs/data/kubejs/worldgen/placed_feature/cave_twigs.json"
 hash = "c79dddd1d085e4cb9037035e1a9b227c988a78f627be76ce35505c487e51e20d"
-
-[[files]]
-file = "kubejs/data/lostcities/creatingspace/rocket_accessible_dimension/lostcity.json"
-hash = "d49cee943f9455c295d5f0b9ee877ae572f736298170314c85ae23e00d7659ab"
 
 [[files]]
 file = "kubejs/data/mae2/tags/items/p2p_attunements/eu_p2p_tunnel.json"
@@ -9978,7 +9902,7 @@ hash = "491dffb51310c2ccf144bd485183989b94daed69afd1e643fb6455873d74eccf"
 
 [[files]]
 file = "kubejs/data/sophisticatedstorage/recipes/generic_barrel.json"
-hash = "d8ab66c56a72c750ac5ab883413124817cab6e9b50eaaa005c7afd26a0297e0f"
+hash = "52d1e588c61b629bd97713da021a74bc5a5e3af204679ac538bfe59d11183623"
 
 [[files]]
 file = "kubejs/data/sophisticatedstorage/recipes/jungle_barrel.json"
@@ -10654,7 +10578,7 @@ hash = "b3ea8355219e3a96cd35977c78ce0e220bd98fd4b96b5087256b841787457368"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/check__90_sand_tag_compat.js"
-hash = "53f130c94fa81cf4873be815a09e62e0bfca67a77c8d91c59beaeda9a2b8ca8e"
+hash = "5d0396fe1f9b07def07d6f0e9b86e4e430c5744102975516119d9be52845e30a"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/check__95_remove_native_chunkloaders.js"
@@ -10694,7 +10618,7 @@ hash = "0149c08408b68d41355bd843ac912ebc8853aea9232aba33b8c1edaebc02a4b3"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__172_storage_recipe_distinction.js"
-hash = "23240eb5c17bd37ccc80c7a166e40bffc41dff7ac99592045e2dc32920ad99d4"
+hash = "9f53c735e39cd1b3d089b5fb721ccc61a6a6c0627cb6ed1a4cda35d1cf3765fa"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__174_tacz_turrets_electrical_gate.js"
@@ -10718,7 +10642,7 @@ hash = "01dc4319e4f9c567283bb05811f72c38ff10d39e54ba3cfa6b3ff4403e1b2d5b"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__compatability__85_dirt_grass_tag_compat.js"
-hash = "a76dfcfd2a449c3bb97932e2bf04c53442c6649be9bce49859b8f17dbcc1f14c"
+hash = "006718398300efa792e66608781b1649c4c596bf2e50b87ca07fa2ddbf687e99"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__cross_mod_progression__59_formulaic_synthesis_magic_routes.js"
@@ -10830,19 +10754,19 @@ hash = "0509cddb67b8b3b0b7605c7f3019dbce7b416678c0c6c757c42b3a70018fe339"
 
 [[files]]
 file = "kubejs/server_scripts/progression/00_primitive_workshop.js"
-hash = "29fb6177a920cd449f3e723444bf7507e9f29ceccf38a900f32bd1ae835f32b2"
+hash = "89e5423977ea23e88a5c384ca685629fb1432ea2b28ae86b1f1501d249616eec"
 
 [[files]]
 file = "kubejs/server_scripts/progression/10_hand_workshop.js"
-hash = "24f221c91a2016bca7ac8dbd8a88cd5923509ba35cef111933ce1bb5b8d1385e"
+hash = "80ad5a6657c56220510d865e2b94ee95f69e703b918ba2ff642263e1405fe3da"
 
 [[files]]
 file = "kubejs/server_scripts/progression/20_logistics_roots.js"
-hash = "481ca180fa71b6fe889d585b96cb2200befd44d2fd97f918c6b199bbccb70e3e"
+hash = "ddd9f85cd81b144205ad7247ea224c88ee4d967565ef50949137d6fbacb9f73e"
 
 [[files]]
 file = "kubejs/server_scripts/progression/20_powered_works.js"
-hash = "2ecca2c42d2f3897372519cc70a1a1f66dc241a703280259fbb15288213aa2f3"
+hash = "802056b6f13dc737f40576b607ef7a70758ab255116dd6b2abd147c3300d7cf8"
 
 [[files]]
 file = "kubejs/server_scripts/progression/21_better_bumblezone_crops.js"
@@ -10939,6 +10863,10 @@ hash = "ae7e5d0f34b754f8255ded730c6c0b2adb115634e5afcf0a7cde155c4b1aaea9"
 [[files]]
 file = "kubejs/server_scripts/zz_crafting_policy_report.js"
 hash = "3ea31e8bbe8dc2e98b874d982cbd7ff00521ebe51d6854d2c3ca79d140c2bf7b"
+
+[[files]]
+file = "kubejs/server_scripts/zz_recipe_clash_remediation.js"
+hash = "bedb910176619d20f6f216af167182b3246d4915b9a461a73765832d076988dc"
 
 [[files]]
 file = "kubejs/startup_scripts/compat/retained/check__12_unearthed_regolith_hand_mining.js"
@@ -11072,175 +11000,175 @@ metafile = true
 
 [[files]]
 file = "mods/better-airtight-machines-0.1.0.jar"
-hash = "b83bc69b08fe4ffc603915462c59094130efb4dc2d1a23b68d2fe0a02f54cf62"
+hash = "227a932f34a1e034946910f43703a554e823fe983184d799a93e2c31c89c50f9"
 
 [[files]]
 file = "mods/better-arena-trials-0.1.0.jar"
-hash = "0a55cf71cbc676fb3c4060979c4f7b98185b1a7b467c68e8d37b4e896f4b5275"
+hash = "b06dd5e58f58524a6f499565bf0f0342ccaba5856a3cd77fd5167eb10f6dbe56"
 
 [[files]]
 file = "mods/better-block-placement-preview-0.1.0.jar"
-hash = "ba1850a3c18638209da9451bbda808465192ec53910fdaa035ee396625ee2c0c"
+hash = "0e2be5cae2853dbd0523e037c0eebc456e05b9f71d4b1adb37c09cd450be2763"
 
 [[files]]
 file = "mods/better-bumblezone-crops-0.1.0.jar"
-hash = "f6e331d0f132b066a640301b19ca97523b7e0ef301753fe75857b5d4fcce7e6e"
+hash = "d0b2dc694fb354d005511b6209622a2e1bc61db470875601484d46278462836b"
 
 [[files]]
 file = "mods/better-buried-encounters-0.1.0.jar"
-hash = "c5955d9f42240608cc36e78d33f9606d2912171cef2b528640fa5e36f4d5984d"
+hash = "5c5bb1758d4ac126f120e176cebf1887db176bebd0017b74f0b82196dd3eda0e"
 
 [[files]]
 file = "mods/better-cave-encounters-0.2.1.jar"
-hash = "a808ed5ba54ac1e1497b1dec560d3712922bf96798337092e6266e14d6b8f987"
+hash = "679d09e1643c2cdbecdd05ad4ce448dc0cf71fc8037692e3fa7daf9562d45912"
 
 [[files]]
 file = "mods/better-chemlib-hazards-0.2.0.jar"
-hash = "e088e29dcc89f69a3fe5df54673258fef7a79fdaeb293abd90233112f3ed34cc"
+hash = "1769fc462d156bf70efbfd5d0088a766ba4a0c01b77a2c38602dd782f43ab5bb"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
-hash = "355028a6b697fa02ae09dcb2e8b010ca678dcb76e5f57d133612ca3f700db36e"
+hash = "5a0ee5abf3663719758c729c0c6e08aefc322917c00afd96a41656cc013c9823"
 
 [[files]]
 file = "mods/better-craftable-bouquets-0.1.0.jar"
-hash = "9ce51850a5d8dc6ff7d4ade2544172d46f6bc5fea20ed23d63e9d215c53c5a5a"
+hash = "3850073a06be15ddcb8d4649a08e7c2d9b73f945ce2ee30e3e7195c90559475e"
 
 [[files]]
 file = "mods/better-create-kinetic-loss-0.1.0.jar"
-hash = "5d3fb65b80b5004aebcb0e9ca1b1131b93ef3b9f153fbc5e7e027d4d9ffab154"
+hash = "66217584d4739f35f2ed1f750815ad8eb75ac7ca357631b80834153e598c5802"
 
 [[files]]
 file = "mods/better-create-train-fuel-0.1.0.jar"
-hash = "4faa2aabc8b66384a87d58fc81954fdddd05bd59c4966bfe8146434680d1aea1"
+hash = "5b38290c7eb70fc509d7874084564006ab04856e298ef484619ef6102062cb84"
 
 [[files]]
 file = "mods/better-deaths-door-1.0.0.jar"
-hash = "3fcd972e32f12f28c355e1ed3fb35021a2b738e60e315d9d3b23741183369003"
+hash = "785f49b103ba5351065d5411acffa601928a05244610432653919571981f8a9a"
 
 [[files]]
 file = "mods/better-dimension-fonts-1.0.0.jar"
-hash = "2c2f62ef45684d8c8ff7d59630a0ec47e05679a46bb0436b48051edac2cfdae4"
+hash = "c43d0cc0a2646153dfe75e39ab8902042a1277b63eeff86d40b8040968f03fca"
 
 [[files]]
 file = "mods/better-discovery-guides-1.0.0.jar"
-hash = "ce9d2f62b91253c469c694bc685cdf3926f53a91558d2781998d770464ad3346"
+hash = "c42a921c7105aeb4ce62bae85079a5e4f54f5a24012e90806ea2c4832afb69b8"
 
 [[files]]
 file = "mods/better-drinking-water-1.1.0.jar"
-hash = "f8eb141e287bf2c0c749fe65353e3410cd824585eae4a91014816405ff6946d2"
+hash = "2ad9e49aa72ceb9eac097f4afc382d267fa439066098f58cd30dba33dcaeb57d"
 
 [[files]]
 file = "mods/better-exploration-load-control-0.1.0.jar"
-hash = "adf2a1f09fd891839580a5829af0c1aa1fd9a944375a01c182943f80a60e899e"
+hash = "e1217e1a98cee24abba76f116d5be2afd275471397f8dae83df15e3f4b349fc2"
 
 [[files]]
 file = "mods/better-gameplay-notices-1.0.0.jar"
-hash = "8e222baf8454ae9417a6fecc60f1ac373257b26d6d53828a99151cc28b7c3aab"
+hash = "7c958252f6001f8e40ce7052cf36fefa8c66d76580ca2dfaf6372f6b1c72485e"
 
 [[files]]
 file = "mods/better-hexerei-dynamic-trees-1.0.1.jar"
-hash = "d5250814be3aac7b597fc5a4134101e7b1eab949790e8b13366ab74803d49d33"
+hash = "2fb07727e2632830518afdded4058d0cb8ee94aa1976e9e36eb7ae39e385ead4"
 
 [[files]]
 file = "mods/better-industrial-heat-0.1.0.jar"
-hash = "7be758bb151494fe69c2a02c1f8b36977e9af8106ba844e4ae15a6f3ada35423"
+hash = "7c6984940be8358820ac0eb29c7dba00c353e700fc86e74b089ab210cc0d7e54"
 
 [[files]]
 file = "mods/better-journal-inventory-0.1.0.jar"
-hash = "f1b521f34f1c81a516202437340a411d33e50e9a63e503305d80a4c4a318de12"
+hash = "0b8575b46644e70631974d4465e3316c36b57ea7863438640ba3f7eef22d48f8"
 
 [[files]]
 file = "mods/better-magic-chunk-anchors-0.1.0.jar"
-hash = "eddfdf310d3a7399fbfb7dba2a86103950c263b30436ab80853c9badce24644d"
+hash = "70ec3b457d832fd33ac1e2aa45ad3a6b70acd2723b0c7dce52468bd0d268e1db"
 
 [[files]]
 file = "mods/better-malum-dynamic-trees-1.0.1.jar"
-hash = "793519ce04d2291130c426413e0e8705167d3fc6b700bed6494a8e95531819b8"
+hash = "b67fdaccbcf859b74371aec95d4c643f750cc9625457d6481b526e4f968fe447"
 
 [[files]]
 file = "mods/better-mining-lamp-0.1.0.jar"
-hash = "0e6cc865454e42dd3954b766b2894ae6658d592944caa1b9e77a32258ceb7920"
+hash = "3b26b4981f8b7fa35f334752a702bb59509d0465f139fdb6c7292f09d8a39df7"
 
 [[files]]
 file = "mods/better-oc2r-create-controls-0.1.0.jar"
-hash = "5a0431a6df6e3efa74fd7f9fd1f645f3aac0c7b68703ec9c9576da09adb3eff4"
+hash = "f70d232687c467761c4e6bf9c70ed9a6721c41c695344cb0a4b41278469fcc45"
 
 [[files]]
 file = "mods/better-oc2r-wireless-messaging-1.0.0.jar"
-hash = "9d38251a139ce68d1fb8ce06746a3c77f3c1e2b3beeb5e414d10989037d2ec42"
+hash = "2d6218d826565bb6aab35d53786d02e9a8934720928ee21d4140444ae402ebec"
 
 [[files]]
 file = "mods/better-ore-geology-0.2.0.jar"
-hash = "ef3f04f0236db366ffc37551a10a5acae02620f7df9faf76dce9d1606308c256"
+hash = "250aeccd21cac67d05c523f980ed560d83d990aa924a00ff499146acfb956874"
 
 [[files]]
 file = "mods/better-pillager-campaigns-0.5.4.jar"
-hash = "47f89f26c5f80f0a0b50349e3e835d379790581fe46b3ec87993c824f484e840"
+hash = "c74f7fa906fbbc0214da30726a0c7bdfce48470ec3e421690b8e898d6dc42ae4"
 
 [[files]]
 file = "mods/better-player-traces-0.1.0.jar"
-hash = "544dac15c9d829fc4d17ca5c42cf8fafba72d189c132fbbc9032ec01d8c876d2"
+hash = "277d838552173021ede340dd24f6f6648644a27374e85a86798ecc09797412ca"
 
 [[files]]
 file = "mods/better-rail-beetle-0.1.0.jar"
-hash = "4cad84a57fc307963c47342a72cfc420f8ac0dd3e30d4b0fe28271a142a88247"
+hash = "52ca919cb82a7cdf6be8dd4d87a73424b4ed347ee81a96bbe326ce75ce62695d"
 
 [[files]]
 file = "mods/better-regolith-farming-0.1.0.jar"
-hash = "579960b2cf98e18ba779655d34d1b06b99702d2adbcebf3a3f9b39efe979c8d3"
+hash = "0e590e75f88382ed858302ebf6f9b68db677848a0af7439ad4427e0f7dc6e7f7"
 
 [[files]]
 file = "mods/better-rehooked-grappling-0.1.0.jar"
-hash = "9dee10b4ae8eff9be2a686ad49f3c8bc1f3d798cf59784a9c7936b93cd84079d"
+hash = "57a136a5489b587cf041bd13fbc363d94e057e182b84f08450d7d14bbf0560bc"
 
 [[files]]
 file = "mods/better-rpg-progression-1.0.1.jar"
-hash = "b954b2305b92985cf2bb453d0944761a7ef901ed51b1effd07629089be594ce6"
+hash = "fb6373c7136c263a6ee91c94c480db92ce5e1230fcd9c950592a9c83ed8ecdcb"
 
 [[files]]
 file = "mods/better-runtime-diagnostics-0.1.0.jar"
-hash = "1c7c9784eaa78ec39698bf7f91d1efdf682654d094f8de183f9745c6d125219b"
+hash = "b35628227f41911e6027493c31a18530a69f7bb88ea0c6dd23241ba4d6543844"
 
 [[files]]
 file = "mods/better-settlement-roads-0.1.0.jar"
-hash = "845f9109e3505d3cebb8606883d407a1ffa06ba84af16fdd4403bbab2b54953d"
+hash = "48c9501632146c5b64d2ab50da20171866a5717489ebaeb895f285b4ce9b42ec"
 
 [[files]]
 file = "mods/better-spawns-1.0.0.jar"
-hash = "10a3395d67954afe512f5c5fb344c5c7288e515df1eebc5cf42ae07b2c599a3d"
+hash = "ca5ff7c3a9ee74aeedf73729dcde89b5207ce2c65f8da54bfd0e17aba4b40f32"
 
 [[files]]
 file = "mods/better-spirit-commerce-1.0.1.jar"
-hash = "e7230436848c309f2c7f0f4d1f7c9f532d7c7fcb03da652150a89fdb6565da4f"
+hash = "a24f7b655faba89666e254473cf731a8dbbc201f89111fd38859dcf40fbaca73"
 
 [[files]]
 file = "mods/better-survival-hud-1.0.0.jar"
-hash = "f9cf007ac3e8fdf79dec571d4f74e4e43bdc798ef214a959025f1f92ffb52a35"
+hash = "08287f04420f694ec0c5df56b66966d18e0acaedea598d1b397f784ea733b4ce"
 
 [[files]]
 file = "mods/better-survival-physiology-0.1.1.jar"
-hash = "3653785c50a4f88bad19261ba443f48ba08a7d21b2e5b0d4f50213cf36a2876e"
+hash = "be54d49bc36b73df5a2894223ead7a1665f32fbeeeabc049b3b8b859953ba273"
 
 [[files]]
 file = "mods/better-tinkers-loot-affixes-1.0.0.jar"
-hash = "60a6a42b96aa78b3b65fb337ef1d8d32ca3e2c5ddf9dd8a2b422257676770ece"
+hash = "fa81a0d97bc04d645684d25e206f3fd37525cb9831697d734887576193061bd0"
 
 [[files]]
 file = "mods/better-village-fortifications-1.0.0.jar"
-hash = "ccd9b1011d1b54fd5ea79b24b9737ed10489c10096a8a8b314a022c6eb585d34"
+hash = "986d905352d30b31674904e98e64e6661e08bb7f8474afddd03ada159e3a1ad0"
 
 [[files]]
 file = "mods/better-weathering-offline-progress-0.1.0.jar"
-hash = "03b7be0e55901505223c6060d436a1feab6a74497a9fc138c2a1bddbd897059a"
+hash = "09f2535118f1a228e26bad090e7a83500100f58e69535b18e67b6afb4d7150df"
 
 [[files]]
 file = "mods/better-wildfire-0.1.0.jar"
-hash = "206bbd62605e4a6c71386c422c0f96f82721acb26cabd32430e3bcc0dead24ab"
+hash = "1f590d1c9df98ba4a0934458c740a5e0c5c9162759f41dacb858349a399abef4"
 
 [[files]]
 file = "mods/better-world-management-0.1.0.jar"
-hash = "1aa3810002f74cefc927ca88907071fc31ab9643d009c1fcafadfd1db999ecb3"
+hash = "6fb80bd2a7360af4fb60bb970165ff7896408b76f41bd55d1b680191f3bbdb9e"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -12059,7 +11987,7 @@ metafile = true
 
 [[files]]
 file = "mods/scalable-tnt-0.1.0.jar"
-hash = "fe1f8ef9a49ce0661568534990c27e2954f9f64f4e937ee477055eefbc3ca3c2"
+hash = "93f9ea77ac536c682cfec98c79659913522b5d476845ecacaa5c0683a1d7ce9e"
 
 [[files]]
 file = "mods/searchables.pw.toml"
@@ -12194,11 +12122,6 @@ metafile = true
 [[files]]
 file = "mods/the-flesh-that-hates.pw.toml"
 hash = "4ce2c62c813e65de9b648d0ae8575067b09c69045d6154afcd6139763e1860cb"
-metafile = true
-
-[[files]]
-file = "mods/the-lost-cities.pw.toml"
-hash = "46cc5956867ff7af36f8c46be1d058cdeb9ad9d118a2a3e4d71f2eb129128b5a"
 metafile = true
 
 [[files]]
@@ -12372,15 +12295,19 @@ hash = "d4ff3e4d261926e951d9f1b38e4584ebef0aa46fab25143f463f85bf19bfb532"
 
 [[files]]
 file = "pack-test-lock.main.kts"
-hash = "12df4f25dcb02a37e4ac60e7bdd0910aa3e37f72df42b2590dc52dbf4fe7dd80"
+hash = "16d18b1fd4e65d1c918ce021638692306f79d855352ccd23f20452db6bbb9d31"
 
 [[files]]
 file = "pack-test-queue.main.kts"
-hash = "5cf0300caff94901572ce47add3ec21b30f3296d2d39f4110e6b93a570b49b52"
+hash = "ca720b3df5706d1227c2d041c5ff84f28644e145926194be1680d127442526f4"
 
 [[files]]
 file = "package.sh"
 hash = "2c1de53cdf545ae0a6c44edc3c59daeca32c2f7ff568e9b9e3e01a5fd54555ab"
+
+[[files]]
+file = "plans/recipe-clash-replacements.md"
+hash = "dc9f113ad8a7426b51970b3c709a53dab2178c47b7dbdfeaff7683d186db8a9b"
 
 [[files]]
 file = "recipe-policies.yml"
@@ -12467,4 +12394,4 @@ hash = "380a3105e0739f6bbae202352d29d68a7a1e88bab8912c95cd9204492c7d48ae"
 
 [[files]]
 file = "test-control.main.kts"
-hash = "3a5cee7952ebac46f09400437d9912a52cf4a1bd82b1a871643d5363eae0eb9f"
+hash = "b8563354828c4689d801faafee7a4bccd5c3c0a8ec087fa8774cdee2702d6c22"
