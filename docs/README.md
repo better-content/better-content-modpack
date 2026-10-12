@@ -50,7 +50,7 @@ standing policies or human authorization.
 
 ### Integration and acquisition
 
-- [Deferred features](deferred-features.md): wanted features outside current scope; not implementation authorization.
+- [Aspirational features](aspirational-features.md): wanted features outside current scope; not implementation authorization.
 - [Performance/mod integration](performance_and_mods.md).
 - [Cataclysm/cave encounters](cataclysm_better_cave_encounters_integration.md).
 - [Untamed Wilds](untamed_wilds_integration.md).

@@ -1,4 +1,4 @@
-# Deferred features
+# Aspirational features
 
 ## Purpose and authority
 
@@ -13,6 +13,22 @@ link its owning subject or source repository. Once implemented or declined, remo
 entry after moving any still-relevant guidance to the proper living subject; do not accumulate
 historical completion reports here. See the [documentation authority map](README.md),
 [workspace policy](policies/workspace.md) and [testing policy](testing.md).
+
+## Aspirational contextual Threads
+
+**Status:** Wanted; outside current implementation scope. These are future teaching cards,
+not requests to implement new gameplay mechanics, and do not fill the four vacated active slots.
+
+- **Water bottle:** Contextual preparation and carrying advice that complements, rather than
+  repeats, the existing Drinking Safe Water lesson.
+- **Grappling hook:** A contextual Thread about acquiring or using the pack's hook and its
+  useful traversal role.
+- **Climbing:** A contextual Thread explaining the implemented climbing opportunity at a
+  personal point of need.
+
+Mechanic and trigger research, ownership, copy, art, and acceptance belong to separately
+approved future work. No triggers are selected here. Recording these aspirations authorizes
+neither implementation, deployment nor testing.
 
 ## Abyssal City: gameplay completion and pack integration
 

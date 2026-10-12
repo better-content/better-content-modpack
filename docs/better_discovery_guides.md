@@ -35,7 +35,7 @@ copy. Possession must not be described as operating a machine, and intended futu
 behavior must not be presented as implemented.
 
 Preserve stable concept, Thread, and lesson identities when their meaning is unchanged.
-Learning Surfaces has 52 live cards across seven topics; the Lessons reference and loading
+Learning Surfaces has 48 live cards across seven topics; the Lessons reference and loading
 rotation share 18 lessons. The main-menu, Esc, and death contexts share 135 authored tips. Follow [Threads](threads.md) for the single-explanation schema,
 personal trigger evidence, native doorways, and lineage persistence. Domain mods
 own their gameplay events; Learning Surfaces adapters translate those events into card signals.
@@ -75,7 +75,9 @@ states why the event happened; significance that is not causation does not belon
 cause. A Thread that
 points to a concrete craftable result shows an item beneath its explanation. Players use
 their configured EMI recipe and uses controls on that item; Thread copy never gives
-ingredient counts or a recipe layout. Hover
+ingredient counts or a recipe layout. Primitive-tool previews use recipe references to
+resolve native output stacks, preserving rock/flint/bone material NBT for both axes and
+knives; no parallel recipe-NBT catalogue is authored. Hover
 annotations remain one or two lines totaling at most 24 words. Apply this tone to
 pack-authored guide notices, not to copied third-party guide prose or narrative design
 documents.
@@ -106,7 +108,9 @@ documents.
 Cards credit owned remote work at its actual successful outcome, including while the owner is
 offline. First-use cards use explicit acquisition, completed use, screen-close, and approach
 cues at the useful moment. Item checks run after relevant inventory changes; approach checks
-run after accepted movement. Timed onboarding uses a due-time queue. These cues do not infer
+run after accepted movement. Axe onboarding counts 600 connected non-spectator player ticks, pausing in spectator
+mode and persisting the remainder across reconnects. Backpack credits a successful
+crafting-table craft, not straw or table possession. These cues do not infer
 machine operation from possession or proximity. No card requires another human; the World
 Condenser remains limited by its current dedicated-server lifecycle support. There is no
 hourly discovery quota or minimum interval.
@@ -120,7 +124,7 @@ change artwork but cannot reload copy or trigger rules while running.
 
 All card and loading illustrations exclude humans, humanoids, humanlike spirits, body parts,
 silhouettes and mannequins. Use concrete objects, mechanisms, environments, and nonhumanoid
-creatures to explain the event. All 52 active card illustrations and 18 loading/Lessons
+creatures to explain the event. All 48 active card illustrations and 18 loading/Lessons
 illustrations use reviewed Journal copperplate art; the card copy and triggers are active.
 
 ## Review and validation

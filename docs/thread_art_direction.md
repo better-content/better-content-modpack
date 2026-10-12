@@ -26,7 +26,7 @@ they do not require a whole-image tint or the retired four-suit composition rule
 
 ## Editable source and review
 
-The 52 active card scenes and teaching definitions are maintained in
+The 48 active card scenes and teaching definitions are maintained in
 [`authoring/discoveries.json`](../../mod_source/better-discovery-guides/authoring/discoveries.json).
 [`art-grammar.txt`](../../mod_source/better-discovery-guides/authoring/art-grammar.txt)
 contains the shared generation prompt. Current authored card masters live in
