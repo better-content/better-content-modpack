@@ -8,5 +8,7 @@ better-runtime-diagnostics	src/test/java/com/bettercontent/betterruntimediagnost
 better-arena-trials	src/main/java/com/bettercontent/betterarenatrials/server/ArenaTraceBridge.java
 # Isolated native heart diagnostics inspect synchronized fixture state and optional Mantle config.
 better-deaths-door	src/injuryVisual/java/com/bettercontent/betterdeathsdoor/heartreview/HeartVisualReview.java
+# Isolated, non-pack native test reporter resolves registered GameTest witness identities only.
+better-abyssal-city	src/main/java/com/bettercontent/abyssal/HarnessTestReporter.java
 # Direct compatibility test denies client class loading during early/server plugin initialization.
 better-deaths-door	src/test/java/com/bettercontent/betterdeathsdoor/client/MantleRendererContractTest.java
