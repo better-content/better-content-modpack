@@ -1587,14 +1587,15 @@ class HoverAnnotationLearningSurfaceTest {
         val woods = listOf("oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "cherry", "bamboo", "crimson", "warped")
 
         assertEquals(setOf("sophisticatedstorage:oak_barrel", "sophisticatedstorage:oak_chest"), targets)
-        assertEquals("Wood barrels use a plank ring; wood chests use a vanilla chest. Storage capacity stays native.", copy)
+        assertEquals("Wood barrels use planks and a lever; wood chests add a matching plank to a vanilla chest and lever. Capacity stays native.", copy)
         assertTrue(row.path("owner").asText().contains("refactor__balance__172_storage_recipe_distinction.js"))
         assertTrue(source.contains("if (!Platform.isLoaded('sophisticatedstorage')) return"))
         assertTrue(source.contains("event.remove({ id: barrelId })") && source.contains("event.remove({ id: chestId })"))
         assertTrue(source.contains("['PPP', 'PLP', 'PPP']"))
         assertTrue(source.contains("P: 'minecraft:' + wood + '_planks', L: 'minecraft:lever'"))
-        assertTrue(source.contains("[' C ', ' L ', '   ']"))
-        assertTrue(source.contains("C: 'minecraft:chest', L: 'minecraft:lever'"))
+        assertTrue(source.contains("['P', 'C', 'L']"))
+        assertTrue(source.contains("P: 'minecraft:' + wood + '_planks', C: 'minecraft:chest', L: 'minecraft:lever'"))
+        assertTrue(source.contains("event.remove({ id: 'sophisticatedstorage:oak_chest_from_vanilla_chest' })"))
         woods.forEach { wood ->
             assertTrue(source.contains("'" + wood + "'"), "missing wood recipe for $wood")
         }

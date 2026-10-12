@@ -34,7 +34,7 @@ class PrimitiveWorkshopRecipeContractTest {
     }
 
     @Test
-    fun `generic rustic utilities have additive straw canvas and coal routes`() {
+    fun `generic rustic utilities retain handmade costs with distinct recipe silhouettes`() {
         val expectedIds = listOf(
             "sack_from_canvas", "awning_from_canvas", "doormat_from_canvas",
             "fire_pit_from_coal", "feeding_trough_from_straw", "quark_thatch_from_straw",
@@ -48,7 +48,12 @@ class PrimitiveWorkshopRecipeContractTest {
         assertTrue(primitive.contains("S: 'farmersdelight:straw'"))
         assertFalse(primitive.contains("event.remove({ id: 'supplementaries:sack' })"))
         assertFalse(primitive.contains("event.remove({ id: 'supplementaries:awnings/awning' })"))
-        assertFalse(primitive.contains("event.remove({ id: 'quark:building/crafting/thatch' })"))
+        assertTrue(primitive.contains("event.remove({ id: 'quark:building/crafting/thatch' })"))
+        assertTrue(primitive.contains("event.remove({ id: 'dawnoftimebuilder:thatch_wheat' })"))
+        assertTrue(primitive.contains("event.shaped('4x quark:thatch', ['SSS', ' S ']"))
+        assertTrue(primitive.contains("event.shaped('4x dawnoftimebuilder:thatch_wheat', ['S  ', 'SSS']"))
+        assertTrue(primitive.contains("event.shaped('supplementaries:doormat', ['C', 'C']"))
+        assertTrue(primitive.contains("event.shaped('8x dawnoftimebuilder:wattle_and_daub', ['SS', 'CC']"))
     }
 
     @Test

@@ -2,7 +2,7 @@
 
 This index is generated from the three executable KubeJS roots. Every listed JavaScript file is active; directory names such as `retained` and `reviewed` describe review history, not load state. `kubejs/inactive_review` is deliberately excluded because it is outside the executable roots.
 
-Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
+Current inventory: **101 active scripts** — 10 client, 82 server, and 9 startup.
 
 ## Client scripts
 
@@ -10,7 +10,8 @@ Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 - `kubejs/client_scripts/compat/retained/check__48_hide_replaced_fishing_rods.js` — Hides native fishing rods superseded by the pack’s Starcatcher fishing route.
 - `kubejs/client_scripts/compat/retained/remove__40_hide_quarantined_systems.js` — Hides quarantined chemistry, transport, test, legacy, and unsupported items from recipe viewers.
 - `kubejs/client_scripts/guidance/10_hover_annotations.js` — Adds the pack's item-local hover annotations through the normal tooltip pipeline.
-- `kubejs/client_scripts/policy/hide_burnt_content.js` — Hides Burnt’s transient and damaged block-state items from recipe viewers while preserving its world simulation.
+- `kubejs/client_scripts/policy/hide_fire_content.js` — Hides generated burnt and smoldering states from recipe viewers without disabling their world simulation.
+- `kubejs/client_scripts/policy/hide_native_ordinary_spirits.js` — Hides native ordinary Malum spirits in favor of the pack's physical spirit items.
 - `kubejs/client_scripts/policy/hide_disabled_potions.js` — Hides disabled vanilla potion-delivery stacks and surfaces from recipe viewers while preserving plain water bottles.
 - `kubejs/client_scripts/policy/hide_completed_tcon_tools.js` — Hides completed TConstruct and extension tools from recipe viewers while retaining wearable armor and construction inputs.
 - `kubejs/client_scripts/policy/hide_excavated_variants.js` — Hides Excavated Variants’ host-stone permutations from recipe viewers without removing their recipes or world content.
@@ -26,7 +27,7 @@ Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 - `kubejs/server_scripts/compat/retained/check__50_sand_compat.js` — Unifies compatible sand blocks and items under shared tags.
 - `kubejs/server_scripts/compat/retained/check__56_standardize_starcatcher_fishing.js` — Removes competing fishing-rod routes so Starcatcher owns meaningful fishing progression.
 - `kubejs/server_scripts/compat/retained/check__75_stone_cobble_tag_compat.js` — Keeps stone/cobblestone inputs generic by default except for an explicit whitelist of 125 rock-identity recipe IDs; preserves generic machinery, tools, template duplication, and future uses plus the furnace material union; see `docs/stone-cobble-compatibility.md`.
-- `kubejs/server_scripts/compat/retained/check__90_sand_tag_compat.js` — Rewrites recipes to accept the unified sand tag.
+- `kubejs/server_scripts/compat/retained/check__90_sand_tag_compat.js` — Keeps functional sand inputs generic while preserving exact sandstone, layers, sandpaper and cast identities.
 - `kubejs/server_scripts/compat/retained/check__95_remove_native_chunkloaders.js` — Removes native chunk-loader recipes in favor of the pack’s magic-gated anchors.
 - `kubejs/server_scripts/compat/retained/refactor__balance__110_extreme_y_band_reward_gates.js` — Uses high-altitude and deep-underground materials to gate powerful terrain-reward utilities.
 - `kubejs/server_scripts/compat/retained/refactor__balance__125_magic_power_spike_gates.js` — Adds Blood Magic slate requirements to especially powerful rituals, focuses, generators, and magic networks.
@@ -40,7 +41,7 @@ Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 - `kubejs/server_scripts/compat/retained/refactor__balance__80_magic_progression_blood_slate_gates.js` — Gates native magic systems and Ars depth crossings behind Blood Magic slates and other magical proofs.
 - `kubejs/server_scripts/compat/retained/refactor__balance__82_blood_magic_lifeforce_rework.js` — Makes Still-Beating Hearts the early LP route and pushes stronger Blood Magic throughput deeper.
 - `kubejs/server_scripts/compat/retained/refactor__compatability__45_stone_surface_tool_compat.js` — Assigns selected stone-surface blocks to pickaxe mining tags.
-- `kubejs/server_scripts/compat/retained/refactor__compatability__85_dirt_grass_tag_compat.js` — Rewrites recipes to accept unified dirt and grass tags.
+- `kubejs/server_scripts/compat/retained/refactor__compatability__85_dirt_grass_tag_compat.js` — Keeps functional dirt and grass inputs generic while preserving exact soil-product identities.
 - `kubejs/server_scripts/compat/retained/refactor__cross_mod_progression__59_formulaic_synthesis_magic_routes.js` — Retains two small Ars crystal crossings without duplicating Realistic Ores separation or acid-specific cutting fluids.
 - `kubejs/server_scripts/compat/retained/refactor__move_to_mod__75_arcane_chunkloader_tags.js` — Defines interchangeable early magical proofs accepted by Arcane Chunk Loaders.
 - `kubejs/server_scripts/compat/retained/refactor__move_to_mod__95_arcane_chunkloader_recipes.js` — Adds power-specialized Arcane Chunk Loader recipes accepting proof from any supported magical discipline.
@@ -75,11 +76,38 @@ Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 - `kubejs/server_scripts/utility/10_recipe_surface_helpers.js` — Defines reusable Rhino-safe helpers for constructing and rewriting recipes.
 - `kubejs/server_scripts/utility/hooks_drones_gates.js` — Gates grappling hooks and autonomous drones as powerful route-editing utilities.
 - `kubejs/server_scripts/zz_crafting_policy_report.js` — Reports exact surviving recipe outputs and live recipe consumers for centrally cut families.
+- `kubejs/server_scripts/zz_recipe_clash_remediation.js` — Distinguishes exact competing recipe families through retained-cost silhouettes, material identities and pristine-stack finishing; leaves stateful serializers native.
+- `kubejs/server_scripts/compat/curios_backpack_slot.js` — Tags Sophisticated Backpacks for the Curios backpack slot.
+- `kubejs/server_scripts/compat/retained/refactor__balance__172_storage_recipe_distinction.js` — Gives barrels a plank ring and lever, and wood chests a matching plank, vanilla chest and lever, retaining native capacity.
+- `kubejs/server_scripts/compat/retained/refactor__balance__174_tacz_turrets_electrical_gate.js` — Gates TaCZ turrets behind electrical instrumentation and AE control parts.
+- `kubejs/server_scripts/compat/reviewed/occultism_crushing_outputs.js` — Repairs twelve broken tag-output crushing routes with exact outputs and stable recipe IDs.
+- `kubejs/server_scripts/compat/reviewed/untamed_thalassophobia_pearls.js` — Supplies Untamed pearl forms from Thalassophobia clam pearls.
+- `kubejs/server_scripts/policy/better_ore_geology_tag_policy.js` — Removes generated geological feedstocks from generic ore item tags.
+- `kubejs/server_scripts/policy/disable_jumbo_furnace.js` — Closes Jumbo Furnace processing and restores More Red's red-alloy fallback.
+- `kubejs/server_scripts/policy/disable_sophisticatedbackpack_jukebox.js` — Removes disabled backpack jukebox upgrade recipes without changing ordinary jukeboxes.
+- `kubejs/server_scripts/policy/native_material_cost_prewarm.js` — Constructs native TConstruct casting recipes sequentially before parallel KubeJS conversion without changing recipe data.
+- `kubejs/server_scripts/policy/ore_raw_material_loot.js` — Replaces raw-metal loot with geological feedstocks across loot-table channels.
+- `kubejs/server_scripts/policy/ore_raw_material_recipes.js` — Redirects raw-metal conversion outputs to authored geological feeds.
+- `kubejs/server_scripts/policy/storage_barrel_recipe.js` — Removes vanilla-barrel conversion and new copper storage acquisition bypasses.
+- `kubejs/server_scripts/progression/22_underwater_works.js` — Authors renewable marine workshop routes without replacing geological recovery or Spout water treatment.
+- `kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js` — Prepares initial Soulstone from Black Shale through Hexerei before native Malum processing.
+- `kubejs/server_scripts/progression/80_tech_palette.js` — Gates initial AE2 components through Nether and meteor-field materials.
+- `kubejs/server_scripts/progression/81_pneumaticcraft_progression.js` — Authors pressure machinery and upgrade roots while retaining electrical and acid ownership.
+- `kubejs/server_scripts/progression/82_food_drying.js` — Authors Hexerei rack preservation routes to Heat Sync dried foods.
+- `kubejs/server_scripts/progression/82_pneumaticcraft_acquisition.js` — Replaces low-tier emerald service offers with pressure-system acquisition routes.
+- `kubejs/server_scripts/progression/83_station_crafting.js` — Gives TConstruct's first station a direct material upgrade without pattern consumption or table-exchange bypasses.
+- `kubejs/server_scripts/progression/85_certus_quartz_components.js` — Uses meteor Certus Quartz in selected native quartz-component slots.
+- `kubejs/server_scripts/progression/85_dimension_font_ecology.js` — Authors renewable Font libations and terrain-material machinery routes.
+- `kubejs/server_scripts/progression/86_dimension_transport.js` — Opens repeatable native transport construction through first-trip Font materials.
+- `kubejs/server_scripts/progression/food_eras.js` — Stages foraged meals, Bumblezone crops and cooking-pot meal groups.
+- `kubejs/server_scripts/transport/20_found_better_rail_beetles.js` — Adds found starter beetles with fixed ordinary supplies to mine loot.
+- `kubejs/server_scripts/utility/21_starter_hook_loot.js` — Places six early ReHooked prototypes in loot while retaining mechanical assembly for stronger tiers.
 
 ## Startup scripts
 
 - `kubejs/startup_scripts/compat/retained/check__12_unearthed_regolith_hand_mining.js` — Adjusts Unearthed regolith blocks for the intended manual mining behavior.
 - `kubejs/startup_scripts/compat/retained/remove__10_ae2_skystone_hardness.js` — Adjusts AE2 skystone block hardness and mining behavior.
+- `kubejs/startup_scripts/policy/disable_jumbo_furnace.js` — Removes the unsupported embedded Jumbo Furnace from the creative building-block tab.
 - `kubejs/startup_scripts/policy/disable_potion_brewing.js` — Clears vanilla and modded Brewing Stand registrations so potion delivery has no brewing path.
 - `kubejs/startup_scripts/policy/disable_trickster_weight.js` — Removes the incompatible Trickster Weight effect from the startup registry surface.
 - `kubejs/startup_scripts/policy/hide_vanilla_tools_from_creative.js` — Removes replaced vanilla tools from creative tabs while leaving registry identities intact.

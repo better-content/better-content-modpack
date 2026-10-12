@@ -10,10 +10,11 @@ ServerEvents.recipes(function (event) {
     // TCon's native cast recipes consume these blanks in the Part Builder
     // material slot. Keep the blank inputs visible in EMI so cast making does
     // not depend on discovering an implicit table action.
-    event.shaped('4x tconstruct:blank_sand_cast', ['SS', 'SS'], {
+    // Four-sand T, not the sandstone square; retain original handmade cost/yield.
+    event.shaped('4x tconstruct:blank_sand_cast', ['SSS', ' S '], {
         S: 'minecraft:sand'
     }).id('kubejs:hand_workshop/tconstruct/blank_sand_cast')
-    event.shaped('4x tconstruct:blank_red_sand_cast', ['SS', 'SS'], {
+    event.shaped('4x tconstruct:blank_red_sand_cast', ['SSS', ' S '], {
         S: 'minecraft:red_sand'
     }).id('kubejs:hand_workshop/tconstruct/blank_red_sand_cast')
 

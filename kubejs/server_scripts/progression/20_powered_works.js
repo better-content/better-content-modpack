@@ -39,13 +39,14 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:powered_works/copper_machine_block')
 
     ;[
-        ['create:crafting/kinetics/water_wheel', 'create:water_wheel'],
-        ['create:crafting/kinetics/large_water_wheel', 'create:large_water_wheel'],
-        ['create:crafting/kinetics/windmill_bearing', 'create:windmill_bearing'],
-        ['create:crafting/kinetics/mechanical_pump', 'create:mechanical_pump']
+        // Preserve four alloy + one Machine Block, but not four identical outputs.
+        ['create:crafting/kinetics/water_wheel', 'create:water_wheel', [' A ', 'AMA', ' A ']],
+        ['create:crafting/kinetics/large_water_wheel', 'create:large_water_wheel', ['A A', ' M ', 'A A']],
+        ['create:crafting/kinetics/windmill_bearing', 'create:windmill_bearing', ['AAA', ' M ', ' A ']],
+        ['create:crafting/kinetics/mechanical_pump', 'create:mechanical_pump', [' A ', 'AMA', 'A  ']]
     ].forEach(function (root) {
         event.remove({ id: root[0] })
-        event.shaped(root[1], [' A ', 'AMA', ' A '], {
+        event.shaped(root[1], root[2], {
             A: 'create:andesite_alloy', M: 'kubejs:copper_machine_block'
         }).id('kubejs:powered_works/direct_root/' + root[1].substring('create:'.length))
     })

@@ -37,7 +37,8 @@ ServerEvents.recipes(function (event) {
     event.shaped('2x supplementaries:awning', ['CCC', 'S S'], {
         C: 'farmersdelight:canvas', S: 'minecraft:stick'
     }).id('kubejs:primitive_workshop/awning_from_canvas')
-    event.shaped('supplementaries:doormat', ['CC'], {
+    // Keep the two-canvas cost, but not the coaster's horizontal silhouette.
+    event.shaped('supplementaries:doormat', ['C', 'C'], {
         C: 'farmersdelight:canvas'
     }).id('kubejs:primitive_workshop/doormat_from_canvas')
     event.shaped('supplementaries:fire_pit', ['CFC', 'CCC'], {
@@ -47,13 +48,19 @@ ServerEvents.recipes(function (event) {
     event.shaped('quark:feeding_trough', ['PSP', 'PPP'], {
         P: '#minecraft:planks', S: 'farmersdelight:straw'
     }).id('kubejs:primitive_workshop/feeding_trough_from_straw')
-    event.shaped('4x quark:thatch', ['SS', 'SS'], {
+    // Reserve the four-straw square for native canvas. Native crafting mirrors
+    // horizontally but does not rotate: the T and L remain distinct at every offset.
+    event.remove({ id: 'quark:building/crafting/thatch' })
+    event.remove({ id: 'dawnoftimebuilder:thatch_wheat' })
+    event.shaped('4x quark:thatch', ['SSS', ' S '], {
         S: 'farmersdelight:straw'
     }).id('kubejs:primitive_workshop/quark_thatch_from_straw')
-    event.shaped('4x dawnoftimebuilder:thatch_wheat', ['SS', 'SS'], {
+    event.shaped('4x dawnoftimebuilder:thatch_wheat', ['S  ', 'SSS'], {
         S: 'farmersdelight:straw'
     }).id('kubejs:primitive_workshop/dawn_thatch_from_straw')
-    event.shaped('8x dawnoftimebuilder:wattle_and_daub', ['SC', 'CS'], {
+    // Two straw/two clay and the original yield, without Supplementaries' checkerboard.
+    event.remove({ id: 'dawnoftimebuilder:wattle_and_daub' })
+    event.shaped('8x dawnoftimebuilder:wattle_and_daub', ['SS', 'CC'], {
         S: 'farmersdelight:straw', C: 'minecraft:clay_ball'
     }).id('kubejs:primitive_workshop/dawn_wattle_and_daub_from_straw')
     event.shaped('8x dawnoftimebuilder:white_wattle_and_daub', ['SC', 'CD'], {
