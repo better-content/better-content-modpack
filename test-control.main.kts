@@ -125,7 +125,7 @@ private fun writeControl(id: String, fields: Map<String, Any?>) {
 private fun launch(command: List<String>, cwd: Path, log: Path, environment: Map<String, String> = emptyMap()): Int {
     Files.createDirectories(log.parent)
     return superviseFacade(root.toFile(), command, cwd.toFile(),
-        if (cwd.startsWith(workspace.resolve("mod_source"))) 2700 else 28800, log.toFile(), environment)
+        if (cwd.startsWith(workspace.resolve("mod_source"))) 2700 else 28800, log.toFile(), environment = environment)
 }
 
 private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, Any?> {
