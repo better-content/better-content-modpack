@@ -154,7 +154,10 @@ logout. Contextual relevance takes priority over unseen novelty.
 
 Each surface keeps its own client-local exposure history. A tip counts as seen only
 when its copy is actually rendered. Hidden or clipped advice does not consume history.
-The native injury recap owns death controls and space; Learning Surfaces uses its measured
-remaining area and omits a tip if the full copy will not fit. Tips never delay respawn
+The native injury recap owns death controls, the scrollable content viewport and measured
+hint reservation. Learning Surfaces wraps its tip into that reservation, follows Door's
+150 ms stage visibility, and clips only to the shared content viewport. Hidden or partly
+clipped copy does not consume exposure history. Without Door, the existing native hint
+layout still omits a tip if the full copy will not fit. Tips never delay respawn
 or alter normal and hardcore death controls. The packaged catalogue is fixed for a
 release; invalid packaged data fails validation rather than silently swapping copy.

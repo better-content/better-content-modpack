@@ -56,7 +56,8 @@
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-player-traces"
+        "better-player-traces",
+        "better-deaths-door"
       ]
     },
     {

@@ -50,6 +50,28 @@ preferences can be configured through EMI's sidebar settings; no custom grid or 
 decoration is introduced. Mend/Cancel and progress/status use the shared server-authoritative
 Death's Door treatment view on both personal-inventory paths.
 
+## Current XP and exclusive backpack equipment (source contract)
+
+Journal's Record reads the local player's native current XP level and next-level progress.
+It does not introduce XP state or packets. Unspent attribute points and **Life peak** are
+separate labels; peak is not current level. Wide/narrow offsets and scrolling share the
+same measured XP header budget. Both personal-inventory paths retain this presentation;
+separate native backpack screens remain undecorated.
+
+Player-worn Sophisticated backpacks belong only in functional Curios `better_backpack[0]`.
+All six installed tiers remain valid there. Better Compat Fixes enforces final native
+Curios/armor admission, including competing validation listeners and normal quick/dispenser
+paths; it does not replace storage, transfer, opening or item initialization. The dedicated
+slot is reserved for backpacks; other back accessories retain their own native slots.
+Carried/held/placed bags and backpack-wearing non-player mobs are unaffected. Existing
+misplaced bags remain removable without automatic migration, content repair or deletion,
+with a concise login warning naming the Backpack slot. Direct operator equipment-authoring
+commands remain outside ordinary placement admission.
+
+These describe owning source changes, not proof that the bundled pack JARs were deployed.
+Optional-mod/version admission, actual menu identities, paired same-artifact captures and
+human interaction verdicts must still be reported independently.
+
 ## Acceptance before claiming completion
 
 - Audit source and actual packaged artifacts for native authority and absence of retired engines.

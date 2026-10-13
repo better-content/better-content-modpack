@@ -82,6 +82,37 @@ The event boundary is deliberately narrow. The feeling of death tension emerges
 from independently owned systems. A death attempt, an accepted death, and a
 completed respawn are different lifecycle moments.
 
+## Current-world records and graphical recap (source implementation)
+
+Death's Door source now owns ten bounded per-life records: eligible play time, highest
+native XP level, credited mob kills, successful block placements, native blocks mined,
+food hunger restored, accepted HP lost, survived post-entry Door checks, real Door
+entries and completed injury cures. Its Overworld ledger keeps current counters,
+completed-life bests, reached milestone tiers and one latest frozen recap per player.
+Ordinary death-respawn starts a new life; reconnect, restart and dimension/non-death
+clones retain it. Nothing carries to a successor/unrelated world or grants a reward.
+
+An existing player first observed without a ledger gets a labeled partial summary,
+not reconstructed history. Full eligible Survival lives outside Arena can establish
+bests and once-per-player/world milestones. Spectator pauses collection;
+Creative/Adventure invalidates awards. Arena's typed native membership/terminal-tick
+signal suspends measurement and preserves the ordinary life through contained deaths.
+This bridge is Arena → Door, not a reverse dependency or central death registry.
+
+The source death screen shows cause, a compact summary and up to three graphical
+best/milestone/matched/near/first cards. **Details** retains the full damage/body recap
+and metric totals. Door owns its scrollable viewport and measured Discovery Guides
+hint reservation. Cause and native actions are immediate; summary, each card and the
+hint appear in discrete 150 ms stages. Three cards finish at about 750 ms. Reduced
+motion is immediate; resizing, late/duplicate packets and Details do not restart it.
+Native Respawn/Title handlers and enable timing remain unchanged.
+
+Exact metric definitions, thresholds, ranking, payload bounds and local gates belong
+in [Death's Door's README](../../mod_source/better-deaths-door/README.md#current-world-life-records-and-death-presentation).
+These source changes are not a claim that the tracked bundled JAR was deployed.
+Local gates, isolated visual observations and human interaction acceptance are separate;
+no pack deployment, Packwiz refresh, packaging or Dist/Debug follows from this work.
+
 ## Current pack policy and persistence
 
 | Surface | Current rule | Authority |
@@ -109,7 +140,7 @@ state. Each name links to its owning source repository.
 
 | Owner | Death-system contribution |
 | --- | --- |
-| [Downed Player Revival](https://github.com/better-content/better-deaths-door) | Damage-to-Death's-Door transition, maim roll, treatment, pressure presentation, final-death acceptance signal, and recap |
+| [Downed Player Revival](https://github.com/better-content/better-deaths-door) | Damage-to-Death's-Door transition, maim roll, treatment, pressure presentation, final-death acceptance signal, current-world life records and recap |
 | [Class Selector](https://github.com/better-content/better-spawns) | Locked personal return point and the sound/particle reinvigoration after respawn |
 | [RPG Stats](https://github.com/better-content/better-rpg-progression) | Per-life allocation loss, persistent Auto plan, and XP-level-derived final-death Heart Fragments |
 | [Depth Director](https://github.com/better-content/better-cave-encounters) | Underground pressure, warnings, bounded surges, semantic low-health response, and injury-aware pacing; injuries slow buildup without retiring the encounter |
