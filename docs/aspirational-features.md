@@ -14,6 +14,49 @@ entry after moving any still-relevant guidance to the proper living subject; do 
 historical completion reports here. See the [documentation authority map](README.md),
 [workspace policy](policies/workspace.md) and [testing policy](testing.md).
 
+## Valkyrien Skies: physical motion and spacecraft
+
+**Status:** Wanted; deferred and outside current implementation scope.
+
+**Goal:** Valkyrien Skies vehicles and moving contraptions should have realistic sources of
+motion and Newtonian responses, including equal-and-opposite reactions. Extend that physical
+vehicle model to player-built spacecraft, replacing Creating Space's spacecraft system rather
+than maintaining a second, disconnected flight model.
+
+### Proposed behavior — not yet approved
+
+- Give propulsion and actuation identifiable physical sources: engines supply power, while
+  wheels, propellers, control surfaces, thrusters and mechanisms apply forces through contact,
+  a surrounding medium or expelled reaction mass as appropriate. Power alone is not thrust;
+  internal mechanisms must not accelerate an isolated craft's center of mass for free.
+- Apply equal-and-opposite forces and torques to interacting bodies. Pushing, towing, docking,
+  collisions and mounted mechanisms should produce corresponding reactions rather than
+  one-sided motion. Account for momentum carried away by exhaust or transferred to air,
+  water or terrain without requiring individual particle simulation.
+- Make mass, inertia, force application points and torque matter: heavier loads change
+  acceleration, off-center thrust can rotate a craft, and braking or attitude changes need
+  physical means. Preserve linear and angular momentum unless an external interaction changes
+  them; avoid unexplained drag, automatic stopping or reactionless steering.
+- Use Valkyrien Skies-driven spacecraft for continuous physical maneuvering, with vacuum-capable
+  propulsion, finite propellant/reaction mass where applicable, coasting and deliberate braking.
+  Atmospheric propellers and aerodynamic control surfaces must not provide vacuum thrust or
+  control without a separately justified mechanism.
+
+### Decisions and conditions for revisiting
+
+- Inspect the selected Valkyrien Skies version and integrations before choosing an owning source
+  repository; existing physics support and gaps are not assessed by this entry.
+- Define practical simulation limits, acceptable approximations, player controls and any explicitly
+  supernatural exceptions without presenting exceptions as ordinary Newtonian mechanics.
+- Decide spacecraft assembly, atmosphere/space transitions, gravity and travel-scale behavior,
+  persistence, multiplayer synchronization and compatibility with the pack's progression.
+  Orbital simulation is an unresolved scope decision, not an assumed requirement.
+- Plan the replacement boundary and migration for Creating Space's spacecraft, recipes, controls
+  and progression dependencies; decide separately whether any non-spacecraft content remains.
+- Require explicit implementation approval and separately authorized physics, multiplayer,
+  performance and native visual verification. Recording this goal does not remove Creating Space,
+  install Valkyrien Skies or authorize a deployment or test run.
+
 ## Aspirational contextual Threads
 
 **Status:** Wanted; outside current implementation scope. These are future teaching cards,
