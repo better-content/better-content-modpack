@@ -181,21 +181,29 @@ archive_server_tree() {
 }
 
 package_dist() {
-  (($# == 0)) || fail 'distribution output is fixed at the repository dist/ directory'
+  local untested_suffix=""
+  if (($# != 0)); then
+    (($# == 2)) && [[ "$1" == --untested-suffix && "$2" =~ ^[a-z]$ ]] || fail 'usage: dist.sh [--untested-suffix a..z]'
+    untested_suffix="$2"
+  fi
   for command in java packwiz python3 zip; do command -v "$command" >/dev/null || fail "$command is required"; done
   local out_root="$ROOT/dist"
   local current_version current_build next_build version version_dir_name release_dir client_dir server_dir stage
   current_version="$(awk -F ' *= *' '$1 == "version" { value=$2; gsub(/^"|"$/, "", value); print value; exit }' "$ROOT/pack.toml")"
-  current_build="$(printf '%s' "$current_version" | sed -nE 's/^.*[^0-9]([0-9]+)$/\1/p')"
-  [ -n "$current_build" ] || fail 'pack version must end in a numeric build number'
-  next_build=$((10#$current_build + 1))
-  version="$(printf '%s' "$current_version" | sed -E "s/[0-9]+$/$next_build/")"
-  version_dir_name="$(printf '%s' "$version" | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9._-')"
-  if [ -e "$out_root" ]; then
-    find "$out_root" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +
+  [[ "$current_version" =~ ^Build\ ([0-9]+)([a-z]?)$ ]] || fail 'pack version must be Build N or Build Na'
+  current_build="${BASH_REMATCH[1]}"
+  local current_suffix="${BASH_REMATCH[2]}"
+  if [ -n "$untested_suffix" ]; then
+    [[ "$untested_suffix" > "$current_suffix" ]] || fail 'untested suffix must advance the current suffix'
+    version="Build $current_build$untested_suffix"
   else
-    mkdir -p "$out_root"
+    next_build=$((10#$current_build + 1))
+    version="Build $next_build"
   fi
+  version_dir_name="$(printf '%s' "$version" | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9._-')"
+  # Keep the previous complete pair until a new complete pair exists; maintenance
+  # owns disposal and active-consumer protection for superseded distributions.
+  mkdir -p "$out_root"
   out_root="$(cd "$out_root" && pwd)"
   release_dir="$out_root/$version_dir_name"
   [ ! -e "$release_dir" ] || fail "version directory already exists: $release_dir"
@@ -226,6 +234,7 @@ Mojang's EULA. This archive is packaging output and carries no validation,
 verification, compatibility, or runtime-health claim.
 TXT
   archive_server_tree "$server_dir"
+  [ -z "$untested_suffix" ] || printf 'UNTESTED lettered build; no prior test verdict transfers to these archives.\n'
   printf 'version: %s\nclient: %s\nserver: %s\n' "$version" "$client_dir/better-content.zip" "$server_dir/better-content.zip"
 }
 

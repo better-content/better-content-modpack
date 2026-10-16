@@ -23,7 +23,10 @@ Pi's rebuildable search/model caches remain disposable independently of conversa
 ## Latest packaged build retention
 
 Always retain the client/server `better-content.zip` pair from the highest numbered complete
-`better-content-modpack/dist/build-N/` directory. Both files and their directories must be ordinary
+`better-content-modpack/dist/build-N/` directory, including lettered revisions such as
+`build-443a/`. Order by numeric build first, then optional lowercase suffix: `443 < 443a < 443b < 444`.
+Lettered revisions remain explicitly untested unless separately qualified on their exact bytes.
+Both files and their directories must be ordinary
 non-symlink paths. A newer partial build does not replace the retained complete pair. Once a newer
 complete pair exists, the older pair becomes disposable unless an independent active consumer or
 explicit delivery pin still needs it. With no complete pair, there is no build-retention exception.

@@ -373,6 +373,33 @@ Successful packaging can remove expanded staging sooner; failed staging lasts on
 active task's diagnosis. Apart from the latest complete packaged ZIP pair, no
 current-candidate/latest-pass/unresolved-failure exception survives.
 
+## Untested lettered builds
+
+An explicit package-only request may produce an **untested** lettered revision of the current
+numeric build: `443a`, then `443b`, through `443z`. The suffix is a packaging revision, not a
+passing test tier. Never transfer the numeric build's Dev/Dist/Debug or visual verdict to changed
+archives. State clearly in delivery that the lettered pair is untested and name the changed inputs.
+
+For a config/content-only revision using the existing bundled JARs, use the existing package-once
+entry point, under the shared runner mutex:
+
+```sh
+./pack-test-lock.main.kts run release release-skip-tests -- ./dist.sh --untested-suffix a
+```
+
+Refresh Packwiz metadata with `packwiz refresh` immediately before packaging so the changed inputs
+have coherent hashes. This narrow package-only preparation does not invoke `release.main.kts`,
+Gradle, source builds, deployment or test suites. Explicit user prohibitions on additional checks
+also exclude Dev, documentation checks and runtime/visual checks; disclose these omissions rather
+than silently running them. The normal tested fresh-release procedure is unchanged. No verified
+receipt or tested provenance is created or reused for this path.
+
+`pack.toml` and the client manifest carry `Build 443a`; canonical outputs are
+`dist/build-443a/{client,server}/better-content.zip`. Suffixes advance without overwriting an existing
+revision; the next ordinary numeric package after any `443` lettered revision is `444`.
+Register/finish the packaging task under the disposal policy. Lettered output retention follows
+that same policy and is independent of acceptance.
+
 ## Fresh distributions
 
 Only an explicit fresh-dist request authorizes:

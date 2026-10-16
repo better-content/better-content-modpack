@@ -69,18 +69,18 @@ def git_inputs(repo):
 
 
 def latest_build_outputs(workspace):
-    """Retain the highest numbered complete ZIP pair, independently of test verdicts."""
+    """Retain the latest complete numeric/lettered ZIP pair, independently of test verdicts."""
     dist = workspace / 'better-content-modpack/dist'
     if not dist.is_dir() or dist.is_symlink():
         return []
     complete = []
     for build in dist.iterdir():
-        number = re.fullmatch(r'build-([0-9]+)', build.name)
+        number = re.fullmatch(r'build-([0-9]+)([a-z]?)', build.name)
         if not number or build.is_symlink() or not build.is_dir():
             continue
         pair = [build / side / 'better-content.zip' for side in ('client', 'server')]
         if all(not p.parent.is_symlink() and not p.is_symlink() and p.is_file() for p in pair):
-            complete.append((int(number[1]), pair))
+            complete.append(((int(number[1]), number[2]), pair))
     return max(complete, key=lambda entry: entry[0])[1] if complete else []
 
 

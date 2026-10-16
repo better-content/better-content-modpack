@@ -5,10 +5,6 @@ file = ".worklane/testing-sessions/.lock"
 hash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 
 [[files]]
-file = ".worklane/testing-sessions/ae5c0582b42f416cbe09502801f31fa4.json"
-hash = "53f2971ebd94fa05b8a4d19b55a970cd64da83ca47d6e1843f3db617e20aaf55"
-
-[[files]]
 file = ".worklane/testing-sessions/c6bf11e279d54e05a160cd0a504cb804.json"
 hash = "1edcce51d72905b95961734709d99f6f7f585c6f50abc7892a78642cf7e5c335"
 
@@ -2366,7 +2362,7 @@ hash = "48a66d0c9f1086135d940da666bbbd87e291ed8f77ca2de2b31a17b6c4412e2e"
 
 [[files]]
 file = "config/curios-common.toml"
-hash = "96b8fd886be5a933cf14f2e1f52a71668a1e859e5a0488d374b090b75cff716c"
+hash = "973aed59e642258f0ad1ac208422a15af2e7a216db9c3b6c7a7869b196ec481e"
 
 [[files]]
 file = "config/dcm.json"
@@ -4698,7 +4694,7 @@ hash = "478a21324a21317fd06d10995bdf479a8f70e624f65e3336e448f9183df20684"
 
 [[files]]
 file = "dist.sh"
-hash = "f68243a1fcf03f5cd45e1defa372eeb190c9e825340265af9ce65a6d683da261"
+hash = "a9d03518303aef17b4d28f1bdddfc16dbbddd4ce83247ad88da8f8181383d188"
 
 [[files]]
 file = "globalresources/better_content/excavated_variants/better_content/configs/malum_texture_blacklist.json5"
@@ -12307,7 +12303,7 @@ hash = "ca720b3df5706d1227c2d041c5ff84f28644e145926194be1680d127442526f4"
 
 [[files]]
 file = "package.sh"
-hash = "2c1de53cdf545ae0a6c44edc3c59daeca32c2f7ff568e9b9e3e01a5fd54555ab"
+hash = "a0083bf9e19d207c0e3cb3038bfe4fb6696834441366ccb868c6fa9a3964d880"
 
 [[files]]
 file = "plans/recipe-clash-replacements.md"

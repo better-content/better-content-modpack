@@ -42,7 +42,10 @@ current branch when a canonical remote exists. Do not push while a required chec
 
 Source validation does not authorize deployment, another repository's builds, Packwiz refresh,
 packaging or runtime suites. [testing.md](../testing.md) is the sole shared test/release procedure
-and authorization policy. Do not deploy development-mapped or sources JARs. After disposal,
+and authorization policy. Explicitly ordered package-only revisions use untested letter suffixes
+(e.g. `443a`); they never inherit the parent build's acceptance. Follow its
+[untested lettered-build procedure](../testing.md#untested-lettered-builds), respecting any explicit
+prohibition on builds or checks. Do not deploy development-mapped or sources JARs. After disposal,
 provider artifacts must be regenerated in dependency order before consumer source builds.
 
 Inventory GUI/compatibility work anywhere in the workspace must follow
