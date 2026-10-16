@@ -14,15 +14,13 @@ class HookLootSourceContractTest {
     private val root = Path.of(System.getProperty("bc.repo.root"))
 
     @Test
-    fun `soap prototype is loot only and replaces wooden hook as iron recipe input`() {
+    fun `soap prototype remains loot only and the iron recipe input`() {
         val crafting = Files.readString(root.resolve("kubejs/server_scripts/utility/hooks_drones_gates.js"))
         val loot = Files.readString(root.resolve("kubejs/server_scripts/utility/21_starter_hook_loot.js"))
         val tables = Regex("'((?:minecraft:chests/)[^']+)'\\s*:\\s*([0-9.]+)")
             .findAll(loot)
             .associate { it.groupValues[1] to it.groupValues[2].toDouble() }
 
-        assertTrue(crafting.contains("event.remove({ output: 'rehooked:wood_hook' })"))
-        assertFalse(crafting.contains("kubejs:rehooked/wood_hook_post_seared"))
         assertTrue(crafting.contains("H: 'better_rehooked_grappling:soap_on_a_rope'"))
         assertTrue(loot.contains("Item.of("))
         listOf("soap_on_a_rope", "block_and_tackle", "grapnel_bundle", "climbing_vine", "ratchet_reel", "anglers_gaff")
@@ -40,6 +38,24 @@ class HookLootSourceContractTest {
         )
         assertTrue(tables.values.all { it in 0.05..0.07 })
         assertTrue(loot.contains("!Platform.isLoaded('rehooked') || !Platform.isLoaded('better_rehooked_grappling')"))
+    }
+
+    @Test
+    fun `wooden hook retains its post seared mechanical recipe`() {
+        val crafting = Files.readString(root.resolve("kubejs/server_scripts/utility/hooks_drones_gates.js"))
+        assertTrue(crafting.contains("""
+            bcMobilityMechanical(event, 'rehooked:wood_hook', [
+                    'RRC',
+                    ' WH',
+                    'W H'
+                ], {
+                    R: 'farmersdelight:rope',
+                    C: 'tconstruct:seared_bricks',
+                    W: 'rehooked:wood_chain',
+                    H: '#forge:rods/wooden'
+                }, 'kubejs:rehooked/wood_hook_post_seared')
+        """.trimIndent()))
+        assertFalse(crafting.contains("event.remove({ output: 'rehooked:wood_hook' })"))
     }
 
     @Test

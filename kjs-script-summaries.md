@@ -74,7 +74,7 @@ Current inventory: **101 active scripts** — 10 client, 82 server, and 9 startu
 - `kubejs/server_scripts/progression/70_transition_components.js` — Authors reachable cross-mod components used by factory, electrical, aerospace, AE2, geology, and post-AE2 transitions.
 - `kubejs/server_scripts/transport/10_optional_engineering_roots.js` — Places Eureka, Clockwork, Trackwork, and Create train roots at their intended optional eras.
 - `kubejs/server_scripts/utility/10_recipe_surface_helpers.js` — Defines reusable Rhino-safe helpers for constructing and rewriting recipes.
-- `kubejs/server_scripts/utility/hooks_drones_gates.js` — Gates grappling hooks and autonomous drones as powerful route-editing utilities.
+- `kubejs/server_scripts/utility/hooks_drones_gates.js` — Gates grappling hooks and autonomous drones through mechanical assembly, including the restored post-seared wooden hook recipe.
 - `kubejs/server_scripts/zz_crafting_policy_report.js` — Reports exact surviving recipe outputs and live recipe consumers for centrally cut families.
 - `kubejs/server_scripts/zz_recipe_clash_remediation.js` — Distinguishes exact competing recipe families through retained-cost silhouettes, material identities and pristine-stack finishing; leaves stateful serializers native.
 - `kubejs/server_scripts/compat/curios_backpack_slot.js` — Tags Sophisticated Backpacks for the Curios backpack slot.
