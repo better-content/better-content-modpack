@@ -4,18 +4,18 @@ Systemic Salience is an exact identity language shared by three separate authori
 
 ## Canonical identity matrix
 
-Every row has exactly one representative in each authority. Aspect words appear in tooltips and supporting cues, not in the ordinary stat, food-group, or deposit names.
+Every row has exactly one representative in each authority. Formal aspect labels appear in tooltips and supporting cues; ordinary stat, food-group, and deposit names describe their practical identity. Endurance is also the natural capability name for conserving bodily reserves.
 
 | Aspect | Glyph | sRGB | RPG development | Diet identity | Ore identity |
 | --- | --- | --- | --- | --- | --- |
-| Impact | ✦ | `#FF4055` | Arms | Proteins | Hotstone |
-| Tempo | » | `#00A985` | Hands | Sugar | Copper Bloom |
-| Work | ⚒ | `#F0E2C5` | Fingers | Grains | Tin Quartz |
-| Mobility | ➜ | `#E0B01F` | Lungs | Fruits | Brassroot |
-| Endurance | ∞ | `#52606A` | Blood | Fats | Coal Measures |
-| Robustness | ◆ | `#AF6A2F` | Skin | Vegetables | Ironstone |
-| Renewal | ✚ | `#6CCAF0` | Liver | Dairy | Evaporite Beds |
-| Control | ⊕ | `#8E5BB7` | Eyes | Alcohol | Black Shale |
+| Impact | ✦ | `#FF4055` | Strength | Proteins | Hotstone |
+| Tempo | » | `#00A985` | Hand Speed | Sugar | Copper Bloom |
+| Work | ⚒ | `#F0E2C5` | Tool Handling | Grains | Tin Quartz |
+| Mobility | ➜ | `#E0B01F` | Athletics | Fruits | Brassroot |
+| Endurance | ∞ | `#52606A` | Endurance | Fats | Coal Measures |
+| Robustness | ◆ | `#AF6A2F` | Hardiness | Vegetables | Ironstone |
+| Renewal | ✚ | `#6CCAF0` | Detoxification | Dairy | Evaporite Beds |
+| Control | ⊕ | `#8E5BB7` | Marksmanship | Alcohol | Black Shale |
 
 The shipped ore identity palette is authoritative and is shared by the RPG, bodily-state,
 and Threads aspect definitions. Glyph, name, value structure, morphology, and actual
@@ -62,14 +62,18 @@ These owners already implement meaningful pauses at their own scopes. Keep ordin
 
 RPG allocations use `cap × points / (points + 20)`: twenty committed points reach half the cap, allocation cannot be refunded during the life, and death wipes the ledger. Each visible category is singular and mechanically coherent:
 
-- Arms increases damaging impact and knockback.
-- Hands increases attack and item-use cadence.
-- Fingers increases productive mining speed and reach.
-- Lungs increases movement, swimming, step capability, and underwater air capacity; 20 points extend the base 15-second reserve to 22.5 seconds.
-- Blood conserves hunger, thirst, and stamina.
-- Skin resists temperature and knockback.
-- Liver shortens harmful effects and preserves beneficial effects; it never grants health, healing, or combat recovery.
-- Eyes narrow arrow spread and gently increase arrow speed and effective range from the start; later guns gain recoil and dispersion control, while Goety spells gain range.
+- Strength increases damaging impact and knockback.
+- Hand Speed increases attack and item-use cadence.
+- Tool Handling increases productive mining speed and reach.
+- Athletics increases movement, swimming, step capability, and underwater air capacity; 20 points extend the base 15-second reserve to 22.5 seconds.
+- Endurance conserves hunger and thirst and increases stamina capacity.
+- Hardiness resists temperature and knockback.
+- Detoxification shortens harmful effects and preserves beneficial effects; it never grants health, healing, or combat recovery.
+- Marksmanship narrows arrow spread and gently increases arrow speed and effective range from the start; later guns gain recoil and dispersion control, while Goety spells gain range.
+
+These player-facing capability names retain the existing `arms`, `hands`, `fingers`, `lungs`,
+`blood`, `skin`, `liver`, and `eyes` IDs respectively. Body-part badges, palettes, aspect mappings,
+allocation data, and mechanics are unchanged; renaming does not require a save migration.
 
 Slice of Life: Carrot remains the sole owner of maximum-health progression.
 
