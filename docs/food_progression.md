@@ -1,6 +1,6 @@
 # Food progression
 
-The Diet screen shows eight named groups. Six lasting groups unlock an ability at 20%, then add distinct abilities at 40%, 60%, and 80%. Sweetness and Draught are temporary loads. Prepared food can credit every group supplied by its ingredients, even when the result also has a direct Diet tag.
+The Diet screen shows eight named groups. Six lasting groups unlock an ability at 20%, then add distinct abilities at 40%, 60%, and 80%. Sweetness and Draught are temporary loads. Food groups follow Diet's native rules: direct food tags take precedence; otherwise Diet can generate groups from recipe ingredients. Better Survival Physiology does not override that classification or inheritance.
 
 | Group | First dependable source | Later food and role |
 | --- | --- | --- |
