@@ -392,7 +392,7 @@
     {
       "repository": "better-ore-geology",
       "modId": "better_ore_geology",
-      "artifact": "better-ore-geology-0.2.0.jar",
+      "artifact": "better-ore-geology-0.3.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
