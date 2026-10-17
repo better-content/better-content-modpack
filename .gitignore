@@ -41,8 +41,8 @@ generated/validation/contract_completeness_summary.json
 generated/visual-iteration/
 exports/
 
-# Live conversation verification metadata, never authored evidence.
-/.worklane/testing-sessions/
+# Local coordination locks and verification metadata are never authored inputs.
+/.worklane/
 
 # Local run artifacts
 logs/
