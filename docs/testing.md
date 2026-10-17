@@ -132,16 +132,24 @@ Use the coordinator's stable conversation ID (`PI_SESSION_ID` in Pi; explicitly 
 
 Opening a receipt or ordinary source/Dev checks does not authorize preparation or establish a
 baseline. Source-control checks validate ownership but do not advance the release receipt.
-Only successful canonical preparation establishes verified deployable artifacts. Without a
-session, tested preparation uses a full invocation-scoped baseline and removes its receipt on
-completion/failure. `--skip-tests` cannot consume a verified receipt.
+Canonical preparation checkpoints each provider only after its complete verification tasks,
+artifact checks and input rechecks succeed. A later provider failure does not discard those
+checkpoints, but only successful complete preparation establishes a deployable coherent set.
+Without a session, tested preparation uses an invocation-scoped baseline and removes its receipt
+on completion/failure. `--skip-tests` cannot consume or create verified checkpoints.
 
 The atomic bounded receipt in `.worklane/testing-sessions/` records owner, generation, shared
 input fingerprint, per-repository source identity, verified JAR/provider hashes, tasks and latest
-successful verification ID. It contains no worlds, logs or historical result catalogue. A failed
-or incomplete baseline cannot authorize reuse. Identity includes HEAD, tracked/nonignored files
-and status; a later HEAD cannot be attached to a built JAR. Artifact changes after a reuse
-decision fail rather than acquiring the previous verification ID. Declared `supportArtifacts`
+successful verification ID, plus bounded per-provider checkpoint metadata. Candidate JAR bytes
+stay in task-owned generated evidence, not in the receipt. It contains no worlds, logs or
+historical result catalogue. A failed or incomplete baseline never authorizes deployment or
+packaging; its individually successful checkpoints may be reused only after exact current
+source/task/shared-input, production/support-byte and consumed-dependency checks. Missing or
+invalid checkpoints require rebuilding that provider and its transitive consumers. Legacy failed
+runs without checkpoints cannot be imported from old JARs or successful-looking logs. Identity
+includes HEAD, tracked/nonignored files and status; a later HEAD cannot be attached to a built
+JAR. Artifact changes after a reuse decision fail rather than acquiring the previous verification
+ID. Reused checkpoints retain their original verification IDs. Declared `supportArtifacts`
 (e.g. the isolated native diagnostic supplement) are gate-produced, hash-bound inputs too;
 missing/corrupt supplements require rebuilding their provider. Changed providers invalidate
 consumers. The manifest's `verificationInputs` declare external pack contracts/upstream pins and
@@ -150,13 +158,31 @@ alone is insufficient. Session status adds an observational live rescan of share
 source/task identities, production/support bytes and the provider/consumer closure. It does not
 advance verification or authorize reuse; preparation rechecks under the receipt lock.
 
+After an interrupted or failed preparation, inspect the failure and confirm process cleanup, then
+retry the same owned session **without `--rebuild-all`** to retain eligible checkpoints:
+
+```sh
+./release.main.kts --verification-session SESSION_ID
+```
+
+`--rebuild-all` explicitly starts a fresh verification epoch: old complete-baseline records and
+partial checkpoints cannot substitute for new verification, even if this fresh attempt later
+fails. Unchanged successful checkpoints from that new attempt can then be resumed without the
+flag. Shared-contract changes still conservatively invalidate the entire set; a source-only fix
+invalidates its provider and consumers. End-of-task disposal may delete checkpoint bytes, which
+makes them ineligible rather than weakening verification. All normal Dev/Dist acceptance,
+immutable candidate hashes, strict diagnostics and process-cleanup requirements remain in force.
+
 Same conversation identity survives compaction/reconnection. Only explicitly owner-admitted
 helper conversation identities can share it; receipt ownership never changes. Different owners are rejected;
 uncertain liveness is not permission to adopt a receipt. Explicit end refuses during preparation.
 After stopping and confirming complete cleanup of an interrupted owned tree, its owner may use
-`session end SESSION_ID --confirm-terminated-run RUN_ID`; this refuses if the coordinator PID
-still exists. That confirmation is an explicit cleanup assertion, not inference from PID absence.
-End unused sessions explicitly. Admission/revocation and explicit replacement refuse an active
+`session recover SESSION_ID --confirm-terminated-run RUN_ID` to clear the abandoned active-run
+marker while preserving checkpoints for canonical revalidation. Alternatively,
+`session end SESSION_ID --confirm-terminated-run RUN_ID` discards the receipt. Both refuse if
+the coordinator PID still exists or the run ID does not match. That confirmation is an explicit
+cleanup assertion, not inference from PID absence; helpers cannot perform owner recovery.
+Recovery does not verify any artifact or authorize deployment. End unused sessions explicitly. Admission/revocation and explicit replacement refuse an active
 coordinator. End/replacement is owner-only; a helper cannot transfer ownership or revive a receipt.
 Uncertain owner liveness remains fail-closed and requires explicit owner reconciliation, never
 cross-conversation adoption. Receipts are task-lifetime data and are removed on handoff.

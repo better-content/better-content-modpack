@@ -138,6 +138,7 @@ fun main(args: Array<String>) {
     val pending = manifest.mods.associateBy { it.repository }.toMutableMap()
     while (pending.isNotEmpty() && failures.isEmpty()) {
         val completed = built.map { it.definition.repository }.toSet()
+        val completedHashes = built.associate { it.definition.repository to it.sha256 }
         val ready = pending.values.filter { mod -> mod.dependsOn.all { it in completed } }
         require(ready.isNotEmpty()) { "active-mod release dependencies contain a cycle: ${pending.keys.sorted()}" }
         val executor = Executors.newFixedThreadPool(jobs)
@@ -145,11 +146,24 @@ fun main(args: Array<String>) {
             executor.submit(Callable {
                 val update = sourceUpdatesByRepository.getValue(mod.repository)
                 val mustBuild = verification?.affected?.contains(mod.repository) ?: forceRebuild
-                build(root, workspace, evidence, staging, mod,
-                    if (verification != null && !mustBuild) update.copy(status = "same") else update,
-                    skipTests, mustBuild).also { item ->
-                        if (verification != null && !mustBuild) verification.requireReusable(item)
-                    }
+                val consumed = mod.dependsOn.associateWith { dependency ->
+                    completedHashes.getValue(dependency)
+                }
+                verification?.requireConsumedStages(mod, consumed)
+                val item = if (verification != null && !mustBuild) verification.reusable(mod) ?:
+                    build(root, workspace, evidence, staging, mod, update.copy(status = "same"), skipTests, false)
+                else build(root, workspace, evidence, staging, mod, update, skipTests, mustBuild)
+                verification?.requireConsumedStages(mod, consumed)
+                if (verification != null && !mustBuild) verification.requireReusable(item)
+                val reflection = bytecodeReflectionViolations(mod.repository,
+                    workspace.resolve("mod_source/${mod.repository}"), item.jar, reflectionAllowances)
+                require(reflection.isEmpty()) {
+                    "${mod.repository} staged bytecode uses forbidden reflection: ${reflection.joinToString()}"
+                }
+                if (verification != null && mustBuild) {
+                    verification.checkpoint(item, consumed)
+                }
+                item
             })
         }
         executor.shutdown()
@@ -181,7 +195,7 @@ fun main(args: Array<String>) {
         "staged custom-mod bytecode uses forbidden reflection; see ${evidence.resolve("reflection-bytecode-audit.tsv")}"
     }
 
-    verification?.checkInputs()
+    val verificationOrigins = verification?.validateComplete(built)
     built.forEach { item ->
         require(Hashes.sha256(item.jar) == item.sha256) { "verified staged artifact changed: ${item.jar}" }
         if (!skipTests) require(supportArtifactHashes(workspace.resolve("mod_source/${item.definition.repository}"), item.definition) == item.supportHashes) {
@@ -241,6 +255,7 @@ fun main(args: Array<String>) {
                 "artifact" to it.definition.artifact,
                 "sha256" to it.sha256,
                 "mode" to it.mode,
+                "verification_id" to verificationOrigins?.getValue(it.definition.repository),
                 "support_hashes" to it.supportHashes,
             )
         },

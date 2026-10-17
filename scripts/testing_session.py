@@ -167,6 +167,21 @@ def inspect_live(root, receipt):
                 affected_providers=sorted(changed), authority='observational_only; preparation rechecks under session lock')
 
 
+def confirm_terminated_run(value, confirmed):
+    # Explicit owner assertion covers complete owned-tree cleanup. PID absence alone
+    # does not establish that descendants or other owned resources were cleaned.
+    if confirmed != value.get('active_run') or not re.fullmatch(r'\d{8}T\d{6}Z-\d+', confirmed or ''):
+        raise ValueError('session is in use; uncertain owner liveness requires reconciliation')
+    pid = int(confirmed.rsplit('-', 1)[1])
+    if not 1 <= pid <= 2**31 - 1:
+        raise ValueError('invalid confirmed run PID')
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return
+    raise ValueError('confirmed run coordinator still exists; stop and clean its owned tree first')
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', default=str(Path(__file__).resolve().parent.parent))
@@ -184,6 +199,9 @@ def main():
     end = sub.add_parser('end')
     end.add_argument('session')
     end.add_argument('--confirm-terminated-run', help='explicit owner confirmation after complete owned-process cleanup')
+    recover = sub.add_parser('recover')
+    recover.add_argument('session')
+    recover.add_argument('--confirm-terminated-run', help='explicit owner confirmation after complete owned-process cleanup')
     args = parser.parse_args()
     owner = caller_owner()
     if args.action == 'begin':
@@ -218,20 +236,15 @@ def main():
                 value = dict(value, live_inspection=inspect_live(Path(args.root), value))
             elif args.action == 'end':
                 if value.get('active_run'):
-                    confirmed = args.confirm_terminated_run
-                    if confirmed != value['active_run'] or not re.fullmatch(r'\d{8}T\d{6}Z-\d+', confirmed or ''):
-                        raise ValueError('session is in use; uncertain owner liveness requires reconciliation')
-                    pid = int(confirmed.rsplit('-', 1)[1])
-                    if not 1 <= pid <= 2**31 - 1:
-                        raise ValueError('invalid confirmed run PID')
-                    try:
-                        os.kill(pid, 0)
-                    except ProcessLookupError:
-                        pass
-                    else:
-                        raise ValueError('confirmed run coordinator still exists; stop and clean its owned tree first')
+                    confirm_terminated_run(value, args.confirm_terminated_run)
                 session_path(args.root, args.session).unlink()
                 value = dict(schema=SCHEMA, session_id=args.session, state='ended')
+            elif args.action == 'recover':
+                if not value.get('active_run') or value.get('baseline') == 'complete':
+                    raise ValueError('recovery requires an interrupted active verification run')
+                confirm_terminated_run(value, args.confirm_terminated_run)
+                value = dict(value, baseline='failed', active_run=None)
+                atomic_write(session_path(args.root, args.session), value)
             print(json.dumps(value))
 
 

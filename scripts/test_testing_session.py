@@ -80,6 +80,95 @@ class SessionTests(unittest.TestCase):
                     sessions.main()
             self.assertFalse(path.exists())
 
+    def recovery_fixture(self):
+        receipt = sessions.begin(self.root, 'conversation')
+        candidate = self.root / 'generated/checkpoint.jar'
+        candidate.parent.mkdir(parents=True)
+        candidate.write_bytes(b'verified checkpoint bytes')
+        receipt.update(baseline='verifying', active_run='20261017T000000Z-123456', helpers=['helper'],
+            checkpoints={'provider': {'verification_id': 'original-run', 'sha256': sessions.file_identity(candidate),
+                                      'staged_path': 'generated/checkpoint.jar'}},
+            shared_fingerprint='unchanged', mods={'prior': {'verification_id': 'prior-run'}})
+        path = sessions.session_path(self.root, receipt['session_id'])
+        sessions.atomic_write(path, receipt)
+        return receipt, path, candidate
+
+    def invoke_recover(self, receipt, owner='conversation', confirmation=None):
+        args = ['testing_session.py', '--root', str(self.root), 'recover', receipt['session_id']]
+        if confirmation is not None:
+            args += ['--confirm-terminated-run', confirmation]
+        with patch.dict(os.environ, {'PI_SESSION_ID': owner}), patch('sys.argv', args), contextlib.redirect_stdout(io.StringIO()) as output:
+            sessions.main()
+        return json.loads(output.getvalue())
+
+    def test_recover_dead_owned_run_preserves_checkpoints_bytes_and_origin(self):
+        receipt, path, candidate = self.recovery_fixture()
+        before = candidate.read_bytes()
+        with patch.object(os, 'kill', side_effect=ProcessLookupError) as probe:
+            result = self.invoke_recover(receipt, confirmation=receipt['active_run'])
+        probe.assert_called_once_with(123456, 0)
+        expected = dict(receipt, baseline='failed', active_run=None)
+        self.assertEqual(expected, result)
+        self.assertEqual(expected, sessions.load(self.root, receipt['session_id'], 'conversation'))
+        self.assertEqual(before, candidate.read_bytes())
+        self.assertTrue(path.exists())
+
+    def test_recover_refuses_missing_or_mismatched_confirmation_without_liveness_inference(self):
+        receipt, path, candidate = self.recovery_fixture()
+        before = path.read_bytes()
+        for confirmation in (None, '20261017T000001Z-123456', 'malformed', '20261017T000000Z-0'):
+            with self.subTest(confirmation=confirmation), patch.object(os, 'kill') as probe:
+                with self.assertRaises(ValueError):
+                    self.invoke_recover(receipt, confirmation=confirmation)
+                probe.assert_not_called()
+                self.assertEqual(before, path.read_bytes())
+        self.assertEqual(b'verified checkpoint bytes', candidate.read_bytes())
+
+    def test_recover_refuses_invalid_stored_run_and_pid_even_with_exact_confirmation(self):
+        receipt, path, _ = self.recovery_fixture()
+        for run in ('not-a-run', '20261017T000000Z-0', '20261017T000000Z-2147483648'):
+            value = dict(receipt, active_run=run)
+            sessions.atomic_write(path, value)
+            before = path.read_bytes()
+            with self.subTest(run=run), patch.object(os, 'kill') as probe:
+                with self.assertRaises(ValueError):
+                    self.invoke_recover(value, confirmation=run)
+                probe.assert_not_called()
+                self.assertEqual(before, path.read_bytes())
+
+    def test_recover_refuses_live_or_uncertain_coordinator(self):
+        receipt, path, candidate = self.recovery_fixture()
+        before = path.read_bytes()
+        for failure in (None, PermissionError('uncertain coordinator access')):
+            with self.subTest(failure=failure), patch.object(os, 'kill', side_effect=failure):
+                with self.assertRaises((ValueError, PermissionError)):
+                    self.invoke_recover(receipt, confirmation=receipt['active_run'])
+                self.assertEqual(before, path.read_bytes())
+        self.assertEqual(b'verified checkpoint bytes', candidate.read_bytes())
+
+    def test_recover_is_owner_only_even_for_admitted_helpers(self):
+        receipt, path, candidate = self.recovery_fixture()
+        before = path.read_bytes()
+        for owner in ('foreign', 'helper'):
+            with self.subTest(owner=owner), patch.object(os, 'kill') as probe:
+                with self.assertRaises(ValueError):
+                    self.invoke_recover(receipt, owner=owner, confirmation=receipt['active_run'])
+                probe.assert_not_called()
+                self.assertEqual(before, path.read_bytes())
+        self.assertEqual(b'verified checkpoint bytes', candidate.read_bytes())
+
+    def test_recover_refuses_idle_or_complete_receipts(self):
+        receipt, path, _ = self.recovery_fixture()
+        for baseline, active in (('pending', None), ('failed', None), ('complete', None), ('complete', receipt['active_run'])):
+            value = dict(receipt, baseline=baseline, active_run=active)
+            sessions.atomic_write(path, value)
+            before = path.read_bytes()
+            with self.subTest(baseline=baseline, active=active), patch.object(os, 'kill') as probe:
+                with self.assertRaises(ValueError):
+                    self.invoke_recover(value, confirmation=receipt['active_run'])
+                probe.assert_not_called()
+                self.assertEqual(before, path.read_bytes())
+
     def test_helpers_require_owner_admission_and_cannot_end_or_replace_owner(self):
         receipt = sessions.begin(self.root, 'conversation')
         sid = receipt['session_id']

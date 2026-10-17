@@ -23,7 +23,8 @@ class VerificationSessionTest {
         Files.createDirectories(root.resolve("mods"))
         git(root, "init", "-q")
         Files.writeString(root.resolve("contract.txt"), "authored contract\n")
-        git(root, "add", "contract.txt")
+        Files.writeString(root.resolve(".gitignore"), "generated/\n.worklane/\nmods/\n")
+        git(root, "add", "contract.txt", ".gitignore")
         git(root, "-c", "user.email=test@example.invalid", "-c", "user.name=Test", "commit", "-qm", "fixture")
         mods.forEach { mod ->
             val source = root.parent.resolve("mod_source/${mod.repository}")
@@ -45,12 +46,28 @@ class VerificationSessionTest {
         return id
     }
     private fun built(root: Path) = mods.map { mod ->
-        val path = root.resolve("mods/${mod.artifact}")
-        BuiltMod(mod, "synthetic-commit", path, Hashes.sha256(path), "synthetic-verified")
+        val id = mapper.readValue<VerificationReceipt>(root.resolve(".worklane/testing-sessions")
+            .toFile().listFiles()!!.single { it.extension == "json" }).active_run!!
+        val path = root.resolve("generated/test-evidence/$id/release/staged-jars/${mod.artifact}")
+        Files.createDirectories(path.parent)
+        Files.copy(root.resolve("mods/${mod.artifact}"), path, java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+        val commit = git(root.parent.resolve("mod_source/${mod.repository}"), "rev-parse", "HEAD").trim()
+        BuiltMod(mod, commit, path, Hashes.sha256(path), "rebuilt")
+    }
+    private fun checkpointAffected(session: VerificationSession, items: List<BuiltMod>) {
+        items.forEach { item ->
+            if (item.definition.repository in session.affected) session.checkpoint(item,
+                item.definition.dependsOn.associateWith { dependency ->
+                    items.single { it.definition.repository == dependency }.sha256
+                })
+        }
     }
     private fun verify(root: Path, id: String, force: Boolean = false): Set<String> =
-        VerificationSession(root, mods, "verification", force, "conversation", id).use { session ->
-            session.commit(built(root)); session.affected
+        VerificationSession(root, mods, "verification-${java.util.UUID.randomUUID().toString().replace("-", "")}", force,
+            "conversation", id).use { session ->
+            val items = built(root)
+            checkpointAffected(session, items)
+            session.commit(items); session.affected
         }
 
     @Test fun `new baseline then same conversation reuse and explicit rebuild`() {
@@ -89,7 +106,7 @@ class VerificationSessionTest {
         VerificationSession(root, mods, "missing", false, "conversation", id).use {
             assertEquals(setOf("independent"), it.affected)
             Files.writeString(root.resolve("mods/independent.jar"), "new verified jar")
-            it.commit(built(root))
+            val items = built(root); checkpointAffected(it, items); it.commit(items)
         }
         root.parent.toFile().deleteRecursively()
     }
@@ -98,7 +115,7 @@ class VerificationSessionTest {
         Files.writeString(root.resolve("contract.txt"), "changed pack contract")
         assertEquals(mods.map { it.repository }.toSet(), verify(root, id))
         VerificationSession(root, mods, "partial", false, "conversation", id).use { /* intentionally incomplete */ }
-        assertEquals(mods.map { it.repository }.toSet(), verify(root, id))
+        assertEquals(emptySet<String>(), verify(root, id))
         VerificationSession(root, mods, "mutation", false, "conversation", id).use {
             Files.writeString(root.parent.resolve("mod_source/consumer/source.txt"), "mutated while building")
             assertThrows(IllegalArgumentException::class.java) { it.commit(built(root)) }
@@ -111,7 +128,8 @@ class VerificationSessionTest {
         val root = fixture()
         var id = ""
         VerificationSession(root, mods, "ephemeral", false, "conversation", null).use {
-            id = it.id; assertTrue(it.fullBaseline); it.commit(built(root))
+            id = it.id; assertTrue(it.fullBaseline)
+            val items = built(root); checkpointAffected(it, items); it.commit(items)
         }
         assertFalse(Files.exists(root.resolve(".worklane/testing-sessions/$id.json")))
         root.parent.toFile().deleteRecursively()
@@ -134,12 +152,14 @@ class VerificationSessionTest {
             val mod = active.single { it.repository == item.definition.repository }
             item.copy(definition = mod, supportHashes = supportArtifactHashes(root.parent.resolve("mod_source/${mod.repository}"), mod))
         }
-        VerificationSession(root, active, "initial", false, "conversation", id).use { it.commit(artifacts()) }
+        VerificationSession(root, active, "initial", false, "conversation", id).use {
+            val items = artifacts(); checkpointAffected(it, items); it.commit(items)
+        }
         Files.delete(support)
         VerificationSession(root, active, "missing-support", false, "conversation", id).use {
             assertEquals(setOf("provider", "consumer"), it.affected)
             Files.writeString(support, "newly verified support")
-            it.commit(artifacts())
+            val items = artifacts(); checkpointAffected(it, items); it.commit(items)
         }
         Files.writeString(support, "unverified replacement")
         VerificationSession(root, active, "corrupt-support", false, "conversation", id).use {
