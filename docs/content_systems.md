@@ -49,6 +49,15 @@ exception: its startup classifier checks loaded namespaces, and its final recipe
 report inspects recipe JSON for named cut-family leaks and consumers. This does not
 authorize a general audit framework; see [Crafting graph policy](crafting_policy.md).
 
+## Tinkers' tool visibility
+
+`kubejs/client_scripts/policy/hide_completed_tcon_tools.js` hides completed multipart
+station/anvil tools from both EMI and JEI. It selects `tconstruct:modifiable/multipart`
+minus `multipart/single` and wearable armor, not the broad `modifiable` tag. Direct
+crafts such as Flint and Brick and slime staffs, single-part shields, wearable armor,
+parts, materials, modifiers and recipes remain visible. This is viewer filtering,
+not recipe removal.
+
 ## Item-hover annotations
 
 Better Content owns one pack-authored item-hover annotation surface. Concise,

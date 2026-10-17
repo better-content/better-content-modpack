@@ -13,7 +13,7 @@ Current inventory: **101 active scripts** — 10 client, 82 server, and 9 startu
 - `kubejs/client_scripts/policy/hide_fire_content.js` — Hides generated burnt and smoldering states from recipe viewers without disabling their world simulation.
 - `kubejs/client_scripts/policy/hide_native_ordinary_spirits.js` — Hides native ordinary Malum spirits in favor of the pack's physical spirit items.
 - `kubejs/client_scripts/policy/hide_disabled_potions.js` — Hides disabled vanilla potion-delivery stacks and surfaces from recipe viewers while preserving plain water bottles.
-- `kubejs/client_scripts/policy/hide_completed_tcon_tools.js` — Hides completed TConstruct and extension tools from recipe viewers while retaining wearable armor and construction inputs.
+- `kubejs/client_scripts/policy/hide_completed_tcon_tools.js` — Hides multipart TConstruct and extension tools assembled at a Tinker Station/Anvil from EMI/JEI, excluding single-part gear and wearable armor; direct crafts and construction inputs stay visible.
 - `kubejs/client_scripts/policy/hide_excavated_variants.js` — Hides Excavated Variants’ host-stone permutations from recipe viewers without removing their recipes or world content.
 - `kubejs/client_scripts/policy/hide_vanilla_tools.js` — Hides vanilla-style tools whose reachable native-system replacements own progression.
 
