@@ -2,7 +2,7 @@
 
 This index is generated from the three executable KubeJS roots. Every listed JavaScript file is active; directory names such as `retained` and `reviewed` describe review history, not load state. `kubejs/inactive_review` is deliberately excluded because it is outside the executable roots.
 
-Current inventory: **101 active scripts** — 10 client, 82 server, and 9 startup.
+Current inventory: **102 active scripts** — 10 client, 82 server, and 10 startup.
 
 ## Client scripts
 
@@ -104,6 +104,8 @@ Current inventory: **101 active scripts** — 10 client, 82 server, and 9 startu
 - `kubejs/server_scripts/utility/21_starter_hook_loot.js` — Places six early ReHooked prototypes in loot while retaining mechanical assembly for stronger tiers.
 
 ## Startup scripts
+
+- `kubejs/startup_scripts/policy/enderman_armor.js` — Sets vanilla Endermen to 4 base armour on server-side entity joins, including save loads, without changing toughness or modded variants.
 
 - `kubejs/startup_scripts/compat/retained/check__12_unearthed_regolith_hand_mining.js` — Adjusts Unearthed regolith blocks for the intended manual mining behavior.
 - `kubejs/startup_scripts/compat/retained/remove__10_ae2_skystone_hardness.js` — Adjusts AE2 skystone block hardness and mining behavior.
