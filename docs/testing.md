@@ -42,6 +42,16 @@ the complete timestamp/logger/message, a valid mod namespace, and a positive fin
 failure payloads remain correctness findings. This category replaces the old per-mod duration and
 occurrence allowances; it is not an `adpother` exception or a raised threshold for one candidate.
 
+The isolated Spirit Commerce source GameTest fixture also distinguishes initial arena setup from
+runtime correctness: at most one exact native `MinecraftServer`/`Server thread` startup-lag WARN
+may be recorded as a performance diagnostic when its nonce-bound, nonshipping phase observer
+proves it occurred in initial world/arena setup before the second server tick. Positive duration
+and consistent tick-count fields are required and retained with the source line. Missing or
+invalid phase proof, repeated notices, ERROR severity, malformed payloads and later runtime lag
+remain failures. This source-fixture classification does not change the full-pack log policy,
+assertions, startup/join deadlines or performance acceptance; it is not a claim that the delay
+was repaired.
+
 Every runtime suite records `startup_performance_diagnostics`: source paths/lines, normalized seconds,
 observation counts and per-mod maxima, including on failed runs. Aggregate/native logs can duplicate
 observations, so timings are not summed. These records are diagnostic-only: a correctness pass is
