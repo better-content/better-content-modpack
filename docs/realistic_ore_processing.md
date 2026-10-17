@@ -46,6 +46,21 @@ the corresponding underground body. A sample is a useful local clue to prospect
 below, although a later extraction of the same ore family does not prove it came
 from that particular body. The sample can also be collected for a small chunk.
 
+## Visual exposures
+
+Each deposit family has quiet traces, fragments, restrained richer patches, and original-strength
+mineral windows, with three independently authored patterns per role. A coherent spatial field
+selects exposures within individual faces, rather than assigning a random full-strength tile to
+every ore block. Stone and deepslate retain their canonical hosts; Excavated Variants synthesizes
+other host composites from the same mineral overlays.
+
+These are visual exposures, not gameplay grades: ore positions, generation budgets and random
+sampling, drops, processing yields and progression are unchanged. World block states preserve the
+compact geological style through saves and host conversion. Player-placed and Silk-Touched blocks
+select a stable appearance at the new location without adding item metadata or splitting stacks.
+Implementation and art authority live in the [Better Ore Geology source README](../../mod_source/better-ore-geology/README.md)
+and its linked texture workflow.
+
 ## Processing depth
 
 1. Ordinary mining yields one host-independent chunk; Silk Touch preserves the
