@@ -1,6 +1,7 @@
 .codex
 /.gradle/
 /.github/
+/.worklane/
 docs
 # Retained inactive mod manifests and integration customizations; never export.
 /disabled/

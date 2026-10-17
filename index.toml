@@ -1,18 +1,6 @@
 hash-format = "sha256"
 
 [[files]]
-file = ".worklane/testing-sessions/.lock"
-hash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-
-[[files]]
-file = ".worklane/testing-sessions/c6bf11e279d54e05a160cd0a504cb804.json"
-hash = "1edcce51d72905b95961734709d99f6f7f585c6f50abc7892a78642cf7e5c335"
-
-[[files]]
-file = ".worklane/testing-sessions/e59e7da84c4f49ed8a1dc289b574a47a.json"
-hash = "c9dda57b41dfb7454a87d6c3a52ce6c6f2bddc1a88361e2335d7627bcdae312e"
-
-[[files]]
 file = "AGENTS.md"
 hash = "6cdbacd03871b1c49a139ce321727974308754e77abd888937ad2e561b80cab9"
 
@@ -7394,7 +7382,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "a5212ea1ab8e78a4e749f97b5a76f35f0521183f741f9e018c4b4f3d7831ec00"
+hash = "a18480fb70925cae62bd3958e8df137c2f9d1ab2cdebd1798221641953cb9d2f"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -7851,6 +7839,14 @@ hash = "3d20c743344f34c57ddf3223c8bdb58a557f359aa6508f1a6aba976a3a973c77"
 [[files]]
 file = "kubejs/data/better_cave_encounters/director_ecologies/undead.json"
 hash = "3d9c3d24b224e9850cf2654d8fef152f7b1019ade05f53bd65ea6f4d1871f48c"
+
+[[files]]
+file = "kubejs/data/better_celestial_events/tags/worldgen/biome/thin_veil_forest.json"
+hash = "ddb8ca5e5885ae83f3467d4baaabd97d8528354884051e824931b6b163fa3e17"
+
+[[files]]
+file = "kubejs/data/better_celestial_events/tags/worldgen/biome/thin_veil_swamp.json"
+hash = "8cdb4f81fa15d70f5b2038b06378422d3000cb893617d7e39429dc8c70de52ff"
 
 [[files]]
 file = "kubejs/data/better_chemlib_hazards/chemical_traits/helium.json"
@@ -11000,175 +10996,179 @@ metafile = true
 
 [[files]]
 file = "mods/better-airtight-machines-0.1.0.jar"
-hash = "1fe94683c97da3fcc7147ae01cb2bccf093d25f73af86b9a55c5542b3380ac9c"
+hash = "c5a534ca9766c8633d53af5e86061679f00ffb45d9e7483deb31e767e8475d46"
 
 [[files]]
 file = "mods/better-arena-trials-0.1.0.jar"
-hash = "de4cbfb4b06c54ef1b33c80491b7911a07ab23413831fa81d24d53597ad78c75"
+hash = "e382f75f1eaaa362475351c7e9bcea371ebe24c27a46c33e363700cc69f15b4b"
 
 [[files]]
 file = "mods/better-block-placement-preview-0.1.0.jar"
-hash = "f8d6ef0e0d96671b5132dd5c8803d50f229d028fc8f9cf3137c8de35a0e765d8"
+hash = "43f11d53a3cdd50754fb93d712e5d747b1ef65fd64bfc33f912ac7890870be13"
 
 [[files]]
 file = "mods/better-bumblezone-crops-0.1.0.jar"
-hash = "3b570915c7a803824620bbc480f7f6ef2642a0ce13dbe23493db2d076e9fe253"
+hash = "d4290f5cc87b38a97f956998eac6af12977d3446a309554db8e13a672aeb246f"
 
 [[files]]
 file = "mods/better-buried-encounters-0.1.0.jar"
-hash = "e7953ee18e03b129fd06236390cc8e1fc03ed9325d8ac82079aebada056e3590"
+hash = "41e0672196343ad7103fd04ab53432a870bc034c1b8c717a9eba1a651cc0ae47"
 
 [[files]]
 file = "mods/better-cave-encounters-0.2.1.jar"
-hash = "fb44fa0475cafed2fbab9f3998a00cb5126b8070c729f31a8425aa32f89ece7a"
+hash = "85b063f720faf36ab98dd5509672575bd59edadc4e3a44436b4b3de2eb1c97d1"
+
+[[files]]
+file = "mods/better-celestial-events-0.1.0.jar"
+hash = "f6b2fb9df4724c55422cfe185741397f8464ab76d767d5caf38b6aa2a5542b79"
 
 [[files]]
 file = "mods/better-chemlib-hazards-0.2.0.jar"
-hash = "ba858395eb745aad8c2f1c7b9cf8d8647ece80afe9595d8fa0354cb77ea16d6d"
+hash = "5c4a8acb8949cfb6b5dc7c205a2001cd98c16ce032b31a4aeb5e1a5a8f6e2e62"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
-hash = "387cac9507ea1768fbf17ceb75712205a2c524cb314695d4b8228da3bdc27672"
+hash = "4dab234a7d9cf91c80cb370f4d0e4ce348e4c7b363027129de9d25fe25768527"
 
 [[files]]
 file = "mods/better-craftable-bouquets-0.1.0.jar"
-hash = "50caf26c10b9ccfbb0201ec61ada0878943e2f308165caff7e633732b8ff9bf5"
+hash = "e712d5c11f027d9af24fcfc0266efe37029d7afa11afcc33d1c7b3edda74e7b6"
 
 [[files]]
 file = "mods/better-create-kinetic-loss-0.1.0.jar"
-hash = "9f1a1bd21ecc8de21fb4128563db14cfe0bbde1d8a9f3a8ca7936cedb1f09523"
+hash = "67f4ffb99461bcae210c1f50e23cab7fcb96fd060b2513724e73c69d1db1de0e"
 
 [[files]]
 file = "mods/better-create-train-fuel-0.1.0.jar"
-hash = "7778ad93561eb13d7cbde6a9986d2dc8fd45ab5c0823938d49b307d70ef450a4"
+hash = "c4160cac20e57701b77ed04e290a37cbdaf502b7603655d22e9bd6665b792aed"
 
 [[files]]
 file = "mods/better-deaths-door-1.0.0.jar"
-hash = "8751a4430cd163d0e83bac5b710c81aa107ba493999648784cb70da8e34fc150"
+hash = "bf445a7ea6920000468c6c26e0b1c2856bab4b2c454b86ec55e083aac7ad6439"
 
 [[files]]
 file = "mods/better-dimension-fonts-1.0.0.jar"
-hash = "7a37c889228d784322e066ff3bee8c292a71b3578f08a81bccbb336a91e12abe"
+hash = "89d1abfadd433b295de9a81b50d799d98a111a10f0cad3b0df198f7c32870cf4"
 
 [[files]]
 file = "mods/better-discovery-guides-1.0.0.jar"
-hash = "008959740726c878f3f310a460e0402a77f40d4c20e989ccab481877064881b5"
+hash = "edcb6d9a750ae6d3c80258a5c4ffb5fdf6b6e98be547e615a523c09a34ff62a5"
 
 [[files]]
 file = "mods/better-drinking-water-1.1.0.jar"
-hash = "c7182c9836794c42114c89b5d7b390053893bfc853253c5e14274b9cbf716d24"
+hash = "6761de47248be438374b43dd78a2889fe186d84ebc1b4f720d7cae989bba7063"
 
 [[files]]
 file = "mods/better-exploration-load-control-0.1.0.jar"
-hash = "73c781457b856d7c6e49f7c19d09d57daeed5b4eb5d36a987d2d308ce18258dd"
+hash = "79e3a2a33501de94bf5cd8245f2866a4514309ea549cbf2ee86ba17619761349"
 
 [[files]]
 file = "mods/better-gameplay-notices-1.0.0.jar"
-hash = "2c5499c53a777390b030ee415569ffd5b7e68132b12741c2da57d3171439ec60"
+hash = "6544b26c403032cad004204383f7661308eeebb1d6afc0abfdd0f40187556c6f"
 
 [[files]]
 file = "mods/better-hexerei-dynamic-trees-1.0.1.jar"
-hash = "2d4ad874d300411047ef2e29c88e834fbd617a279d6636538ccadad5d1e72349"
+hash = "dbf044ad2a0e18c68f5f38a97450c13ec6e352e1f88ad9ab481a74af709addf5"
 
 [[files]]
 file = "mods/better-industrial-heat-0.1.0.jar"
-hash = "d19e41413c0ece883d7eddfd0f5415f48a2d17df2c6e5c0c9236e3f2ef409533"
+hash = "f053185d5a1af10fe86996548f75643991a5a72ecd4723e1037f9344552c17b4"
 
 [[files]]
 file = "mods/better-journal-inventory-0.1.0.jar"
-hash = "d04acda4d25e7d8f89cb52aaf0a9476559df014556a5fa804d69bbf720b5f953"
+hash = "a06565d0a53597198a7a4cdcdacf9e5989b987542a02c04cfbff2a6fb008fc1a"
 
 [[files]]
 file = "mods/better-magic-chunk-anchors-0.1.0.jar"
-hash = "ac9866a9c461e4a28698c993cd4adfd62eea163a40d55cbbaeec88df79bcd2bd"
+hash = "f7520e3f86593a6f9b01c879dbfddcf3aa74771098a8c803003700f5cb02f674"
 
 [[files]]
 file = "mods/better-malum-dynamic-trees-1.0.1.jar"
-hash = "2ba546f53e72089345d3076dc15ba762d0c4e648d2af4eaa195504b5f783d4cf"
+hash = "e3c4ef3a31af7990e717683c954608b7c739dbcfd4cdd4b2181b906750c27752"
 
 [[files]]
 file = "mods/better-mining-lamp-0.1.0.jar"
-hash = "8bee60ede27f4c076d6a8944dcd3cf61f08c72082c255e86d3ddc0adf36df7fd"
+hash = "da1da1844d5541c4ff7b99c6aa9f5de15574dbc4a27ee253cc06811881a5c270"
 
 [[files]]
 file = "mods/better-oc2r-create-controls-0.1.0.jar"
-hash = "0bfd6114ffc827c2c57f2f0f1d385dcb99b2401b6e387490bafc14205ce13228"
+hash = "e807ecb503fb22e9e82f880c8838572fa3cecb4e4ef4e0a84fad420538c75ea5"
 
 [[files]]
 file = "mods/better-oc2r-wireless-messaging-1.0.0.jar"
-hash = "5be3b4925efc12f625a8036876aca8f04a50b58f6d69d3e677ed95addebbdb8b"
+hash = "e7fa0cf0be10573a487c88dbeec8b3deaff8dc089e0b771280be433b25e16cd0"
 
 [[files]]
-file = "mods/better-ore-geology-0.2.0.jar"
-hash = "5ead0901d2902f6f4941b0aa1125d049ba9cc99d3d2f5a23e3146c5974744de2"
+file = "mods/better-ore-geology-0.3.0.jar"
+hash = "69d4f4de6a5a2f0b5c67b49fd467dd6513f9cf795fccd98a97da200a6f2879a0"
 
 [[files]]
 file = "mods/better-pillager-campaigns-0.5.4.jar"
-hash = "b0ace9b53892bba402313af706088eb9ed8b9d2d0b9befcbf2c45b313b68557d"
+hash = "21b3415280a566645588c1aad3670327afdec76a70540d05c29c9bc7a90a4689"
 
 [[files]]
 file = "mods/better-player-traces-0.1.0.jar"
-hash = "73b1616821404c255261c15a4930bb09ca546f847ae537d7080cb2bee2509b69"
+hash = "94da2f3bd9d0ed8febe417584166c6fcc1e1859af33dbe745827ef42bd107093"
 
 [[files]]
 file = "mods/better-rail-beetle-0.1.0.jar"
-hash = "0fd2144fc73d2b4335754c2b4e40e092868b02d6c15f112b625df027be43e526"
+hash = "1be37d052d3c1152a2fa620ec3d1bb9effc8a36984ca6aea708bacbeb3d8b4c4"
 
 [[files]]
 file = "mods/better-regolith-farming-0.1.0.jar"
-hash = "6b680b643635f5086ff2747883cb441b211b38ed333110424f177518173d55bd"
+hash = "457db6a247112d618ca5aedbce4d8d6f35401332b24585a99698e994372b2589"
 
 [[files]]
 file = "mods/better-rehooked-grappling-0.1.0.jar"
-hash = "a74e7fe8dca2a2994602d07a16f3c1be44634417044f01194af8223febd475d5"
+hash = "de8704d3fda66b988bf87e0055bc7d30521452a0bf4239349f153444764e0c8c"
 
 [[files]]
 file = "mods/better-rpg-progression-1.0.1.jar"
-hash = "13003f99071bd626b63f8a1b29f0c031031f6e64567e1c92ced5e27c4848d030"
+hash = "bab12a1f10bc03fcedfbc4194d7d35fa0122f2cf32f64064e624bc05787acc2d"
 
 [[files]]
 file = "mods/better-runtime-diagnostics-0.1.0.jar"
-hash = "9af4cd47d685311d136dfb868ab1ca59848fe82d0cd75a0f090b62f0e0b1401b"
+hash = "2abb6b81ed76d1cbe3867edcef073112843f757d33f40c089862902934e0b0e9"
 
 [[files]]
 file = "mods/better-settlement-roads-0.1.0.jar"
-hash = "cd17fae94d1bb3341a7e73fc76e243d7625e29dbcf0666fb84b975be47ab21f0"
+hash = "bfaeb546993ff657a4d2b7f1bd2643813a79fc7225213b3c91b23bf733bde98c"
 
 [[files]]
 file = "mods/better-spawns-1.0.0.jar"
-hash = "52becbafee21546fa95be3485a344099bf3a915f5a4c708a691ded387b291616"
+hash = "3e577e9eecd663383164bad3b6a3872560ffa463c1156c3903b76c2070b851c1"
 
 [[files]]
 file = "mods/better-spirit-commerce-1.0.1.jar"
-hash = "a93d2004f2327a87a860737f353cfcbac6a3cabde356f297539f978a3caf4215"
+hash = "d3e9d7d0fba129b1824b531553f8fb3ec3de7803bec863880512a1eaead77505"
 
 [[files]]
 file = "mods/better-survival-hud-1.0.0.jar"
-hash = "4d7d58876284ad2df63227ffc3fa656f7a4208be6e55f922220db57f8494dd65"
+hash = "0a00deac9fa2dad34aa6ec6f93eb007ba9ca8320d74c255b822773e82ea31bfd"
 
 [[files]]
 file = "mods/better-survival-physiology-0.1.1.jar"
-hash = "71477915f0fc23534b60410d7b0b927edca97836ed3eb44829b149ddc1d1c91c"
+hash = "53fcec061c9d1d3eb13bc509670e16262dc335d6a9172756746d14616180e92e"
 
 [[files]]
 file = "mods/better-tinkers-loot-affixes-1.0.0.jar"
-hash = "d10920c4a02167c0b6cd2242ae8bdcf765a680c7a8a714ebc60ceefc6103f7e8"
+hash = "e6d5d0835c598e462d225f399a23bfec45ca479f9ba0a4aedbe60f8666e460bd"
 
 [[files]]
 file = "mods/better-village-fortifications-1.0.0.jar"
-hash = "1314118dc0a04c7942ef1957b68da65cf72cb59308e02a7e46e0667978d8845d"
+hash = "53193f1bb28ff6ab525fdfd6f8e77c1db07784f846e3508b965365083a67accb"
 
 [[files]]
 file = "mods/better-weathering-offline-progress-0.1.0.jar"
-hash = "a94d7bd7fbf90a21bb3b1234f26616d1285cb9a183e60f960f4905f21a660406"
+hash = "548f7b68ee78be43785e36ccde194d1cd01297b7eb48bb934b7656eb77807ad3"
 
 [[files]]
 file = "mods/better-wildfire-0.1.0.jar"
-hash = "2cc4e1bb424351b0648dc2d7c34abda1ec185b23b0bac248a6160e8721298ee8"
+hash = "161b0133dbac4e62be01a5bc034caf6bcf64054626f4e38392aa841195fcf3c9"
 
 [[files]]
 file = "mods/better-world-management-0.1.0.jar"
-hash = "5cd6dfa45235a11398c15577e6c6d623db4df8296d2a634ae8a31fa4670f1299"
+hash = "1c27035ed2b2a3c00c33bab2cad60d234f5505c1ec528b79e8d3a32204cd5dab"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -11987,7 +11987,7 @@ metafile = true
 
 [[files]]
 file = "mods/scalable-tnt-0.1.0.jar"
-hash = "719309aa6f025ef3105566c3094a43b11dd55867c5613cad521a6e1bb50acb4e"
+hash = "080b799e4f9cf2994f42270ffb1413bfdea4d38781a6ae62ba7cda1a48da82c1"
 
 [[files]]
 file = "mods/searchables.pw.toml"
