@@ -6,4 +6,4 @@
 	visitInterval = 120000
 	#Range: 20 ~ 24000
 	retryDelay = 1200
-	announceArrival = true
+	announceArrival = false
