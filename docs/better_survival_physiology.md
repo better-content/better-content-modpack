@@ -90,6 +90,11 @@ Diet displays exactly eight groups, matching the eight aspect identities and col
 - Sugar grants `+50%` or `+100%` attack and item-use cadence at its own `25%` and `60%` load thresholds; it burns the powerful nutrition band two or five times faster and builds metabolic debt.
 - Alcohol improves handling only in its moderate `35–65%` window; high load degrades handling and can cause stumbles. Maximum alcohol is unambiguously bad.
 
+Sugar's exponential consumption multiplier (`8^load`, up to `8×` at full load) applies
+uniformly to all eight groups, including sugar itself and alcohol clearance. Each retains its
+own baseline decay curve; sugar's configured half-life is the unaccelerated baseline. Sugar
+and alcohol time estimates account for sugar falling during the estimate.
+
 Diet's native screen remains the authoritative nutrition display and shows each group's actual benefit, load, and estimated upper-tier time. Food tooltips and meal recaps name the effect at the moment it matters. Generic Diet-wide bonuses stay disabled so they cannot duplicate the aspect abilities.
 
 ## Ores
