@@ -1,0 +1,24 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:forest",
+    "minecraft:flower_forest",
+    "minecraft:birch_forest",
+    "minecraft:old_growth_birch_forest",
+    "minecraft:dark_forest",
+    "minecraft:windswept_forest",
+    "minecraft:taiga",
+    "minecraft:old_growth_pine_taiga",
+    "minecraft:old_growth_spruce_taiga",
+    "minecraft:snowy_taiga",
+    { "id": "ars_nouveau:archwood_forest", "required": false },
+    { "id": "natures_spirit:coniferous_covert", "required": false },
+    { "id": "natures_spirit:aspen_forest", "required": false },
+    { "id": "natures_spirit:blooming_sugi_forest", "required": false },
+    { "id": "natures_spirit:maple_woodlands", "required": false },
+    { "id": "natures_spirit:redwood_forest", "required": false },
+    { "id": "natures_spirit:sugi_forest", "required": false },
+    { "id": "natures_spirit:windswept_sugi_forest", "required": false },
+    { "id": "natures_spirit:fir_forest", "required": false }
+  ]
+}

@@ -26,6 +26,15 @@
   ],
   "mods": [
     {
+      "repository": "better-celestial-events",
+      "modId": "better_celestial_events",
+      "artifact": "better-celestial-events-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
       "repository": "better-airtight-machines",
       "modId": "better_airtight_machines",
       "artifact": "better-airtight-machines-0.1.0.jar",
@@ -71,7 +80,8 @@
       "dependsOn": [
         "better-compat-fixes",
         "better-gameplay-notices",
-        "better-dimension-fonts"
+        "better-dimension-fonts",
+        "better-celestial-events"
       ]
     },
     {
@@ -226,7 +236,8 @@
       ],
       "dependsOn": [
         "better-compat-fixes",
-        "better-gameplay-notices"
+        "better-gameplay-notices",
+        "better-celestial-events"
       ]
     },
     {

@@ -130,7 +130,7 @@ class HarnessFastTest {
         val document = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         assertEquals("bc.active_custom_mods.v1", document.path("schema").asText())
         val mods = document.path("mods")
-        assertEquals(44, mods.size())
+        assertEquals(45, mods.size())
         val repositories = mods.map { it.path("repository").asText() }.toSet()
         assertEquals(mods.size(), repositories.size)
         assertEquals(mods.size(), mods.map { it.path("modId").asText() }.toSet().size)
@@ -162,14 +162,14 @@ class HarnessFastTest {
         fun dependencies(repository: String) = mods.single { it.path("repository").asText() == repository }
             .path("dependsOn").map { it.asText() }
         assertEquals(listOf("better-industrial-heat"), dependencies("better-chemlib-hazards"))
-        assertEquals(listOf("better-compat-fixes", "better-gameplay-notices", "better-dimension-fonts"), dependencies("better-spirit-commerce"))
+        assertEquals(listOf("better-compat-fixes", "better-gameplay-notices", "better-dimension-fonts", "better-celestial-events"), dependencies("better-spirit-commerce"))
         assertEquals(
             listOf("better-gameplay-notices", "better-survival-hud"),
             dependencies("better-compat-fixes"),
         )
         assertEquals(listOf("better-world-management"), dependencies("better-spawns"))
         assertEquals(listOf("better-compat-fixes", "better-deaths-door"), dependencies("better-cave-encounters"))
-        assertEquals(listOf("better-compat-fixes", "better-gameplay-notices"), dependencies("better-dimension-fonts"))
+        assertEquals(listOf("better-compat-fixes", "better-gameplay-notices", "better-celestial-events"), dependencies("better-dimension-fonts"))
         assertEquals(listOf("better-deaths-door"), dependencies("better-pillager-campaigns"))
         assertEquals(listOf("better-deaths-door"), dependencies("better-player-traces"))
         assertEquals(

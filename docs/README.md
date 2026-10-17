@@ -52,6 +52,7 @@ standing policies or human authorization.
 
 - [Aspirational features](aspirational-features.md): wanted features outside current scope; not implementation authorization.
 - [Performance/mod integration](performance_and_mods.md).
+- [Celestial events](celestial-events.md): four rare nights, travel, encounters and finite-stock visits.
 - [Cataclysm/cave encounters](cataclysm_better_cave_encounters_integration.md).
 - [Untamed Wilds](untamed_wilds_integration.md).
 - [Native EMI transport](native-emi-server-transport.md).
