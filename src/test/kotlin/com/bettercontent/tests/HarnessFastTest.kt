@@ -411,9 +411,10 @@ class HarnessFastTest {
     }
 
     @Test
-    fun candidateLocatorRejectsMismatchedReleaseDirectories(@TempDir root: Path) {
-        zip(root.resolve("dist/a/client/better-content.zip"), mapOf("manifest.json" to "{}"))
-        zip(root.resolve("dist/b/server/better-content.zip"), mapOf("server/eula.txt" to "eula=false"))
+    fun candidateLocatorRejectsPartialDeclaredRelease(@TempDir root: Path) {
+        Files.writeString(root.resolve("pack.toml"), "version = \"Build 2\"\n")
+        zip(root.resolve("dist/build-1/client/better-content.zip"), mapOf("manifest.json" to "{}"))
+        zip(root.resolve("dist/build-2/server/better-content.zip"), mapOf("server/eula.txt" to "eula=false"))
 
         // Full tiers set a real binding. Discovery's synthetic fixture must neither
         // consume that binding nor mutate the parent JVM's production environment.
@@ -422,7 +423,7 @@ class HarnessFastTest {
         val output = BoundedCommand.capture(root, listOf("env", "-u", "BC_CANDIDATE_BINDING", "-u", "BC_PACK_TEST_HANDOFF",
             Path.of(System.getProperty("java.home"), "bin/java").toString(), "-cp", classpath,
             CandidateDiscoveryFixtureProbe::class.java.name, root.toString()), Duration.ofSeconds(15))
-        assertTrue(output.contains("different releases"), output)
+        assertTrue(output.contains("current Build 2 candidate directories"), output)
     }
 
     @Test

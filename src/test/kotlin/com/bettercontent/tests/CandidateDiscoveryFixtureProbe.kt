@@ -9,9 +9,9 @@ object CandidateDiscoveryFixtureProbe {
         require(System.getenv("BC_PACK_TEST_HANDOFF").isNullOrBlank())
         try {
             CandidateLocator.locate(Path.of(args.single()))
-            error("mismatched synthetic releases were accepted")
+            error("partial declared synthetic release was accepted")
         } catch (failure: IllegalArgumentException) {
-            require(failure.message.orEmpty().contains("different releases")) { "unexpected rejection: $failure" }
+            require(failure.message.orEmpty().contains("current Build 2 candidate directories")) { "unexpected rejection: $failure" }
             println(failure.message)
         }
     }

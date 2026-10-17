@@ -42,15 +42,20 @@ the complete timestamp/logger/message, a valid mod namespace, and a positive fin
 failure payloads remain correctness findings. This category replaces the old per-mod duration and
 occurrence allowances; it is not an `adpother` exception or a raised threshold for one candidate.
 
-The isolated Spirit Commerce source GameTest fixture also distinguishes initial arena setup from
-runtime correctness: at most one exact native `MinecraftServer`/`Server thread` startup-lag WARN
-may be recorded as a performance diagnostic when its nonce-bound, nonshipping phase observer
-proves it occurred in initial world/arena setup before the second server tick. Positive duration
-and consistent tick-count fields are required and retained with the source line. Missing or
-invalid phase proof, repeated notices, ERROR severity, malformed payloads and later runtime lag
-remain failures. This source-fixture classification does not change the full-pack log policy,
-assertions, startup/join deadlines or performance acceptance; it is not a claim that the delay
-was repaired.
+The isolated Spirit Commerce source GameTest fixture distinguishes initial setup scheduling debt
+from runtime correctness. At most one exact native `MinecraftServer`/`Server thread` startup-lag
+WARN may be recorded as a performance diagnostic within the nonce-bound first-tick-end to
+second-tick-start window. A delayed notice strictly between second-tick-end and third-tick-start
+requires six ordered, nonshipping clock samples and the pinned native scheduling arithmetic:
+matching counters, monotonic-clock brackets, exact schedule/catch-up increments and a conservative
+post-setup residual below the native 2000 ms overload threshold. Only a lower bound on the
+post-first-tick setup interval is subtracted; actual second-tick work is not subtracted. This
+interval includes initial arena setup and may include queued work/scheduling; it is not a proven
+arena-only duration. Positive duration, consistent tick counts and the raw source record remain
+in the report, including on failure. Missing/invalid proof, repeats, malformed payloads, ERRORs,
+later notices and genuine post-setup overload remain blocking. This source-fixture classification
+does not change production code, batches, full-pack log policy, assertions, deadlines or gameplay
+performance acceptance; it is not a claim that setup cost was repaired.
 
 Every runtime suite records `startup_performance_diagnostics`: source paths/lines, normalized seconds,
 observation counts and per-mod maxima, including on failed runs. Aggregate/native logs can duplicate
@@ -112,6 +117,11 @@ runtime rebuild, even when the bundled JAR records the same source revision. Lat
 rebuilds changed/missing/hash-mismatched providers and their transitive consumers. It stages and
 deploys the coherent set, refreshes Packwiz and packages once. Runtime suites still use fresh
 fixtures; the receipt never replaces pack acceptance. Release evidence binds tier IDs and hashes.
+Normal candidate discovery binds the exact `pack.toml` `Build N`/lettered version to its client
+and server ZIPs under `dist/build-N.../`; older builds may coexist while independently consumed.
+Missing/partial current builds, invalid or stale version metadata and symlink paths fail instead
+of falling back to an older complete or previously passing pair. Explicit candidate bindings
+continue to select only their exact paths and hashes.
 
 ### Conversation-scoped source verification
 

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.BufferedWriter
 import java.net.ServerSocket
+import java.math.BigInteger
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.nio.file.LinkOption.NOFOLLOW_LINKS
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.nio.file.StandardOpenOption
@@ -49,6 +51,10 @@ object Hashes {
 }
 
 object CandidateLocator {
+    private val versionLine = Regex("""version\s*=\s*"Build ([0-9]+)([a-z]?)"\s*(?:#.*)?""")
+    private val versionKey = Regex("""^\s*(?:version|"version"|'version')\s*=""")
+    private val releaseName = Regex("build-([0-9]+)([a-z]?)")
+
     fun locate(root: Path): CandidatePair {
         System.getenv("BC_CANDIDATE_BINDING")?.takeIf(String::isNotBlank)?.let {
             val pair = CandidateBinding.select(root, Path.of(it))
@@ -57,32 +63,67 @@ object CandidateLocator {
             }
             return pair
         }
-        val dist = root.resolve("dist")
-        require(dist.isDirectory()) { "dist/ is absent; an explicit fresh dist is required before pack-level testing" }
-        val clients = Files.walk(dist).use { stream ->
-            stream.filter { it.endsWith("client/better-content.zip") }.sorted().toList()
-        }
-        val servers = Files.walk(dist).use { stream ->
-            stream.filter { it.endsWith("server/better-content.zip") }.sorted().toList()
-        }
-        require(clients.size == 1 && servers.size == 1) {
-            "dist/ must contain exactly one client ZIP and one server ZIP (found ${clients.size}/${servers.size})"
-        }
-        val clientRelease = clients.single().parent.parent
-        val serverRelease = servers.single().parent.parent
-        require(clientRelease == serverRelease) { "client and server candidates belong to different releases" }
-        val pair = CandidatePair(
-            clientRelease,
-            clients.single(),
-            servers.single(),
-            Hashes.sha256(clients.single()),
-            Hashes.sha256(servers.single()),
-        )
+        val pair = locateUnbound(root)
         System.getenv("BC_PACK_TEST_HANDOFF")?.takeIf { it.isNotBlank() }?.let {
             PackTestHandoff.validate(Path.of(it), pair)
         }
         return pair
     }
+
+    internal fun locateUnbound(root: Path): CandidatePair {
+        require(root.toAbsolutePath() == root.toAbsolutePath().normalize()) {
+            "candidate root must not contain . or .. path components"
+        }
+        val pack = root.resolve("pack.toml")
+        require(Files.exists(pack, NOFOLLOW_LINKS)) { "pack.toml is missing; cannot select a production candidate" }
+        return currentBuild(root, pack)
+    }
+
+    private fun currentBuild(root: Path, pack: Path): CandidatePair {
+        var ancestor = requireNotNull(root.toAbsolutePath().normalize().root)
+        for (part in root.toAbsolutePath().normalize()) {
+            ancestor = ancestor.resolve(part)
+            require(!Files.isSymbolicLink(ancestor)) { "candidate root has a symlink ancestor: $ancestor" }
+        }
+        require(Files.isDirectory(root, NOFOLLOW_LINKS) && Files.isRegularFile(pack, NOFOLLOW_LINKS) &&
+            Files.size(pack) <= 1024 * 1024) { "pack.toml must be an ordinary bounded production file" }
+        val topLevel = Files.readAllLines(pack).takeWhile { !it.trimStart().startsWith("[") }
+        val declarations = topLevel.filter { versionKey.containsMatchIn(it) }
+        require(declarations.size == 1) { "pack.toml requires exactly one top-level Build version" }
+        val version = versionLine.matchEntire(declarations.single().trim())
+            ?: throw IllegalArgumentException("pack.toml has an invalid Build version")
+        val number = version.groupValues[1]
+        val suffix = version.groupValues[2]
+        val dist = root.resolve("dist")
+        require(Files.isDirectory(dist, NOFOLLOW_LINKS)) {
+            "dist/ is absent or unsafe; an explicit fresh dist is required before pack-level testing"
+        }
+        val currentNumber = BigInteger(number)
+        Files.list(dist).use { entries ->
+            entries.forEach { entry ->
+                val other = releaseName.matchEntire(entry.fileName.toString()) ?: return@forEach
+                val otherNumber = BigInteger(other.groupValues[1])
+                require(otherNumber < currentNumber ||
+                    (otherNumber == currentNumber && other.groupValues[2] <= suffix)) {
+                    "dist/ has a build newer than pack.toml: ${entry.fileName}"
+                }
+            }
+        }
+        val release = dist.resolve("build-$number$suffix")
+        val clientDir = release.resolve("client")
+        val serverDir = release.resolve("server")
+        require(Files.isDirectory(release, NOFOLLOW_LINKS) && Files.isDirectory(clientDir, NOFOLLOW_LINKS) &&
+            Files.isDirectory(serverDir, NOFOLLOW_LINKS)) {
+            "current Build $number$suffix candidate directories are missing or unsafe"
+        }
+        val client = clientDir.resolve("better-content.zip")
+        val server = serverDir.resolve("better-content.zip")
+        require(Files.isRegularFile(client, NOFOLLOW_LINKS) && Files.isRegularFile(server, NOFOLLOW_LINKS)) {
+            "current Build $number$suffix requires ordinary client and server ZIPs"
+        }
+        return CandidatePair(release, client, server, Hashes.sha256(client), Hashes.sha256(server))
+    }
+
 }
 
 object PackTestHandoff {
