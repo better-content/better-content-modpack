@@ -13,6 +13,7 @@ wrappers and pinned hashes; a global Gradle installation does not replace them.
 | Packwiz | `v0.0.0-20260906154125-ef87d964f8cb` | Go install, `$HOME/.local/bin/packwiz` | `GOBIN="$HOME/.local/bin" go install github.com/packwiz/packwiz@v0.0.0-20260906154125-ef87d964f8cb` |
 | Vineflower | `1.10.1` | `$HOME/.local/share/tools/vineflower.jar`; launcher `$HOME/.local/bin/vineflower` | Launcher uses SDKMAN current Java |
 | Codex CLI | `0.163.0` | npm user prefix `$HOME/.local`; launcher `$HOME/.local/bin/codex` | `npm install -g --prefix "$HOME/.local" @openai/codex@0.163.0`; lane launcher keeps temporary files under `$HOME/.tmp/codex`, defaults `CODEX_HOME` to `$HOME/.local/share/codex-adhoc`; use `--no-daemon` |
+| Pi coding agent | `1.3.0` | npm bundle `$HOME/.local/share/worklane/pi-bundle`; `$HOME/.local/bin/pi` resolves through `$HOME/.local/lib/node_modules/@earendil-works/pi-coding-agent` | `npm install --prefix "$HOME/.local/share/worklane/pi-bundle" --no-save --package-lock=false --ignore-scripts @earendil-works/pi-coding-agent@1.3.0`; verify with `zsh -lic 'command -v pi && pi --version'` |
 | Flite narrator runtime | Debian `libflite1` `2.2-7`, amd64 | `$HOME/.local/share/minecraft-native/libflite1-2.2-7` | Extract the pinned package below without installation/system writes; pass its `usr/lib/x86_64-linux-gnu` directory through `LD_LIBRARY_PATH` |
 
 `$HOME/.local/bin/kotlin` and `kotlinc` resolve through SDKMAN's current candidate, so cleanup does
