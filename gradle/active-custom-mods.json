@@ -98,7 +98,7 @@
     },
     {
       "repository": "better-compat-fixes",
-      "verificationInputs": ["mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
+      "verificationInputs": ["mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/weapons-of-miracles.pw.toml", "src/test/kotlin/com/bettercontent/tests/SaulomonkSpawnContractTest.kt", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
       "buildInputs": [],
       "modId": "better_compat_fixes",
       "artifact": "better-compat-fixes-0.1.9.jar",

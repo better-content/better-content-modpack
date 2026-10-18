@@ -126,6 +126,18 @@ all of those items are currently obtainable in survival.
 | `wom:nova` | Nova |
 | `wom:blackstar` | Blackstar |
 
+Orbit, Nova and Blackstar are carried by native Saulomonks. Better Compat Fixes'
+version-gated WoM 2.0.171 hook changes their spawn-distance admission to strictly
+more than **2,000 horizontal blocks from the nearest living, nonspectating player's
+permanent Better Spawns onboarding point**, not world origin. The nearest player
+at the attempted mob position supplies the anchor; missing, malformed or
+other-dimension points deny admission rather than borrowing another player's point.
+Desert biome injection, sand, difficulty and native mob-spawn checks are unchanged,
+as are spawn weight, equipment and drops. This does not remove existing mobs.
+The owning mod's `verifyFull` tests the transformed native predicate; the pack's
+`SaulomonkSpawnContractTest` checks the onboarding key and upstream-pin boundary.
+Source validation does not imply deployment or full-pack natural-spawn acceptance.
+
 WoM's Golden, Iron, Diamond and Netherite Greataxes map to base
 `epicfight:greatsword`, and Hollow Longsword maps to `epicfight:longsword`;
 these do not add distinct presets. The existing TCon integration contributes
