@@ -23,6 +23,31 @@ class PlaytestDefaultsContractTest {
     }
 
     @Test
+    fun recommended_controls_are_authored_directly_in_options() {
+        val options = Files.readAllLines(root.resolve("options.txt"))
+        val bindings = mapOf(
+            "key.parcool.FastRun" to "key.keyboard.left.shift",
+            "key.parcool.ClingToCliff" to "key.mouse.5",
+            "key.parcool.Vault" to "key.mouse.5",
+            "key.parcool.RideZipline" to "key.mouse.5",
+            "key.parcool.HangDown" to "key.mouse.5",
+            "key.parcool.WallSlide" to "key.mouse.5",
+            "ping-wheel.key.ping-location" to "key.mouse.4",
+            "key.epicfight.dodge" to "key.keyboard.unknown",
+            "key.epicfight.lock_on" to "key.keyboard.caps.lock",
+            "key.epicfight.lock_on_shift_freely" to "key.keyboard.caps.lock:SHIFT",
+            "key.rotavision.rotate" to "key.keyboard.r:ALT",
+            "key.rotavision.toggle" to "key.keyboard.t:ALT",
+            "key.relics.ability_list" to "key.keyboard.a:ALT",
+            "key.moreartifacts.eye.teleport" to "key.keyboard.p:ALT",
+            "quark.keybind.lock_rotation" to "key.keyboard.unknown",
+        )
+        for ((key, binding) in bindings) {
+            assertEquals("key_$key:$binding", options.single { it.startsWith("key_$key:") })
+        }
+    }
+
+    @Test
     fun ordinary_emi_keeps_favorites_in_native_subpanel_without_duplicate_page() {
         val config = Files.readString(root.resolve("config/emi.css"))
         assertTrue(config.contains("right-sidebar-subpanels: favorites 3;"))
