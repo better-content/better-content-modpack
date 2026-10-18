@@ -14,6 +14,27 @@
   ],
   "mods": [
     {
+      "repository": "better-wild-fruit-trees",
+      "modId": "better_wild_fruit_trees",
+      "artifact": "better-wild-fruit-trees-0.1.1.jar",
+      "verificationInputs": [
+        "mods/dynamictrees.pw.toml",
+        "mods/dynamic-trees-fruits-delight.pw.toml",
+        "mods/fruits-delight.pw.toml",
+        "mods/farmers-delight.pw.toml",
+        "mods/tinkers-construct.pw.toml",
+        "mods/mantle.pw.toml",
+        "mods/ars-nouveau.pw.toml",
+        "mods/curios.pw.toml",
+        "mods/geckolib.pw.toml",
+        "mods/patchouli.pw.toml",
+        "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json",
+        "kubejs/config/crafting_policy.json",
+        "kubejs/server_scripts/progression/food_eras.js"
+      ],
+      "tasks": ["verifyFull", "stageRuntimeJar"]
+    },
+    {
       "repository": "better-celestial-events",
       "verificationInputs": ["kubejs/data/better_celestial_events/tags/**"],
       "modId": "better_celestial_events",
@@ -77,7 +98,7 @@
     },
     {
       "repository": "better-compat-fixes",
-      "verificationInputs": ["mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/starcatcher.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json"],
+      "verificationInputs": ["mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
       "buildInputs": [],
       "modId": "better_compat_fixes",
       "artifact": "better-compat-fixes-0.1.9.jar",
@@ -87,7 +108,8 @@
       ],
       "dependsOn": [
         "better-gameplay-notices",
-        "better-survival-hud"
+        "better-survival-hud",
+        "better-industrial-heat"
       ]
     },
     {
@@ -434,12 +456,12 @@
     },
     {
       "repository": "better-runtime-diagnostics",
-      "verificationInputs": ["mods/untamed-wilds-au-naturel.pw.toml", "mods/the-deep-void.pw.toml"],
+      "verificationInputs": ["mods/untamed-wilds-au-naturel.pw.toml", "mods/the-deep-void.pw.toml", "mods/starcatcher.pw.toml", "mods/curios.pw.toml", "mods/diet.pw.toml", "mods/dynamictrees.pw.toml", "mods/oculus.pw.toml"],
       "buildInputs": [],
       "modId": "better_runtime_diagnostics",
       "artifact": "better-runtime-diagnostics-0.1.0.jar",
       "supportArtifacts": ["build/libs/better-runtime-test-support.jar"],
-      "dependsOn": ["better-spawns"],
+      "dependsOn": ["better-spawns", "better-survival-physiology", "better-wild-fruit-trees", "better-spirit-commerce"],
       "tasks": [
         "build",
         "stageRuntimeJar"

@@ -2,6 +2,10 @@
   "schema": "bc.ci_source_revisions.v1",
   "repositories": [
     {
+      "repository": "better-wild-fruit-trees",
+      "commit": "2eb164575a32c76389cde6c62958c3331c5cb040"
+    },
+    {
       "repository": "better-airtight-machines",
       "commit": "5751e53874fee695c2eac6907a3d44f42385759b"
     },
@@ -11,11 +15,11 @@
     },
     {
       "repository": "better-spirit-commerce",
-      "commit": "91277c5057910d9350e7df4aec8b5858d03f9a1b"
+      "commit": "cb4830237fb4b4b4ac98522822f00e4ba3eb9f89"
     },
     {
       "repository": "better-compat-fixes",
-      "commit": "fb539320e6992807dddf2445388cffaee994e4ce"
+      "commit": "ab31041ed9c639e011623fbed9573521638e8b79"
     },
     {
       "repository": "better-discovery-guides",
@@ -75,7 +79,7 @@
     },
     {
       "repository": "better-industrial-heat",
-      "commit": "e463c1ec25c072bc81541a89d43648234e889aa9"
+      "commit": "81ef2d851ca36ebc9d3222a0843fd7b31cc85ca7"
     },
     {
       "repository": "better-weathering-offline-progress",
@@ -99,7 +103,7 @@
     },
     {
       "repository": "better-pillager-campaigns",
-      "commit": "5c68b89539774b1ec680c1dfb2ce2cc81f3e3d75"
+      "commit": "81884c3b66d2c8cbdc73d956f62864ffedbdeef8"
     },
     {
       "repository": "better-player-traces",
@@ -135,7 +139,7 @@
     },
     {
       "repository": "better-runtime-diagnostics",
-      "commit": "09f9d40838498516c97814edbdc9b0f348c56a78"
+      "commit": "3226d934a4db30fe667542b384388f283fa75aac"
     },
     {
       "repository": "better-settlement-roads",
@@ -143,7 +147,7 @@
     },
     {
       "repository": "better-survival-physiology",
-      "commit": "7c21a780074c5a0b761523dc1e030eca14e41ccd"
+      "commit": "c8a08351c1c2beeb2c261f465c65a8a5435d789d"
     },
     {
       "repository": "better-tinkers-loot-affixes",

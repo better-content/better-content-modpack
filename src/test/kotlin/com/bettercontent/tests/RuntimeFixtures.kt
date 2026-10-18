@@ -453,7 +453,7 @@ class ClientFixture(
             "MESA_GL_VERSION_OVERRIDE" to "4.6",
             "MESA_GLSL_VERSION_OVERRIDE" to "460",
             "ALSOFT_DRIVERS" to "null",
-        )
+        ) + gameplayAudioEnvironment(evidence, log)
 
     /** Lifecycle oracle only; no storage checkpoint may authorize exit. */
     fun requestNormalVerifyExit(savedMarker: UUID, reopenedMarker: UUID, savedTime: Long, reopenedTime: Long) {

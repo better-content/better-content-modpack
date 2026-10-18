@@ -15,7 +15,7 @@ runtime logic.
 | Occult physical components | Hexerei | The mixing cauldron uses iron and a vanilla cauldron; impure chalk requires Aether, Nether, and Bumblezone trophies equally. Occultism retains rituals, spirit fire, bindings, servants, and the finite dimensional matrix |
 | Occult storage | None | Controllers, stabilizers, remotes, satchel, wormholes, mineshaft, and miners are closed; finite AE2 storage and visible Font-rooted logistics remain |
 | Vanilla boat durability, vessel-drop suppression, reinforced recipes | Better Content Fixes | No boat mutation or hiding scripts |
-| Player-kill spirit release, spirit commerce, eight profession identities, resident barter, and wandering-trader lifecycle | Better Spirit Commerce | The standalone mod owns credited-kill release through Malum's animated spirit entities, eight matching stations/outfits/behaviours, a 280-row profession catalogue, eight 14-good wandering stocks (112 goods), 48 Plague Doctor oddities, and matching villager-egg offers. Village residents use native barter rather than the fixed profession catalogue; coins, emerald commerce, and eldritch/umbral trade are closed |
+| Player-kill spirit release, spirit commerce, eight profession identities, resident barter, and wandering-trader lifecycle | Better Spirit Commerce | The standalone mod owns credited-kill release through Malum's animated spirit entities, eight matching stations/outfits/behaviours, a 280-row profession catalogue, eight 36-row wandering pools (288 authored rows), thirteen core offers selected per visit, 48 Plague Doctor oddities, and matching villager-egg offers. Village residents use native barter rather than the fixed profession catalogue; coins, emerald commerce, and eldritch/umbral trade are closed |
 | Wild fruit trees and berry fields | Better Wild Fruit Trees | Fixed-location forage, mature harvest/regrowth, propagation restrictions and diamond-tier direct player removal; non-bush fruit plants and ordinary trees remain native. See the [owning source](../../mod_source/better-wild-fruit-trees/README.md). |
 | Spoiled food reuse and chopping feedback | Better Content Fixes | Spoiled produce enters native composting; spoiled meat is basic Starcatcher bait. Cut-face wood particle rate increases linearly with completion. Source/native checks are not audiovisual acceptance. |
 | Regional pillager familiarity | Better Pillager Campaigns | New campaign work requires the target player's accumulated local Survival presence, not world age; physical enemies retain native pursuit. See the [owning source](../../mod_source/better-pillager-campaigns/README.md). |
@@ -126,10 +126,21 @@ catalogues and profession conversion are disabled for village villagers, who use
 personal supplies and nearby recipes through the native barter journal. Eldritch and umbral spirits never appear in commerce.
 
 Wandering traders use the same eight identities, colours, and matching payment
-spirits. Every identity carries 14 themed goods, including a matching campfire costing one
-corresponding commerce spirit, plus one one-use offer of two
-matching spirits for two villager eggs already assigned to the corresponding
-profession. Player-credited kills immediately release Better Content spirits at the
+spirits. Each identity has a 36-row authored pool. A visit deterministically selects four
+fixed staples, four supplies, three equipment offers, one standout, and its matching campfire:
+thirteen core offers. The campfire costs one corresponding commerce spirit. The existing
+one-use offer of two matching spirits for two villager eggs and optional Font-map offer are
+additional. Selection is bound to the trader UUID and theme, not rerolled by reopening,
+saving/reloading, or foreign-offer repair. The standalone `bc.wandering_pool.v1` resource owns
+these wandering rows; the legacy profession catalogue and Plague Doctor oddities remain separate.
+
+Finite stock remains world-global where already specified: the original 22 commodity ceilings
+(total 64) are unchanged. New imports have explicit finite ceilings consumed only by spirit-paid
+merchant sales, including any matching Plague Doctor sale; they do not debit resident barter.
+Stock schema 3 preserves existing balances and zeroes during v1/v2 migration. Missing known
+keys on a v3 reload fail closed rather than replenishing stock.
+
+Player-credited kills immediately release Better Content spirits at the
 dying mob through Malum's floating, homing item entities. Malum-native mappings remain authoritative, including mapped passive
 animals such as cows, pigs, sheep, and chickens. Only the unmapped fallback is
 hostile-only: it deterministically releases two ordinary spirits. Spawner-origin
@@ -143,16 +154,23 @@ harvesting tools are inert or hidden.
 
 ### Ordinary trader arrival
 
-Ten total carried commerce spirits qualify a living non-spectator Overworld player, provided at
-least one good in the selected market is affordable. Loose spirits are sufficient; native Spirit
-Pouch contents count too, but a pouch is never required. Admission consumes no spirits and has no
-initial wait, intervisit cooldown or failed-site retry timer. Gamerules, safe terrain and one
-active ordinary trader still apply. Among affordable markets, selection uses the nearest eligible
-player's recent pickup history 85% of the time (square-root-dampened totals over the current and
-previous nine game-time days), and uniform randomness 15% of the time. No recent history means
-uniform selection. Spending and storage do not erase pickup history; carried funds independently
-control admission. Other-dimension pickups share the Overworld game-time clock, unaffected by
-sleeping/daytime commands. Spirit Fair retains its independent celestial occurrence contract.
+Ten total carried commerce spirits qualify a living non-spectator Overworld player. Loose spirits
+are sufficient; native Spirit Pouch contents count too, but a pouch is never required. Admission
+consumes no spirits and has no initial wait, intervisit cooldown or failed-site retry timer.
+Gamerules, native safe placement in loaded terrain and local occupancy still apply: an unexpired
+ordinary camp blocks another within 256 blocks, not distant players across the whole world.
+Each successful ordinary visit has one immutable 12,000-game-tick lifetime (ten native minutes),
+not a countdown refreshed every second. Expired unloaded records and later-loaded scenery retire
+without forcing chunks; a failed campsite rolls back only its newly created trader/untamed owned
+companions and restores the native saved trader identity.
+
+Selection uses the anchor player's recent actual pickup history 85% of the time
+(square-root-dampened totals over the current and previous nine game-time days). The 15% surprise
+branch chooses uniformly among **all eight identities**, not only currently affordable markets;
+no history also means uniform selection. Spending and storage do not erase pickup history, and
+admission does not require matching currency for the selected market. Other-dimension pickups
+share the Overworld game-time clock, unaffected by sleeping/daytime commands. Spirit Fair retains
+its independent celestial occurrence contract.
 See the [owning contract](../../mod_source/better-spirit-commerce/README.md#ordinary-trader-arrival).
 
 ### Spirit campfires

@@ -241,14 +241,16 @@ teleportable dimension, `dimensions`, `campaign-start` (three live encounters an
 restart and Untamed whale client spawn), `lineage-transition` (Debug lifecycle successor commit
 and archive), `cursed-pyramid` (pinned seed, saved structure record,
 and strict log audit in its surrounding chunks), `world-save` (seeded persistence),
-`world-startup` (unseeded native integrated creation), and `deep-void` (networked native entry)
-(the last three are Debug). The `campaign-start` fixture
+`world-startup` (unseeded native integrated creation), `deep-void` (networked native entry), and
+`gameplay` (observed familiarity/restart and six-fix native client acceptance; Debug only)
+(the world-save/world-startup/deep-void targets are also Debug). The `campaign-start` fixture
 uses the packaged spawn rules and removes a strip of campaign floor to verify that the
 campaign-phase repair restores pathable geometry. For example:
 
 ```sh
 ./test.main.kts debug --target font:aether --retry-of RUN_ID --candidate-binding /absolute/path/to/release/provenance.json
 ./test.main.kts debug --target fonts --candidate-binding /absolute/path/to/release/provenance.json
+./test.main.kts debug --target gameplay --candidate-binding /absolute/path/to/release/provenance.json
 ```
 
 Targeted runs still perform fast checks and candidate validation, then start only the selected
@@ -433,6 +435,51 @@ the 0/10,000/20,000 checkpoints and places the players above them. These pads ex
 fresh extracted test world, making the routed local-approach proof deterministic while retaining
 the complete modpack, real server tick, and real campaign materialization path.
 
+**Observed gameplay target.** The explicit `gameplay` target uses the existing multiplayer
+runtime group and a separate target-only scenario; ordinary Dist/Debug group discovery does not
+silently add a thirty-minute soak. It requires the same candidate/support byte binding and strict
+log/process-cleanup gates. Its fresh Survival player first rejects an unfamiliar campaign, then
+spends at least 18,000 actual eligible native ticks and 900 measured online seconds in the core.
+A normal save/server-process restart and reconnect separate the second equally bounded visit.
+Each visit must remain below 36,000 ticks, preventing the second visit alone from explaining the
+final familiarity. Public familiarity must be false before/after the first visit and before
+reconnect, then true after at least 36,000 observed ticks and 1,800 eligible online seconds total.
+The observer never seeds history, changes a game clock, or counts offline time. Its retained
+same-world checkpoint binds actual counts, monotonic/native tick witnesses and candidate hashes;
+this is separate from the authored-history fixture above.
+
+The same target exercises actual registered spoiled items and native compost/rod behavior,
+configured bush fields with explicitly authored native harvest/growth scheduling, production
+readiness edges, and ordinary/Dynamic Trees cuts. Its nonshipping held-cut driver calls public
+native mining APIs once per actual client tick and narrowly suppresses only an unrelated no-input
+release while an exact run/nonce/player/target/candidate-bound action is active. It clears before
+new targets, explicit stop, disconnect or expiry. This is authored fixture control, not human mouse
+input or a read-only observer. Separate hooks only observe progress/particles. Ordinary trader
+arrivals and repeat visits use the real spawner and finite expiry, with actual process-restart
+UUID/expiry/post/fire persistence witnesses; the fixture never inserts traders or camp records.
+
+Native framebuffer captures record renderer/state rather than a preview. The gameplay-only native
+OpenAL Soft WAVE backend records actual mixer output, finalizes through normal client exit, and
+retains per-launch PCM/header/binding evidence. A Forge source-start observer additionally checks
+the actual native `Channel.playing()` state after play; it does not sample volume/pitch getters
+that advance sound RNG. Dispatch, native source playing and aggregate nonzero mixer output are
+not cue-specific waveform identification or physical listening approval. Likewise,
+native rod-menu/backpack frames do not replace the paired human-pointer inventory checkpoint in
+[inventory parity](inventory-parity.md). Keep those verdicts distinct and report unavailable human
+or physical acceptance as pending, never infer it from source checks or counters. All gameplay
+probe/driver code remains in the isolated supplement, excluded from production/candidate archives.
+
+After the full unshaded soak/restart/familiarity/scout proof, the target normally quits the client,
+changes only the extracted fixture's Oculus `enableShaders=false` flag to true, and restarts the
+same candidate client on the unchanged server/world. Typed pinned Oculus public APIs must report
+actual enabled/in-use Complementary Reimagined r5.8.1, the unchanged ZIP hash, no fallback and no
+stored shader error. Its 32-frame matrix covers eight palettes × normal/signal × native day/night.
+Phase keys come from actual native level state, not visit labels or a clock offset. The visual
+window is bounded by one 20-minute/24,000-tick daylight cycle after independently bounded native
+startup; no `/time` or synthetic input is used. This is a shader-on visual workload, not a
+thirty-minute shader performance verdict. Production Oculus config remains unchanged, and actual
+framebuffer inspection is separate from API-state/counter success.
+
 Debug's lifecycle smoke verifies one lineage transition, its committed archive, and final clean state.
 It intentionally avoids a second generation; longer persistence matrices require separate explicit
 authorization.
@@ -456,6 +503,7 @@ is disclosed and is not a hardware-accelerated performance or manual visual acce
 | Native Deep Void | Extended-bottom native world, exact upstream artifact, real Survival player; above/disabled negatives, same-tick native entry and client destination | Ten-minute absolute scenario budget with at-most-two-minute tick waits and at-most-ninety-second client/return waits |
 | Dimension/Font traversal | Runtime-discovered registries/config, three fresh positions, server/client chunk reports, direct-denial guard and block-family/geometry oracles | Ninety-second arrivals; at least 18 TPS in three consecutive samples within one 180-second stabilization deadline; bounded nested calls |
 | Campaign/repair | Three real Survival clients, fixture corridors, native routed encounters and repair geometry | Recorded three-client resource profile, bounded routed-stage/heartbeat waits; rejected routes recorded, not waived |
+| Observed gameplay | One real Survival client, actual native ticks/monotonic time, saved campaign and ordinary-trader witnesses, native six-fix actions and framebuffer/audio evidence | Fixed 35-minute deadline per visit, each ≥18,000 ticks/900 eligible seconds and <36,000 ticks; existing software-rendered fixture profile, real restart; post-soak shader matrix ≤20 minutes/24,000 ticks after bounded startup |
 | Restart/Flesh/whale | Current fixture saved state, native restart/reconnect and client spawn observations | Bounded stop/restart/client waits; fresh evidence and unchanged candidate hashes |
 | Lifecycle/snapshot/pyramid | Native completion schema and snapshot ID, one committed lineage archive, pinned structure seed and saved structure record | Bounded native command/completion waits; one generation only; saved evidence belongs to the current run |
 | Final audits/cleanup | Current logs, ZIP/support digests and all owned identities | Bounded diagnostic/TERM/KILL/reap phases; retain evidence across handoffs; process cleanup is not data purge |
@@ -536,7 +584,12 @@ share a workspace-level Forge cache lock. ForgeGradle's generated MCP/mapped JAR
 for concurrent generation or reading during generation, especially after cache disposal. The
 lock serializes complete source verification/staging invocations without skipping any gate or
 changing Forge pins. Do not launch uncoordinated manual source Gradle builds against the same
-cache during release preparation.
+cache during release preparation. The single canonical path is
+`/home/dev/better-content-modpack/.worklane/forge-cache.lock`, held with POSIX `fcntl.lockf`
+for the complete invocation, including any mutable build/world archival or reset. A similarly
+named file under `/home/dev/.worklane/` is a different lock and does not serialize this cache;
+BSD `flock` is not interchangeable. Consumers should bind immutable validated provider snapshots,
+not a sibling output that another producer may replace.
 
 `--skip-tests` is the explicit untested-release path. It still reuses valid source-identical
 bundled JARs. Changed or unannotated sources build through `stageRuntimeJar` without the custom-mod

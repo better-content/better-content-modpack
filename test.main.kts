@@ -29,7 +29,7 @@ while (argument < args.size) {
 }
 val fontTargets = setOf("bumblezone", "aether", "nether")
 val fontDimensions = setOf("the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether")
-val validTarget = target == null || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart", "restart-compat", "world-save", "world-startup", "deep-void") ||
+val validTarget = target == null || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart", "restart-compat", "world-save", "world-startup", "deep-void", "gameplay") ||
     (target!!.startsWith("font:") && target!!.removePrefix("font:") in fontTargets) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
         target!!.removePrefix("dimension:") !in fontDimensions)
@@ -50,6 +50,7 @@ val targetMethod = when {
     target == "world-save" -> "debugSeededWorldSaveAndReopen"
     target == "world-startup" -> "debugNativeUnseededWorldStartup"
     target == "deep-void" -> "debugNativeDeepVoidEntry"
+    target == "gameplay" -> "gameplayAcceptance"
     target == "fonts" || target?.startsWith("font:") == true -> "debugNativeFontRoundTrips"
     else -> "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations"
 }
@@ -134,9 +135,10 @@ fun gradle(suite: String, task: String, method: String? = null, evidenceSuite: S
     val startedAt = System.currentTimeMillis()
     val command = mutableListOf(root.resolve("gradlew").absolutePath, "--no-daemon", task)
     if (method != null) {
-        val testClass = when (suite) {
-            "server" -> "ServerRuntimeTest"
-            "multiplayer" -> "MultiplayerRuntimeTest"
+        val testClass = when {
+            target == "gameplay" -> "GameplayRuntimeTest"
+            suite == "server" -> "ServerRuntimeTest"
+            suite == "multiplayer" -> "MultiplayerRuntimeTest"
             else -> "SingleplayerRuntimeTest"
         }
         command += listOf("--tests", "com.bettercontent.tests.$testClass.$method")

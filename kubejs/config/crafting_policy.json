@@ -7,6 +7,10 @@
     "promotion_rule": "Promote a reported category only after its recorded backlog is zero."
   },
   "namespaces": {
+    "better_wild_fruit_trees": {
+      "primary_role": "integration",
+      "support_state": "not_applicable"
+    },
     "better_celestial_events": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"

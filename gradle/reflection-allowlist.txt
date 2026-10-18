@@ -12,5 +12,7 @@ better-deaths-door	src/injuryVisual/java/com/bettercontent/betterdeathsdoor/hear
 better-abyssal-city	src/main/java/com/bettercontent/abyssal/HarnessTestReporter.java
 # Nonshipping Debug adapter seeds fixed authored campaign presence through exact public APIs only.
 better-runtime-diagnostics	src/testSupport/java/com/bettercontent/runtimetestsupport/CampaignPresenceFixture.java
+# Nonshipping elapsed-time observer reads exact public campaign data/BlockPoint APIs only; never seeds history.
+better-runtime-diagnostics	src/testSupport/java/com/bettercontent/runtimetestsupport/ObservedCampaignPresenceProbe.java
 # Direct compatibility test denies client class loading during early/server plugin initialization.
 better-deaths-door	src/test/java/com/bettercontent/betterdeathsdoor/client/MantleRendererContractTest.java

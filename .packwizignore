@@ -23,6 +23,8 @@ docs
 /test-control.main.kts
 /plans/
 /review/
+# Retained development proposals/evidence are not pack runtime inputs.
+/workspace_artifacts/
 /dist.sh
 /package.sh
 /settings.gradle.kts

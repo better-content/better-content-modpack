@@ -164,7 +164,7 @@ class HarnessFastTest {
         assertEquals(listOf("better-industrial-heat"), dependencies("better-chemlib-hazards"))
         assertEquals(listOf("better-compat-fixes", "better-gameplay-notices", "better-dimension-fonts", "better-celestial-events"), dependencies("better-spirit-commerce"))
         assertEquals(
-            listOf("better-gameplay-notices", "better-survival-hud"),
+            listOf("better-gameplay-notices", "better-survival-hud", "better-industrial-heat"),
             dependencies("better-compat-fixes"),
         )
         assertEquals(listOf("better-world-management"), dependencies("better-spawns"))

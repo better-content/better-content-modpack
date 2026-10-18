@@ -23,6 +23,16 @@ No non-active JAR enters `mods/` without explicitly reactivating the feature. De
 checkout counts from the actual repositories under `/home/dev/mod_source/`, and active/provider
 counts from the manifest and its dependency closure; neither is a fixed documentation total.
 
+## Wild fruit integration
+
+`better-wild-fruit-trees` is active in the release manifest and retains its standalone behavior.
+Its pinned Dynamic Trees, DT Fruits Delight, Fruits Delight and Farmer's Delight inputs are
+release verification inputs; optional Ars Nouveau, Tinkers' Construct and Mantle pins also bind
+its berry/actual-tool-tier native fixtures. The pack's replacement global loot list explicitly retains
+`better_wild_fruit_trees:no_propagules` before the final Bumblezone cultivar modifier; no
+parallel KubeJS propagation or yield implementation is introduced. See [food progression](food_progression.md)
+and the [owning behavior contract](../../mod_source/better-wild-fruit-trees/README.md).
+
 ## Local build and provider bootstrap
 
 Run validation and staging from the owning checkout using its Gradle wrapper. Java 17 is selected
