@@ -47,7 +47,7 @@
 
 ["Purity-related Effects"]
 	#Purity for drinks that normally have purity but for whatever reason don't have a value set
-	defaultPurity = 2
+	defaultPurity = 0
 	#Whether player should gain hydration even if they recieved a purity-related debuff
 	quenchThirstWhenDebuffed = true
 	#% of getting poisoned after drinking dirty water
@@ -69,7 +69,7 @@
 
 ["Purification levels"]
 	#How many levels of purification are added after boiling in a kettle
-	kettlePurificationLevels = 2
+	kettlePurificationLevels = 3
 
 ["Fermentation levels"]
 	#Purification level below which fermented liquids will grow bacteria and get less purified
@@ -79,7 +79,7 @@
 
 ["Create compatibility"]
 	#Purification levels gained by filtering water through a Sand Filter
-	sandFilterFiltrationAmount = 1
+	sandFilterFiltrationAmount = 3
 	#Millibuckets of water filtered per game tick with a Sand Filter
 	sandFilterMbPerTick = 10
 
