@@ -154,13 +154,16 @@ harvesting tools are inert or hidden.
 
 ### Ordinary trader arrival
 
-Ten total carried commerce spirits qualify a living non-spectator Overworld player. Loose spirits
-are sufficient; native Spirit Pouch contents count too, but a pouch is never required. Admission
-consumes no spirits and has no initial wait, intervisit cooldown or failed-site retry timer.
-Gamerules, native safe placement in loaded terrain and local occupancy still apply: an unexpired
-ordinary camp blocks another within 256 blocks, not distant players across the whole world.
-Each successful ordinary visit has one immutable 12,000-game-tick lifetime (ten native minutes),
-not a countdown refreshed every second. Expired unloaded records and later-loaded scenery retire
+A non-spectator Overworld player qualifies when both `doTraderSpawning` and `doMobSpawning`
+gamerules and Commerce's recurring visits are enabled. No spirit-funds or nearby-camp gate remains;
+native safe placement in loaded terrain still applies. A world-wide saved schedule rolls five to
+nine elapsed game-time days (120,000–216,000 ticks), initially from the first eligible check and
+then from each successful arrival. Visits can overlap. Each trader stays until its offers run out
+or seven elapsed game-time days (168,000 ticks) after arrival, with no deadline renewal on reload.
+Departure does not change the next arrival. Failed placements retry every 1,200 ticks without
+rerolling the multi-day wait. Schedule and retry deadlines survive saves/restarts; sleeping and
+`/time` do not accelerate these clocks. Legacy inactive schedules start a fresh initial wait;
+existing camps keep their saved expiry. Expired unloaded records and later-loaded scenery retire
 without forcing chunks; a failed campsite rolls back only its newly created trader/untamed owned
 companions and restores the native saved trader identity.
 
