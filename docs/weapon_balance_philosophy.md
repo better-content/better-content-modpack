@@ -2,7 +2,7 @@
 
 This is the living design authority for weapon balance in Better Content. It records the reasoning that survives individual tuning passes: what a weapon owes the player, which advantages may alter its damage budget, and which exceptions must be explicit.
 
-The document currently contains only the Tinkers' Construct family philosophy. Other weapon systems need their own named pass; they do not inherit TCon values automatically.
+The balance philosophy currently covers the Tinkers' Construct family. The style inventory also records upstream Epic Fight and Weapons of Miracles presets; it does not extend TCon balance values to those native weapons. Other weapon systems need their own named balance pass.
 
 ## Shared principles
 
@@ -74,7 +74,71 @@ never exposes EDPS tiers, multipliers, head-scale math, or compatibility keys.
 
 Shovel and Battle Spade remain separate: the Shovel is a conventional work tool with shovel motion, while the two-head Battle Spade is a martial combat chassis with sword combos. Javelin keeps its throw through Trident; Amethyst Staff keeps its caster identity while using a melee Spear form.
 
-### Dodge, camera, and alternate modes
+## Epic Fight and Weapons of Miracles style inventory
+
+Weapons of Miracles is pinned on both sides by
+`mods/weapons-of-miracles.pw.toml` to **2.0.171 for Forge 1.20.1** (Modrinth
+version `nf0AyjKh`). Its upstream release notes name our pinned Epic Fight
+**20.14.17** as the tested version; its native dependency range is `[20.14.3,)`.
+This establishes declared compatibility, not full-pack runtime acceptance.
+The `wom` crafting-policy namespace retains upstream content; installation does
+not constitute a progression/balance pass or guarantee every survival acquisition
+route in this closed-End pack. No TCon mappings are changed by this addition.
+
+The inventory counts named capability presets, not individual animations or
+learnable skills. A preset can reuse another form's animations, and styles such
+as dual wield or sheath can be branches within one preset.
+
+### Base Epic Fight: 16 presets
+
+The pinned `WeaponCapabilityPresets` defines Axe, Hoe, Pickaxe, Shovel, Sword,
+Spear, Greatsword, Uchigatana, Tachi, Longsword, Dagger, Fist, Bow, Crossbow,
+Trident and Shield. The TCon tables above cover all except Uchigatana and Shield.
+Ordinary shields supply the defensive Shield capability; Buckler is deliberately
+Fist instead. Our Katana is Tachi, not Uchigatana, so Battojutsu's sheath/draw
+playstyle has no explicitly mapped TCon carrier. The native EF Uchigatana's
+survival acquisition route is not established here.
+
+### Weapons of Miracles: 17 named presets
+
+These are the actual types in the pinned JAR's
+`data/wom/capabilities/weapons/` resources and registered by
+`WOMWeaponCapabilityPresets`. Carriers are native item mappings, not claims that
+all of those items are currently obtainable in survival.
+
+| Preset | Native carrier(s) |
+|---|---|
+| `wom:staff` | Wooden, Stone, Golden, Iron, Diamond and Netherite Staff |
+| `wom:agony` | Agony |
+| `wom:torment` | Torment (`wom:tormented_mind`) |
+| `wom:ruine` | Ruine |
+| `wom:satsujin` | Satsujin |
+| `wom:ender_blaster` | Ender Blaster |
+| `wom:clawed_gauntle` | Clawed Gauntle (`wom:jabberwocky`; upstream spelling) |
+| `wom:antitheus` | Antitheus |
+| `wom:herrscher` | Herrscher |
+| `wom:gesetz` | Gesetz |
+| `wom:moonless` | Moonless |
+| `wom:solar` | Solar |
+| `wom:napoleon` | Napoleon |
+| `wom:evil_tachi` | Evil Odachi (`wom:evil_tachi`) |
+| `wom:orbit` | Orbit |
+| `wom:nova` | Nova |
+| `wom:blackstar` | Blackstar |
+
+WoM's Golden, Iron, Diamond and Netherite Greataxes map to base
+`epicfight:greatsword`, and Hollow Longsword maps to `epicfight:longsword`;
+these do not add distinct presets. The existing TCon integration contributes
+three more named presets: `epicfighttinkercompat:longbow`,
+`epicfighttinkercompat:crossbow` and `epicfighttinkercompat:swasher`.
+That is **36 named presets** across these three providers: 16 base + 17 WoM + 3
+TCon integration. It is not a count of 36 wholly independent animation sets.
+`WeaponsOfMiraclesContractTest` inspects the hash-pinned native resources to keep
+the WoM inventory and fallback distinctions reproducible without Minecraft.
+Packwiz index/hash refresh and runtime acceptance remain release-preparation work
+under the [shared testing policy](testing.md).
+
+## TCon dodge, camera, and alternate modes
 
 Combat Roll and Better Content Fixes' directional double-tap integration are removed. Epic Fight's native Roll and Step progression is the only dodge system and uses Epic Fight's dedicated input. The Epic Fight combat camera is active in third-person only; it never changes perspective automatically.
 
