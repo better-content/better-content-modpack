@@ -17,7 +17,7 @@ class FixtureVerifyWorldExitTest {
         val bridge = root.resolve("world-lifecycle")
         Files.createDirectories(client.resolve("saves/DebugWorld"))
         Files.createDirectories(bridge)
-        try { block(root, client, bridge) } finally { owner.toFile().deleteRecursively() }
+        block(root, client, bridge) // Retain the owned fixture on every outcome.
     }
     private fun binding(root: Path, client: Path, bridge: Path) = requireNotNull(fixtureVerifyExitBinding(
         "verify", "DebugWorld", false, "20261008T170000Z-123", "SmokeWorld", offlineUuid("SmokeWorld"), root, client, bridge))

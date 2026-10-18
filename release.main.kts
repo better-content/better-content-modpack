@@ -83,6 +83,9 @@ if (System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
     exitProcess(superviseFacade(root, command))
 }
 
+val lockVerified = superviseFacade(root, listOf("python3", "-B", root.resolve("scripts/runner_lock.py").absolutePath), budgetSeconds = 30)
+if (lockVerified != 0) exitProcess(75)
+
 val runId = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC)
     .format(java.time.Instant.now()) + "-" + ProcessHandle.current().pid()
 val forceRebuild = rebuildAll

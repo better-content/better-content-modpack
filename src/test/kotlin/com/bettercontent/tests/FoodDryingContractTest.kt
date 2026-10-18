@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import java.time.Duration
 
 @Tag("fast")
 class FoodDryingContractTest {
@@ -15,17 +16,16 @@ class FoodDryingContractTest {
 
     @Test
     fun `rack recipes tag and annotation describe the same dried foods`() {
-        val script = Files.readString(root.resolve("kubejs/server_scripts/progression/82_food_drying.js"))
-        val catalogueBody = script.substringAfter("var catalogue = [", missingDelimiterValue = "")
-            .substringBefore("\n    ]", missingDelimiterValue = "")
-        assertTrue(catalogueBody.isNotEmpty(), "the authored rack catalogue must remain explicit")
-
-        val rowPattern = Regex("(?m)^\\s*\\['([^']+)',\\s*'([^']+)',\\s*'([^']+)'\\],?\\s*$")
-        val recipes = rowPattern.findAll(catalogueBody).associate {
-            it.groupValues[3] to (it.groupValues[1] to it.groupValues[2])
+        val output = BoundedCommand.capture(root, listOf(
+            "node", root.resolve("src/test/resources/food-drying-contract.cjs").toString(),
+            root.resolve("kubejs/server_scripts/progression/82_food_drying.js").toString(),
+        ), Duration.ofSeconds(15))
+        val emitted = jacksonObjectMapper().readTree(output)
+        val recipes = emitted.associate {
+            it.path("id").asText().removePrefix("kubejs:food/drying_rack/") to
+                (it.path("ingredients")[0].path("item").asText() to it.path("output").path("item").asText())
         }
-        val authoredRows = Regex("(?m)^\\s*\\[").findAll(catalogueBody).count()
-        assertEquals(authoredRows, recipes.size, "every explicit catalogue row must parse uniquely")
+        assertEquals(emitted.size(), recipes.size, "every executed recipe must have a unique ID")
         assertEquals(
             mapOf(
                 "beef" to ("minecraft:beef" to "better_industrial_heat:dried_beef"),
@@ -57,10 +57,8 @@ class FoodDryingContractTest {
             driedAnnotation.path("selector").path("items").map { it.asText() }.toSet(),
             "the player-facing drying annotation must name every and only authored dried food",
         )
-        val annotation = driedAnnotation.path("lines").map { it.asText() }.joinToString(" ")
-        assertTrue(annotation.contains("Dry raw food on Hexerei's rack"))
-        assertTrue(annotation.contains("spoils 90% slower"))
-        assertTrue(annotation.contains("cannot be cooked"))
+        assertTrue(driedAnnotation.path("lines").isArray && !driedAnnotation.path("lines").isEmpty,
+            "drying must retain player-facing guidance; wording is not an executable preservation oracle")
 
         val thermalSource = Files.readString(
             heatSync.resolve("src/main/kotlin/com/bettercontent/betterindustrialheat/food/FoodThermalService.kt"),

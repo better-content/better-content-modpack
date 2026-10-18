@@ -16,11 +16,8 @@ class SessionTests(unittest.TestCase):
     def setUp(self):
         output = Path(__file__).resolve().parent.parent / 'build/tmp/session-control-tests'
         output.mkdir(parents=True, exist_ok=True)
-        self.temp = tempfile.TemporaryDirectory(dir=output)
-        self.root = Path(self.temp.name)
-
-    def tearDown(self):
-        self.temp.cleanup()
+        self.root = Path(tempfile.mkdtemp(prefix='retained-', dir=output))
+        # Retain receipts, artifact snapshots and failure state on every test outcome.
 
     def test_begin_is_pending_and_owner_cannot_be_adopted(self):
         receipt = sessions.begin(self.root, 'conversation')
@@ -78,7 +75,8 @@ class SessionTests(unittest.TestCase):
             with patch('sys.argv', base + ['--confirm-terminated-run', run]), patch.object(os, 'kill', side_effect=ProcessLookupError):
                 with contextlib.redirect_stdout(io.StringIO()):
                     sessions.main()
-            self.assertFalse(path.exists())
+            self.assertTrue(path.exists())
+            self.assertEqual('ended', json.loads(path.read_text())['state'])
 
     def recovery_fixture(self):
         receipt = sessions.begin(self.root, 'conversation')
@@ -188,7 +186,7 @@ class SessionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             sessions.load(self.root, sid, 'helper', allow_helpers=True)
         invoke('conversation', ['begin', '--owner-session', 'conversation', '--replace', sid])
-        self.assertFalse(sessions.session_path(self.root, sid).exists())
+        self.assertEqual('ended', json.loads(sessions.session_path(self.root, sid).read_text())['state'])
 
     def test_live_status_detects_missing_artifacts_source_changes_and_shared_changes(self):
         root = self.root / 'workspace/pack'
@@ -203,17 +201,105 @@ class SessionTests(unittest.TestCase):
         manifest = {'verificationInputs': ['source.txt'], 'mods': [{'repository': 'fixture', 'artifact': 'fixture.jar', 'tasks': ['verifyFull']}]}
         (root / 'gradle/active-custom-mods.json').write_text(json.dumps(manifest))
         jar = root / 'mods/fixture.jar'; jar.write_text('verified artifact bytes')
-        receipt = dict(baseline='complete', shared_context={'_patterns': 'source.txt', '_java_home': '/nonexistent',
-            'source.txt': sessions.file_identity(root / 'source.txt'), 'manifest': sessions.file_identity(root / 'gradle/active-custom-mods.json'),
-            'sdk': 'missing', 'toolchain': 'missing'}, mods={'fixture': {'source': sessions.source_identity(source),
-                'tasks': ['verifyFull'], 'sha256': sessions.file_identity(jar)}})
+        mod = manifest['mods'][0]
+        mod['modId'] = 'fixture'
+        (root / 'gradle/active-custom-mods.json').write_text(json.dumps(manifest))
+        context = {'_patterns': 'source.txt', '_java_home': os.environ.get('JAVA_HOME', '/nonexistent'), 'java': 'synthetic'}
+        shared = sessions.current_shared_entries(root, ['source.txt'], context)
+        checkpoint = dict(owner='original-conversation', verification_id='original-run',
+            source=sessions.source_identity(source), tasks=mod['tasks'], sha256=sessions.file_identity(jar),
+            dependencies={}, support_hashes={}, shared_fingerprint=sessions.contract_identity(root, mod, shared))
+        immutable = sessions.checkpoint_path(root, mod, checkpoint)
+        immutable.parent.mkdir(parents=True)
+        immutable.write_bytes(jar.read_bytes())
+        checkpoint['staged_path'] = str(immutable.relative_to(root))
+        receipt = dict(schema=sessions.SCHEMA, baseline='failed', shared_context=context,
+                       mods={}, checkpoints={'fixture': checkpoint})
         self.assertTrue(sessions.inspect_live(root, receipt)['valid_reuse'])
-        jar.unlink()
+        self.assertEqual({'fixture': 'original-run'}, sessions.inspect_live(root, receipt)['verification_origins'])
+        jar.unlink()  # Missing disposable build/deployed outputs do not invalidate retained immutable bytes.
+        self.assertTrue(sessions.inspect_live(root, receipt)['valid_reuse'])
+        immutable.write_bytes(b'corrupt snapshot')
         self.assertEqual(['fixture'], sessions.inspect_live(root, receipt)['affected_providers'])
-        jar.write_text('verified artifact bytes'); (source / 'source.txt').write_text('changed source')
+        immutable.write_text('verified artifact bytes'); (source / 'source.txt').write_text('changed source')
         self.assertEqual(['fixture'], sessions.inspect_live(root, receipt)['affected_providers'])
         (source / 'source.txt').write_text('authored'); (root / 'source.txt').write_text('changed contract')
-        self.assertIn('full baseline required: shared verification inputs changed', sessions.inspect_live(root, receipt)['invalidations'])
+        self.assertEqual(['fixture'], sessions.inspect_live(root, receipt)['affected_providers'])
+
+    def test_scoped_partial_checkpoints_history_and_fresh_epoch(self):
+        root = self.root
+        (root / 'gradle').mkdir()
+        (root / 'provider-contract.txt').write_text('provider contract')
+        (root / 'unrelated.md').write_text('docs may change')
+        mods = [dict(repository='provider', modId='provider', artifact='provider.jar', tasks=['verify'],
+                     verificationInputs=['provider-contract.txt'], buildInputs=[], supportArtifacts=['build/support.jar']),
+                dict(repository='consumer', modId='consumer', artifact='consumer.jar', tasks=['verify'], dependsOn=['provider']),
+                dict(repository='independent', modId='independent', artifact='independent.jar', tasks=['verify'])]
+        manifest = dict(verificationInputs=[], mods=mods)
+        (root / 'gradle/active-custom-mods.json').write_text(json.dumps(manifest))
+        context = dict(_java_home=os.environ.get('JAVA_HOME', '/nonexistent'), java='synthetic')
+        receipt = dict(schema=sessions.SCHEMA, baseline='failed', shared_context=context, checkpoints={}, mods={})
+        sources = {mod['repository']: mod['repository'] for mod in mods}
+        with patch.object(sessions, 'git_text', return_value='provider-contract.txt\0unrelated.md\0'), \
+                patch.object(sessions, 'source_identity', side_effect=lambda repo: sources[repo.name]):
+            shared = sessions.current_shared_entries(root, [], context)
+            for mod in mods:
+                checkpoint = dict(owner='historical-owner', verification_id='historical-run',
+                    source=mod['repository'], tasks=mod['tasks'], dependencies={}, support_hashes={},
+                    shared_fingerprint=sessions.contract_identity(root, mod, shared),
+                    build_fingerprint=sessions.build_identity(root, mod, shared), build_id='original-build')
+                path = sessions.checkpoint_path(root, mod, checkpoint)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(mod['repository'])
+                checkpoint.update(sha256=sessions.file_identity(path), staged_path=str(path.relative_to(root)))
+                if mod['repository'] == 'provider':
+                    support = path.with_name(path.name + '.support') / 'build/support.jar'
+                    support.parent.mkdir(parents=True); support.write_text('support bytes')
+                    checkpoint['support_hashes'] = {'build/support.jar': sessions.file_identity(support)}
+                if mod.get('dependsOn'):
+                    checkpoint['dependencies'] = {'provider': receipt['checkpoints']['provider']['sha256']}
+                receipt['checkpoints'][mod['repository']] = checkpoint
+            self.assertTrue(sessions.inspect_live(root, receipt)['valid_reuse'])
+            (root / 'unrelated.md').write_text('unrelated edit')
+            self.assertTrue(sessions.inspect_live(root, receipt)['valid_reuse'])
+            archive = root / '.worklane/testing-sessions/completed'
+            archive.mkdir()
+            (archive / 'historical-run.json').write_text(json.dumps(receipt))
+            fresh = dict(schema=sessions.SCHEMA, baseline='pending', shared_context=context)
+            self.assertTrue(sessions.inspect_live(root, fresh)['valid_reuse'])
+            provider_snapshot = sessions.checkpoint_path(root, mods[0], receipt['checkpoints']['provider'])
+            support = provider_snapshot.with_name(provider_snapshot.name + '.support') / 'build/support.jar'
+            support.write_text('corrupt support bytes')
+            self.assertEqual(['consumer', 'provider'], sessions.inspect_live(root, fresh)['affected_providers'])
+            support.write_text('support bytes')
+            self.assertEqual(['consumer', 'independent', 'provider'],
+                             sessions.inspect_live(root, dict(fresh, reuse_history=False))['affected_providers'])
+            (root / 'provider-contract.txt').write_text('changed contract')
+            self.assertEqual(['consumer', 'provider'], sessions.inspect_live(root, fresh)['affected_providers'])
+            self.assertEqual('original-build', sessions.inspect_live(root, fresh)['build_reuse_candidates']['provider'])
+            changed_toolchain = dict(fresh, shared_context=dict(context, java='different resolved Java identity'))
+            self.assertEqual({}, sessions.inspect_live(root, changed_toolchain)['build_reuse_candidates'])
+            sources['provider'] = 'changed production identity'
+            self.assertNotIn('provider', sessions.inspect_live(root, fresh)['build_reuse_candidates'])
+            sources['provider'] = 'provider'
+            (root / 'provider-contract.txt').write_text('provider contract')
+            mods[0]['tasks'] = ['verify', 'newRequiredGate']
+            (root / 'gradle/active-custom-mods.json').write_text(json.dumps(manifest))
+            self.assertEqual(['consumer', 'provider'], sessions.inspect_live(root, fresh)['affected_providers'])
+            self.assertIn('provider', sessions.inspect_live(root, fresh)['build_reuse_candidates'])
+            mods[0]['tasks'] = ['verify']
+            mods[0]['buildInputs'] = ['provider-contract.txt']
+            (root / 'gradle/active-custom-mods.json').write_text(json.dumps(manifest))
+            self.assertNotIn('provider', sessions.inspect_live(root, fresh)['build_reuse_candidates'])
+            mods[0]['buildInputs'] = []
+            (root / 'gradle/active-custom-mods.json').write_text(json.dumps(manifest))
+            active = dict(receipt, active_run='live-run')
+            (archive / 'historical-run.json').write_text(json.dumps(active))
+            self.assertFalse(sessions.inspect_live(root, fresh)['valid_reuse'])
+            legacy = dict(receipt, schema='bc.testing_session.v1')
+            (archive / 'historical-run.json').write_text(json.dumps(legacy))
+            self.assertFalse(sessions.inspect_live(root, fresh)['valid_reuse'])
+            self.assertEqual(legacy, json.loads((archive / 'historical-run.json').read_text()))
 
     def test_identity_is_stable_conversation_not_pane(self):
         with patch.dict(os.environ, {'PI_SESSION_ID': 'stable-conversation', 'HERDR_PANE_ID': 'new-pane'}):

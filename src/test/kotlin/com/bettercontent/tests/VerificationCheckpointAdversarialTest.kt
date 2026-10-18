@@ -58,7 +58,7 @@ class VerificationCheckpointAdversarialTest {
             mods.forEach { mod -> session.checkpoint(item(mod), mod.dependsOn.associateWith { dependency -> item(mods.first { it.repository == dependency }).sha256 }) }
         }
         fun partial() { session("origin").use { it.checkpoint(item(), emptyMap()) } }
-        override fun close() { root.parent.toFile().deleteRecursively() }
+        override fun close() { /* Preserve synthetic receipts, snapshots and failure state for inspection. */ }
     }
     private fun repository(path: Path) {
         Files.createDirectories(path)
@@ -203,7 +203,9 @@ class VerificationCheckpointAdversarialTest {
         val support = f.source(provider).resolve("build/libs/support.jar")
         Files.createDirectories(support.parent); Files.writeString(support, "verified support")
         f.session("origin", definitions = definitions).use { it.checkpoint(f.item(provider), emptyMap()) }
-        Files.writeString(support, "tampered support")
+        val snapshot = f.root.resolve(f.read().checkpoints.getValue("provider").staged_path)
+            .resolveSibling("provider.jar.support/build/libs/support.jar")
+        Files.writeString(snapshot, "tampered support")
         f.session("resume", definitions = definitions).use { s ->
             assertTrue(s.affected.containsAll(setOf("provider", "consumer")))
             assertNull(s.reusable(provider))

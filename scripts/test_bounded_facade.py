@@ -14,11 +14,11 @@ SCRIPT = Path(__file__).with_name('bounded_facade.py')
 
 class SupervisorTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(dir=Path.home() / '.tmp', prefix='facade-test-')
-        self.root = Path(self.temp.name)
+        directory = Path.home() / '.tmp'
+        directory.mkdir(parents=True, exist_ok=True)
+        self.root = Path(tempfile.mkdtemp(dir=directory, prefix='facade-test-'))
         self.log = self.root / 'command.log'
-    def tearDown(self):
-        self.temp.cleanup()
+        # Retain logs and fixture state regardless of the test outcome.
     def command(self, program, budget=5):
         return [sys.executable, '-B', str(SCRIPT), '--cwd', str(self.root), '--budget-seconds', str(budget),
                 '--log', str(self.log), '--', sys.executable, '-u', '-c', program]

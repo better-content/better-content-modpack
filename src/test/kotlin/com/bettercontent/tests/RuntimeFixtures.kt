@@ -654,21 +654,34 @@ private const val DEFAULT_CLIENT_JVM_ARGS = "-Xms2G -Xmx12G"
 
 fun promoteSnapshot(source: Path, destination: Path, token: String): String {
     val snapshotId = RuntimeSnapshotValidator.validate(source)
+    promoteSnapshotFiles(source, destination, token)
+    return snapshotId
+}
+
+/** Promotion mechanics separated from snapshot validation for inert restoration tests. */
+internal fun promoteSnapshotFiles(source: Path, destination: Path, token: String,
+    move: (Path, Path) -> Unit = { from, to -> Files.move(from, to, StandardCopyOption.ATOMIC_MOVE); Unit }) {
+    require(Regex("[A-Za-z0-9_.-]+").matches(token)) { "invalid snapshot promotion token" }
     destination.parent.createDirectories()
     val staging = destination.parent.resolve(".runtime-dumps-$token.staging")
     val backup = destination.parent.resolve(".runtime-dumps-$token.previous")
-    require(!staging.exists() && !backup.exists()) { "runtime snapshot promotion paths already exist" }
-    source.toFile().copyRecursively(staging.toFile())
+    val restore = destination.parent.resolve(".runtime-dumps-$token.restore")
+    require(!staging.exists() && !backup.exists() && !restore.exists()) { "runtime snapshot promotion paths already exist" }
+    check(source.toFile().copyRecursively(staging.toFile())) { "incomplete runtime snapshot staging: $staging" }
     val hadPrevious = destination.exists()
     try {
-        if (hadPrevious) Files.move(destination, backup, StandardCopyOption.ATOMIC_MOVE)
-        Files.move(staging, destination, StandardCopyOption.ATOMIC_MOVE)
+        if (hadPrevious) move(destination, backup)
+        move(staging, destination)
     } catch (error: Throwable) {
-        if (hadPrevious && backup.exists() && !destination.exists()) Files.move(backup, destination, StandardCopyOption.ATOMIC_MOVE)
+        if (hadPrevious && backup.exists() && !destination.exists()) {
+            try {
+                // Restore atomically from a copy so the original diagnostic backup survives.
+                check(backup.toFile().copyRecursively(restore.toFile())) { "incomplete snapshot restoration staging: $restore" }
+                Files.move(restore, destination, StandardCopyOption.ATOMIC_MOVE)
+            } catch (restoration: Throwable) { error.addSuppressed(restoration) }
+        }
+        // Failed staging, backup and any failed restore staging remain for diagnosis.
         throw error
-    } finally {
-        staging.toFile().deleteRecursively()
     }
-    backup.toFile().deleteRecursively()
-    return snapshotId
+    // Successful promotion consumes staging by atomic rename; previous snapshots remain.
 }

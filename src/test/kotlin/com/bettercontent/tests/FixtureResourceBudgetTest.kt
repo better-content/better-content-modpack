@@ -113,7 +113,6 @@ class FixtureResourceBudgetTest {
         val root = Path.of("build", "fixture-budget-test").toAbsolutePath()
         Files.createDirectories(root)
         val directory = Files.createTempDirectory(root, "owned-")
-        try { test(directory) }
-        finally { Files.walk(directory).use { paths -> paths.sorted(Comparator.reverseOrder()).forEach(Files::delete) } }
+        test(directory) // Retain the owned ABI probe output on every outcome.
     }
 }

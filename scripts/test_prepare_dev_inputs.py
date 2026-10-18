@@ -11,9 +11,8 @@ class PinnedInputsTests(unittest.TestCase):
     def setUp(self):
         root = Path.home() / '.tmp'
         root.mkdir(exist_ok=True)
-        self.temp = tempfile.TemporaryDirectory(dir=root)
-        self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name)
+        self.root = Path(tempfile.mkdtemp(prefix='pinned-input-test-', dir=root))
+        # Keep cold/warm/corrupt input fixtures for inspection on every outcome.
         self.cache = self.root / 'cache'
         self.body = b'pinned-native-test-fixture'
         self.pin = {'filename': 'native.jar', 'download': {'hash-format': 'sha256',

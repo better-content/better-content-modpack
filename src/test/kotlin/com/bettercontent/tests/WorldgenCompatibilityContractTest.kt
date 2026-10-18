@@ -154,7 +154,8 @@ class WorldgenCompatibilityContractTest {
                     "Empty height range: triangle (0 above bottom-504 below top)\n",
             )
         }
-        assertEquals(1, LogPolicy.findings(listOf(rawWarning)).size)
+        assertEquals(0, LogPolicy.findings(listOf(rawWarning)).size,
+            "height-range advice alone is not proof of a failed generation operation")
     }
 
     @Test

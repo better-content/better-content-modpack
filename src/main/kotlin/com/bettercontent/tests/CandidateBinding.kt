@@ -27,7 +27,19 @@ fun runtimeInputIdentity(root: Path): String {
 }
 
 object CandidateBinding {
+    fun requireOrdinary(path: Path) {
+        val absolute = path.toAbsolutePath()
+        require(absolute == absolute.normalize()) { "non-normalized path: $path" }
+        var ancestor = absolute.root
+        for (part in absolute) {
+            ancestor = ancestor.resolve(part)
+            require(!Files.isSymbolicLink(ancestor)) { "symlink path component: $ancestor" }
+        }
+    }
+
     fun select(root: Path, binding: Path): CandidatePair {
+        requireOrdinary(root)
+        requireOrdinary(binding)
         require(!Files.isSymbolicLink(binding) && Files.isRegularFile(binding) && Files.size(binding) <= 1024 * 1024) {
             "invalid candidate binding: $binding"
         }
@@ -40,8 +52,14 @@ object CandidateBinding {
         }
         val candidates = document.path("candidates")
         fun side(name: String): Path {
-            val path = Path.of(candidates.path(name).asText()).toAbsolutePath().normalize()
-            require(path.startsWith(root.resolve("dist")) && Files.isRegularFile(path) && !Files.isSymbolicLink(path)) {
+            val path = Path.of(candidates.path(name).asText())
+            require(path.isAbsolute) { "$name candidate path must be absolute" }
+            requireOrdinary(path)
+            val relative = root.toAbsolutePath().resolve("dist").relativize(path)
+            require(path.startsWith(root.toAbsolutePath().resolve("dist")) && relative.nameCount == 3 &&
+                Regex("build-[0-9]+[a-z]?").matches(relative.getName(0).toString()) &&
+                relative.getName(1).toString() == name && relative.fileName.toString() == "better-content.zip" &&
+                Files.isRegularFile(path) && !Files.isSymbolicLink(path)) {
                 "$name candidate is outside canonical dist or missing"
             }
             require(Hashes.sha256(path) == candidates.path(name + "_sha256").asText()) { "$name candidate hash mismatch" }
@@ -66,6 +84,7 @@ object CandidateBinding {
             require(hashes.fieldNames().asSequence().toSet() == declared) { "$name support artifact binding is incomplete" }
             declared.forEach { relative ->
                 val path = source.resolve(relative).normalize()
+                requireOrdinary(path)
                 require(path.startsWith(source.resolve("build")) && !Files.isSymbolicLink(path) &&
                     Files.isRegularFile(path) && Hashes.sha256(path) == hashes.path(relative).asText()) {
                     "$name support artifact is missing or unverified; canonical preparation is required"

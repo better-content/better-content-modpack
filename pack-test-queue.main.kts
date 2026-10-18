@@ -28,6 +28,26 @@ fun jq(path: Path, expression: String): String {
     return output.trim()
 }
 
+fun validatePins(path: Path) {
+    val binding = jq(path, ".candidate_binding // \"\"")
+    val status = superviseFacade(root.toFile(), listOf("python3", "-B", root.resolve("scripts/candidate_paths.py").toString(),
+        "--root", root.toString(), "--handoff", path.toString()) +
+        if (binding.isNotBlank()) listOf("--binding", binding) else emptyList(), budgetSeconds = 60)
+    require(status == 0) { "unsafe or changed candidate handoff" }
+}
+
+fun authority(path: Path) {
+    val task = jq(path, ".task_id | select(type == \"string\" and length > 0)")
+    val generation = jq(path, ".task_generation | select(type == \"number\" and . > 0 and . == floor)")
+    val owner = jq(path, ".task_owner | select(type == \"string\" and length > 0)")
+    val selector = jq(path, ".selector | select(. == \"dist\" or . == \"debug\")")
+    val (status, result) = captureFacade(root.toFile(), listOf("python3", "-B", root.resolve("scripts/workspace_coordination.py").toString(),
+        "--root", System.getenv("WORKSPACE_COORDINATION_ROOT")?.takeIf(String::isNotBlank)
+            ?: Path.of(System.getProperty("user.home"), ".worklane/coordination").toString(),
+        "authority", "--task", task, "--generation", generation, "--owner", owner, "--operation", "pack-test:$selector"))
+    require(status == 0 && Regex("\"valid\"\\s*:\\s*true").containsMatchIn(result)) { "stale, missing or cancelled task authority" }
+}
+
 fun manifests(directory: Path): List<Path> = Files.list(directory).use { stream ->
     stream.filter { it.isRegularFile() && it.fileName.toString().endsWith(".json") }.sorted().toList()
 }
@@ -37,7 +57,9 @@ when (args.firstOrNull()) {
         if (args.size != 2) usage()
         val source = Path.of(args[1]).toAbsolutePath().normalize()
         require(source.isRegularFile()) { "handoff does not exist: $source" }
-        jq(source, "select(.schema == \"bc.pack_test_handoff.v1\") | select(.producer.agent == \"workspace_coord\") | select(.authorization.explicit == true) | select(.request_id | type == \"string\" and length > 0) | select(.callback.agent and .callback.pane_id) | select(.modpack.head and (.modpack.status | type == \"array\")) | select((.repositories | type == \"array\") and (.validations | type == \"array\") and (.artifacts | type == \"array\") and (.dependencies | type == \"array\") and (.scenarios | type == \"array\") and (.prior_evidence | type == \"array\")) | select(.selector == \"dist\" or .selector == \"debug\") | select(.candidate.client.path and .candidate.client.sha256 and .candidate.server.path and .candidate.server.sha256) | .request_id")
+        jq(source, "select(.schema == \"bc.pack_test_handoff.v1\") | select(.producer.agent | type == \"string\" and length > 0) | select(.authorization.explicit == true) | select(.request_id | type == \"string\" and length > 0) | select(.callback.agent and .callback.pane_id) | select(.modpack.head and (.modpack.status | type == \"array\")) | select((.repositories | type == \"array\") and (.validations | type == \"array\") and (.artifacts | type == \"array\") and (.dependencies | type == \"array\") and (.scenarios | type == \"array\") and (.prior_evidence | type == \"array\")) | select(.selector == \"dist\" or .selector == \"debug\") | select(.candidate.client.path and .candidate.client.sha256 and .candidate.server.path and .candidate.server.sha256) | .request_id")
+        authority(source)
+        validatePins(source)
         val requestId = jq(source, ".request_id")
         val all = directories.values.flatMap(::manifests)
         require(all.none { runCatching { jq(it, ".request_id") }.getOrNull() == requestId }) { "request is already registered: $requestId" }
@@ -64,10 +86,15 @@ when (args.firstOrNull()) {
             ?: error("pack-test queue is empty")
         val running = directories.getValue("running").resolve(queued.fileName)
         Files.move(queued, running, StandardCopyOption.ATOMIC_MOVE)
+        try { authority(running); validatePins(running) } catch (failure: Exception) {
+            Files.move(running, directories.getValue("failed").resolve(running.fileName), StandardCopyOption.ATOMIC_MOVE)
+            throw failure
+        }
         val selector = jq(running, ".selector")
         val command = mutableListOf(root.resolve("test.main.kts").toString(), selector)
         jq(running, ".target // \"\"").takeIf(String::isNotBlank)?.let { command += listOf("--target", it) }
         jq(running, ".retry_of // \"\"").takeIf(String::isNotBlank)?.let { command += listOf("--retry-of", it) }
+        jq(running, ".candidate_binding // \"\"").takeIf(String::isNotBlank)?.let { command += listOf("--candidate-binding", it) }
         if (selector == "debug" && "--target" !in command) command += "--existing-candidate"
         val status = superviseFacade(root.toFile(), command, environment = mapOf(
             "BC_PACK_TEST_HANDOFF" to running.toString(), "BC_PACK_TEST_STATE_ROOT" to stateRoot.toString(),

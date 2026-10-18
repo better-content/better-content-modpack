@@ -1,8 +1,6 @@
 #!/usr/bin/env kotlin
 @file:Import("scripts/BoundedFacade.main.kts")
 
-import java.nio.file.Files
-import java.security.MessageDigest
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
@@ -17,6 +15,7 @@ var retryOf: String? = null
 var existingCandidate = false
 var verificationSession: String? = null
 var candidateBinding: String? = null
+val handoff = System.getenv("BC_PACK_TEST_HANDOFF")?.takeIf(String::isNotBlank)
 var argument = 1
 while (argument < args.size) {
     when (args[argument]) {
@@ -69,14 +68,14 @@ fun usage(): Nothing {
 
 if (selector !in setOf("dev", "dist", "debug") || !validTarget ||
     (target != null && (selector == "dev" || (selector == "dist" && target != "join"))) ||
-    (retryOf != null && candidateBinding == null) ||
+    (retryOf != null && candidateBinding == null && handoff == null) ||
     (target != null && candidateBinding == null && System.getenv("BC_PACK_TEST_HANDOFF").isNullOrBlank()) ||
     (candidateBinding != null && (selector == "dev" || !java.io.File(candidateBinding!!).isFile)) ||
     (existingCandidate && (selector != "debug" || target != null || args.count { it == "--existing-candidate" } != 1)) ||
     (retryOf != null && !Regex("\\d{8}T\\d{6}Z-\\d+").matches(retryOf!!)) ||
     (retryOf != null && !root.resolve("generated/test-evidence/$retryOf").isDirectory)) usage()
 val selected = selector ?: usage()
-if (candidateBinding != null && selected == "debug" && target == null) existingCandidate = true
+if ((candidateBinding != null || handoff != null) && selected == "debug" && target == null) existingCandidate = true
 verificationSession?.let {
     if (!Regex("[a-f0-9]{32}").matches(it)) usage()
     val status = superviseFacade(root, listOf("python3", "-B", root.resolve("scripts/testing_session.py").absolutePath, "status", it), budgetSeconds = 60)
@@ -88,7 +87,7 @@ if (selected == "debug" && target == null && !existingCandidate) {
     exitProcess(superviseFacade(root, listOf(root.resolve("release.main.kts").absolutePath, "--debug") + sessionArgs))
 }
 
-if (selected == "dist" && target == null && candidateBinding == null && System.getenv("BC_RELEASE_PREPARED") != "1") {
+if (selected == "dist" && target == null && candidateBinding == null && handoff == null && System.getenv("BC_RELEASE_PREPARED") != "1") {
     exitProcess(superviseFacade(root, listOf(root.resolve("release.main.kts").absolutePath) + sessionArgs))
 }
 
@@ -96,6 +95,11 @@ if (selected != "dev" && System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank(
     val status = superviseFacade(root, listOf(root.resolve("pack-test-lock.main.kts").absolutePath,
         "run", "test", if (target == null) selected else "$selected:$target", "--", __FILE__.absolutePath) + args)
     exitProcess(status)
+}
+
+if (selected != "dev") {
+    val verified = superviseFacade(root, listOf("python3", "-B", root.resolve("scripts/runner_lock.py").absolutePath), budgetSeconds = 30)
+    if (verified != 0) exitProcess(75)
 }
 
 val runId = if (selected == "dev") null else {
@@ -161,7 +165,8 @@ if (selected == "dev") {
     if (selected == "debug" && existingCandidate && priorDist == null) {
         val prerequisiteId = "${runId}1"
         val prerequisite = superviseFacade(root, listOf(__FILE__.absolutePath, "dist") +
-            (candidateBinding?.let { listOf("--candidate-binding", it) } ?: emptyList()),
+            (candidateBinding?.let { listOf("--candidate-binding", it) } ?: emptyList()) +
+            (retryOf?.let { listOf("--retry-of", it) } ?: emptyList()),
             environment = mapOf("BC_RELEASE_PREPARED" to "1", "BC_DIST_PREREQUISITE" to "1", "BC_TEST_RUN_ID" to prerequisiteId))
         statuses["dist-prerequisite"] = prerequisite
         if (prerequisite == 0) priorDist = prerequisiteId
@@ -180,25 +185,14 @@ if (selected == "dev") {
                 .first { "\"type\":\"candidate_selected\"" in it }
             fun field(name: String): String = Regex("\"$name\":\"([^\"]+)\"").find(selected)
                 ?.groupValues?.get(1) ?: error("missing $name in Dist candidate receipt")
-            fun sha256(file: java.io.File): String {
-                val digest = MessageDigest.getInstance("SHA-256")
-                file.inputStream().use { input ->
-                    val buffer = ByteArray(1024 * 1024)
-                    while (true) {
-                        val size = input.read(buffer)
-                        if (size < 0) break
-                        digest.update(buffer, 0, size)
-                    }
-                }
-                return digest.digest().joinToString("") { "%02x".format(it) }
-            }
-            val candidates = Files.walk(root.resolve("dist").toPath()).use { stream ->
-                stream.filter { it.endsWith("better-content.zip") }.toList()
-            }
-            val client = candidates.single { it.parent.fileName.toString() == "client" }.toFile()
-            val server = candidates.single { it.parent.fileName.toString() == "server" }.toFile()
-            client.absolutePath == field("client") && server.absolutePath == field("server") &&
-                sha256(client) == field("client_sha256") && sha256(server) == field("server_sha256")
+            val selectionArgs = listOf("python3", "-B", root.resolve("scripts/candidate_paths.py").absolutePath, "--root", root.absolutePath) +
+                (candidateBinding?.let { listOf("--binding", it) } ?: emptyList()) +
+                (handoff?.let { listOf("--handoff", it) } ?: emptyList())
+            val (code, selection) = captureFacade(root, selectionArgs)
+            require(code == 0) { "exact candidate selection failed" }
+            fun selectedField(name: String): String = Regex("\"$name\"\\s*:\\s*\"([^\"]+)\"").find(selection)
+                ?.groupValues?.get(1) ?: error("missing selected $name")
+            listOf("client", "server", "client_sha256", "server_sha256").all { selectedField(it) == field(it) }
         }.getOrDefault(false)
         statuses["prior-dist"] = if (reportsPassed && candidateMatches) 0 else 1
     } else if (statuses["dist-prerequisite"] == null) {

@@ -23,13 +23,15 @@ jobs:
         run: bash .github/scripts/install-kotlin.sh
       - name: Verify provider bootstrap
         run: python3 .github/scripts/test_prepare_provider_jars.py
-      - name: Check out pinned sources for the reflection boundary
+      - name: Verify synthetic CI checkout and output boundaries
+        run: python3 -B scripts/test_ci_boundaries.py
+      - name: Check out complete pinned source inspection inputs
         run: >-
           python3 .github/scripts/checkout-ci-sources.py
           --manifest .github/ci-source-revisions.json
           --workspace "$GITHUB_WORKSPACE/.."
       - name: Compile and run Minecraft-free harness tests
-        run: ./test.main.kts run dev
+        run: ./test.main.kts dev
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4

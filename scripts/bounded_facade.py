@@ -83,8 +83,9 @@ def cleanup(process, known, grace=2.0, force=5.0):
 def output_path(path):
     path = Path(path).absolute()
     home = Path.home()
-    approved = [home / '.tmp', home / 'workspace_artifacts', home / 'better-content-modpack/build',
-                home / 'better-content-modpack/generated']
+    pack = Path(__file__).absolute().parent.parent
+    approved = [home / '.tmp', pack.parent / 'workspace_artifacts',
+                pack / 'build', pack / 'generated']
     if '..' in path.parts or not any(path.is_relative_to(root) for root in approved):
         raise ValueError('supervisor log must use an approved output root')
     if any(parent.is_symlink() for parent in [path, *path.parents]):

@@ -49,7 +49,7 @@ class RetirementAuditTest {
             }
             val good=root.resolve("production.zip");Files.write(good,nested("mods/native.jar",nested("META-INF/mods.toml","modId=\"native\"".toByteArray())))
             RetiredInventoryArtifactExclusion.validate(good)
-        }finally { root.toFile().deleteRecursively() }
+        } finally { /* Retain candidate-audit fixtures on success and failure. */ }
     }
     @Test fun diagnosticsAreSeparatedFromStorageWithoutRelaxingOrdinaryAudits() {
         val s=Files.readString(Path.of("src/test/kotlin/com/bettercontent/tests/RuntimeDiagnosticSupport.kt"))

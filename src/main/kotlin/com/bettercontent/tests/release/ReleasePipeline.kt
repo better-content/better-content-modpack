@@ -27,12 +27,14 @@ data class ActiveMod(
     val tasks: List<String>,
     val dependsOn: List<String> = emptyList(),
     val supportArtifacts: List<String> = emptyList(),
+    val verificationInputs: List<String> = emptyList(),
+    val buildInputs: List<String>? = null,
 )
 
 data class ActiveModManifest(val schema: String, val mods: List<ActiveMod>,
     val verificationInputs: List<String> = listOf("**"))
 data class BuiltMod(val definition: ActiveMod, val commit: String, val jar: Path, val sha256: String, val mode: String,
-    val supportHashes: Map<String, String> = emptyMap())
+    val supportHashes: Map<String, String> = emptyMap(), val buildId: String? = null)
 data class SourceUpdate(
     val repository: String,
     val artifact: String,
@@ -46,8 +48,15 @@ private const val SOURCE_METADATA_ENTRY = "META-INF/better-content-source.proper
 private const val SOURCE_METADATA_SCHEMA = "bc.custom_mod_source.v1"
 
 fun main(args: Array<String>) {
+    require(args.isNotEmpty()) { "release root required" }
+    val root = Path.of(args[0]).toAbsolutePath().normalize()
+    com.bettercontent.tests.RunnerMutex.withLock(root) { prepareRelease(args) }
+}
+
+private fun prepareRelease(args: Array<String>) {
     require(args.size == 4) { "usage: ReleasePipeline ROOT JOBS SKIP_TESTS FORCE_REBUILD" }
     val root = Path.of(args[0]).toAbsolutePath().normalize()
+    require(!System.getProperty("bc.gradle.home").isNullOrBlank()) { "resolved Gradle distribution identity is required" }
     val jobs = args[1].toInt()
     val skipTests = args[2].toBooleanStrict()
     val forceRebuild = args[3].toBooleanStrict()
@@ -127,11 +136,8 @@ fun main(args: Array<String>) {
     val verification = if (skipTests) null else VerificationSession(root, manifest.mods, runId, forceRebuild, sharedInputs = manifest.verificationInputs)
     try {
     val dependencyWarmup = root.resolve("build/release-dependency-warmup/$runId")
-    try {
-        runLogged(root, packageResolveCommand(root, dependencyWarmup), evidence.resolve("dependency-cache.log"))
-    } finally {
-        dependencyWarmup.toFile().deleteRecursively()
-    }
+    // Run-scoped dependency preparation is retained on success and failure alike.
+    runLogged(root, packageResolveCommand(root, dependencyWarmup), evidence.resolve("dependency-cache.log"))
 
     val built = mutableListOf<BuiltMod>()
     val failures = mutableListOf<String>()
@@ -152,7 +158,8 @@ fun main(args: Array<String>) {
                 verification?.requireConsumedStages(mod, consumed)
                 val item = if (verification != null && !mustBuild) verification.reusable(mod) ?:
                     build(root, workspace, evidence, staging, mod, update.copy(status = "same"), skipTests, false)
-                else build(root, workspace, evidence, staging, mod, update, skipTests, mustBuild)
+                else build(root, workspace, evidence, staging, mod, update, skipTests, mustBuild,
+                    if (verification != null && mustBuild) verification.reusableBuild(mod, consumed) else null)
                 verification?.requireConsumedStages(mod, consumed)
                 if (verification != null && !mustBuild) verification.requireReusable(item)
                 val reflection = bytecodeReflectionViolations(mod.repository,
@@ -231,6 +238,9 @@ fun main(args: Array<String>) {
         "force_rebuild" to forceRebuild,
         "verification_session" to verification?.id,
         "full_session_baseline" to verification?.fullBaseline,
+        "artifact_reuse" to "exact immutable bytes, source and build identity",
+        "verification_reuse" to "original provider verification IDs; current contracts revalidated",
+        "runtime_acceptance" to "pending; historical runtime verdicts are never imported",
         "runtime_input_sha256" to com.bettercontent.tests.runtimeInputIdentity(root),
         "candidates" to mapOf(
             "client" to candidates.client.toString(),
@@ -256,6 +266,7 @@ fun main(args: Array<String>) {
                 "sha256" to it.sha256,
                 "mode" to it.mode,
                 "verification_id" to verificationOrigins?.getValue(it.definition.repository),
+                "build_id" to (it.buildId ?: if (it.mode == "rebuilt") runId else null),
                 "support_hashes" to it.supportHashes,
             )
         },
@@ -277,6 +288,7 @@ internal fun build(
     sourceUpdate: SourceUpdate,
     skipTests: Boolean,
     forceRebuild: Boolean,
+    reusableBuild: BuiltMod? = null,
 ): BuiltMod {
     val repository = workspace.resolve("mod_source").resolve(mod.repository)
     val log = evidence.resolve("mod-${mod.repository}.log")
@@ -294,7 +306,17 @@ internal fun build(
     val initialSource = sourceIdentity(repository)
     val expectedCommit = sourceUpdate.localCommit
     val tasks = if (skipTests) listOf("stageRuntimeJar") else mod.tasks
-    val buildCommand = listOf(repository.resolve("gradlew").toString(), "--no-daemon", "clean") + tasks
+    val jar = repository.resolve("build/libs").resolve(mod.artifact)
+    if (reusableBuild != null) {
+        require(!skipTests && reusableBuild.commit == expectedCommit && reusableBuild.buildId != null) {
+            "build reuse requires exact source provenance and fresh verification"
+        }
+        requireSafeBuildOutput(repository, jar)
+        Files.createDirectories(jar.parent)
+        Files.copy(reusableBuild.jar, jar, StandardCopyOption.REPLACE_EXISTING)
+        require(Hashes.sha256(jar) == reusableBuild.sha256) { "restored build bytes changed" }
+    }
+    val buildCommand = providerVerificationCommand(repository, tasks, reusableBuild != null)
     withForgeCacheLock(workspace) {
         runLogged(repository, buildCommand, log, providerBuildEnvironment(staging))
     }
@@ -306,7 +328,6 @@ internal fun build(
             }
         }
     }
-    val jar = repository.resolve("build/libs").resolve(mod.artifact)
     require(Files.isRegularFile(jar)) { "${mod.repository} did not stage ${mod.artifact}" }
     require(jarDeclaresMod(jar, mod.modId)) { "${mod.artifact} does not declare ${mod.modId}" }
     Files.copy(jar, staged, StandardCopyOption.REPLACE_EXISTING)
@@ -314,9 +335,27 @@ internal fun build(
     require(commit == expectedCommit && sourceIdentity(repository) == initialSource) {
         "${mod.repository} source changed during verification; refusing later-HEAD annotation"
     }
-    annotateJar(staged, mod, expectedCommit)
-    return BuiltMod(mod, commit, staged, Hashes.sha256(staged), "rebuilt",
-        if (skipTests) emptyMap() else supportArtifactHashes(repository, mod))
+    if (readSourceCommit(staged, mod) != expectedCommit) annotateJar(staged, mod, expectedCommit)
+    val sha = Hashes.sha256(staged)
+    val support = if (skipTests) emptyMap() else supportArtifactHashes(repository, mod)
+    val retained = reusableBuild != null && sha == reusableBuild.sha256 && support == reusableBuild.supportHashes
+    return BuiltMod(mod, commit, staged, sha, if (retained) "build-reused-verified" else "rebuilt",
+        support, if (retained) reusableBuild!!.buildId else null)
+}
+
+internal fun providerVerificationCommand(repository: Path, tasks: List<String>, restoredBuild: Boolean): List<String> =
+    listOf(repository.resolve("gradlew").toString(), "--no-daemon") +
+        (if (restoredBuild) emptyList() else listOf("clean")) + tasks
+
+internal fun requireSafeBuildOutput(repository: Path, output: Path) {
+    val base = repository.toAbsolutePath().normalize()
+    var current = output.toAbsolutePath().normalize()
+    require(current.startsWith(base)) { "build output escaped source repository" }
+    while (current != base) {
+        require(!Files.isSymbolicLink(current)) { "build output contains a symlink" }
+        current = current.parent
+    }
+    require(!Files.isSymbolicLink(base)) { "source repository is a symlink" }
 }
 
 internal fun sourceUpdateStatus(localCommit: String, bundledCommit: String?): String = when {

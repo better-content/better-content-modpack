@@ -43,9 +43,15 @@ if (kind !in setOf("test", "release") || command.isEmpty()) usage()
 
 val stateRoot = System.getenv("BC_PACK_TEST_STATE_ROOT")?.takeIf(String::isNotBlank)?.let(Path::of)
     ?: Path.of(System.getProperty("user.home"), ".local/share/worklane/pack-tests")
+var component = stateRoot.toAbsolutePath().normalize().root
+for (part in stateRoot.toAbsolutePath().normalize()) {
+    component = component.resolve(part)
+    require(!Files.isSymbolicLink(component)) { "unsafe runner state path: $component" }
+}
 Files.createDirectories(stateRoot)
 val lockPath = stateRoot.resolve("runner.lock")
 val ownerPath = stateRoot.resolve("owner.json")
+require(!Files.isSymbolicLink(lockPath) && !Files.isSymbolicLink(ownerPath)) { "unsafe runner lock/owner path" }
 val inherited = System.getenv("BC_PACK_TEST_LOCK_TOKEN")?.takeIf(String::isNotBlank)
 
 @Volatile var childSupervisor: Process? = null
@@ -62,7 +68,9 @@ fun runChild(token: String): Int {
 }
 
 if (inherited != null) {
-    if (ownerToken(ownerPath) != inherited) {
+    val verified = superviseFacade(__FILE__.canonicalFile.parentFile,
+        listOf("python3", "-B", __FILE__.canonicalFile.parentFile.resolve("scripts/runner_lock.py").absolutePath), budgetSeconds = 30)
+    if (verified != 0 || ownerToken(ownerPath) != inherited) {
         System.err.println("pack-test lock token does not match the active owner: $ownerPath")
         exitProcess(75)
     }

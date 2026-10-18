@@ -1,32 +1,21 @@
 {
   "schema": "bc.active_custom_mods.v1",
   "verificationInputs": [
-    "gradle/**",
+    "gradle/reflection-allowlist.txt",
+    "gradle/wrapper/gradle-wrapper.properties",
+    "gradle/wrapper/gradle-wrapper.jar",
+    "gradlew",
     "build.gradle.kts",
     "settings.gradle.kts",
     "gradle.properties",
-    "docs/**",
-    "config/**",
-    "kubejs/**",
-    "datapacks/**",
-    "mods/*.pw.toml",
-    "src/main/kotlin/**",
-    "release.main.kts",
-    "test.main.kts",
-    "test-control.main.kts",
-    "scripts/prepare_dev_inputs.py",
-    "scripts/testing_session.py",
-    "scripts/bounded_facade.py",
-    "scripts/BoundedFacade.main.kts",
-    "pack-test-lock.main.kts",
-    "pack-test-queue.main.kts",
-    "package.sh",
-    "dist.sh",
-    ".github/ci-source-revisions.json"
+    "src/main/kotlin/com/bettercontent/tests/release/*.kt",
+    "src/main/kotlin/com/bettercontent/tests/BoundedCommand.kt",
+    "src/main/kotlin/com/bettercontent/tests/RunnerMutex.kt"
   ],
   "mods": [
     {
       "repository": "better-celestial-events",
+      "verificationInputs": ["kubejs/data/better_celestial_events/tags/**"],
       "modId": "better_celestial_events",
       "artifact": "better-celestial-events-0.1.0.jar",
       "tasks": [
@@ -71,6 +60,8 @@
     },
     {
       "repository": "better-spirit-commerce",
+      "verificationInputs": ["kubejs/data/malum/**", "mods/just-enough-effect-descriptions-jeed.pw.toml", "mods/jei.pw.toml"],
+      "buildInputs": ["kubejs/data/malum/**"],
       "modId": "better_spirit_commerce",
       "artifact": "better-spirit-commerce-1.0.1.jar",
       "tasks": [
@@ -86,6 +77,8 @@
     },
     {
       "repository": "better-compat-fixes",
+      "verificationInputs": ["mods/dynamictrees.pw.toml", "mods/configured.pw.toml"],
+      "buildInputs": [],
       "modId": "better_compat_fixes",
       "artifact": "better-compat-fixes-0.1.9.jar",
       "tasks": [
@@ -170,6 +163,8 @@
     },
     {
       "repository": "better-journal-inventory",
+      "verificationInputs": ["docs/inventory-parity.md"],
+      "buildInputs": [],
       "modId": "better_journal_inventory",
       "artifact": "better-journal-inventory-0.1.0.jar",
       "tasks": [
@@ -439,6 +434,8 @@
     },
     {
       "repository": "better-runtime-diagnostics",
+      "verificationInputs": ["mods/untamed-wilds-au-naturel.pw.toml", "mods/the-deep-void.pw.toml"],
+      "buildInputs": [],
       "modId": "better_runtime_diagnostics",
       "artifact": "better-runtime-diagnostics-0.1.0.jar",
       "supportArtifacts": ["build/libs/better-runtime-test-support.jar"],

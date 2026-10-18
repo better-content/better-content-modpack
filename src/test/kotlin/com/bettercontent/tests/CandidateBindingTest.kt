@@ -51,8 +51,22 @@ class CandidateBindingTest {
             val profile = f.root.resolve("server-config/production.properties")
             Files.createDirectories(profile.parent); Files.writeString(profile, "view-distance=99")
             assertThrows(IllegalArgumentException::class.java) { CandidateBinding.select(f.root, f.binding) }
-        } finally { f.workspace.toFile().deleteRecursively() }
+        } finally { println("retained binding fixture: ${f.workspace}") }
     }
+    @Test fun `binding and candidate ancestor symlinks are rejected`() {
+        val f = fixture()
+        try {
+            val alias = f.workspace.resolve("alias")
+            Files.createSymbolicLink(alias, f.workspace)
+            assertThrows(IllegalArgumentException::class.java) { CandidateBinding.select(f.root, alias.resolve("provenance.json")) }
+            val side = f.client.parent
+            val actual = side.resolveSibling("actual-client")
+            Files.move(side, actual)
+            Files.createSymbolicLink(side, actual)
+            assertThrows(IllegalArgumentException::class.java) { CandidateBinding.select(f.root, f.binding) }
+        } finally { println("retained binding fixture: ${f.workspace}") }
+    }
+
     @Test fun `source mutation or changed archive cannot authorize a retry`() {
         val f = fixture()
         try {
@@ -61,6 +75,6 @@ class CandidateBindingTest {
             Files.writeString(f.source.resolve("source.txt"), "authored source")
             Files.writeString(f.client, "changed archive")
             assertThrows(IllegalArgumentException::class.java) { CandidateBinding.select(f.root, f.binding) }
-        } finally { f.workspace.toFile().deleteRecursively() }
+        } finally { println("retained binding fixture: ${f.workspace}") }
     }
 }

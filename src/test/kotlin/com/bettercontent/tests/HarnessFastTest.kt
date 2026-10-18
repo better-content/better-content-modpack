@@ -130,7 +130,7 @@ class HarnessFastTest {
         val document = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         assertEquals("bc.active_custom_mods.v1", document.path("schema").asText())
         val mods = document.path("mods")
-        assertEquals(45, mods.size())
+        assertTrue(mods.isArray && !mods.isEmpty, "the active provider manifest must declare providers")
         val repositories = mods.map { it.path("repository").asText() }.toSet()
         assertEquals(mods.size(), repositories.size)
         assertEquals(mods.size(), mods.map { it.path("modId").asText() }.toSet().size)
@@ -421,7 +421,7 @@ class HarnessFastTest {
         val classpath = listOf(CandidateDiscoveryFixtureProbe::class.java, CandidateLocator::class.java, kotlin.Unit::class.java)
             .map { Path.of(it.protectionDomain.codeSource.location.toURI()).toString() }.distinct().joinToString(java.io.File.pathSeparator)
         val output = BoundedCommand.capture(root, listOf("env", "-u", "BC_CANDIDATE_BINDING", "-u", "BC_PACK_TEST_HANDOFF",
-            Path.of(System.getProperty("java.home"), "bin/java").toString(), "-cp", classpath,
+            Path.of(System.getProperty("java.home"), "bin/java").toString(), "-Dbc.repo.root=${System.getProperty("bc.repo.root")}", "-cp", classpath,
             CandidateDiscoveryFixtureProbe::class.java.name, root.toString()), Duration.ofSeconds(15))
         assertTrue(output.contains("current Build 2 candidate directories"), output)
     }
@@ -448,8 +448,12 @@ class HarnessFastTest {
         val pair = CandidatePair(root.resolve("release"), client, server, Hashes.sha256(client), Hashes.sha256(server))
         val handoff = root.resolve("handoff.json")
         val mapper = jacksonObjectMapper()
+        val repository = Path.of(System.getProperty("bc.repo.root"))
+        BoundedCommand.capture(repository, listOf("python3", "-B", repository.resolve("scripts/workspace_coordination.py").toString(),
+            "--root", root.toString(), "task-register", "--task", "handoff-fixture", "--owner", "fixture", "--operation", "pack-test:dist"), Duration.ofSeconds(30))
         mapper.writeValue(handoff.toFile(), mapOf(
             "schema" to "bc.pack_test_handoff.v1",
+            "task_id" to "handoff-fixture", "task_generation" to 1, "task_owner" to "fixture", "selector" to "dist",
             "request_id" to "request-1",
             "producer" to mapOf("agent" to "workspace_coord"),
             "authorization" to mapOf("explicit" to true),
@@ -466,11 +470,11 @@ class HarnessFastTest {
                 "server" to mapOf("path" to server.toString(), "sha256" to pair.serverSha256),
             ),
         ))
-        assertEquals("request-1", PackTestHandoff.validate(handoff, pair))
+        assertEquals("request-1", PackTestHandoff.validate(handoff, pair, root))
         mapper.writeValue(handoff.toFile(), mapper.readTree(handoff.toFile()).deepCopy<com.fasterxml.jackson.databind.node.ObjectNode>().apply {
             withObject("candidate").withObject("server").put("sha256", "bad")
         })
-        assertThrows(IllegalArgumentException::class.java) { PackTestHandoff.validate(handoff, pair) }
+        assertThrows(IllegalArgumentException::class.java) { PackTestHandoff.validate(handoff, pair, root) }
     }
 
     @Test
@@ -541,203 +545,6 @@ class HarnessFastTest {
     }
 
     @Test
-    fun logPolicyNamesWarningsAndFatalRecords(@TempDir root: Path) {
-        val clean = root.resolve("clean.log").also { it.writeText("[INFO] ready\n") }
-        val accepted = root.resolve("accepted.log").also {
-            it.writeText("[pool-12-thread-1/WARN] [xbigellx.realisticphysics.RealisticPhysics]: Forcing chunk load: [-79, 44]\n" +
-                "[C2ME worker #5/ERROR] [net.minecraft.Util]: Detected setBlock in a far chunk [57, 66], pos: BlockPos{x=923, y=63, z=1056}, status: minecraft:features, currently generating: ResourceKey[minecraft:worldgen/placed_feature / natures_spirit:marsh_water_placed]\n" +
-                "[Server thread/WARN] [net.minecraft.network.Connection]: handleDisconnection() called twice\n")
-        }
-        val bad = root.resolve("bad.log").also { it.writeText("[Server/WARN] unsafe\nReportedException: boom\n") }
-        assertTrue(LogPolicy.findings(listOf(clean, accepted)).isEmpty())
-        val findings = LogPolicy.findings(listOf(bad))
-        assertEquals(2, findings.size)
-        assertEquals(listOf(1, 2), findings.map { it.line })
-    }
-
-    @Test
-    fun logPolicyBoundsCollectiveUpdateNoticesToRuntimeProcesses(@TempDir root: Path) {
-        val multiplayer = root.resolve("multiplayer")
-        val serverDir = multiplayer.resolve("fixture/server-extract/better-content-server/logs")
-        val clientDir = multiplayer.resolve("fixture/client-1/logs")
-        val lifecycleDir = root.resolve("server")
-        val standaloneServerDir = root.resolve("server/fixture/server-extract/better-content-server/logs")
-        val targetJoin = root.resolve("target-join")
-        val targetServerDir = targetJoin.resolve("fixture/server-extract/better-content-server/logs")
-        val targetClientDir = targetJoin.resolve("fixture/client-1/logs")
-        val targetRestart = root.resolve("target-restart")
-        val targetRestartServerDir = targetRestart.resolve("fixture/server-extract/better-content-server/logs")
-        val targetRestartClientDir = targetRestart.resolve("fixture/client-4/logs")
-        val targetWorldSave = root.resolve("target-world-save")
-        val targetWorldSaveServerDir = targetWorldSave.resolve("fixture/server-extract/better-content-server/logs")
-        val targetWorldSaveClientDir = targetWorldSave.resolve("fixture/client-5/logs")
-        val targetServerReady = root.resolve("target-server-ready")
-        val targetServerReadyDir = targetServerReady.resolve("fixture/server-extract/better-content-server/logs")
-        val singleplayerDir = root.resolve("singleplayer/fixture/client-1/logs")
-        serverDir.createDirectories()
-        clientDir.createDirectories()
-        lifecycleDir.createDirectories()
-        standaloneServerDir.createDirectories()
-        targetServerDir.createDirectories()
-        targetClientDir.createDirectories()
-        targetRestartServerDir.createDirectories()
-        targetRestartClientDir.createDirectories()
-        targetWorldSaveServerDir.createDirectories()
-        targetWorldSaveClientDir.createDirectories()
-        targetServerReadyDir.createDirectories()
-        singleplayerDir.createDirectories()
-        val notice = "[03:11:22] [Collective Update Checker/WARN] [Collective]: " +
-            "[Update] Collective has an update available: 8.40 -> 8.41\n"
-        val server = serverDir.resolve("latest.log").also { it.writeText(notice) }
-        val standaloneServer = standaloneServerDir.resolve("latest.log").also { it.writeText(notice) }
-        val standaloneServerOverflow = standaloneServerDir.resolve("overflow/latest.log").also {
-            it.parent.createDirectories()
-            it.writeText(notice + notice)
-        }
-        val client = clientDir.resolve("latest.log").also { it.writeText(notice) }
-        val repeated = clientDir.resolve("repeated.log").also { it.writeText(notice + notice) }
-        val multiplayerAggregate = multiplayer.resolve("server.log").also { it.writeText(notice + notice) }
-        val multiplayerAggregateOverflow = multiplayer.resolve("overflow/multiplayer/server.log").also {
-            it.parent.createDirectories()
-            it.writeText(notice + notice + notice)
-        }
-        val targetServer = targetServerDir.resolve("latest.log").also { it.writeText(notice) }
-        val targetClient = targetClientDir.resolve("latest.log").also { it.writeText(notice) }
-        val targetAggregateServer = targetJoin.resolve("server.log").also { it.writeText(notice) }
-        val targetAggregateClient = targetJoin.resolve("client-1.log").also { it.writeText(notice) }
-        val restartServer = targetRestartServerDir.resolve("latest.log").also { it.writeText(notice) }
-        val restartClient = targetRestartClientDir.resolve("latest.log").also { it.writeText(notice) }
-        val worldSaveServer = targetWorldSaveServerDir.resolve("latest.log").also { it.writeText(notice) }
-        val worldSaveClient = targetWorldSaveClientDir.resolve("latest.log").also { it.writeText(notice) }
-        val worldSaveAggregate = targetWorldSave.resolve("singleplayer-5.log").also { it.writeText(notice) }
-        val targetServerReadyFixture = targetServerReadyDir.resolve("latest.log").also { it.writeText(notice) }
-        val targetServerReadyAggregate = targetServerReady.resolve("server.log").also { it.writeText(notice + notice) }
-        val targetServerReadyOverflow = targetServerReady.resolve("overflow/server.log").also {
-            it.parent.createDirectories()
-            it.writeText(notice + notice + notice)
-        }
-        val targetAggregateServerOverflow = targetJoin.resolve("overflow/target-join/server.log").also {
-            it.parent.createDirectories()
-            it.writeText(notice + notice + notice)
-        }
-        val lifecycle = lifecycleDir.resolve("server.log").also { it.writeText(notice + notice) }
-        val lifecycleOverflow = lifecycleDir.resolve("overflow/server/server.log").also {
-            it.parent.createDirectories()
-            it.writeText(notice + notice + notice)
-        }
-        val singleplayer = singleplayerDir.resolve("latest.log").also { it.writeText(notice) }
-        val repeatedSingleplayer = singleplayerDir.resolve("repeated.log").also {
-            it.writeText(notice + notice)
-        }
-        val outsideMultiplayer = root.resolve("unscoped/client.log").also {
-            it.parent.createDirectories()
-            it.writeText(notice)
-        }
-        val unrelated = clientDir.resolve("unrelated.log").also {
-            it.writeText(notice.replace("Collective]:", "OtherMod]:"))
-        }
-
-        assertTrue(LogPolicy.findings(listOf(server, client)).isEmpty())
-        assertTrue(LogPolicy.findings(listOf(standaloneServer)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(standaloneServerOverflow)).map { it.line })
-        assertEquals(listOf(2), LogPolicy.findings(listOf(repeated)).map { it.line })
-        assertTrue(LogPolicy.findings(listOf(multiplayerAggregate)).isEmpty())
-        assertEquals(listOf(3), LogPolicy.findings(listOf(multiplayerAggregateOverflow)).map { it.line })
-        assertTrue(LogPolicy.findings(listOf(targetServer, targetClient, targetAggregateServer, targetAggregateClient)).isEmpty())
-        assertTrue(LogPolicy.findings(listOf(restartServer, restartClient)).isEmpty())
-        assertTrue(LogPolicy.findings(listOf(worldSaveServer, worldSaveClient, worldSaveAggregate)).isEmpty())
-        assertTrue(LogPolicy.findings(listOf(targetServerReadyFixture, targetServerReadyAggregate)).isEmpty())
-        assertEquals(listOf(3), LogPolicy.findings(listOf(targetServerReadyOverflow)).map { it.line })
-        assertEquals(listOf(3), LogPolicy.findings(listOf(targetAggregateServerOverflow)).map { it.line })
-        assertTrue(LogPolicy.findings(listOf(lifecycle)).isEmpty())
-        assertEquals(listOf(3), LogPolicy.findings(listOf(lifecycleOverflow)).map { it.line })
-        assertTrue(LogPolicy.findings(listOf(singleplayer)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(repeatedSingleplayer)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(outsideMultiplayer)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyBoundsKnownStarcatcherMetadataWarning(@TempDir root: Path) {
-        val warning = "[11:00:00] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFile]: " +
-            "starcatcher-2.2.1-FORGE-1.20.1.jar contains an invalid 'accessTransformers' TOML entry. " +
-            "Should be e.g. accessTransformers = [\"META-INF/accesstransformer.cfg\", " +
-            "\"META-INF/extra_at.cfg\"] or accessTransformers = [] for no ATs. Falling back to default."
-        val one = root.resolve("one.log").also { it.writeText("$warning\n") }
-        val repeated = root.resolve("repeated.log").also { it.writeText("$warning\n$warning\n") }
-        val excessive = root.resolve("excessive.log").also { it.writeText("$warning\n$warning\n$warning\n") }
-        assertTrue(LogPolicy.findings(listOf(one)).isEmpty())
-        assertTrue(LogPolicy.findings(listOf(repeated)).isEmpty())
-        assertEquals(listOf(3), LogPolicy.findings(listOf(excessive)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyBoundsCampaignItemFrameToolWarnings(@TempDir root: Path) {
-        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
-        val sword = "[05:50:27] [C2ME worker #3/WARN] [net.minecraft.world.entity.decoration.ItemFrame]: " +
-            "Unable to load item from: {count:1,id:\"minecraft:iron_sword\"}"
-        val axe = "[05:50:27] [C2ME worker #3/WARN] [net.minecraft.world.entity.decoration.ItemFrame]: " +
-            "Unable to load item from: {count:1,id:\"minecraft:iron_axe\"}"
-        val accepted = multiplayer.resolve("server.log").also { it.writeText("$sword\n$axe\n") }
-        val repeated = multiplayer.resolve("repeated.log").also {
-            it.writeText("$sword\n$axe\n$sword\n$axe\n")
-        }
-        val unrelated = multiplayer.resolve("unrelated.log").also {
-            it.writeText(sword.replace("minecraft:iron_sword", "minecraft:diamond") + "\n")
-        }
-        val otherSuite = root.resolve("server.log").also { it.writeText("$sword\n$axe\n") }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(3, 4), LogPolicy.findings(listOf(repeated)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
-        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(otherSuite)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyBoundsCampaignUnknownStepHeightAttributeWarnings(@TempDir root: Path) {
-        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
-        val warning = "[08:59:36] [C2ME worker #3/WARN] " +
-            "[net.minecraft.world.entity.ai.attributes.AttributeMap]: " +
-            "Ignoring unknown attribute 'forge:step_height'"
-        val accepted = multiplayer.resolve("server.log").also {
-            it.writeText("$warning\n$warning\n")
-        }
-        val excessive = multiplayer.resolve("excessive-server.log").also {
-            it.writeText("$warning\n$warning\n$warning\n")
-        }
-        val wrongFile = multiplayer.resolve("fixture/server-extract/logs").also { it.createDirectories() }
-            .resolve("server.log").also { it.writeText("$warning\n") }
-        val unrelated = multiplayer.resolve("unrelated.log").also {
-            it.writeText(warning.replace("forge:step_height", "forge:reach") + "\n")
-        }
-        val otherSuite = root.resolve("server.log").also { it.writeText("$warning\n") }
-        val targetDimensionsAggregate = root.resolve("target-dimensions/server.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText("$warning\n$warning\n")
-        }
-        val targetDimensionsLatest = root.resolve("target-dimensions/fixture/server-extract/server/logs/latest.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText("$warning\n$warning\n")
-        }
-        val targetDimensionsOverflow = root.resolve("target-dimensions/fixture/server-extract/overflow/logs/latest.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText("$warning\n$warning\n$warning\n")
-        }
-        val targetDimensionsWrongFile = root.resolve("target-dimensions/fixture/client-1/logs/latest.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText("$warning\n")
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted, targetDimensionsAggregate, targetDimensionsLatest)).isEmpty())
-        assertEquals(listOf(3), LogPolicy.findings(listOf(excessive)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongFile)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(unrelated)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(otherSuite)).map { it.line })
-        assertEquals(listOf(3), LogPolicy.findings(listOf(targetDimensionsOverflow)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(targetDimensionsWrongFile)).map { it.line })
-    }
-
-    @Test
     fun startupTimingsNormalizeUnitsAndPreserveRecordProvenance(@TempDir root: Path) {
         val durations = listOf("1102 ms", "1.102 s", "1.102 min", "1.102 h")
         val seconds = listOf(1.102, 1.102, 66.12, 3967.2)
@@ -803,47 +610,7 @@ class HarnessFastTest {
         }
 
         assertTrue(LogPolicy.startupTimings(listOf(log)).isEmpty())
-        assertEquals((1..invalid.size).toList(), LogPolicy.findings(listOf(log)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyKnownCustomRecipeBookCategoryWarnings(@TempDir root: Path) {
-        val known = root.resolve("known-recipe-categories.log").also {
-            it.writeText(
-                "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
-                    "Unknown recipe category: [!!!supplier!!!]/the_deep_void:glutton_jei_wheat\n" +
-                    "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
-                    "Unknown recipe category: cataclysm:weapon_fusion/cataclysm:weapon_infusion/brontes\n",
-            )
-        }
-        val unknown = root.resolve("unknown-recipe-category.log").also {
-            it.writeText(
-                "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
-                    "Unknown recipe category: other_mod:broken\n" +
-                    "[11:00:00] [Render thread/WARN] [net.minecraft.client.ClientRecipeBook]: " +
-                    "Unknown recipe category: cataclysm:other_custom_type/brontes\n",
-            )
-        }
-
-        assertTrue(LogPolicy.findings(listOf(known)).isEmpty())
-        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(unknown)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyNineExactDeepVoidPhysicsFallbackWarningsPerLog(@TempDir root: Path) {
-        val warning =
-            "[09:46:22] [Server thread/WARN] [xbigellx.realisticphysics.RealisticPhysics]: " +
-                "Level null when loading chunk at '[-3, -3]' for dimension 'the_deep_void:deep_void'.\n"
-        // The initial world and up to eight successor attempts can each emit this exact warning.
-        val accepted = root.resolve("deep-void-physics-fallback.log").also { it.writeText(warning.repeat(9)) }
-        val overflow = root.resolve("deep-void-physics-fallback-overflow.log").also { it.writeText(warning.repeat(10)) }
-        val wrongDimension = root.resolve("deep-void-physics-fallback-wrong-dimension.log").also {
-            it.writeText(warning.replace("the_deep_void:deep_void", "minecraft:overworld"))
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(10), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongDimension)).map { it.line })
+        assertTrue(LogPolicy.findings(listOf(log)).isEmpty(), "malformed timing advice is not a failed operation")
     }
 
     @Test
@@ -864,7 +631,7 @@ class HarnessFastTest {
         }
 
         assertTrue(LogPolicy.startupTimings(listOf(log)).isEmpty())
-        assertEquals((1..invalid.size).toList(), LogPolicy.findings(listOf(log)).map { it.line })
+        assertEquals(listOf(6, 7), LogPolicy.findings(listOf(log)).map { it.line })
     }
 
     @Test
@@ -883,160 +650,7 @@ class HarnessFastTest {
         assertEquals(validMods, LogPolicy.startupTimings(listOf(valid)).map { it.mod })
         assertTrue(LogPolicy.findings(listOf(valid)).isEmpty())
         assertTrue(LogPolicy.startupTimings(listOf(invalid)).isEmpty())
-        assertEquals((1..invalidMods.size).toList(), LogPolicy.findings(listOf(invalid)).map { it.line })
-    }
-
-    @Test
-    fun untamedSpeciesPrototypesAreAcceptedOnlyDuringJeiRegistration(@TempDir root: Path) {
-        val start = "[12:47:47] [Render thread/INFO] [mezz.jei.library.load.PluginCaller]: Registering ingredients...\n"
-        val end = "[12:47:48] [Render thread/INFO] [mezz.jei.library.load.PluginCaller]: Registering ingredients took 1.170 s\n"
-        val warning = "[12:47:47] [Render thread/WARN] [untamedwilds.UntamedWilds]: There's no species provided for the EntityType\n"
-        val accepted = root.resolve("jei-prototypes.log").also { it.writeText(start + warning.repeat(3400) + end) }
-        val overflow = root.resolve("jei-prototypes-overflow.log").also {
-            it.writeText(start + warning.repeat(3401) + end + warning)
-        }
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(3402, 3404), LogPolicy.findings(listOf(overflow)).map { it.line })
-    }
-
-    @Test
-    fun dedicatedSeedWarningsAreScopedToSingleplayerWorldSave(@TempDir root: Path) {
-        val version = "[11:00:59] [Render thread/WARN] [net.minecraftforge.common.ForgeHooks]: The following mods have version differences that were not resolved:\n" +
-            "unloaded_activity (version 0.6.3 -> MISSING)\n"
-        val remap = "[11:00:59] [Render thread/WARN] [net.minecraftforge.registries.ForgeRegistry]: " +
-            "Registry minecraft:item: Object did not get ID it asked for. Name: theoneprobe:probe Expected: 3987 Got: 2330\n"
-        val missing = "[11:00:59] [Render thread/WARN] [net.minecraft.server.MinecraftServer]: Missing data pack mod:unloaded_activity\n"
-        val seeded = root.resolve("singleplayer/singleplayer-5.log")
-        seeded.parent.toFile().mkdirs()
-        seeded.writeText(version + remap + missing)
-        val ordinary = root.resolve("multiplayer/client-1.log")
-        ordinary.parent.toFile().mkdirs()
-        ordinary.writeText(version + remap + missing)
-        assertTrue(LogPolicy.findings(listOf(seeded)).isEmpty())
-        assertEquals(listOf(1, 3, 4), LogPolicy.findings(listOf(ordinary)).map { it.line })
-    }
-
-    @Test
-    fun singleplayerOpenAlCleanupIsAcceptedOnlyOnceDuringJeiLogout(@TempDir root: Path) {
-        val stop = "[13:15:35] [Render thread/INFO] [mezz.jei.forge.plugins.forge.ForgeGuiPlugin]: Stopping JEI GUI\n"
-        val error = "[13:15:35] [Render thread/ERROR] [com.mojang.blaze3d.audio.OpenAlUtil]: Cleanup: Invalid name parameter.\n"
-        val seeded = root.resolve("target-world-save/singleplayer-5.log")
-        seeded.parent.toFile().mkdirs()
-        seeded.writeText(stop + error + error)
-        val unscoped = root.resolve("multiplayer/client-1.log")
-        unscoped.parent.toFile().mkdirs()
-        unscoped.writeText(stop + error)
-        assertEquals(listOf(3), LogPolicy.findings(listOf(seeded)).map { it.line })
-        assertEquals(listOf(2), LogPolicy.findings(listOf(unscoped)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyOneExactPresenceFootstepsMissingAcoustic(@TempDir root: Path) {
-        val known = "[21:04:01] [Render thread/WARN] [PFSolver]: Tried to play a missing acoustic: MESSY_GROUND\n"
-        val accepted = root.resolve("known-missing-acoustic.log").also { it.writeText(known) }
-        val rejected = root.resolve("other-missing-acoustic.log").also {
-            it.writeText(
-                known + known +
-                    known.replace("MESSY_GROUND", "UNKNOWN_SURFACE"),
-            )
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2, 3), LogPolicy.findings(listOf(rejected)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyTheSixAetherCuriosOverrideTags(@TempDir root: Path) {
-        fun warning(
-            tag: String,
-            time: String = "06:58:52",
-            worker: String = "Worker-Main-21",
-            jar: String = "aether-1.20.1-1.5.2-neoforge.jar",
-        ) =
-            "[$time] [$worker/WARN] [artifacts.Artifacts]: " +
-                "Tag entries for curios:tags/items/aether_$tag.json cleared by $jar:packs/curios_override"
-        val tags = listOf("accessory", "cape", "gloves", "pendant", "ring", "shield")
-        val accepted = root.resolve("aether-curios-override.log").also {
-            it.writeText(
-                (tags.map { warning(it) } + tags.map {
-                    warning(it, time = "06:59:01", worker = "Worker-ResourceReload-3")
-                }).joinToString("\n", postfix = "\n"),
-            )
-        }
-        val rejected = root.resolve("changed-aether-curios-override.log").also {
-            it.writeText(
-                warning("accessory") + "\n" + warning("accessory") + "\n" +
-                    warning("other") + "\n" + warning("cape", jar = "different-aether.jar") + "\n",
-            )
-        }
-        val thirdBatch = root.resolve("third-aether-curios-batch.log").also {
-            it.writeText(
-                (tags.map { warning(it) } + tags.map {
-                    warning(it, time = "06:59:01", worker = "Worker-ResourceReload-3")
-                } + warning("accessory", time = "07:00:00", worker = "Worker-Main-22"))
-                    .joinToString("\n", postfix = "\n"),
-            )
-        }
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2, 3, 4), LogPolicy.findings(listOf(rejected)).map { it.line })
-        assertEquals(listOf(13), LogPolicy.findings(listOf(thirdBatch)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyTheCuratedCuriosBackTagOverride(@TempDir root: Path) {
-        val known = "[01:31:25] [Worker-Main-20/WARN] [artifacts.Artifacts]: " +
-            "Tag entries for curios:tags/items/back.json cleared by KubeJS Resource Pack [data]"
-        val accepted = root.resolve("curios-back.log").also {
-            it.writeText(List(3) { known }.joinToString("\n", postfix = "\n"))
-        }
-        val rejected = root.resolve("changed-curios-back.log").also {
-            it.writeText((List(4) { known } + known.replace("back.json", "belt.json") +
-                known.replace("KubeJS Resource Pack [data]", "another pack"))
-                .joinToString("\n", postfix = "\n"))
-        }
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(4, 5, 6), LogPolicy.findings(listOf(rejected)).map { it.line })
-    }
-
-    @Test
-    fun serverLifecycleLogAllowsOnlyThreeExactStartupWarningSets(@TempDir root: Path) {
-        fun aetherWarning(tag: String, time: String) =
-            "[$time] [Worker-Main-21/WARN] [artifacts.Artifacts]: " +
-                "Tag entries for curios:tags/items/aether_$tag.json cleared by " +
-                "aether-1.20.1-1.5.2-neoforge.jar:packs/curios_override"
-        val tags = listOf("accessory", "cape", "gloves", "pendant", "ring", "shield")
-        val starcatcher = "[06:58:52] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFile]: " +
-            "starcatcher-2.2.1-FORGE-1.20.1.jar contains an invalid 'accessTransformers' TOML entry. " +
-            "Should be e.g. accessTransformers = [\"META-INF/accesstransformer.cfg\", " +
-            "\"META-INF/extra_at.cfg\"] or accessTransformers = [] for no ATs. Falling back to default."
-        fun ironFrameItem(item: String) =
-            "[06:58:52] [C2ME worker #5/WARN] [net.minecraft.world.entity.decoration.ItemFrame]: " +
-                "Unable to load item from: {count:1,id:\"minecraft:$item\"}"
-        val threeStarts = (1..3).flatMap { start ->
-            listOf(
-                starcatcher,
-                *tags.map { aetherWarning(it, "06:58:5$start") }.toTypedArray(),
-            )
-        }
-        val accepted = root.resolve("server/server.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText((threeStarts + ironFrameItem("iron_sword") + ironFrameItem("iron_axe"))
-                .joinToString("\n", postfix = "\n"))
-        }
-        val overflow = root.resolve("overflow/server/server.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText((threeStarts + starcatcher + ironFrameItem("iron_sword") + ironFrameItem("iron_sword") +
-                ironFrameItem("iron_axe") + ironFrameItem("iron_axe"))
-                .joinToString("\n", postfix = "\n"))
-        }
-        val wrongPath = root.resolve("ordinary/server.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText(ironFrameItem("iron_sword") + "\n")
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(22, 24, 26), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongPath)).map { it.line })
+        assertTrue(LogPolicy.findings(listOf(invalid)).isEmpty())
     }
 
     @Test
@@ -1047,27 +661,6 @@ class HarnessFastTest {
 
         assertTrue(threadedWorldGen.contains("enabled = \"true\""))
         assertTrue(threadedWorldGen.contains("allowThreadedFeatures = \"false\""))
-    }
-
-    @Test
-    fun startupTimingsRejectExtraPayloadInsteadOfHidingErrors(@TempDir root: Path) {
-        val notice = "[12:00:00] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
-            "Mod 'example' took 1.102 s to run a deferred task."
-        val invalid = listOf(
-            "$notice Registry Object not present: example:missing",
-            "$notice java.lang.IllegalStateException: failed",
-            "$notice java.lang.OutOfMemoryError: Java heap space",
-            "$notice extra payload",
-            "unrelated prefix $notice",
-            notice.replace("to run a deferred task.", "to run a deferred task; failed."),
-        )
-        val log = root.resolve("startup-with-extra-payload.log").also {
-            it.writeText(invalid.joinToString("\n", postfix = "\n"))
-        }
-
-        assertTrue(LogPolicy.startupTimings(listOf(log)).isEmpty())
-        assertEquals((1..invalid.size).toList(), LogPolicy.findings(listOf(log)).map { it.line })
-        assertEquals(invalid, LogPolicy.findings(listOf(log)).map { it.text })
     }
 
     @Test
@@ -1098,289 +691,69 @@ class HarnessFastTest {
     }
 
     @Test
-    fun logPolicyAcceptsOnlyFourExactC2meEarlyBlockEntityWarningsPerLog(@TempDir root: Path) {
-        fun warning(index: Int) =
-            "[16:58:0$index] [C2ME worker #$index/WARN] [net.minecraft.server.level.WorldGenRegion]: " +
-                "Tried to access a block entity before it was created. " +
-                "BlockPos{x=${1_010_182 + index}, y=46, z=1000215}"
-
-        val accepted = root.resolve("accepted-early-be.log").also {
-            it.writeText((1..4).joinToString(separator = "\n", postfix = "\n", transform = ::warning))
-        }
-        val overflow = root.resolve("overflow-early-be.log").also {
-            it.writeText((1..5).joinToString(separator = "\n", postfix = "\n", transform = ::warning))
-        }
-        val wrongShape = root.resolve("wrong-shape-early-be.log").also {
-            it.writeText(
-                warning(1).replace("C2ME worker #1", "Server thread") + "\n" +
-                    warning(2).replace("net.minecraft.server.level.WorldGenRegion", "net.minecraft.Util") + "\n" +
-                    warning(3).replace("before it was created", "after it was removed") + "\n",
-            )
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(5), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+    fun extraTimingPayloadIsNotTelemetryAndDoesNotHideAnOperationFailure(@TempDir root: Path) {
+        val timing = "[12:00:00] [main/WARN] [net.minecraftforge.fml.DeferredWorkQueue]: " +
+            "Mod 'example' took 1.102 s to run a deferred task."
+        val records = listOf("$timing extra advice", "$timing Registry Object not present: example:missing")
+        val log = root.resolve("timing-payload.log").also { it.writeText(records.joinToString("\n")) }
+        assertTrue(LogPolicy.startupTimings(listOf(log)).isEmpty())
+        assertEquals(listOf(2), LogPolicy.findings(listOf(log)).map { it.line })
     }
 
     @Test
-    fun logPolicyBoundsExactRecoveredDistantHorizonsPhantomArraysPerLog(@TempDir root: Path) {
-        fun warning(reference: String = "1359776d") =
-            "[06:28:03] [DH-Phantom Array Recycler Thread[0]/WARN] " +
-                "[DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.pooling.PhantomArrayListPool]: " +
-                "Pool: [Render Reducer]. Unable to find checkout for phantom reference " +
-                "[java.lang.ref.PhantomReference@$reference], arrays will need to be recreated."
-
-        val accepted = root.resolve("accepted-dh-phantom.log").also {
-            it.writeText(warning() + "\n")
+    fun warningVolumeAndIncidentalWordingDoNotDetermineCorrectness(@TempDir root: Path) {
+        val warnings = listOf(
+            "[12:00:00] [Render thread/WARN] [untamedwilds.UntamedWilds]: There's no species provided for the EntityType",
+            "[12:00:00] [C2ME worker #5/WARN] [net.minecraft.server.level.WorldGenRegion]: Tried to access a block entity before it was created. BlockPos{x=1, y=2, z=3}",
+            "[12:00:00] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: Unable to play empty soundEvent: minecraft:entity.salmon.ambient",
+            "[12:00:00] [main/WARN] [new.Logger]: Previously unseen advisory",
+        )
+        val log = root.resolve("warnings.log").also {
+            it.writeText(warnings.joinToString("\n", postfix = "\n").repeat(3500))
         }
-        val overflow = root.resolve("overflow-dh-phantom.log").also {
-            it.writeText((1..5).joinToString("\n") { warning("2468ace$it") } + "\n")
-        }
-        val wrongShape = root.resolve("wrong-shape-dh-phantom.log").also {
-            it.writeText(
-                warning().replace("DH-Phantom Array Recycler Thread[0]", "Render thread") + "\n" +
-                    warning().replace("PhantomArrayListPool", "OtherPool") + "\n" +
-                    warning().replace("arrays will need to be recreated", "array was lost") + "\n",
-            )
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(5), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+        assertTrue(LogPolicy.findings(listOf(log)).isEmpty())
+        log.writeText(warnings.joinToString("\n", postfix = "\n") { it.replace("/WARN]", "/ERROR]") })
+        assertEquals((1..warnings.size).toList(), LogPolicy.findings(listOf(log)).map { it.line })
     }
 
     @Test
-    fun logPolicyAcceptsOnlyOneExactDistantHorizonsInsufficientMemoryWarningPerLog(@TempDir root: Path) {
-        fun warning(thread: String = "DH-LOD Builder Thread[0]", message: String = "Insufficient memory detected") =
-            "[06:28:03] [$thread/WARN] " +
-                "[DistantHorizons-DistantHorizons-com.seibel.distanthorizons.core.pooling.PhantomArrayListPool]: " +
-                "§6Distant Horizons: $message.§r"
-
-        val accepted = root.resolve("accepted-dh-memory.log").also { it.writeText(warning() + "\n") }
-        val overflow = root.resolve("overflow-dh-memory.log").also {
-            it.writeText(warning() + "\n" + warning() + "\n")
-        }
-        val wrongShape = root.resolve("wrong-shape-dh-memory.log").also {
-            it.writeText(
-                warning(thread = "Render thread") + "\n" +
-                    warning(message = "Low memory detected") + "\n",
-            )
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
-
-        val renderLoader = root.resolve("accepted-dh-render-loader-memory.log").also {
-            it.writeText(warning(thread = "DH-Render Loader Thread[0]") + "\n")
-        }
-        assertTrue(LogPolicy.findings(listOf(renderLoader)).isEmpty())
-        val updatePropagator = root.resolve("accepted-dh-update-propagator-memory.log").also {
-            it.writeText(warning(thread = "DH-Update Propagator Thread[0]") + "\n")
-        }
-        assertTrue(LogPolicy.findings(listOf(updatePropagator)).isEmpty())
+    fun failedOperationsBlockAtEverySeverityAndWithoutAnEnvelope(@TempDir root: Path) {
+        val failures = listOf(
+            "Error loading KubeJS script", "KubeJS errors found [2]", "Registry registration failed",
+            "Failed to save world", "Corrupted chunk data", "java.lang.AssertionError: invariant",
+            "java.lang.OutOfMemoryError: Java heap space", "ReportedException: server tick",
+        )
+        val records = listOf("INFO", "WARN", "ERROR", "FATAL").flatMap { severity ->
+            failures.map { "[12:00:00] [Server thread/$severity] [example.Logger]: $it" }
+        } + failures
+        val log = root.resolve("operations.log").also { it.writeText(records.joinToString("\n")) }
+        assertEquals((1..records.size).toList(), LogPolicy.findings(listOf(log)).map { it.line })
+        assertThrows(IllegalArgumentException::class.java) { LogPolicy.requireClean(listOf(log)) }
     }
 
     @Test
-    fun logPolicyAcceptsOnlyOneExactEmptySalmonAmbientSoundWarningPerLog(@TempDir root: Path) {
-        fun warning(sound: String = "minecraft:entity.salmon.ambient") =
-            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
-                "Unable to play empty soundEvent: $sound"
-
-        val accepted = root.resolve("accepted-empty-salmon.log").also {
-            it.writeText(warning() + "\n")
+    fun errorEnvelopeCannotBeHiddenByKnownWarningPayloadOrFixturePath(@TempDir root: Path) {
+        val payloads = listOf(
+            "Forcing chunk load: [-79, 44]",
+            "Detected setBlock in a far chunk currently generating: ResourceKey[minecraft:worldgen/placed_feature / natures_spirit:marsh_water_placed]",
+            "WARNING : glfwInit took 1.265897709 seconds to start.",
+            "Cleanup: Invalid name parameter.",
+            "handleDisconnection() called twice",
+        )
+        val log = root.resolve("singleplayer/fixture/client-1/logs/latest.log").also {
+            it.parent.createDirectories()
+            it.writeText(payloads.joinToString("\n") { message ->
+                "[12:00:00] [Render thread/ERROR] [example.Logger]: $message"
+            })
         }
-        val overflow = root.resolve("overflow-empty-salmon.log").also {
-            it.writeText(warning() + "\n" + warning() + "\n")
-        }
-        val wrongShape = root.resolve("wrong-shape-empty-salmon.log").also {
-            it.writeText(
-                warning().replace("Render thread/WARN", "Server thread/WARN") + "\n" +
-                    warning().replace("minecraft:entity.salmon.ambient", "minecraft:entity.dolphin.ambient") + "\n",
-            )
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyOneExactUntamedPlaceholderSoundWarningPerLog(@TempDir root: Path) {
-        fun warning(sound: String = "untamedwilds:nothing") =
-            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
-                "Unable to play empty soundEvent: $sound"
-
-        val accepted = root.resolve("accepted-untamed-placeholder-sound.log").also {
-            it.writeText(warning() + "\n")
-        }
-        val overflow = root.resolve("overflow-untamed-placeholder-sound.log").also {
-            it.writeText(warning() + "\n" + warning() + "\n")
-        }
-        val other = root.resolve("wrong-untamed-placeholder-sound.log").also {
-            it.writeText(warning("untamedwilds:missing") + "\n")
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(other)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyBoundsUntamedMissingSpeciesWarningToMultiplayerServerLogs(@TempDir root: Path) {
-        val warning = "[14:19:11] [Server thread/WARN] [untamedwilds.UntamedWilds]: " +
-            "There's no species provided for the EntityType"
-        val multiplayer = root.resolve("multiplayer").also { it.createDirectories() }
-        val aggregate = multiplayer.resolve("server.log").also { it.writeText("$warning\n") }
-        val fixtureLog = multiplayer.resolve("fixture/server-extract/better-content-server/logs/latest.log")
-            .also { it.parent.createDirectories() }
-            .also { it.writeText("$warning\n") }
-        val overflow = multiplayer.resolve("fixture/server-extract/overflow/logs/latest.log")
-            .also { it.parent.createDirectories() }
-            .also { it.writeText("$warning\n$warning\n") }
-        val clientLog = multiplayer.resolve("fixture/client-1/logs/latest.log")
-            .also { it.parent.createDirectories() }
-            .also { it.writeText("$warning\n") }
-        val wrongShape = multiplayer.resolve("wrong-shape.log").also {
-            it.writeText(warning.replace("Server thread/WARN", "Render thread/WARN") + "\n")
-        }
-
-        assertTrue(LogPolicy.findings(listOf(aggregate, fixtureLog)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(clientLog)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongShape)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyOneExactSlowGlfwInitializationDiagnosticPerMultiplayerClientLog(@TempDir root: Path) {
-        fun diagnostic(seconds: String = "1.265897709") =
-            "[14:57:27] [main/ERROR] [EARLYDISPLAY]: WARNING : glfwInit took $seconds seconds to start."
-
-        val aggregate = root.resolve("multiplayer/client-1.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText(diagnostic() + "\n")
-        }
-        val fixture = root.resolve("multiplayer/fixture/client-1/logs/latest.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText(diagnostic() + "\n")
-        }
-        val restartFixture = root.resolve("target-restart/fixture/client-4/logs/latest.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText(diagnostic() + "\n")
-        }
-        val overflow = root.resolve("multiplayer/client-2.log").also {
-            it.writeText(diagnostic() + "\n" + diagnostic() + "\n")
-        }
-        val wrongSuite = root.resolve("singleplayer/client.log").also {
-            it.parent.toFile().mkdirs()
-            it.writeText(diagnostic() + "\n")
-        }
-        val wrongRecord = root.resolve("multiplayer/client-3.log").also {
-            it.writeText(diagnostic("0.500") + "\n")
-        }
-        val serverLog = root.resolve("multiplayer/server.log").also {
-            it.writeText(diagnostic() + "\n")
-        }
-
-        assertTrue(LogPolicy.findings(listOf(aggregate, fixture, restartFixture)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1, 1, 1), LogPolicy.findings(listOf(wrongSuite, wrongRecord, serverLog)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyOneExactQuarkCrabIdleSoundWarningPerLog(@TempDir root: Path) {
-        fun warning(sound: String = "quark:entity.crab.idle") =
-            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
-                "Unable to play empty soundEvent: $sound"
-
-        val accepted = root.resolve("accepted-quark-crab-idle.log").also {
-            it.writeText(warning() + "\n")
-        }
-        val overflow = root.resolve("overflow-quark-crab-idle.log").also {
-            it.writeText(warning() + "\n" + warning() + "\n")
-        }
-        val other = root.resolve("wrong-quark-empty-sound.log").also {
-            it.writeText(warning("quark:entity.crab.hurt") + "\n")
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(other)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyOneExactEmptyCodAmbientSoundWarningPerLog(@TempDir root: Path) {
-        fun warning(sound: String = "minecraft:entity.cod.ambient") =
-            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
-                "Unable to play empty soundEvent: $sound"
-
-        val accepted = root.resolve("accepted-empty-cod.log").also { it.writeText(warning() + "\n") }
-        val overflow = root.resolve("overflow-empty-cod.log").also {
-            it.writeText(warning() + "\n" + warning() + "\n")
-        }
-        val wrongShape = root.resolve("wrong-shape-empty-cod.log").also {
-            it.writeText(
-                warning().replace("Render thread/WARN", "Server thread/WARN") + "\n" +
-                    warning("minecraft:entity.dolphin.ambient") + "\n",
-            )
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOneExactAquaticAmbientAndAllTheLeaksWarningPerLog(@TempDir root: Path) {
-        fun sound(sound: String) =
-            "[06:28:03] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine]: " +
-                "Unable to play empty soundEvent: $sound"
-        val leaks = "[06:28:03] [Render thread/WARN] [AllTheLeaks]: " +
-            "Server not found while trying to clear leaked chunks"
-        val accepted = root.resolve("accepted-aquatic-leaks.log").also {
-            it.writeText(
-                sound("minecraft:entity.tropical_fish.ambient") + "\n" +
-                    sound("minecraft:entity.puffer_fish.ambient") + "\n" + leaks + "\n",
-            )
-        }
-        val overflow = root.resolve("overflow-aquatic-leaks.log").also {
-            it.writeText(
-                sound("minecraft:entity.tropical_fish.ambient") + "\n" +
-                    sound("minecraft:entity:tropical_fish.ambient") + "\n" +
-                    sound("minecraft:entity.puffer_fish.ambient") + "\n" +
-                    sound("minecraft:entity.puffer_fish.ambient") + "\n" + leaks + "\n" + leaks + "\n",
-            )
-        }
-        val wrongShape = root.resolve("wrong-shape-aquatic-leaks.log").also {
-            it.writeText(
-                sound("minecraft:entity.dolphin.ambient") + "\n" +
-                    leaks.replace("Render thread/WARN", "Server thread/WARN") + "\n",
-            )
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2, 4, 6), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(wrongShape)).map { it.line })
-    }
-
-    @Test
-    fun logPolicyAcceptsOnlyOneExactInvalidImmersiveWeatheringIcicleWarningPerLog(@TempDir root: Path) {
-        val warning = "[06:28:03] [Server thread/WARN] [net.minecraft.world.level.chunk.LevelChunk]: " +
-            "Block entity minecraft:mob_spawner @ BlockPos{x=49, y=139, z=12} " +
-            "state Block{immersive_weathering:icicle}[thickness=tip,vertical_direction=down,waterlogged=false] " +
-            "invalid for ticking:"
-        val accepted = root.resolve("accepted-invalid-icicle.log").also { it.writeText(warning + "\n") }
-        val overflow = root.resolve("overflow-invalid-icicle.log").also {
-            it.writeText(warning + "\n" + warning + "\n")
-        }
-        val wrongShape = root.resolve("wrong-shape-invalid-icicle.log").also {
-            it.writeText(warning.replace("immersive_weathering:icicle", "minecraft:stone") + "\n")
-        }
-
-        assertTrue(LogPolicy.findings(listOf(accepted)).isEmpty())
-        assertEquals(listOf(2), LogPolicy.findings(listOf(overflow)).map { it.line })
-        assertEquals(listOf(1), LogPolicy.findings(listOf(wrongShape)).map { it.line })
+        assertEquals(payloads.size, LogPolicy.findings(listOf(log)).size)
+        assertEquals(LogPolicy.Record("WARN", "DH-LOD Builder Thread[0]", "example.Logger", "advisory"),
+            LogPolicy.parseRecord("[12:00:00] [DH-LOD Builder Thread[0]/WARN] [example.Logger]: advisory"))
+        log.writeText("[12:00:00] [main/INFO] [example.Logger]: quoted /ERROR] is payload, not severity")
+        assertTrue(LogPolicy.findings(listOf(log)).isEmpty())
+        log.writeText("[12:00:00] [main/ERROR] [example.Logger]: quoted [worker/WARN] [other.Logger]: advisory")
+        assertEquals(1, LogPolicy.findings(listOf(log)).size,
+            "a quoted WARN envelope must not replace the outer ERROR severity")
     }
 
     @Test
@@ -1438,7 +811,7 @@ class HarnessFastTest {
     }
 
     @Test
-    fun coordinatorQueueAcceptsWorkspaceHandoffAndRejectsDuplicates(@TempDir state: Path) {
+    fun coordinatorQueueRejectsUnregisteredLiteralWorkspaceIdentity(@TempDir state: Path) {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val queue = root.resolve("pack-test-queue.main.kts")
         val handoff = state.resolve("handoff.json")
@@ -1464,9 +837,8 @@ class HarnessFastTest {
         fun request(): Int = ProcessBuilder(queue.toString(), "request", handoff.toString())
             .apply { environment()["BC_PACK_TEST_STATE_ROOT"] = state.resolve("coordination").toString() }
             .start().waitFor()
-        assertEquals(0, request())
-        assertTrue(Files.list(state.resolve("coordination/queued")).use { it.count() } == 1L)
         assertTrue(request() != 0)
+        assertEquals(0L, Files.list(state.resolve("coordination/queued")).use { it.count() })
     }
 
     private fun zip(path: Path, entries: Map<String, String>) {

@@ -30,9 +30,11 @@ internal data class ProviderCheckpoint(
     val shared_fingerprint: String,
     val owner: String,
     val staged_path: String,
+    val build_fingerprint: String? = null,
+    val build_id: String? = null,
 )
 internal data class VerificationReceipt(
-    val schema: String = "bc.testing_session.v1",
+    val schema: String = "bc.testing_session.v2",
     val session_id: String,
     val owner: String,
     val generation: Int = 0,
@@ -44,6 +46,8 @@ internal data class VerificationReceipt(
     val active_run: String? = null,
     val helpers: Set<String> = emptySet(),
     val shared_context: Map<String, String> = emptyMap(),
+    val state: String = "open",
+    val reuse_history: Boolean = true,
 )
 
 /** Conservative invalidation, including the full transitive consumer closure. */
@@ -85,6 +89,9 @@ internal class VerificationSession(
     private var completed = false
     private val sources = mods.associate { it.repository to sourceIdentity(root.parent.resolve("mod_source/${it.repository}")) }
     private val shared = sharedIdentity()
+    private val contracts = mods.associate { it.repository to contractIdentity(it) }
+    private val builds = mods.associate { it.repository to buildIdentity(it) }
+    private val buildCandidates: Map<String, ProviderCheckpoint>
     val affected: Set<String>
     val fullBaseline: Boolean
 
@@ -99,29 +106,22 @@ internal class VerificationSession(
             require(!Files.isSymbolicLink(path)) { "session receipt is a symlink" }
             if (supplied == null) save(VerificationReceipt(session_id = id, owner = owner))
             receipt = read()
-            require(receipt.active_run == null) { "verification session is already in use by ${receipt.active_run}" }
+            require(receipt.active_run == null && receipt.state == "open") { "verification session is active or ended" }
         }
-        fullBaseline = rebuildAll || receipt.shared_fingerprint != shared ||
-            (receipt.mods.isEmpty() && receipt.checkpoints.isEmpty())
-        val prior = if (rebuildAll || receipt.shared_fingerprint != shared) {
-            receipt.copy(mods = emptyMap(), checkpoints = emptyMap())
-        } else receipt
+        // Cross-conversation reuse reads finalized immutable attempts, never active controls.
+        val historical = if (rebuildAll || !receipt.reuse_history) emptyMap() else historicalCheckpoints()
+        buildCandidates = if (rebuildAll) emptyMap() else
+            (if (receipt.reuse_history) historicalCheckpoints(buildOnly = true) else emptyMap()) + receipt.checkpoints
+        val prior = if (rebuildAll) receipt.copy(mods = emptyMap(), checkpoints = emptyMap())
+            else receipt.copy(checkpoints = historical + receipt.checkpoints)
+        fullBaseline = rebuildAll || (prior.mods.isEmpty() && prior.checkpoints.isEmpty())
         val invalid = mods.filter { mod ->
             val checkpoint = prior.checkpoints[mod.repository]
-            val verified = prior.mods[mod.repository]
             val dependencies = mod.dependsOn.associateWith { dependency ->
                 prior.checkpoints[dependency]?.sha256 ?: prior.mods[dependency]?.sha256 ?: "missing"
             }
             when {
                 checkpoint != null -> !checkpointValid(mod, checkpoint, dependencies)
-                verified != null -> {
-                    val jar = root.resolve("mods/${mod.artifact}")
-                    verified.source != sources.getValue(mod.repository) || verified.tasks != mod.tasks ||
-                        !Files.isRegularFile(jar, LinkOption.NOFOLLOW_LINKS) || Hashes.sha256(jar) != verified.sha256 ||
-                        verified.dependencies != dependencies ||
-                        verified.support_hashes != supportArtifactHashes(
-                            root.parent.resolve("mod_source/${mod.repository}"), mod, allowMissing = true)
-                }
                 else -> true
             }
         }.map { it.repository }.toSet()
@@ -129,7 +129,8 @@ internal class VerificationSession(
         locked {
             require(read() == receipt) { "session changed while preparing verification" }
             receipt = prior.copy(baseline = "verifying", active_run = runId,
-                shared_fingerprint = shared,
+                reuse_history = prior.reuse_history && !rebuildAll,
+                shared_fingerprint = shared, shared_context = sharedContext(),
                 checkpoints = prior.checkpoints.filterKeys { it !in affected },
                 invalidations = if (fullBaseline) listOf("full baseline required") else affected.sorted())
             save(receipt)
@@ -155,12 +156,19 @@ internal class VerificationSession(
     @Synchronized fun checkpoint(item: BuiltMod, dependencyHashes: Map<String, String>) {
         val mod = item.definition
         require(mod in mods && mod.repository in affected) { "provider is not scheduled for verification" }
-        require(item.mode == "rebuilt") { "only a freshly verified provider can be checkpointed" }
+        require(item.mode in setOf("rebuilt", "build-reused-verified")) { "only a freshly verified provider can be checkpointed" }
+        if (item.mode == "build-reused-verified") {
+            val origin = buildCandidates[mod.repository]
+            require(origin != null && item.buildId == origin.build_id && item.sha256 == origin.sha256 &&
+                item.supportHashes == origin.support_hashes && checkpointBuildValid(mod, origin, dependencyHashes)) {
+                "retained build provenance no longer matches exact bytes and inputs"
+            }
+        } else require(item.buildId == null) { "changed build bytes cannot retain an older build identity" }
         require(item.commit == git(root.parent.resolve("mod_source/${mod.repository}"), "rev-parse", "HEAD").trim() &&
             sourceIdentity(root.parent.resolve("mod_source/${mod.repository}")) == sources.getValue(mod.repository)) {
             "provider source changed before checkpoint: ${mod.repository}"
         }
-        require(sharedIdentity() == shared) { "shared inputs changed before checkpoint" }
+        require(contractIdentity(mod) == contracts.getValue(mod.repository)) { "verification contracts changed before checkpoint" }
         require(dependencyHashes.keys == mod.dependsOn.toSet()) { "checkpoint dependency set differs from manifest" }
         requireConsumedStages(mod, dependencyHashes)
         require(Files.isRegularFile(item.jar, LinkOption.NOFOLLOW_LINKS) && Hashes.sha256(item.jar) == item.sha256) {
@@ -184,6 +192,14 @@ internal class VerificationSession(
             } else Files.move(temporary, destination, StandardCopyOption.ATOMIC_MOVE)
         } finally { Files.deleteIfExists(temporary) }
         require(Hashes.sha256(destination) == item.sha256) { "checkpoint candidate changed" }
+        item.supportHashes.forEach { (relative, hash) ->
+            val support = supportPath(mod, runId, relative)
+            requireNoSymlink(support)
+            Files.createDirectories(support.parent)
+            val input = root.parent.resolve("mod_source/${mod.repository}/$relative")
+            if (!Files.exists(support)) Files.copy(input, support)
+            require(Hashes.sha256(input) == hash && Hashes.sha256(support) == hash) { "support snapshot changed" }
+        }
         requireConsumedStages(mod, dependencyHashes)
         locked {
             val current = read()
@@ -215,8 +231,8 @@ internal class VerificationSession(
                 checkpoint?.sha256 ?: current.mods[dependency]?.sha256 ?: "missing"
             }) { "checkpoint consumed different dependency bytes" }
             val entry = ProviderCheckpoint(sources.getValue(mod.repository), item.sha256,
-                dependencyHashes, mod.tasks, runId, item.supportHashes, shared,
-                current.owner, root.relativize(destination).toString())
+                dependencyHashes, mod.tasks, runId, item.supportHashes, contracts.getValue(mod.repository),
+                current.owner, root.relativize(destination).toString(), builds.getValue(mod.repository), item.buildId ?: runId)
             require(checkpointValid(mod, entry, dependencyHashes)) { "checkpoint failed final validation" }
             receipt = current.copy(checkpoints = current.checkpoints + (mod.repository to entry))
             save(receipt)
@@ -245,6 +261,18 @@ internal class VerificationSession(
             receipt.checkpoints[dependency]?.sha256 ?: receipt.mods[dependency]?.sha256 ?: "missing"
         }
         require(checkpointValid(mod, checkpoint, dependencies)) { "checkpoint invalidated before reuse: ${mod.repository}" }
+        return stageCheckpoint(mod, checkpoint)
+    }
+
+    /** Build reuse is not verification reuse: the caller must rerun every required task. */
+    fun reusableBuild(mod: ActiveMod, dependencies: Map<String, String>): BuiltMod? {
+        val checkpoint = buildCandidates[mod.repository] ?: return null
+        if (!checkpointBuildValid(mod, checkpoint, dependencies)) return null
+        require(buildIdentity(mod) == builds.getValue(mod.repository)) { "build inputs changed before restore" }
+        return stageCheckpoint(mod, checkpoint)
+    }
+
+    private fun stageCheckpoint(mod: ActiveMod, checkpoint: ProviderCheckpoint): BuiltMod {
         val source = checkpointPath(mod, checkpoint.verification_id)
         val destination = root.resolve("generated/test-evidence/$runId/release/staged-jars/${mod.artifact}")
         requireNoSymlink(destination)
@@ -253,14 +281,35 @@ internal class VerificationSession(
         require(Hashes.sha256(source) == checkpoint.sha256 && Hashes.sha256(destination) == checkpoint.sha256) {
             "checkpoint bytes changed during staging"
         }
+        checkpoint.support_hashes.forEach { (relative, hash) ->
+            val output = root.parent.resolve("mod_source/${mod.repository}/$relative")
+            require(relative in mod.supportArtifacts && !Files.isSymbolicLink(output)) { "unsafe support output" }
+            var ancestor = output.toAbsolutePath().normalize()
+            val workspace = root.parent.toAbsolutePath().normalize()
+            require(ancestor.startsWith(workspace)) { "support output escaped workspace" }
+            while (ancestor != workspace) {
+                require(!Files.isSymbolicLink(ancestor)) { "support output contains a symlink" }
+                ancestor = ancestor.parent
+            }
+            Files.createDirectories(output.parent)
+            Files.copy(supportPath(mod, checkpoint.verification_id, relative), output, StandardCopyOption.REPLACE_EXISTING)
+            require(Hashes.sha256(output) == hash) { "support snapshot changed during staging" }
+        }
         return BuiltMod(mod, git(root.parent.resolve("mod_source/${mod.repository}"), "rev-parse", "HEAD").trim(),
-            destination, checkpoint.sha256, "checkpoint-reused", checkpoint.support_hashes)
+            destination, checkpoint.sha256, "checkpoint-reused", checkpoint.support_hashes, checkpoint.build_id)
     }
 
     private fun checkpointPath(mod: ActiveMod, originRun: String): Path {
         require(Regex("[A-Za-z0-9_-]{1,80}").matches(originRun)) { "invalid checkpoint origin" }
         require(Regex("[A-Za-z0-9._-]+\\.jar").matches(mod.artifact)) { "invalid checkpoint artifact name" }
-        return root.resolve("generated/test-evidence/$originRun/release/verified-checkpoints/${mod.artifact}")
+        return root.resolve(".worklane/testing-sessions/artifacts/$originRun/${mod.artifact}")
+    }
+
+    private fun supportPath(mod: ActiveMod, origin: String, relative: String): Path {
+        require(relative in mod.supportArtifacts && !Path.of(relative).isAbsolute && ".." !in Path.of(relative).map { it.toString() }) {
+            "unsafe support artifact path"
+        }
+        return checkpointPath(mod, origin).resolveSibling(mod.artifact + ".support").resolve(relative)
     }
 
     private fun requireNoSymlink(path: Path) {
@@ -275,16 +324,26 @@ internal class VerificationSession(
         }
     }
 
+    private fun checkpointBuildValid(mod: ActiveMod, checkpoint: ProviderCheckpoint,
+        dependencies: Map<String, String>): Boolean = runCatching {
+        require(checkpoint.build_fingerprint == builds.getValue(mod.repository) && !checkpoint.build_id.isNullOrBlank())
+        checkpointValid(mod, checkpoint.copy(tasks = mod.tasks, shared_fingerprint = contracts.getValue(mod.repository)), dependencies)
+    }.getOrDefault(false)
+
     private fun checkpointValid(mod: ActiveMod, checkpoint: ProviderCheckpoint,
         dependencies: Map<String, String>): Boolean = runCatching {
         val candidate = checkpointPath(mod, checkpoint.verification_id)
-        require(checkpoint.owner == receipt.owner && checkpoint.shared_fingerprint == shared &&
+        require(checkpoint.owner.isNotBlank() && checkpoint.shared_fingerprint == contracts.getValue(mod.repository) &&
             checkpoint.source == sources.getValue(mod.repository) && checkpoint.tasks == mod.tasks &&
             checkpoint.dependencies == dependencies &&
             checkpoint.staged_path == root.relativize(candidate).toString())
         requireNoSymlink(candidate)
         Files.isRegularFile(candidate, LinkOption.NOFOLLOW_LINKS) && Hashes.sha256(candidate) == checkpoint.sha256 &&
-            supportArtifactHashes(root.parent.resolve("mod_source/${mod.repository}"), mod, allowMissing = true) == checkpoint.support_hashes
+            checkpoint.support_hashes.keys == mod.supportArtifacts.toSet() && checkpoint.support_hashes.all { (relative, hash) ->
+                val support = supportPath(mod, checkpoint.verification_id, relative)
+                requireNoSymlink(support)
+                Files.isRegularFile(support, LinkOption.NOFOLLOW_LINKS) && Hashes.sha256(support) == hash
+            }
     }.getOrDefault(false)
 
     fun checkInputs() {
@@ -293,6 +352,7 @@ internal class VerificationSession(
         } }
         require(sharedIdentity() == shared) { "shared verification inputs changed during verification" }
         mods.forEach { mod ->
+            require(contractIdentity(mod) == contracts.getValue(mod.repository)) { "provider verification contracts changed: ${mod.repository}" }
             require(sourceIdentity(root.parent.resolve("mod_source/${mod.repository}")) == sources.getValue(mod.repository)) {
                 "${mod.repository} source changed during verification; refusing deployment/provenance"
             }
@@ -338,7 +398,8 @@ internal class VerificationSession(
             }
             save(receipt.copy(generation = receipt.generation + if (receipt.mods.isEmpty()) 1 else 0,
                 baseline = "complete", shared_fingerprint = shared, shared_context = sharedContext(), mods = verified,
-                checkpoints = emptyMap(), invalidations = emptyList(), active_run = null))
+                checkpoints = receipt.checkpoints, invalidations = emptyList(), active_run = null))
+            publish(read())
         }
         completed = true
     }
@@ -347,15 +408,19 @@ internal class VerificationSession(
         if (!acquired) return
         locked {
             val current = read()
-            if (!completed && current.active_run == runId) save(current.copy(baseline = "failed", active_run = null))
-            if (supplied == null) Files.deleteIfExists(path)
+            if (!completed && current.active_run == runId) {
+                val ended = current.copy(baseline = "failed", active_run = null)
+                save(ended)
+                publish(ended)
+            }
+            if (supplied == null) save(read().copy(state = "ended"))
         }
     }
 
     private fun read(): VerificationReceipt {
         require(Files.size(path) <= 1024 * 1024) { "oversized session receipt" }
         val value: VerificationReceipt = mapper.readValue(path.toFile())
-        require(value.schema == "bc.testing_session.v1" && (value.owner == owner || owner in value.helpers) && value.session_id == id) {
+        require(value.schema == "bc.testing_session.v2" && (value.owner == owner || owner in value.helpers) && value.session_id == id) {
             "verification session belongs to another conversation"
         }
         return value
@@ -379,7 +444,78 @@ internal class VerificationSession(
     }
 
     private fun sharedContext(): Map<String, String> = sharedEntries().toMap() + mapOf(
-        "_patterns" to sharedInputs.joinToString("\u0000"), "_java_home" to System.getProperty("java.home"))
+        "_patterns" to sharedInputs.joinToString("\u0000"), "_java_home" to System.getProperty("java.home"),
+        "_gradle_home" to (System.getProperty("bc.gradle.home") ?: ""),
+        "_kotlin_path" to Path.of(kotlin.KotlinVersion::class.java.protectionDomain.codeSource.location.toURI()).toString())
+
+    private fun contractIdentity(mod: ActiveMod): String = fingerprint(sharedEntries() + scopedEntries(mod) + listOf(
+        "build_identity" to buildIdentity(mod), "repository" to mod.repository, "artifact" to mod.artifact, "mod_id" to mod.modId,
+        "tasks" to mod.tasks.joinToString("\u0000"), "dependencies" to mod.dependsOn.joinToString("\u0000"),
+        "support" to mod.supportArtifacts.joinToString("\u0000")))
+
+    private fun buildIdentity(mod: ActiveMod): String = fingerprint(sharedEntries() +
+        scopedEntries(mod, mod.buildInputs ?: mod.verificationInputs) + listOf(
+            "source" to sources.getValue(mod.repository), "repository" to mod.repository,
+            "artifact" to mod.artifact, "mod_id" to mod.modId,
+            "dependencies" to mod.dependsOn.joinToString("\u0000"), "support" to mod.supportArtifacts.joinToString("\u0000")))
+
+    private fun scopedEntries(mod: ActiveMod, patterns: List<String> = mod.verificationInputs): List<Pair<String, String>> {
+        require(patterns.all { !it.startsWith("/") && ".." !in it.split('/') }) { "unsafe scoped verification input" }
+        val matchers = patterns.map { root.fileSystem.getPathMatcher("glob:$it") }
+        return git(root, "ls-files", "-z", "--cached", "--others", "--exclude-standard")
+            .split('\u0000').filter { it.isNotBlank() }.distinct()
+            .filter { name -> matchers.any { it.matches(Path.of(name)) } }
+            .map { it to fileIdentity(root.resolve(it)) } + ("scoped_patterns" to patterns.joinToString("\u0000"))
+    }
+
+    private fun resolvedGradleIdentity(): String {
+        val home = System.getProperty("bc.gradle.home") ?: return "unresolved"
+        val lib = Path.of(home).resolve("lib")
+        require(Files.isDirectory(lib)) { "resolved Gradle distribution is missing" }
+        return Files.walk(lib).use { paths -> fingerprint(paths.filter { Files.isRegularFile(it) }
+            .map { lib.relativize(it).toString() to fileIdentity(it) }.toList()) }
+    }
+
+    private fun historicalCheckpoints(buildOnly: Boolean = false): Map<String, ProviderCheckpoint> {
+        val archive = directory.resolve("completed")
+        requireNoSymlink(archive)
+        if (!Files.isDirectory(archive)) return emptyMap()
+        val entries = mutableMapOf<String, ProviderCheckpoint>()
+        Files.list(archive).use { paths -> paths.sorted().forEach { candidate ->
+            if (Regex("[A-Za-z0-9_-]{1,80}\\.json").matches(candidate.fileName.toString()) &&
+                Files.isRegularFile(candidate, LinkOption.NOFOLLOW_LINKS) && Files.size(candidate) <= 1024 * 1024) {
+                val historical = runCatching { mapper.readValue<VerificationReceipt>(candidate.toFile()) }.getOrNull()
+                if (historical?.schema == "bc.testing_session.v2" && historical.active_run == null) {
+                    historical.checkpoints.forEach { (name, checkpoint) ->
+                        val mod = mods.singleOrNull { it.repository == name }
+                        if (mod != null && (if (buildOnly) checkpointBuildValid(mod, checkpoint, checkpoint.dependencies)
+                            else checkpointValid(mod, checkpoint, checkpoint.dependencies))) entries[name] = checkpoint
+                    }
+                }
+            }
+        } }
+        return entries
+    }
+
+    /** An immutable attempt snapshot; old schemas remain untouched and cannot be promoted. */
+    private fun publish(value: VerificationReceipt) {
+        val archive = directory.resolve("completed")
+        requireNoSymlink(archive)
+        Files.createDirectories(archive)
+        val destination = archive.resolve("$runId.json")
+        requireNoSymlink(destination)
+        val bytes = mapper.writeValueAsBytes(value.copy(state = "ended", active_run = null))
+        require(bytes.size <= 1024 * 1024) { "completed receipt exceeds bounded size" }
+        if (Files.exists(destination)) require(Files.readAllBytes(destination).contentEquals(bytes)) {
+            "immutable completed receipt already exists with different content"
+        } else {
+            val temporary = Files.createTempFile(archive, ".completed-", ".json")
+            try {
+                Files.write(temporary, bytes)
+                Files.move(temporary, destination, StandardCopyOption.ATOMIC_MOVE)
+            } finally { Files.deleteIfExists(temporary) }
+        }
+    }
 
     private fun sharedIdentity(): String = fingerprint(sharedEntries())
 
@@ -394,13 +530,14 @@ internal class VerificationSession(
         val names = git(root, "ls-files", "-z", "--cached", "--others", "--exclude-standard")
             .split('\u0000').filter { it.isNotBlank() }.distinct()
             .filter { name -> matchers.any { it.matches(Path.of(name)) } }
-            .filterNot { it == "index.toml" || (it.startsWith("mods/") && it.endsWith(".jar")) || it.startsWith(".worklane/") }
+            .filterNot { it == "gradle/active-custom-mods.json" || it == "index.toml" || (it.startsWith("mods/") && it.endsWith(".jar")) || it.startsWith(".worklane/") }
         return names.map { it to fileIdentity(root.resolve(it)) } + listOf(
             "input_patterns" to sharedInputs.joinToString("\u0000"),
-            "manifest" to fileIdentity(root.resolve("gradle/active-custom-mods.json")),
             "java" to (System.getProperty("java.version") + ":" + System.getProperty("java.home")),
             "toolchain" to fileIdentity(Path.of(System.getProperty("java.home")).resolve("release")),
-            "sdk" to fileIdentity(root.resolve("docs/toolchains.md")),
+            "java_binary" to fileIdentity(Path.of(System.getProperty("java.home")).resolve("bin/java")),
+            "kotlin" to fileIdentity(Path.of(kotlin.KotlinVersion::class.java.protectionDomain.codeSource.location.toURI())),
+            "gradle" to resolvedGradleIdentity(),
         )
     }
 }

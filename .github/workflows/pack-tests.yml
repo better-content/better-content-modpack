@@ -49,13 +49,14 @@ jobs:
           python3 .github/scripts/checkout-ci-sources.py
           --manifest .github/ci-source-revisions.json
           --workspace "$GITHUB_WORKSPACE/.."
-      - name: Download Forge installer
+      - name: Download and verify pinned Forge installer
         run: |
           curl --fail --location --retry 3 \
-            --output forge-1.20.1-47.4.13-installer.jar \
-            https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.4.13/forge-1.20.1-47.4.13-installer.jar
+            --output forge-1.20.1-47.4.22-installer.jar \
+            https://maven.minecraftforge.net/net/minecraftforge/forge/1.20.1-47.4.22/forge-1.20.1-47.4.22-installer.jar
+          echo 'a66b95e67eba6b3f72047aa73318e4b80edb616d5834cd05a5baae10d25699d6  forge-1.20.1-47.4.22-installer.jar' | sha256sum --check --strict
       - name: Run cumulative tier on one fresh candidate
-        run: ./test.main.kts run "${{ inputs.tier }}"
+        run: ./test.main.kts "${{ inputs.tier }}"
       - name: Upload candidate and test evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 import uuid
 
-SCHEMA = 'bc.testing_session.v1'
+SCHEMA = 'bc.testing_session.v2'
 
 
 def caller_owner():
@@ -79,7 +79,8 @@ def begin(root, owner):
         raise ValueError('invalid owner identity')
     session = uuid.uuid4().hex
     value = dict(schema=SCHEMA, session_id=session, owner=owner, generation=0,
-                 baseline='pending', shared_fingerprint=None, mods={}, helpers=[], shared_context={}, invalidations=['baseline not started'])
+                 baseline='pending', shared_fingerprint=None, mods={}, checkpoints={}, helpers=[], shared_context={},
+                 state='open', reuse_history=True, invalidations=['baseline not started'])
     with locked(root):
         atomic_write(session_path(root, session), value)
     return value
@@ -127,44 +128,189 @@ def matches_pattern(name, pattern):
     return re.fullmatch(regex, name) is not None
 
 
+def fingerprint(entries):
+    digest = hashlib.sha256()
+    for name, value in sorted(entries, key=lambda entry: entry[0]):
+        digest.update((name + '\0' + value + '\0').encode())
+    return digest.hexdigest()
+
+
+def no_symlink(root, path):
+    path = Path(path)
+    try:
+        parts = path.relative_to(root).parts
+    except ValueError:
+        return False
+    current = root
+    if root.is_symlink():
+        return False
+    for part in parts:
+        if part == '..':
+            return False
+        current = current / part
+        if current.is_symlink():
+            return False
+    return True
+
+
+def live_entries(root, patterns, shared=False):
+    if any(pattern.startswith('/') or '..' in pattern.split('/') for pattern in patterns):
+        raise ValueError('unsafe verification input pattern')
+    names = set(git_text(root, 'ls-files', '-z', '--cached', '--others', '--exclude-standard').split('\0')) - {''}
+    return [(name, file_identity(root / name)) for name in names
+            if any(matches_pattern(name, pattern) for pattern in patterns) and not (shared and (
+                name in ('gradle/active-custom-mods.json', 'index.toml') or
+                (name.startswith('mods/') and name.endswith('.jar')) or name.startswith('.worklane/')))]
+
+
+def current_shared_entries(root, patterns, context):
+    java = Path(context.get('_java_home', '/nonexistent'))
+    gradle = Path(context.get('_gradle_home', '/nonexistent')) / 'lib'
+    gradle_hash = fingerprint([(str(path.relative_to(gradle)), file_identity(path))
+                               for path in gradle.rglob('*') if path.is_file()]) if gradle.is_dir() else 'unresolved'
+    return live_entries(root, patterns, shared=True) + [
+        ('input_patterns', '\0'.join(patterns)), ('java', context.get('java', 'unresolved')),
+        ('toolchain', file_identity(java / 'release')), ('java_binary', file_identity(java / 'bin/java')),
+        ('kotlin', file_identity(Path(context.get('_kotlin_path', '/nonexistent')))), ('gradle', gradle_hash)]
+
+
+def contract_identity(root, mod, shared):
+    patterns = mod.get('verificationInputs', [])
+    return fingerprint(shared + live_entries(root, patterns) + [
+        ('build_identity', build_identity(root, mod, shared)),
+        ('scoped_patterns', '\0'.join(patterns)), ('repository', mod['repository']),
+        ('artifact', mod['artifact']), ('mod_id', mod['modId']), ('tasks', '\0'.join(mod['tasks'])),
+        ('dependencies', '\0'.join(mod.get('dependsOn', []))), ('support', '\0'.join(mod.get('supportArtifacts', [])))])
+
+
+def build_identity(root, mod, shared):
+    patterns = mod.get('buildInputs')
+    if patterns is None:
+        patterns = mod.get('verificationInputs', [])
+    return fingerprint(shared + live_entries(root, patterns) + [
+        ('scoped_patterns', '\0'.join(patterns)),
+        ('source', source_identity(root.parent / 'mod_source' / mod['repository'])),
+        ('repository', mod['repository']), ('artifact', mod['artifact']), ('mod_id', mod['modId']),
+        ('dependencies', '\0'.join(mod.get('dependsOn', []))), ('support', '\0'.join(mod.get('supportArtifacts', [])))])
+
+
+def checkpoint_build_valid(root, mod, checkpoint, contract, build, dependencies):
+    return bool(checkpoint.get('build_id') and checkpoint.get('build_fingerprint') == build and
+                checkpoint_valid(root, mod, dict(checkpoint, tasks=mod['tasks'], shared_fingerprint=contract), contract, dependencies))
+
+
+def checkpoint_path(root, mod, checkpoint):
+    origin = checkpoint.get('verification_id', '')
+    artifact = mod['artifact']
+    if not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', origin) or not re.fullmatch(r'[A-Za-z0-9._-]+\.jar', artifact):
+        raise ValueError('unsafe checkpoint origin or artifact')
+    return root / '.worklane/testing-sessions/artifacts' / origin / artifact
+
+
+def checkpoint_valid(root, mod, checkpoint, contract, dependencies):
+    try:
+        candidate = checkpoint_path(root, mod, checkpoint)
+        supports = checkpoint.get('support_hashes', {})
+        if (not checkpoint.get('owner') or checkpoint.get('shared_fingerprint') != contract or
+                checkpoint.get('source') != source_identity(root.parent / 'mod_source' / mod['repository']) or
+                checkpoint.get('tasks') != mod['tasks'] or checkpoint.get('dependencies', {}) != dependencies or
+                checkpoint.get('staged_path') != str(candidate.relative_to(root)) or
+                not no_symlink(root, candidate) or not candidate.is_file() or
+                file_identity(candidate) != checkpoint.get('sha256') or set(supports) != set(mod.get('supportArtifacts', []))):
+            return False
+        for relative, sha in supports.items():
+            if Path(relative).is_absolute() or '..' in Path(relative).parts:
+                return False
+            support = candidate.with_name(candidate.name + '.support') / relative
+            if not no_symlink(root, support) or not support.is_file() or file_identity(support) != sha:
+                return False
+        return True
+    except (ValueError, OSError):
+        return False
+
+
 def inspect_live(root, receipt):
+    root = Path(root)
     manifest = json.loads((root / 'gradle/active-custom-mods.json').read_text())
     mods = manifest['mods']
-    invalid = []
-    changed = set()
-    if receipt.get('baseline') != 'complete':
-        invalid.append('full baseline required: ' + receipt.get('baseline', 'unknown'))
     context = receipt.get('shared_context', {})
-    if receipt.get('baseline') == 'complete' and not context:
-        invalid.append('full baseline required: live input context unavailable')
-    patterns = manifest.get('verificationInputs', [])
-    names = set(git_text(root, 'ls-files', '-z', '--cached', '--others', '--exclude-standard').split('\0')) - {''}
-    names = {name for name in names if any(matches_pattern(name, pattern) for pattern in patterns)
-             and name != 'index.toml' and not (name.startswith('mods/') and name.endswith('.jar')) and not name.startswith('.worklane/')}
-    expected_names = set(context) - {'input_patterns', 'manifest', 'java', 'toolchain', 'sdk', '_patterns', '_java_home'}
-    if context and (context.get('_patterns') != '\0'.join(patterns) or names != expected_names or
-            any(file_identity(root / name) != context.get(name) for name in names) or
-            file_identity(root / 'gradle/active-custom-mods.json') != context.get('manifest') or
-            file_identity(root / 'docs/toolchains.md') != context.get('sdk') or
-            file_identity(Path(context.get('_java_home', '/nonexistent')) / 'release') != context.get('toolchain')):
-        invalid.append('full baseline required: shared verification inputs changed')
+    archive = root / '.worklane/testing-sessions/completed'
+    if not context and no_symlink(root, archive) and archive.is_dir():
+        for candidate in sorted(archive.iterdir()):
+            if (re.fullmatch(r'[A-Za-z0-9_-]{1,80}\.json', candidate.name) and candidate.is_file() and
+                    no_symlink(root, candidate) and candidate.stat().st_size <= 1024 * 1024):
+                try:
+                    prior = json.loads(candidate.read_text())
+                    if prior.get('schema') == SCHEMA and not prior.get('active_run'):
+                        context = prior.get('shared_context', {}) or context
+                except (ValueError, OSError):
+                    pass
+    shared = current_shared_entries(root, manifest.get('verificationInputs', []), context)
+    contracts = {mod['repository']: contract_identity(root, mod, shared) for mod in mods}
+    builds = {mod['repository']: build_identity(root, mod, shared) for mod in mods}
+    checkpoints = {}
+    build_candidates = {}
+    archive = root / '.worklane/testing-sessions/completed'
+    if receipt.get('reuse_history', True) and no_symlink(root, archive) and archive.is_dir():
+        for path in sorted(archive.iterdir()):
+            if (not re.fullmatch(r'[A-Za-z0-9_-]{1,80}\.json', path.name) or not no_symlink(root, path) or
+                    not path.is_file() or path.stat().st_size > 1024 * 1024):
+                continue
+            try:
+                historical = json.loads(path.read_text())
+            except (ValueError, OSError):
+                continue
+            if historical.get('schema') != SCHEMA or historical.get('active_run'):
+                continue
+            for mod in mods:
+                checkpoint = historical.get('checkpoints', {}).get(mod['repository'])
+                if checkpoint:
+                    if checkpoint_valid(root, mod, checkpoint, contracts[mod['repository']], checkpoint.get('dependencies', {})):
+                        checkpoints[mod['repository']] = checkpoint
+                    if checkpoint_build_valid(root, mod, checkpoint, contracts[mod['repository']], builds[mod['repository']], checkpoint.get('dependencies', {})):
+                        build_candidates[mod['repository']] = checkpoint
+    checkpoints.update(receipt.get('checkpoints', {}))
+    build_candidates.update(receipt.get('checkpoints', {}))
+    build_eligible = {}
     for mod in mods:
         name = mod['repository']
-        repo = root.parent / 'mod_source' / name
-        prior = receipt.get('mods', {}).get(name)
-        if prior is None or prior.get('source') != source_identity(repo) or prior.get('tasks') != mod['tasks'] or \
-                file_identity(root / 'mods' / mod['artifact']) != prior.get('sha256') or \
-                prior.get('support_hashes', {}) != {path: file_identity(repo / path) for path in mod.get('supportArtifacts', [])} or \
-                prior.get('dependencies', {}) != {provider: receipt.get('mods', {}).get(provider, {}).get('sha256', 'missing') for provider in mod.get('dependsOn', [])}:
+        candidate = build_candidates.get(name)
+        dependencies = {provider: build_candidates.get(provider, receipt.get('mods', {}).get(provider, {})).get('sha256', 'missing')
+                        for provider in mod.get('dependsOn', [])}
+        if candidate and checkpoint_build_valid(root, mod, candidate, contracts[name], builds[name], dependencies):
+            build_eligible[name] = candidate['build_id']
+    changed = set()
+    origins = {}
+    for mod in mods:
+        name = mod['repository']
+        checkpoint = checkpoints.get(name)
+        dependencies = {provider: checkpoints.get(provider, receipt.get('mods', {}).get(provider, {})).get('sha256', 'missing')
+                        for provider in mod.get('dependsOn', [])}
+        if checkpoint is None or not checkpoint_valid(root, mod, checkpoint, contracts[name], dependencies):
             changed.add(name)
+        else:
+            origins[name] = checkpoint['verification_id']
     while True:
         closure = changed | {mod['repository'] for mod in mods if any(provider in changed for provider in mod.get('dependsOn', []))}
         if closure == changed:
             break
         changed = closure
-    invalid.extend(sorted(changed))
-    return dict(valid_reuse=not invalid and not receipt.get('active_run'), invalidations=invalid,
-                affected_providers=sorted(changed), authority='observational_only; preparation rechecks under session lock')
+    invalid = sorted(changed)
+    current_java = os.environ.get('JAVA_HOME')
+    if current_java and Path(current_java).resolve() != Path(context.get('_java_home', '/nonexistent')).resolve():
+        invalid.append('resolved Java identity differs; preparation must resolve current toolchain')
+        changed = {mod['repository'] for mod in mods}
+        build_eligible = {}
+    if receipt.get('schema') != SCHEMA:
+        invalid.append('incompatible receipt schema; retained history is not eligible')
+        changed = {mod['repository'] for mod in mods}
+        build_eligible = {}
+    return dict(valid_reuse=not invalid and not receipt.get('active_run') and receipt.get('state', 'open') == 'open',
+                session_preparation_allowed=not receipt.get('active_run') and receipt.get('state', 'open') == 'open', invalidations=invalid,
+                affected_providers=sorted(changed), build_reuse_candidates=build_eligible,
+                build_reuse_authority='conditional on exact current-run dependency bytes; required verification still runs', verification_origins={name: origin for name, origin in origins.items() if name not in changed},
+                runtime_acceptance='not evaluated; no historical runtime result is promoted',
+                authority='observational_only; preparation rechecks under session lock')
 
 
 def confirm_terminated_run(value, confirmed):
@@ -212,7 +358,8 @@ def main():
                 previous = load(args.root, args.replace, owner)
                 if previous.get('active_run'):
                     raise ValueError('cannot replace an active verification coordinator')
-                session_path(args.root, args.replace).unlink()
+                previous['state'] = 'ended'
+                atomic_write(session_path(args.root, args.replace), previous)
         print(json.dumps(begin(args.root, owner)))
     else:
         with locked(args.root):
@@ -237,8 +384,8 @@ def main():
             elif args.action == 'end':
                 if value.get('active_run'):
                     confirm_terminated_run(value, args.confirm_terminated_run)
-                session_path(args.root, args.session).unlink()
-                value = dict(schema=SCHEMA, session_id=args.session, state='ended')
+                value = dict(value, state='ended', active_run=None)
+                atomic_write(session_path(args.root, args.session), value)
             elif args.action == 'recover':
                 if not value.get('active_run') or value.get('baseline') == 'complete':
                     raise ValueError('recovery requires an interrupted active verification run')

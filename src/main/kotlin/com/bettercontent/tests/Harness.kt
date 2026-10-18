@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.BufferedWriter
 import java.net.ServerSocket
-import java.math.BigInteger
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.LinkOption.NOFOLLOW_LINKS
@@ -51,10 +50,6 @@ object Hashes {
 }
 
 object CandidateLocator {
-    private val versionLine = Regex("""version\s*=\s*"Build ([0-9]+)([a-z]?)"\s*(?:#.*)?""")
-    private val versionKey = Regex("""^\s*(?:version|"version"|'version')\s*=""")
-    private val releaseName = Regex("build-([0-9]+)([a-z]?)")
-
     fun locate(root: Path): CandidatePair {
         System.getenv("BC_CANDIDATE_BINDING")?.takeIf(String::isNotBlank)?.let {
             val pair = CandidateBinding.select(root, Path.of(it))
@@ -63,65 +58,30 @@ object CandidateLocator {
             }
             return pair
         }
-        val pair = locateUnbound(root)
-        System.getenv("BC_PACK_TEST_HANDOFF")?.takeIf { it.isNotBlank() }?.let {
+        System.getenv("BC_PACK_TEST_HANDOFF")?.takeIf(String::isNotBlank)?.let {
+            val pair = selectPaths(root, listOf("--handoff", it))
             PackTestHandoff.validate(Path.of(it), pair)
+            return pair
         }
-        return pair
+        return locateUnbound(root)
     }
 
     internal fun locateUnbound(root: Path): CandidatePair {
         require(root.toAbsolutePath() == root.toAbsolutePath().normalize()) {
             "candidate root must not contain . or .. path components"
         }
-        val pack = root.resolve("pack.toml")
-        require(Files.exists(pack, NOFOLLOW_LINKS)) { "pack.toml is missing; cannot select a production candidate" }
-        return currentBuild(root, pack)
+        return selectPaths(root)
     }
 
-    private fun currentBuild(root: Path, pack: Path): CandidatePair {
-        var ancestor = requireNotNull(root.toAbsolutePath().normalize().root)
-        for (part in root.toAbsolutePath().normalize()) {
-            ancestor = ancestor.resolve(part)
-            require(!Files.isSymbolicLink(ancestor)) { "candidate root has a symlink ancestor: $ancestor" }
-        }
-        require(Files.isDirectory(root, NOFOLLOW_LINKS) && Files.isRegularFile(pack, NOFOLLOW_LINKS) &&
-            Files.size(pack) <= 1024 * 1024) { "pack.toml must be an ordinary bounded production file" }
-        val topLevel = Files.readAllLines(pack).takeWhile { !it.trimStart().startsWith("[") }
-        val declarations = topLevel.filter { versionKey.containsMatchIn(it) }
-        require(declarations.size == 1) { "pack.toml requires exactly one top-level Build version" }
-        val version = versionLine.matchEntire(declarations.single().trim())
-            ?: throw IllegalArgumentException("pack.toml has an invalid Build version")
-        val number = version.groupValues[1]
-        val suffix = version.groupValues[2]
-        val dist = root.resolve("dist")
-        require(Files.isDirectory(dist, NOFOLLOW_LINKS)) {
-            "dist/ is absent or unsafe; an explicit fresh dist is required before pack-level testing"
-        }
-        val currentNumber = BigInteger(number)
-        Files.list(dist).use { entries ->
-            entries.forEach { entry ->
-                val other = releaseName.matchEntire(entry.fileName.toString()) ?: return@forEach
-                val otherNumber = BigInteger(other.groupValues[1])
-                require(otherNumber < currentNumber ||
-                    (otherNumber == currentNumber && other.groupValues[2] <= suffix)) {
-                    "dist/ has a build newer than pack.toml: ${entry.fileName}"
-                }
-            }
-        }
-        val release = dist.resolve("build-$number$suffix")
-        val clientDir = release.resolve("client")
-        val serverDir = release.resolve("server")
-        require(Files.isDirectory(release, NOFOLLOW_LINKS) && Files.isDirectory(clientDir, NOFOLLOW_LINKS) &&
-            Files.isDirectory(serverDir, NOFOLLOW_LINKS)) {
-            "current Build $number$suffix candidate directories are missing or unsafe"
-        }
-        val client = clientDir.resolve("better-content.zip")
-        val server = serverDir.resolve("better-content.zip")
-        require(Files.isRegularFile(client, NOFOLLOW_LINKS) && Files.isRegularFile(server, NOFOLLOW_LINKS)) {
-            "current Build $number$suffix requires ordinary client and server ZIPs"
-        }
-        return CandidatePair(release, client, server, Hashes.sha256(client), Hashes.sha256(server))
+    private fun selectPaths(root: Path, extra: List<String> = emptyList()): CandidatePair {
+        val scriptRoot = Path.of(System.getProperty("bc.repo.root", ".")).toAbsolutePath().normalize()
+        val json = try { BoundedCommand.capture(scriptRoot, listOf("python3", "-B", scriptRoot.resolve("scripts/candidate_paths.py").toString(),
+            "--root", root.toAbsolutePath().toString()) + extra, Duration.ofSeconds(30)) }
+            catch (failure: IllegalStateException) { throw IllegalArgumentException("exact candidate selection failed: ${failure.message}", failure) }
+        val value = jacksonObjectMapper().readTree(json)
+        val client = Path.of(value.path("client").asText())
+        val server = Path.of(value.path("server").asText())
+        return CandidatePair(client.parent.parent, client, server, value.path("client_sha256").asText(), value.path("server_sha256").asText())
     }
 
 }
@@ -129,13 +89,23 @@ object CandidateLocator {
 object PackTestHandoff {
     private val mapper = jacksonObjectMapper()
 
-    fun validate(path: Path, pair: CandidatePair): String {
-        require(Files.isRegularFile(path)) { "pack-test handoff is missing: $path" }
+    fun validate(path: Path, pair: CandidatePair, authorityRoot: Path = System.getenv("WORKSPACE_COORDINATION_ROOT")?.takeIf(String::isNotBlank)?.let(Path::of)
+        ?: Path.of(System.getProperty("user.home"), ".worklane/coordination")): String {
+        CandidateBinding.requireOrdinary(path)
+        require(Files.isRegularFile(path) && Files.size(path) <= 1024 * 1024) { "pack-test handoff is missing or oversized: $path" }
         val document = mapper.readTree(path.toFile())
         require(document.path("schema").asText() == "bc.pack_test_handoff.v1") { "unexpected pack-test handoff schema" }
-        require(document.path("producer").path("agent").asText() == "workspace_coord") {
-            "only workspace_coord may admit an immutable candidate"
-        }
+        val task = document.path("task_id").asText()
+        val generation = document.path("task_generation")
+        val taskOwner = document.path("task_owner").asText()
+        val operation = document.path("selector").asText()
+        require(task.isNotBlank() && generation.isIntegralNumber && generation.asLong() > 0 && taskOwner.isNotBlank() &&
+            operation in setOf("dist", "debug")) { "handoff lacks registered task/owner/operation authority" }
+        val root = Path.of(System.getProperty("bc.repo.root", ".")).toAbsolutePath().normalize()
+        val authority = BoundedCommand.capture(root, listOf("python3", "-B", root.resolve("scripts/workspace_coordination.py").toString(),
+            "--root", authorityRoot.toString(), "authority", "--task", task, "--generation", generation.asText(),
+            "--owner", taskOwner, "--operation", "pack-test:$operation"), Duration.ofSeconds(30))
+        require(jacksonObjectMapper().readTree(authority).path("valid").asBoolean(false)) { "stale task authority" }
         require(document.path("authorization").path("explicit").asBoolean()) { "pack-test handoff lacks explicit authorization" }
         require(document.path("callback").path("agent").asText().isNotBlank() && document.path("callback").path("pane_id").asText().isNotBlank()) {
             "pack-test handoff lacks a callback agent and pane"
@@ -310,7 +280,6 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
         if (!success && failures.isEmpty()) failures += "suite failed outside a named checkpoint"
         event("suite_finished", mapOf("success" to success, "failures" to failures.toList()))
         writeSummary(if (success) "passed" else "failed")
-        if (success && fixture.exists()) check(fixture.toFile().deleteRecursively()) { "failed to remove passed fixture: $fixture" }
         println("evidence: ${directory.absolutePathString()}")
     }
 

@@ -30,7 +30,7 @@ class PrettyPipesRecipeContractTest {
                 process.destroyForcibly()
                 assertTrue(process.waitFor(5, TimeUnit.SECONDS), "Recipe fixture process cleanup")
             }
-            Files.deleteIfExists(log)
+            // Retain bounded recipe output on success and failure.
         }
         val actions = jacksonObjectMapper().readTree(output).toList()
         val pretty = actions.filter { it.path("output").asText().contains("prettypipes:") }

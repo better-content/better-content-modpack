@@ -13,6 +13,18 @@ docs
 /gradlew
 /gradlew.bat
 /release.main.kts
+# Agent guidance, maintenance/control entry points and authored work plans are not runtime content.
+/AGENTS.md
+/.pi/
+/.kotlin/
+/maintenance.main.kts
+/pack-test-lock.main.kts
+/pack-test-queue.main.kts
+/test-control.main.kts
+/plans/
+/review/
+/dist.sh
+/package.sh
 /settings.gradle.kts
 /src/
 /test.main.kts

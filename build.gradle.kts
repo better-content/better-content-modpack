@@ -40,6 +40,7 @@ tasks.withType<Test>().configureEach {
     systemProperty("bc.repo.root", layout.projectDirectory.asFile.absolutePath)
     val testTemp = layout.buildDirectory.dir("tmp/tests")
     systemProperty("java.io.tmpdir", testTemp.get().asFile.absolutePath)
+    systemProperty("junit.jupiter.tempdir.cleanup.mode.default", "NEVER")
     doFirst { testTemp.get().asFile.mkdirs() }
 }
 
@@ -50,6 +51,9 @@ tasks.test {
         exec { commandLine("python3", "-B", "scripts/test_testing_session.py") }
         exec { commandLine("python3", "-B", "scripts/test_bounded_facade.py") }
         exec { commandLine("python3", "-B", "scripts/test_prepare_dev_inputs.py") }
+        exec { commandLine("python3", "-B", "scripts/test_ci_boundaries.py") }
+        exec { commandLine("python3", "-B", "scripts/test_workspace_coordination.py") }
+        exec { commandLine("python3", "-B", "scripts/test_candidate_routing.py") }
         exec { commandLine("python3", "-B", "scripts/prepare_dev_inputs.py") }
     }
 }
@@ -63,9 +67,7 @@ fun registerPackTest(name: String, tag: String, descriptionText: String) =
         useJUnitPlatform { includeTags(tag) }
         shouldRunAfter(tasks.test)
         doFirst {
-            require(!System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) {
-                "pack-level Gradle tasks must be invoked through ./test.main.kts so the shared runner mutex is held"
-            }
+            exec { commandLine("python3", "-B", "scripts/runner_lock.py") }
         }
     }
 
@@ -90,6 +92,7 @@ tasks.register<JavaExec>("prepareFreshDist") {
     dependsOn(tasks.classes)
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("com.bettercontent.tests.release.ReleasePipelineKt")
+    systemProperty("bc.gradle.home", gradle.gradleHomeDir!!.absolutePath)
     args(
         layout.projectDirectory.asFile.absolutePath,
         providers.gradleProperty("releaseJobs").orElse("2").get(),

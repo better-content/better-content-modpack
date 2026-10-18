@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Materialize pinned source-only checkouts for the fast reflection boundary test.
+"""Materialize complete pinned source inputs for CI inspection and source builds.
 
-No mod is built, deployed, or used as a CI provider JAR by this operation.
+Includes wrappers, Gradle/build configuration and non-src inspection inputs. This
+operation does not itself build or deploy mods or prepare provider JARs.
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -11,7 +12,17 @@ import re
 import subprocess
 
 
+def reject_symlink_ancestors(path: Path):
+    for candidate in (path, *path.parents):
+        if candidate.is_symlink():
+            raise ValueError(f"refuse symlink source checkout boundary: {candidate}")
+
+
 def checkout(manifest: Path, workspace: Path):
+    if '..' in workspace.parts:
+        raise ValueError("source checkout workspace must not contain parent traversal")
+    workspace = workspace.absolute()
+    reject_symlink_ancestors(workspace / 'mod_source')
     document = json.loads(manifest.read_text())
     if document.get("schema") != "bc.ci_source_revisions.v1":
         raise ValueError("unsupported CI source inventory")
@@ -27,16 +38,16 @@ def checkout(manifest: Path, workspace: Path):
 
     def materialize(record):
         target = workspace / "mod_source" / record["repository"]
+        reject_symlink_ancestors(target)
         if target.exists():
             raise ValueError(f"refuse to overwrite existing source checkout: {target}")
         target.parent.mkdir(parents=True, exist_ok=True)
+        reject_symlink_ancestors(target)
         subprocess.run(["git", "init", str(target)], check=True, capture_output=True)
         def git(*args):
             return subprocess.run(["git", "-C", str(target), *args], check=True,
                                   text=True, capture_output=True)
         git("remote", "add", "origin", f"https://github.com/better-content/{record['repository']}.git")
-        git("config", "core.sparseCheckout", "true")
-        (target / ".git/info/sparse-checkout").write_text("/src/\n")
         git("fetch", "--depth=1", "--filter=blob:none", "origin", record["commit"])
         git("checkout", "--detach", "FETCH_HEAD")
         if git("rev-parse", "HEAD").stdout.strip() != record["commit"]:

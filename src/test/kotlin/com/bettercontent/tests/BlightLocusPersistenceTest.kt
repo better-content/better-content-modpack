@@ -14,9 +14,7 @@ class BlightLocusPersistenceTest {
     private fun fixture(test: (Path) -> Unit) {
         val directory = Path.of("build", "blight-persistence-tests", UUID.randomUUID().toString())
         Files.createDirectories(directory)
-        try { test(directory) } finally {
-            Files.walk(directory).use { paths -> paths.sorted(Comparator.reverseOrder()).forEach { Files.delete(it) } }
-        }
+        test(directory) // Retain generated world metadata and failure state on every outcome.
     }
 
     private fun gzip(path: Path, body: DataOutputStream.() -> Unit) {

@@ -13,10 +13,12 @@ spec.loader.exec_module(providers)
 
 class ProviderBootstrapTest(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
-        self.addCleanup(self.temp.cleanup)
-        self.pack = Path(self.temp.name) / "pack"
-        self.output = Path(self.temp.name) / "output"
+        temporary_root = Path.home() / '.tmp'
+        temporary_root.mkdir(parents=True, exist_ok=True)
+        fixture = Path(tempfile.mkdtemp(prefix='provider-test-', dir=temporary_root))
+        # Keep provider staging and corrupt-input fixtures regardless of outcome.
+        self.pack = fixture / "pack"
+        self.output = fixture / "output"
         (self.pack / "gradle").mkdir(parents=True)
         (self.pack / "mods").mkdir()
         self.mods = [dict(repository=n, modId=n, artifact=f"{n}-1.0.jar", dependsOn=d)

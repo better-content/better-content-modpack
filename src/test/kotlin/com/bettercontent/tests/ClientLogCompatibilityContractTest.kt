@@ -33,6 +33,7 @@ class ClientLogCompatibilityContractTest {
                     "[Render thread/WARN] [net.minecraft.client.multiplayer.ClientChunkCache]: ${phrases[3]} 22, 6\n",
             )
         }
-        assertEquals(4, LogPolicy.findings(listOf(rawWarnings)).size)
+        assertEquals(listOf(3), LogPolicy.findings(listOf(rawWarnings)).map { it.line },
+            "advisory WARNs do not fail correctness, but OpenAL ERROR is not hidden by familiar text")
     }
 }

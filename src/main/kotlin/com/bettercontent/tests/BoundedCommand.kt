@@ -22,14 +22,15 @@ object BoundedCommand {
     fun run(cwd: Path, command: List<String>, log: Path, budget: Duration,
             environment: Map<String, String> = emptyMap(), input: String? = null): Int {
         require(command.isNotEmpty() && !budget.isNegative && !budget.isZero)
-        val output = log.toAbsolutePath().normalize()
+        val output = log.toAbsolutePath()
+        require(output == output.normalize()) { "command output must not contain traversal components" }
         val home = Path.of(System.getProperty("user.home")).toAbsolutePath().normalize()
-        val pack = home.resolve("better-content-modpack")
-        val approved = listOf(home.resolve(".tmp"), home.resolve("workspace_artifacts"),
+        val pack = Path.of(System.getProperty("bc.repo.root", ".")).toAbsolutePath().normalize()
+        val approved = listOf(home.resolve(".tmp"), pack.parent.resolve("workspace_artifacts"),
             pack.resolve("build"), pack.resolve("generated"))
         require(approved.any(output::startsWith)) { "command output must be inside approved temporary/output roots" }
         var ancestor: Path? = output
-        while (ancestor != null && ancestor.startsWith(home)) {
+        while (ancestor != null) {
             require(!Files.isSymbolicLink(ancestor)) { "command output has a symlink ancestor: $ancestor" }
             ancestor = ancestor.parent
         }

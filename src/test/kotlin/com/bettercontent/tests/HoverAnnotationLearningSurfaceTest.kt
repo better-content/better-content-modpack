@@ -13,6 +13,7 @@ import java.util.zip.ZipFile
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.FieldVisitor
+import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
 @Tag("fast")
@@ -237,19 +238,33 @@ class HoverAnnotationLearningSurfaceTest {
         val row = registry.path("annotations").single { it.path("selector").path("tag").asText() == "dynamictrees:seeds" }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
         val auditPath = row.path("evidence").single().asText()
-        val audit = Files.readString(root.resolve(auditPath).normalize())
+        assertTrue(Files.isRegularFile(root.resolve(auditPath).normalize()))
         assertTrue(pin.contains("filename = \"DynamicTrees-1.20.1-1.4.10.jar\""))
         assertTrue(pin.contains("file-id = 7502488"))
         assertTrue(row.path("owner").asText().contains("config/dynamictrees-common.toml"))
-        assertTrue(audit.contains("Seed#doPlanting"))
-        assertTrue(audit.contains("plantSapling"))
-        assertTrue(audit.contains("biomeSuitability"))
-        assertTrue(audit.contains("No stump lookup or stump-targeted planting occurs"))
         ZipFile(pinnedModJar("DynamicTrees-1.20.1-1.4.10.jar").toFile()).use { jar ->
+            val calls = mutableSetOf<String>()
+            var foundPlanting = false
             val seed = jar.getInputStream(checkNotNull(jar.getEntry("com/ferreusveritas/dynamictrees/item/Seed.class")))
-                .use { it.readBytes().toString(Charsets.ISO_8859_1) }
-            listOf("doPlanting", "plantSapling", "biomeSuitability").forEach { assertTrue(seed.contains(it)) }
-            assertTrue(!seed.lowercase().contains("stump"))
+                .use { it.readBytes() }
+            ClassReader(seed).accept(object : ClassVisitor(Opcodes.ASM9) {
+                override fun visitMethod(access: Int, name: String, descriptor: String, signature: String?, exceptions: Array<out String>?): MethodVisitor? {
+                    if (name !in setOf("doPlanting", "shouldPlant")) return null
+                    if (name == "doPlanting") foundPlanting = true
+                    val caller = name
+                    return object : MethodVisitor(Opcodes.ASM9) {
+                        override fun visitMethodInsn(opcode: Int, owner: String, name: String, descriptor: String, isInterface: Boolean) {
+                            calls += "$caller->$owner#$name"
+                        }
+                    }
+                }
+            }, ClassReader.SKIP_DEBUG or ClassReader.SKIP_FRAMES)
+            assertTrue(foundPlanting, "pinned native Seed must expose doPlanting")
+            mapOf("doPlanting" to "plantSapling", "shouldPlant" to "biomeSuitability").forEach { (caller, method) ->
+                assertTrue(calls.any { it.startsWith("$caller->") && it.endsWith("#$method") },
+                    "native $caller must invoke $method")
+            }
+            assertTrue(calls.none { it.contains("stump", ignoreCase = true) })
         }
         assertTrue(copy.contains("suitable soil and biome"))
         assertTrue(!copy.contains("stump"))
@@ -364,9 +379,9 @@ class HoverAnnotationLearningSurfaceTest {
             annotation.path("selector").path("items").any { it.asText() == "cold_sweat:waterskin" }
         }
         val copy = row.path("lines").map { it.asText() }.joinToString(" ")
-        assertTrue(coldSweat.contains("Defines how much a waterskin will change the player's body temperature"))
-        assertTrue(coldSweat.contains("\"Waterskin Strength\" = 50"))
-        assertTrue(thirst.contains("Defines items that will recover thirst when drunk"))
+        val strength = Regex("(?m)^\\s*\"Waterskin Strength\"\\s*=\\s*([0-9]+)\\s*(?:#.*)?$")
+            .find(coldSweat)?.groupValues?.get(1)?.toInt()
+        assertEquals(50, strength, "read the active waterskin setting, not its explanatory comment")
         assertTrue(!thirst.contains("cold_sweat:waterskin") && !thirst.contains("cold_sweat:filled_waterskin"))
         assertTrue(row.path("owner").asText().contains("config/coldsweat/item.toml"))
         assertTrue(row.path("evidence").any { it.asText() == "config/thirst/item_settings.toml" })
@@ -712,7 +727,9 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(acquisition.contains("SpiritCreditAllocation.fromNative(nativeDrops"))
         assertTrue(acquisition.contains("releaseGroupedSpirits(physicalDrops, victim, recipient)"))
         assertTrue(acquisition.contains("CurrencyItems.item(entry.getKey()).get()"))
-        assertTrue(allocation.contains("Maps Malum's ordinary drops"))
+        assertTrue(allocation.contains("CurrencyIdentity.fromLegacyNativeSpirit(id)"))
+        assertTrue(allocation.contains("unit < stack.getCount()"))
+        assertTrue(allocation.contains("result.merge(identity, 1, Integer::sum)"))
         assertTrue(identity.contains("fromLegacyNativeSpirit"))
         assertTrue(copy.contains("release stackable Better Content spirits from the dying mob"))
         assertTrue(copy.contains("serve as currency and ordinary Malum reagents"))
