@@ -52,6 +52,16 @@ compatibility only; helm control, camera behavior, rendering, specialized add-on
 observer synchronization, and ship persistence remain manual-playtest surfaces. Epic Fight's
 optional third-person combat camera remains player-controlled.
 
+Tinkers' Construct and the supported TCon addon melee mappings have client-side Epic Fight
+trail skins in `kubejs/assets/<namespace>/item_skins/`. These supply blade/head-local endpoints,
+lifetime and the native swing-trail texture; capability mappings alone do not define a trail.
+Short blades, swords, long blades, heavy blades, katanas, tool heads and polearms use distinct
+spans. The skins do not replace item renderers or change movesets/stats. Tinkers Integration's
+native material-colour hook tints modifiable tools; neutral silver is the authored fallback.
+Ranged and fist mappings intentionally receive no blade ribbon. The Minecraft-free
+`TinkerWeaponTrailsTest` checks coverage and complete resource fields, not native visibility,
+material tint appearance or exact model alignment; those remain in-game visual checks.
+
 Complicated Bees, EMI Ores, Forgotten Ruins, Ice and Fire, Hexerei, Malum, Occultism,
 Goety, Ars Elemental, Ars Creo, Ars Energistique, Polymorph, Supplementaries, Amendments, Genetic
 Animals, Fowl Play, Advanced Chimneys, and Realistic Block Physics are active. Farmer's Delight,
