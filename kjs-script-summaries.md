@@ -48,7 +48,6 @@ Current inventory: **102 active scripts** — 10 client, 82 server, and 10 start
 - `kubejs/server_scripts/compat/retained/refactor__questionable__70_formal_magic_domains.js` — Generates formal-magic tier, domain, origin, and glyph-provenance tags.
 - `kubejs/server_scripts/compat/retained/remove__10_ae2_skystone_tier.js` — Adjusts block tags so AE2 skystone occupies the intended mining tier.
 - `kubejs/server_scripts/compat/retained/remove__10_campfire_recipe.js` — Replaces the native campfire recipe with the pack’s explicit crafting route.
-- `kubejs/server_scripts/compat/retained/remove__40_blood_orbs_from_still_beating_hearts.js` — Uses a Still-Beating Heart to gate the Weak Blood Orb while preserving native later-orb recipes.
 - `kubejs/server_scripts/compat/reviewed/chemistry_fluid_compat.js` — Unifies the exact shared chemistry fluids used by installed processing mods.
 - `kubejs/server_scripts/compat/reviewed/furnace_policy.js` — Applies the reviewed furnace recipe and fuel policy.
 - `kubejs/server_scripts/compat/reviewed/ingot_rewrites.js` — Rewrites exact ingot recipes to the pack's canonical material forms.

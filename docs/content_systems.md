@@ -15,7 +15,7 @@ runtime logic.
 | Occult physical components | Hexerei | The mixing cauldron uses iron and a vanilla cauldron; impure chalk requires Aether, Nether, and Bumblezone trophies equally. Occultism retains rituals, spirit fire, bindings, servants, and the finite dimensional matrix |
 | Occult storage | None | Controllers, stabilizers, remotes, satchel, wormholes, mineshaft, and miners are closed; finite AE2 storage and visible Font-rooted logistics remain |
 | Vanilla boat durability, vessel-drop suppression, reinforced recipes | Better Content Fixes | No boat mutation or hiding scripts |
-| Player-kill spirit release, spirit commerce, seven village professions, and wandering-trader lifecycle | Better Content Economy | The standalone mod owns credited-kill release through Malum's animated spirit entities, the exact 245-offer villager catalogue, seven matching stations/outfits/behaviours, seven 13-good wandering stocks, and matching villager-egg offers; coins, emerald commerce, and eldritch/umbral trade are closed |
+| Player-kill spirit release, spirit commerce, eight profession identities, resident barter, and wandering-trader lifecycle | Better Spirit Commerce | The standalone mod owns credited-kill release through Malum's animated spirit entities, eight matching stations/outfits/behaviours, a 280-row profession catalogue, eight 13-good wandering stocks (104 goods), 48 Plague Doctor oddities, and matching villager-egg offers. Village residents use native barter rather than the fixed profession catalogue; coins, emerald commerce, and eldritch/umbral trade are closed |
 | TCon alloy composition and casting | Tinkers' Construct | Removes bypasses and authors exact cross-mod alloy recipes |
 | Celestial events | Better Celestial Events | Pack authors habitat tags; Font and Commerce owners implement free travel and fair visits. See [Celestial events](celestial-events.md). |
 | Kinetic assembly | Create | Uses Machine Blocks only at listed direct roots |
@@ -110,9 +110,10 @@ active achievement ledger or replacement reward system.
 The eight village professions correspond to sacred, wicked, arcane, aerial,
 aqueous, earthen, infernal, and Tempo spirits. Each has a
 matching coloured workstation, outfit, local utility behaviour, and 35-offer
-catalogue priced only in its own spirit at 1–8. Other employed villager
-professions are normalized into these eight; raw vanilla and third-party offers
-are removed. Eldritch and umbral spirits never appear in commerce.
+catalogue priced only in its own spirit at 1–8. These are catalogue and identity
+definitions, not the current village-resident trading interface: fixed profession
+catalogues and profession conversion are disabled for village villagers, who use
+personal supplies and nearby recipes through the native barter journal. Eldritch and umbral spirits never appear in commerce.
 
 Wandering traders use the same eight identities, colours, and matching payment
 spirits. Every identity carries 13 themed goods plus one one-use offer of two
@@ -134,4 +135,5 @@ harvesting tools are inert or hidden.
 The refactor supplies no old-world identity migration. New worlds are the supported baseline
 because deposit identities, placed small chunks, disturbed radioactivity and Machine Block
 identities participate in saved state. This development environment is not a save-backup service:
-all worlds/saves are disposed of at task handoff under [generated-data.md](policies/generated-data.md).
+worlds/saves are generated data retained by default under
+[generated-data.md](policies/generated-data.md); ending a task does not delete them.

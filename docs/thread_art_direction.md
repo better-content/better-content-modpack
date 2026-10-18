@@ -39,5 +39,6 @@ and facsimile model overrides; an optional active-task `REVIEW_BUNDLE` can overr
 review. It does not generate new artwork. Visually inspect every master for forbidden figures,
 subject accuracy, text artifacts and small-scale clarity, then inspect actual compact/wide reader
 and loading surfaces when runtime review is explicitly authorized. Contact sheets, original
-imagegen/session outputs and earlier review bundles are disposed of at handoff under
-[generated-data.md](policies/generated-data.md), not archived as superseded evidence.
+imagegen/session outputs and earlier review bundles are retained across handoffs by default under
+[generated-data.md](policies/generated-data.md). Finish closes activity and deletes nothing;
+purge is separately gated. Retention does not make an old review bundle a standing test dependency.

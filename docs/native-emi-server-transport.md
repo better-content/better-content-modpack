@@ -49,6 +49,7 @@ client/server selection authority, unchanged candidate hashes, strict log audit,
 when affected and process cleanup. Paired inventory acceptance is required for GUI/integration
 changes; native API checks and human pointer checks are separate.
 
-Historical candidate worlds and reports are not standing evidence dependencies. During the
-active task use evidence for diagnosis; at handoff remove it according to
-[generated-data.md](policies/generated-data.md). Do not claim deleted paths remain inspectable.
+Historical candidate worlds and reports are not standing evidence dependencies. Use evidence
+for diagnosis and retain it across handoffs by default under
+[generated-data.md](policies/generated-data.md). Finish closes activity and deletes nothing;
+purge is separately gated. Retention does not make historical observations fresh acceptance.

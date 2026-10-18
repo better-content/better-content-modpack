@@ -11,51 +11,55 @@ Only release preparation refreshes tracked Packwiz hashes; authoring/deployment 
 
 Docs-only changes use `python3 -B scripts/check_documentation.py` and `git diff --check` rather
 than full custom-mod builds. Source changes retain the owning repository's documented gate.
-All worlds/saves/candidates/evidence/caches are task-lifetime data under
-[generated-data.md](policies/generated-data.md), not permanent acceptance archives.
+Worlds/saves/candidates/evidence/caches/receipts are retained by default across tasks and
+conversations under [generated-data.md](policies/generated-data.md). Retention is not acceptance;
+finishing a task closes activity and deletes nothing.
 
 ## Test input boundary
 
-Tests must never require generated results retained from an earlier run: historical reports,
-audit prose, catalogue dumps, screenshots, worlds, or a latest-pass directory are not fixtures
-or golden baselines. Required inputs are authored/versioned fixtures, source/configuration,
-or reproducibly fetched upstream artifacts verified against committed pins. Declare and prepare
-those inputs explicitly so an empty output/cache workspace can run the documented gate.
+Historical reports, audit prose, catalogue dumps, screenshots, worlds, or a latest-pass directory
+must not become undeclared fixtures or golden baselines. Required test inputs are authored/versioned
+fixtures, source/configuration, or reproducibly fetched upstream artifacts verified against
+committed pins. Declare and prepare those inputs explicitly so an empty output/cache workspace
+can run the documented gate.
 
-Tests may inspect outputs created by the current invocation to verify the system under test;
-provider/support JARs must likewise be built or explicitly prepared for that invocation. This
-is not permission to reuse unverified leftover output. Documentation checks establish authored
+Tests may inspect outputs created by the current invocation to verify the system under test.
+Provider/support JARs and verification checkpoints may be retained and reused only after the
+canonical preparation path revalidates their scoped source/task/input/dependency identities and
+exact bytes. Existence or historical success alone never establishes eligibility. Documentation checks establish authored
 contract consistency, not proof of native behavior or runtime acceptance; native-input tests
 must inspect the authoritative implementation or data directly.
 
 ## Correctness, performance and diagnostic verdicts
 
-Correctness gates block on failed assertions, crashes, registry/script failures, unclassified
-warning/error records, startup/join timeouts, candidate-hash changes and incomplete process cleanup.
-Existing narrow compatibility classifications remain independently tested; there is no blanket
-warning/error exemption and no mod-specific waiver for a failed launch.
+Correctness gates block on failed assertions, crashes, registry/script failures, actual failed
+operations, unclassified ERROR/FATAL records, startup/join timeouts, candidate-hash changes and
+incomplete process cleanup. Warning presence or count alone never fails correctness. A WARN
+that reports an actual failure still fails on that operation, not its severity or occurrence
+quota. Familiar-warning text is not an exemption for an ERROR/FATAL. Existing narrow
+compatibility classifications remain independently tested; none waives a failed launch.
 
 Exact native Forge `DeferredWorkQueue` WARN messages reporting elapsed deferred startup work on
 `main` or `Render thread` are **performance diagnostics**, not failed operations. The parser requires
 the complete timestamp/logger/message, a valid mod namespace, and a positive finite duration in
-`ms`, `s`, `min` or `h`. Malformed messages, other loggers/threads, ERROR severity and additional
-failure payloads remain correctness findings. This category replaces the old per-mod duration and
+`ms`, `s`, `min` or `h`. Malformed timing WARNs or other logger/thread WARNs are not automatically
+correctness failures; actual failure payloads and unclassified ERROR/FATAL records remain
+correctness findings. This category replaces the old per-mod duration and
 occurrence allowances; it is not an `adpother` exception or a raised threshold for one candidate.
 
-The isolated Spirit Commerce source GameTest fixture distinguishes initial setup scheduling debt
-from runtime correctness. At most one exact native `MinecraftServer`/`Server thread` startup-lag
-WARN may be recorded as a performance diagnostic within the nonce-bound first-tick-end to
-second-tick-start window. A delayed notice strictly between second-tick-end and third-tick-start
-requires six ordered, nonshipping clock samples and the pinned native scheduling arithmetic:
-matching counters, monotonic-clock brackets, exact schedule/catch-up increments and a conservative
-post-setup residual below the native 2000 ms overload threshold. Only a lower bound on the
-post-first-tick setup interval is subtracted; actual second-tick work is not subtracted. This
-interval includes initial arena setup and may include queued work/scheduling; it is not a proven
-arena-only duration. Positive duration, consistent tick counts and the raw source record remain
-in the report, including on failure. Missing/invalid proof, repeats, malformed payloads, ERRORs,
-later notices and genuine post-setup overload remain blocking. This source-fixture classification
-does not change production code, batches, full-pack log policy, assertions, deadlines or gameplay
-performance acceptance; it is not a claim that setup cost was repaired.
+The isolated Spirit Commerce source GameTest fixture retains a causal timing classifier for
+startup diagnostics, separate from correctness. An exact native `MinecraftServer`/`Server thread`
+lag notice can be attributed to initial setup within a nonce-bound first-tick-end to second-tick-start
+window. Attribution of a delayed notice between second-tick-end and third-tick-start requires
+six ordered nonshipping clock samples and pinned native scheduling arithmetic: matching counters,
+monotonic-clock brackets, schedule/catch-up increments and a conservative residual below the
+native 2000 ms overload threshold. Only a lower bound on the post-first-tick setup interval is
+subtracted; actual second-tick work is not. That interval may include queued work/scheduling and
+is not a proven arena-only duration. Raw notices, proof eligibility and residual measurements
+remain diagnostic evidence. Missing/invalid proof, repeats or later WARNs do not alone fail
+correctness; actual failed operations and ERROR/FATAL records do. No standalone performance
+budget is invented by this classifier. Existing assertions, workload/deadline gates and gameplay
+performance acceptance remain unchanged; diagnostic attribution is not a repaired-performance claim.
 
 Every runtime suite records `startup_performance_diagnostics`: source paths/lines, normalized seconds,
 observation counts and per-mod maxima, including on failed runs. Aggregate/native logs can duplicate
@@ -80,7 +84,7 @@ run while other developers share the workspace:
 Dev runs the fast Minecraft-free contracts and `git diff --check`; it does not refresh Packwiz
 hashes. Cold-cache source inspection rehydrates only the native JAR/ZIP archives named by its tests through
 `scripts/prepare_dev_inputs.py`, verifies each active pin's hash and exercises that rehydration's
-synthetic tests. These downloads remain disposable dependencies; no Minecraft launch, deployment
+synthetic tests. These downloads remain generated dependencies retained by default; no Minecraft launch, deployment
 or distribution is performed. Fresh-dist preparation refreshes them once after source and pack changes settle.
 Pack-level tiers run only when explicitly requested:
 
@@ -111,19 +115,21 @@ is not offered by source control; checkout count is not a build requirement. Ful
 direct tier commands below. `submit --handoff /absolute/path/to/handoff.json` sends a prepared
 immutable-candidate request to the shared queue.
 
-Direct full Dist and Debug require clean active custom-mod repositories. The first authorized
-preparation in a verification session runs every active mod's verification tasks and clean
-runtime rebuild, even when the bundled JAR records the same source revision. Later preparation
-rebuilds changed/missing/hash-mismatched providers and their transitive consumers. It stages and
+Direct full Dist and Debug require clean active custom-mod repositories. Authorized preparation
+revalidates retained provider checkpoints and verifies affected providers and their transitive
+consumers, clean-rebuilding whenever exact build-only reuse is ineligible. With no eligible
+checkpoints, or with `--rebuild-all`, it runs every active mod's verification tasks; matching embedded source metadata
+alone cannot skip verification. It stages and
 deploys the coherent set, refreshes Packwiz and packages once. Runtime suites still use fresh
 fixtures; the receipt never replaces pack acceptance. Release evidence binds tier IDs and hashes.
-Normal candidate discovery binds the exact `pack.toml` `Build N`/lettered version to its client
-and server ZIPs under `dist/build-N.../`; older builds may coexist while independently consumed.
-Missing/partial current builds, invalid or stale version metadata and symlink paths fail instead
-of falling back to an older complete or previously passing pair. Explicit candidate bindings
-continue to select only their exact paths and hashes.
+Unbound candidate discovery binds the exact `pack.toml` `Build N`/lettered version to its client
+and server ZIPs under `dist/build-N.../`; older builds may coexist. Missing/partial current builds,
+invalid/stale version metadata, unexpectedly newer build directories and symlink paths fail
+instead of falling back to an older complete or previously passing pair. Explicit bindings and
+queued handoffs take precedence over current-version discovery and select only their exact
+paths/hashes; binding, candidate and support paths reject symlink ancestors.
 
-### Conversation-scoped source verification
+### Persistent source verification and conversation controls
 
 Use the coordinator's stable conversation ID (`PI_SESSION_ID` in Pi; explicitly set
 `BC_OWNER_SESSION` for a launcher without that identity), never a pane or PID:
@@ -145,26 +151,48 @@ baseline. Source-control checks validate ownership but do not advance the releas
 Canonical preparation checkpoints each provider only after its complete verification tasks,
 artifact checks and input rechecks succeed. A later provider failure does not discard those
 checkpoints, but only successful complete preparation establishes a deployable coherent set.
-Without a session, tested preparation uses an invocation-scoped baseline and removes its receipt
-on completion/failure. `--skip-tests` cannot consume or create verified checkpoints.
+Without an explicit session, tested preparation creates an invocation control receipt, publishes
+its finalized attempt and retains it on completion/failure. `--skip-tests` cannot consume or
+create verified checkpoints.
 
-The atomic bounded receipt in `.worklane/testing-sessions/` records owner, generation, shared
-input fingerprint, per-repository source identity, verified JAR/provider hashes, tasks and latest
-successful verification ID, plus bounded per-provider checkpoint metadata. Candidate JAR bytes
-stay in task-owned generated evidence, not in the receipt. It contains no worlds, logs or
-historical result catalogue. A failed or incomplete baseline never authorizes deployment or
-packaging; its individually successful checkpoints may be reused only after exact current
+The bounded `bc.testing_session.v2` control receipt in `.worklane/testing-sessions/` records owner,
+generation, shared input fingerprint, per-repository source identity, verified JAR/provider hashes,
+tasks and verification IDs. Finalized immutable attempts live under `completed/`; verified
+production/support byte snapshots live separately under `artifacts/`. Neither receipt nor
+checkpoint metadata embeds worlds or logs. New conversations may import eligible checkpoints
+from finalized v2 attempts, including individually successful checkpoints from partial attempts,
+but never adopt another conversation's active mutable control receipt. Original ownership and
+verification IDs are preserved. v1 history remains untouched and is ineligible for import.
+A failed or incomplete baseline never authorizes deployment or packaging; its individually successful checkpoints may be reused only after exact current
 source/task/shared-input, production/support-byte and consumed-dependency checks. Missing or
-invalid checkpoints require rebuilding that provider and its transitive consumers. Legacy failed
+invalid checkpoints require reverifying that provider and its transitive consumers, with
+clean rebuilding unless their separate exact build identities permit build-only reuse. Legacy failed
 runs without checkpoints cannot be imported from old JARs or successful-looking logs. Identity
 includes HEAD, tracked/nonignored files and status; a later HEAD cannot be attached to a built
 JAR. Artifact changes after a reuse decision fail rather than acquiring the previous verification
 ID. Reused checkpoints retain their original verification IDs. Declared `supportArtifacts`
 (e.g. the isolated native diagnostic supplement) are gate-produced, hash-bound inputs too;
-missing/corrupt supplements require rebuilding their provider. Changed providers invalidate
-consumers. The manifest's `verificationInputs` declare external pack contracts/upstream pins and
-shared build inputs; changes conservatively require a full baseline. Embedded source metadata
-alone is insufficient. Session status adds an observational live rescan of shared inputs,
+missing/corrupt supplements invalidate reuse until canonical preparation restores or rebuilds
+and rechecks their exact bytes. Changed providers invalidate
+consumers. Per-provider manifest `verificationInputs` declare scoped external pack
+contracts/upstream pins; changes invalidate that provider and its consumer closure. Common gate
+implementation and shared build inputs invalidate all providers. Identities include Java release
+and executable bytes, the actual Kotlin runtime JAR, and the resolved Gradle distribution's
+library bytes (`bc.gradle.home`), as well as provider tasks and dependency declarations.
+Embedded source metadata alone is insufficient. Exact verified-checkpoint reuse retains its
+verification ID. Build-only reuse is narrower and does not reuse verification: when the exact
+source/build/toolchain/dependency/support identity still matches, preparation may restore a
+build snapshot and run every current verification task without an unconditional `clean`.
+Only byte-identical final production/support artifacts retain the original `build_id`; successful
+reverification always gets a fresh verification ID. Regenerated different bytes get a new build
+ID. Source, unknown-input or build-identity changes require a clean rebuild.
+
+Per-provider `buildInputs` default to `verificationInputs`. Explicit narrower scopes are allowed
+only for proven verification-only contracts: Compat pins and Journal policy use empty build-input
+lists; Commerce resources remain build inputs while its JEI/JEED verification pins do not. Shared
+inputs cover the actual release verifier/controller and Gradle build/toolchain controls, not
+unrelated Harness, packaging, test or queue facades. Explicit untested mode may independently
+reuse source-identical bundled bytes without a verification claim. Session status adds an observational live rescan of shared inputs,
 source/task identities, production/support bytes and the provider/consumer closure. It does not
 advance verification or authorize reuse; preparation rechecks under the receipt lock.
 
@@ -175,27 +203,31 @@ retry the same owned session **without `--rebuild-all`** to retain eligible chec
 ./release.main.kts --verification-session SESSION_ID
 ```
 
-`--rebuild-all` explicitly starts a fresh verification epoch: old complete-baseline records and
-partial checkpoints cannot substitute for new verification, even if this fresh attempt later
-fails. Unchanged successful checkpoints from that new attempt can then be resumed without the
-flag. Shared-contract changes still conservatively invalidate the entire set; a source-only fix
-invalidates its provider and consumers. End-of-task disposal may delete checkpoint bytes, which
-makes them ineligible rather than weakening verification. All normal Dev/Dist acceptance,
+`--rebuild-all` explicitly starts a fresh verification epoch and disables archive import for
+the lifetime of that active receipt: old complete-baseline records and partial checkpoints cannot
+substitute for new verification, even if this fresh attempt later fails. Unchanged successful
+checkpoints from that new epoch can then be resumed without the flag. Shared-contract changes
+invalidate the entire set; scoped/source-only changes invalidate their providers and consumers.
+Missing or modified checkpoint bytes make them ineligible rather than weakening verification;
+task handoff itself does not delete them. All normal Dev/Dist acceptance,
 immutable candidate hashes, strict diagnostics and process-cleanup requirements remain in force.
 
 Same conversation identity survives compaction/reconnection. Only explicitly owner-admitted
-helper conversation identities can share it; receipt ownership never changes. Different owners are rejected;
-uncertain liveness is not permission to adopt a receipt. Explicit end refuses during preparation.
+helper conversation identities can share the active control; its ownership never changes.
+Different owners are rejected from that mutable control. Cross-conversation checkpoint import
+uses finalized immutable attempts instead. Explicit end refuses during preparation.
 After stopping and confirming complete cleanup of an interrupted owned tree, its owner may use
 `session recover SESSION_ID --confirm-terminated-run RUN_ID` to clear the abandoned active-run
 marker while preserving checkpoints for canonical revalidation. Alternatively,
-`session end SESSION_ID --confirm-terminated-run RUN_ID` discards the receipt. Both refuse if
-the coordinator PID still exists or the run ID does not match. That confirmation is an explicit
+`session end SESSION_ID --confirm-terminated-run RUN_ID` marks its control ended without
+deleting it. Both refuse if the coordinator PID still exists or the run ID does not match. That confirmation is an explicit
 cleanup assertion, not inference from PID absence; helpers cannot perform owner recovery.
-Recovery does not verify any artifact or authorize deployment. End unused sessions explicitly. Admission/revocation and explicit replacement refuse an active
-coordinator. End/replacement is owner-only; a helper cannot transfer ownership or revive a receipt.
-Uncertain owner liveness remains fail-closed and requires explicit owner reconciliation, never
-cross-conversation adoption. Receipts are task-lifetime data and are removed on handoff.
+Recovery does not verify any artifact or authorize deployment. End unused active controls
+explicitly. Admission/revocation and replacement refuse an active coordinator. End/replacement
+is owner-only and marks controls ended while retaining their files, completed attempts and artifact
+snapshots; a helper cannot transfer ownership or revive a receipt. Uncertain owner liveness
+requires explicit owner reconciliation, never mutable-control adoption. Receipts are retained
+across handoffs by default; task completion does not remove them.
 Synthetic receipt tests do not establish completed cold source-build or Debug acceptance.
 The two Librarian snapshot users pin the exact timestamped implementation via plugin resolution,
 not merely a dated marker that still depends on a floating implementation.
@@ -223,13 +255,16 @@ Targeted runs still perform fast checks and candidate validation, then start onl
 runtime fixture and its required setup. They check candidate hashes, process cleanup, and strict
 logs. Findings are recorded in the target evidence and fail that targeted run. If a source fix
 needs a new JAR, use `./release.main.kts --target font:aether --retry-of RUN_ID` to package once
-and test that target. Direct full Debug later uses the session's affected-source verification
-and runs complete Dist and Debug on its new, unchanged ZIP pair.
+and test that target. A later unbound full Debug uses affected-source verification and runs complete Dist and Debug
+on its new, unchanged ZIP pair.
 
 Full retries also accept `--retry-of RUN_ID --candidate-binding PATH` without a target. The
 binding is canonical tested release `release/provenance.json` with exact paths, ZIP SHA-256,
 source commits and production/runtime input fingerprint. Mismatches fail rather than silently
-selecting another candidate. Bound full Debug runs a fresh Dist prerequisite and complete Debug.
+selecting another candidate. Bound full Dist and Debug do not invoke release preparation, source rebuilding or packaging.
+Bound full Debug runs a fresh pinned Dist prerequisite and complete Debug, checking the
+prerequisite's exact selected candidate paths and hashes. `BC_TEST_RETRY_OF` is propagated through
+that prerequisite for diagnostic lineage only, never as a pass waiver.
 Harness-only edits can retain hashes; production/source changes require canonical preparation
 and a new binding. Legacy provenance without runtime/support fingerprints cannot authorize reuse.
 Targeted fixtures also require a binding or a coordinator handoff whose `artifacts` explicitly
@@ -238,11 +273,12 @@ because it exists. Prior run IDs establish diagnostic lineage, not a prior-pass 
 
 Dist includes Dev, candidate contracts, a real full-pack client joining a fresh dedicated server,
 an online player heartbeat, strict logs, and candidate hashes. It does not run dimension travel.
-Direct full Debug uses unchanged candidate hashes from its newly packaged Dist run and adds
+Unbound full Debug uses unchanged candidate hashes from its newly packaged Dist run; bound full
+Debug uses its exact retained candidate pair after a fresh Dist prerequisite. Both add
 dedicated-server startup/runtime snapshot, three
 fresh locations per directly teleportable dimension with strict three-sample TPS and Font-only
 direct-travel guards, one lineage transition and archive, three live client campaigns,
-server restart/client reconnect, four native Font round trips, native networked extended-bottom
+server restart/client reconnect, three native Font round trips, native networked extended-bottom
 Deep Void entry with negative controls, and singleplayer title screen, unseeded native creation,
 and separately seeded save/reopen.
 
@@ -250,10 +286,12 @@ Dist, Debug, and `release.main.kts` share one kernel-backed runner mutex. The
 supported entry points acquire it automatically and publish current ownership at
 `$HOME/.local/share/worklane/pack-tests/owner.json`; contention fails immediately with exit code
 75 and that ownership record. Dev and custom-mod repository-local checks do not use this mutex.
-Do not invoke the heavyweight Gradle tasks directly: they require the inherited lock token.
+Do not invoke the heavyweight Gradle tasks directly: inherited authorization requires both
+the actual full POSIX kernel lock and a live ancestor owner, not a token string alone. Direct
+preparation also holds the runner mutex for its action lifetime.
 
-Only `workspace_coord` admits work to the persistent queue. It supplies an immutable-candidate
-handoff and registers it with:
+Queue admission uses registered task producer authority, not a magic agent name. The authorized
+producer supplies an immutable-candidate handoff and registers it with:
 
 ```sh
 ./pack-test-queue.main.kts request /absolute/path/to/handoff.json
@@ -261,14 +299,24 @@ handoff and registers it with:
 ./pack-test-queue.main.kts run-next
 ```
 
-Product lanes do not wait inside a runner process when the mutex is owned. They register their
-dependency with `workspace_coord`, become idle, and resume when the coordinator or `pack_tests`
-notifies the handoff callback. The `bc.pack_test_handoff.v1` document must include explicit user
-authorization, request ID and selector; producer and callback agent/pane identity; modpack HEAD
-and status; absolute client/server paths and SHA-256 hashes; repository revisions/statuses;
-producer validations; artifacts; ordered dependencies; requested scenarios; and prior evidence.
-Admission copies the document into the queue, rejects duplicate request IDs, and the harness
-revalidates the exact candidate paths and hashes before use.
+Helpers do not wait inside a runner process when the mutex is owned. They register their
+dependency with their task's accountable lead, become idle, and resume when that lead or the
+assigned runner notifies the handoff callback. No permanent workspace-wide coordinator role is required. The `bc.pack_test_handoff.v1` document must include explicit user
+authorization (`authorization.explicit`), nonblank `task_id`, positive `task_generation`,
+`task_owner` naming the registered accountable lead, request ID and selector; producer and callback agent/pane identity; modpack HEAD and status; absolute
+client/server paths and SHA-256 hashes; repository revisions/statuses; producer validations;
+artifacts; ordered dependencies; requested scenarios; and prior evidence. Optional
+`candidate_binding` carries the exact provenance path; artifacts must still bind support bytes.
+Admission copies the document into the queue and rejects duplicate request IDs. Exact candidate
+paths/hashes and symlink ancestry are checked before admission, at dispatch and before harness use.
+Task owner, generation and selector-authorized operation are rechecked through
+[workspace coordination](workspace-coordination.md) at all three boundaries. The operation is
+`pack-test:dist` or `pack-test:debug` from the original selector; Debug's Dist prerequisite remains
+under its Debug operation. Task registration grants these with repeatable `--operation`; an empty
+grant set admits no pack tests. Producer agent identity alone confers no authority. The controller
+uses `WORKSPACE_COORDINATION_ROOT` or `~/.worklane/coordination`, not the modpack root. These grants
+are operator metadata, not cryptographic proof of a user conversation; explicit user authorization
+remains a separate mandatory condition.
 Queued full Debug runs against that pinned pair and does not rebuild sources or package another
 pair.
 
@@ -294,7 +342,7 @@ Dev writes ordinary Gradle XML and HTML reports only. Dist and Debug use a run I
 structured evidence beneath `generated/test-evidence/<run-id>/`: incremental JSON events, a
 `bc.modpack_test_run.v1` summary, and candidate hashes. Runtime groups add logs and timeout
 diagnostics; Debug also collects runtime data. The single-player group records the customized
-title screen without injecting input. Failed fixtures remain available during the active task only.
+title screen without injecting input. Failed fixtures remain retained for diagnosis across handoffs by default.
 Automated tests must not synthesize mouse movement or mouse
 clicks. Threads reader development, the Quark chat emote picker, the World Condenser configuration
 screen, and the Create World menu are manual visual gates. The seeded persistence probe's
@@ -318,14 +366,15 @@ ID, hashes, failed or aborted cases, evidence path, retained fixture, and proces
 Cleanup retains observed process descendants after their parent exits and checks termination after
 graceful and forced shutdown. Every fixture is closed even when an earlier close fails. The
 `process_cleanup` event reports `complete=false`, surviving PIDs, and an error when cleanup fails;
-the suite then fails and keeps its fixture and original failure evidence until task handoff. `complete=true` means
+the suite then fails and retains its fixture and original failure evidence across task handoff. `complete=true` means
 all tracked processes have exited. Dev tests ordinary, forced, and orphaned-child
 shutdown without launching Minecraft.
 
 A runtime snapshot is evidence for a target only when its snapshot ID appears in that run's server
 events and the run's `candidate_selected` hashes match the target under discussion. Completeness
 makes a snapshot usable evidence; recency alone does not make it current. Do not use unmatched
-snapshots or their volatile totals as claims about the tracked pack; dispose of them at handoff.
+snapshots or their volatile totals as claims about the tracked pack. Retained historical evidence
+must be labeled with its original candidate/run, never presented as fresh acceptance.
 
 The better-runtime-diagnostics completion schema is `bc.runtime_dump_completion.v3` and includes
 `dimensions.json` (`bc.dimensions.v1`). Debug multiplayer traversal discovers targets at run time
@@ -400,7 +449,7 @@ is disclosed and is not a hardware-accelerated performance or manual visual acce
 | Campaign/repair | Three real Survival clients, fixture corridors, native routed encounters and repair geometry | Recorded three-client resource profile, bounded routed-stage/heartbeat waits; rejected routes recorded, not waived |
 | Restart/Flesh/whale | Current fixture saved state, native restart/reconnect and client spawn observations | Bounded stop/restart/client waits; fresh evidence and unchanged candidate hashes |
 | Lifecycle/snapshot/pyramid | Native completion schema and snapshot ID, one committed lineage archive, pinned structure seed and saved structure record | Bounded native command/completion waits; one generation only; saved evidence belongs to the current run |
-| Final audits/cleanup | Current logs, ZIP/support digests and all owned identities | Bounded diagnostic/TERM/KILL/reap phases; retain failure during diagnosis, dispose at handoff |
+| Final audits/cleanup | Current logs, ZIP/support digests and all owned identities | Bounded diagnostic/TERM/KILL/reap phases; retain evidence across handoffs; process cleanup is not data purge |
 
 ## Task registration and handoff
 
@@ -409,15 +458,18 @@ and consumed/output boundaries with `maintenance.main.kts begin --task TASK_ID -
 All tests/retries in that task keep the same candidate alive until diagnosis/testing/delivery
 ends. Queue handoffs remain active consumers until their callbacks/delivery complete.
 
-Before final success/failure/cancellation/blocked handoff, report results, stop owned producers,
-then run `maintenance.main.kts finish --task TASK_ID --apply`. Caches/provider/build JARs are
-removed once idle, along with evidence, superseded ZIPs and worlds regardless of verdict.
-The latest complete packaged ZIP pair remains retained under the disposal policy. Active consumers
-are reported as incomplete cleanup, not historical retention. See the canonical
-[disposal policy](policies/generated-data.md) for audit, pins, resume and safety behavior.
-Successful packaging can remove expanded staging sooner; failed staging lasts only for the
-active task's diagnosis. Apart from the latest complete packaged ZIP pair, no
-current-candidate/latest-pass/unresolved-failure exception survives.
+Before final success/failure/cancellation/blocked handoff, report results and stop owned producers.
+Finish closes activity and releases its lease; it deletes nothing. Preserve outputs, caches,
+provider/build JARs, evidence, worlds and receipts across handoffs and conversations by default.
+Task assignment, turn-scoped file claims, operation-lifetime leases and retention records are
+separate: releasing a turn claim does not end a task or cancel its helpers/jobs.
+
+Purge is a separate operation, never a finish side effect. It requires quiet (no working agents),
+stable (current usable modpack proof), and messy gates, and must protect the last known good build
+and latest candidate with their support bytes and evidence. Follow the canonical
+[retention/purge policy](policies/generated-data.md) for the implemented commands and safety gates;
+do not use an old `finish --apply` cleanup recipe. Process termination remains mandatory even
+though data is retained.
 
 ## Untested lettered builds
 
@@ -443,7 +495,7 @@ receipt or tested provenance is created or reused for this path.
 `pack.toml` and the client manifest carry `Build 443a`; canonical outputs are
 `dist/build-443a/{client,server}/better-content.zip`. Suffixes advance without overwriting an existing
 revision; the next ordinary numeric package after any `443` lettered revision is `444`.
-Register/finish the packaging task under the disposal policy. Lettered output retention follows
+Register/finish the packaging task under the retention policy. Lettered output retention follows
 that same policy and is independent of acceptance.
 
 ## Fresh distributions
@@ -458,11 +510,14 @@ Only an explicit fresh-dist request authorizes:
 
 The release command consumes `gradle/active-custom-mods.json`, requires clean active repositories,
 and records each local source `HEAD` in release evidence. It never fetches or modifies remotes.
-Tested preparation clean-rebuilds and verifies the session's required provider/consumer closure,
-with a full initial baseline. It annotates and deploys the coherent staged set, refreshes Packwiz
+Tested preparation revalidates persistent checkpoints, then verifies the required
+provider/consumer closure using a clean rebuild or eligible exact build-only snapshot, with a
+full verification baseline when no eligible verified checkpoints remain
+or `--rebuild-all` is requested. It annotates and deploys the coherent staged set, refreshes Packwiz
 hashes and checks the diff, runs `dist.sh`
 exactly once, and then runs the complete Dist tier. Targeted and queued Debug can test that
-unchanged ZIP pair when explicitly requested. Direct full Debug uses conversation-scoped source verification,
+unchanged ZIP pair when explicitly requested. Direct full Debug uses persistent source verification
+under a conversation-owned active control,
 then packages once and runs complete Dist and Debug. Release evidence records
 each mod's build mode and JAR hash.
 Legacy JARs without source metadata are replaced during this bootstrap run.

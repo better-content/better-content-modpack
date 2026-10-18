@@ -19,8 +19,9 @@ All current runtime identities are a clean break; no legacy config/world identit
 | `dynamic-trees-dimension-compat` | Validation-only; `./gradlew runData verifyFull`; Undergarden retired |
 | `better-ratlantis-logistics` | Retired/history-only after Ratlantis cut; no active build/staging/bundling |
 
-No non-active JAR enters `mods/` without explicitly reactivating the feature. There are 47 source
-checkouts currently; derive future counts from actual checkouts/manifest, not this historical number.
+No non-active JAR enters `mods/` without explicitly reactivating the feature. Derive
+checkout counts from the actual repositories under `/home/dev/mod_source/`, and active/provider
+counts from the manifest and its dependency closure; neither is a fixed documentation total.
 
 ## Local build and provider bootstrap
 
@@ -32,9 +33,9 @@ and sources JARs are not runtime inputs.
 
 Typed consumers accept `BC_CUSTOM_MOD_JAR_DIR`, a directory containing canonical runtime filenames.
 Blank overrides or missing required JARs fail configuration rather than silently falling back.
-Without the override, local builds use sibling `build/libs/` provider artifacts. When task-handoff
-cleanup has removed them, stage providers in manifest topological dependency order before building
-consumers. Do not make Threads/event listeners upstream providers or introduce dependency cycles.
+Without the override, local builds use sibling `build/libs/` provider artifacts. If artifacts
+are missing or fail current verification, stage providers in manifest topological dependency
+order before building consumers. Do not make Threads/event listeners upstream providers or introduce dependency cycles.
 Release preparation stages providers and passes one explicit staging directory to consumers.
 
 [testing.md](testing.md) is the sole deployment/release/testing procedure and authorization policy.
@@ -51,8 +52,11 @@ it does not build, deploy, warm caches or package. Some API consumers stage a pr
 immutable source revision when the pinned bundled baseline predates the required API. Inspect
 the current owning workflow, not historical product names, to determine that exception.
 
-The modpack reflection check materializes source-only revisions from
-`.github/ci-source-revisions.json`, including validation-only repositories. Update pins deliberately
+CI materializes complete source checkouts at revisions pinned in
+`.github/ci-source-revisions.json`, including validation-only repositories; there is no
+`src/`-only sparse filter, because owning builds and source inspection also need their
+root scripts, manifests and configuration. The public CI facade is `./test.main.kts dev`
+or the explicitly selected tier, without an extra `run` subcommand. Update pins deliberately
 after reviewed source changes; do not skip the check because a runner lacks `mod_source/`.
 Provider/CI pins must not float. SDK inventory is [toolchains.md](toolchains.md).
 Snapshot plugin artifacts and transitive dependency verification remain reproducibility limits;
@@ -69,16 +73,18 @@ but API drift in an expected pinned integration is a visible validation failure.
 
 Bundled/staged JARs record repository, mod ID and source HEAD in
 `META-INF/better-content-source.properties`. Source identity checks are local-only—no fetch/pull/
-merge or remote contact. Tested releases require a conversation-scoped full verified clean baseline, then affected-source
-verification with exact receipt-bound artifacts. Explicit test-free flows can reuse annotated
+merge or remote contact. Tested releases require a verified clean provider baseline revalidated
+against current inputs, then affected-source verification with exact receipt-bound artifacts.
+Finalized immutable checkpoints can cross conversations; active mutable controls cannot. Explicit test-free flows can reuse annotated
 source-identical JARs without a verification claim.
 [Testing](testing.md) defines those modes, without a second conflicting procedure here.
 
-## Disposal and related guidance
+## Retention and related guidance
 
-Build/provider JARs, wrapper/dependency caches, isolated test worlds and reports are disposable at
-handoff under [generated-data.md](policies/generated-data.md). Installed toolchains, tracked
-production JARs and authored fixture templates/assets are inputs and survive. A fixture world is
+Build/provider JARs, wrapper/dependency caches, isolated test worlds and reports are generated
+data retained by default across handoffs under [generated-data.md](policies/generated-data.md).
+Finishing a task deletes nothing; purge is separately gated. Installed toolchains, tracked
+production JARs and authored fixture templates/assets remain protected inputs. A fixture world is
 not an authored GameTest template merely because both have similar names.
 
 - [Workspace policy](policies/workspace.md)

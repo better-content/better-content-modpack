@@ -10,8 +10,9 @@ copying policies. All shared Better Content policy is versioned in this modpack 
 |---|---|
 | Lane environment, tools and Herdr | `/home/dev/.config/agent-guidance/lane.md` (same frozen guide for Pi/Codex) |
 | Polyrepo layout, ownership, commits and source/input boundary | [Workspace policy](policies/workspace.md) |
-| Worlds/saves, outputs, caches and task-handoff disposal | [Generated data](policies/generated-data.md) |
+| Worlds/saves, outputs, caches and retention/purge | [Generated data](policies/generated-data.md) |
 | Shared tests, release procedure and authorization | [Testing](testing.md) |
+| Task lead, bounded helpers, claims and operation leases | [Workspace coordination](workspace-coordination.md) |
 | Native inventory implementation/acceptance | [Inventory parity](inventory-parity.md) |
 | Local build commands and unique mod constraints | Owning repository `AGENTS.md` / `README.md` |
 | Repository identities, provider graph and staging | [Custom-mod workspace](custom-mod-workspace.md); executable `gradle/active-custom-mods.json` |
@@ -19,7 +20,8 @@ copying policies. All shared Better Content policy is versioned in this modpack 
 
 Current explicit user instructions determine task scope/authorization. Source/configuration
 establish implemented behavior. Exact-candidate observations establish runtime results only for
-that candidate during the active task. Design intent is not implementation, and a historical
+that candidate and the recorded run. Retained evidence may be reused only after
+revalidating its scoped inputs; it does not become a fresh runtime observation. Design intent is not implementation, and a historical
 pass is not fresh verification. If source and documented intent conflict, resolve the specific
 owner decision rather than declaring either universally authoritative. Mark undiscoverable facts
 `UNKNOWN`; do not invent acceptance. Task plans/claims and cached fixture instructions are not
@@ -88,8 +90,11 @@ active-mod count in multiple documents. Machine-readable catalogs stay authorita
 own data rather than becoming competing narrative policy.
 
 Do not add one-off audits, pass reports, raw logs, dumps, snapshots, historical plans or diagnostic
-JSON under docs, or recreate `quarantine/docs/`. During active tasks, outputs live in classified
-disposable roots; at handoff they are removed under [generated-data.md](policies/generated-data.md).
+JSON under docs, or recreate `quarantine/docs/`. Generated outputs live in classified output roots and are retained by default across
+handoffs and conversations under [generated-data.md](policies/generated-data.md).
+Task completion closes activity; it deletes nothing. Purge requires the policy's
+quiet, stable and messy gates, preserving the last known good build and latest
+candidate with their support and evidence.
 Do not copy old acceptance claims or advertise deleted evidence paths as still available.
 Changelogs and license notices are repository history/legal metadata, not retention authorities.
 Runtime `.txt` files may be live configuration; do not classify by extension alone.

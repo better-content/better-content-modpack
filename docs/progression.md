@@ -72,8 +72,13 @@ Bumblezone is expedition-only: upstream portals, tokens, and hive
 teleportation are disabled. Ordinary vegetable patches generate naturally in the
 Overworld, but Bumblezone nurseries remain the origin of non-space food seed stock
 and yield two to four propagules from mature plants. Outside an authored origin,
-uprooting preserves one propagule with a ten-percent chance for a second; edible
-produce is never itself the planting item. The Field Cook and Embark selections
+the current `CultivarLootModifier` returns exactly one propagule for a mature,
+non-persistent-harvest, source-marked crop, and none for an unsourced crop; immature
+or persistent-harvest crops return none off-origin. Flowers use a separate
+20-percent off-origin one-propagule roll. Edible produce is never itself the planting
+item. The previously documented ten-percent chance for a second
+off-origin propagule conflicts with this implementation and remains an unresolved
+design-intent decision, not an implemented yield. The Field Cook and Embark selections
 therefore offer cabbage and tomatoes as food, not their seeds. The cultivar loot
 modifier runs after the pack's other global loot modifiers so grass cannot leak
 wheat or sage seed into the Overworld.
