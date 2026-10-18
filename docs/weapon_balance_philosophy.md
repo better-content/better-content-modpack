@@ -69,7 +69,7 @@ items outside the catalogue continue through v9 or the compatibility mod's fallb
 
 The normal item-hover surface derives one concise player-facing handling line
 from this catalogue and those capability mappings. It humanizes the Epic Fight
-form and any material alternate mode, marks work-first tools where useful, and
+form and any material alternate mode, notes gathering utility without implying weaker combat, and
 never exposes EDPS tiers, multipliers, head-scale math, or compatibility keys.
 
 Shovel and Battle Spade remain separate: the Shovel is a conventional work tool with shovel motion, while the two-head Battle Spade is a martial combat chassis with sword combos. Javelin keeps its throw through Trident; Amethyst Staff keeps its caster identity while using a melee Spear form.
