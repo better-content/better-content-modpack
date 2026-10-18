@@ -15,6 +15,15 @@ switches, dimension eligibility and the teleport operation remain owned by The D
 The owning [compatibility source](../../mod_source/better-compat-fixes/README.md) documents the
 pinned procedure, native branch GameTest and production-artifact verification.
 
+The one-time native Deep Void origin entrance is enabled through `PlaceCultTemple = true` in
+`config/Deep Void Config.toml`. Better Compat Fixes anchors both native temple variants and their
+delayed floor openings to the actual dimension bottom rather than vanilla Y=-64. Native X/Z
+positions, template selection, placement gamerule and saved placement flag remain authoritative.
+Already-placed entrances are not moved or regenerated; unplaced worlds become eligible on their
+next native level load with the corrected mod/config. This is a single origin entrance, not a
+network of distributed holes. Abductor spawning is unchanged. Source/native fixture checks do not
+constitute acceptance of a newly packaged full-pack candidate.
+
 The Bumblezone 7.13.4 is the active Font-only expedition realm replacing the
 retired Undergarden and Deeper Darker routes. `better_bumblezone_crops` owns Bumblezone food flora and
 propagation. The three visible logistics roots are pack recipes in
