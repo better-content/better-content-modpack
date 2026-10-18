@@ -52,7 +52,7 @@ For systems whose salience fades under constant trickle, use **accumulate → di
 | Owner surface | Accumulation and discharge | Recovery or quiet interval |
 | --- | --- | --- |
 | Depth Director | Eligible underground time builds encounter pressure. Each ecology has a warning, bounded surge and packet budget. | Ecology profiles specify a recovery phase; pressure also decays while on the surface. New injury relief is a separate one-time signal, not an encounter reset. |
-| Pillager Campaigns | Eligible play schedules scouts or three-wave assaults; assault arrival receives a two-minute surface warning and spawn work is capped per tick and second. | Resolving a campaign schedules the next eligible window. A stalled wave has a finite progress timeout. Do not add a second encounter in the same track while an invasion remains active. |
+| Pillager Campaigns | Eligible play schedules scouts or three-wave assaults; new interception additionally requires personal regional familiarity (30 minutes accumulated living Survival presence, strongest within 128 blocks and fading to zero at 256). Assault arrival receives a two-minute surface warning and spawn work is capped per tick and second. | Familiarity persists across visits and restart, without offline accumulation. Approaching encounters wait in unfamiliar territory; already-materialized enemies may pursue normally. Resolving a campaign schedules the next eligible window. A stalled wave has a finite progress timeout. Do not add a second encounter in the same track while an invasion remains active. |
 | Spirit economy | Credited kills release physical Better Content spirits at the dying mob immediately. | The spirits home to their credited player through Malum's ordinary collection behavior; there is no release cadence or reward ledger. |
 | Injury-pressure relief | A newly observed maim creates a temporary director-relief signal. | The saved signal decays each second on the configured curve (180 seconds by default), whether the injury remains or is treated; encounter budget and target state remain intact. |
 
@@ -94,6 +94,13 @@ Sugar's exponential consumption multiplier (`8^load`, up to `8×` at full load) 
 uniformly to all eight groups, including sugar itself and alcohol clearance. Each retains its
 own baseline decay curve; sugar's configured half-life is the unaccelerated baseline. Sugar
 and alcohol time estimates account for sugar falling during the estimate.
+
+Heavy Blow readiness uses the same server-side eligibility predicate as combat. Becoming ready
+plays one Impact systemic-salience motif with its radial particle burst and a transient activation
+label; remaining ready does not repeat the cue. Login/reconnect establishes a silent baseline.
+The existing empowered strike cue remains separate and occurs once at the target. This adds no
+permanent HUD widget and does not change attack balance. Source checks cover ordinary attacks and
+Epic Fight's native attack route; full-pack audiovisual acceptance is separate.
 
 Diet's native screen remains the authoritative nutrition display and shows each group's actual benefit, load, and estimated upper-tier time. Food tooltips and meal recaps name the effect at the moment it matters. Generic Diet-wide bonuses stay disabled so they cannot duplicate the aspect abilities.
 

@@ -10,5 +10,7 @@ better-arena-trials	src/main/java/com/bettercontent/betterarenatrials/server/Are
 better-deaths-door	src/injuryVisual/java/com/bettercontent/betterdeathsdoor/heartreview/HeartVisualReview.java
 # Isolated, non-pack native test reporter resolves registered GameTest witness identities only.
 better-abyssal-city	src/main/java/com/bettercontent/abyssal/HarnessTestReporter.java
+# Nonshipping Debug adapter seeds fixed authored campaign presence through exact public APIs only.
+better-runtime-diagnostics	src/testSupport/java/com/bettercontent/runtimetestsupport/CampaignPresenceFixture.java
 # Direct compatibility test denies client class loading during early/server plugin initialization.
 better-deaths-door	src/test/java/com/bettercontent/betterdeathsdoor/client/MantleRendererContractTest.java

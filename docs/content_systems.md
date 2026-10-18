@@ -15,7 +15,10 @@ runtime logic.
 | Occult physical components | Hexerei | The mixing cauldron uses iron and a vanilla cauldron; impure chalk requires Aether, Nether, and Bumblezone trophies equally. Occultism retains rituals, spirit fire, bindings, servants, and the finite dimensional matrix |
 | Occult storage | None | Controllers, stabilizers, remotes, satchel, wormholes, mineshaft, and miners are closed; finite AE2 storage and visible Font-rooted logistics remain |
 | Vanilla boat durability, vessel-drop suppression, reinforced recipes | Better Content Fixes | No boat mutation or hiding scripts |
-| Player-kill spirit release, spirit commerce, eight profession identities, resident barter, and wandering-trader lifecycle | Better Spirit Commerce | The standalone mod owns credited-kill release through Malum's animated spirit entities, eight matching stations/outfits/behaviours, a 280-row profession catalogue, eight 13-good wandering stocks (104 goods), 48 Plague Doctor oddities, and matching villager-egg offers. Village residents use native barter rather than the fixed profession catalogue; coins, emerald commerce, and eldritch/umbral trade are closed |
+| Player-kill spirit release, spirit commerce, eight profession identities, resident barter, and wandering-trader lifecycle | Better Spirit Commerce | The standalone mod owns credited-kill release through Malum's animated spirit entities, eight matching stations/outfits/behaviours, a 280-row profession catalogue, eight 14-good wandering stocks (112 goods), 48 Plague Doctor oddities, and matching villager-egg offers. Village residents use native barter rather than the fixed profession catalogue; coins, emerald commerce, and eldritch/umbral trade are closed |
+| Wild fruit trees and berry fields | Better Wild Fruit Trees | Fixed-location forage, mature harvest/regrowth, propagation restrictions and diamond-tier direct player removal; non-bush fruit plants and ordinary trees remain native. See the [owning source](../../mod_source/better-wild-fruit-trees/README.md). |
+| Spoiled food reuse and chopping feedback | Better Content Fixes | Spoiled produce enters native composting; spoiled meat is basic Starcatcher bait. Cut-face wood particle rate increases linearly with completion. Source/native checks are not audiovisual acceptance. |
+| Regional pillager familiarity | Better Pillager Campaigns | New campaign work requires the target player's accumulated local Survival presence, not world age; physical enemies retain native pursuit. See the [owning source](../../mod_source/better-pillager-campaigns/README.md). |
 | TCon alloy composition and casting | Tinkers' Construct | Removes bypasses and authors exact cross-mod alloy recipes |
 | Celestial events | Better Celestial Events | Pack authors habitat tags; Font and Commerce owners implement free travel and fair visits. See [Celestial events](celestial-events.md). |
 | Kinetic assembly | Create | Uses Machine Blocks only at listed direct roots |
@@ -107,6 +110,13 @@ active achievement ledger or replacement reward system.
 
 ## Spirit commerce
 
+Wandering spirit traders and economy-driven villages are **separate systems**, even though Better
+Spirit Commerce implements both. Wandering traders sell authored goods for matching spirits at
+authored prices and stock limits; their offers do not depend on resident supplies, needs,
+workstations, customer-supplied crafting ingredients or commissions. Village residents instead
+barter real goods through their own local economy. See the
+[owning gameplay boundary](../../mod_source/better-spirit-commerce/docs/commerce-systems.md).
+
 The eight village professions correspond to sacred, wicked, arcane, aerial,
 aqueous, earthen, infernal, and Tempo spirits. Each has a
 matching coloured workstation, outfit, local utility behaviour, and 35-offer
@@ -116,7 +126,8 @@ catalogues and profession conversion are disabled for village villagers, who use
 personal supplies and nearby recipes through the native barter journal. Eldritch and umbral spirits never appear in commerce.
 
 Wandering traders use the same eight identities, colours, and matching payment
-spirits. Every identity carries 13 themed goods plus one one-use offer of two
+spirits. Every identity carries 14 themed goods, including a matching campfire costing one
+corresponding commerce spirit, plus one one-use offer of two
 matching spirits for two villager eggs already assigned to the corresponding
 profession. Player-credited kills immediately release Better Content spirits at the
 dying mob through Malum's floating, homing item entities. Malum-native mappings remain authoritative, including mapped passive
@@ -129,6 +140,74 @@ delivery receipts. The native Spirit Pouch is
 the sole supported specialist storage surface. Create Deco coins, coin stacks,
 wallets, coin recipes, emerald-priced offers, Wares/Font adapters, and specialist
 harvesting tools are inert or hidden.
+
+### Ordinary trader arrival
+
+Ten total carried commerce spirits qualify a living non-spectator Overworld player, provided at
+least one good in the selected market is affordable. Loose spirits are sufficient; native Spirit
+Pouch contents count too, but a pouch is never required. Admission consumes no spirits and has no
+initial wait, intervisit cooldown or failed-site retry timer. Gamerules, safe terrain and one
+active ordinary trader still apply. Among affordable markets, selection uses the nearest eligible
+player's recent pickup history 85% of the time (square-root-dampened totals over the current and
+previous nine game-time days), and uniform randomness 15% of the time. No recent history means
+uniform selection. Spending and storage do not erase pickup history; carried funds independently
+control admission. Other-dimension pickups share the Overworld game-time clock, unaffected by
+sleeping/daytime commands. Spirit Fair retains its independent celestial occurrence contract.
+See the [owning contract](../../mod_source/better-spirit-commerce/README.md#ordinary-trader-arrival).
+
+### Spirit campfires
+
+Each wandering trader's campfire matches its spirit-market palette. The campfire is sold only
+by the matching trader, for one corresponding spirit; there is no crafting recipe. Purchased
+fires are player-placeable and recoverable. Trader-owned scenery has persisted ownership,
+produces no item drops and is retired on camp relocation/departure, without touching purchased
+fires or player replacement blocks. Cleanup never force-loads old terrain.
+
+Commerce owns the blocks, flames, standalone smoke fallback and lifecycle. Pack emitter definitions
+under `config/adchimneys/Emitters/better_spirit_commerce$*_campfire*.cfg` integrate the new variants
+with Advanced Chimneys' colored replacement smoke. Ordinary normal/soul campfires are unchanged.
+The source integration does not add another wind force on top of ForgeEndertech and Weather2;
+combined wind/shader appearance remains a full-stack client acceptance concern. Details and
+source checks belong to [Spirit Commerce](../../mod_source/better-spirit-commerce/README.md).
+
+## Forage, chopping and spoiled food
+
+Fixed-location berry fields include sweet berry, Fruits Delight blueberry and cranberry, and
+optional Ars Nouveau sourceberry bushes. New decoration targets 10–14 sparsely spaced plants
+within a 29×29 footprint, limited by terrain; existing chunks are not backfilled. Bush foliage
+stays mature across native picking and regrowth, with each plant's native food yield. Direct
+planting and berry-to-pot propagation are closed. Direct normal-player removal of these bushes
+and protected fruit trees needs a registered diamond-or-better axe tier. Tinkers' axes use their
+native per-stack harvest tier, including upgrades, rather than their dummy superclass tier;
+broken or uninitialized tools are denied. Machine/FakePlayer mining is exempt. Indirect soil/hoe/fluid removal remains native. Commands, world editing and writes that
+bypass normal placement events are not a propagation guarantee. Protected tree classification is
+loaded-only and bounded, failing open when a fruit root is unavailable; ordinary trees stay native.
+
+Chopping feedback is a time-integrated rate: `2 + 16 × completion` material chips per second,
+sampled on native mining ticks with fractional carry, not a fixed chip budget per block or a
+render-frame budget. Chips originate at the cut; stopping, changing targets/material or rolling
+progress back resets the accumulator. Ordinary logs and Dynamic Trees are covered; native
+completion debris and unrelated blocks are unchanged.
+
+Spoiled produce uses vanilla composting at a 65% layer chance toward bone meal. Spoiled meat is
+additive basic Starcatcher bait, retaining its native rod menu, lure-time benefit and bobber-owned
+consumption. Specialist bait pools and the existing disabled Aquaculture recipe are unchanged.
+The Compat source fixture proves native mechanics with explicit stand-ins when Industrial Heat
+is absent; actual spoiled-item loading and client chopping appearance remain full-stack acceptance
+work. Its mechanical gate still reports inherited Farmer's Respite recipe/loot diagnostics and a
+Dispenser mixin warning; this is not a clean strict-log pack verdict. See the
+[owning checks and limitations](../../mod_source/better-compat-fixes/README.md).
+
+## Regional campaign familiarity
+
+New pillager campaign targeting/materialization requires 36,000 actually observed living Survival
+ticks (30 minutes at 20 TPS) accumulated per player and dimension across visits. Nearby presence
+has full influence through roughly 128 blocks and smoothly falls to zero at 256; offline time,
+world age and another player's history do not count. The bounded occupied-cell ledger preserves
+established regions over transient travel but can evict the weakest history at its 1,024-cell cap.
+Already physical enemies can still pursue into unfamiliar terrain. Existing progression clocks
+and campaign lifetimes are unchanged. Source-native fixtures seed explicit authored familiarity;
+such a seed is not evidence of a real elapsed 30-minute session or restart acceptance.
 
 ## New-world baseline
 

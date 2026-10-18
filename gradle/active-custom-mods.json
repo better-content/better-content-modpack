@@ -60,7 +60,7 @@
     },
     {
       "repository": "better-spirit-commerce",
-      "verificationInputs": ["kubejs/data/malum/**", "mods/just-enough-effect-descriptions-jeed.pw.toml", "mods/jei.pw.toml"],
+      "verificationInputs": ["kubejs/data/malum/**", "mods/just-enough-effect-descriptions-jeed.pw.toml", "mods/jei.pw.toml", "mods/advanced-chimneys.pw.toml", "mods/forgeendertech.pw.toml", "mods/weather-storms-tornadoes.pw.toml", "config/adchimneys/Emitters/better_spirit_commerce$*.cfg"],
       "buildInputs": ["kubejs/data/malum/**"],
       "modId": "better_spirit_commerce",
       "artifact": "better-spirit-commerce-1.0.1.jar",
@@ -77,7 +77,7 @@
     },
     {
       "repository": "better-compat-fixes",
-      "verificationInputs": ["mods/dynamictrees.pw.toml", "mods/configured.pw.toml"],
+      "verificationInputs": ["mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/starcatcher.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json"],
       "buildInputs": [],
       "modId": "better_compat_fixes",
       "artifact": "better-compat-fixes-0.1.9.jar",
