@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Task-lifetime disposal, retaining only the latest complete packaged ZIP pair."""
+"""Retain generated work by default; prune only explicit reclaimable data while quiet/stable/messy."""
 from __future__ import annotations
 import argparse
 import contextlib
 import fcntl
+import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -14,7 +16,12 @@ import sys
 import time
 import uuid
 
-SCHEMA = 'bc.workspace_maintenance.v2'
+SCHEMA = 'bc.workspace_maintenance.v3'
+LEGACY_SCHEMA = 'bc.workspace_maintenance.v2'
+GIB = 1024 ** 3
+DEFAULT_THRESHOLDS = {'warning_used': 80, 'critical_used': 90,
+                      'warning_free': 50 * GIB, 'critical_free': 20 * GIB,
+                      'messy_bytes': 20 * GIB}
 ID = re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,119}$')
 REPO_OUTPUTS = {'build', '.gradle', '.kotlin', 'generated', 'dist', 'logs',
                 'crash-reports', 'screenshots', 'saves', 'world', 'server-instance',
@@ -52,7 +59,7 @@ def allocated(path):
     if not exists(path):
         return 0
     # du does not follow symbolic links; bytes are allocated rather than apparent.
-    r = subprocess.run(['du', '-sk', '--', str(path)], capture_output=True, text=True)
+    r = subprocess.run(['du', '-sk', '--', str(path)], capture_output=True, text=True, timeout=30)
     if r.returncode:
         raise RuntimeError('cannot measure target: ' + str(path))
     return int(r.stdout.split()[0]) * 1024
@@ -60,7 +67,7 @@ def allocated(path):
 
 def git_inputs(repo):
     def git(*args):
-        r = subprocess.run(['git', '-C', str(repo), *args], capture_output=True)
+        r = subprocess.run(['git', '-C', str(repo), *args], capture_output=True, timeout=30)
         if r.returncode:
             raise RuntimeError('cannot inspect Git inputs: ' + str(repo))
         return [repo / os.fsdecode(p) for p in r.stdout.split(b'\0') if p]
@@ -110,6 +117,7 @@ def discover(workspace):
             if Path(base) != repo and ('build.gradle' in files or 'build.gradle.kts' in files):
                 for name in ('build', '.gradle', '.kotlin'):
                     add(Path(base) / name, 'repository output/fixture')
+    add(pack / '.worklane/testing-sessions', 'verification records and immutable artifacts')
     artifacts = workspace / 'workspace_artifacts'
     if artifacts.is_dir():
         for p in artifacts.iterdir():
@@ -132,8 +140,9 @@ def discover(workspace):
     codex = workspace / '.codex'
     if codex.is_dir():
         for p in codex.iterdir():
-            if '.sqlite' in p.name or p.name.startswith('auth.json.worklane-backup-'):
-                add(p, 'agent database/obsolete credential backup')
+            if '.sqlite' in p.name:
+                add(p, 'agent generated database')
+            # Credential backups are credentials, not generated cleanup targets.
     pi = workspace / '.pi/agent'
     for name in ('web-search-cache', 'models-store.json'):
         add(pi / name, 'agent generated cache')
@@ -231,7 +240,7 @@ def process_references(workspace):
     # Pi does not continuously hold its session FD open. Herdr publishes identities.
     session = os.environ.get('HERDR_SESSION')
     if session:
-        r = subprocess.run(['herdr', '--session', session, 'agent', 'list'], capture_output=True, text=True)
+        r = subprocess.run(['herdr', '--session', session, 'agent', 'list'], capture_output=True, text=True, timeout=15)
         if r.returncode:
             raise RuntimeError('cannot inspect Herdr agent sessions')
         for agent in json.loads(r.stdout)['result']['agents']:
@@ -269,8 +278,12 @@ def load_tasks(workspace):
     if not p.exists():
         return {}
     data = json.loads(p.read_text())
-    if data.get('schema') != SCHEMA or not isinstance(data.get('tasks'), dict):
+    if data.get('schema') not in {SCHEMA, LEGACY_SCHEMA} or not isinstance(data.get('tasks'), dict):
         raise RuntimeError('invalid active-task registry')
+    for task in data['tasks'].values():
+        pin = task.get('pin_until')
+        if pin is not None and (not isinstance(pin, (int, float)) or not math.isfinite(pin)):
+            raise ValueError('invalid non-finite task pin; reconcile without deleting data')
     return data['tasks']
 
 
@@ -344,9 +357,11 @@ def plan(workspace, refs=None, tasks=None):
     targets, repos = discover(workspace)
     refs = process_references(workspace) if refs is None else refs
     tasks = load_tasks(workspace) if tasks is None else tasks
-    retained = latest_build_outputs(workspace)
+    retention = load_retention(workspace)
+    retained = protected_outputs(workspace, retention)
     dist = workspace / 'better-content-modpack/dist'
     boundaries = [p for _, p in refs] + retained
+    boundaries += [safe_path(workspace, p) for p in retention['records']]
     leased_roots = []
     for task in tasks.values():
         until = task.get('pin_until')
@@ -359,10 +374,9 @@ def plan(workspace, refs=None, tasks=None):
     pending = list(targets.items())
     while pending:
         path, category = pending.pop()
-        descendants = any(beneath(p, path) for p in boundaries)
-        fully_leased = path in boundaries or any(beneath(path, p) for p in leased_roots)
-        splittable = category == 'disposable review/delivery/evidence' or (
-            category == 'repository output/fixture' and beneath(path, dist))
+        descendants = any(p != path and beneath(p, path) for p in boundaries)
+        fully_leased = path in retained or path in [p for _, p in refs] or any(beneath(path, p) for p in leased_roots)
+        splittable = True  # Explicit child retention/classification must constrain every output category.
         if splittable and descendants and not fully_leased \
                 and path.is_dir() and not path.is_symlink():
             pending.extend((p, category) for p in path.iterdir())
@@ -381,6 +395,8 @@ def plan(workspace, refs=None, tasks=None):
     decisions = []
     for path, category in targets.items():
         safe_path(workspace, path)
+        if not exists(path):
+            continue  # Live producers may remove temporary paths during a read-only inventory.
         reasons = []
         protected = protected_by_target.get(path, []) + [str(p) for p in operating if beneath(path, p)]
         owners = [str(pid) for pid, p in refs if beneath(p, path)]
@@ -400,13 +416,33 @@ def plan(workspace, refs=None, tasks=None):
                     owners.append('task:' + task_id)
             if active and shared_build_output(path, category) and task.get('uses_build_cache', True):
                 owners.append('task:' + task_id)
-        action = 'protect_input' if protected else 'defer_active' if owners else 'delete'
-        blocker = permission_blocker(path) if action == 'delete' else None
+        record = retention_for(path, retention)
+        classification = record['kind'] if record else (
+            'reusable' if 'cache' in category or 'dependency' in category or category.startswith('verification') else 'unknown')
+        # Unresolved diagnoses and completed registrations remain retention records, not leases.
+        retained_tasks = [task_id for task_id, task in tasks.items()
+                          if task.get('retention', 'retained') != 'released'
+                          and any(beneath(path, safe_path(workspace, p)) or
+                                  beneath(safe_path(workspace, p), path)
+                                  for p in task.get('paths', []))]
+        if retained_tasks:
+            classification = 'retained'
+            reasons.append('retained task material: ' + ', '.join(retained_tasks))
+        action = ('protect_input' if protected else 'defer_active' if owners else
+                  'delete' if classification == 'reclaimable' else 'retain')
+        try:
+            blocker = permission_blocker(path) if action == 'delete' else None
+        except FileNotFoundError:
+            continue
+        if record:
+            reasons.append(record['reason'])
+        elif not protected and not owners:
+            reasons.append('retained by default; classification is not deletion authorization')
         if blocker:
             reasons.append(blocker)
         if protected:
             if any(beneath(p, path) for p in retained):
-                reasons.append('latest complete packaged build; retention does not imply validation')
+                reasons.append('latest candidate or last known-good/support material; retention is not validation')
             else:
                 reasons.append('authored, tracked or installed operating inputs inside output tree')
         if owners:
@@ -414,13 +450,20 @@ def plan(workspace, refs=None, tasks=None):
         try:
             size = allocated(path)
         except RuntimeError:
+            if not exists(path):
+                continue
             if not owners:
                 raise
             size = 0
             reasons.append('active changing payload: size unavailable')
+        try:
+            identity = signature(path)
+        except FileNotFoundError:
+            continue
         decisions.append({'path': str(path), 'category': category, 'action': action,
+                          'classification': 'protected' if protected or owners else classification,
                           'owners': sorted(set(owners)), 'protected_inputs': protected,
-                          'reasons': reasons, 'bytes': size, 'identity': signature(path), 'blocked_permission': blocker})
+                          'reasons': reasons, 'bytes': size, 'identity': identity, 'blocked_permission': blocker})
     for relative in PROTECTED:
         p = workspace / relative
         if exists(p) and not any(d['path'] == str(p) for d in decisions):
@@ -430,7 +473,7 @@ def plan(workspace, refs=None, tasks=None):
     return decisions
 
 
-def delete_checked(path, workspace, expected):
+def delete_checked(path, workspace, expected, *, checkpoint=None):
     safe_path(workspace, path)
     history = workspace / '.pi/agent/sessions'
     if beneath(path, history) or beneath(history, path):
@@ -445,7 +488,12 @@ def delete_checked(path, workspace, expected):
         return next(line for line in Path(f'/proc/self/fdinfo/{fd}').read_text().splitlines()
                     if line.startswith('mnt_id:'))
     anchor_mount = None
+    visited = 0
     def remove(parent_fd, name, identity=None):
+        nonlocal visited
+        visited += 1
+        if checkpoint is not None and visited % 64 == 1:
+            checkpoint()  # A large directory is not one uninterruptible cleanup batch.
         try:
             s = os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
         except FileNotFoundError:
@@ -487,13 +535,50 @@ def delete_checked(path, workspace, expected):
         os.close(fd)
 
 
+def revalidate_batch(workspace, path, category):
+    """Check noncooperating consumers/protection changes inside long directory removals."""
+    refs = process_references(workspace)
+    if any(beneath(p, path) for _, p in refs):
+        raise RuntimeError('consumer appeared during deletion batch')
+    if category == 'shared rebuildable Gradle cache' and any(beneath(p, workspace / '.gradle') for _, p in refs):
+        raise RuntimeError('shared cache consumer appeared during deletion batch')
+    if '.sqlite' in path.name:
+        base = path.name.split('.sqlite')[0] + '.sqlite'
+        if any(p.parent == path.parent and p.name.startswith(base) for _, p in refs):
+            raise RuntimeError('database consumer appeared during deletion batch')
+    data = load_retention(workspace)
+    if any(beneath(p, path) or beneath(path, p) for p in protected_outputs(workspace, data)):
+        raise RuntimeError('retention changed during deletion batch')
+    record = retention_for(path, data)
+    if not record or record['kind'] != 'reclaimable' or any(
+            beneath(Path(name), path) and row['kind'] != 'reclaimable'
+            for name, row in data['records'].items()):
+        raise RuntimeError('classification changed during deletion batch')
+    for task in load_tasks(workspace).values():
+        pin = task.get('pin_until')
+        active = pin > time.time() if pin is not None else task.get('state', 'active') == 'active'
+        retained = task.get('retention', 'retained') != 'released'
+        overlap = any(beneath(safe_path(workspace, p), path) or beneath(path, safe_path(workspace, p))
+                      for p in task.get('paths', []))
+        if (overlap and (active or retained)) or (active and task.get('uses_build_cache', True)
+                                                and shared_build_output(path, category)):
+            raise RuntimeError('task protection changed during deletion batch')
+    repo = next((p for p in path.parents if (p / '.git').exists()), None)
+    if repo and any(beneath(p, path) for p in git_inputs(repo)):
+        raise RuntimeError('authored input appeared during deletion batch')
+
+
 class DisposalBlocked(RuntimeError):
     def __init__(self, removed, blocked, transaction):
         super().__init__('permission-controlled disposable targets remain')
         self.removed, self.blocked, self.transaction = removed, blocked, transaction
 
 
-def apply(workspace, decisions, transaction=None):
+def apply(workspace, decisions, transaction=None, *, admission=None):
+    # Direct callers have the same gate as the CLI; a plan alone never authorizes deletion.
+    if admission is None:
+        raise RuntimeError('prune requires quiet/stable/messy maintenance admission')
+    admission()
     state = workspace / '.worklane/disposal'
     if state.parent.is_symlink() or state.is_symlink():
         raise ValueError('unsafe disposal state directory')
@@ -525,13 +610,23 @@ def apply(workspace, decisions, transaction=None):
     checkpoint()
     removed = []
     while pending:
+        admission()  # New work requests yield before the next bounded target.
         d = pending[0]
         # Check live consumers and task leases again immediately before each target.
         fresh_refs = process_references(workspace)
         tasks = load_tasks(workspace)
         path = Path(d['path'])
-        if any(beneath(p, path) or beneath(path, p) for p in latest_build_outputs(workspace)):
-            raise RuntimeError('target became latest retained build; replan before deletion: ' + str(path))
+        retention = load_retention(workspace)
+        if any(beneath(p, path) or beneath(path, p) for p in protected_outputs(workspace, retention)):
+            raise RuntimeError('target became latest retained build or known-good material; replan: ' + str(path))
+        history = workspace / '.pi/agent/sessions'
+        if beneath(path, history) or beneath(history, path):
+            raise ValueError('protected Pi conversation history: ' + str(path))
+        classification = retention_for(path, retention)
+        if not classification or classification['kind'] != 'reclaimable':
+            raise RuntimeError('target no longer explicitly reclaimable; replan: ' + str(path))
+        if any(beneath(path, workspace / p) or beneath(workspace / p, path) for p in PROTECTED):
+            raise RuntimeError('target intersects protected operating input')
         consumers = any(beneath(p, path) for _, p in fresh_refs)
         if d['category'] == 'shared rebuildable Gradle cache':
             consumers |= any(beneath(p, workspace / '.gradle') for _, p in fresh_refs)
@@ -541,6 +636,10 @@ def apply(workspace, decisions, transaction=None):
         if consumers:
             raise RuntimeError('target became active; resume after consumer exits: ' + d['path'])
         for task in tasks.values():
+            if task.get('retention', 'retained') != 'released' and any(
+                    beneath(safe_path(workspace, p), path) or beneath(path, safe_path(workspace, p))
+                    for p in task.get('paths', [])):
+                raise RuntimeError('target has retained task material')
             until = task.get('pin_until')
             active = until > time.time() if until is not None else task.get('state', 'active') == 'active'
             if active and (any(beneath(safe_path(workspace, p), path) or beneath(path, safe_path(workspace, p))
@@ -551,8 +650,11 @@ def apply(workspace, decisions, transaction=None):
         repo = next((p for p in path.parents if (p / '.git').exists()), None)
         if repo and any(beneath(p, path) for p in git_inputs(repo)):
             raise RuntimeError('target now contains authored input: ' + str(path))
+        def batch_guard():
+            admission()
+            revalidate_batch(workspace, path, d['category'])
         try:
-            delete_checked(Path(d['path']), workspace, d['identity'])
+            delete_checked(Path(d['path']), workspace, d['identity'], checkpoint=batch_guard)
         except PermissionError as error:
             # Never chmod/chown foreign owners or mislabel their outputs as inputs.
             blocked.append({**d, 'blocked_permission': str(error)})
@@ -568,33 +670,205 @@ def apply(workspace, decisions, transaction=None):
     return removed
 
 
+def load_retention(workspace):
+    path = safe_path(workspace, workspace / '.worklane/retention.json')
+    if path.is_symlink():
+        raise ValueError('unsafe retention registry')
+    if not path.exists():
+        return {'schema': SCHEMA, 'records': {}, 'stability': {'state': 'unknown'}}
+    data = json.loads(path.read_text())
+    if data.get('schema') != SCHEMA or not isinstance(data.get('records'), dict):
+        raise ValueError('invalid retention registry')
+    for name, record in data['records'].items():
+        safe_path(workspace, name)
+        if record.get('kind') not in {'retained', 'reusable', 'reclaimable', 'unknown'} or not record.get('reason'):
+            raise ValueError('invalid retention classification')
+    return data
+
+
+def save_retention(workspace, data):
+    path = safe_path(workspace, workspace / '.worklane/retention.json')
+    path.parent.mkdir(exist_ok=True)
+    atomic_json(workspace, path, data)
+
+
+def retention_for(path, data):
+    matches = [(len(Path(name).parts), record) for name, record in data['records'].items()
+               if beneath(path, Path(name))]
+    return max(matches, key=lambda item: item[0])[1] if matches else None
+
+
+def protected_outputs(workspace, data):
+    # Preserve the whole latest candidate, not ZIPs stripped of retry fixtures/support.
+    result = list({p.parents[1] for p in latest_build_outputs(workspace)})
+    stable = data.get('last_known_good', {})
+    result += [safe_path(workspace, p) for p in stable.get('artifacts', {})]
+    result += [safe_path(workspace, p) for p in stable.get('evidence', {})]
+    result += [safe_path(workspace, p) for p, r in data['records'].items()
+               if r['kind'] in {'retained', 'reusable'}]
+    return result
+
+
+def digest_file(workspace, path):
+    path = safe_path(workspace, path)
+    if path.is_symlink() or not path.is_file():
+        raise ValueError('identity requires a regular non-symlink file: ' + str(path))
+    digest = hashlib.sha256()
+    with path.open('rb') as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def production_identity(workspace):
+    pack = workspace / 'better-content-modpack'
+    roots = ['pack.toml', 'index.toml', 'options.txt', 'config', 'defaultconfigs', 'kubejs',
+             'mods', 'resourcepacks', 'shaderpacks', 'global_packs']
+    files = []
+    for root in roots:
+        path = pack / root
+        if path.is_symlink():
+            raise ValueError('production input symlink: ' + str(path))
+        if path.is_dir():
+            files.extend(p for p in path.rglob('*') if p.is_file() or p.is_symlink())
+        elif path.is_file():
+            files.append(path)
+    if not (pack / 'pack.toml').is_file():
+        raise ValueError('cannot establish current production identity without pack.toml')
+    digest = hashlib.sha256()
+    for path in sorted(files):
+        digest.update(str(path.relative_to(pack)).encode() + b'\0')
+        digest.update(digest_file(workspace, path).encode() + b'\n')
+    return digest.hexdigest()
+
+
+def stable_now(workspace, data):
+    stable = data.get('stability', {})
+    if stable.get('state') != 'good' or not stable.get('basis') or not stable.get('evidence') or not stable.get('artifacts'):
+        return False
+    try:
+        return (stable.get('production_identity') == production_identity(workspace) and
+                all(digest_file(workspace, Path(p)) == expected
+                    for group in ('artifacts', 'evidence') for p, expected in stable[group].items()))
+    except (OSError, ValueError):
+        return False
+
+
+def working_agents():
+    session = os.environ.get('HERDR_SESSION')
+    if not session:
+        raise RuntimeError('quiet state unknown: no Herdr session')
+    result = subprocess.run(['herdr', '--session', session, 'agent', 'list'],
+                            capture_output=True, text=True, timeout=15)
+    if result.returncode:
+        raise RuntimeError('quiet state unknown: Herdr unavailable')
+    return [a['pane_id'] for a in json.loads(result.stdout)['result']['agents']
+            if a.get('agent_status') not in {'idle', 'done'}]
+
+
+def thresholds(data):
+    values = {**DEFAULT_THRESHOLDS, **data.get('thresholds', {})}
+    if any(not isinstance(v, (int, float)) or not 0 < v < float('inf') for v in values.values()):
+        raise ValueError('invalid storage thresholds')
+    if not values['warning_used'] < values['critical_used'] <= 100 or values['critical_free'] >= values['warning_free']:
+        raise ValueError('inconsistent storage thresholds')
+    return values
+
+
+def storage_status(workspace, data, measurement=None):
+    limits = thresholds(data)
+    fs = os.statvfs(workspace)
+    total, available = fs.f_blocks * fs.f_frsize, fs.f_bavail * fs.f_frsize
+    used = (fs.f_blocks - fs.f_bfree) * fs.f_frsize
+    percent = 100 * used / total if total else 100
+    warnings = []
+    if percent >= limits['critical_used'] or available < limits['critical_free']:
+        warnings.append('critical filesystem pressure; does not authorize cleanup')
+    elif percent >= limits['warning_used'] or available < limits['warning_free']:
+        warnings.append('filesystem pressure; inspect retained/reclaimable inventory')
+    measurement = measurement or data.get('measurement')
+    if not measurement or time.time() - measurement.get('at', 0) > 3600:
+        warnings.append('inventory absent/stale; run maintenance measure when appropriate')
+    if measurement and measurement.get('reclaimable_bytes', 0) >= limits['messy_bytes']:
+        warnings.append('reclaimable backlog; pruning still requires quiet and verified stable state')
+    return {'schema': SCHEMA, 'capacity_scope': 'filesystem, not a confirmed lane quota',
+            'total_bytes': total, 'used_bytes': used, 'available_bytes': available,
+            'used_percent': percent, 'thresholds': limits, 'warnings': warnings,
+            'measurement': measurement, 'recorded_stability': data.get('stability', {}).get('state', 'unknown'),
+            'stability_revalidated': False}
+
+
+def measured_inventory(decisions):
+    return {'at': time.time(), 'scope': 'classified output inventory, not whole workspace usage',
+            'allocated_bytes': sum(d['bytes'] for d in decisions),
+            'reclaimable_bytes': sum(d['bytes'] for d in decisions
+                                     if d['action'] == 'delete' and not d.get('blocked_permission')),
+            'categories': {kind: sum(d['bytes'] for d in decisions if d.get('classification') == kind)
+                           for kind in ('protected', 'retained', 'reusable', 'reclaimable', 'unknown')},
+            'largest': [{'path': d['path'], 'bytes': d['bytes'], 'action': d['action']}
+                        for d in sorted(decisions, key=lambda d: d['bytes'], reverse=True)[:10]]}
+
+
+@contextlib.contextmanager
+def maintenance_reservation(coordinator, owner):
+    coordinator.reserve(owner)
+    try:
+        with coordinator.maintenance(owner):
+            yield
+    finally:
+        coordinator.unreserve(owner)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--workspace', type=Path, default=Path(__file__).resolve().parents[2])
     sub = parser.add_subparsers(dest='command', required=True)
     sub.add_parser('audit')
+    sub.add_parser('measure')
+    status = sub.add_parser('status')
+    status.add_argument('--cached', action='store_true', help='status never scans payloads')
+    classify = sub.add_parser('classify')
+    classify.add_argument('--path', required=True)
+    classify.add_argument('--kind', choices=['retained', 'reusable', 'reclaimable', 'unknown'], required=True)
+    classify.add_argument('--reason', required=True)
+    stability = sub.add_parser('stability')
+    stability.add_argument('--state', choices=['good', 'broken', 'unknown'], required=True)
+    stability.add_argument('--basis', required=True)
+    stability.add_argument('--artifact', action='append', default=[])
+    stability.add_argument('--evidence', action='append', default=[])
+    configure = sub.add_parser('configure')
+    for key in DEFAULT_THRESHOLDS:
+        configure.add_argument('--' + key.replace('_', '-'), type=float)
     prune = sub.add_parser('prune')
+    prune.add_argument('--owner', required=True, help='explicit maintenance identity, not an arbitrary excluded pane')
     group = prune.add_mutually_exclusive_group(required=True)
     group.add_argument('--apply', action='store_true')
     group.add_argument('--resume')
-    begin = sub.add_parser('begin')
-    begin.add_argument('--task', required=True)
-    begin.add_argument('--path', action='append', default=[])
-    begin.add_argument('--pin-until', type=float)
-    begin.add_argument('--no-build-cache', action='store_true', help='read-only artifact consumer; no build-cache lease')
-    finish = sub.add_parser('finish')
-    finish.add_argument('--task', required=True)
-    finish.add_argument('--apply', action='store_true', required=True)
+    for command in ('begin', 'update', 'finish', 'release-retention'):
+        task_parser = sub.add_parser(command)
+        task_parser.add_argument('--task', required=True)
+        task_parser.add_argument('--owner', default=os.environ.get('BC_OWNER_SESSION') or os.environ.get('PI_SESSION_ID'))
+        task_parser.add_argument('--path', action='append', default=[])
+        task_parser.add_argument('--pin-until', type=float)
+        task_parser.add_argument('--no-build-cache', action='store_true')
+        task_parser.add_argument('--reconcile-legacy', action='store_true')
+        task_parser.add_argument('--reason')
+        task_parser.add_argument('--apply', action='store_true', help='deprecated compatibility flag; finish never deletes')
     args = parser.parse_args(argv)
     workspace = args.workspace.absolute()
     if workspace.is_symlink() or not workspace.is_dir():
         raise ValueError('workspace must be a real directory')
     workspace = workspace.resolve()
-    # Audit never creates lock/state files. Mutations serialize registry and deletion.
+    # Read-only inspection never creates state or takes deletion authority.
+    retention = load_retention(workspace)
+    if args.command == 'status':
+        print(json.dumps(storage_status(workspace, retention), indent=2))
+        return 0
     if args.command == 'audit':
         decisions = plan(workspace)
+        measurement = measured_inventory(decisions)
         print(json.dumps({'schema': SCHEMA, 'workspace': str(workspace), 'decisions': decisions,
-                          'reclaimable_bytes': sum(d['bytes'] for d in decisions if d['action'] == 'delete' and not d.get('blocked_permission'))}, indent=2))
+                          **measurement, 'storage': storage_status(workspace, retention, measurement)}, indent=2))
         return 0
     lock_root = workspace / '.worklane'
     lock_root.mkdir(exist_ok=True)
@@ -603,51 +877,116 @@ def main(argv=None):
     lock_path = lock_root / 'disposal.lock'
     fd = os.open(lock_path, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600)
     try:
-        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        tasks = load_tasks(workspace)
-        if args.command in {'begin', 'finish'} and not ID.fullmatch(args.task):
-            raise ValueError('invalid task ID')
-        if args.command == 'begin':
-            if args.task in tasks:
-                raise ValueError('task already registered')
-            paths = [str(safe_path(workspace, p)) for p in args.path]
-            if args.pin_until is not None and args.pin_until <= time.time():
-                raise ValueError('pin expiration must be in the future')
-            tasks[args.task] = {'state': 'active', 'paths': paths, 'pin_until': args.pin_until,
-                                'uses_build_cache': not args.no_build_cache and args.pin_until is None}
-            save_tasks(workspace, tasks)
-            print(json.dumps({'schema': SCHEMA, 'registered': args.task}))
-            return 0
-        if args.command == 'finish':
-            if args.task not in tasks:
-                raise ValueError('task is not registered')
-            tasks[args.task]['state'] = 'finished'
-            save_tasks(workspace, tasks)
-        decisions = plan(workspace)
-        blocked = []
-        transaction = None
         try:
-            removed = apply(workspace, decisions, getattr(args, 'resume', None))
-        except DisposalBlocked as error:
-            removed, blocked, transaction = error.removed, error.blocked, error.transaction
-        if args.command == 'finish':
-            tasks = load_tasks(workspace)
-            # An explicit pin survives finish only until its declared expiration.
-            if (tasks[args.task].get('pin_until') or 0) <= time.time():
-                del tasks[args.task]
-            save_tasks(workspace, tasks)
-        if args.command == 'prune':
-            tasks = load_tasks(workspace)
-            tasks = {task_id: task for task_id, task in tasks.items()
-                     if (task.get('pin_until') is not None and task['pin_until'] > time.time()) or
-                     (task.get('pin_until') is None and task.get('state', 'active') == 'active')}
-            save_tasks(workspace, tasks)
-        remaining = [d for d in decisions if d['action'] == 'defer_active']
-        print(json.dumps({'schema': SCHEMA, 'removed_count': len(removed),
-                          'removed_bytes': sum(d['bytes'] for d in decisions if d['path'] in set(removed)),
-                          'deferred': remaining, 'blocked_permission': blocked,
-                          'resume_transaction': transaction}, indent=2))
-        return 3 if remaining or blocked else 0
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            if args.command in {'begin', 'update'}:
+                from workspace_coordination import Coordinator
+                Coordinator(workspace / '.worklane/coordination').request_work()
+            raise
+        tasks = load_tasks(workspace)
+        retention = load_retention(workspace)
+        if args.command in {'begin', 'update', 'finish', 'release-retention'}:
+            if not ID.fullmatch(args.task) or not args.owner:
+                raise ValueError('valid task ID and stable --owner identity required')
+            if args.command == 'begin':
+                if args.task in tasks:
+                    raise ValueError('task already registered; update active tasks or choose a new task ID')
+                tasks[args.task] = {'state': 'active', 'paths': [], 'owner': args.owner,
+                                    'created_at': time.time(), 'retention': 'retained'}
+            elif args.task not in tasks:
+                raise ValueError('task is not registered')
+            task = tasks[args.task]
+            if task.get('owner') != args.owner:
+                if task.get('owner') or not args.reconcile_legacy or not args.reason:
+                    raise ValueError('owner mismatch or legacy owner unknown; explicit reconciliation required')
+                task['owner'] = args.owner
+                task['reconciled'] = {'at': time.time(), 'reason': args.reason}
+            if args.command in {'begin', 'update'}:
+                if task.get('state') != 'active' or task.get('retention', 'retained') == 'released':
+                    raise ValueError('cannot update finished/released activity; register a new task ID')
+                if args.pin_until is not None and (not math.isfinite(args.pin_until) or args.pin_until <= time.time()):
+                    raise ValueError('pin expiration must be finite and in the future')
+                task['paths'] = sorted(set(task.get('paths', []) + [str(safe_path(workspace, p)) for p in args.path]))
+                if args.command == 'begin' or args.pin_until is not None:
+                    task['pin_until'] = args.pin_until
+                if args.command == 'begin' or args.no_build_cache:
+                    task['uses_build_cache'] = not args.no_build_cache and task.get('pin_until') is None
+            elif args.command == 'finish':
+                task['state'] = 'finished'
+                task['finished_at'] = time.time()
+            else:
+                if task.get('state') != 'finished' or not args.reason:
+                    raise ValueError('retention release requires finished task and explicit reason')
+                task['retention'] = 'released'
+                task['release_reason'] = args.reason
+            task['updated_at'] = time.time()
+            if args.command in {'begin', 'update'}:
+                from workspace_coordination import Coordinator
+                with Coordinator(workspace / '.worklane/coordination').transaction(admission=True):
+                    save_tasks(workspace, tasks)
+            else:
+                save_tasks(workspace, tasks)
+            print(json.dumps({'schema': SCHEMA, 'task': args.task, 'state': task['state'], 'removed_count': 0}))
+            return 0
+        if args.command == 'classify':
+            path = safe_path(workspace, args.path)
+            targets, _ = discover(workspace)
+            if not exists(path) or not any(beneath(path, p) for p in targets):
+                raise ValueError('classification requires an existing known output boundary')
+            if not args.reason.strip():
+                raise ValueError('classification reason required')
+            retention['records'][str(path)] = {'kind': args.kind, 'reason': args.reason, 'at': time.time()}
+        elif args.command == 'stability':
+            stable = {'state': args.state, 'basis': args.basis, 'at': time.time()}
+            if args.state == 'good':
+                if not args.artifact or not args.evidence or not args.basis.strip():
+                    raise ValueError('good state requires exact artifacts, evidence and acceptance basis')
+                stable['production_identity'] = production_identity(workspace)
+                for group, paths in [('artifacts', args.artifact), ('evidence', args.evidence)]:
+                    stable[group] = {str(safe_path(workspace, p)): digest_file(workspace, Path(p)) for p in paths}
+                retention['last_known_good'] = stable
+            retention['stability'] = stable
+        elif args.command == 'configure':
+            retention['thresholds'] = {**retention.get('thresholds', {}),
+                                      **{key: getattr(args, key) for key in DEFAULT_THRESHOLDS
+                                         if getattr(args, key) is not None}}
+            thresholds(retention)
+        elif args.command == 'measure':
+            previous = retention.get('measurement', {})
+            measurement = measured_inventory(plan(workspace))
+            measurement['growth_bytes'] = measurement['allocated_bytes'] - previous.get('allocated_bytes', measurement['allocated_bytes'])
+            retention['measurement'] = measurement
+        elif args.command == 'prune':
+            # Quiet observation happens before reservation; the coordinator then closes admission.
+            if working_agents():
+                raise RuntimeError('workspace is not quiet: agents are working')
+            from workspace_coordination import Coordinator
+            coordinator = Coordinator(workspace / '.worklane/coordination')
+            with maintenance_reservation(coordinator, args.owner):
+                decisions = plan(workspace)
+                measurement = measured_inventory(decisions)
+                if not stable_now(workspace, retention):
+                    raise RuntimeError('current modpack stability is unknown, broken, or changed')
+                if measurement['reclaimable_bytes'] < thresholds(retention)['messy_bytes']:
+                    raise RuntimeError('workspace is not messy enough to prune')
+                def admission():
+                    if coordinator.maintenance_should_yield() or working_agents():
+                        raise RuntimeError('new work requested; maintenance yielding before next target')
+                    if not stable_now(workspace, load_retention(workspace)):
+                        raise RuntimeError('production/artifact/evidence stability changed; maintenance yielding')
+                blocked, transaction = [], None
+                try:
+                    removed = apply(workspace, decisions, args.resume, admission=admission)
+                except DisposalBlocked as error:
+                    removed, blocked, transaction = error.removed, error.blocked, error.transaction
+                print(json.dumps({'schema': SCHEMA, 'removed_count': len(removed),
+                                  'removed_bytes': sum(d['bytes'] for d in decisions if d['path'] in set(removed)),
+                                  'blocked_permission': blocked, 'resume_transaction': transaction}, indent=2))
+                return 3 if blocked else 0
+        save_retention(workspace, retention)
+        print(json.dumps(storage_status(workspace, retention), indent=2))
+        return 0
     finally:
         os.close(fd)
 

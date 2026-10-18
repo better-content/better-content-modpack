@@ -4,10 +4,10 @@ Forge 1.20.1 content/integration repository. Read [docs/README.md](docs/README.m
 [workspace policy](docs/policies/workspace.md) before changes. Shared rules have one owner:
 
 - [Testing/releases](docs/testing.md): explicit user authorization; supported facades and locks.
-- [Disposable data](docs/policies/generated-data.md): all development worlds/saves, failed fixtures,
-  evidence, superseded candidates, disposable sessions (not Pi conversation history), caches and
-  build outputs end at task handoff;
-  retain only the latest complete packaged client/server ZIP pair, not its fixtures/evidence.
+- [Generated-data retention](docs/policies/generated-data.md): retain worlds/saves, fixtures,
+  evidence, candidates, receipts, caches and build outputs by default across handoffs and
+  conversations. Finish closes activity and deletes nothing. Purge is separately gated by quiet,
+  stable and messy conditions; last known good and latest candidate/support/evidence stay protected.
 - [Inventory parity](docs/inventory-parity.md): both native paths and same-artifact real acceptance.
 - [Player teaching](docs/better_discovery_guides.md): read before teaching changes.
 - [Custom-mod inventory/bootstrap](docs/custom-mod-workspace.md) and [SDK inventory](docs/toolchains.md).
@@ -20,7 +20,7 @@ Forge 1.20.1 content/integration repository. Read [docs/README.md](docs/README.m
   distributions. `test-control.main.kts` exposes structured control. `pack-test-queue.main.kts`
   is the persistent coordinator queue; `pack-test-lock.main.kts` is the internal mutex wrapper.
 - `maintenance.main.kts` delegates to standard-library Python, not Gradle. Follow the task
-  registration/handoff contract in the disposable-data policy.
+  activity-registration and retention/purge contract in the generated-data policy.
 - The former `tools/` tree and `quarantine/` are unsupported. Do not recreate/invoke them or make
   runtime content depend on them without explicit reversal. Custom-mod source remains outside the pack.
 - `bc.crafting_policy.v1` is a narrow authorized content policy in `kubejs/config/` and KubeJS scripts,

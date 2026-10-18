@@ -1,120 +1,129 @@
-# Generated data is disposable
+# Generated data: retention and deliberate reclamation
 
 ## Scope and authority
 
-This is the sole Better Content retention/disposal policy. It covers all development worlds and
-saves, runtime instances, candidates/distributions, test evidence, failed fixtures, captures,
-dumps/logs, disposable agent sessions/history/images (excluding Pi conversation history), dependency
-caches, and repository build/provider JAR outputs. This environment is **not a save backup service
-or historical archive**. No world is sentimentally protected; dead-build worlds are not a reason to keep a build alive. Current
-candidates, latest passes, unresolved failures and sealed distributions receive no automatic
-retention exemption except the latest complete packaged ZIP pair defined below. Authored/operating inputs remain inputs as defined in
-[workspace.md](workspace.md); never classify `.codex`, `.cache`, or an art directory wholesale.
+This is the sole Better Content retention/reclamation policy. It covers development worlds and
+saves, runtime instances, candidates/distributions, evidence, failed fixtures, captures, dumps,
+logs, generated agent data, dependency caches and repository build/provider outputs.
+[Workspace policy](workspace.md) defines authored/operating inputs. Task completion, failure,
+cancellation, blocked handoff, claim release and expired delivery pins are **not deletion triggers**.
+Retain generated material by default across conversations, including unresolved diagnoses.
+Retention is not a claim of correctness or fresh runtime acceptance.
 
-## Pi conversation history is protected
+Authored source, Git history, production inputs/JARs, installed tools/SDKs, credentials,
+configuration, authored art/audio and **the entire `/home/dev/.pi/agent/sessions/` tree** are protected.
+Pi history, including inactive conversations and attachments, requires an explicit user request
+naming the history to delete. Never classify `.codex`, `.cache`, or art directories wholesale.
 
-Pi chat history under `/home/dev/.pi/agent/sessions/` is user-owned input, not disposable task
-output. Preserve the entire tree, including inactive/ended conversations and associated files,
-at handoff and during pruning. Live-consumer checks are not its retention condition. Cleanup
-must not discover it as disposable or delete it through an old plan/transaction. Only an explicit
-user request to delete the specified history authorizes removal; task completion is not permission.
-Pi's rebuildable search/model caches remain disposable independently of conversation history.
+## Candidate and verification preservation
 
-## Latest packaged build retention
+Protect the complete latest packaged candidate, not merely its two ZIPs. Candidate ordering is
+numeric build then optional lowercase revision (`443 < 443a < 444`); partial builds do not replace
+complete pairs. Lettered or newly packaged builds do not inherit acceptance.
 
-Always retain the client/server `better-content.zip` pair from the highest numbered complete
-`better-content-modpack/dist/build-N/` directory, including lettered revisions such as
-`build-443a/`. Order by numeric build first, then optional lowercase suffix: `443 < 443a < 443b < 444`.
-Lettered revisions remain explicitly untested unless separately qualified on their exact bytes.
-Both files and their directories must be ordinary
-non-symlink paths. A newer partial build does not replace the retained complete pair. Once a newer
-complete pair exists, the older pair becomes disposable unless an independent active consumer or
-explicit delivery pin still needs it. With no complete pair, there is no build-retention exception.
+Independently preserve the last known-good distribution and its evidence/support artifacts. A
+failed or untested newer candidate must not displace it. The stability registration records exact
+artifact/evidence hashes and current production identity; it is an operator-recorded acceptance
+basis, not a verifier that creates runtime proof. Include required retry/support artifacts when
+recording that basis, and use retained classifications for supporting directories. Missing or
+changed evidence makes current stability unknown but does not remove last-known-good protection.
 
-Retention is independent of validation: the latest packaged build can be failed or untested; do not
-call it the latest passing build or infer acceptance from its presence. Keep only the two ZIPs, not
-expanded staging, worlds, evidence, logs, caches or source-build JARs. Cleanup reports these exact
-paths as protected by latest-build policy and rechecks the selection before deletion. Tests never
-use this retention rule to obtain historical reports or undeclared prerequisites.
+Completed verification receipts and immutable supporting artifacts may survive conversations.
+Reuse requires the relevant source, toolchain, contract, dependency and artifact checks described
+in [testing.md](../testing.md). Never adopt another owner's active mutable run, import a verdict
+from successful-looking logs, or describe historical acceptance as a fresh native run. Retention
+is an optimization: documented tests must still work with empty generated/cache directories.
 
-## Conversation verification receipts
+## Activity, retention and ownership are separate
 
-The bounded control receipts under the modpack's `.worklane/testing-sessions/` are not evidence
-archives. They contain only live-conversation source/artifact/input verification metadata, as
-specified in [testing.md](../testing.md). They can survive task handoffs only for their owning
-active conversation; logs, reports, build outputs, caches and worlds still cannot. Another
-conversation cannot adopt an old receipt. Explicit session end removes it; uncertain owner
-liveness requires reconciliation, not inferred permission to reuse or delete it. Missing outputs
-at the next authorized preparation invalidate artifact reuse. Automatic owner replacement
-cleanup is not yet implemented; end receipts explicitly.
+Task assignments, turn-scoped work claims, operation-lifetime resource leases and retention
+records are separate. See [workspace policy](workspace.md). Register producers/consumers before
+using outputs, including exact candidate and support boundaries. Read-only consumers may omit
+the shared build-cache lease. Shut down owned producers gracefully before closing their activity;
+never kill unrelated processes. Queue requests remain consumers until completed or cancelled.
 
-## Task lifetime
+`finish` closes only the named owner's activity and deletes **nothing**. Its old `--apply` spelling
+is accepted for compatibility but does not prune. Closed task records and paths remain retained.
+`release-retention` is a separate reasoned owner decision, not deletion; explicit output
+classification and all cleanup gates still apply afterward. A pin expiration ends a lease only.
 
-Keep outputs while their task/consumer is active, including diagnosis, retries and sequential
-tests of one unchanged candidate. Before final success, failure, cancellation or blocked handoff,
-report results and dispose of the task's outputs except the latest complete packaged ZIP pair. Report deleted paths as deleted, not available
-for later inspection. An old passing result is not fresh runtime verification.
+Legacy registrations preserve their paths and data. Unknown ownership requires explicit
+reconciliation with a reason; current actors must not impersonate an old owner. Do not clear
+another task's registration merely because its agent disappeared. No installation-time purge,
+old-plan replay, or wholesale migration cleanup is permitted.
 
-Stop owned producers gracefully before finishing; do not kill unrelated agents or remove files
-under a live consumer. Queue work is an active consumer, not historical retention. An explicitly
-requested delivery/pin must identify the exact path and an expiration time/condition; never
-invent a permanent pin. An active safety deferral means cleanup is incomplete and must be
-reported and retried once the owner releases/exits. Release/deployment authorization is separate.
+## Inventory and commands
 
-Rebuildable dependency caches, wrapper downloads and local provider/build JARs are deleted at
-handoff once idle. Installed SDKs/tools, credentials, configuration, tracked wrapper/bootstrap
-inputs and bundled production JARs survive. The next source build downloads dependencies and
-rebuilds providers in the manifest's dependency order. No cache warming/rebuild is part of cleanup.
-
-## Commands and producer contract
-
-Run from the modpack (installed Kotlin SDK; no Gradle dependency):
+The standard-library controller is `scripts/workspace-maintenance.py`; `maintenance.main.kts`
+is its Kotlin facade and does not start Gradle. Inventory distinguishes **protected, retained,
+reusable, reclaimable and unknown**. Unknown legacy outputs remain retained until inspected and
+deliberately classified. A `delete` action in a read-only plan means explicitly reclaimable,
+not permission to execute that plan.
 
 ```sh
-./maintenance.main.kts audit
-./maintenance.main.kts begin --task TASK_ID --path /home/dev/workspace_artifacts/reviews/TASK_ID
-./maintenance.main.kts finish --task TASK_ID --apply
-./maintenance.main.kts prune --apply
-./maintenance.main.kts prune --resume TRANSACTION_ID
+./maintenance.main.kts audit                         # read-only full inventory
+./maintenance.main.kts status --cached               # bounded, no payload scan
+./maintenance.main.kts measure                       # update cached sizes/growth
+./maintenance.main.kts begin --task TASK --owner OWNER --path /absolute/output
+./maintenance.main.kts update --task TASK --owner OWNER --path /another/output
+./maintenance.main.kts finish --task TASK --owner OWNER
+./maintenance.main.kts release-retention --task TASK --owner OWNER --reason 'need resolved'
+./maintenance.main.kts classify --path /absolute/output --kind reclaimable --reason 'obsolete fixture'
+./maintenance.main.kts prune --apply --owner MAINTENANCE_ID
+./maintenance.main.kts prune --resume TRANSACTION_ID --owner MAINTENANCE_ID
 ```
 
-For Python-only cleanup, including after caches have been deleted:
+`--owner` is a stable session/task principal, defaulting to `BC_OWNER_SESSION` or `PI_SESSION_ID`
+when available. Legacy owner reconciliation additionally requires `--reconcile-legacy --reason`.
+Repeat `--path` to add consumed boundaries; use `--no-build-cache` for read-only consumers.
+Explicit delivery deadlines use `--pin-until UNIX_SECONDS`; expiry alone never deletes data.
 
-```sh
-python3 -B scripts/workspace-maintenance.py audit
-```
+A good-state record requires `stability --state good --basis TEXT --artifact PATH --evidence PATH`
+with repeatable artifact/evidence arguments. Record the actual acceptance scope, not a unit-test
+pass masquerading as modpack usability. `stability --state broken|unknown --basis TEXT` invalidates
+current good-state eligibility without erasing the last known-good retention record. Production
+and evidence identities are revalidated before pruning. Never fabricate an acceptance record to
+make cleanup pass.
 
-Register a task **before** producing or consuming disposable files. Repeat `--path` for each
-output/input boundary it consumes, including exact candidate paths; tasks also hold the shared
-build-cache lease. `finish` closes the lease and disposes eligible idle outputs. The command never
-stops processes itself: the caller first shuts down its producers and coordinates with other
-owners. Read-only consumers use `begin --no-build-cache` to avoid a needless provider/cache lease.
-Exit 3 means active or permission-blocked disposable targets remain; exit 1 means unsafe or
-interrupted cleanup. Foreign-owned outputs are still disposable, not promoted to authored inputs:
-report the blocker and ask their owner/host administrator to release permissions, then resume.
-Never escalate privileges or silently claim the purge is complete. `audit` does not mutate anything. Failed fixture/report contents and missing
-candidates do not prevent deletion.
+## Quiet + stable + messy
 
-Temporary delivery pins use `begin --task DELIVERY_ID --path PATH --pin-until UNIX_SECONDS` with
-a concrete user-requested deadline. Finish the delivery task after transfer; the pin protects
-only until that deadline. Unregister completed unpinned tasks at finish. Stale active registrations
-require owner reconciliation, not guessed expiry or automatic killing.
+Real pruning requires all three:
 
-Supported producer entry points are release/test controls and documented local verification
-commands; agents wrap their full activity in `begin`/`finish`. Do not attach an unconditional
-per-command trap that deletes a candidate between tests or while a queue still consumes it.
+1. **Quiet:** no agents working, and no conflicting registered work, claims, jobs or resource
+   leases. Unknown liveness fails closed. Low CPU and absence of tests do not establish quiet.
+2. **Stable:** the current modpack is known good and usable, with an acceptance basis and matching
+   current production/artifact/evidence identities. Idle agents, unchanged files, warning absence,
+   old builds and source-unit passes do not establish this.
+3. **Messy:** enough explicitly reclaimable, unblocked material exists to justify deletion.
 
-## Safety and storage
+Observe quiet before taking an exclusive coordination reservation. Admissions request a yield
+rather than overlapping maintenance. Recheck before targets and within large trees (bounded
+64-entry deletion batches); new work causes a safe stop. Never bypass admission by invoking the
+internal deletion function directly. Interrupted transactions remain for inspection and must
+revalidate targets; v2 deletion transactions cannot resume under the new policy.
 
-The v2 cleanup interface emits `delete`, `defer_active`, and `protect_input` decisions, allocated
-bytes and consumer identities. It uses an explicit output-root allowlist, tracked/nonignored
-input detection, live cwd/FD/mapping/session checks and task leases. Disposable symlinks are
-unlinked without traversing their targets; ancestor symlinks, path escapes, target substitution
-and unexpected mount boundaries are rejected. Unknown paths outside classified output roots
-are inputs until inspected, not blanket deletion targets.
+Initial configurable thresholds are warning at 80% filesystem use or under 50 GiB available,
+critical at 90% or under 20 GiB, and messy at 20 GiB reclaimable. `configure` accepts
+`--warning-used`, `--critical-used`, `--warning-free`, `--critical-free`, and `--messy-bytes`;
+free/size arguments are bytes. Report filesystem capacity as such, not as a confirmed lane quota.
+Storage warnings never override quiet/stable/consumer protections or fail correctness gates.
+Cached status reports measurements' age, growth and largest targets; measurements older than an
+hour are explicitly stale. Agents should surface actionable, deduplicated warnings rather than
+scan the entire workspace on every tool call.
 
-Cleanup stores only bounded live-task metadata and incomplete transaction records under `.worklane/`.
-Completed transactions are removed, not accumulated as history. The final handoff reports
-measured space reclaimed and exact active deferrals in text; it does not create another archive,
-Git bundle, evidence backup or compatibility link. `workspace_artifacts/README.md` is merely a
-pointer here; its other contents are disposable task output.
+## Deletion safety
+
+Explicit output roots, tracked/nonignored input detection, live cwd/FD/mapping/session/socket
+checks, task retention and resource leases remain enforced. Preserve all active consumers and
+unresolved diagnoses. Prefer obsolete fixtures/staging over useful dependency caches; useful
+reusable material is not reclaimable merely because it can technically be rebuilt.
+
+Reject escaping paths, symlink ancestors, substituted targets, unexpected mounts and unsafe state
+files. Unlink disposable symlinks without following targets. Recheck protection and consumers
+before deletion. Report permission blockers; never escalate privileges, chown foreign outputs,
+or silently report completion. Exit 3 means permission-blocked eligible targets remain; errors,
+unsafe paths and interrupted admission fail without claiming a completed purge.
+
+Reports state actual removed paths/bytes, retained material and blockers. `workspace_artifacts/`
+contains retained task outputs, not authored production content. Do not move diagnostics into
+versioned docs or create shadow archives, Git bundles or compatibility links to evade inventory.
