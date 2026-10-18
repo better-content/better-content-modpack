@@ -152,7 +152,7 @@ under the [shared testing policy](testing.md).
 
 ## TCon dodge, camera, and alternate modes
 
-Combat Roll and Better Content Fixes' directional double-tap integration are removed. Epic Fight's native Roll and Step progression is the only dodge system and uses Epic Fight's dedicated input. The Epic Fight combat camera is active in third-person only; it never changes perspective automatically.
+Combat Roll is removed. Better Compat Fixes requests ParCool's native dodge when a physical arrow key is double-tapped within seven client ticks while holding physical Left Shift and not crouching. Releasing Left Shift clears pending taps; Right Shift does not enable this shortcut. WASD, movement-key rebinding and vanilla forward double-tap sprint are unchanged. ParCool retains its native stamina, cooldown and action restrictions; its direct dodge binding remains available. Epic Fight's native Roll and Step progression remains separate and uses Epic Fight's dedicated input (unbound in pack defaults). The Epic Fight combat camera is active in third-person only; it never changes perspective automatically.
 
 Returning Blockram, Buckler, and Fuma Shuriken throws use the separate 100-tier throw target. Javelin throws stay at 105 per hit. Battlesign's charged Bonk and War Pick's charge projectile target 100. The Minotaur Axe sprint charge remains the one explicit signature exception.
 

@@ -1925,7 +1925,17 @@ class HoverAnnotationLearningSurfaceTest {
                 }
             }
             val movement = lessons.path("briefs").first { it.path("id").asText() == "movement" }.path("body").asText()
-            assertTrue(movement.contains("directional double-tap dodging is off"))
+            // Source authoring does not deploy either JAR. Check teaching against the bundled implementation.
+            val arrowDodgeBundled = ZipFile(root.resolve("mods/better-compat-fixes-0.1.9.jar").toFile()).use {
+                it.getEntry("com/bettercontent/bettercompatfixes/client/ArrowDoubleTapDodgeClient.class") != null
+            }
+            assertTrue(movement.contains(if (arrowDodgeBundled) {
+                "while holding Left Shift and not crouching, a double tap of an arrow key"
+            } else {
+                "directional double-tap dodging is off"
+            }))
+            val sourceMovement = sourceLessons.path("briefs").first { it.path("id").asText() == "movement" }.path("body").asText()
+            assertTrue(sourceMovement.contains("while holding Left Shift and not crouching, a double tap of an arrow key"))
             assertTrue(!movement.contains("double taps also dodge"))
         }
 
