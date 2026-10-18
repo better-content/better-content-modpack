@@ -102,7 +102,7 @@ The existing empowered strike cue remains separate and occurs once at the target
 permanent HUD widget and does not change attack balance. Source checks cover ordinary attacks and
 Epic Fight's native attack route; full-pack audiovisual acceptance is separate.
 
-Diet's native screen remains the authoritative nutrition display and shows each group's actual benefit, load, and estimated upper-tier time. Food tooltips and meal recaps name the effect at the moment it matters. Generic Diet-wide bonuses stay disabled so they cannot duplicate the aspect abilities.
+Diet's native screen remains the authoritative nutrition display and shows each group's actual benefit, load, and estimated upper-tier time. Food hover consolidates nutrient gains into one horizontal row of graphical aspect badges, pack names and per-serving percentages, without ASCII glyphs or effect descriptions. This replaces Diet's default-name list and “When eaten” separator. Quark's duplicate food icons and saturation description are disabled; the bottom native restoration displays, eaten status and source-mod attribution remain. Freshness labels are capitalized and colored green (Fresh), yellow (Stale), gold (Spoiled) and red (Rotten). There is no text meal recap. Generic Diet-wide bonuses stay disabled so they cannot duplicate the aspect abilities.
 
 ## Ores
 
