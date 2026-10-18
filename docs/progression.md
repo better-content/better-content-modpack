@@ -198,8 +198,16 @@ Thermal & Pressure; sensors and gyros in Electrical Control. Aether materials
 gate stable high-performance flight, never primitive ships, basic Trackwork, or
 low-performance aircraft. The Rail Beetle joins the Precision Factory branch by
 combining a Railway Casing, a Barrel, a Minecart, and two Electron Tubes. Its
-found example can also appear in an abandoned mineshaft chest; placing that marked
-item supplies 32 rails, 16 cobblestone supports, and 8 coal without advanced modules.
+found example can also appear in an abandoned mineshaft or village toolsmith chest;
+placing that marked item supplies 32 rails, 16 cobblestone supports, and 8 coal without
+advanced modules. The Rail Beetle source also owns cave-siding discoveries: a parked
+Beetle coupled to a passenger cart and reserve chest cart, with 64 rails, 64 cobblestone
+supports and 16 coal in each of the working and reserve inventories. These generate
+only in suitable dry, supported Overworld caves with Create available. Opening the
+Beetle wakes its survey; unclaimed examples do not consume their supplies. Freight
+reserves must be transferred manually, and taking the vehicles never restocks the site.
+This source addition requires a newly deployed mod artifact and newly generated chunks;
+it is not a claim about the currently bundled JAR. The
 baseline coal firebox, 4-block/second drive, 64-rail survey, two-cart drawgear,
 and one-wide/four-deep bridge work remain complete and practical. One engine
 cradle accepts conditional Create steam, PowerGrid flux, Ars Source, Blood
