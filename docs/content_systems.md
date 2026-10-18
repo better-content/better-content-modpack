@@ -53,6 +53,14 @@ exception: its startup classifier checks loaded namespaces, and its final recipe
 report inspects recipe JSON for named cut-family leaks and consumers. This does not
 authorize a general audit framework; see [Crafting graph policy](crafting_policy.md).
 
+## Tinkers' wood material
+
+Wood cannot supply tool heads. The override at
+`kubejs/data/tconstruct/tinkering/materials/stats/wood.json` explicitly sets
+`tconstruct:head` to `null`: TConstruct merges material stats across data packs,
+so merely omitting that entry preserves the upstream head stats. Wood remains
+available for handles, bindings, grips, arrow shafts, bow limbs and shield cores.
+
 ## Tinkers' tool visibility
 
 `kubejs/client_scripts/policy/hide_completed_tcon_tools.js` hides completed multipart

@@ -13,6 +13,7 @@
       "melee_speed": 0.0,
       "mining_speed": 0.0
     },
+    "tconstruct:head": null,
     "tconstruct:limb": {
       "accuracy": 0.0,
       "draw_speed": 0.0,
