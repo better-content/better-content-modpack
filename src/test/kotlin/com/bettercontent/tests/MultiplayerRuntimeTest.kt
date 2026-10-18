@@ -45,7 +45,7 @@ class MultiplayerRuntimeTest {
             val harnessOptions = listOf(
                 inheritedJavaOptions,
                 "-Dbetter_pillager_campaigns.harness=true",
-                if (evidence.run.tier == "debug") "-Dbc.pack_test.debug=true -Dbc.pack_test.deepvoid=true" else "",
+                if (evidence.run.tier == "debug") "-Dbc.pack_test.debug=true -Dbc.pack_test.deepvoid=true -Dbc.pack_test.campaign_presence=true" else "",
             )
                 .filter(String::isNotBlank).joinToString(" ")
             server = DedicatedServerFixture(
@@ -357,6 +357,7 @@ class MultiplayerRuntimeTest {
                     val targetX = x + offset.first
                     val targetZ = z + offset.second
                     placeCampaignPlayer(client.username, index + 1, attempt, targetX, targetZ)
+                    if (attempt == 0) authorCampaignPresence(client, index + 1, targetX, targetZ)
                     val result = server.commandResult(
                         "better_pillager_campaigns harness spawn scout immediate ${client.username} 5",
                         Regex("Harness started immediate scout .*${Regex.escape(client.username)}|" +
@@ -721,6 +722,50 @@ class MultiplayerRuntimeTest {
             "campaign platform $index",
             Duration.ofMinutes(2),
         )
+    }
+
+    private fun authorCampaignPresence(client: ClientFixture, index: Int, x: Int, z: Int) {
+        // Deliberately authored fixture history, not an elapsed-time/online soak verdict.
+        // Runs only after the real Survival player is grounded, never during initial join.
+        val nonce = java.util.UUID.randomUUID()
+        val run = evidence.run.config.runId
+        val request = server.diagnosticSupport.bridge.resolve("campaign-presence.request")
+        val identity = "run=$run nonce=$nonce uuid=${client.uuid} player=${client.username} dimension=minecraft:overworld x=$x y=316 z=$z"
+        fun submit(kind: String) {
+            require(!Files.exists(request)) { "previous campaign presence request was not consumed" }
+            val pending = request.resolveSibling("campaign-presence-$nonce-$kind.pending")
+            Files.writeString(pending, "$run\n$nonce\n${client.uuid}\n${client.username}\n$index\n$x\n316\n$z\n$kind\n",
+                java.nio.file.StandardOpenOption.CREATE_NEW, java.nio.file.StandardOpenOption.WRITE)
+            Files.move(pending, request, StandardCopyOption.ATOMIC_MOVE)
+        }
+        submit("inspect")
+        val inspection = Regex(Regex.escape("BC_CAMPAIGN_PRESENCE_INSPECT $identity") + " familiar=(true|false)")
+        server.waitLog(inspection, "campaign presence before-state ${client.username}", Duration.ofSeconds(30))
+        val before = inspection.findAll(Files.readString(server.log)).single().groupValues[1].toBooleanStrict()
+        evidence.run.event("campaign_presence_before", mapOf("player" to client.username, "uuid" to client.uuid,
+            "nonce" to nonce.toString(), "familiar" to before, "x" to x, "y" to 316, "z" to z))
+        // Only fresh SmokeClient2/3 have a guaranteed unknown-history precondition. Preserve
+        // any legitimately earned lead history from the earlier full Debug phases.
+        if (index > 1) {
+            check(!before) { "fresh campaign player unexpectedly has familiar history" }
+            server.commandResult("better_pillager_campaigns harness spawn scout immediate ${client.username} 5",
+                Regex("Harness could not create a campaign for the target player"),
+                "unfamiliar campaign rejection ${client.username}", Duration.ofSeconds(30))
+            server.commandResult("better_pillager_campaigns inspect ${client.username}",
+                Regex("campaign_inspect player=${Regex.escape(client.username)} encounter=none"),
+                "unfamiliar campaign left no encounter ${client.username}", Duration.ofSeconds(30))
+            evidence.run.event("campaign_unfamiliar_rejected", mapOf("player" to client.username,
+                "uuid" to client.uuid, "nonce" to nonce.toString(), "familiar" to false))
+        }
+        submit("seed")
+        server.waitLog(Regex(Regex.escape("BC_CAMPAIGN_PRESENCE_SEEDED $identity") +
+            " before_inspect=$before before_seed=(true|false) after=true authored_ticks=36000 history_origin=authored_fixture"),
+            "authored campaign presence ${client.username}", Duration.ofSeconds(30))
+        server.diagnosticSupport.assertStable()
+        evidence.run.event("campaign_presence_authored", mapOf("player" to client.username, "uuid" to client.uuid,
+            "nonce" to nonce.toString(), "dimension" to "minecraft:overworld", "x" to x, "y" to 316, "z" to z,
+            "before_familiar" to before, "authored_ticks" to 36_000, "history_origin" to "authored_fixture",
+            "elapsed_time_acceptance" to false))
     }
 
     private fun verifyCampaignPlatform(index: Int, x: Int, z: Int) {

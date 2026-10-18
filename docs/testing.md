@@ -402,9 +402,18 @@ for diagnosis. Candidate hashes are checked again after the multiplayer scenario
 
 In Debug, the multiplayer fixture then keeps three real clients connected to that same full-pack dedicated
 server in Survival at linear Overworld checkpoints 10,000 blocks apart. The harness-only
-protection control makes each player invulnerable without changing game mode. A routed scout is
-started for each player with no injected route. A rejected terrain path triggers a retry at another
-nearby player position on the prepared platform; each rejected and accepted point is recorded.
+protection control makes each player invulnerable without changing game mode. An immediate scout is
+started for each player through native loaded-approach validation, without an injected route.
+After confirmed grounded Survival placement, the candidate-bound nonshipping support helper
+records the existing familiarity state, then authors exactly 36,000 presence ticks through the
+public production API for that player's current location. This is explicitly labeled
+`history_origin=authored_fixture`, not acceptance of thirty observed online minutes. Fresh
+SmokeClient2/3 must first reject an unfamiliar campaign and retain no encounter; the lead's
+legitimately earned history is preserved. Requests bind run, nonce, UUID and exact fixture
+position, are limited to three players, and remain retained after consumption. The helper does
+not bypass eligibility or change progression clocks. A rejected terrain path triggers a retry at
+another nearby player position within the established core on the prepared platform; each
+rejected and accepted point is recorded.
 The test confirms that all three clients remain connected and all three encounters are active
 before continuing to restart and log audits.
 This is separate from the isolated Pillager Campaigns development harness and is evidence for the
