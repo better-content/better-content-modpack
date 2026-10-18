@@ -307,17 +307,18 @@ internal fun build(
     val expectedCommit = sourceUpdate.localCommit
     val tasks = if (skipTests) listOf("stageRuntimeJar") else mod.tasks
     val jar = repository.resolve("build/libs").resolve(mod.artifact)
-    if (reusableBuild != null) {
-        require(!skipTests && reusableBuild.commit == expectedCommit && reusableBuild.buildId != null) {
-            "build reuse requires exact source provenance and fresh verification"
-        }
-        requireSafeBuildOutput(repository, jar)
-        Files.createDirectories(jar.parent)
-        Files.copy(reusableBuild.jar, jar, StandardCopyOption.REPLACE_EXISTING)
-        require(Hashes.sha256(jar) == reusableBuild.sha256) { "restored build bytes changed" }
-    }
     val buildCommand = providerVerificationCommand(repository, tasks, reusableBuild != null)
-    withForgeCacheLock(workspace) {
+    withForgeCacheLock(root) {
+        // Restore mutable build outputs under the same lock as reset/clean and all readers.
+        if (reusableBuild != null) {
+            require(!skipTests && reusableBuild.commit == expectedCommit && reusableBuild.buildId != null) {
+                "build reuse requires exact source provenance and fresh verification"
+            }
+            requireSafeBuildOutput(repository, jar)
+            Files.createDirectories(jar.parent)
+            Files.copy(reusableBuild.jar, jar, StandardCopyOption.REPLACE_EXISTING)
+            require(Hashes.sha256(jar) == reusableBuild.sha256) { "restored build bytes changed" }
+        }
         runLogged(repository, buildCommand, log, providerBuildEnvironment(staging))
     }
     if (!skipTests && mod.repository != "better-exploration-load-control") {

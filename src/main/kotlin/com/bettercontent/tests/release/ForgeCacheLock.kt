@@ -14,8 +14,9 @@ import kotlin.concurrent.withLock
 // the entire source Gradle invocation, including readers of the generated JARs.
 private val sourceGradleMutex = ReentrantLock(true)
 
-internal fun <T> withForgeCacheLock(workspace: Path, action: () -> T): T = sourceGradleMutex.withLock {
-    val state = workspace.resolve(".worklane")
+// The lock belongs to the pack repository, NOT its polyrepo workspace parent.
+internal fun <T> withForgeCacheLock(packRoot: Path, action: () -> T): T = sourceGradleMutex.withLock {
+    val state = packRoot.resolve(".worklane")
     require(!Files.isSymbolicLink(state)) { "unsafe Forge cache lock directory" }
     Files.createDirectories(state)
     FileChannel.open(state.resolve("forge-cache.lock"), CREATE, WRITE, NOFOLLOW_LINKS).use { channel ->

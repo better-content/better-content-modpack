@@ -72,6 +72,38 @@ class HarnessFastTest {
     }
 
     @Test
+    fun forgeCacheLockInteroperatesWithPythonPosixLockf(@TempDir packRoot: Path) {
+        val lock = packRoot.resolve(".worklane/forge-cache.lock")
+        Files.createDirectories(lock.parent)
+        val python = ProcessBuilder("python3", "-c", """
+            import fcntl, sys
+            with open(sys.argv[1], 'a') as lock:
+                fcntl.lockf(lock, fcntl.LOCK_EX)
+                print('locked', flush=True)
+                sys.stdin.readline()
+        """.trimIndent(), lock.toString()).redirectError(ProcessBuilder.Redirect.INHERIT).start()
+        val executor = java.util.concurrent.Executors.newFixedThreadPool(2)
+        val entered = java.util.concurrent.CountDownLatch(1)
+        try {
+            val ready = executor.submit<String> { python.inputStream.bufferedReader().readLine() }
+            assertEquals("locked", ready.get(5, java.util.concurrent.TimeUnit.SECONDS))
+            val waiting = executor.submit { withForgeCacheLock(packRoot) { entered.countDown() } }
+            assertTrue(!entered.await(150, java.util.concurrent.TimeUnit.MILLISECONDS),
+                "Java source invocation must wait for the same POSIX lock held by Python")
+            python.outputStream.write('\n'.code)
+            python.outputStream.flush()
+            assertTrue(python.waitFor(5, java.util.concurrent.TimeUnit.SECONDS))
+            assertEquals(0, python.exitValue())
+            waiting.get(5, java.util.concurrent.TimeUnit.SECONDS)
+            assertEquals(0L, entered.count)
+        } finally {
+            if (python.isAlive) python.destroyForcibly()
+            python.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)
+            executor.shutdownNow()
+        }
+    }
+
+    @Test
     fun forgeCacheLockIsReleasedAfterFailure(@TempDir workspace: Path) {
         assertThrows(IllegalStateException::class.java) {
             withForgeCacheLock(workspace) { error("simulated build failure") }
@@ -397,6 +429,10 @@ class HarnessFastTest {
         val rebuilt = build(root, workspace, evidence, staging, mod, sourceUpdate, skipTests = false, forceRebuild = true)
 
         assertEquals("rebuilt", rebuilt.mode)
+        assertTrue(Files.isRegularFile(root.resolve(".worklane/forge-cache.lock")),
+            "the actual release build must lock the pack root")
+        assertTrue(!Files.exists(workspace.resolve(".worklane/forge-cache.lock")),
+            "a similarly named workspace-parent lock does not protect the canonical cache")
         assertEquals(listOf("--no-daemon", "clean", "verifyFull", "stageRuntimeJar"),
             Files.readAllLines(repository.resolve("invoked-tasks.txt")))
         assertEquals(commit, readSourceCommit(rebuilt.jar, mod))
