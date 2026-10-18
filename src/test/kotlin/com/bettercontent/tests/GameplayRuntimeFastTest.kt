@@ -26,6 +26,30 @@ class GameplayRuntimeFastTest {
     """.trimIndent()) as ObjectNode
     private fun verify(node: ObjectNode) = ObservedGameplayContract.validate(node, "synthetic", nonce, player)
 
+    private fun pool(): ObjectNode = mapper.createObjectNode().put("schema", "bc.wandering_pool.v1").also { node ->
+        val rows = node.putArray("rows")
+        repeat(288) { index -> rows.addObject().putObject("result").put("id", "fixture:item_$index") }
+    }
+    private fun registry(): ObjectNode = mapper.createObjectNode().also { node ->
+        val items = node.putObject("items")
+        repeat(288) { index -> items.putObject("fixture:item_$index") }
+    }
+    @Test fun packagedPoolRequiresEveryResultInCurrentNativeRegistry() {
+        val required = GameplayPoolRegistryContract.validate(pool(), registry())
+        org.junit.jupiter.api.Assertions.assertEquals(288, required.size)
+        val missing = registry().also { (it.path("items") as ObjectNode).remove("fixture:item_287") }
+        assertThrows(IllegalArgumentException::class.java) { GameplayPoolRegistryContract.validate(pool(), missing) }
+        val arrayInsteadOfRegistryObject = mapper.createObjectNode().also { it.putArray("items").add("fixture:item_0") }
+        assertThrows(IllegalArgumentException::class.java) { GameplayPoolRegistryContract.validate(pool(), arrayInsteadOfRegistryObject) }
+    }
+    @Test fun packagedPoolRejectsWrongSchemaCountAndAir() {
+        assertThrows(IllegalArgumentException::class.java) { GameplayPoolRegistryContract.validate(pool().put("schema", "wrong"), registry()) }
+        val short = pool().also { (it.path("rows") as com.fasterxml.jackson.databind.node.ArrayNode).remove(287) }
+        assertThrows(IllegalArgumentException::class.java) { GameplayPoolRegistryContract.validate(short, registry()) }
+        val air = pool().also { (it.path("rows")[0].path("result") as ObjectNode).put("id", "minecraft:air") }
+        val withAir = registry().also { (it.path("items") as ObjectNode).putObject("minecraft:air") }
+        assertThrows(IllegalArgumentException::class.java) { GameplayPoolRegistryContract.validate(air, withAir) }
+    }
     @Test fun acceptsActualCountsRatherThanFabricatingExactTicks() { verify(valid()) }
     @Test fun rejectsInsufficientElapsedOrNativeTicksIndependently() {
         for (key in listOf("firstTicks", "secondTicks", "firstNanos", "secondNanos")) {

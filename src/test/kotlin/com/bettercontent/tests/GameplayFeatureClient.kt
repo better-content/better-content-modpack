@@ -31,9 +31,26 @@ object GameplayFeatureClient {
             io.world("spoilage", "v1-native-compost-bobber")
             for (state in listOf("rod-no-backpack", "rod-equipped")) {
                 io.client("close-menu", "v1-$state-close-before")
-                val native = io.world(state, "v1-$state-open")
+                var native = io.world(state, "v1-$state-open")
+                if (state == "rod-equipped") {
+                    val primed = native
+                    // Curios 6418456 emits changed-stack sync from the next LivingTick, not
+                    // setStackInSlot. Its ordered client-main-thread update must precede the
+                    // later native OpenScreen packet; a delayed photo cannot repair the first init.
+                    Thread.sleep(1200)
+                    native = io.world(state, "v1-$state-final-open-after-native-sync")
+                    require(native.path("server_tick").asLong() > primed.path("server_tick").asLong())
+                    require(native.path("native_probe").path("menu_id").asInt() != primed.path("native_probe").path("menu_id").asInt())
+                    evidence.event("gameplay_native_rod_equipment_sync_order", mapOf("state" to state,
+                        "prime_server_tick" to primed.path("server_tick").asLong(), "final_server_tick" to native.path("server_tick").asLong(),
+                        "prime_menu_id" to primed.path("native_probe").path("menu_id").asInt(),
+                        "final_menu_id" to native.path("native_probe").path("menu_id").asInt(),
+                        "basis" to "pinned Curios LivingTick sync precedes later native menu-open packet on the same ordered connection; no intervening client close packet",
+                        "direct_client_curios_stack_sample" to "NOT_AVAILABLE in frozen supplement; native packet-ordering oracle used"))
+                }
                 Thread.sleep(1200)
                 val capture = io.capture("v1-$state-native-frame")
+                require(capture.path("menu_id").asInt(-1) == native.path("native_probe").path("menu_id").asInt(-2))
                 require(capture.path("menu_class").asText() == native.path("native_probe").path("menu_class").asText())
                 require(capture.path("screen_class").asText().contains("starcatcher", ignoreCase = true))
                 require(capture.path("slots").any { it.path("index").asInt() == 37 &&

@@ -14,6 +14,7 @@ import java.nio.file.StandardCopyOption
 import java.nio.file.StandardOpenOption
 import java.time.Duration
 import java.util.UUID
+import java.util.jar.JarFile
 
 /** Separate from MultiplayerRuntimeTest's explicitly authored campaign history fixture. */
 @Tag("multiplayer")
@@ -57,6 +58,7 @@ class GameplayRuntimeTest {
 
     @Test fun gameplayAcceptance() = evidence.run.checkpoint("observed gameplay two-visit native presence") {
         server.waitReady()
+        validateSelectedTraderPoolAgainstFreshRegistry()
         client.prepare(); client.launchDedicated(); client.waitDedicatedJoin(); client.waitSettled()
         server.send("gamemode spectator ${client.username}")
         server.send("execute in minecraft:overworld run tp ${client.username} ${CORE - 512} 316 $CORE")
@@ -115,6 +117,35 @@ class GameplayRuntimeTest {
         GameplayFeatureClient.runShaderWindow(server, client, evidence.run, nonce)
         server.assertHashes(); client.assertHashes(); server.auditLogs()
         LogPolicy.requireClean(collectLogs(evidence.run.directory))
+    }
+
+    private fun validateSelectedTraderPoolAgainstFreshRegistry() {
+        // This invocation's strict complete native dump is the oracle, never an old
+        // snapshot or a sibling source checkout. Do not promote it to a global dump.
+        val dump = server.runtimeDump()
+        val snapshotId = RuntimeSnapshotValidator.validate(dump)
+        val jar = server.server.resolve("mods/better-spirit-commerce-1.0.1.jar")
+        require(Files.isRegularFile(jar) && !Files.isSymbolicLink(jar)) { "selected server lacks exact Commerce runtime JAR" }
+        val jarHash = Hashes.sha256(jar)
+        val poolText = JarFile(jar.toFile()).use { archive ->
+            val entry = requireNotNull(archive.getJarEntry("data/better_spirit_commerce/spiritcommerce/wandering_pool.json")) {
+                "selected Commerce JAR lacks its wandering pool resource"
+            }
+            require(entry.size in 1..1_048_576) { "unexpected packaged wandering pool resource size" }
+            archive.getInputStream(entry).bufferedReader(Charsets.UTF_8).use { it.readText() }
+        }
+        val pool = mapper.readTree(poolText)
+        val registries = mapper.readTree(dump.resolve("registries.json").toFile())
+        val needed = GameplayPoolRegistryContract.validate(pool, registries)
+        require(Hashes.sha256(jar) == jarHash) { "selected Commerce JAR changed during registry validation" }
+        Files.writeString(evidence.run.directory.resolve("gameplay-wandering-pool.json"), poolText,
+            StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)
+        server.assertHashes()
+        evidence.run.event("runtime_snapshot", mapOf("snapshot_id" to snapshotId, "source" to dump.toString(),
+            "scope" to "gameplay_packaged_wandering_pool_registry_resolution", "promoted_global" to false,
+            "client_sha256" to server.pair.clientSha256, "server_sha256" to server.pair.serverSha256,
+            "pool_jar" to jar.toString(), "pool_jar_sha256" to jarHash, "pool_rows" to pool.path("rows").size(),
+            "needed_items" to needed, "needed_item_count" to needed.size))
     }
 
     private fun requireNativeFamiliarCampaign() {
@@ -177,6 +208,26 @@ class GameplayRuntimeTest {
             Thread.sleep(500)
         }
         error("deadline expired for actual native presence $kind; retained measurement=$output; no elapsed/tick acceptance fabricated")
+    }
+}
+
+/** Narrow current-output registry-resolution contract, not a historical pool baseline. */
+object GameplayPoolRegistryContract {
+    fun validate(pool: JsonNode, registries: JsonNode): List<String> {
+        require(pool.path("schema").asText() == "bc.wandering_pool.v1") { "unexpected packaged wandering pool schema" }
+        val rows = pool.path("rows")
+        require(rows.isArray && rows.size() == 288) { "packaged wandering pool must contain 288 rows" }
+        val items = registries.path("items")
+        require(items.isObject) { "current native registry dump lacks the items object" }
+        val ids = rows.map { row ->
+            val id = row.path("result").path("id").asText()
+            require(id.matches(Regex("[a-z0-9_.-]+:[a-z0-9_./-]+")) && id != "minecraft:air") {
+                "packaged pool has an invalid/air result: $id"
+            }
+            require(items.has(id)) { "packaged wandering pool result is absent from current native item registry: $id" }
+            id
+        }
+        return ids.distinct().sorted()
     }
 }
 

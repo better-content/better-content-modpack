@@ -448,6 +448,11 @@ The observer never seeds history, changes a game clock, or counts offline time. 
 same-world checkpoint binds actual counts, monotonic/native tick witnesses and candidate hashes;
 this is separate from the authored-history fixture above.
 
+Before the client/soak, the target validates a fresh, strict complete native runtime snapshot
+without global promotion. All 288 wandering-pool result IDs read from the selected candidate's
+Commerce JAR must resolve in that invocation's live item registry; sibling sources and retained
+proposal CSVs are not the runtime oracle. Snapshot ID and candidate/JAR hashes remain recorded.
+
 The same target exercises actual registered spoiled items and native compost/rod behavior,
 configured bush fields with explicitly authored native harvest/growth scheduling, production
 readiness edges, and ordinary/Dynamic Trees cuts. Its nonshipping held-cut driver calls public
