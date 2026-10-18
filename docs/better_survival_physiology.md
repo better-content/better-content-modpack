@@ -8,14 +8,14 @@ Every row has exactly one representative in each authority. Formal aspect labels
 
 | Aspect | Glyph | sRGB | RPG development | Diet identity | Ore identity |
 | --- | --- | --- | --- | --- | --- |
-| Impact | ✦ | `#FF4055` | Strength | Proteins | Hotstone |
-| Tempo | » | `#00A985` | Hand Speed | Sugar | Copper Bloom |
-| Work | ⚒ | `#F0E2C5` | Tool Handling | Grains | Tin Quartz |
-| Mobility | ➜ | `#E0B01F` | Athletics | Fruits | Brassroot |
-| Endurance | ∞ | `#52606A` | Endurance | Fats | Coal Measures |
-| Robustness | ◆ | `#AF6A2F` | Hardiness | Vegetables | Ironstone |
-| Renewal | ✚ | `#6CCAF0` | Detoxification | Dairy | Evaporite Beds |
-| Control | ⊕ | `#8E5BB7` | Marksmanship | Alcohol | Black Shale |
+| Impact | ✦ | `#FF4055` | Strength | Sinew (Proteins) | Hotstone |
+| Tempo | » | `#00A985` | Hand Speed | Nectar (Sugar) | Copper Bloom |
+| Work | ⚒ | `#F0E2C5` | Tool Handling | Grain (Grains) | Tin Quartz |
+| Mobility | ➜ | `#E0B01F` | Athletics | Berry (Fruits) | Brassroot |
+| Endurance | ∞ | `#52606A` | Endurance | Tallow (Fats) | Coal Measures |
+| Robustness | ◆ | `#AF6A2F` | Hardiness | Root (Vegetables) | Ironstone |
+| Renewal | ✚ | `#6CCAF0` | Preservation | Cream (Dairy) | Evaporite Beds |
+| Control | ⊕ | `#8E5BB7` | Marksmanship | Draught (Alcohol) | Black Shale |
 
 The shipped ore identity palette is authoritative and is shared by the RPG, bodily-state,
 and Threads aspect definitions. Glyph, name, value structure, morphology, and actual
@@ -62,33 +62,49 @@ These owners already implement meaningful pauses at their own scopes. Keep ordin
 
 RPG allocations use `cap × points / (points + 20)`: twenty committed points reach half the cap, allocation cannot be refunded during the life, and death wipes the ledger. Each visible category is singular and mechanically coherent:
 
-- Strength increases damaging impact and knockback.
+- Strength increases knockback and stagger impact, not damage.
 - Hand Speed increases attack and item-use cadence.
-- Tool Handling increases productive mining speed and reach.
-- Athletics increases movement, swimming, step capability, and underwater air capacity; 20 points extend the base 15-second reserve to 22.5 seconds.
-- Endurance conserves hunger and thirst and increases stamina capacity.
-- Hardiness resists temperature and knockback.
-- Detoxification shortens harmful effects and preserves beneficial effects; it never grants health, healing, or combat recovery.
+- Tool Handling increases productive block reach, not mining speed.
+- Athletics increases step capability and underwater air capacity, not movement/swimming speed; 20 points extend the base 15-second reserve to 22.5 seconds.
+- Endurance increases stamina capacity, not hunger/thirst efficiency or stamina cost reduction.
+- Hardiness resists knockback, not temperature.
+- Preservation extends beneficial effects and protects them during milk drinking from the first positive investment; it never shortens harmful effects or grants health, healing, or combat recovery.
 - Marksmanship narrows arrow spread and gently increases arrow speed and effective range from the start; later guns gain recoil and dispersion control, while Goety spells gain range.
 
 These player-facing capability names retain the existing `arms`, `hands`, `fingers`, `lungs`,
 `blood`, `skin`, `liver`, and `eyes` IDs respectively. Body-part badges, palettes, aspect mappings,
-allocation data, and mechanics are unchanged; renaming does not require a save migration.
+and allocation data remain unchanged. Authored effects now complement nutrition's primaries rather than duplicating them; no stat-ID migration is introduced.
 
 Slice of Life: Carrot remains the sole owner of maximum-health progression.
 
 ## Nutrition
 
-Diet displays exactly eight groups, matching the eight aspect identities and colours. Proteins, Grains, Fruits, Fats, Vegetables, and Dairy are ordinary nutrition; Sugar and Alcohol are differently behaving loads, never required for dietary completeness. Ordinary thresholds are `50%` supported, `75%` prepared, and `90%` feast. The powerful band loses three percentage points per minute while active: `90%` falls below `75%` in about five idle minutes, sooner during hunger-linked Diet decay or Sugar Tempo.
+The eight food groups match the eight aspect identities and colours. Sinew, Grain, Berry,
+Tallow, Root and Cream are ordinary nutrition; Nectar and Draught are optional temporary
+loads, never required for dietary completeness. Every ordinary primary scales linearly from
+zero: at 10% nutrition, receive 10% of the unamplified maximum, with no deficiency penalty.
 
-- Proteins grant `+75%` melee damage above `75%`, with a charged `+200%` Heavy Blow above `90%` after briefly withholding attacks.
-- Grains grant `+100%` mining speed above `75%`; correct-tool Work Rhythm reaches `+200%` above `90%`.
-- Fruits grant `+50%` movement and swimming above `75%`, with a sprint surge reaching `+100%` above `90%`.
-- Fats reduce hunger, thirst, and stamina costs by `70%` above `75%`, reaching `85%` above `90%` and funding one ten-second zero-cost emergency reserve.
-- Vegetables resist `80%` of temperature drift and half of knockback above `75%`; at `90%` they can cancel one extreme exposure or knockback every 30 seconds.
-- Dairy clears harmful effects four times as fast and preserves benefits through milk above `75%`; at `90%` it cleanses one harmful effect every 20 seconds.
-- Sugar grants `+50%` or `+100%` attack and item-use cadence at its own `25%` and `60%` load thresholds; it burns the powerful nutrition band two or five times faster and builds metabolic debt.
-- Alcohol improves handling only in its moderate `35–65%` window; high load degrades handling and can cause stumbles. Maximum alcohol is unambiguously bad.
+| Group | Primary at 100%, without Nectar | Secondary unlocks |
+| --- | --- | --- |
+| Sinew | +40% melee damage | 40% charged strike; 80% cleave |
+| Grain | +100% correct-tool mining speed | 40% break sequence; 60% longer grace; 80% work burst |
+| Berry | +25% movement/swimming speed | 20% safer falls; 40% sustained-sprint stride; 80% sprinting leap |
+| Tallow | −50% hunger/thirst/stamina costs | 80% emergency reserve |
+| Root | −70% heat/cold drift | 80% temperature-hit guard |
+| Cream | 2× harmful-effect expiry speed | 40% meal recovery; 80% periodic cleanse |
+
+Nectar amplifies these effects by `1 + load` and accelerates consumption. It does not provide
+another cadence bonus, alter unlock thresholds or multiply RPG allocations. Tallow and Root
+reductions cap at 85% even with Nectar. Draught grants `min(30%, 30% × load × Nectar amplification)`
+incoming damage reduction. Its movement, work, cadence and resource-cost penalties start above
+30% load and are **also** amplified by Nectar, up to their impairment caps. Blackout starts at
+100% raw load and ends at 85%; maximum Draught remains bad.
+
+Secondary abilities have different counts and roles rather than a compulsory four-tier ladder.
+Nutrition no longer grants knockback/stagger, step height, beneficial-effect preservation or
+Root movement speed. RPG owns those complementary capabilities. Exact formulas, perk timings
+and source authority belong to the [physiology balance contract](../../mod_source/better-survival-physiology/README.md#nutrition-balance).
+Diet retains native nutrition decay; the additional upper-band drain begins above 80%.
 
 Sugar's exponential consumption multiplier (`8^load`, up to `8×` at full load) applies
 uniformly to all eight groups, including sugar itself and alcohol clearance. Each retains its
@@ -99,10 +115,10 @@ Heavy Blow readiness uses the same server-side eligibility predicate as combat. 
 plays one Impact systemic-salience motif with its radial particle burst and a transient activation
 label; remaining ready does not repeat the cue. Login/reconnect establishes a silent baseline.
 The existing empowered strike cue remains separate and occurs once at the target. This adds no
-permanent HUD widget and does not change attack balance. Source checks cover ordinary attacks and
+permanent readiness HUD widget. Source checks cover ordinary attacks and
 Epic Fight's native attack route; full-pack audiovisual acceptance is separate.
 
-Diet's native screen remains the authoritative nutrition display and shows each group's actual benefit, load, and estimated upper-tier time. Food hover consolidates nutrient gains into one horizontal row of graphical aspect badges, pack names and per-serving percentages, without ASCII glyphs or effect descriptions. This replaces Diet's default-name list and “When eaten” separator. Quark's duplicate food icons and saturation description are disabled; the bottom native restoration displays, eaten status and source-mod attribution remain. Freshness labels are capitalized and colored green (Fresh), yellow (Stale), gold (Spoiled) and red (Rotten). There is no text meal recap. Generic Diet-wide bonuses stay disabled so they cannot duplicate the aspect abilities.
+Diet remains authoritative for nutrient values. The nutrition strip displays current group/load percentages; the benefit presentation helpers describe continuous primaries and only real perk unlocks. Opening/layout behavior is not changed by this balance work. Food hover consolidates nutrient gains into one horizontal row of graphical aspect badges, pack names and per-serving percentages, without ASCII glyphs or effect descriptions. This replaces Diet's default-name list and “When eaten” separator. Quark's duplicate food icons and saturation description are disabled; the bottom native restoration displays, eaten status and source-mod attribution remain. Freshness labels are capitalized and colored green (Fresh), yellow (Stale), gold (Spoiled) and red (Rotten). There is no text meal recap. Generic Diet-wide bonuses stay disabled so they cannot duplicate the aspect abilities.
 
 ## Ores
 
