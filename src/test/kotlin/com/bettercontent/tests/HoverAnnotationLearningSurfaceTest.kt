@@ -403,7 +403,15 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(collector.contains("level.isRainingAt(collectionPos) || Weather2RainCompat.isPrecipitatingAt(level, collectionPos)"))
         assertTrue(collector.contains("WaterPurity.getFilledContainer(held, false)"))
         assertTrue(collector.contains("WaterPurity.addPurity(filled, pos, level)"))
-        assertTrue(collector.contains("thirst.drink(player, 3, 2)"))
+        assertTrue(collector.contains("WaterDrinking.sip(serverPlayer, () ->"))
+        assertTrue(collector.contains("new PlayerWaterReserve.Reserve(3, 2, 0, WaterPurity.getBlockPurity(level, pos))"))
+        assertTrue(collector.indexOf("consumeCharge(level, pos, state)") < collector.indexOf("new PlayerWaterReserve.Reserve"))
+        val drinking = Files.readString(
+            root.resolve("../mod_source/better-drinking-water/src/main/java/com/bettercontent/betterdrinkingwater/WaterDrinking.java").normalize(),
+        )
+        assertTrue(drinking.contains("reserve = purchase.get()"))
+        assertTrue(drinking.contains("WaterPurity.givePurityEffects(player, reserve.purity())"))
+        assertTrue(drinking.contains("thirst.drink(player, restored, quenched)"))
         assertTrue(thirstConfig.contains("defaultPurity = 0"))
         assertTrue(thirstConfig.contains("kettlePurificationLevels = 3"))
         assertTrue(thirstConfig.contains("sandFilterFiltrationAmount = 3"))

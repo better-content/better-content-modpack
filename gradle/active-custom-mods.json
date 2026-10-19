@@ -505,6 +505,8 @@
     },
     {
       "repository": "better-drinking-water",
+      "verificationInputs": ["kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
+      "buildInputs": [],
       "modId": "better_drinking_water",
       "artifact": "better-drinking-water-1.1.0.jar",
       "tasks": [
