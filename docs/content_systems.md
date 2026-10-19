@@ -253,8 +253,9 @@ source checks belong to [Spirit Commerce](../../mod_source/better-spirit-commerc
 ## Forage, chopping and rotten food
 
 Fixed-location berry fields include sweet berry, Fruits Delight blueberry and cranberry, and
-optional Ars Nouveau sourceberry bushes. New decoration targets 10–14 sparsely spaced plants
-within a 29×29 footprint, limited by terrain; existing chunks are not backfilled. Bush foliage
+optional Ars Nouveau sourceberry bushes. New decoration targets 30–42 sparsely spaced plants
+within a 47×47 footprint, limited by terrain; existing chunks are not backfilled. Fields are
+centered on their decoration chunk to keep generation writes within its 3×3 chunk neighborhood. Bush foliage
 stays mature across native picking and regrowth, with each plant's native food yield. Direct
 planting and berry-to-pot propagation are closed. Direct normal-player removal of these bushes
 and protected fruit trees needs a registered diamond-or-better axe tier. Tinkers' axes use their
