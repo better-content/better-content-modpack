@@ -8,6 +8,14 @@
   "treasure_pattern": "(?:^|[/_])(?:treasure|burial|sacred|sanctuary|bastion|ancient_city|mausoleum)(?:$|[/_])",
   "encounter_pattern": "(?:^|[/_])(?:dungeon|crypt|graveyard|dragon|roost|cave|prison|bastille|keep|monastery|pyramid|temple|mansion|stronghold|outpost|nether_bridge)(?:$|[/_])",
   "excluded_namespaces": ["lootr", "thirst"],
+  "excluded_table_patterns": [
+    "^[^:]+:(?:inject|injections)/",
+    "^wares:(?:agreement|package|gameplay)/",
+    "^goety:gameplay/",
+    "^pneumaticcraft:custom/",
+    "^the_bumblezone:structures/sempiternal_sanctum/sudoku_failed$",
+    "^minecraft:empty$"
+  ],
   "bundles": {
     "minecraft:string": 3,
     "minecraft:leather": 2,

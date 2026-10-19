@@ -32,6 +32,11 @@ class List extends Array {
 }
 const handlers = []
 const event = {
+    addLootTypeModifier(type) {
+        const builder = this.addLootTableModifier(/.*/)
+        handlers[handlers.length - 1].type = type
+        return builder
+    },
     addLootTableModifier(pattern) {
         const actions = []
         handlers.push({ pattern, actions })
@@ -51,6 +56,7 @@ const sandbox = vm.createContext({
     LootJS: { modifiers: fn => fn(event) },
     Java: { loadClass(name) {
         if (name.endsWith('LootTable')) return { EMPTY }
+        if (name.endsWith('LootContextType')) return { CHEST: 'CHEST' }
         if (name.endsWith('BuiltInRegistries')) return { ITEM: { keySet() {
             const iterator = ids.values(); let next = iterator.next()
             return { iterator: () => ({ hasNext: () => !next.done, next() {
@@ -88,7 +94,11 @@ function run(table, stacks, { seed = 1, type = 'CHEST', missing = false } = {}) 
             return state % n
         } })
     }
-    for (const { pattern, actions } of handlers) if (pattern.test(table)) for (const action of actions) action(context)
+    for (const { pattern, actions, type: requiredType } of handlers) {
+        if (pattern.test(table) && (!requiredType || requiredType === type)) {
+            for (const action of actions) action(context)
+        }
+    }
     return loot
 }
 function score(loot) {
@@ -122,7 +132,12 @@ for (const [table, profile] of [
     ['iceandfire:chest/fire_dragon_roost', config.profiles.encounter],
     ['goety:chests/crypt_loot', config.profiles.encounter],
     ['cataclysm:chests/desert_treasure', config.profiles.treasure],
-    ['forgottenruins:chest/burial_chamber', config.profiles.treasure]
+    ['forgottenruins:chest/burial_chamber', config.profiles.treasure],
+    ['the_bumblezone:structures/bee_house', config.profiles.supplies],
+    ['kaisyn:village/village_jungle_house', config.profiles.supplies],
+    ['kaisyn:outpost/common/armory', config.profiles.encounter],
+    ['creatingspace:abandoned_moon_base_loot', config.profiles.supplies],
+    ['example:any_future_folder/any_future_container', config.profiles.supplies]
 ]) {
     for (let seed = 1; seed <= 200; seed++) {
         for (const input of [[], [new Stack('minecraft:bread')],
@@ -143,7 +158,8 @@ for (const [table, profile] of [
 assert.deepEqual(summary(run('goety:chests/crypt_loot', [], { seed: 67 })),
     summary(run('goety:chests/crypt_loot', [], { seed: 67 })))
 // Both naming conventions lose seeds; compensation occurs afterward.
-for (const table of ['forgottenruins:chest/farming', 'minecraft:chests/village/village_plains_house']) {
+for (const table of ['forgottenruins:chest/farming', 'minecraft:chests/village/village_plains_house',
+    'kaisyn:village/village_jungle_house', 'the_bumblezone:structures/bee_house', 'creatingspace:crashed_rocket_loot']) {
     const loot = run(table, [new Stack('minecraft:wheat_seeds', 32)])
     assert(!loot.some(s => s.id === 'minecraft:wheat_seeds'))
     assert(score(loot) >= 6)
@@ -159,10 +175,18 @@ assert.equal(special[1].count, 40)
 // More special rewards than the ceiling: retain all rather than deleting rare gear.
 const overflow = Array.from({ length: 20 }, (_, n) => new Stack('special:relic', 1, { n }))
 assert.deepEqual(Array.from(run('minecraft:chests/simple_dungeon', overflow)), overflow)
-// No normalization outside root chest tables or for an unresolved table.
-for (const table of ['minecraft:blocks/stone', 'minecraft:entities/zombie', 'minecraft:gameplay/fishing',
-    'minecraft:archaeology/desert_pyramid', 'artifacts:inject/chests/desert_pyramid',
-    'goety:inject/chests/simple_dungeon', 'thirst:chests/simple_dungeon', 'lootr:chests/elytra', 'minecraft:empty']) {
+// No normalization outside native CHEST contexts, regardless of table naming.
+for (const [table, type] of [['minecraft:blocks/stone', 'BLOCK'], ['minecraft:entities/zombie', 'ENTITY'],
+    ['minecraft:gameplay/fishing', 'FISHING'], ['minecraft:archaeology/desert_pyramid', 'UNKNOWN'],
+    ['example:gift', 'GIFT'], ['example:barter', 'PIGLIN_BARTER']]) {
+    assert.equal(run(table, [], { type }).length, 0, table)
+}
+// Helpers and non-container rewards stay excluded even with CHEST parameters.
+for (const table of ['artifacts:inject/chests/desert_pyramid', 'goety:inject/chests/simple_dungeon',
+    'thirst:chests/simple_dungeon', 'lootr:chests/elytra', 'minecraft:empty',
+    'wares:package/village/plains', 'wares:agreement/village/plains_payment_buy',
+    'goety:gameplay/vault_rare', 'pneumaticcraft:custom/common_dungeon_loot',
+    'the_bumblezone:structures/sempiternal_sanctum/sudoku_failed']) {
     assert.equal(run(table, []).length, 0, table)
 }
 assert.equal(run('example:chests/missing', [], { missing: true }).length, 0)
@@ -174,4 +198,30 @@ assert.equal(geological.find(s => s.id === 'better_ore_geology:small_ore_chunk_i
 const split = run('minecraft:chests/simple_dungeon', [new Stack('minecraft:bread', 4), new Stack('minecraft:bread', 4)])
 const merged = run('minecraft:chests/simple_dungeon', [new Stack('minecraft:bread', 8)])
 assert.deepEqual(summary(split), summary(merged))
+// Optional source inventory from a separately hash-verified native archive scan.
+// No cached native inventory is required by the hermetic default Dev fixture.
+if (process.argv[3]) {
+    const inventory = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'))
+    assert.equal(inventory.parse_errors.length, 0)
+    let covered = 0, excluded = 0, unresolved = 0
+    const profileFor = vm.runInContext('bcChestProfile', sandbox)
+    for (const row of inventory.candidates) {
+        const profile = profileFor(row.id)
+        assert.equal(Boolean(profile), !Boolean(row.excluded), row.id)
+        for (const seed of [1, 13, 67]) {
+            const loot = run(row.id, [], { seed, missing: !row.resolved })
+            if (profile && row.resolved) {
+                assert(score(loot) >= profile.min && score(loot) <= profile.max, row.id)
+                const full = run(row.id, Object.keys(config.bundles).map(id => new Stack(id, 64)), { seed })
+                assert(score(full) >= profile.min && score(full) <= profile.max, row.id)
+            } else {
+                assert.equal(loot.length, 0, row.id)
+            }
+        }
+        if (!profile) excluded++
+        else if (!row.resolved) unresolved++
+        else covered++
+    }
+    console.log(`Native inventory selection passed: ${covered} covered, ${excluded} excluded helpers/rewards, ${unresolved} unresolved references`)
+}
 console.log('Chest loot normalization: production behavior, tier bounds, policy cuts, exclusions, protected state and deterministic RNG passed')

@@ -131,6 +131,7 @@ var BC_LOOT_ITEM_REGISTRY = Java.loadClass('net.minecraft.core.registries.BuiltI
 var BC_LOOT_POTION_UTILS = Java.loadClass('net.minecraft.world.item.alchemy.PotionUtils')
 var BC_LOOT_POTIONS = Java.loadClass('net.minecraft.world.item.alchemy.Potions')
 var BC_LOOT_ITEMS = Java.loadClass('net.minecraft.world.item.Items')
+var BC_LOOT_CHEST_TYPE = Java.loadClass('com.almostreliable.lootjs.core.LootContextType').CHEST
 
 function bcIsDisabledPotionDelivery(stack) {
     if (stack.is(BC_LOOT_ITEMS.SPLASH_POTION)
@@ -179,7 +180,8 @@ LootJS.modifiers(function (event) {
         context.getLoot().removeIf(function (stack) { return bcIsDisabledPotionDelivery(stack) })
     })
 
-    var chestLoot = event.addLootTableModifier(/^[a-z0-9_.-]+:chests?\/.*/)
+    // Native chest context also covers structures/, village/, and root-level IDs.
+    var chestLoot = event.addLootTypeModifier(BC_LOOT_CHEST_TYPE)
     for (var j = 0; j < BC_CHEST_LOOT_REMOVE_SEEDS.length; j++) {
         if (bcLootItemExists(BC_CHEST_LOOT_REMOVE_SEEDS[j])) chestLoot.removeLoot(BC_CHEST_LOOT_REMOVE_SEEDS[j])
     }

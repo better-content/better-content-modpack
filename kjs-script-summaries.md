@@ -56,8 +56,8 @@ Current inventory: **102 active scripts** — 10 client, 82 server, and 10 start
 - `kubejs/server_scripts/policy/dimension_access.js` — Removes direct portal routes so rocket and Font graphs own intended dimension access.
 - `kubejs/server_scripts/policy/closed_end_dragon_replacements.js` — Replaces vanilla dragon-boss inputs with finite Ice and Fire families and authors the closed-End Elytra and netherite-sheet routes.
 - `kubejs/server_scripts/policy/conventional_tool_authority.js` — Removes conventional native tool-family recipes so Tinkers' Construct owns pickaxe, axe, shovel, hoe, and sword progression.
-- `kubejs/server_scripts/policy/global_loot_progression.js` — Removes progression-breaking materials from broad loot injection surfaces and seeds from both root `chest/` and `chests/` tables.
-- `kubejs/server_scripts/policy/chest_loot_normalization.js` — Bounds ordinary chest commodities and compensates sparse post-filter results by role, preserving special/tagged rewards and Lootr personal rolls.
+- `kubejs/server_scripts/policy/global_loot_progression.js` — Removes progression-breaking materials from broad loot injection surfaces and seeds from native chest contexts regardless of table naming.
+- `kubejs/server_scripts/policy/chest_loot_normalization.js` — Bounds ordinary commodities in native chest contexts and compensates sparse post-filter results by role, preserving special/tagged rewards, helper exclusions and Lootr personal rolls; prefilled inventories are not rewritten.
 - `kubejs/server_scripts/policy/removed_items.js` — Applies the exact deny list for intentionally unavailable outputs.
 - `kubejs/server_scripts/policy/tnt_recipe.js` — Restricts TNT to the two vanilla sand inputs instead of broad sand tags.
 - `kubejs/server_scripts/processing/ore_sifting_and_spouting.js` — Disables Bulk Washing, migrates granular separations to waterlogged Sifting, and assigns direct water treatments to Spouting.

@@ -57,8 +57,11 @@ authorize a general audit framework; see [Crafting graph policy](crafting_policy
 
 `kubejs/server_scripts/policy/chest_loot_normalization.js` owns cross-mod chest
 quantity normalization; `kubejs/config/chest_loot_normalization.json` owns bundle
-sizes, role selectors, and targets. Root `chest/` and `chests/` tables are both
-covered, including the seed-removal policy in `global_loot_progression.js`.
+sizes, role selectors, and targets. Both normalization and the seed-removal policy
+in `global_loot_progression.js` select the native LootJS `CHEST` context, not a
+folder convention. This includes `chest/`, `chests/`, Bumblezone's `structures/`,
+Towns and Towers' `kaisyn:village/` and `kaisyn:outpost/`, Creating Space's root
+IDs, and future table names used in a chest context.
 
 Normalization runs at script priority -10000, after pack removal/replacement and
 prototype additions. The pinned LootJS 2.13.1 Forge hook invokes script actions
@@ -66,7 +69,7 @@ at `ForgeHooks.modifyLoot` return, after native global loot modifiers. Sparse
 results receive mundane expedition supplies, never a reroll of a prohibited tool,
 seed, potion, currency, or gated component. Ordinary supply chests target 6–8
 reward bundles, encounter chests 8–10, and treasure chests 10–12. Role matching is
-explicit in the config; unmatched root chest tables use the supply profile.
+explicit in the config; unmatched chest-context tables use the supply profile.
 
 Only untagged items on the ordinary-commodity allowlist can be reduced. Duplicate
 commodity stacks are aggregated and capped at two configured bundles per item;
@@ -77,13 +80,26 @@ Special rewards alone may exceed the ceiling rather than being deleted. Bundle
 counts measure quantity, not occupied GUI slots; native chest filling can split
 stacks. This is not an equal-value guarantee between different mods' treasures.
 
-Block/entity drops, fishing, archaeology, gifts, injection helper tables, Thirst
-helper tables, Lootr's synthetic tables, and unresolved loot tables receive no
-normalization. Lootr retains personal rolls and saved inventories; already-rolled
+Block/entity drops, fishing, archaeology, and gifts are outside the native chest
+context. Explicit config exclusions protect injection/Thirst helpers, Lootr's
+synthetic tables, Wares packages/agreements, Goety vault/spawner rewards,
+PneumaticCraft injection helpers, and Bumblezone's intentional failed-Sudoku
+reward. Unresolved tables are not concealed with filler loot.
+
+This hook does **not** rewrite prefilled structure inventories (`Items` without a
+`LootTable`) or Lootr's copied custom inventories: those do not generate a loot
+table and require a separate placement/conversion policy. Prefilled puzzle,
+story, and machine inventories must not be indiscriminately replaced with random
+supplies. Lootr retains personal rolls and saved inventories; already-rolled
 inventories are not rewritten, and the texture preference is unchanged.
+
 `ChestLootNormalizationTest` executes the production scripts with collection/stack
-stand-ins across sparse, overflowing, filtered, tagged, and excluded inputs. That
-Minecraft-free check is not full-pack runtime acceptance.
+stand-ins across sparse, overflowing, filtered, tagged, and excluded inputs. The
+fixture also accepts a separately generated native inventory JSON as an optional
+third argument to test every discovered table's selection, bounds, exclusions,
+and unresolved-table guard. The default Dev fixture is hermetic and does not
+silently adopt retained inventories as test inputs. These Minecraft-free checks
+are not full-pack runtime acceptance.
 
 ## Tinkers' wood material
 

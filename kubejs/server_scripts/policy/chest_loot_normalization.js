@@ -4,6 +4,7 @@
 // global-modifier injections have already contributed to the same loot list.
 var BC_CHEST_NORMALIZATION = JsonIO.read('kubejs/config/chest_loot_normalization.json')
 var BC_CHEST_EMPTY_TABLE = Java.loadClass('net.minecraft.world.level.storage.loot.LootTable').EMPTY
+var BC_CHEST_LOOT_TYPE = Java.loadClass('com.almostreliable.lootjs.core.LootContextType').CHEST
 
 if (!BC_CHEST_NORMALIZATION || BC_CHEST_NORMALIZATION.schema !== 'bc.chest_loot_normalization.v1') {
     throw new Error('Missing or invalid chest loot normalization policy')
@@ -11,13 +12,18 @@ if (!BC_CHEST_NORMALIZATION || BC_CHEST_NORMALIZATION.schema !== 'bc.chest_loot_
 
 var BC_CHEST_TREASURE = new RegExp(BC_CHEST_NORMALIZATION.treasure_pattern)
 var BC_CHEST_ENCOUNTER = new RegExp(BC_CHEST_NORMALIZATION.encounter_pattern)
+var BC_CHEST_EXCLUSIONS = BC_CHEST_NORMALIZATION.excluded_table_patterns.map(function (pattern) {
+    return new RegExp(pattern)
+})
 
 function bcChestProfile(table) {
-    // Only root structure tables, never inject/chests, block/entity drops,
-    // archaeology, fishing, gifts, or Lootr's synthetic Elytra table.
-    if (!/^[a-z0-9_.-]+:chests?\//.test(table)) return null
+    // Selection is by native CHEST context, not a mod's folder convention.
+    // Exclude nested helper tables and non-container reward/package systems.
     var namespace = table.substring(0, table.indexOf(':'))
     if (BC_CHEST_NORMALIZATION.excluded_namespaces.indexOf(namespace) >= 0) return null
+    for (var i = 0; i < BC_CHEST_EXCLUSIONS.length; i++) {
+        if (BC_CHEST_EXCLUSIONS[i].test(table)) return null
+    }
     var path = table.substring(table.indexOf(':') + 1)
     if (BC_CHEST_TREASURE.test(path)) return BC_CHEST_NORMALIZATION.profiles.treasure
     if (BC_CHEST_ENCOUNTER.test(path)) return BC_CHEST_NORMALIZATION.profiles.encounter
@@ -93,5 +99,5 @@ function bcNormalizeChestLoot(context) {
 }
 
 LootJS.modifiers(function (event) {
-    event.addLootTableModifier(/^[a-z0-9_.-]+:chests?\//).apply(bcNormalizeChestLoot)
+    event.addLootTypeModifier(BC_CHEST_LOOT_TYPE).apply(bcNormalizeChestLoot)
 })
