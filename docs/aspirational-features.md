@@ -298,6 +298,48 @@ Choose donor assets and palettes for the remaining vegetable/herbal drinks durin
   native inventory and visual acceptance scope before shipping. This entry claims no new runtime
   compatibility, balance, asset-license clearance or deployment acceptance.
 
+## Loot: table-owned quantity and reward balancing
+
+**Status:** Wanted; deferred and outside current implementation scope. The former global chest
+normalizer is removed; a table-by-table replacement balance pass has not been implemented.
+See [structure chest loot](content_systems.md#structure-chest-loot) for current behavior.
+
+**Goal:** Make exploration rewards worthwhile and appropriately sized without flattening distinct
+locations into generic supply bundles, deleting special rewards or manufacturing compensation
+for every sparse roll.
+
+### Proposed approach — not yet approved
+
+- Balance explicitly selected loot tables and pools at their definitions: adjust roll counts,
+  weights and item quantities rather than scoring and reconstructing final generated stacks.
+- Give intended containers authored roles such as expedition supplies, encounter rewards and
+  treasure. Roles guide table authoring, not automatic classification by folder-name regexes.
+- Reference reusable supply pools explicitly where appropriate. Extra supplies are an opt-in
+  part of a container's table, never an automatic response to an empty or progression-filtered roll.
+- Inspect all consumers before changing a shared table. Native `CHEST` context does not prove
+  physical chest use; Quark Stonelings can roll carried rewards through that path. Keep mob-carried
+  rewards, nested helpers, packages and intentional empty/failure rewards outside blanket balancing.
+- Preserve special-reward pools, item data and native stack behavior unless a specific balance
+  decision changes them. Existing progression cuts and geological replacements remain independent;
+  balancing must not restore prohibited acquisition routes.
+- Use a narrowly targeted final cap only for a demonstrated post-table injection problem, with
+  explicit tables/commodities and no filler generation, rather than reviving a global normalizer.
+
+### Decisions and conditions for revisiting
+
+- Inventory the active pinned tables, pools, injections and their consumers; identify actual empty
+  or excessive reward problems before selecting changes. Retained diagnostic inventories are not
+  automatically current implementation inputs or evidence.
+- Approve the initial table set, roles, desired quantities, special rewards and treatment of
+  intentional scarcity. No universal bundle targets or treasure-value score are settled here.
+- Decide shared-pool ownership and preserve Lootr personal-roll behavior. Existing rolled or
+  prefilled inventories must not be silently rewritten; any save migration is separate scope.
+- Verify effective pool composition, progression restrictions, representative distributions and
+  preservation of item state, including negative cases for mob/helper consumers. Source checks
+  alone do not establish gameplay balance or exact-candidate native runtime acceptance.
+- Require explicit implementation approval and separately authorized runtime testing and packaging.
+  Recording this aspiration authorizes documentation only, not a replacement loot system.
+
 ## Valkyrien Skies: physical motion and spacecraft
 
 **Status:** Wanted; deferred and outside current implementation scope.
