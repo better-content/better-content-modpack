@@ -303,6 +303,8 @@ class ClientFixture(
 
     fun prepare() {
         val importLogName = if (slot == 0) "client-import" else "client-$slot-import"
+        val initializedBaseline = ClientPackImport.initialize(pair.client, pair.clientSha256, client,
+            evidence.directory.resolve(if (slot == 0) "client-init.log" else "client-$slot-init.log"))
         var imported = false
         for (attempt in 1..3) {
             val importLog = evidence.directory.resolve(
@@ -313,13 +315,9 @@ class ClientFixture(
                 imported = true
                 break
             } catch (failure: IllegalStateException) {
-                val index = client.resolve("index.toml")
                 val transientHandshake = importLog.isRegularFile() &&
                     importLog.readText().contains("net/http: TLS handshake timeout")
-                val emptyPartialImport = index.isRegularFile() && Files.size(index) == 0L &&
-                    Files.list(client).use { it.toList() == listOf(index) }
-                if (!transientHandshake || !emptyPartialImport || attempt == 3) throw failure
-                Files.delete(index)
+                if (!transientHandshake || !ClientPackImport.unchanged(client, initializedBaseline) || attempt == 3) throw failure
                 evidence.event("client_import_retry", mapOf(
                     "client" to username, "attempt" to attempt, "reason" to "CurseForge TLS handshake timeout",
                 ))

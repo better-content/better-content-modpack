@@ -1,10 +1,6 @@
 hash-format = "sha256"
 
 [[files]]
-file = "AGENTS.md"
-hash = "6cdbacd03871b1c49a139ce321727974308754e77abd888937ad2e561b80cab9"
-
-[[files]]
 file = "LICENSE"
 hash = "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
 
@@ -26,7 +22,7 @@ hash = "da41baa38cd86e7388841af4095cb06b9f6f3a1c883cedfe6f0632ea129f4f06"
 
 [[files]]
 file = "config/Deep Void Config.toml"
-hash = "5222b972674d9ef70ae3461ad50e8e5ec60c692fbee0be2601cc84d0af47357d"
+hash = "60167f24c9036d0ed2ca1b576ecc9a513a188c9a57bdb305ed71d5506404ad71"
 
 [[files]]
 file = "config/DistantHorizons.toml"
@@ -95,6 +91,70 @@ hash = "49f87a4f3132ba06857b8d6293b60db84f715a2f704f90f86e4730eaa8bfae1f"
 [[files]]
 file = "config/adchimneys-common.toml"
 hash = "99dcd142c860e869e55909e41619622668a6549235458441b419c8134cfa25da"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$aerial_campfire.cfg"
+hash = "591dfcd13a06b21a202aea7dec9a60250e0a39ed5564355a302c81c35c91d3b8"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$aerial_campfire_signal.cfg"
+hash = "e96f1fbde693afc0b013f386e067eee808398183b2b7824d302c69f9c18a0770"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$aqueous_campfire.cfg"
+hash = "ac8be4a048a94c1099f73cb5910b58ea55f8144fba78759f66196348864e24b8"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$aqueous_campfire_signal.cfg"
+hash = "4325c6bd1ddc04035b3589873bf411bceaed1570de880bedf0d8c5e4e134662f"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$arcane_campfire.cfg"
+hash = "5b1988f0536b3b1e1a09ee528cf7780ae877e0a6e902bf32f7a31d7979c5caa1"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$arcane_campfire_signal.cfg"
+hash = "23b109412a7b420aaade149d3503f7f88f57aea8ad95140f2e649c2752163bcc"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$earthen_campfire.cfg"
+hash = "c6643a017173105ba2de3a07672313c528174dd10bd3fd6e9a2b743677d30ee7"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$earthen_campfire_signal.cfg"
+hash = "b6d2b14d153a9e7d6e08bf3d0098f0a4f47503ca4a8d82a279714542f98b9988"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$infernal_campfire.cfg"
+hash = "5d4ba555b1e71a1906c0b14e9afec9742ff6d463be9c34f95b74f73b6ef46e8a"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$infernal_campfire_signal.cfg"
+hash = "092371291e52f24e285f74d303d85a0d11fed63499648fa7cbfbf7becd6a11dc"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$sacred_campfire.cfg"
+hash = "1d2865f1ae9d83d3f042c5eac2ca18f0b5a4f8d8373bf15a7e2635cf96bc46b3"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$sacred_campfire_signal.cfg"
+hash = "fc6a88623c4b1ee36bf8bcfd665269ccad4a007dec024eada96ebe385e3d6ad8"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$tempo_campfire.cfg"
+hash = "aa3b51fe4259881f9f3d0701f282e04e3a510273afc2d4683e30e20462eaa379"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$tempo_campfire_signal.cfg"
+hash = "80c43ab778cccc60af7149a43ba4bab17244f8d375d147171295d3581ee28ec2"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$wicked_campfire.cfg"
+hash = "92e48ce63eb1dede1e441289e5b93745c4c09386b28d6d5a3433babd600288c7"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$wicked_campfire_signal.cfg"
+hash = "45a12ea890d273e0e2ccddae2feb60bdc8d3f3beab2a4fa329e4b43bd0574879"
 
 [[files]]
 file = "config/adchimneys/Emitters/create$blaze_burner.cfg"
@@ -1826,7 +1886,7 @@ hash = "c54f14d2579cfff9ad95df94dd3a8abb781f8e05a80ddc0138bdb133963c3d4a"
 
 [[files]]
 file = "config/ars_nouveau-common.toml"
-hash = "e78540309c92412f739ddc7cf8e27816f388a66a286d0a9b535a9508333e77d1"
+hash = "3dc115806c10330a1fc8c6b5651207ef4fdd196dc4ee49648855996867e9be0d"
 
 [[files]]
 file = "config/ars_nouveau-server.toml"
@@ -2214,7 +2274,7 @@ hash = "528a81ba2ea97d69cd7da8134fcaa7a8ee8b991e29bbddc834a030ee50f9f1eb"
 
 [[files]]
 file = "config/better_spirit_commerce-common.toml"
-hash = "70762c2c9d053a71b1b3a897bd753a8bc31c783504f9a14e907c4095958d86f0"
+hash = "20bdd31c2b03336bf960f849475ff07c16dd76cffb7a01c97d53423ed43a9525"
 
 [[files]]
 file = "config/better_survival_hud-client.toml"
@@ -2822,7 +2882,7 @@ hash = "a5d08b917ef15d63c2be151c5741f52ec8a892027c1dd6b3cf23a88282834229"
 
 [[files]]
 file = "config/quark-common.toml"
-hash = "26f0c342678f91e9cc1b619c5d03b1ce4ce7dd8afe072db1a4027ef805112cdc"
+hash = "60984240c7cdbea1e889fc2874cb52d297cc39c1a2c2a55931f37dd3565e0c33"
 
 [[files]]
 file = "config/rats-common.toml"
@@ -3366,7 +3426,7 @@ hash = "ac3c442ed65141d5bf71497bd0562833ecffc16a6aae47f78aa2daa7b400d6f5"
 
 [[files]]
 file = "config/thirst/common.toml"
-hash = "a6f80ab32adaa76743e1d8bf9c97be795888d28982775cbcbae3e067dcfac43f"
+hash = "e6754c25c279929fc8c3c639c6abf54b16c42b313e92a10dd5524187879d6c9c"
 
 [[files]]
 file = "config/thirst/container.toml"
@@ -3374,7 +3434,7 @@ hash = "8fec1bca92d628e7e57b7ccf3ee2088e286449ca60e78e4a12613805aaa73fe8"
 
 [[files]]
 file = "config/thirst/item_settings.toml"
-hash = "3ae9985bc16456d10ff886c04fe7c6836baa69576578d61369e17331cbf8b22b"
+hash = "29d394a1dea5b134740983919aca037851d126b66dc66c52533d708560a44941"
 
 [[files]]
 file = "config/thirst/keyword.toml"
@@ -4681,16 +4741,32 @@ file = "defaultresources/excavated_variants/excavated_variants/variants/minecraf
 hash = "478a21324a21317fd06d10995bdf479a8f70e624f65e3336e448f9183df20684"
 
 [[files]]
-file = "dist.sh"
-hash = "a9d03518303aef17b4d28f1bdddfc16dbbddd4ce83247ad88da8f8181383d188"
-
-[[files]]
 file = "globalresources/better_content/excavated_variants/better_content/configs/malum_texture_blacklist.json5"
 hash = "c07165a746c38afd02bcb17ceaead4c7aa2bc1ebd3a0834fb58afd3c3553d1cd"
 
 [[files]]
 file = "globalresources/better_dimension_fonts/excavated_variants/better_dimension_fonts/variants/better_dimension_fonts_modded_ores.json5"
 hash = "a3e21167ac45f242fad8a36cf18755050ab2680ef69eb2a1979264fea13b5901"
+
+[[files]]
+file = "kubejs/assets/additionalweaponry/item_skins/butcher_knife.json"
+hash = "1c477186c59b1060ac40e4a0e22641647077578a6e8235382643123262e2cb81"
+
+[[files]]
+file = "kubejs/assets/additionalweaponry/item_skins/cutlass.json"
+hash = "124fb1c019ce661059110df83b1e8c58c206de8bc76aef1c4f71529f830a5870"
+
+[[files]]
+file = "kubejs/assets/additionalweaponry/item_skins/pitchfork.json"
+hash = "d31cf6e72a3c79b6368dd018450f0c47a94997bfb12f597340616c3a9b77ce57"
+
+[[files]]
+file = "kubejs/assets/additionalweaponry/item_skins/scepter.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/additionalweaponry/item_skins/wrench.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
 
 [[files]]
 file = "kubejs/assets/additionalweaponry/models/item/firearm_barrel.json"
@@ -5211,6 +5287,14 @@ hash = "943713d8e556793522c82583ddd5b8e0a25ee48eab14569ec6e414ca29a01892"
 [[files]]
 file = "kubejs/assets/complicated_bees/patchouli_books/field_guide/zh_cn/entries/other/foods.json"
 hash = "04672c5d632e8a76d2ec0858059badb5dcb618120b0b8d355559f59be82ef140"
+
+[[files]]
+file = "kubejs/assets/construct_arsenal/item_skins/helix_blade.json"
+hash = "0c8de8e42110295ae256b073f297e9db88077666a4498475d50e6e982094908c"
+
+[[files]]
+file = "kubejs/assets/construct_arsenal/item_skins/quarterstaff.json"
+hash = "d31cf6e72a3c79b6368dd018450f0c47a94997bfb12f597340616c3a9b77ce57"
 
 [[files]]
 file = "kubejs/assets/create/models/block/belt.json"
@@ -6945,6 +7029,78 @@ file = "kubejs/assets/supplementaries/sounds/item/awning_bounce_3.ogg"
 hash = "13a8f83a117a657ab974fb51afe582ad71f94a247a4e8ab2340c1c3a06290c9a"
 
 [[files]]
+file = "kubejs/assets/tconstruct/item_skins/battlesign.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/broad_axe.json"
+hash = "04b8132f2ed3718de2a043530482a0ac21e1aa1017dd2b8d3fc9e85fd66291ee"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/cleaver.json"
+hash = "0c8de8e42110295ae256b073f297e9db88077666a4498475d50e6e982094908c"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/dagger.json"
+hash = "1c477186c59b1060ac40e4a0e22641647077578a6e8235382643123262e2cb81"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/excavator.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/hand_axe.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/javelin.json"
+hash = "d31cf6e72a3c79b6368dd018450f0c47a94997bfb12f597340616c3a9b77ce57"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/kama.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/mattock.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/minotaur_axe.json"
+hash = "04b8132f2ed3718de2a043530482a0ac21e1aa1017dd2b8d3fc9e85fd66291ee"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/pickadze.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/pickaxe.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/scythe.json"
+hash = "04b8132f2ed3718de2a043530482a0ac21e1aa1017dd2b8d3fc9e85fd66291ee"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/sledge_hammer.json"
+hash = "04b8132f2ed3718de2a043530482a0ac21e1aa1017dd2b8d3fc9e85fd66291ee"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/swasher.json"
+hash = "124fb1c019ce661059110df83b1e8c58c206de8bc76aef1c4f71529f830a5870"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/sword.json"
+hash = "124fb1c019ce661059110df83b1e8c58c206de8bc76aef1c4f71529f830a5870"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/vein_hammer.json"
+hash = "04b8132f2ed3718de2a043530482a0ac21e1aa1017dd2b8d3fc9e85fd66291ee"
+
+[[files]]
+file = "kubejs/assets/tconstruct/item_skins/war_pick.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
 file = "kubejs/assets/tconstruct/models/block/storage/queens_slime.json"
 hash = "6eaad9e176da85849cbb009e395f16c9f14324ecb238510d9865461a2242aab6"
 
@@ -7037,8 +7193,60 @@ file = "kubejs/assets/the_flesh_that_hates/textures/item/plaqueblock.png"
 hash = "4b2ecf4e3b86a3c1d06f90c34fc456bb68bdbceb4130e6373b159e8e6d043a1e"
 
 [[files]]
+file = "kubejs/assets/tinker_rapier/item_skins/estoc_tic.json"
+hash = "284896a6fb3e8942bf43055a7d515a69b7709a9d48741cfb6d9a8ca36a5a1004"
+
+[[files]]
+file = "kubejs/assets/tinker_rapier/item_skins/rapier_tic.json"
+hash = "284896a6fb3e8942bf43055a7d515a69b7709a9d48741cfb6d9a8ca36a5a1004"
+
+[[files]]
+file = "kubejs/assets/tinkers_battle_spades/item_skins/battle_spade.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/tinkers_katanas/item_skins/fuma_shuriken.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/tinkers_katanas/item_skins/katana.json"
+hash = "de9bb5af8250a12b12dfe88219b72e78875860f87cdb15fbb552d33ddd73db35"
+
+[[files]]
+file = "kubejs/assets/tinkers_things/item_skins/amethyst_staff.json"
+hash = "d31cf6e72a3c79b6368dd018450f0c47a94997bfb12f597340616c3a9b77ce57"
+
+[[files]]
+file = "kubejs/assets/tinkers_things/item_skins/blockram.json"
+hash = "0c8de8e42110295ae256b073f297e9db88077666a4498475d50e6e982094908c"
+
+[[files]]
+file = "kubejs/assets/tinkers_things/item_skins/chisel.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
+file = "kubejs/assets/tinkers_things/item_skins/halberd.json"
+hash = "d31cf6e72a3c79b6368dd018450f0c47a94997bfb12f597340616c3a9b77ce57"
+
+[[files]]
+file = "kubejs/assets/tinkers_things/item_skins/shovel.json"
+hash = "2637af6a6dc5b0376043b6aa174b0c6a9df3779ddcb5b4d05ea260cb0b9865b4"
+
+[[files]]
 file = "kubejs/assets/tinkers_things/models/block/hematite.json"
 hash = "581351741f416bb06cb745b3ddfb63be7dc26122eb1b83f7bcd82f135723607d"
+
+[[files]]
+file = "kubejs/assets/tinkersweaponry/item_skins/greatsword.json"
+hash = "0c8de8e42110295ae256b073f297e9db88077666a4498475d50e6e982094908c"
+
+[[files]]
+file = "kubejs/assets/tinkersweaponry/item_skins/lance.json"
+hash = "d31cf6e72a3c79b6368dd018450f0c47a94997bfb12f597340616c3a9b77ce57"
+
+[[files]]
+file = "kubejs/assets/tinkersweaponry/item_skins/pike.json"
+hash = "d31cf6e72a3c79b6368dd018450f0c47a94997bfb12f597340616c3a9b77ce57"
 
 [[files]]
 file = "kubejs/assets/tinkersweaponry/textures/item/tool/greatsword/head_broken_tconstruct_unknown.png"
@@ -7338,11 +7546,11 @@ hash = "0cdcd842a9aa30424f258210359023a6cd9002960ae97e265fd27f659fe10116"
 
 [[files]]
 file = "kubejs/client_scripts/guidance/10_hover_annotations.js"
-hash = "a9af61220f8f2c0fc832fa06b3ac8c75c9aca0f9a1efe52bb2dc55f87399dc93"
+hash = "ad462a0021853608253047e394e252e49b204e5bfb922482fea1cf333b70af78"
 
 [[files]]
 file = "kubejs/client_scripts/policy/hide_completed_tcon_tools.js"
-hash = "c0f449eec4223c8a6267b4061e440a4ab8866f287d1cb4e9adc1e12171343a0c"
+hash = "ba249da07e8b7fad712f5f43d9963213f8ad19b7b5b0ad68d24ced94017b47a5"
 
 [[files]]
 file = "kubejs/client_scripts/policy/hide_disabled_potions.js"
@@ -7382,7 +7590,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "a18480fb70925cae62bd3958e8df137c2f9d1ab2cdebd1798221641953cb9d2f"
+hash = "51af46a26c5ea1c48940bc007d684dc373248b6c2c53383f38e35b0b05aff961"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -8726,7 +8934,7 @@ hash = "cf47d22623f9ecc27660f459511618683fc1969d5c24c8d07b43a538f923403f"
 
 [[files]]
 file = "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json"
-hash = "4c1f18a8568b1690eecdf6851a820739b7f6d3b80ff8255141932bf026555e23"
+hash = "b818c7778ba162aac2efa6ef5d30ec6c4fb2d687115c6a3e017213e13967fc60"
 
 [[files]]
 file = "kubejs/data/forge/tags/blocks/farmland.json"
@@ -10070,7 +10278,7 @@ hash = "5b3b1ffa5fa8edeea343e43f1633e194d6864493db7fb7df651a1ee124fbc461"
 
 [[files]]
 file = "kubejs/data/tconstruct/tinkering/materials/stats/wood.json"
-hash = "389fbf9ce65e3f432b559875b00a79903759730fcf9d0752a9ed784c1301756c"
+hash = "00ecee8264d1e9e43c65ed8887aaf14a84b904c65dfdb295e90235c8b9588d24"
 
 [[files]]
 file = "kubejs/data/tconstruct/tinkering/station_layouts/fishing_rod.json"
@@ -10718,7 +10926,7 @@ hash = "93977064d27b211cfff591179b38933fbd01188d764da5e596e5b1fb000d3184"
 
 [[files]]
 file = "kubejs/server_scripts/policy/global_loot_progression.js"
-hash = "963c926795c450876191eec305f510c945562a72008ae476a19dcab04e6ea6f7"
+hash = "643e87d2c3569485aa8bd55dd4b7a712457cdd0eab5adaed25e5fc4d0aafde36"
 
 [[files]]
 file = "kubejs/server_scripts/policy/native_material_cost_prewarm.js"
@@ -10889,6 +11097,10 @@ file = "kubejs/startup_scripts/policy/disable_trickster_weight.js"
 hash = "b4fb3f90c62078c6a9fe4b947511028496a38e2c3ce355956623996ffe02e73c"
 
 [[files]]
+file = "kubejs/startup_scripts/policy/enderman_armor.js"
+hash = "eefa8a22c437484b819ea1ad97c448e5c359db3e6babf294da28ca379c9ef9a9"
+
+[[files]]
 file = "kubejs/startup_scripts/policy/hide_vanilla_tools_from_creative.js"
 hash = "7e72dcc1fd5a724d36dc9e7145c4f26901e282a4384ce984b7acea08c528dbe5"
 
@@ -10901,8 +11113,8 @@ file = "kubejs/startup_scripts/progression/20_transition_items.js"
 hash = "30c6fa36417c0752429009d26bb7f5bc938561a49cb799def410d26265e25071"
 
 [[files]]
-file = "maintenance.main.kts"
-hash = "0abb12700b5cc5117a6d17063cfb5dc0fb5eeb6e221c47ffc1568a04f06846d5"
+file = "lock"
+hash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
 
 [[files]]
 file = "mods/accelerated-rendering.pw.toml"
@@ -10996,179 +11208,183 @@ metafile = true
 
 [[files]]
 file = "mods/better-airtight-machines-0.1.0.jar"
-hash = "c5a534ca9766c8633d53af5e86061679f00ffb45d9e7483deb31e767e8475d46"
+hash = "2da9b24dc4c86e1bacd2036f592a285a4135849a121110fda2f1d5c9c7a2bfdd"
 
 [[files]]
 file = "mods/better-arena-trials-0.1.0.jar"
-hash = "e382f75f1eaaa362475351c7e9bcea371ebe24c27a46c33e363700cc69f15b4b"
+hash = "cee800c5207dcf32a0792473bd9e10d81f9145633ac51c70e90729f50ec79720"
 
 [[files]]
 file = "mods/better-block-placement-preview-0.1.0.jar"
-hash = "43f11d53a3cdd50754fb93d712e5d747b1ef65fd64bfc33f912ac7890870be13"
+hash = "f761d4c2ce2f3c52c126198f2ca01860e3bd952a805273a518dccf65655ddea6"
 
 [[files]]
 file = "mods/better-bumblezone-crops-0.1.0.jar"
-hash = "d4290f5cc87b38a97f956998eac6af12977d3446a309554db8e13a672aeb246f"
+hash = "08565399e940cf7a02705a40e8befc9a30b3317f9691efe2346d541ab10546fa"
 
 [[files]]
 file = "mods/better-buried-encounters-0.1.0.jar"
-hash = "41e0672196343ad7103fd04ab53432a870bc034c1b8c717a9eba1a651cc0ae47"
+hash = "bbc3dd80d98e0c4e9817925c7997324f9ead6b0f28a5b9c682cb5283df449960"
 
 [[files]]
 file = "mods/better-cave-encounters-0.2.1.jar"
-hash = "85b063f720faf36ab98dd5509672575bd59edadc4e3a44436b4b3de2eb1c97d1"
+hash = "bd6a2f0dfce0d7be4d6953cbfb924471e51d2ee887709de90bf819e34434bff8"
 
 [[files]]
 file = "mods/better-celestial-events-0.1.0.jar"
-hash = "f6b2fb9df4724c55422cfe185741397f8464ab76d767d5caf38b6aa2a5542b79"
+hash = "55f8b54285011482188f378521f2b1eea935f47693f851aab152f94f6cc7bf8e"
 
 [[files]]
 file = "mods/better-chemlib-hazards-0.2.0.jar"
-hash = "5c4a8acb8949cfb6b5dc7c205a2001cd98c16ce032b31a4aeb5e1a5a8f6e2e62"
+hash = "c96e6e60cb7955100674d92acd3c4d0bb6b1483cff2aa38d0491f3bf362c68db"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
-hash = "4dab234a7d9cf91c80cb370f4d0e4ce348e4c7b363027129de9d25fe25768527"
+hash = "00b8055d7e3e1d31b6e4392c27baed38f332c7e7cbe680159739bb9a8f28797e"
 
 [[files]]
 file = "mods/better-craftable-bouquets-0.1.0.jar"
-hash = "e712d5c11f027d9af24fcfc0266efe37029d7afa11afcc33d1c7b3edda74e7b6"
+hash = "64534e787932bae8ad597f4a23ac11f32664a7b3f022eb0a8e4510268e34a0e0"
 
 [[files]]
 file = "mods/better-create-kinetic-loss-0.1.0.jar"
-hash = "67f4ffb99461bcae210c1f50e23cab7fcb96fd060b2513724e73c69d1db1de0e"
+hash = "77b7ec75ecbb5ff88a8ee4db17b3a0abd8db1921216d5e8bb5335f11d325ff0b"
 
 [[files]]
 file = "mods/better-create-train-fuel-0.1.0.jar"
-hash = "c4160cac20e57701b77ed04e290a37cbdaf502b7603655d22e9bd6665b792aed"
+hash = "35573787913ee998aa7928d39c63de683cc94d3d2056a46d50cc294063704f54"
 
 [[files]]
 file = "mods/better-deaths-door-1.0.0.jar"
-hash = "bf445a7ea6920000468c6c26e0b1c2856bab4b2c454b86ec55e083aac7ad6439"
+hash = "911b7113b47a42ea023b7ea7487fcef2831a26eac825b003a0bced80f9876259"
 
 [[files]]
 file = "mods/better-dimension-fonts-1.0.0.jar"
-hash = "89d1abfadd433b295de9a81b50d799d98a111a10f0cad3b0df198f7c32870cf4"
+hash = "de95e6e12d6e63b8ac1f111e2d560552750d1e7af321297bc076a731017d6c50"
 
 [[files]]
 file = "mods/better-discovery-guides-1.0.0.jar"
-hash = "edcb6d9a750ae6d3c80258a5c4ffb5fdf6b6e98be547e615a523c09a34ff62a5"
+hash = "7cc20eaba35c6f909e4310e4365434d66d63ee1f8abc7816a32e5d59bc6f2a3e"
 
 [[files]]
 file = "mods/better-drinking-water-1.1.0.jar"
-hash = "6761de47248be438374b43dd78a2889fe186d84ebc1b4f720d7cae989bba7063"
+hash = "fd9dede3ac1e1c4dfde930e712dc613750d9afc904a5e94e98d08cb4f1c18b17"
 
 [[files]]
 file = "mods/better-exploration-load-control-0.1.0.jar"
-hash = "79e3a2a33501de94bf5cd8245f2866a4514309ea549cbf2ee86ba17619761349"
+hash = "6d78a9400bee5654707ab4fec647e4ff84cb035cb8c808837ae1b0d5afc5c11d"
 
 [[files]]
 file = "mods/better-gameplay-notices-1.0.0.jar"
-hash = "6544b26c403032cad004204383f7661308eeebb1d6afc0abfdd0f40187556c6f"
+hash = "186e6e5af78ee1234e3120ba3ebc6931f04dd0a6c544fe23637c00fe7229039a"
 
 [[files]]
 file = "mods/better-hexerei-dynamic-trees-1.0.1.jar"
-hash = "dbf044ad2a0e18c68f5f38a97450c13ec6e352e1f88ad9ab481a74af709addf5"
+hash = "abbc233ff96ad38454140f5fe6126e5e815c1052c842e33bd3253064c13e84fc"
 
 [[files]]
 file = "mods/better-industrial-heat-0.1.0.jar"
-hash = "f053185d5a1af10fe86996548f75643991a5a72ecd4723e1037f9344552c17b4"
+hash = "bcdb8ed01225e2670e98c517b26d8fb1ad8e9410b305b2dd161955424094fd3c"
 
 [[files]]
 file = "mods/better-journal-inventory-0.1.0.jar"
-hash = "a06565d0a53597198a7a4cdcdacf9e5989b987542a02c04cfbff2a6fb008fc1a"
+hash = "e0ca053acf2cd78f985e006b52747b7f184e7698ebe041df49588b84325a2f8e"
 
 [[files]]
 file = "mods/better-magic-chunk-anchors-0.1.0.jar"
-hash = "f7520e3f86593a6f9b01c879dbfddcf3aa74771098a8c803003700f5cb02f674"
+hash = "27c3ad7de876a851248a16be4d03da0e3706bf9ee185467cc51f1e58f17674dd"
 
 [[files]]
 file = "mods/better-malum-dynamic-trees-1.0.1.jar"
-hash = "e3c4ef3a31af7990e717683c954608b7c739dbcfd4cdd4b2181b906750c27752"
+hash = "89dc4a2d820bdf6fe44867837f95a4efd2823e26e76cba1a1ca2817d61074aa0"
 
 [[files]]
 file = "mods/better-mining-lamp-0.1.0.jar"
-hash = "da1da1844d5541c4ff7b99c6aa9f5de15574dbc4a27ee253cc06811881a5c270"
+hash = "1bed70e9ad80a22a284660e01025fbbd1a558b5ad4d6118c00267200b3144606"
 
 [[files]]
 file = "mods/better-oc2r-create-controls-0.1.0.jar"
-hash = "e807ecb503fb22e9e82f880c8838572fa3cecb4e4ef4e0a84fad420538c75ea5"
+hash = "4cd2f664cc3909dcd2af10b1de2fc3ddb06c6de18719e88cd0fecf1702b7a6e3"
 
 [[files]]
 file = "mods/better-oc2r-wireless-messaging-1.0.0.jar"
-hash = "e7fa0cf0be10573a487c88dbeec8b3deaff8dc089e0b771280be433b25e16cd0"
+hash = "6e83b26a08e11472d3537f68f6c041cd622cb2b2ab7a10c2f74bf331a04c44fc"
 
 [[files]]
 file = "mods/better-ore-geology-0.3.0.jar"
-hash = "69d4f4de6a5a2f0b5c67b49fd467dd6513f9cf795fccd98a97da200a6f2879a0"
+hash = "17c527d47c3c8d1c038023b886fd3a678635c2850300ac8d4ebb18ea328daf39"
 
 [[files]]
 file = "mods/better-pillager-campaigns-0.5.4.jar"
-hash = "21b3415280a566645588c1aad3670327afdec76a70540d05c29c9bc7a90a4689"
+hash = "05de409a7a9a006769d159cd45ea3525c865fab939aaf256f7e69d6822b8909f"
 
 [[files]]
 file = "mods/better-player-traces-0.1.0.jar"
-hash = "94da2f3bd9d0ed8febe417584166c6fcc1e1859af33dbe745827ef42bd107093"
+hash = "3cf2ca82dcafb3987e339746450a6211481c7201a8d3f934a2c7cdc188c0d95e"
 
 [[files]]
 file = "mods/better-rail-beetle-0.1.0.jar"
-hash = "1be37d052d3c1152a2fa620ec3d1bb9effc8a36984ca6aea708bacbeb3d8b4c4"
+hash = "11a97b3e92540040a1e14c3bfde740ae0ecb4ee24346b13ca48faa2c6d9a4585"
 
 [[files]]
 file = "mods/better-regolith-farming-0.1.0.jar"
-hash = "457db6a247112d618ca5aedbce4d8d6f35401332b24585a99698e994372b2589"
+hash = "adb122ca1d30b58335cc71d7dc4b5419aee842084050c85bb3b5c79ed5798183"
 
 [[files]]
 file = "mods/better-rehooked-grappling-0.1.0.jar"
-hash = "de8704d3fda66b988bf87e0055bc7d30521452a0bf4239349f153444764e0c8c"
+hash = "ce131cc42da07ea4c5b858dd516c7cf86c5eb4860c953634dad62330a045f35f"
 
 [[files]]
 file = "mods/better-rpg-progression-1.0.1.jar"
-hash = "bab12a1f10bc03fcedfbc4194d7d35fa0122f2cf32f64064e624bc05787acc2d"
+hash = "8e12e3ec3708126d2329a6ddcd2c4eaea71469fd8a5c63e46fb80b41a9c3d287"
 
 [[files]]
 file = "mods/better-runtime-diagnostics-0.1.0.jar"
-hash = "2abb6b81ed76d1cbe3867edcef073112843f757d33f40c089862902934e0b0e9"
+hash = "f9c005e42af2ac4ee1a42d29cfe6627606f69061be1ef2fa993d1412ed886867"
 
 [[files]]
 file = "mods/better-settlement-roads-0.1.0.jar"
-hash = "bfaeb546993ff657a4d2b7f1bd2643813a79fc7225213b3c91b23bf733bde98c"
+hash = "cf78222e1699f473486dc4bd5b30f61100c7a74cc6e624c93195bb330299876d"
 
 [[files]]
 file = "mods/better-spawns-1.0.0.jar"
-hash = "3e577e9eecd663383164bad3b6a3872560ffa463c1156c3903b76c2070b851c1"
+hash = "e38b3e30c93c09cf0250e2d59d33f7edbff5b9670ff2f462da38222fcb1e6be8"
 
 [[files]]
 file = "mods/better-spirit-commerce-1.0.1.jar"
-hash = "d3e9d7d0fba129b1824b531553f8fb3ec3de7803bec863880512a1eaead77505"
+hash = "0c2397d9b5c8caf03c83d80533c00259bb5e6bb77ad9986c3bbb9f2ec93f63fb"
 
 [[files]]
 file = "mods/better-survival-hud-1.0.0.jar"
-hash = "0a00deac9fa2dad34aa6ec6f93eb007ba9ca8320d74c255b822773e82ea31bfd"
+hash = "5aa325a7a0d1e72e40bcd5370ee4e6b17c7d40b8b677b2cd14453ec7cba2291e"
 
 [[files]]
 file = "mods/better-survival-physiology-0.1.1.jar"
-hash = "53fcec061c9d1d3eb13bc509670e16262dc335d6a9172756746d14616180e92e"
+hash = "22a9c9e860aea6bbce2d857b3c03c8394e764945ef3710f087d16a9826131094"
 
 [[files]]
 file = "mods/better-tinkers-loot-affixes-1.0.0.jar"
-hash = "e6d5d0835c598e462d225f399a23bfec45ca479f9ba0a4aedbe60f8666e460bd"
+hash = "292c96a1b845b16e7b0a453c0604765a0aff6dbc44d6638242d373aded216bf5"
 
 [[files]]
 file = "mods/better-village-fortifications-1.0.0.jar"
-hash = "53193f1bb28ff6ab525fdfd6f8e77c1db07784f846e3508b965365083a67accb"
+hash = "b9c610f2707e4f4478349f72a8b276fb325a5f4e4454c31545e04d53876718bf"
 
 [[files]]
 file = "mods/better-weathering-offline-progress-0.1.0.jar"
-hash = "548f7b68ee78be43785e36ccde194d1cd01297b7eb48bb934b7656eb77807ad3"
+hash = "e97d52ce313e8729f92bde0d11b4655dfc955c318e61488f15a8ac122e90abf0"
+
+[[files]]
+file = "mods/better-wild-fruit-trees-0.1.1.jar"
+hash = "68100eb5eaa30c83e3977b7f7024dfdad2d42db29963833bcb3b3a17ef46eca3"
 
 [[files]]
 file = "mods/better-wildfire-0.1.0.jar"
-hash = "161b0133dbac4e62be01a5bc034caf6bcf64054626f4e38392aa841195fcf3c9"
+hash = "3c4385f3facdbd81c2efcf225efc3fc6c96b620b0255840c578b37cce6b9b93b"
 
 [[files]]
 file = "mods/better-world-management-0.1.0.jar"
-hash = "1c27035ed2b2a3c00c33bab2cad60d234f5505c1ec528b79e8d3a32204cd5dab"
+hash = "a17fbb6b40cb6d96bdad59526e0991c15218f8d974d3a60f2829636ca3c891b5"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -11987,7 +12203,7 @@ metafile = true
 
 [[files]]
 file = "mods/scalable-tnt-0.1.0.jar"
-hash = "080b799e4f9cf2994f42270ffb1413bfdea4d38781a6ae62ba7cda1a48da82c1"
+hash = "dfdef639f4a500c2ac15b13465d79f025caee325d6d463c11c2e00ea03c250c8"
 
 [[files]]
 file = "mods/searchables.pw.toml"
@@ -12260,6 +12476,11 @@ hash = "4ded4d3aef90c90d3004fbb73ba363322bb74da6458cba65604e9ae0fe52a67a"
 metafile = true
 
 [[files]]
+file = "mods/weapons-of-miracles.pw.toml"
+hash = "7d5dcc1e3101335db67ce5401999771fd8e3bdb2a2f859503af10f41c29c4d10"
+metafile = true
+
+[[files]]
 file = "mods/weather-storms-tornadoes.pw.toml"
 hash = "8f24f728e1e69034beb9fe44cf2b2e0b40147a4ed5559f38cc851edcb43ceaab"
 metafile = true
@@ -12291,23 +12512,7 @@ metafile = true
 
 [[files]]
 file = "options.txt"
-hash = "df63f26eba751fb2d3d8f4f315b6596ad8eb2e003cf179598d0b31a853842e8e"
-
-[[files]]
-file = "pack-test-lock.main.kts"
-hash = "16d18b1fd4e65d1c918ce021638692306f79d855352ccd23f20452db6bbb9d31"
-
-[[files]]
-file = "pack-test-queue.main.kts"
-hash = "ca720b3df5706d1227c2d041c5ff84f28644e145926194be1680d127442526f4"
-
-[[files]]
-file = "package.sh"
-hash = "a0083bf9e19d207c0e3cb3038bfe4fb6696834441366ccb868c6fa9a3964d880"
-
-[[files]]
-file = "plans/recipe-clash-replacements.md"
-hash = "dc9f113ad8a7426b51970b3c709a53dab2178c47b7dbdfeaff7683d186db8a9b"
+hash = "2e33476f7b8d446743f18781b474c032c74854d7365443055601e192c13d9bc9"
 
 [[files]]
 file = "recipe-policies.yml"
@@ -12374,6 +12579,10 @@ file = "shaderpacks/ComplementaryReimagined_r5.8.1.zip.txt"
 hash = "3a5f45d40550d15a973b5d6a63b218e93a8930851690108d92add5d409bdaf2f"
 
 [[files]]
+file = "state.json"
+hash = "2ce114eddd6983af6308f347bca1d0947a757d58dbf42c5287a9c9730cb64b1e"
+
+[[files]]
 file = "tacz/applied-armorer.pw.toml"
 hash = "e786a4717b8f6cdcb018f7f9bc71a30935df713793f7390f9c197051b46ffa81"
 metafile = true
@@ -12391,7 +12600,3 @@ metafile = true
 [[files]]
 file = "tacz/tacz-pre.toml"
 hash = "380a3105e0739f6bbae202352d29d68a7a1e88bab8912c95cd9204492c7d48ae"
-
-[[files]]
-file = "test-control.main.kts"
-hash = "b8563354828c4689d801faafee7a4bccd5c3c0a8ec087fa8774cdee2702d6c22"

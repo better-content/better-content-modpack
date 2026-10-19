@@ -63,6 +63,23 @@ class LogPolicyOptionalProbeTest {
     }
 
     @Test
+    fun exactWomAnimationAssetSchemaProbeDoesNotHideOtherEpicFightErrors(@TempDir root: Path) {
+        val probe = record(
+            "Datapack animation reading failed: No constructor information has provided: " +
+                "wom:valkyrie/valkyrie_idle",
+            "epicfight", "ERROR", "Render thread",
+        )
+        assertTrue(findings(root, listOf(probe)).isEmpty())
+        listOf(
+            probe.replace("Render thread", "main"),
+            probe.replace("epicfight", "othermod"),
+            probe.replace("valkyrie_idle", "valkyrie_attack"),
+            probe.replace("No constructor information has provided", "Animation constructor failed"),
+            probe.replace("wom:valkyrie", "epicfight:valkyrie"),
+        ).forEach { assertEquals(1, findings(root, listOf(it)).size, it) }
+    }
+
+    @Test
     fun caughtNettyContextDoesNotCrossRecordsOrLoseNativeStackProvenance(@TempDir root: Path) {
         listOf(false, true).forEach { array ->
             val original = netty(array)

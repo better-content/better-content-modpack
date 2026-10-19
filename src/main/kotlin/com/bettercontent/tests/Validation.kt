@@ -207,6 +207,18 @@ object LogPolicy {
         return setOf(continuation.first().first)
     }
 
+    // Epic Fight 20.14.17 probes this one WOM animation asset as a datapack animation.
+    // Its JSON is a model keyframe clip with no `constructor`; readResourcepackAnimation
+    // logs this exact message and returns before registering or loading anything.
+    // Keep the compatibility classification exact: other Epic Fight errors still fail.
+    private fun ignoredWomAnimationSchemaProbe(text: String): Boolean {
+        val record = parseRecord(text) ?: return false
+        return record.severity == "ERROR" && record.thread == "Render thread" &&
+            record.logger == "epicfight" &&
+            record.message == "Datapack animation reading failed: No constructor information has provided: " +
+                "wom:valkyrie/valkyrie_idle"
+    }
+
     private fun operationFailed(text: String): Boolean {
         val record = parseRecord(text)
         return record?.severity in setOf("ERROR", "FATAL") ||
@@ -220,7 +232,8 @@ object LogPolicy {
             fun flush() {
                 val diagnostics = optionalProbeLines(group)
                 group.forEach { (number, text) ->
-                    if (number !in diagnostics && operationFailed(text)) add(Finding(path, number, text))
+                    if (number !in diagnostics && !ignoredWomAnimationSchemaProbe(text) && operationFailed(text))
+                        add(Finding(path, number, text))
                 }
             }
             Files.readAllLines(path).forEachIndexed { index, text ->
