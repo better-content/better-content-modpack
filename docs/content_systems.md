@@ -53,6 +53,38 @@ exception: its startup classifier checks loaded namespaces, and its final recipe
 report inspects recipe JSON for named cut-family leaks and consumers. This does not
 authorize a general audit framework; see [Crafting graph policy](crafting_policy.md).
 
+## Structure chest loot
+
+`kubejs/server_scripts/policy/chest_loot_normalization.js` owns cross-mod chest
+quantity normalization; `kubejs/config/chest_loot_normalization.json` owns bundle
+sizes, role selectors, and targets. Root `chest/` and `chests/` tables are both
+covered, including the seed-removal policy in `global_loot_progression.js`.
+
+Normalization runs at script priority -10000, after pack removal/replacement and
+prototype additions. The pinned LootJS 2.13.1 Forge hook invokes script actions
+at `ForgeHooks.modifyLoot` return, after native global loot modifiers. Sparse
+results receive mundane expedition supplies, never a reroll of a prohibited tool,
+seed, potion, currency, or gated component. Ordinary supply chests target 6–8
+reward bundles, encounter chests 8–10, and treasure chests 10–12. Role matching is
+explicit in the config; unmatched root chest tables use the supply profile.
+
+Only untagged items on the ordinary-commodity allowlist can be reduced. Duplicate
+commodity stacks are aggregated and capped at two configured bundles per item;
+excess ordinary bundles are randomly reduced to the role ceiling. Other rewards
+count toward the target but are preserved unchanged: equipment, relics, maps,
+unique components, and all tagged stacks, including water purity and inventories.
+Special rewards alone may exceed the ceiling rather than being deleted. Bundle
+counts measure quantity, not occupied GUI slots; native chest filling can split
+stacks. This is not an equal-value guarantee between different mods' treasures.
+
+Block/entity drops, fishing, archaeology, gifts, injection helper tables, Thirst
+helper tables, Lootr's synthetic tables, and unresolved loot tables receive no
+normalization. Lootr retains personal rolls and saved inventories; already-rolled
+inventories are not rewritten, and the texture preference is unchanged.
+`ChestLootNormalizationTest` executes the production scripts with collection/stack
+stand-ins across sparse, overflowing, filtered, tagged, and excluded inputs. That
+Minecraft-free check is not full-pack runtime acceptance.
+
 ## Tinkers' wood material
 
 Wood cannot supply tool heads. The override at

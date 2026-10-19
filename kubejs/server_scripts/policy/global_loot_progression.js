@@ -179,7 +179,7 @@ LootJS.modifiers(function (event) {
         context.getLoot().removeIf(function (stack) { return bcIsDisabledPotionDelivery(stack) })
     })
 
-    var chestLoot = event.addLootTableModifier(/.*:chests\/.*/)
+    var chestLoot = event.addLootTableModifier(/^[a-z0-9_.-]+:chests?\/.*/)
     for (var j = 0; j < BC_CHEST_LOOT_REMOVE_SEEDS.length; j++) {
         if (bcLootItemExists(BC_CHEST_LOOT_REMOVE_SEEDS[j])) chestLoot.removeLoot(BC_CHEST_LOOT_REMOVE_SEEDS[j])
     }
