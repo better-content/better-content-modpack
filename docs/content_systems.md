@@ -263,6 +263,16 @@ credit, while chunk reloads do not accrue unloaded time. These are renewable-pro
 not guarantees under seasonal suppression, inactive chunks or poor geometry; initial ripe stock,
 bonemeal and ordinary crops retain their separate behavior. See the owning mod for rate assumptions.
 
+New fruit trees retain native generated size, while their additional growth energy and
+growth-only branch tapering mature from native to enlarged settings over 30 extended days
+(1,500,000 active chunk ticks, about 20h50m at 20 TPS). Native inhabited time excludes inactive
+or unloaded chunks; saved root age survives reload without offline/calendar/bonemeal catch-up.
+New tracked worldgen roots left at zero fertility receive a one-time 15-fertility supply after
+generation, without changing their initial shape/fruit stock; repeat notifications/reloads cannot
+refill it. Legacy roots without maturation data retain full potential and are not resized/refueled. Native soil,
+seasons and clearance can delay actual geometry; day thirty unlocks the full growth ceiling,
+not a forced finished tree. Fruit renewal and rarity are independent of this maturation clock.
+
 New discoveries are deliberately very rare: field attempts pass an additional 1-in-128 roll
 following native biome/frequency filters (a usual 1-in-32 rule becomes 1-in-4,096 eligible chunks
 per berry type). Protected weighted fruit-tree choices pass a 1-in-256 roll; a rejected fruit choice
