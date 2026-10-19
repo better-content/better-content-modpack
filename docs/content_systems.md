@@ -253,6 +253,16 @@ broken or uninitialized tools are denied. Machine/FakePlayer mining is exempt. I
 bypass normal placement events are not a propagation guarantee. Protected tree classification is
 loaded-only and bounded, failing open when a fruit root is unavailable; ordinary trees stay native.
 
+Natural regrowth is paced independently of this size: a mean 36-bush field targets roughly
+20 berries per 50,000 active game ticks (about 17–23 for 30–42 plants), with species-specific
+regrowth chances preserving native picking yields. Productive protected trees target roughly
+80 fruit over the same interval: eight-item harvests remain, but successful natural fruit
+replacements spend a root-owned allowance of one fruit block per 5,000 ticks, banked to at most
+two replacements. Failed geometry does not spend that allowance. Native root data preserves
+credit, while chunk reloads do not accrue unloaded time. These are renewable-production targets,
+not guarantees under seasonal suppression, inactive chunks or poor geometry; initial ripe stock,
+bonemeal and ordinary crops retain their separate behavior. See the owning mod for rate assumptions.
+
 Chopping feedback is a time-integrated rate: `2 + 16 × completion` material chips per second,
 sampled on native mining ticks with fractional carry, not a fixed chip budget per block or a
 render-frame budget. Chips originate at the cut; stopping, changing targets/material or rolling
