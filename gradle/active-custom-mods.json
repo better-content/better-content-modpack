@@ -478,6 +478,8 @@
     },
     {
       "repository": "better-survival-physiology",
+      "dependsOn": ["better-drinking-water"],
+      "verificationInputs": ["mods/diet.pw.toml", "mods/brewin-and-chewin.pw.toml"],
       "modId": "better_survival_physiology",
       "artifact": "better-survival-physiology-0.1.1.jar",
       "tasks": [
@@ -505,7 +507,7 @@
     },
     {
       "repository": "better-drinking-water",
-      "verificationInputs": ["kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
+      "verificationInputs": ["config/thirst/item_settings.toml", "mods/farmers-delight.pw.toml", "mods/farmers-respite.pw.toml", "mods/brewin-and-chewin.pw.toml", "mods/fruits-delight.pw.toml", "mods/create.pw.toml", "mods/aether.pw.toml", "mods/the-bumblezone.pw.toml", "mods/hexerei.pw.toml", "mods/malum.pw.toml", "mods/ubes-delight.pw.toml", "mods/fallout-wastelands.pw.toml", "mods/the-deep-void.pw.toml", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
       "buildInputs": [],
       "modId": "better_drinking_water",
       "artifact": "better-drinking-water-1.1.0.jar",
