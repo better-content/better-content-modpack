@@ -14,5 +14,7 @@ better-abyssal-city	src/main/java/com/bettercontent/abyssal/HarnessTestReporter.
 better-runtime-diagnostics	src/testSupport/java/com/bettercontent/runtimetestsupport/CampaignPresenceFixture.java
 # Nonshipping elapsed-time observer reads exact public campaign data/BlockPoint APIs only; never seeds history.
 better-runtime-diagnostics	src/testSupport/java/com/bettercontent/runtimetestsupport/ObservedCampaignPresenceProbe.java
+# Nonshipping native dodge adapter invokes generated public guard/animation test methods with deterministic doubles.
+better-compat-fixes	src/test/java/com/bettercontent/bettercompatfixes/EpicParCoolDodgeKeyConflictTest.java
 # Direct compatibility test denies client class loading during early/server plugin initialization.
 better-deaths-door	src/test/java/com/bettercontent/betterdeathsdoor/client/MantleRendererContractTest.java
