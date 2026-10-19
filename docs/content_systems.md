@@ -254,14 +254,21 @@ bypass normal placement events are not a propagation guarantee. Protected tree c
 loaded-only and bounded, failing open when a fruit root is unavailable; ordinary trees stay native.
 
 Natural regrowth is paced independently of this size: a mean 36-bush field targets roughly
-20 berries per 50,000 active game ticks (about 17–23 for 30–42 plants), with species-specific
+40 berries per 50,000 active game ticks (about 33–47 for 30–42 plants), with species-specific
 regrowth chances preserving native picking yields. Productive protected trees target roughly
-80 fruit over the same interval: eight-item harvests remain, but successful natural fruit
-replacements spend a root-owned allowance of one fruit block per 5,000 ticks, banked to at most
+160 fruit over the same interval: eight-item harvests remain, but successful natural fruit
+replacements spend a root-owned allowance of one fruit block per 2,500 ticks, banked to at most
 two replacements. Failed geometry does not spend that allowance. Native root data preserves
 credit, while chunk reloads do not accrue unloaded time. These are renewable-production targets,
 not guarantees under seasonal suppression, inactive chunks or poor geometry; initial ripe stock,
 bonemeal and ordinary crops retain their separate behavior. See the owning mod for rate assumptions.
+
+New discoveries are deliberately very rare: field attempts pass an additional 1-in-128 roll
+following native biome/frequency filters (a usual 1-in-32 rule becomes 1-in-4,096 eligible chunks
+per berry type). Protected weighted fruit-tree choices pass a 1-in-256 roll; a rejected fruit choice
+returns native unhandled so ordinary biome trees can still be selected. Native preferences,
+global tree density/chance and JoCodes remain; existing resources are not culled. These rolls
+permit clusters and do not guarantee minimum spacing or measured landscape density.
 
 Chopping feedback is a time-integrated rate: `2 + 16 × completion` material chips per second,
 sampled on native mining ticks with fractional carry, not a fixed chip budget per block or a
