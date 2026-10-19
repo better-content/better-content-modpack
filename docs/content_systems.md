@@ -165,12 +165,13 @@ harvesting tools are inert or hidden.
 
 A non-spectator Overworld player qualifies when both `doTraderSpawning` and `doMobSpawning`
 gamerules and Commerce's recurring visits are enabled. No spirit-funds or nearby-camp gate remains;
-native safe placement in loaded terrain still applies. A world-wide saved schedule rolls five to
-nine elapsed game-time days (120,000–216,000 ticks), initially from the first eligible check and
+native safe placement in loaded terrain still applies. A world-wide saved schedule rolls 2.5 to
+4.5 elapsed game-time days (60,000–108,000 ticks), initially from the first eligible check and
 then from each successful arrival. Visits can overlap. Each trader stays until its offers run out
 or seven elapsed game-time days (168,000 ticks) after arrival, with no deadline renewal on reload.
 Departure does not change the next arrival. Failed placements retry every 1,200 ticks without
-rerolling the multi-day wait. Schedule and retry deadlines survive saves/restarts; sleeping and
+rerolling the multi-day wait. Already-saved arrival deadlines remain unchanged; shorter waits apply to new rolls.
+Schedule and retry deadlines survive saves/restarts; sleeping and
 `/time` do not accelerate these clocks. Legacy inactive schedules start a fresh initial wait;
 existing camps keep their saved expiry. Expired unloaded records and later-loaded scenery retire
 without forcing chunks; a failed campsite rolls back only its newly created trader/untamed owned
