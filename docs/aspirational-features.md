@@ -57,6 +57,39 @@ than maintaining a second, disconnected flight model.
   performance and native visual verification. Recording this goal does not remove Creating Space,
   install Valkyrien Skies or authorize a deployment or test run.
 
+## Hostile mobs: retreat after a one-sided fight
+
+**Status:** Wanted; deferred and outside current implementation scope.
+
+**Goal:** Ordinary hostile mobs that lose half their health without successfully landing a hit
+should try to run away rather than continue a hopeless attack.
+
+### Proposed behavior — not yet approved
+
+- Track damage and successful hits within an encounter. A successful hit means actually damaging
+  the opponent, not merely swinging or firing a projectile.
+- Trigger retreat after losing health equal to half the mob's maximum health without landing a
+  hit. Prefer encounter damage tracking over a simple current-health threshold so an already
+  injured mob or unrelated environmental damage does not automatically trigger flight.
+- Give retreat priority over attacking and prevent immediate target reacquisition from cancelling
+  it. Choose reachable escape destinations away from the opponent rather than just clearing the
+  attack target.
+- Start with ordinary ground-based hostiles. Bosses, stationary enemies, flying mobs, creepers
+  preparing to explode and mobs with custom combat AI need explicit inclusion/exclusion decisions;
+  generic coverage does not promise compatibility with every modded hostile.
+
+### Decisions and conditions for revisiting
+
+- Define encounter start/end, damage attribution and whether the opponent must be a player.
+- Confirm whether one successful hit prevents retreat for the rest of that encounter, as the
+  initial request suggests, or whether losing half its health since its last successful hit also
+  qualifies. The latter is a broader morale mechanic, not an assumed requirement.
+- Decide retreat duration, escape distance, out-of-combat reset and cornered behavior. A bounded
+  retreat of roughly 8–15 seconds with fighting back when cornered is a proposal, not settled tuning.
+- Choose the owning server-side integration repository after inspecting existing combat AI;
+  verify representative vanilla and modded mobs, pathfinding and multiplayer behavior under
+  separately authorized implementation and testing. This entry authorizes no gameplay changes.
+
 ## Aspirational contextual Threads
 
 **Status:** Wanted; outside current implementation scope. These are future teaching cards,
