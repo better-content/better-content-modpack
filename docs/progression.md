@@ -203,11 +203,15 @@ placing that marked item supplies 32 rails, 16 cobblestone supports, and 8 coal 
 advanced modules. The Rail Beetle source also owns cave-siding discoveries: a parked
 Beetle coupled to a passenger cart and reserve chest cart, with 64 rails, 64 cobblestone
 supports and 16 coal in each of the working and reserve inventories. These generate
-only in suitable dry, supported Overworld caves with Create available. The source
-uses post-carving cave-floor feature placement, sampling positions across a chunk
-and scanning down through air to ground, rather than registering structure-grid
-candidates that may contain no train. New discoveries are not `/locate structure`
-targets; existing saved sites remain readable. Opening the
+only at suitable dry Overworld cave walls with Create available. The post-carving
+feature searches selected chunks for a natural cave mouth, then excavates a ruined
+rail-work camp into the adjoining rock. The Beetle's nose faces outward into the
+open cave; the coupled carts sit deeper in the alcove. Broken timbers, a workbench,
+an extinguished hearth and rubble mark the site, without an extra loot chest.
+The site supplies its own parking space instead of requiring a naturally clear
+13-block corridor; fluid, surface, ore and existing-structure conflicts veto
+excavation. New discoveries are not `/locate structure` targets; existing saved
+sites remain readable. Opening the
 Beetle wakes its survey; unclaimed examples do not consume their supplies. Freight
 reserves must be transferred manually, and taking the vehicles never restocks the site.
 This source addition requires a newly deployed mod artifact and newly generated chunks;
