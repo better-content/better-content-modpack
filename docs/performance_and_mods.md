@@ -15,14 +15,26 @@ switches, dimension eligibility and the teleport operation remain owned by The D
 The owning [compatibility source](../../mod_source/better-compat-fixes/README.md) documents the
 pinned procedure, native branch GameTest and production-artifact verification.
 
-The one-time native Deep Void origin entrance is enabled through `PlaceCultTemple = true` in
-`config/Deep Void Config.toml`. Better Compat Fixes anchors both native temple variants and their
-delayed floor openings to the actual dimension bottom rather than vanilla Y=-64. Native X/Z
-positions, template selection, placement gamerule and saved placement flag remain authoritative.
-Already-placed entrances are not moved or regenerated; unplaced worlds become eligible on their
-next native level load with the corrected mod/config. This is a single origin entrance, not a
-network of distributed holes. Abductor spawning is unchanged. Source/native fixture checks do not
-constitute acceptance of a newly packaged full-pack candidate.
+Deep Void entrances are registered as `better_compat_fixes:deep_void_entrance`, searchable with
+`/locate structure better_compat_fixes:deep_void_entrance`. One random-spread structure set uses
+128-chunk spacing and 64-chunk separation (one candidate per 2,048-block region before biome
+rejection). Its 18 inspected upstream templates have equal selection weight, including upstream
+revisions. Every variant has a separate lined 3×3 bore through the actual world bottom, a surrounding
+floor/chamber and a passage into the decoration. Explicit template air remains active; authoring
+structure blocks and saved entities are excluded. Existing template loot/spawners remain native.
+Structure placement is Overworld-only and clipped per chunk, without shared mutable placement
+settings. New starts occur in newly generated chunks; existing origin temples/chunks are not migrated.
+`PlaceCultTemple = false` disables the competing one-time origin entrance. Abductors are unchanged.
+
+Below Y=0 in the Overworld, carried ordinary compasses point toward the nearest confirmed entrance
+start within a bounded eight-region search. Lodestone/recovery compasses, Y≥0 and other dimensions
+retain native behavior. Searches are server-side, asynchronous and cached: at most one global
+in-flight chunk request and one new request per ten ticks, requesting only `STRUCTURE_STARTS`,
+never terrain or full chunks. They may create structure metadata in unexplored chunks, but do not
+populate terrain. Old chunks without entrance starts are skipped. Movement by 32 blocks, a five-minute
+refresh, reconnect and data reload invalidate relevant state; no result retains the spawn target.
+Client needle/packet behavior and full-pack exploration acceptance require a matching deployed
+artifact and are not established by isolated source/native fixture checks.
 
 The Bumblezone 7.13.4 is the active Font-only expedition realm replacing the
 retired Undergarden and Deeper Darker routes. `better_bumblezone_crops` owns Bumblezone food flora and

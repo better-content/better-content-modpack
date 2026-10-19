@@ -24,11 +24,11 @@ class World09DeepVoidSourceContractTest {
     }
 
     @Test
-    fun `enables the one-time origin temple and preserves native entry defaults`() {
+    fun `scattered structures replace the one-time origin temple and preserve native entry defaults`() {
         val config = Files.readString(root.resolve("config/Deep Void Config.toml"))
         assertTrue(config.contains("[\"Generation&World\"]"))
-        assertTrue(config.contains("PlaceCultTemple = true"))
-        assertTrue(config.contains("actual world bottom"))
+        assertTrue(config.contains("PlaceCultTemple = false"))
+        assertTrue(config.contains("Registered scattered Deep Void entrances"))
         assertFalse(config.contains("PlayersTeleportInVoid = false"))
         assertFalse(config.contains("PlayersTeleportInEnd = false"))
         assertFalse(config.contains("SpawnAbductors = false"))
