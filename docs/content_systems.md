@@ -18,7 +18,7 @@ runtime logic.
 | Player-kill spirit release, spirit commerce, eight profession identities, resident barter, and wandering-trader lifecycle | Better Spirit Commerce | The standalone mod owns credited-kill release through Malum's animated spirit entities, eight matching stations/outfits/behaviours, a 280-row profession catalogue, eight 36-row wandering pools (288 authored rows), thirteen core offers selected per visit, 48 Plague Doctor oddities, and matching villager-egg offers. Village residents use native barter rather than the fixed profession catalogue; coins, emerald commerce, and eldritch/umbral trade are closed |
 | Drinking-water quality | Better Drinking Water / Thirst | Dirty (0) or purified (3); legacy intermediate tiers count as dirty. Supported vessels share prepaid fractional sipping; sneak-empty-hand drinking draws from approved cauldrons/tanks. Equipping does not purify. Boiling and configured kettle/sand-filter treatment purify finite supplies; native bucket/fluid transfers preserve quality. Exact support and exclusions live in the [owning source](../../mod_source/better-drinking-water/README.md). |
 | Wild fruit trees and berry fields | Better Wild Fruit Trees | Fixed-location forage, mature harvest/regrowth, propagation restrictions and diamond-tier direct player removal; non-bush fruit plants and ordinary trees remain native. See the [owning source](../../mod_source/better-wild-fruit-trees/README.md). |
-| Spoiled food reuse and chopping feedback | Better Content Fixes | Spoiled produce enters native composting; spoiled meat is basic Starcatcher bait. Cut-face wood particle rate increases linearly with completion. Source/native checks are not audiovisual acceptance. |
+| Rotten food reuse and chopping feedback | Better Content Fixes | Rotten Produce enters native composting; Rotten Meat is basic Starcatcher bait. Cut-face wood particle rate increases linearly with completion. Source/native checks are not audiovisual acceptance. |
 | Regional pillager familiarity | Better Pillager Campaigns | New campaign work requires the target player's accumulated local Survival presence, not world age; physical enemies retain native pursuit. See the [owning source](../../mod_source/better-pillager-campaigns/README.md). |
 | TCon alloy composition and casting | Tinkers' Construct | Removes bypasses and authors exact cross-mod alloy recipes |
 | Celestial events | Better Celestial Events | Pack authors habitat tags; Font and Commerce owners implement free travel and fair visits. See [Celestial events](celestial-events.md). |
@@ -200,7 +200,7 @@ The source integration does not add another wind force on top of ForgeEndertech 
 combined wind/shader appearance remains a full-stack client acceptance concern. Details and
 source checks belong to [Spirit Commerce](../../mod_source/better-spirit-commerce/README.md).
 
-## Forage, chopping and spoiled food
+## Forage, chopping and rotten food
 
 Fixed-location berry fields include sweet berry, Fruits Delight blueberry and cranberry, and
 optional Ars Nouveau sourceberry bushes. New decoration targets 10–14 sparsely spaced plants
@@ -219,11 +219,17 @@ render-frame budget. Chips originate at the cut; stopping, changing targets/mate
 progress back resets the accumulator. Ordinary logs and Dynamic Trees are covered; native
 completion debris and unrelated blocks are unchanged.
 
-Spoiled produce uses vanilla composting at a 65% layer chance toward bone meal. Spoiled meat is
+Rotten Produce uses vanilla composting at a 65% layer chance toward bone meal. Rotten Meat is
 additive basic Starcatcher bait, retaining its native rod menu, lure-time benefit and bobber-owned
-consumption. Specialist bait pools and the existing disabled Aquaculture recipe are unchanged.
+consumption. These display names retain the `better_industrial_heat:spoiled_produce` and
+`better_industrial_heat:spoiled_meat` registry IDs. Eating them applies only Poison X for five
+seconds. Ordinary stale food applies Thirst IV for 60 seconds; spoiled food applies Thirst VIII
+and Malnourishment I for 60 seconds. The owning [Industrial Heat README](../../mod_source/better-industrial-heat/README.md#eating-penalties)
+defines the drain scales. [Drinking Water](../../mod_source/better-drinking-water/README.md#quality-and-purification)
+owns the two-tier water penalties: dirty water applies Hunger VIII for 60 seconds and
+Malnourishment X for 25 seconds, while purified water has no purity penalty. Specialist bait pools and the existing disabled Aquaculture recipe are unchanged.
 The Compat source fixture proves native mechanics with explicit stand-ins when Industrial Heat
-is absent; actual spoiled-item loading and client chopping appearance remain full-stack acceptance
+is absent; actual rotten-item loading and client chopping appearance remain full-stack acceptance
 work. Its mechanical gate still reports inherited Farmer's Respite recipe/loot diagnostics and a
 Dispenser mixin warning; this is not a clean strict-log pack verdict. See the
 [owning checks and limitations](../../mod_source/better-compat-fixes/README.md).
