@@ -12012,5 +12012,960 @@
         0
       ]
     }
+  },
+  "possible_physical_source_review": {
+    "schema": "bc.structure_loot_possible.v1",
+    "scope": "Seven finite known payloads conservatively reviewed if a physical consumer exists. Conditional roles are source metadata only, never production selectors, inactive flags, natural placement proof, effective-native acceptance or candidate-universe completeness. Current seven native blockers unchanged.",
+    "tables": [
+      {
+        "id": "creatingspace:abandoned_moon_base_loot",
+        "decision": "unchanged",
+        "activity": "UNKNOWN",
+        "frequency": "UNKNOWN",
+        "inactive": false,
+        "native_blocking": true,
+        "conditional_possible_physical_role": "treasure",
+        "retained_semantic_identity": "blueprint and nickel reward; physical consumer unknown",
+        "source_table_sha256": "4a6c09bcd77b56efc0c5b5816e13866b5fb8552036a557d6d93fcf6383fdb19e",
+        "current_source_pool_budgets": [
+          {
+            "pool": 0,
+            "rolls_bounds": [
+              1,
+              1
+            ],
+            "luck_bonus_rolls": 0,
+            "raw_item_unit_bounds": [
+              1,
+              1
+            ],
+            "entries": [
+              {
+                "item": "creatingspace:design_blueprint",
+                "weight": 1,
+                "selection_probability_fraction": "1/4",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "minecraft:set_nbt",
+                    "tag": "{\"design_type\":\"creatingspace:exhaust_pack_type\",\"design\":\"creatingspace:aerospike\"}"
+                  }
+                ]
+              },
+              {
+                "item": "creatingspace:design_blueprint",
+                "weight": 1,
+                "selection_probability_fraction": "1/4",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "minecraft:set_nbt",
+                    "tag": "{\"design_type\":\"creatingspace:power_pack_type\",\"design\":\"creatingspace:ox_rich_staged_cycle\"}"
+                  }
+                ]
+              },
+              {
+                "item": "creatingspace:design_blueprint",
+                "weight": 1,
+                "selection_probability_fraction": "1/4",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "minecraft:set_nbt",
+                    "tag": "{\"design_type\":\"creatingspace:power_pack_type\",\"design\":\"creatingspace:fuel_rich_staged_cycle\"}"
+                  }
+                ]
+              },
+              {
+                "item": "creatingspace:design_blueprint",
+                "weight": 1,
+                "selection_probability_fraction": "1/4",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "minecraft:set_nbt",
+                    "tag": "{\"design_type\":\"creatingspace:power_pack_type\",\"design\":\"creatingspace:full_flow_staged_cycle\"}"
+                  }
+                ]
+              }
+            ],
+            "scope": "Raw source selections/counts only; not final native stacks, effective modifiers, or placement frequency."
+          },
+          {
+            "pool": 1,
+            "rolls_bounds": [
+              3,
+              3
+            ],
+            "luck_bonus_rolls": 0,
+            "raw_item_unit_bounds": [
+              3,
+              3
+            ],
+            "entries": [
+              {
+                "item": "creatingspace:nickel_ingot",
+                "weight": 2,
+                "selection_probability_fraction": "2/2",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": []
+              }
+            ],
+            "scope": "Raw source selections/counts only; not final native stacks, effective modifiers, or placement frequency."
+          }
+        ],
+        "direct_active_modifier_refs": [],
+        "unresolved_unconditional_modifier_registrations": [
+          "aether:double_drops",
+          "aether:gloves_loot_diamond",
+          "aether:gloves_loot_gold",
+          "aether:gloves_loot_leather",
+          "aether:gloves_loot_netherite",
+          "aether:pig_drops",
+          "artifacts:smelt_ores_with_pickaxe_heater",
+          "better_bumblezone_crops:propagation",
+          "better_chemlib_hazards:placed_nuclear_state",
+          "better_wild_fruit_trees:no_propagules",
+          "relics:relic_loot",
+          "tacz:loot_table_injector",
+          "the_bumblezone:inject_drops_to_non_bz_mobs"
+        ],
+        "effective_native_composition": "UNKNOWN",
+        "preserve_special_state": true,
+        "unknown_shared_consumer": true,
+        "unchanged_is_not_balance_or_placement_certification": true,
+        "unchanged_preservation_rationale": "Preserve exact upstream item probabilities, current bounded quantities and special state because the automatic physical/shared consumer and frequency remain unknown. This is a deliberate source semantic-preservation decision, not certification of balanced accessibility, final effective quantities or placement."
+      },
+      {
+        "id": "fallout_wastelands_:chests/enclavelootable",
+        "decision": "unchanged",
+        "activity": "UNKNOWN",
+        "frequency": "UNKNOWN",
+        "inactive": false,
+        "native_blocking": true,
+        "conditional_possible_physical_role": "treasure",
+        "retained_semantic_identity": "Enclave equipment reward; physical consumer unknown",
+        "source_table_sha256": "b703a3eb420bf96d678fa0e3fc594af0c63d06bdb788a2cc52a041c86eb9070b",
+        "current_source_pool_budgets": [
+          {
+            "pool": 0,
+            "rolls_bounds": [
+              1,
+              1
+            ],
+            "luck_bonus_rolls": 0,
+            "raw_item_unit_bounds": [
+              1,
+              1
+            ],
+            "entries": [
+              {
+                "item": "fallout_wastelands_:enclave_antiradsuit_helmet",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:enclave_antiradsuit_chestplate",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:enclave_antiradsuit_leggings",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:enclave_antiradsuit_boots",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:enclaveofficier_suit_helmet",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:enclaveofficier_suit_leggings",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:enclaveofficier_suit_chestplate",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:enclaveofficier_suit_boots",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:ripper",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:energy_cell",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:plasmarifle",
+                "weight": 1,
+                "selection_probability_fraction": "1/11",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "scope": "Raw source selections/counts only; not final native stacks, effective modifiers, or placement frequency."
+          }
+        ],
+        "direct_active_modifier_refs": [],
+        "unresolved_unconditional_modifier_registrations": [
+          "aether:double_drops",
+          "aether:gloves_loot_diamond",
+          "aether:gloves_loot_gold",
+          "aether:gloves_loot_leather",
+          "aether:gloves_loot_netherite",
+          "aether:pig_drops",
+          "artifacts:smelt_ores_with_pickaxe_heater",
+          "better_bumblezone_crops:propagation",
+          "better_chemlib_hazards:placed_nuclear_state",
+          "better_wild_fruit_trees:no_propagules",
+          "relics:relic_loot",
+          "tacz:loot_table_injector",
+          "the_bumblezone:inject_drops_to_non_bz_mobs"
+        ],
+        "effective_native_composition": "UNKNOWN",
+        "preserve_special_state": true,
+        "unknown_shared_consumer": true,
+        "unchanged_is_not_balance_or_placement_certification": true,
+        "unchanged_preservation_rationale": "Preserve exact upstream item probabilities, current bounded quantities and special state because the automatic physical/shared consumer and frequency remain unknown. This is a deliberate source semantic-preservation decision, not certification of balanced accessibility, final effective quantities or placement."
+      },
+      {
+        "id": "fallout_wastelands_:chests/raidertier_2",
+        "decision": "unchanged",
+        "activity": "UNKNOWN",
+        "frequency": "UNKNOWN",
+        "inactive": false,
+        "native_blocking": true,
+        "conditional_possible_physical_role": "treasure",
+        "retained_semantic_identity": "distinct higher-tier equipment reward; physical consumer unknown",
+        "source_table_sha256": "0fe6a0aa4b6bdf19ff2873484eb0f5ce0fbb5134605939fc886286892c998003",
+        "current_source_pool_budgets": [
+          {
+            "pool": 0,
+            "rolls_bounds": [
+              1,
+              5
+            ],
+            "luck_bonus_rolls": 0,
+            "raw_item_unit_bounds": [
+              0,
+              15
+            ],
+            "entries": [
+              {
+                "item": "fallout_wastelands_:chinesepistol",
+                "weight": 6,
+                "selection_probability_fraction": "6/54",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:revolver_32",
+                "weight": 7,
+                "selection_probability_fraction": "7/54",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:nailgun",
+                "weight": 6,
+                "selection_probability_fraction": "6/54",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:deathclaw_gauntlet",
+                "weight": 1,
+                "selection_probability_fraction": "1/54",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:psycho",
+                "weight": 9,
+                "selection_probability_fraction": "9/54",
+                "count_bounds": [
+                  1,
+                  2
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 2
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:dynamite_item",
+                "weight": 8,
+                "selection_probability_fraction": "8/54",
+                "count_bounds": [
+                  1,
+                  3
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 3
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:nuka_cola_quantum",
+                "weight": 2,
+                "selection_probability_fraction": "2/54",
+                "count_bounds": [
+                  0,
+                  2
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 0,
+                      "max": 2
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:tenmmhomemadeassaultrifle",
+                "weight": 5,
+                "selection_probability_fraction": "5/54",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:industrialhammer",
+                "weight": 3,
+                "selection_probability_fraction": "3/54",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              },
+              {
+                "item": "fallout_wastelands_:varmint_rifle",
+                "weight": 7,
+                "selection_probability_fraction": "7/54",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "set_count",
+                    "count": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  }
+                ]
+              }
+            ],
+            "scope": "Raw source selections/counts only; not final native stacks, effective modifiers, or placement frequency."
+          }
+        ],
+        "direct_active_modifier_refs": [],
+        "unresolved_unconditional_modifier_registrations": [
+          "aether:double_drops",
+          "aether:gloves_loot_diamond",
+          "aether:gloves_loot_gold",
+          "aether:gloves_loot_leather",
+          "aether:gloves_loot_netherite",
+          "aether:pig_drops",
+          "artifacts:smelt_ores_with_pickaxe_heater",
+          "better_bumblezone_crops:propagation",
+          "better_chemlib_hazards:placed_nuclear_state",
+          "better_wild_fruit_trees:no_propagules",
+          "relics:relic_loot",
+          "tacz:loot_table_injector",
+          "the_bumblezone:inject_drops_to_non_bz_mobs"
+        ],
+        "effective_native_composition": "UNKNOWN",
+        "preserve_special_state": true,
+        "unknown_shared_consumer": true,
+        "unchanged_is_not_balance_or_placement_certification": true,
+        "unchanged_preservation_rationale": "Preserve exact upstream item probabilities, current bounded quantities and special state because the automatic physical/shared consumer and frequency remain unknown. This is a deliberate source semantic-preservation decision, not certification of balanced accessibility, final effective quantities or placement."
+      },
+      {
+        "id": "goety:chests/shack_book",
+        "decision": "unchanged",
+        "activity": "UNKNOWN",
+        "frequency": "UNKNOWN",
+        "inactive": false,
+        "native_blocking": true,
+        "conditional_possible_physical_role": "treasure",
+        "retained_semantic_identity": "valuable book/paper/enchantment reward; physical consumer unknown",
+        "source_table_sha256": "83d21977fbe190a11f44582affc3987b2ac34ee2b01612082e6d60a48a53c3bf",
+        "current_source_pool_budgets": [
+          {
+            "pool": 0,
+            "rolls_bounds": [
+              2,
+              10
+            ],
+            "luck_bonus_rolls": 0,
+            "raw_item_unit_bounds": [
+              2,
+              70
+            ],
+            "entries": [
+              {
+                "item": "minecraft:book",
+                "weight": 20,
+                "selection_probability_fraction": "20/52",
+                "count_bounds": [
+                  1,
+                  3
+                ],
+                "native_functions": [
+                  {
+                    "add": false,
+                    "count": {
+                      "type": "minecraft:uniform",
+                      "max": 3.0,
+                      "min": 1.0
+                    },
+                    "function": "minecraft:set_count"
+                  }
+                ]
+              },
+              {
+                "item": "minecraft:paper",
+                "weight": 20,
+                "selection_probability_fraction": "20/52",
+                "count_bounds": [
+                  2,
+                  7
+                ],
+                "native_functions": [
+                  {
+                    "add": false,
+                    "count": {
+                      "type": "minecraft:uniform",
+                      "max": 7.0,
+                      "min": 2.0
+                    },
+                    "function": "minecraft:set_count"
+                  }
+                ]
+              },
+              {
+                "item": "minecraft:map",
+                "weight": 1,
+                "selection_probability_fraction": "1/52",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": []
+              },
+              {
+                "item": "minecraft:compass",
+                "weight": 1,
+                "selection_probability_fraction": "1/52",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": []
+              },
+              {
+                "item": "minecraft:book",
+                "weight": 10,
+                "selection_probability_fraction": "10/52",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "minecraft:enchant_with_levels",
+                    "levels": 30.0,
+                    "treasure": true
+                  }
+                ]
+              }
+            ],
+            "scope": "Raw source selections/counts only; not final native stacks, effective modifiers, or placement frequency."
+          }
+        ],
+        "direct_active_modifier_refs": [],
+        "unresolved_unconditional_modifier_registrations": [
+          "aether:double_drops",
+          "aether:gloves_loot_diamond",
+          "aether:gloves_loot_gold",
+          "aether:gloves_loot_leather",
+          "aether:gloves_loot_netherite",
+          "aether:pig_drops",
+          "artifacts:smelt_ores_with_pickaxe_heater",
+          "better_bumblezone_crops:propagation",
+          "better_chemlib_hazards:placed_nuclear_state",
+          "better_wild_fruit_trees:no_propagules",
+          "relics:relic_loot",
+          "tacz:loot_table_injector",
+          "the_bumblezone:inject_drops_to_non_bz_mobs"
+        ],
+        "effective_native_composition": "UNKNOWN",
+        "preserve_special_state": true,
+        "unknown_shared_consumer": true,
+        "unchanged_is_not_balance_or_placement_certification": true,
+        "unchanged_preservation_rationale": "The upstream valuable book reward deliberately combines 2-10 selections of books/paper with weighted level-30 treasure-enchanted books. Explicitly acknowledge up to 70 raw paper units or ten enchanted-book selections; retain all quantities and enchantment semantics because frequency and shared consumer context remain unknown. This is not an assertion that UNKNOWN implies balanced, nor authorization to cap or normalize the special reward.",
+        "upstream_valuable_reward_budget_acknowledged": {
+          "rolls": [
+            2,
+            10
+          ],
+          "paper_count_per_selection": [
+            2,
+            7
+          ],
+          "raw_max_paper_units": 70,
+          "book_count_per_selection": [
+            1,
+            3
+          ],
+          "enchantment_levels": 30,
+          "treasure_enchantment": true,
+          "frequency": "UNKNOWN",
+          "shared_consumer_context": "UNKNOWN"
+        }
+      },
+      {
+        "id": "supplementaries:inject/test",
+        "decision": "unchanged",
+        "activity": "UNKNOWN",
+        "frequency": "UNKNOWN",
+        "inactive": false,
+        "native_blocking": true,
+        "conditional_possible_physical_role": "treasure",
+        "retained_semantic_identity": "helper/debug exploration-map definition; physical consumer unknown",
+        "source_table_sha256": "bfcbed1616c3c7fc0c74d3a6e13deeb27b9c66054623ac55ba84fee339f9b7c5",
+        "current_source_pool_budgets": [
+          {
+            "pool": 0,
+            "rolls_bounds": [
+              1,
+              1
+            ],
+            "luck_bonus_rolls": 0,
+            "raw_item_unit_bounds": [
+              1,
+              1
+            ],
+            "entries": [
+              {
+                "item": "minecraft:map",
+                "weight": 1,
+                "selection_probability_fraction": "1/1",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": [
+                  {
+                    "function": "minecraft:exploration_map",
+                    "destination": "minecraft:village",
+                    "custom_decoration": "supplementaries:village",
+                    "zoom": 2,
+                    "skip_existing_chunks": true
+                  }
+                ]
+              }
+            ],
+            "scope": "Raw source selections/counts only; not final native stacks, effective modifiers, or placement frequency."
+          }
+        ],
+        "direct_active_modifier_refs": [],
+        "unresolved_unconditional_modifier_registrations": [
+          "aether:double_drops",
+          "aether:gloves_loot_diamond",
+          "aether:gloves_loot_gold",
+          "aether:gloves_loot_leather",
+          "aether:gloves_loot_netherite",
+          "aether:pig_drops",
+          "artifacts:smelt_ores_with_pickaxe_heater",
+          "better_bumblezone_crops:propagation",
+          "better_chemlib_hazards:placed_nuclear_state",
+          "better_wild_fruit_trees:no_propagules",
+          "relics:relic_loot",
+          "tacz:loot_table_injector",
+          "the_bumblezone:inject_drops_to_non_bz_mobs"
+        ],
+        "effective_native_composition": "UNKNOWN",
+        "preserve_special_state": true,
+        "unknown_shared_consumer": true,
+        "unchanged_is_not_balance_or_placement_certification": true,
+        "unchanged_preservation_rationale": "Preserve exact upstream item probabilities, current bounded quantities and special state because the automatic physical/shared consumer and frequency remain unknown. This is a deliberate source semantic-preservation decision, not certification of balanced accessibility, final effective quantities or placement."
+      },
+      {
+        "id": "the_bumblezone:structures/gazebuzz_cluster/potions_reward",
+        "decision": "unchanged",
+        "activity": "UNKNOWN",
+        "frequency": "UNKNOWN",
+        "inactive": false,
+        "native_blocking": true,
+        "conditional_possible_physical_role": "treasure",
+        "retained_semantic_identity": "puzzle diamond reward, not potion loot; physical consumer unknown",
+        "source_table_sha256": "1fd32daa7a25ad5f38a624c640ae9dbfa88c97e8df5bb527c83cc15e2346cd14",
+        "current_source_pool_budgets": [
+          {
+            "pool": 0,
+            "rolls_bounds": [
+              1,
+              1
+            ],
+            "luck_bonus_rolls": 0,
+            "raw_item_unit_bounds": [
+              1,
+              1
+            ],
+            "entries": [
+              {
+                "item": "minecraft:diamond",
+                "weight": 1,
+                "selection_probability_fraction": "1/1",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": []
+              }
+            ],
+            "scope": "Raw source selections/counts only; not final native stacks, effective modifiers, or placement frequency."
+          }
+        ],
+        "direct_active_modifier_refs": [],
+        "unresolved_unconditional_modifier_registrations": [
+          "aether:double_drops",
+          "aether:gloves_loot_diamond",
+          "aether:gloves_loot_gold",
+          "aether:gloves_loot_leather",
+          "aether:gloves_loot_netherite",
+          "aether:pig_drops",
+          "artifacts:smelt_ores_with_pickaxe_heater",
+          "better_bumblezone_crops:propagation",
+          "better_chemlib_hazards:placed_nuclear_state",
+          "better_wild_fruit_trees:no_propagules",
+          "relics:relic_loot",
+          "tacz:loot_table_injector",
+          "the_bumblezone:inject_drops_to_non_bz_mobs"
+        ],
+        "effective_native_composition": "UNKNOWN",
+        "preserve_special_state": true,
+        "unknown_shared_consumer": true,
+        "unchanged_is_not_balance_or_placement_certification": true,
+        "unchanged_preservation_rationale": "Preserve exact upstream item probabilities, current bounded quantities and special state because the automatic physical/shared consumer and frequency remain unknown. This is a deliberate source semantic-preservation decision, not certification of balanced accessibility, final effective quantities or placement."
+      },
+      {
+        "id": "the_bumblezone:structures/gazebuzz_cluster/targets_reward",
+        "decision": "unchanged",
+        "activity": "UNKNOWN",
+        "frequency": "UNKNOWN",
+        "inactive": false,
+        "native_blocking": true,
+        "conditional_possible_physical_role": "treasure",
+        "retained_semantic_identity": "puzzle diamond/emerald reward; physical consumer unknown",
+        "source_table_sha256": "dc2cf18734db63d28bf575112bb73b745d08b9d86ac0e41f06f04c800e4904bd",
+        "current_source_pool_budgets": [
+          {
+            "pool": 0,
+            "rolls_bounds": [
+              1,
+              1
+            ],
+            "luck_bonus_rolls": 0,
+            "raw_item_unit_bounds": [
+              1,
+              1
+            ],
+            "entries": [
+              {
+                "item": "minecraft:diamond",
+                "weight": 1,
+                "selection_probability_fraction": "1/2",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": []
+              },
+              {
+                "item": "minecraft:emerald",
+                "weight": 1,
+                "selection_probability_fraction": "1/2",
+                "count_bounds": [
+                  1,
+                  1
+                ],
+                "native_functions": []
+              }
+            ],
+            "scope": "Raw source selections/counts only; not final native stacks, effective modifiers, or placement frequency."
+          }
+        ],
+        "direct_active_modifier_refs": [],
+        "unresolved_unconditional_modifier_registrations": [
+          "aether:double_drops",
+          "aether:gloves_loot_diamond",
+          "aether:gloves_loot_gold",
+          "aether:gloves_loot_leather",
+          "aether:gloves_loot_netherite",
+          "aether:pig_drops",
+          "artifacts:smelt_ores_with_pickaxe_heater",
+          "better_bumblezone_crops:propagation",
+          "better_chemlib_hazards:placed_nuclear_state",
+          "better_wild_fruit_trees:no_propagules",
+          "relics:relic_loot",
+          "tacz:loot_table_injector",
+          "the_bumblezone:inject_drops_to_non_bz_mobs"
+        ],
+        "effective_native_composition": "UNKNOWN",
+        "preserve_special_state": true,
+        "unknown_shared_consumer": true,
+        "unchanged_is_not_balance_or_placement_certification": true,
+        "unchanged_preservation_rationale": "Preserve exact upstream item probabilities, current bounded quantities and special state because the automatic physical/shared consumer and frequency remain unknown. This is a deliberate source semantic-preservation decision, not certification of balanced accessibility, final effective quantities or placement."
+      }
+    ]
   }
 }

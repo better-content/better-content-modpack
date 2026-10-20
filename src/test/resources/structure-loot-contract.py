@@ -259,6 +259,66 @@ def sample_changed_pools(rows, tables, contract):
     return observations
 
 
+POSSIBLE_IDENTITIES = {
+    'creatingspace:abandoned_moon_base_loot': 'blueprint and nickel reward; physical consumer unknown',
+    'fallout_wastelands_:chests/enclavelootable': 'Enclave equipment reward; physical consumer unknown',
+    'fallout_wastelands_:chests/raidertier_2': 'distinct higher-tier equipment reward; physical consumer unknown',
+    'goety:chests/shack_book': 'valuable book/paper/enchantment reward; physical consumer unknown',
+    'supplementaries:inject/test': 'helper/debug exploration-map definition; physical consumer unknown',
+    'the_bumblezone:structures/gazebuzz_cluster/potions_reward': 'puzzle diamond reward, not potion loot; physical consumer unknown',
+    'the_bumblezone:structures/gazebuzz_cluster/targets_reward': 'puzzle diamond/emerald reward; physical consumer unknown',
+}
+
+
+def possible_pool_budgets(table):
+    result = []
+    for index, pool in enumerate(table['pools']):
+        lo, hi = number_bounds(pool['rolls'])
+        assert not pool.get('conditions') and not pool.get('functions') and not pool.get('bonus_rolls')
+        weights = [entry.get('weight', 1) for entry in pool['entries']]
+        entries = []
+        for entry, weight in zip(pool['entries'], weights):
+            assert entry['type'] == 'minecraft:item' and not entry.get('conditions')
+            entries.append(dict(item=entry['name'], weight=weight,
+                selection_probability_fraction=f'{weight}/{sum(weights)}',
+                count_bounds=list(number_bounds(quantity(entry))),
+                native_functions=entry.get('functions', [])))
+        result.append(dict(pool=index, rolls_bounds=[lo, hi], luck_bonus_rolls=0,
+            raw_item_unit_bounds=[lo * min(e['count_bounds'][0] for e in entries), hi * max(e['count_bounds'][1] for e in entries)],
+            entries=entries, scope='Raw source selections/counts only; not final native stacks, effective modifiers, or placement frequency.'))
+    return result
+
+
+def validate_possible_reviews(tables, native, rows, effective, contract):
+    review = contract['possible_physical_source_review']
+    assert review['schema'] == 'bc.structure_loot_possible.v1'
+    records = {r['id']: r for r in review['tables']}
+    assert len(records) == len(review['tables']) and set(records) == set(POSSIBLE_IDENTITIES)
+    assert not set(records) & set(contract['native_probe']['tables']), 'conditional reviews silently changed native selected-table obligations'
+    broad = sorted(k for k,v in effective.items() if not v.get('conditions'))
+    for key, record in records.items():
+        assert rows[key]['kind'] == 'unknown-consumer' and rows[key]['role'] is None
+        assert rows[key]['decision'] == record['decision'] == 'unchanged'
+        assert tables[key] == native[key], ('conditional review modified shared/unknown native semantics', key)
+        assert record['activity'] == record['effective_native_composition'] == 'UNKNOWN'
+        assert record['inactive'] is False and record['native_blocking'] is True
+        assert record['conditional_possible_physical_role'] == 'treasure'
+        assert record['retained_semantic_identity'] == POSSIBLE_IDENTITIES[key]
+        assert record['source_table_sha256'] == fingerprint(tables[key])
+        assert record['current_source_pool_budgets'] == possible_pool_budgets(tables[key])
+        assert record['direct_active_modifier_refs'] == sorted(k for k,v in effective.items() if key in set(strings(v)))
+        assert record['unresolved_unconditional_modifier_registrations'] == broad
+        assert record['preserve_special_state'] is True and record['unknown_shared_consumer'] is True
+        assert record['unchanged_is_not_balance_or_placement_certification'] is True
+        assert record['unchanged_preservation_rationale'] and record['frequency'] == 'UNKNOWN'
+    goety = records['goety:chests/shack_book']
+    assert goety['upstream_valuable_reward_budget_acknowledged'] == {
+        'rolls': [2,10], 'paper_count_per_selection': [2,7], 'raw_max_paper_units': 70,
+        'book_count_per_selection': [1,3], 'enchantment_levels': 30, 'treasure_enchantment': True,
+        'frequency': 'UNKNOWN', 'shared_consumer_context': 'UNKNOWN',
+    }
+
+
 def reject_mutation(tables, candidates, contract, native, mutate):
     t, c, policy = copy.deepcopy(tables), set(candidates), copy.deepcopy(contract)
     mutate(t, c, policy)
@@ -285,6 +345,20 @@ def main():
     assert hashlib.sha256(DESIGN_PATH.read_bytes()).hexdigest() == contract['authored_missing_sha256'], 'authored missing designs changed without review'
     validate_authored_items()
     rows = validate(tables, candidates, contract, native)
+    validate_possible_reviews(tables, native, rows, effective, contract)
+    for change in [
+        lambda p: p['possible_physical_source_review']['tables'][0].update(activity='inactive'),
+        lambda p: p['possible_physical_source_review']['tables'][0].update(native_blocking=False),
+        lambda p: p['possible_physical_source_review']['tables'][0]['current_source_pool_budgets'][0]['entries'][0].update(native_functions=[]),
+        lambda p: p['possible_physical_source_review']['tables'][0].update(conditional_possible_physical_role='encounter'),
+    ]:
+        mutated = copy.deepcopy(contract); change(mutated)
+        try:
+            validate_possible_reviews(tables, native, rows, effective, mutated)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('possible-physical conditional review mutation admitted')
     unused_expected = unused_source_evidence(ROOT)
     def require_unused(evidence):
         assert evidence == unused_expected, 'reviewed unused-definition evidence drift or positive consumer'
@@ -344,7 +418,7 @@ def main():
     observations = sample_changed_pools(rows, tables, contract)
     counts = collections.Counter(row['kind'] for row in rows.values())
     print('Structure loot ownership: reviewed pinned candidate inventory; 15 exact table overrides; eight explicit new missing-table designs; twelve negative table mutations rejected.')
-    print(json.dumps({'reviewed':len(rows), 'classifications':dict(counts), 'unresolved':[k for k,v in rows.items() if v['kind']=='unresolved'], 'unknown_consumers':[k for k,v in rows.items() if v['kind']=='unknown-consumer'], 'authored_pool_samples':observations, 'exact_reference_repairs':repairs, 'reviewed_unused_source_contexts':list(UNUSED_CONTEXTS), 'unused_scope_negative_mutations':4, 'native_acceptance':'PENDING separate exact-candidate runtime probe; source templates do not prove active placements', 'prefilled_template_occurrences_untouched':len(prefilled)}, indent=2))
+    print(json.dumps({'reviewed':len(rows), 'classifications':dict(counts), 'unresolved':[k for k,v in rows.items() if v['kind']=='unresolved'], 'unknown_consumers':[k for k,v in rows.items() if v['kind']=='unknown-consumer'], 'authored_pool_samples':observations, 'exact_reference_repairs':repairs, 'reviewed_unused_source_contexts':list(UNUSED_CONTEXTS), 'unused_scope_negative_mutations':4, 'conditional_possible_physical_reviews':7, 'conditional_review_negative_mutations':4, 'native_acceptance':'PENDING separate exact-candidate runtime probe; source templates do not prove active placements', 'prefilled_template_occurrences_untouched':len(prefilled)}, indent=2))
 
 
 if __name__ == '__main__':
