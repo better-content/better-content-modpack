@@ -19,6 +19,7 @@ import sys
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from structure_loot_inputs import NbtReader, effective_injections, fingerprint, load, strings
+from structure_loot_unused import CONTEXTS as UNUSED_CONTEXTS, compute as unused_source_evidence
 
 
 # Exact path-only repairs, not aliases or reward reconstruction. Immutable pinned
@@ -284,6 +285,26 @@ def main():
     assert hashlib.sha256(DESIGN_PATH.read_bytes()).hexdigest() == contract['authored_missing_sha256'], 'authored missing designs changed without review'
     validate_authored_items()
     rows = validate(tables, candidates, contract, native)
+    unused_expected = unused_source_evidence(ROOT)
+    def require_unused(evidence):
+        assert evidence == unused_expected, 'reviewed unused-definition evidence drift or positive consumer'
+        assert {row['id'] for row in evidence['definitions']} == set(UNUSED_CONTEXTS)
+        assert all(not references.get(key) and not details['worldgen_consumers'].get(key) for key in UNUSED_CONTEXTS)
+        assert all(rows[key]['kind'] == 'unknown-consumer' for key in UNUSED_CONTEXTS), 'source review cannot predeclare native inactivity'
+    require_unused(contract['unused_definition_review'])
+    for change in [
+        lambda e: e['definitions'][0]['live_known_code_callers'].append('future:runtime/caller'),
+        lambda e: e['definitions'][1]['external_data_consumers'].append('future:structures/chest.nbt'),
+        lambda e: e['nonphysical_context'].update(block='mod:suspicious_chest'),
+        lambda e: e['nonphysical_context'].update(id='mod:suspicious_chest'),
+    ]:
+        mutated = copy.deepcopy(contract['unused_definition_review']); change(mutated)
+        try:
+            require_unused(mutated)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('unused/nonphysical context negative mutation admitted')
     repairs = validate_reference_repairs(contract)
     for key, row in rows.items():
         assert row['source'] == sources.get(key), ('source priority changed', key)
@@ -323,7 +344,7 @@ def main():
     observations = sample_changed_pools(rows, tables, contract)
     counts = collections.Counter(row['kind'] for row in rows.values())
     print('Structure loot ownership: reviewed pinned candidate inventory; 15 exact table overrides; eight explicit new missing-table designs; twelve negative table mutations rejected.')
-    print(json.dumps({'reviewed':len(rows), 'classifications':dict(counts), 'unresolved':[k for k,v in rows.items() if v['kind']=='unresolved'], 'unknown_consumers':[k for k,v in rows.items() if v['kind']=='unknown-consumer'], 'authored_pool_samples':observations, 'exact_reference_repairs':repairs, 'native_acceptance':'PENDING separate exact-candidate runtime probe; source templates do not prove active placements', 'prefilled_template_occurrences_untouched':len(prefilled)}, indent=2))
+    print(json.dumps({'reviewed':len(rows), 'classifications':dict(counts), 'unresolved':[k for k,v in rows.items() if v['kind']=='unresolved'], 'unknown_consumers':[k for k,v in rows.items() if v['kind']=='unknown-consumer'], 'authored_pool_samples':observations, 'exact_reference_repairs':repairs, 'reviewed_unused_source_contexts':list(UNUSED_CONTEXTS), 'unused_scope_negative_mutations':4, 'native_acceptance':'PENDING separate exact-candidate runtime probe; source templates do not prove active placements', 'prefilled_template_occurrences_untouched':len(prefilled)}, indent=2))
 
 
 if __name__ == '__main__':

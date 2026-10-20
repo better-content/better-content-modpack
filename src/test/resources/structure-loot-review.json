@@ -11931,5 +11931,86 @@
       "authored_sha256": "250a3e53e939d07995d651388c9c1cd807ac05351bf956e74a31844ce99e5ca9"
     }
   ],
-  "authored_missing_sha256": "41b91b15bf01e13bc27c24a89faa70d38d7b36acd0e382b76e3c15e2d652cc21"
+  "authored_missing_sha256": "41b91b15bf01e13bc27c24a89faa70d38d7b36acd0e382b76e3c15e2d652cc21",
+  "unused_definition_review": {
+    "schema": "bc.structure_loot_unused.v1",
+    "scan_input_sha256": "478c756d6ef6b96cdd709db0fe9bad48f99c0c8cfd7831e487d2b764444e5717",
+    "limits": "Automatic structure-container consumers only, not arbitrary administrator /loot commands. Closed pinned source contexts only; literal search cannot prove arbitrary dynamic code impossible. Positive native selected consumers invalidate unused classification. Registry existence or absence is not a consumer verdict.",
+    "definitions": [
+      {
+        "id": "bloodmagic:chests/simple_dungeon/test_gems",
+        "context": "reviewed-unused-definition",
+        "owner_pin_hash": "c3966f3dc894f3d1594aa7617cf6dd7be0a204a4",
+        "owner_pin_hash_format": "sha1",
+        "definition_resource": "data/bloodmagic/loot_tables/chests/simple_dungeon/test_gems.json",
+        "definition_sha256": "c838933a993e5e79d3dc6ad688580765d4b3aaf4334c4c13f6153857531ce771",
+        "owner": "blood-magic.pw.toml",
+        "archive_filename": "bloodmagic-1.20.1-3.3.7-49.jar",
+        "archive_sha256": "e88af6d512e522a47286fc87015ed290c5d41be7a51c3ef59a391e85bc1fd4a0",
+        "class_path": "wayoftime/bloodmagic/common/data/GeneratorLootTable$BMLootTables.class",
+        "class_sha256": "b14ce9b2abb9dab7742eee09118051c20756eb775c11ecdacb903e2300fe8a0e",
+        "datagen_base": "net/minecraft/data/loot/packs/VanillaChestLoot",
+        "exclusive_datagen_literals": [
+          {
+            "source": "blood-magic.pw.toml!wayoftime/bloodmagic/common/data/GeneratorLootTable$BMLootTables.class",
+            "sha256": "b14ce9b2abb9dab7742eee09118051c20756eb775c11ecdacb903e2300fe8a0e"
+          }
+        ],
+        "external_data_consumers": [],
+        "pack_configuration_consumers": [],
+        "live_known_code_callers": [],
+        "runtime_verdict": "PENDING native selected-consumer checks; loaded table is not activity"
+      },
+      {
+        "id": "rats:chest/plague_doctor_hut",
+        "context": "reviewed-unused-definition",
+        "owner_pin_hash": "dbd9b1208cb14287d32e2d53fe05459e597ead58",
+        "owner_pin_hash_format": "sha1",
+        "owner": "rats.pw.toml",
+        "archive_filename": "Rats-1.20.1-8.1.3.jar",
+        "archive_sha256": "9a73aa327f8d48a06208bb6f47f03799e061eac8714f09301df0ef5d34ca5f3c",
+        "class_path": "com/github/alexthe666/rats/data/loot/RatsChestLootTables.class",
+        "class_sha256": "5cddbfb6717e1ebb5a34fea7b21e88a4caecb7783eb7bd29dfb288cd6463dd3f",
+        "datagen_base": "net/minecraft/data/loot/LootTableSubProvider",
+        "definition_resource": "data/rats/loot_tables/chest/plague_doctor_hut.json",
+        "definition_sha256": "174062afe3919f0f7e53757f76d7454f0b8eb4a6c7c6582f034f1b2084c9816c",
+        "exclusive_datagen_literals": [
+          {
+            "source": "rats.pw.toml!com/github/alexthe666/rats/data/loot/RatsChestLootTables.class",
+            "sha256": "5cddbfb6717e1ebb5a34fea7b21e88a4caecb7783eb7bd29dfb288cd6463dd3f"
+          }
+        ],
+        "external_data_consumers": [],
+        "pack_configuration_consumers": [],
+        "live_known_code_callers": [],
+        "runtime_verdict": "PENDING native selected-consumer checks; loaded table is not activity",
+        "actual_template_witness": {
+          "resource": "data/rats/structures/plague_doctor_hut.nbt",
+          "sha256": "ec45479e5612a76055cdba65b5aac64f8dba8c9e0e452fc87b14550ee9997f97",
+          "position": [
+            3,
+            4,
+            6
+          ],
+          "block": "minecraft:chest",
+          "block_entity": "minecraft:chest",
+          "items": [],
+          "loot_table_present": false
+        }
+      }
+    ],
+    "nonphysical_context": {
+      "id": "goety:archaelogy/ruined_monastery",
+      "template": "goety:ruined_monastery/rubbles_4",
+      "resource": "data/goety/structures/ruined_monastery/rubbles_4.nbt",
+      "template_sha256": "9ab6df0becd0160d6bcececf1fe869ef10b898965b57ae3734646842ebc639e3",
+      "block": "minecraft:suspicious_gravel",
+      "block_entity": "minecraft:brushable_block",
+      "position": [
+        1,
+        0,
+        0
+      ]
+    }
+  }
 }
