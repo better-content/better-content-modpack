@@ -15,8 +15,10 @@ WORKSPACE = PACK.parent
 def files(repo):
     result = subprocess.run(['git', '-C', str(repo), 'ls-files', '-z', '--cached', '--others', '--exclude-standard'],
                             capture_output=True, check=True)
+    # Retained task reports are outputs, not maintained documentation inputs.
     return sorted({repo / p.decode() for p in result.stdout.split(b'\0')
-                   if p and p.decode().endswith('.md') and (repo / p.decode()).is_file()})
+                   if p and not p.startswith(b'workspace_artifacts/')
+                   and p.decode().endswith('.md') and (repo / p.decode()).is_file()})
 
 
 def prose(text):

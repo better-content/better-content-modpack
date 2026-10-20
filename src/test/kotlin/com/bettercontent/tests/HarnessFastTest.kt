@@ -140,7 +140,10 @@ class HarnessFastTest {
 
         assertTrue(build.contains("outputs.upToDateWhen { false }"))
         assertTrue(facade.contains("report.lastModified() < startedAt"))
-        assertTrue(facade.contains("validateFreshEvidence(evidenceSuite, startedAt)"))
+        assertTrue(facade.contains("target in nativeFamilyMethods -> listOf(\"\$evidenceSuite-families\")"))
+        assertTrue(facade.contains("suite == \"interactions\" && (method == null || target == \"interactions\") -> listOf(evidenceSuite, \"\$evidenceSuite-families\")"))
+        assertTrue(facade.contains("return if (requiredEvidence.all { validateFreshEvidence(it, startedAt) }) 0 else 1"))
+        assertTrue(!facade.contains("requiredEvidence.any"))
         assertTrue(facade.contains("BC_TEST_EVIDENCE_SUITE"))
     }
 

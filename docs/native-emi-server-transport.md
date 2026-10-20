@@ -40,6 +40,24 @@ vanilla crafting-grid `quickMoveStack` has its own return range, independent of 
 Any claim about actual clearing/refill behavior must be checked on the current native menu,
 not inferred from server installation or a former custom-bag implementation.
 
+## Ingredient-first views (owning source contract)
+
+Better Compat Fixes snapshots EMI's native exposed inventory once when a recipe view opens.
+It stably promotes recipes whose ingredients and quantities cover one execution before
+pagination, then promotes categories containing any such recipe; native ordering breaks ties
+inside both groups. Missing-input recipes and categories remain visible. Generic openings start
+at the first promoted result; explicit recipe focus remains meaningful. Reopening refreshes the
+snapshot, while browsing does not continuously reshuffle it.
+
+The implementation reuses EMI's native greedy matcher and its known overlapping-alternative
+false negatives; it does not promise exact allocation, a suitable workstation or a successful
+craft operation. Native menu/handler authority and independent personal/backpack inventory
+sources remain unchanged. There is no unopened/nested bag search, custom storage handler,
+recipe-manager mutation or replacement transfer engine. The
+[owning compatibility README](../../mod_source/better-compat-fixes/README.md) owns source details.
+Source/native fixture passes are not evidence that the bundled candidate has this behavior;
+full-pack paired native ordering/fill checks and LLM capture review remain required.
+
 ## Verification boundaries
 
 The fast `EmiServerTransportContractTest` guards metadata and this native boundary only; it

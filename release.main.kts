@@ -60,7 +60,7 @@ if (jobs !in 1..4) {
     System.err.println("release jobs must be between 1 and 4")
     exitProcess(2)
 }
-val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "campaign-start", "campaign", "restart-compat", "cursed-pyramid", "lineage-transition", "world-save", "world-startup", "deep-void", "gameplay") ||
+val validTarget = target == null || target in setOf("join", "fonts", "dimensions", "campaign-start", "campaign", "restart-compat", "cursed-pyramid", "lineage-transition", "world-save", "world-startup", "deep-void", "gameplay", "plant-drinks", "structure-loot", "bees-cosmetics", "emi-native-order", "interactions", "structure-loot-personal", "lifecycle-interactions", "tnt-buried", "regolith-native", "wildfire-native", "machine-seals", "kinetic-loss", "oc2-provider-api", "wireless-native", "native-device-bus", "kinetic-overload") ||
     (target!!.startsWith("font:") && target!!.removePrefix("font:") in setOf("bumblezone", "aether", "nether")) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
         target!!.removePrefix("dimension:") !in setOf("the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether"))
@@ -173,7 +173,7 @@ if (debugMode) {
     }
     val debugStatus = testTier("debug", debugRunId, true)
     val debugCandidateStable = candidateUnchanged()
-    record("passed", if (debugStatus == 0 && debugCandidateStable) "passed" else "failed ($debugStatus, candidate_stable=$debugCandidateStable)")
+    record("passed", if (debugStatus == 0 && debugCandidateStable) "passed" else if (debugStatus == 4 && debugCandidateStable) "awaiting_review" else "failed ($debugStatus, candidate_stable=$debugCandidateStable)")
     if (!debugCandidateStable) {
         System.err.println("candidate hashes changed during Debug; see $summary")
         exitProcess(1)

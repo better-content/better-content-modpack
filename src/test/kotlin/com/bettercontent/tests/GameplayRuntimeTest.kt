@@ -17,19 +17,19 @@ import java.util.UUID
 import java.util.jar.JarFile
 
 /** Separate from MultiplayerRuntimeTest's explicitly authored campaign history fixture. */
-@Tag("multiplayer")
-@EnabledIfEnvironmentVariable(named = "BC_TEST_TARGET", matches = "gameplay")
+@Tag("gameplay")
+@EnabledIfEnvironmentVariable(named = "BC_TEST_TIER", matches = "debug")
 class GameplayRuntimeTest {
     companion object {
-        @JvmField @RegisterExtension val evidence = EvidenceExtension("multiplayer")
+        @JvmField @RegisterExtension val evidence = EvidenceExtension("gameplay")
         private val mapper = jacksonObjectMapper()
         private val nonce = UUID.randomUUID()
         private lateinit var server: DedicatedServerFixture
         private lateinit var client: ClientFixture
         private const val CORE = 1_000_000
         @JvmStatic @BeforeAll fun start() {
-            require(evidence.run.tier == "debug" && evidence.run.target == "gameplay") {
-                "observed gameplay requires explicit targeted Debug and candidate binding"
+            require(evidence.run.tier == "debug" && evidence.run.target in setOf(null, "gameplay")) {
+                "observed gameplay requires full or targeted Debug and candidate binding"
             }
             val options = listOf(System.getenv("JAVA_TOOL_OPTIONS").orEmpty(),
                 "-Dbetter_pillager_campaigns.harness=true -Dbc.pack_test.debug=true",

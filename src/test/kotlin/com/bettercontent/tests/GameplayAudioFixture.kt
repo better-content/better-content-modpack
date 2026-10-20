@@ -12,7 +12,7 @@ import kotlin.math.abs
 
 /** Gameplay-only native OpenAL Soft WAVE backend. Does not replace/patch sound engine or contexts. */
 fun gameplayAudioEnvironment(evidence: EvidenceRun, log: Path): Map<String, String> {
-    if (evidence.tier != "debug" || evidence.target != "gameplay") return emptyMap()
+    if (evidence.tier != "debug" || evidence.sourceSuite != "gameplay") return emptyMap()
     val directory = evidence.directory.resolve("gameplay-native-audio")
     Files.createDirectories(directory)
     val name = log.fileName.toString().replace(Regex("[^A-Za-z0-9_.-]"), "_") + "-" + UUID.randomUUID()
@@ -40,7 +40,7 @@ fun gameplayAudioEnvironment(evidence: EvidenceRun, log: Path): Map<String, Stri
 
 /** Call only after owned clients exit; WAVE backend finalizes RIFF lengths on device close. */
 fun gameplayAudioVerifyClosed(evidence: EvidenceRun) {
-    if (evidence.tier != "debug" || evidence.target != "gameplay") return
+    if (evidence.tier != "debug" || evidence.sourceSuite != "gameplay") return
     val directory = evidence.directory.resolve("gameplay-native-audio")
     require(Files.isDirectory(directory)) { "requested native audio capture was never configured" }
     val mapper = jacksonObjectMapper()

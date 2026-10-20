@@ -16,11 +16,13 @@ historical completion reports here. See the [documentation authority map](README
 
 ## Plant drinks: normalized juices, teas and botanical brews
 
-**Status:** Wanted; deferred and outside current implementation scope. The owner requested this
-plan be recorded, including the full discussion matrices. Recording it authorizes documentation
-only, not implementation, asset copying, recipe changes, builds or deployment. The coverage rules
-below capture the requested direction; names, new effects, quantities, brewing conditions and
-trade-offs are proposals rather than finalized balance.
+**Status:** Owner-approved implementation in progress; native packaged acceptance is pending.
+The full discussion matrices below are the approved design direction, with bounded source-informed
+tuning delegated for unresolved specialties, doses and process details. Owning sources are
+[Better Drinking Water](../../mod_source/better-drinking-water/README.md) and
+[Better Survival Physiology](../../mod_source/better-survival-physiology/README.md), with pack
+recipe integration. This record is not independent authorization for further builds or deployment;
+current explicit user instructions and the shared testing policy govern those operations.
 
 **Goal:** One coherent plant-drink system covering fruit, berries, leaves, herbs, flowers,
 vegetables, roots, grains, coffee, cocoa, sap and suitable otherworldly botanicals. Every fruit
@@ -300,9 +302,11 @@ Choose donor assets and palettes for the remaining vegetable/herbal drinks durin
 
 ## Loot: table-owned quantity and reward balancing
 
-**Status:** Wanted; deferred and outside current implementation scope. The former global chest
-normalizer is removed; a table-by-table replacement balance pass has not been implemented.
-See [structure chest loot](content_systems.md#structure-chest-loot) for current behavior.
+**Status:** Owner-approved implementation in progress. Table-owned overrides and executable
+source review/distribution contracts are authored; all-active physical-consumer resolution,
+Lootr and exact-candidate native acceptance remain pending. The former global chest normalizer
+remains removed. See [structure chest loot](content_systems.md#structure-chest-loot) for current
+source behavior and verification boundaries.
 
 **Goal:** Make exploration rewards worthwhile and appropriately sized without flattening distinct
 locations into generic supply bundles, deleting special rewards or manufacturing compensation
@@ -425,83 +429,3 @@ or human acceptance is claimed.
   Do not rely on an exhaustive player-steering marathon or assume correct composition from piece tests alone.
 - Complete and verify the hydraulic reclamation and finite actor loops, persistence, two-client play,
   performance, visual readability and the exact extracted standalone payload before player review.
-
-## Complicated Bees: Forestry-style bee swarms
-
-**Status:** Wanted; deferred and outside current implementation scope.
-
-**Goal:** Forestry-style visual bee swarms around Complicated Bees nests and working apiaries,
-so inhabited nests and productive colonies feel alive rather than like static blocks.
-
-### Proposed approach — not yet approved
-
-- Prefer studying actual Forestry swarm/bee-rendering code as the behavioral and visual reference,
-  and adapting or reusing suitable code where licensing and version compatibility permit, rather
-  than approximating the effect from memory. The exact Forestry version and source paths remain
-  to be selected and inspected.
-- Keep swarms cosmetic and client-side; do not introduce simulated bee entities, alter genetics
-  or production, or imply activity when an apiary is inactive. Decide separately how wild nests
-  signal occupancy and how swarm density reflects colony activity.
-- Bound particle/render cost and viewing distance for dense apiary installations; respect client
-  particle settings and provide an appropriate reduction/disable option.
-
-### Source baseline and conditions for revisiting
-
-The pack pin is recorded in [the Complicated Bees manifest](../mods/complicated-bees.pw.toml).
-Source inspection of upstream `v1.20.1-3.4.6` found no ambient bee-particle emission in nests or
-apiaries; its existing bee particle is emitted by the Bee Staff projectile, not colony activity.
-This is an implementation gap, not a verified rendering failure.
-
-Before activation, inspect the chosen Forestry implementation and license, choose the owning
-integration repository, and establish how client visuals receive colony activity without adding
-unnecessary network traffic. Explicit implementation approval and separately authorized native
-visual/performance verification are required; this entry authorizes neither.
-
-## EMI: recipes with available ingredients first
-
-**Status:** Wanted; deferred and outside current implementation scope.
-
-**Goal:** When viewing recipes in EMI, put recipes for which the player has all required
-ingredients and quantities before recipes with missing ingredients. Keep the latter visible.
-
-### Proposed behavior — not yet approved
-
-- Stable ordering within each recipe category: ingredients available first, existing EMI order
-  preserved within both groups. Do not mutate global recipe-manager lists.
-- Evaluate availability once when opening the view, before pagination, rather than continuously
-  moving recipes while the player is browsing.
-- Interpret availability as having the inputs for one recipe execution, not necessarily being
-  able to craft in the current workstation. Native EMI handlers retain authority over fill and
-  crafting operations.
-- Use native exposed inventory sources. Do not introduce unopened/nested backpack searches,
-  custom storage handlers or a new item-transfer engine.
-
-### Feasibility and boundaries
-
-The pack pin is recorded in [the EMI manifest](../mods/emi.pw.toml). Initial source inspection
-of EMI `1.1.24+1.20.1` found usable ingredient/quantity checks in
-[`EmiPlayerInventory.canCraft`](https://github.com/emilyploszaj/emi/blob/23d251ea8ea3a5fd7d760948f36014b185eac69f/xplat/src/main/java/dev/emi/emi/api/recipe/EmiPlayerInventory.java)
-and per-category lists before pagination in
-[`RecipeScreen`](https://github.com/emilyploszaj/emi/blob/23d251ea8ea3a5fd7d760948f36014b185eac69f/xplat/src/main/java/dev/emi/emi/screen/RecipeScreen.java).
-A narrow client-side mixin appears feasible without an EMI fork or server-side crafting changes.
-This is a source-based feasibility assessment, not runtime verification; recheck against the
-actual pin when implementation is authorized.
-
-EMI's existing matcher is greedy: overlapping ingredient alternatives can produce false negatives.
-Reusing native checks does not promise a new exact ingredient-allocation solver. Ordinary input
-availability also does not establish workstation, catalyst or other process requirements.
-
-### Decisions before activation
-
-- Confirm ingredients-available ordering versus stricter "craftable in this menu" ordering.
-- Decide whether category tabs should also be promoted; within-category ordering is the proposed
-  minimum scope.
-- Resolve EMI's preferred-recipe focus behavior so opening the view does not silently land past
-  the promoted recipes, while explicit requests to view a particular recipe remain meaningful.
-- Choose the owning client integration repository and settle inventory-source semantics for
-  personal inventory, crafting menus and separately opened native backpacks.
-
-Any implementation must follow [native inventory parity and acceptance](inventory-parity.md),
-including both personal-inventory paths and relevant separate-backpack behavior. Activation
-requires explicit scope approval; runtime acceptance remains separately authorized under the
-shared testing policy.

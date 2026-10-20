@@ -29,7 +29,7 @@ class DedicatedServerFixture(
     val serverExtract = evidence.fixture.resolve("server-extract")
     val server: Path
     val log = evidence.directory.resolve("server.log")
-    val port = freePort()
+    val port = evidence.nativePort()
     private var process: ManagedProcess
     private var starts = 1
     private lateinit var auditLaunch: FixtureAuditLogging.Launch
@@ -96,7 +96,7 @@ class DedicatedServerFixture(
         }
         auditLaunch = prepareAudit("server-initial")
         process = ManagedProcess("server", listOf("./run.sh"), server, log, environment,
-            lifecycleEvent = { evidence.event("process_lifecycle", it) })
+            lifecycleEvent = { evidence.event("process_lifecycle", it) }).also { evidence.own(it) }
         recordServerResourceBudget()
         evidence.event("server_started", mapOf("pid" to process.pid, "port" to port, "directory" to server.toString()))
     }
@@ -214,7 +214,7 @@ class DedicatedServerFixture(
         process.assertHealthyBeforeTeardown("server restart")
         auditLaunch = prepareAudit("server-restart-$starts")
         process = ManagedProcess("server-restart", listOf("./run.sh"), server, log, environment,
-            lifecycleEvent = { evidence.event("process_lifecycle", it) })
+            lifecycleEvent = { evidence.event("process_lifecycle", it) }).also { evidence.own(it) }
         recordServerResourceBudget()
         evidence.event("server_restarted", mapOf("pid" to process.pid, "port" to port, "directory" to server.toString()))
         starts++
@@ -399,7 +399,7 @@ class ClientFixture(
             "packaged_saves_absent" to true, "lifecycle_state_absent" to true))
         client.resolve("saves").createDirectories()
         xvfb = ManagedProcess("xvfb-$slot", listOf("Xvfb", display, "-screen", "0", "1280x720x24", "-nolisten", "tcp"), client, xvfbLog,
-            lifecycleEvent = { evidence.event("process_lifecycle", it) })
+            lifecycleEvent = { evidence.event("process_lifecycle", it) }).also { evidence.own(it) }
         Thread.sleep(1000)
         check(xvfb!!.alive) { "Xvfb failed; see $xvfbLog" }
     }
@@ -473,7 +473,7 @@ class ClientFixture(
         )
         val command = quickPlayClientCommand(config, client, pins, jvmArgs, username, uuid, world)
         launcher = ManagedProcess("minecraft-client", command, client, log, clientEnvironment(),
-            lifecycleEvent = { evidence.event("process_lifecycle", it) })
+            lifecycleEvent = { evidence.event("process_lifecycle", it) }).also { evidence.own(it) }
         recordClientResourceBudget(jvmArgs, "quickplay", requireNotNull(launcher).pid)
     }
 
@@ -486,7 +486,7 @@ class ClientFixture(
         )
         val command = portableClientCommand(config, client, pins, jvmArgs, username, uuid, connection)
         val process = ManagedProcess("minecraft-client", command, client, log, environment,
-            lifecycleEvent = { evidence.event("process_lifecycle", it) })
+            lifecycleEvent = { evidence.event("process_lifecycle", it) }).also { evidence.own(it) }
         recordClientResourceBudget(jvmArgs, "portablemc", process.pid)
         return process
     }

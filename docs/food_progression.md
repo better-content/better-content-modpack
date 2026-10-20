@@ -45,7 +45,9 @@ Fruits Delight provides forage plants and cooking recipes. Its Dynamic Trees add
 
 **Pending fruit-source extension:** full fixed-location treatment for
 `dynamictreesplus:saguaro_cactus`, `dtnatures_spirit:coconut` and `dtquark:ancient` is authored
-but uncompiled, untested and undeployed in the [owning mod](../../mod_source/better-wild-fruit-trees/README.md#optional-food-tree-extension--source-only-not-ready).
+but uncompiled, untested and undeployed in the
+[owning source draft](https://github.com/better-content/better-wild-fruit-trees/blob/4bb19c8f0b665fe7299f47c1edbd83cc556f87bd/README.md#optional-food-tree-extension--source-only-not-ready).
+It is not part of the existing thirteen-species release baseline.
 Their native food/products must remain usable; whole-coconut processing placement is distinct
 from forbidden germination/planting stock. Four measured native growth references, an appropriate
 cactus adult-reference definition and the native/client gates are still outstanding. No matching
@@ -61,6 +63,35 @@ For food and beverage servings already eligible for Nectar, its tag-based load i
 Nectar amplifies the six lasting groups' continuous primaries and supported perks linearly with `1 + load`; hunger cost and both native and upper-band nutrition decay scale with `8^load`. The shared resource-cost hook also accelerates native thirst and stamina costs; Tallow's emergency reserve cannot cancel Nectar's surcharge. Tallow and Earth reductions cap at 85%. Booze reduces incoming damage by `min(30%, 30% × load × Nectar amplification)`. Its control and work penalties begin above 30% and are also amplified by Nectar, within their impairment caps. At 100% raw Booze load the player blacks out until load drops to 85%.
 
 Nutrition owns temporary damage, mining/movement speed, resource savings, temperature protection and harmful-effect recovery. RPG development owns complementary knockback/stagger, cadence, reach, stepping/breathing, stamina capacity, knockback resistance, beneficial-effect preservation and projectile handling. See [body/aspect identities](better_survival_physiology.md#nutrition) and the [owning balance contract](../../mod_source/better-survival-physiology/README.md#nutrition-balance) for exact caps and unlocks.
+
+## Plant drink production
+
+The plant expansion has a clean-break catalogue and requires fresh worlds for this release.
+Existing worlds, inventories and paid reserves are never bulk-rewritten or deleted; legacy drink
+identity compatibility is not promised. The finite matrix, exact doses, required providers and
+native ingredient aliases live in
+[Better Drinking Water's authored catalogue](../../mod_source/better-drinking-water/src/main/resources/plant_drinks.json),
+not a second pack-owned list. See its
+[production contract](../../mod_source/better-drinking-water/README.md#plant-drink-production)
+and [pinned stock witnesses](../../mod_source/better-drinking-water/docs/plant-stock.md).
+
+One edible portion produces one 250 mB serving by hand or Create, without multiplying yield.
+Ordinary fruit juice requires no mandatory sugar, water or starter; processed milks and infusions
+retain their appropriate bases. Primary fruit brewing uses 1,000 mB juice and an explicit safe
+starter flower, conserves that volume, and takes eight minutes at native temperature band 3.
+Fresh heated infusions and four-minute secondary preparations remain separate process stages.
+Dangerous agents never enter the common starter tag. Plain safe juices provide Hydration+
+without inherited specialist actions; unsafe belladonna is explicitly labeled. Existing specialist,
+Long/Strong, milkshake and cocktail identities retain distinct benefits. Alcohol is explicit,
+not inferred from a keg. Pinned Respite Wither Roots have no obtainable inventory item: no phantom
+recipe or silent substitute is introduced.
+
+Custom plant bottles award manual thirst directly from the same catalogue as fractional reserves;
+adding duplicate Thirst configuration rows would double-award them. Purchase is upfront, full
+thirst/blackout restrictions remain effective, timed effects are bounded and completion-only
+cleansing, mana and blink actions are not repeated for each sip. Owning native source gates do
+not establish effective full-pack recipes, optional-provider actions, native item/fluid appearance
+or balanced exploration availability; these require the exact-candidate Debug evidence.
 
 ## Starcatcher: regional fishing and food families
 

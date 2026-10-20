@@ -459,12 +459,12 @@
     },
     {
       "repository": "better-runtime-diagnostics",
-      "verificationInputs": ["mods/untamed-wilds-au-naturel.pw.toml", "mods/the-deep-void.pw.toml", "mods/starcatcher.pw.toml", "mods/curios.pw.toml", "mods/diet.pw.toml", "mods/dynamictrees.pw.toml", "mods/oculus.pw.toml"],
+      "verificationInputs": ["mods/create.pw.toml", "mods/oc2r.pw.toml", "mods/explosion-overhaul-a-new-level-of-destruction.pw.toml", "config/explosionoverhaul/explosionoverhaul-common.toml", "mods/untamed-wilds-au-naturel.pw.toml", "mods/the-deep-void.pw.toml", "mods/starcatcher.pw.toml", "mods/curios.pw.toml", "mods/diet.pw.toml", "mods/dynamictrees.pw.toml", "mods/oculus.pw.toml", "mods/thirst-was-taken.pw.toml", "mods/emi.pw.toml", "mods/complicated-bees.pw.toml", "mods/lootr.pw.toml", "mods/sophisticated-backpacks.pw.toml", "mods/sophisticated-core.pw.toml", "src/test/resources/structure-loot-review.json"],
       "buildInputs": [],
       "modId": "better_runtime_diagnostics",
       "artifact": "better-runtime-diagnostics-0.1.0.jar",
       "supportArtifacts": ["build/libs/better-runtime-test-support.jar"],
-      "dependsOn": ["better-spawns", "better-survival-physiology", "better-wild-fruit-trees", "better-spirit-commerce"],
+      "dependsOn": ["better-spawns", "better-survival-physiology", "better-wild-fruit-trees", "better-spirit-commerce", "better-compat-fixes", "better-arena-trials", "better-deaths-door", "better-rpg-progression", "better-player-traces", "better-airtight-machines", "better-chemlib-hazards", "better-create-kinetic-loss", "better-oc2r-create-controls", "better-oc2r-wireless-messaging", "better-buried-encounters", "better-regolith-farming", "better-malum-dynamic-trees", "better-wildfire"],
       "tasks": [
         "build",
         "stageRuntimeJar"

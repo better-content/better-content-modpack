@@ -27,9 +27,13 @@ while (argument < args.size) {
         else -> usage()
     }
 }
+val nativeFamilyMethods = mapOf("tnt-buried" to "nativeTntBuriedTransactions", "regolith-native" to "nativeRegolithTransactions",
+    "wildfire-native" to "nativeWildfireTransactions", "machine-seals" to "nativeSealTransactions", "kinetic-loss" to "nativeKineticLossTransactions",
+    "oc2-provider-api" to "nativeOc2ProviderApiTransactions", "wireless-native" to "nativeWirelessTransactions",
+    "native-device-bus" to "nativeDeviceBusTransactions", "kinetic-overload" to "nativeKineticOverloadTransactions")
 val fontTargets = setOf("bumblezone", "aether", "nether")
 val fontDimensions = setOf("the_bumblezone:the_bumblezone", "aether:the_aether", "minecraft:the_nether")
-val validTarget = target == null || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart", "restart-compat", "world-save", "world-startup", "deep-void", "gameplay") ||
+val validTarget = target == null || target in nativeFamilyMethods || target in setOf("server-ready", "cursed-pyramid", "lineage-transition", "join", "fonts", "dimensions", "campaign-start", "campaign", "restart", "restart-compat", "world-save", "world-startup", "deep-void", "gameplay", "plant-drinks", "structure-loot", "bees-cosmetics", "emi-native-order", "interactions", "structure-loot-personal", "lifecycle-interactions") ||
     (target!!.startsWith("font:") && target!!.removePrefix("font:") in fontTargets) ||
     (target!!.startsWith("dimension:") && Regex("[a-z0-9_.-]+:[a-z0-9_./-]+").matches(target!!.removePrefix("dimension:")) &&
         target!!.removePrefix("dimension:") !in fontDimensions)
@@ -37,6 +41,9 @@ val targetSuite = when {
     target == null -> null
     target == "server-ready" || target == "cursed-pyramid" || target == "lineage-transition" -> "server"
     target in setOf("world-save", "world-startup") -> "singleplayer"
+    target == "gameplay" -> "gameplay"
+    target in nativeFamilyMethods -> "interactions"
+    target in setOf("plant-drinks", "structure-loot", "bees-cosmetics", "emi-native-order", "interactions", "structure-loot-personal", "lifecycle-interactions") -> "interactions"
     else -> "multiplayer"
 }
 val targetMethod = when {
@@ -51,6 +58,14 @@ val targetMethod = when {
     target == "world-startup" -> "debugNativeUnseededWorldStartup"
     target == "deep-void" -> "debugNativeDeepVoidEntry"
     target == "gameplay" -> "gameplayAcceptance"
+    target in nativeFamilyMethods -> nativeFamilyMethods.getValue(target!!)
+    target == "plant-drinks" -> "nativePlantDrinkUse"
+    target == "structure-loot" -> "nativeStructureChestLoot"
+    target == "structure-loot-personal" -> "nativeLootrPersonalAndGeneratedConsumers"
+    target == "lifecycle-interactions" -> "nativeLifecycleInteractions"
+    target == "bees-cosmetics" -> "nativeBeeCosmetics"
+    target == "emi-native-order" -> "nativeEmiIngredientOrdering"
+    target == "interactions" -> "*"
     target == "fonts" || target?.startsWith("font:") == true -> "debugNativeFontRoundTrips"
     else -> "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations"
 }
@@ -60,6 +75,8 @@ val taskBySelector = mapOf(
     "server" to "serverTest",
     "multiplayer" to "multiplayerTest",
     "singleplayer" to "singleplayerTest",
+    "gameplay" to "gameplayTest",
+    "interactions" to "interactionTest",
 )
 
 fun usage(): Nothing {
@@ -137,11 +154,14 @@ fun gradle(suite: String, task: String, method: String? = null, evidenceSuite: S
     if (method != null) {
         val testClass = when {
             target == "gameplay" -> "GameplayRuntimeTest"
+            target in nativeFamilyMethods -> "NativeInteractionFamilyRuntimeTest"
+            suite == "interactions" -> "InteractionRuntimeTest"
             suite == "server" -> "ServerRuntimeTest"
             suite == "multiplayer" -> "MultiplayerRuntimeTest"
             else -> "SingleplayerRuntimeTest"
         }
         command += listOf("--tests", "com.bettercontent.tests.$testClass.$method")
+        if (target == "interactions") command += listOf("--tests", "com.bettercontent.tests.NativeInteractionFamilyRuntimeTest.*")
     }
     val environment = buildMap {
         if (suite != "fast") { put("BC_TEST_SELECTOR", suite); put("BC_TEST_TIER", selected) }
@@ -153,7 +173,12 @@ fun gradle(suite: String, task: String, method: String? = null, evidenceSuite: S
     val status = superviseFacade(root, command, budgetSeconds = if (suite == "fast") 1200 else 14400,
         environment = environment, removedEnvironment = if (suite == "fast") setOf("BC_TEST_SELECTOR", "BC_TEST_TIER") else emptySet())
     if (status != 0 || suite == "fast") return status
-    return if (validateFreshEvidence(evidenceSuite, startedAt)) 0 else 1
+    val requiredEvidence = when {
+        target in nativeFamilyMethods -> listOf("$evidenceSuite-families")
+        suite == "interactions" && (method == null || target == "interactions") -> listOf(evidenceSuite, "$evidenceSuite-families")
+        else -> listOf(evidenceSuite)
+    }
+    return if (requiredEvidence.all { validateFreshEvidence(it, startedAt) }) 0 else 1
 }
 
 val statuses = linkedMapOf<String, Int>()
@@ -204,7 +229,7 @@ if (selected == "dev") {
     if (statuses.values.all { it == 0 }) {
         statuses["candidate"] = if (priorDist == null) gradle("candidate", "candidateTest") else 0
         if (statuses.getValue("candidate") == 0) {
-            val runtimeSuites = if (targetSuite != null) listOf(targetSuite) else if (selected == "debug") listOf("server", "multiplayer", "singleplayer")
+            val runtimeSuites = if (targetSuite != null) listOf(targetSuite) else if (selected == "debug") listOf("server", "multiplayer", "singleplayer", "gameplay", "interactions")
                 else listOf("multiplayer")
             for (name in runtimeSuites) {
                 val evidenceSuite = if (targetSuite == name) targetEvidenceSuite!! else name
@@ -219,9 +244,17 @@ if (selected == "dev") {
     }
 }
 
+// A successful Gradle invocation alone is not exhaustive Debug acceptance. Audit actual
+// per-method native evidence, uncovered sensitive boundaries and reviewed framebuffer receipts.
+if (selected == "debug" && target == null && runId != null) {
+    statuses["debug-coverage"] = superviseFacade(root, listOf("python3", "-B",
+        root.resolve("scripts/debug_coverage.py").absolutePath, "verify", "--root", root.absolutePath,
+        "--run-id", runId), budgetSeconds = 60)
+}
+
 if (runId != null && evidence != null) {
     println("run: $runId")
     println("evidence: ${evidence.absolutePath}")
 }
-statuses.forEach { (name, status) -> println("$name: ${if (status == 0) "passed" else "failed ($status)"}") }
-exitProcess(if (statuses.values.all { it == 0 }) 0 else 1)
+statuses.forEach { (name, status) -> println("$name: ${if (status == 0) "passed" else if (name == "debug-coverage" && status == 4) "awaiting_review" else "failed ($status)"}") }
+exitProcess(if (statuses.values.all { it == 0 }) 0 else if (statuses["debug-coverage"] == 4 && statuses.filterKeys { it != "debug-coverage" }.values.all { it == 0 }) 4 else 1)

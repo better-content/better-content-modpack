@@ -24,7 +24,8 @@ object GameplayFeatureClient {
             require(impactSounds(login.path("prior_window")) == 0 && login.path("prior_window").path("native_source_events").none { it.path("id").asText() == IMPACT }) { "ready reconnect manufactured an impact cue" }
             require(login.path("prior_window").path("sounds_dropped").asLong(-1) == 0L)
             evidence.event("gameplay_silent_ready_login", mapOf("nonce" to nonce.toString(), "observation" to "v2-login-window",
-                "native_sound_dispatch_count" to 0, "physical_audio" to "UNKNOWN"))
+                "native_sound_dispatch_count" to 0, "physical_audio" to "NOT_PERFORMED",
+                "physical_audio_reason" to "No physical listening performed"))
         }
         if (visit == 1) {
             io.world("empty-hand", "v1-native-empty-hotbar-selection")
@@ -137,7 +138,7 @@ object GameplayFeatureClient {
             val plateau = io.capture("v1-readiness-plateau-frame")
             require(impactSounds(plateau.path("observations")) == 1) { "ready plateau repeated impact feedback" }
             evidence.event("gameplay_native_readiness_feedback", mapOf("rising_native_sound_events" to 1,
-                "plateau_native_sound_events" to 1, "native_cue_source_verdict" to "NATIVE_CUE_SOURCE_PLAYING", "physical_audio_verdict" to "UNKNOWN", "nutrition_origin" to "authored public Diet tracker fixture"))
+                "plateau_native_sound_events" to 1, "native_cue_source_verdict" to "NATIVE_CUE_SOURCE_PLAYING", "physical_audio_verdict" to "NOT_PERFORMED", "physical_audio_reason" to "No physical listening performed; native cue readiness is separate", "nutrition_origin" to "authored public Diet tracker fixture"))
         }
         io.world("core", "v$visit-return-core")
         io.client("close-menu", "v$visit-finish-native-menu-close")
@@ -146,7 +147,7 @@ object GameplayFeatureClient {
 
     /** Shader-on visual-only window after unshaded gameplay proof. No world clocks or renderer internals changed. */
     fun runShaderWindow(server: DedicatedServerFixture, client: ClientFixture, evidence: EvidenceRun, nonce: UUID) {
-        require(evidence.tier == "debug" && evidence.target == "gameplay")
+        require(evidence.tier == "debug" && evidence.sourceSuite == "gameplay")
         val io = Bridge(server, client, evidence, nonce, 40000)
         val worldBefore = io.world("readiness-observe", "shader-window-world-before")
         require(worldBefore.path("world_root").asText().isNotBlank() && worldBefore.path("world_seed").isNumber
@@ -241,10 +242,10 @@ object GameplayFeatureClient {
 
     internal fun impactSounds(observations: JsonNode) = observations.path("sound_dispatch_events").count { it.path("id").asText() == IMPACT }
 
-    private class Bridge(val server: DedicatedServerFixture, val clientFixture: ClientFixture, val evidence: EvidenceRun,
+    internal class Bridge(val server: DedicatedServerFixture, val clientFixture: ClientFixture, val evidence: EvidenceRun,
                          val nonce: UUID, initialSequence: Int) {
         var next = initialSequence
-        fun world(action: String, label: String, extra: Map<String, Any> = emptyMap()) = request("world", action, label, extra)
+        fun world(action: String, label: String, extra: Map<String, Any> = emptyMap(), timeout: Duration = Duration.ofSeconds(30)) = request("world", action, label, extra, timeout)
         fun client(action: String, label: String, extra: Map<String, Any> = emptyMap()) = request("client", action, label, extra)
         fun capture(label: String, requireShader: Boolean = false): JsonNode {
             val node = client("capture", label, mapOf("require_shader" to requireShader))
@@ -261,7 +262,7 @@ object GameplayFeatureClient {
         }
         private fun diagnosticHash(side: String): String = Regex("-Dbc\\.pack_test\\.diagnostics\\.${side}_sha256=([a-f0-9]{64})")
             .find(server.diagnosticSupport.properties)?.groupValues?.get(1) ?: error("missing exact candidate diagnostic hash")
-        private fun request(side: String, action: String, label: String, extra: Map<String, Any>): JsonNode {
+        private fun request(side: String, action: String, label: String, extra: Map<String, Any>, timeout: Duration = Duration.ofSeconds(30)): JsonNode {
             val seq = ++next
             val root = server.diagnosticSupport.bridge
             val request = root.resolve("gameplay-$side.request")
@@ -273,7 +274,7 @@ object GameplayFeatureClient {
             Files.writeString(pending, mapper.writeValueAsString(fields), StandardOpenOption.CREATE_NEW)
             Files.move(pending, request, StandardCopyOption.ATOMIC_MOVE)
             val output = root.resolve("gameplay-$side-$seq-$label.json")
-            val deadline = System.nanoTime() + Duration.ofSeconds(30).toNanos()
+            val deadline = System.nanoTime() + timeout.toNanos()
             while (!Files.isRegularFile(output)) {
                 check(server.processAlive()) { "server exited waiting for gameplay $side $action" }
                 check(System.nanoTime() < deadline) { "gameplay $side $action timeout; retained $request / $output" }

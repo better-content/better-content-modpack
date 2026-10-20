@@ -18,3 +18,7 @@ better-runtime-diagnostics	src/testSupport/java/com/bettercontent/runtimetestsup
 better-compat-fixes	src/test/java/com/bettercontent/bettercompatfixes/EpicParCoolDodgeKeyConflictTest.java
 # Direct compatibility test denies client class loading during early/server plugin initialization.
 better-deaths-door	src/test/java/com/bettercontent/betterdeathsdoor/client/MantleRendererContractTest.java
+# Isolated nonshipping geological world GameTest: pinned Dread setCommanderId(UUID)
+# fixture setup and Corrodent isDigging() observation. Optional actors remain runtime-only;
+# missing/drifted public methods fail, and this file is excluded from production artifacts.
+better-cave-encounters	src/worldGameTest/java/com/bettercontent/bettercaveencounters/GeologicalWorldGameTests.java

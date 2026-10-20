@@ -23,7 +23,7 @@ class CandidateRoutingTests(unittest.TestCase):
         print('synthetic fixture:', self.root, flush=True)
         subprocess.run(['git', 'init', '-q', str(self.root)], check=True, capture_output=True)
         (self.root / 'scripts').mkdir()
-        for name in ('BoundedFacade.main.kts', 'bounded_facade.py', 'runner_lock.py', 'candidate_paths.py', 'workspace_coordination.py'):
+        for name in ('BoundedFacade.main.kts', 'bounded_facade.py', 'runner_lock.py', 'candidate_paths.py', 'workspace_coordination.py', 'debug_coverage.py', 'debug_source_registration.py', 'testing_session.py'):
             shutil.copy2(REPO / 'scripts' / name, self.root / 'scripts' / name)
             if name.endswith('.main.kts'):
                 with (self.root / 'scripts' / name).open('a') as stream:
@@ -32,6 +32,9 @@ class CandidateRoutingTests(unittest.TestCase):
             shutil.copy2(REPO / name, self.root / name)
             with (self.root / name).open('a') as stream:
                 stream.write(f'\n// isolated fixture {self.root}\n')
+        (self.root / 'gradle').mkdir()
+        for name in ('active-custom-mods.json', 'debug-interactions.json'):
+            shutil.copy2(REPO / 'gradle' / name, self.root / 'gradle' / name)
         self.env = dict(os.environ, BC_PACK_TEST_STATE_ROOT=str(self.root / 'runner-state'), WORKSPACE_COORDINATION_ROOT=str(self.root))
         for name in ('BC_PACK_TEST_LOCK_TOKEN', 'BC_PACK_TEST_LOCK_OWNER', 'BC_PACK_TEST_HANDOFF', 'BC_PRIOR_DIST_RUN_ID', 'BC_CANDIDATE_BINDING'):
             self.env.pop(name, None)
@@ -109,7 +112,7 @@ class CandidateRoutingTests(unittest.TestCase):
         self.assertIn(retry, text)
         self.assertIn(str(self.handoff), text)
 
-    def test_full_debug_receipt_uses_exact_selection_with_retained_older_builds(self):
+    def test_full_debug_selection_is_exact_but_inert_gradle_cannot_fabricate_acceptance(self):
         release = self.root / 'release.main.kts'
         release.write_text('#!/bin/sh\necho RELEASE >> dispatch.log\nexit 90\n')
         release.chmod(0o755)
@@ -132,14 +135,21 @@ if suite:
         gradle.chmod(0o755)
         # Unbound current Build 10 coexists with older Build 9: no global single() scan.
         result = self.run_command([str(self.root / 'test.main.kts'), 'debug', '--existing-candidate'])
-        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+        self.assertIn('prior-dist: passed', result.stdout)
+        self.assertIn('debug-coverage: failed', result.stdout)
+        self.assertIn('missing required native scenario', result.stdout)
         # Explicit Build 9 remains authoritative even with broken current version metadata.
         (self.root / 'pack.toml').write_text('invalid current version')
         result = self.run_command([str(self.root / 'test.main.kts'), 'debug', '--candidate-binding', str(self.binding)])
-        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+        self.assertIn('prior-dist: passed', result.stdout)
+        self.assertIn('missing required native scenario', result.stdout)
         env = dict(self.env, BC_PACK_TEST_HANDOFF=str(self.handoff))
         result = self.run_command([str(self.root / 'test.main.kts'), 'debug'], env)
-        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+        self.assertIn('prior-dist: passed', result.stdout)
+        self.assertIn('missing required native scenario', result.stdout)
         self.assertFalse((self.root / 'dispatch.log').exists())
 
     def test_queue_authority_is_registered_not_literal_and_rechecked_at_dispatch(self):

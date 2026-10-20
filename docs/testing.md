@@ -83,6 +83,29 @@ a gameplay verdict or declare a performance regression repaired from a successfu
 performance budgets require a documented workload/resource profile and measured acceptance criterion,
 not a threshold tuned to a retained historical run. No Debug scope is implied by this separation.
 
+## Failure diagnosis and automated visual review
+
+A failing experimental scenario is evidence to diagnose, not an instruction to change production
+behavior until green. Classify each finding as **product defect**, **harness defect**,
+**requirement mismatch** or **environment limitation**, with its first failing run/candidate,
+expected contract, actual observation and causal evidence. A timeout alone does not identify the
+cause. Preserve the initial evidence and record the reason for each assertion or fixture change.
+Do not relax an assertion, log classification or performance threshold merely to fit a run.
+Controlled negative/fault cases should demonstrate that the repaired oracle still detects the
+violation; a synthetic harness pass is not native gameplay acceptance.
+
+Automated visual acceptance requires an LLM to inspect the actual retained Minecraft framebuffer
+images, with explicit feature criteria and candidate/support/image hashes. Inspect readable labels,
+item/fluid distinctions, layout/clipping/overlap, native menu boundaries and the expected visible
+state. EMI review includes promoted category/recipe ordering and explicit-focus behavior; bee review
+includes occupied/active versus empty/inactive and reduced/disabled states; drink review includes
+plain/specialty identity and legibility. Shader/campfire review covers the real palette/phase matrix,
+not just API state. Both personal-inventory paths and relevant separate native backpacks remain
+mandatory under [inventory parity](inventory-parity.md). Missing, ambiguous or defective captures
+block visual acceptance. Capture files, counters, mocked previews and placeholder browser images
+cannot stand in for image inspection. Record human-pointer and physical-listening checks as
+`NOT_PERFORMED` unless actually exercised; they are separate nonblocking verdicts, not inferred passes.
+
 ## Public tiers
 
 The public test interface has three cumulative tiers. Dev needs no packaged candidate and can
@@ -106,8 +129,9 @@ Pack-level tiers run only when explicitly requested:
 
 Agents can use `test-control.main.kts` for JSON lines with stable run IDs and evidence paths.
 `run` prints a running record immediately, then a final record; `status` and `wait` work from
-another terminal while it runs. `wait` returns 4 when its bounded timeout expires, 1 for a failed
-run, and 0 for a passed run. `evidence` lists recorded files. For example:
+another terminal while it runs. `wait` returns 4 when its bounded timeout expires or a completed
+full Debug awaits visual review, 1 for a failed run, and 0 for a passed run. `awaiting_review` is
+not a runtime failure or an accepted distribution. `evidence` lists recorded files. For example:
 
 ```sh
 ./test-control.main.kts list
@@ -152,13 +176,16 @@ Use the coordinator's stable conversation ID (`PI_SESSION_ID` in Pi; explicitly 
 ./test-control.main.kts session revoke SESSION_ID --helper-session HELPER_CONVERSATION_ID
 ./test-control.main.kts session begin --owner-session "$PI_SESSION_ID" --replace IDLE_OWNED_SESSION_ID
 ./release.main.kts --debug --verification-session SESSION_ID
-./test-control.main.kts run source --all --verification-session SESSION_ID
+./test-control.main.kts run source --all
 ./release.main.kts --debug --verification-session SESSION_ID --rebuild-all
 ./test-control.main.kts session end SESSION_ID
 ```
 
 Opening a receipt or ordinary source/Dev checks does not authorize preparation or establish a
-baseline. Source-control checks validate ownership but do not advance the release receipt.
+baseline. Independent `run source` checks are explicitly noncanonical and do not consume or
+advance release checkpoints; their runtime acceptance is `NOT_EVALUATED`. They reject
+`--verification-session` rather than accept an ignored receipt flag. Use canonical release
+preparation with the owned session for checkpoint creation and revalidation.
 Canonical preparation checkpoints each provider only after its complete verification tasks,
 artifact checks and input rechecks succeed. A later provider failure does not discard those
 checkpoints, but only successful complete preparation establishes a deployable coherent set.
@@ -253,8 +280,16 @@ restart and Untamed whale client spawn), `lineage-transition` (Debug lifecycle s
 and archive), `cursed-pyramid` (pinned seed, saved structure record,
 and strict log audit in its surrounding chunks), `world-save` (seeded persistence),
 `world-startup` (unseeded native integrated creation), `deep-void` (networked native entry), and
-`gameplay` (observed familiarity/restart and six-fix native client acceptance; Debug only)
-(the world-save/world-startup/deep-void targets are also Debug). The `campaign-start` fixture
+`gameplay` (observed familiarity/restart and six-fix native client acceptance; Debug only),
+`plant-drinks`, `structure-loot`, `structure-loot-personal`, `bees-cosmetics`, `emi-native-order`,
+`lifecycle-interactions`, and `interactions` (the native interaction families and
+world-save/world-startup/deep-void targets are also Debug).
+The `interactions` target runs all short native families, separate from the genuine gameplay soak.
+Targets retain their scoped limitations: ordinary chest rolls do not by themselves establish
+Lootr or generated-structure coverage, and manual drinking does not prove fractional reserves.
+`structure-loot-personal` exercises personal rolls with two real connected players;
+`lifecycle-interactions` exercises native replacement-player respawn and late-cancellation
+observations, not same-object direct handler calls. The `campaign-start` fixture
 uses the packaged spawn rules and removes a strip of campaign floor to verify that the
 campaign-phase repair restores pathable geometry. For example:
 
@@ -355,10 +390,16 @@ retained ownership metadata. These mechanism contracts do not prove arbitrary ex
 cleanup or Minecraft acceptance. The Node recipe-handler contract retains its 15-second budget;
 passing repeated/concurrent observations cannot establish the cause of an earlier timeout.
 
-The tiers run internal Gradle tasks `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
-`singleplayerTest`. Dist sequences fast checks, the candidate gate, and the multiplayer runtime
-group. Debug runs the same gates and all three runtime groups to collect diagnostic evidence.
-Each runtime group uses a fresh fixture.
+The tiers run internal Gradle tasks `test`, `candidateTest`, `serverTest`, `multiplayerTest`,
+`singleplayerTest`, `gameplayTest` and `interactionTest`. Dist sequences fast checks, the candidate
+gate and the multiplayer runtime group. Full Debug is the explicitly invoked exhaustive release
+gate: it includes all five runtime groups, including the observed gameplay soak/shader workload
+and independently targetable interaction families. Each runtime group uses a fresh fixture.
+Missing, skipped or aborted required scenarios and uncovered high-risk boundaries prevent a full
+pass. [`gradle/debug-interactions.json`](../gradle/debug-interactions.json) owns the executable
+boundary/scenario/visual-criteria inventory; it must account for every active custom provider.
+Concrete source-native tests can satisfy precisely scoped boundaries only through canonical
+verified-source provenance for the exact candidate, not arbitrary task names or old reports.
 
 Dev writes ordinary Gradle XML and HTML reports only. Dist and Debug use a run ID and write
 structured evidence beneath `generated/test-evidence/<run-id>/`: incremental JSON events, a
@@ -466,9 +507,9 @@ the 0/10,000/20,000 checkpoints and places the players above them. These pads ex
 fresh extracted test world, making the routed local-approach proof deterministic while retaining
 the complete modpack, real server tick, and real campaign materialization path.
 
-**Observed gameplay target.** The explicit `gameplay` target uses the existing multiplayer
-runtime group and a separate target-only scenario; ordinary Dist/Debug group discovery does not
-silently add a thirty-minute soak. It requires the same candidate/support byte binding and strict
+**Observed gameplay scenario.** Full Debug runs this scenario in its own `gameplay` runtime
+group; the explicit `gameplay` target invokes the same workload independently for partial retries.
+Dist does not run the soak. It requires the same candidate/support byte binding and strict
 log/process-cleanup gates. Its fresh Survival player first rejects an unfamiliar campaign, then
 spends at least 18,000 actual eligible native ticks and 900 measured online seconds in the core.
 A normal save/server-process restart and reconnect separate the second equally bounded visit.
@@ -484,7 +525,7 @@ without global promotion. All 288 wandering-pool result IDs read from the select
 Commerce JAR must resolve in that invocation's live item registry; sibling sources and retained
 proposal CSVs are not the runtime oracle. Snapshot ID and candidate/JAR hashes remain recorded.
 
-The same target exercises actual registered spoiled items and native compost/rod behavior,
+The same gameplay scenario exercises actual registered spoiled items and native compost/rod behavior,
 configured bush fields with explicitly authored native harvest/growth scheduling, production
 readiness edges, and ordinary/Dynamic Trees cuts. Its nonshipping held-cut driver calls public
 native mining APIs once per actual client tick and narrowly suppresses only an unrelated no-input
@@ -546,6 +587,30 @@ state or capture counters.
 | Restart/Flesh/whale | Current fixture saved state, native restart/reconnect; `restart-compat` binds the exact summoned whale UUID to native client join and two subsequent END ticks, not rendered visibility | Bounded stop/restart/client waits; whale receipt and heartbeat share 30 seconds after summon; fresh evidence and unchanged candidate hashes |
 | Lifecycle/snapshot/pyramid | Native completion schema and snapshot ID, one committed lineage archive, pinned structure seed and saved structure record | Bounded native command/completion waits; one generation only; saved evidence belongs to the current run |
 | Final audits/cleanup | Current logs, ZIP/support digests and all owned identities | Bounded diagnostic/TERM/KILL/reap phases; retain evidence across handoffs; process cleanup is not data purge |
+
+## Full Debug visual finalization
+
+Run full Debug through the structured facade when post-run visual admission is needed. If every
+runtime, source-boundary and final-audit gate passes but reviewed frames are not yet admitted,
+the run returns exit 4 with `awaiting_review`, never a success. Read the actual retained images
+and native observations before writing a `bc.native_visual_review.v1` review. Every required
+case has explicit criterion findings, image path/SHA-256, native screen/menu and GUI-scale
+metadata, and exact candidate/support binding. A proposed review is not a generated pass.
+
+```sh
+python3 -B scripts/debug_coverage.py inventory
+python3 -B scripts/debug_coverage.py admit-review --run-id NATIVE_DEBUG_RUN_ID --review /absolute/path/to/review.json
+./test-control.main.kts finalize-debug CONTROL_RUN_ID
+```
+
+Use the control record's `child_runs.debug_run` when the release wrapper created a separate native
+Debug run; never assume its ID equals the outer control ID. Finalization rechecks the unchanged
+review contract, runtime evidence, strict audited logs, complete cleanup and actual candidate/support
+bytes. Only a full Debug already awaiting review may be finalized. Failed runtime assertions,
+uncovered high-risk boundaries, changed bytes or defective frames cannot be waived. No Minecraft
+relaunch is needed solely to admit a valid review; production changes still require a fresh
+candidate and complete full Debug. Historical failures and the initial pending-review state remain
+retained. Human-pointer and physical-listening verdicts remain independently `NOT_PERFORMED`.
 
 ## Task registration and handoff
 

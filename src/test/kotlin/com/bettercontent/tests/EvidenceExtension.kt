@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.TestWatcher
 
 class EvidenceExtension(
     private val suite: String,
+    private val evidenceSuffix: String? = null,
     private val config: () -> TestConfig = TestConfig::load,
 ) : BeforeAllCallback, AfterAllCallback, TestWatcher {
     lateinit var run: EvidenceRun
@@ -17,7 +18,9 @@ class EvidenceExtension(
     override fun beforeAll(context: ExtensionContext) {
         successful = true
         priorFailure = null
-        run = EvidenceRun(config(), System.getenv("BC_TEST_EVIDENCE_SUITE")?.takeIf(String::isNotBlank) ?: suite, suite)
+        val selected = System.getenv("BC_TEST_EVIDENCE_SUITE")?.takeIf(String::isNotBlank)
+        val directory = selected?.let { if (evidenceSuffix == null) it else "$it-$evidenceSuffix" } ?: suite
+        run = EvidenceRun(config(), directory, suite)
     }
 
     override fun testFailed(context: ExtensionContext, cause: Throwable) {
@@ -32,7 +35,8 @@ class EvidenceExtension(
     }
 
     override fun testSuccessful(context: ExtensionContext) {
-        run.event("test_passed", mapOf("test" to context.displayName))
+        run.event("test_passed", mapOf("test" to context.displayName,
+            "class" to context.requiredTestClass.simpleName, "method" to context.requiredTestMethod.name))
     }
 
     override fun afterAll(context: ExtensionContext) {
@@ -87,6 +91,12 @@ class EvidenceExtension(
                     "seconds" to timing.seconds, "text" to timing.text,
                 ) },
             ))
+        }
+        finalizeStep("audited_log_hashes") {
+            val logs = collectLogs(run.directory)
+            run.event("final_audited_logs", mapOf("logs" to logs.map { path ->
+                mapOf("path" to path.toString(), "sha256" to Hashes.sha256(path))
+            }))
         }
         try { run.finish(successful) } catch (failure: Throwable) { finalFailures += failure }
         if (finalFailures.isNotEmpty()) {

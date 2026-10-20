@@ -12,6 +12,7 @@ import kotlin.system.exitProcess
 private val root = __FILE__.canonicalFile.parentFile.toPath()
 private val workspace = root.parent
 private val schema = "bc.test_control.v1"
+private data class JsonValue(val text: String)
 
 private fun json(value: Any?): String = when (value) {
     null -> "null"
@@ -23,6 +24,7 @@ private fun json(value: Any?): String = when (value) {
         '\t' -> "\\t".toList()
         else -> listOf(char)
     } }.joinToString("") + "\""
+    is JsonValue -> value.text
     is Boolean, is Number -> value.toString()
     is Map<*, *> -> value.entries.joinToString(",", "{", "}") { json(it.key.toString()) + ":" + json(it.value) }
     is Iterable<*> -> value.joinToString(",", "[", "]") { json(it) }
@@ -56,7 +58,7 @@ private fun options(start: Int, allowed: Set<String>): Map<String, String> {
 private fun requestOptions(scope: String, start: Int): Map<String, String> {
     if (scope !in setOf("dev", "dist", "debug", "source")) fail("unknown scope: $scope")
     val source = scope == "source"
-    val result = options(start, if (source) setOf("--repo", "--all", "--verification-session")
+    val result = options(start, if (source) setOf("--repo", "--all")
         else setOf("--target", "--retry-of", "--existing-candidate", "--verification-session", "--candidate-binding"))
     result["--verification-session"]?.let { session ->
         val (status, output) = capture(listOf("python3", "-B", root.resolve("scripts/testing_session.py").toString(), "status", session))
@@ -68,6 +70,7 @@ private fun requestOptions(scope: String, start: Int): Map<String, String> {
         result["--repo"]?.let { if (it !in allSourceNames()) fail("unknown source repository: $it") }
     } else {
         val target = result["--target"]
+        if (target != null) targetPlan(scope, target)
         if (result["--retry-of"] != null && result["--candidate-binding"] == null) fail("--retry-of needs --candidate-binding")
         if (result["--existing-candidate"] == "true" && (scope != "debug" || target != null))
             fail("--existing-candidate needs full debug")
@@ -80,6 +83,15 @@ private data class SourceMod(val repository: String, val artifact: String, val t
 
 private fun capture(command: List<String>, cwd: Path = root): Pair<Int, String> {
     return captureFacade(root.toFile(), command, cwd.toFile())
+}
+
+private fun targetPlan(scope: String? = null, target: String? = null): JsonValue {
+    val command = mutableListOf("python3", "-B", root.resolve("scripts/debug_coverage.py").toString(), "targets", "--root", root.toString())
+    scope?.let { command += listOf("--tier", it) }
+    target?.let { command += listOf("--target", it) }
+    val (status, output) = capture(command)
+    if (status != 0) fail(output.trim())
+    return JsonValue(output.trim())
 }
 
 private fun activeMods(): List<SourceMod> {
@@ -186,7 +198,9 @@ private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, 
                 "evidence" to controlPath(id).parent.toString()))
         }
     }
-    return mapOf("checks" to completed, "state" to if (completed.values.all { it == "passed" }) "passed" else "failed")
+    return mapOf("checks" to completed, "state" to if (completed.values.all { it == "passed" }) "passed" else "failed",
+        "verification_authority" to "independent source task invocation; no canonical verification-session checkpoints created",
+        "runtime_acceptance" to "NOT_EVALUATED")
 }
 
 private fun runtimeRun(id: String, tier: String, option: Map<String, String>): Map<String, Any?> {
@@ -202,7 +216,7 @@ private fun runtimeRun(id: String, tier: String, option: Map<String, String>): M
     val output = Files.readString(log)
     val childRuns = Regex("(?m)^(release run|Dist run|Debug run|run): ([^\\s]+)$")
         .findAll(output).associate { it.groupValues[1].lowercase().replace(' ', '_') to it.groupValues[2] }
-    return mapOf("state" to if (status == 0) "passed" else "failed", "exit_code" to status,
+    return mapOf("state" to if (status == 0) "passed" else if (tier == "debug" && status == 4) "awaiting_review" else "failed", "exit_code" to status,
         "child_runs" to childRuns, "log" to log.toString())
 }
 
@@ -230,7 +244,7 @@ when (args.firstOrNull()) {
     "list" -> {
         if (args.size != 1) fail("list accepts no options")
         val active = activeMods()
-        reply(mapOf("state" to "ready", "tiers" to listOf("dev", "dist", "debug"),
+        reply(mapOf("state" to "ready", "tiers" to listOf("dev", "dist", "debug"), "target_catalog" to targetPlan(),
             "source_repositories" to allSourceNames().map { name ->
                 mapOf("repository" to name, "active" to active.any { it.repository == name },
                     "tasks" to sourceTasks(name, active))
@@ -242,6 +256,7 @@ when (args.firstOrNull()) {
         val active = activeMods()
         if (scope !in setOf("dev", "dist", "debug", "source")) fail("unknown scope: $scope")
         reply(mapOf("state" to "ready", "scope" to scope,
+            "target_plan" to if (scope == "source") mapOf("verification_authority" to "independent source tasks; no canonical checkpoints or runtime acceptance") else targetPlan(scope, opt["--target"]),
             "tiers" to when {
                 scope == "source" -> emptyList()
                 scope == "dev" -> listOf("dev")
@@ -269,7 +284,8 @@ when (args.firstOrNull()) {
         if (args[0] == "retry" && (opt["--retry-of"] == null || opt["--candidate-binding"] == null))
             fail("retry needs --retry-of and --candidate-binding; --target is optional")
         val id = runId()
-        writeControl(id, mapOf("state" to "running", "scope" to scope, "target" to opt["--target"],
+        val executionPlan = if (scope == "source") mapOf("verification_authority" to "independent source tasks; no canonical checkpoints or runtime acceptance") else targetPlan(scope, opt["--target"])
+        writeControl(id, mapOf("target_plan" to executionPlan, "state" to "running", "scope" to scope, "target" to opt["--target"],
             "retry_of" to opt["--retry-of"], "evidence" to controlPath(id).parent.toString()))
         println(readStatus(id))
         System.out.flush()
@@ -279,10 +295,16 @@ when (args.firstOrNull()) {
         } catch (failure: Exception) {
             mapOf("state" to "failed", "error" to (failure.message ?: failure.javaClass.simpleName))
         }
-        writeControl(id, mapOf("scope" to scope, "target" to opt["--target"],
+        writeControl(id, mapOf("target_plan" to executionPlan, "scope" to scope, "target" to opt["--target"],
             "retry_of" to opt["--retry-of"], "evidence" to controlPath(id).parent.toString()) + result)
         println(readStatus(id))
-        exitProcess(if (result["state"] == "passed") 0 else 1)
+        exitProcess(if (result["state"] == "passed") 0 else if (result["state"] == "awaiting_review") 4 else 1)
+    }
+    "finalize-debug" -> {
+        val id = args.getOrNull(1) ?: fail("finalize-debug needs a control run ID")
+        if (args.size != 2 || !Regex("[A-Za-z0-9._-]+").matches(id)) fail("invalid finalize-debug run ID")
+        exitProcess(superviseFacade(root.toFile(), listOf("python3", "-B", root.resolve("scripts/debug_coverage.py").toString(),
+            "finalize", "--root", root.toString(), "--run-id", id), budgetSeconds = 60))
     }
     "submit" -> {
         val opt = options(1, setOf("--handoff"))
@@ -303,7 +325,7 @@ when (args.firstOrNull()) {
             val files = Files.walk(evidence, 3).use { stream ->
                 stream.filter(Files::isRegularFile).map(Path::toString).sorted().toList()
             }
-            reply(mapOf("state" to "ready", "run_id" to id, "evidence" to evidence.toString(), "files" to files))
+            reply(mapOf("state" to "ready", "run_id" to id, "evidence" to evidence.toString(), "files" to files, "status" to JsonValue(readStatus(id))))
         }
         if (args[0] == "wait") {
             val timeout = opt["--timeout-ms"]?.toLongOrNull() ?: 30_000L
@@ -315,7 +337,7 @@ when (args.firstOrNull()) {
                 status = readStatus(id)
             }
             println(status)
-            exitProcess(if ("\"state\":\"passed\"" in status) 0 else if ("\"state\":\"running\"" in status) 4 else 1)
+            exitProcess(if ("\"state\":\"passed\"" in status) 0 else if ("\"state\":\"running\"" in status || "\"state\":\"awaiting_review\"" in status) 4 else 1)
         }
     }
     else -> fail("usage: test-control.main.kts <list|plan|run|submit|status|wait|evidence|retry|begin|finish> ...")

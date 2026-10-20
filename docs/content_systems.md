@@ -67,12 +67,22 @@ being aggregated and reconstructed. This removes the former normalization
 callback's invalid zero-argument KubeJS `hasTag()` call as well as its broad scope.
 
 Native LootJS `CHEST` context is not proof of a physical container: a mob such as
-Quark's Stoneling can use that context for its carried reward. Future quantity
-balancing must select explicit owning tables/pools, account for their consumers,
-and adjust rolls, weights or counts there. Shared supply pools may be referenced
-explicitly by intended containers; helper tables, mob rewards and future table
-names must not acquire generic supplies by default. No replacement quantity
-rebalance or new shared supply pool is introduced by retiring the normalizer.
+Quark's Stoneling can use that context for its carried reward. Quantity balancing
+selects explicit owning tables/pools, accounts for their consumers, and adjusts
+rolls, weights or counts there. Shared supply pools may be referenced explicitly
+by intended containers; helper tables, mob rewards and future table names must
+not acquire generic supplies by default.
+
+The table-owned balance inputs are
+[`structure-loot-review.json`](../src/test/resources/structure-loot-review.json).
+They distinguish physical consumer witnesses and authored supply/encounter/treasure
+roles from helpers, packages, mob rewards, intentional empty/cut tables and unresolved
+consumers. Roles are review decisions, not a production folder-name classifier.
+Selected `kubejs/data/*/loot_tables/` overrides tune commodity counts/rolls in Alex's
+Caves cabins, vanilla supply/dungeon tables, Rats pet shops and Wares warehouses.
+Special pools, conditions, item identities and item state remain unchanged.
+Reviewed-but-unchanged tables are intentional outcomes; missing/uncertain consumers
+must be resolved against active native configuration before claiming full coverage.
 
 Existing acquisition policy remains: `global_loot_progression.js` removes closed
 families and potion delivery, and removes listed renewable seeds from native
@@ -93,6 +103,16 @@ and helper consumers, unchanged large/duplicate stacks, preserved item state,
 chest-only seed removal and geological replacement quantities. The stack stand-in
 rejects zero-argument `hasTag()` rather than inventing that API. These hermetic
 Minecraft-free checks are not full-pack runtime acceptance.
+
+`StructureLootBalanceTest` additionally rehydrates pinned source inputs through
+[`structure_loot_inputs.py`](../scripts/structure_loot_inputs.py), checks review/input
+identity and effective authored Forge modifiers, compares protected table structure,
+and exercises negative mutations plus seeded distributions for changed pools.
+The sample profile and tolerances live in the executable review inputs; the Python
+sampler does not implement native GLMs, LootJS, conditional pools or container
+splitting. Full-pack native rolls, actual structure consumers and Lootr personal-roll
+behavior remain separate required acceptance checks, not conclusions from a source
+review or seeded sampler.
 
 ## Tinkers' wood material
 
@@ -290,7 +310,8 @@ returns native unhandled so ordinary biome trees can still be selected. Native p
 global tree density/chance and JoCodes remain; existing resources are not culled. These rolls
 permit clusters and do not guarantee minimum spacing or measured landscape density.
 
-**Fruit extension status — source only, not ready:** the [owning fruit mod](../../mod_source/better-wild-fruit-trees/README.md#optional-food-tree-extension--source-only-not-ready)
+**Fruit extension status — source only, not ready:** the
+[owning source draft](https://github.com/better-content/better-wild-fruit-trees/blob/4bb19c8f0b665fe7299f47c1edbd83cc556f87bd/README.md#optional-food-tree-extension--source-only-not-ready)
 has uncompiled/unexecuted full-policy work for `dynamictreesplus:saguaro_cactus`,
 `dtnatures_spirit:coconut` and `dtquark:ancient`, including exact-origin saguaro→mega
 provenance rather than treating all mega cacti as fruit trees. Food/product routes are preserved

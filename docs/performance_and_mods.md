@@ -84,6 +84,18 @@ utilities remain retired; see [native inventory parity](inventory-parity.md).
 The maintained `config/adchimneys/` definitions cover active furnace,
 burner, smeltery, and generator emitters.
 
+Better Compat Fixes' owning source adds cosmetic Complicated Bees swarms around occupied nests
+and active apiaries. They are bounded client particles, not bee entities or changes to genetics,
+production or pollination. Native species occupancy and a transition-only server activity flag
+supply the visual state; inactive apiaries do not advertise production. The client scanner is
+bounded and fair across dense loaded block-entity populations; particle settings and the client
+reduction/disable setting control emissions. Forestry behavior was inspected as a reference;
+the implementation and bee texture are independent, not copied LGPL assets. The
+[owning README](../../mod_source/better-compat-fixes/README.md) owns exact controls and limits.
+Source GameTests and emission counters do not prove visible swarms or dense-installation
+performance. Exact-candidate native observer, transition, range/settings and LLM frame review
+remain required before claiming pack acceptance.
+
 Create Sifting 1.8.6 is active with Create 6.0.8. String-mesh hand sifting is the
 pre-power ore separation path; standard and Brass Sifters automate the same recipe
 language. Advanced and custom meshes are hidden and unobtainable. Create fan-based

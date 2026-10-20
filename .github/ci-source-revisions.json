@@ -11,23 +11,23 @@
     },
     {
       "repository": "better-magic-chunk-anchors",
-      "commit": "2783ecb9ca4b8c96ce19ab3caa7a8da76240c78c"
+      "commit": "5c80060201b4c73a06eed33740706d3cf3495017"
     },
     {
       "repository": "better-spirit-commerce",
-      "commit": "cb4830237fb4b4b4ac98522822f00e4ba3eb9f89"
+      "commit": "3327dc0e0277124fa9857e14d816e9aba67f76a8"
     },
     {
       "repository": "better-compat-fixes",
-      "commit": "52f2a7413301eb853b128eefa46a456c38a2ac9e"
+      "commit": "332e54156b49325731232b9ea5a76df30b8ebe61"
     },
     {
       "repository": "better-discovery-guides",
-      "commit": "60e52f8662cbeb5411264935a49845c40ec3bc39"
+      "commit": "f4c317af7dcd8ded33ccb30b4dd84af7d3046606"
     },
     {
       "repository": "better-bumblezone-crops",
-      "commit": "7c9659450db34d1265bbbc9822cd734fc45dcf9a"
+      "commit": "bccbe5e2be19ffaccdfb5ad1c13d5b0fc6f4dded"
     },
     {
       "repository": "burnt-grass-compat",
@@ -47,15 +47,15 @@
     },
     {
       "repository": "better-cave-encounters",
-      "commit": "5d8560c06e6a5fbc22922d9c447ca980f7f7de20"
+      "commit": "de2b4875c92996d20081901e929b7034947aa677"
     },
     {
       "repository": "better-dimension-fonts",
-      "commit": "4e21b2783809ffe4f026d01d63263fb82b86a730"
+      "commit": "30c511ec23a6dd264e081f587b354d9050a3f50e"
     },
     {
       "repository": "better-deaths-door",
-      "commit": "4b4a5ec3399db8de6d2d5cfbd845fc13f56f25bd"
+      "commit": "735b6788e4db815f74d3629b559bb06f96e3f162"
     },
     {
       "repository": "better-survival-hud",
@@ -79,7 +79,7 @@
     },
     {
       "repository": "better-industrial-heat",
-      "commit": "81ef2d851ca36ebc9d3222a0843fd7b31cc85ca7"
+      "commit": "58ab252043bb729f7716695d8bbf835d9f0abbfb"
     },
     {
       "repository": "better-weathering-offline-progress",
@@ -87,11 +87,11 @@
     },
     {
       "repository": "better-chemlib-hazards",
-      "commit": "9be6b2f854da991a3749ca2ef74a8b8e632de933"
+      "commit": "0cf5dc132bb586a093a3971fe1268f89a38fef7a"
     },
     {
       "repository": "better-mining-lamp",
-      "commit": "4d6e7d6cf6189145575749ca6c08bc212fc26dc4"
+      "commit": "df9eae363dec25d13a519f21e1cbebf140fb5987"
     },
     {
       "repository": "better-oc2r-create-controls",
@@ -103,7 +103,7 @@
     },
     {
       "repository": "better-pillager-campaigns",
-      "commit": "02ffc8a9993e7d5576f5d42cab8f3bd6a212e080"
+      "commit": "273ca66af528eb5a6faff6a5d87260c44e36c2b7"
     },
     {
       "repository": "better-player-traces",
@@ -115,11 +115,11 @@
     },
     {
       "repository": "better-rail-beetle",
-      "commit": "98ec53155f353288fbc5897e21e99832e20e4456"
+      "commit": "adf0f2118f653dc081600990529ad064ee67d5d0"
     },
     {
       "repository": "better-ore-geology",
-      "commit": "85aeb5fc2caabac7cb7ecf7d84a7250d27ab615a"
+      "commit": "d203858b684172f132333de2ae7aabf1a66cb64b"
     },
     {
       "repository": "better-block-placement-preview",
@@ -135,11 +135,11 @@
     },
     {
       "repository": "better-rpg-progression",
-      "commit": "33759f3b9f68b8a3140eaac754ddac7caa3f98af"
+      "commit": "24ebf385347c24704b1dd4ed8463c85f9180fbfe"
     },
     {
       "repository": "better-runtime-diagnostics",
-      "commit": "e66e0d2bd1e9d8d37b7adb8e5a782276a155bc13"
+      "commit": "1dc2205c3c79b0a10613d699b9a220277fcbff26"
     },
     {
       "repository": "better-settlement-roads",
@@ -147,7 +147,7 @@
     },
     {
       "repository": "better-survival-physiology",
-      "commit": "b2ebb3aca31145c666048c7718d2a80cd22f75c4"
+      "commit": "e6bae0dcbd8c0ab6b07897f4fd117636ec39350c"
     },
     {
       "repository": "better-tinkers-loot-affixes",
@@ -159,7 +159,7 @@
     },
     {
       "repository": "better-drinking-water",
-      "commit": "0b4df7ae32264592da7bbea8d876ad5fe298fc49"
+      "commit": "81e4ad60ba5e3a7eb456d9449754c1265a090d3f"
     },
     {
       "repository": "better-world-management",
@@ -183,7 +183,7 @@
     },
     {
       "repository": "better-journal-inventory",
-      "commit": "b0db423944acc6d16f12d42143bcb5fc9690eb98"
+      "commit": "39884b17ebc08f0a6922ec5743a0411f0c74e248"
     },
     {
       "repository": "scalable-tnt",
@@ -191,7 +191,7 @@
     },
     {
       "repository": "better-celestial-events",
-      "commit": "dfaff1da9f586b628b89fb1bff920778606e82d5"
+      "commit": "01cc41e8078075ad3fecdc2fc47aac0aeebe1897"
     }
   ]
 }

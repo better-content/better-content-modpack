@@ -212,17 +212,82 @@ data class TestConfig(
     }
 }
 
-class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: String = suite) {
+class EvidenceRun private constructor(val config: TestConfig, val suite: String, val sourceSuite: String,
+    private val parent: EvidenceRun?, private val family: String?,
+) : AutoCloseable {
+    constructor(config: TestConfig, suite: String, sourceSuite: String = suite) : this(config, suite, sourceSuite, null, null)
     private val mapper: ObjectMapper = jacksonObjectMapper()
-    val directory: Path = config.runRoot.resolve(config.runId).resolve(suite).also { it.createDirectories() }
+    val directory: Path = (if (parent == null) config.runRoot.resolve(config.runId).resolve(suite) else {
+        require(family != null && Regex("[a-z0-9][a-z0-9-]{0,95}").matches(family)) { "invalid fixture family" }
+        parent.directory.resolve("families").resolve(family).also {
+            require(!Files.exists(it, NOFOLLOW_LINKS)) { "fixture family path already exists; retain it and use a fresh run: $it" }
+        }
+    }).also { it.createDirectories() }
     val fixture: Path = directory.resolve("fixture").also { it.createDirectories() }
     private val events = directory.resolve("events.jsonl")
     private val started = Instant.now()
     val tier: String = System.getenv("BC_TEST_TIER")?.takeIf { it in setOf("dist", "debug") } ?: "legacy"
     val target: String? = System.getenv("BC_TEST_TARGET")?.takeIf(String::isNotBlank)
-    private val failures = mutableListOf<String>()
-    val integrity = ArtifactIntegrity()
-    private val runtimeAudits = linkedMapOf<FixtureAuditLogging.Launch, Boolean>()
+    private val failures: MutableList<String> = parent?.failures ?: mutableListOf<String>()
+    val integrity: ArtifactIntegrity = parent?.integrity ?: ArtifactIntegrity()
+    private val runtimeAudits: MutableMap<FixtureAuditLogging.Launch, Boolean> = parent?.runtimeAudits ?: linkedMapOf<FixtureAuditLogging.Launch, Boolean>()
+    private val familyResources = mutableListOf<AutoCloseable>()
+    private val allocatedPorts: MutableSet<Int> = parent?.allocatedPorts ?: mutableSetOf<Int>()
+    val fixtureSession: UUID = UUID.randomUUID()
+    private var activeFamily: EvidenceRun? = null
+    private var familyClosed = false
+    private var cleanupFailure: Throwable? = null
+
+    @Synchronized
+    fun fixtureFamily(name: String): EvidenceRun {
+        check(parent == null && activeFamily == null) { "only one fresh fixture family may be active" }
+        return EvidenceRun(config, suite, sourceSuite, this, name).also { activeFamily = it }
+    }
+
+    fun nativePort(): Int {
+        check(!familyClosed && cleanupFailure == null) { "fixture family is not active" }
+        repeat(128) {
+            val port = freePort()
+            synchronized(allocatedPorts) {
+                if (allocatedPorts.add(port)) {
+                    event("fixture_port_allocated", mapOf("port" to port, "fixture_session" to fixtureSession.toString()))
+                    return port
+                }
+            }
+        }
+        error("could not allocate a distinct fixture port")
+    }
+
+    /** Register immediately after process creation, before any later startup step can fail. */
+    @Synchronized
+    fun <T : AutoCloseable> own(resource: T): T {
+        if (parent != null) {
+            check(!familyClosed && cleanupFailure == null) { "fixture family is closing/closed" }
+            familyResources += resource
+            event("fixture_family_resource_owned", mapOf("resource_sequence" to familyResources.size,
+                "resource_type" to resource.javaClass.name))
+        }
+        return resource
+    }
+
+    @Synchronized
+    override fun close() {
+        check(parent != null) { "root evidence is finalized by its suite, not by fixture-family cleanup" }
+        cleanupFailure?.let { throw it }
+        if (familyClosed) return
+        event("fixture_family_cleanup_started", mapOf("owned_resources" to familyResources.size))
+        val errors = mutableListOf<Throwable>()
+        familyResources.asReversed().forEach { resource -> runCatching { resource.close() }.exceptionOrNull()?.let(errors::add) }
+        if (errors.isNotEmpty()) {
+            cleanupFailure = errors.first().also { first -> errors.drop(1).forEach(first::addSuppressed) }
+            recordFailure("fixture family $family cleanup failed: ${errors.map { it.message }}")
+            event("fixture_family_cleanup_failed", mapOf("errors" to errors.map { it.toString() }))
+            throw requireNotNull(cleanupFailure)
+        }
+        familyClosed = true
+        parent.activeFamily = null
+        event("fixture_family_cleanup_finished", mapOf("owned_resources" to familyResources.size, "complete" to true))
+    }
 
     fun registerAudit(launch: FixtureAuditLogging.Launch) {
         runtimeAudits[launch] = false
@@ -237,7 +302,7 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
         launch.requireNativeRecords()
     }
 
-    fun auditLogging(): List<String> = runtimeAudits.flatMap { (launch, ready) ->
+    fun auditLogging(): List<String> = (if (activeFamily == null) emptyList() else listOf("fixture family ${activeFamily?.family} was not completely cleaned up")) + runtimeAudits.flatMap { (launch, ready) ->
         buildList {
             runCatching { launch.assertStable() }.exceptionOrNull()?.let { add(it.toString()) }
             if (ready) runCatching { launch.requireNativeRecords() }.exceptionOrNull()?.let { add(it.toString()) }
@@ -245,6 +310,10 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
     }
 
     init {
+        if (parent != null) {
+            event("fixture_family_created", mapOf("directory" to directory.toString(), "fixture" to fixture.toString(), "fixture_session" to fixtureSession.toString(),
+                "scope" to "independent native world/process/session; shared parent evidence/integrity/audit closure"))
+        } else {
         event("suite_started", mapOf("suite" to suite, "source_suite" to sourceSuite, "tier" to tier,
             "scope" to if (target == null) "full" else "targeted", "target" to target,
             "retry_of" to System.getenv("BC_TEST_RETRY_OF"), "root" to config.root.absolutePathString()))
@@ -253,13 +322,24 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
             Files.copy(source, directory.resolve("handoff.json"), StandardCopyOption.REPLACE_EXISTING)
             event("handoff_selected", mapOf("request_id" to PackTestHandoff.validate(source, CandidateLocator.locate(config.root))))
         }
+        System.getenv("BC_CANDIDATE_BINDING")?.takeIf(String::isNotBlank)?.let { path ->
+            val binding = Path.of(path).toAbsolutePath().normalize()
+            require(Files.isRegularFile(binding) && !Files.isSymbolicLink(binding)) { "missing canonical candidate binding" }
+            Files.copy(binding, directory.resolve("candidate-binding.json"), StandardCopyOption.REPLACE_EXISTING)
+            event("candidate_binding_retained", mapOf("path" to binding.toString(), "sha256" to Hashes.sha256(binding)))
+        }
         capture("git-status.txt", listOf("git", "status", "--short"), config.root)
         capture("git-head.txt", listOf("git", "rev-parse", "HEAD"), config.root)
         capture("java-version.txt", listOf(config.java.toString(), "-version"), config.root)
+        }
     }
 
     @Synchronized
     fun event(type: String, fields: Map<String, Any?> = emptyMap()) {
+        if (parent != null) {
+            parent.event(type, fields + mapOf("fixture_family" to family, "fixture_family_directory" to directory.toString()))
+            return
+        }
         val document = linkedMapOf<String, Any?>("time" to Instant.now().toString(), "type" to type)
         document.putAll(fields)
         Files.writeString(
@@ -303,6 +383,7 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
     }
 
     fun finish(success: Boolean) {
+        check(parent == null) { "child families cannot finalize or overwrite the parent verdict" }
         if (!success && failures.isEmpty()) failures += "suite failed outside a named checkpoint"
         event("suite_finished", mapOf("success" to success, "failures" to failures.toList()))
         writeSummary(if (success) "passed" else "failed")

@@ -55,9 +55,11 @@ tasks.test {
         exec { commandLine("python3", "-B", "scripts/test_bounded_facade.py") }
         exec { commandLine("python3", "-B", "scripts/test_prepare_dev_inputs.py") }
         exec { commandLine("python3", "-B", "scripts/test_ci_boundaries.py") }
+        exec { commandLine("python3", "-B", "scripts/test_debug_coverage.py") }
         exec { commandLine("python3", "-B", "scripts/test_workspace_coordination.py") }
         exec { commandLine("python3", "-B", "scripts/test_candidate_routing.py") }
         exec { commandLine("python3", "-B", "scripts/test_food_progression.py") }
+        exec { commandLine("node", "scripts/test_plant_drinks.mjs") }
         exec { commandLine("python3", "-B", "scripts/test_wild_crop_forage.py") }
         exec { commandLine("python3", "-B", "scripts/prepare_dev_inputs.py") }
     }
@@ -80,15 +82,19 @@ val candidateTest = registerPackTest("candidateTest", "candidate", "Validates th
 val serverTest = registerPackTest("serverTest", "server", "Runs dedicated-server runtime-data and lifecycle scenarios.")
 val multiplayerTest = registerPackTest("multiplayerTest", "multiplayer", "Runs the packaged dedicated-client join and GUI scenario.")
 val singleplayerTest = registerPackTest("singleplayerTest", "singleplayer", "Runs the packaged fresh single-player scenario.")
+val gameplayTest = registerPackTest("gameplayTest", "gameplay", "Runs observed gameplay, restart/soak and native shader acceptance.")
+val interactionTest = registerPackTest("interactionTest", "interactions", "Runs independently selectable native interaction families.")
 
 serverTest.configure { shouldRunAfter(candidateTest) }
 multiplayerTest.configure { shouldRunAfter(serverTest) }
 singleplayerTest.configure { shouldRunAfter(multiplayerTest) }
+gameplayTest.configure { shouldRunAfter(singleplayerTest) }
+interactionTest.configure { shouldRunAfter(gameplayTest) }
 
 tasks.register("modpackTest") {
     group = "verification"
     description = "Runs all granular pack-level suites against the existing candidate pair."
-    dependsOn(tasks.test, candidateTest, serverTest, multiplayerTest, singleplayerTest)
+    dependsOn(tasks.test, candidateTest, serverTest, multiplayerTest, singleplayerTest, gameplayTest, interactionTest)
 }
 
 tasks.register<JavaExec>("prepareFreshDist") {
