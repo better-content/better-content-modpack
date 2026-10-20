@@ -77,7 +77,16 @@ class PrettyPipesRecipeContractTest {
         assertEquals(5, other.size)
         assertTrue(other.single { it.path("output").asText() == "ae2:energy_acceptor" }
             .path("ingredients").any { it.asText() == "kubejs:impossible_support_matrix" })
-        assertTrue(other.single { it.path("output").asText() == "create:redstone_requester" }
-            .path("ingredients").any { it.asText() == "minecraft:blaze_rod" })
+        // Certus proves every explicitly scalable root, not just Pretty Pipes.
+        // Native honey remains thematic; no processor/network bootstraps routing.
+        listOf("sophisticatedstorage:hopper_upgrade", "rats:rat_upgrade_basic", "littlelogistics:rapid_hopper").forEach { item ->
+            val row = other.single { it.path("output").asText() == item }
+            assertTrue(row.path("key").any { it.asText() == "ae2:certus_quartz_crystal" }, item)
+            assertFalse(row.path("key").toString().contains("processor"), item)
+            assertFalse(row.path("key").toString().contains("sky_stone"), item)
+        }
+        val requester = other.single { it.path("output").asText() == "create:redstone_requester" }
+        assertTrue(requester.path("ingredients").any { it.asText() == "ae2:certus_quartz_crystal" })
+        assertFalse(requester.path("ingredients").any { it.asText() == "minecraft:blaze_rod" })
     }
 }

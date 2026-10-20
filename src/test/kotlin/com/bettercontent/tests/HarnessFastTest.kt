@@ -72,6 +72,16 @@ class HarnessFastTest {
     }
 
     @Test
+    fun sourceControlDeclaresTheCanonicalPackRootForgeLock() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val control = Files.readString(root.resolve("test-control.main.kts"))
+        assertTrue(control.contains("""val cacheLock = root.resolve(".worklane/forge-cache.lock")"""),
+            "source control must use the documented pack-root lock, as release builds do")
+        assertTrue(!control.contains("""workspace.resolve(".worklane/forge-cache.lock")"""),
+            "a workspace-parent lock does not interoperate with the canonical POSIX lock")
+    }
+
+    @Test
     fun forgeCacheLockInteroperatesWithPythonPosixLockf(@TempDir packRoot: Path) {
         val lock = packRoot.resolve(".worklane/forge-cache.lock")
         Files.createDirectories(lock.parent)

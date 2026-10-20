@@ -18,14 +18,22 @@ ServerEvents.recipes(function (event) {
         results: [{ item: 'kubejs:electrical_machine_block', count: 2 }]
     }).id('kubejs:electrical_control/electrical_machine_block')
 
-    // PowerGrid owns stationary electrical generation. Both orientations are
-    // removed first so conversion cannot bypass the Electrical Machine Block.
+    // PowerGrid owns stationary electrical generation. The housing is an open
+    // rotor frame: pressure-built wiring/fittings prove its era, not a full cube.
+    // Remove both orientations first so conversion cannot bypass manufacturing.
     event.remove({ output: 'pneumaticcraft:pneumatic_dynamo' })
     event.remove({ output: 'powergrid:generator_housing' })
     event.remove({ output: 'powergrid:vertical_generator_housing' })
-    event.shaped('powergrid:generator_housing', ['IPI', 'CMC', 'IPI'], {
-        I: '#forge:plates/iron', P: '#forge:plates/copper',
-        C: 'powergrid:conductive_casing', M: 'kubejs:electrical_machine_block'
+    event.custom({
+        type: 'pneumaticcraft:pressure_chamber', pressure: 2.0,
+        inputs: [
+            { type: 'pneumaticcraft:stacked_item', tag: 'forge:plates/iron', count: 4 },
+            { type: 'pneumaticcraft:stacked_item', tag: 'forge:plates/copper', count: 2 },
+            { type: 'pneumaticcraft:stacked_item', item: 'powergrid:conductive_casing', count: 2 },
+            { type: 'pneumaticcraft:stacked_item', item: 'morered:red_alloy_wire', count: 2 },
+            { type: 'pneumaticcraft:stacked_item', item: 'create:electron_tube', count: 1 }
+        ],
+        results: [{ item: 'powergrid:generator_housing' }]
     }).id('kubejs:electrical_control/direct_root/first_stationary_generator')
     event.shapeless('powergrid:vertical_generator_housing', [
         'powergrid:generator_housing'
@@ -36,6 +44,7 @@ ServerEvents.recipes(function (event) {
     event.remove({ id: 'morered:soldering_table' })
     event.shaped('morered:soldering_table', ['PPP', 'WMW', ' C '], {
         P: 'morered:stone_plate', W: 'morered:red_alloy_wire',
-        M: 'kubejs:electrical_machine_block', C: '#forge:plates/copper'
+        // The open table cannot contain a block; pressure-made PCB starts design.
+        M: 'pneumaticcraft:printed_circuit_board', C: '#forge:plates/copper'
     }).id('kubejs:electrical_control/direct_root/circuit_design_station')
 })

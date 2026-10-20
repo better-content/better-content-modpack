@@ -121,6 +121,42 @@ Spout. Flour and cleaning operations consume 100 mB, concrete consumes 250 mB, a
 magma-to-obsidian consumes 1,000 mB. The outputless sugar-cube recipe and direct
 ice-to-packed-ice shortcut are removed.
 
+## Ordinary Overworld terrain recovery
+
+Pack KubeJS separately owns **ordinary terrain**, not deposit assays. The explicit
+`kubejs/config/terrain_recovery.json` catalogue and
+`kubejs/server_scripts/processing/terrain_recovery.js` assign installed Overworld soils,
+regolith, natural rocks and ordinary counterparts to material-family profiles. Solid
+rocks use Crushing Wheels; loose soils/regolith use waterlogged Brass Sifting. Both take
+500 processing ticks. No hand, Millstone, fan-washing, worldgen, new-item or hidden
+provenance route is added. Shared material identities work in any machine dimension.
+
+Physical recovery targets **25% on average**, with chance-based individual operations
+that can produce nothing. Four clay balls represent one clay-block equivalent. Carbonate,
+quartz-rich, mafic, clay-rich and sandy materials have different useful fractions; equivalent
+colors/weathering variants share profiles. Quartz is explicitly allowed as a bulk mineral,
+with ordinary mixed-rock recovery capped at 1/16 and quartz-dominant recovery at 1/4 per
+block. New terrain recipes do not yield metals, metal concentrates or precious gems.
+
+Existing useful nonmetal chemistry may appear as minor coproducts, each capped at 1/64
+per block, with at most two per input and an explicit material basis and live consumer.
+Unused chemicals do not earn drops merely by existing. The catalogue records both eligible
+products and rejected chemistry candidates. These are simplified gameplay profiles, not
+scientific mass assays or an elemental decomposition system.
+
+Terrain crafting is preserved. Freely reidentified Unearthed regolith shares one conservative
+profile; native dirt/sand, loam, kaolin and stone/calcite mixtures constrain recovery rather
+than providing provenance-dependent recipes. Exact conflicting processing recipes are
+replaced, and raw diorite/tuff are subtracted from their native tag-based recycling inputs;
+manufactured-family recycling stays native. Generic gravel downcycling remains an alternative,
+not a second competing Crushing recipe for an exact terrain input. Ores/deposits, manufactured
+masonry, living plants and other-dimension-only terrain are excluded.
+
+Minecraft-free terrain contracts inspect hash-pinned resources and exercise the production
+handler, catalogue budgets, declared consumers and the bounded conversion model. They do not
+establish final loaded coverage, EMI appearance, machine execution or statistical chance
+acceptance; those require a separately authorized exact-candidate runtime session.
+
 ## Design contract
 
 World appearance supplies the useful prior; the name confirms the immediate

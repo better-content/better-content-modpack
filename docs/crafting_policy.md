@@ -60,9 +60,29 @@ Sky Stone. Better Content Fixes replaces the Pressurizer's FE input with native
 PneumaticCraft air: 1,000 mL volume, 10 mL per accelerated item, retaining at
 least 2 bar after payment. Ordinary unaccelerated transport remains available.
 
-Selectors are family-level wherever possible: namespace, tag, ID prefix, or an
-exact ID when no stable family exists. Capability roots prove the first
-meaningful entry into a system; they do not replace every downstream recipe.
+Create capability proofs are category-specific material/manufacturing roots,
+not universal era blocks. The workshop closes over wood/stone/iron fittings;
+two distinct whitelisted underground rock families make refractory compound for
+Seared metallurgy. Skyroot Logs root water/wind power, Nether Brick roots the
+grinding and powered-separation apparatus, and growable Certus roots scalable
+routing (including Create requesters, storage hopper upgrades, rat work orders
+and Rapid Hopper). Native honey parts remain physical/thematic costs. Later
+powered AE2 requirements are unchanged. The exact item/root matrix lives in
+`docs/progression.md`; no namespace-wide ingredient substitution is used.
+
+Machine Blocks are fitted structure, one intact block per eligible machine
+output, never divisible era tokens. The present apparatus consumer allowlist is
+`creatingspace:air_liquefier`; the six assemblies also feed their manufacturing
+chain. Open frames, sub-block devices, bearings, tables and compact Rail Beetle
+modules use era-made parts instead. Their existing pressure/material surfaces
+remain; rocket engineering/electrolysis assemble at 4.5 bar. All six IDs and
+placed blocks remain unchanged. Existing machines are not confiscated.
+
+Selectors for existing content cuts remain family-level wherever possible:
+namespace, tag, ID prefix, or an exact ID when no stable family exists. Capability
+roots name first meaningful manufacturing/material entries; category membership
+does not impose every other category's gate. This policy adds no generic auditor,
+player flags, ore-yield changes or worldgen checks.
 
 Wood compatibility preserves dedicated outputs instead of merging wood
 identities. Quark's named ladder families accept their canonical and vertical

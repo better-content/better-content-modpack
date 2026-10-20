@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#kubejs:forage_rice",
+  "features": "kubejs:forage/rice",
+  "step": "vegetal_decoration"
+}

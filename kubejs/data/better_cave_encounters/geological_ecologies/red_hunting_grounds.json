@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "raw_rock_tag": "better_cave_encounters:geology/red_hunting_grounds",
+  "ordinary_admission": 1.0,
+  "ordinary": [
+    {
+      "entity": "born_in_chaos_v1:dread_hound",
+      "role": "line",
+      "minimum_depth": 0.22,
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8,
+      "weight": 8,
+      "spawn_gamerule": "dreadHoundSpawn"
+    },
+    {
+      "entity": "born_in_chaos_v1:baby_spider",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12,
+      "weight": 8,
+      "spawn_gamerule": "babySpiderSpawn"
+    },
+    {
+      "entity": "iceandfire:dread_beast",
+      "role": "line",
+      "minimum_depth": 0.35,
+      "weight": 1,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 4,
+      "offspring": {
+        "credits": 4,
+        "children": {
+          "iceandfire:dread_thrall": 4,
+          "iceandfire:dread_ghoul": 4,
+          "iceandfire:dread_scuttler": 4,
+          "iceandfire:dread_horse": 4,
+          "iceandfire:dread_beast": 4
+        }
+      }
+    }
+  ],
+  "director": [
+    {
+      "entity": "born_in_chaos_v1:dread_hound",
+      "role": "line",
+      "minimum_depth": 0.22,
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8
+    },
+    {
+      "entity": "born_in_chaos_v1:baby_spider",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "iceandfire:dread_beast",
+      "role": "line",
+      "minimum_depth": 0.35,
+      "weight": 2,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 4,
+      "offspring": {
+        "credits": 4,
+        "children": {
+          "iceandfire:dread_thrall": 4,
+          "iceandfire:dread_ghoul": 4,
+          "iceandfire:dread_scuttler": 4,
+          "iceandfire:dread_horse": 4,
+          "iceandfire:dread_beast": 4
+        }
+      }
+    },
+    {
+      "entity": "born_in_chaos_v1:zombie_lumberjack",
+      "role": "line",
+      "minimum_depth": 0.55,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 3,
+      "offspring": {
+        "credits": 2,
+        "children": {
+          "born_in_chaos_v1:maggot": 2
+        }
+      }
+    },
+    {
+      "entity": "born_in_chaos_v1:fallen_chaos_knight",
+      "role": "heavy",
+      "minimum_depth": 0.68,
+      "weight": 1,
+      "cost": 10,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1,
+      "offspring": {
+        "credits": 2,
+        "children": {
+          "born_in_chaos_v1:maggot": 2
+        }
+      }
+    }
+  ]
+}

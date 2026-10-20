@@ -1,10 +1,19 @@
-// Any one active Font can start seared metallurgy. TCon owns alloy composition;
-// Create begins only after the hand-cranked workshop is physically reachable.
-var BC_FONT_BINDERS = [
-    ['nether', 'minecraft:netherrack', 'kubejs:nether_font_grout'],
-    ['aether', 'aether:aether_dirt', 'kubejs:aether_font_grout'],
-    ['bumblezone', 'the_bumblezone:porous_honeycomb_block', 'kubejs:bumblezone_font_grout']
+// Seared metallurgy needs two independently acquired underground rock families.
+// Raw/cobbled forms belong to one family; Schist axes are not separate families.
+// The ordinary Create workshop does not depend on these metallurgical recipes.
+var BC_REFRACTORY_FAMILIES = [
+    ['gabbro', ['unearthed:gabbro']],
+    ['slate', ['unearthed:slate', 'unearthed:cobbled_slate']],
+    ['phyllite', ['unearthed:phyllite', 'unearthed:cobbled_phyllite']],
+    ['quartzite', ['unearthed:quartzite']],
+    ['schist', ['unearthed:schist']]
 ]
+
+ServerEvents.tags('item', function (event) {
+    BC_REFRACTORY_FAMILIES.forEach(function (family) {
+        event.add('kubejs:refractory_stone/' + family[0], family[1])
+    })
+})
 
 ServerEvents.recipes(function (event) {
     // TCon's native cast recipes consume these blanks in the Part Builder
@@ -19,16 +28,34 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:hand_workshop/tconstruct/blank_red_sand_cast')
 
     event.remove({ output: 'tconstruct:grout' })
-    BC_FONT_BINDERS.forEach(function (font) {
-        event.shapeless('2x ' + font[2], [font[1], '#kubejs:ordinary_sand', 'minecraft:gravel'])
-            .id('kubejs:hand_workshop/font_grout/' + font[0])
-        event.shapeless('8x ' + font[2], [font[1], '#kubejs:ordinary_sand', '#kubejs:ordinary_sand', '#kubejs:ordinary_sand', '#kubejs:ordinary_sand', 'minecraft:gravel', 'minecraft:gravel', 'minecraft:gravel', 'minecraft:gravel'])
-            .id('kubejs:hand_workshop/font_grout/' + font[0] + '_bulk')
-        event.smelting('tconstruct:seared_brick', font[2])
-            .id('kubejs:hand_workshop/font_grout/' + font[0] + '_smelting')
-        event.blasting('tconstruct:seared_brick', font[2])
-            .id('kubejs:hand_workshop/font_grout/' + font[0] + '_blasting')
+    event.remove({ input: 'tconstruct:grout' })
+    ;['nether', 'aether', 'bumblezone'].forEach(function (origin) {
+        // Keep the item registrations for saved stacks, but no metallurgy routes.
+        event.remove({ output: 'kubejs:' + origin + '_font_grout' })
+        event.remove({ input: 'kubejs:' + origin + '_font_grout' })
     })
+    // Unordered distinct-family pairs: two union-tag slots would accept duplicates.
+    BC_REFRACTORY_FAMILIES.forEach(function (left, index) {
+        BC_REFRACTORY_FAMILIES.slice(index + 1).forEach(function (right) {
+            event.shapeless('2x kubejs:refractory_compound', [
+                '#kubejs:refractory_stone/' + left[0],
+                '#kubejs:refractory_stone/' + right[0]
+            ]).id('kubejs:hand_workshop/refractory/' + left[0] + '_' + right[0])
+        })
+    })
+    event.smelting('tconstruct:seared_brick', 'kubejs:refractory_compound')
+        .id('kubejs:hand_workshop/refractory/seared_brick')
+    event.blasting('tconstruct:seared_brick', 'kubejs:refractory_compound')
+        .id('kubejs:hand_workshop/refractory/seared_brick_blasting')
+
+    // Close surface synthesis and cross-family conversions, not cobble restoration.
+    ;[
+        'unearthed:slate_from_smooth_stone',
+        'unearthed:quartzite_from_smooth_sandstone',
+        'unearthed:quartzite_from_smooth_red_sandstone',
+        'unearthed:phyllite_from_slate', 'unearthed:schist_from_phyllite',
+        'unearthed:gabbro'
+    ].forEach(function (id) { event.remove({ id: id }) })
 
     event.remove({ type: 'minecraft:crafting_shaped', output: 'create:andesite_alloy' })
     event.remove({ type: 'minecraft:crafting_shapeless', output: 'create:andesite_alloy' })
@@ -70,6 +97,6 @@ ServerEvents.recipes(function (event) {
 
     event.remove({ id: 'create:crafting/kinetics/hand_crank' })
     event.shaped('create:hand_crank', ['PPP', ' A ', ' S '], {
-        P: '#minecraft:planks', A: 'create:andesite_alloy', S: 'create:shaft'
+        P: '#minecraft:planks', A: '#forge:ingots/iron', S: 'create:shaft'
     }).id('kubejs:hand_workshop/hand_crank')
 })

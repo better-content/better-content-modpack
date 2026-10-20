@@ -30,9 +30,14 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:fonts/nether/boiler_heater')
 
     event.remove({ output: 'pneumaticcraft:thermopneumatic_processing_plant' })
-    event.shaped('pneumaticcraft:thermopneumatic_processing_plant', ['SSS', 'TMT', 'SPS'], {
-        S: 'pneumaticcraft:reinforced_stone_slab', T: 'pneumaticcraft:small_tank',
-        M: 'minecraft:magma_cream', P: 'pneumaticcraft:pressure_tube'
+    event.custom({
+        type: 'create:mechanical_crafting', acceptMirrored: false,
+        pattern: ['SSS', 'TMT', 'SPS'],
+        key: {
+            S: { item: 'pneumaticcraft:reinforced_stone_slab' }, T: { item: 'pneumaticcraft:small_tank' },
+            M: { item: 'minecraft:magma_cream' }, P: { item: 'pneumaticcraft:pressure_tube' }
+        },
+        result: { item: 'pneumaticcraft:thermopneumatic_processing_plant' }
     }).id('kubejs:fonts/nether/thermopneumatic_plant')
 
     event.replaceInput({ output: 'pneumaticcraft:jet_boots_upgrade_5' },

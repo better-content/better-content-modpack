@@ -8,7 +8,7 @@ The balance philosophy currently covers the Tinkers' Construct family. The style
 
 1. **DPS is mandatory.** Utility, manufacturing difficulty, rarity, and mob-specific bonuses do not replace general combat output.
 2. **Normalize baselines, not every build.** Materials, traits, upgrades, affixes, execution, and encounters may diverge after the clean chassis is sound.
-3. **Costs and advantages are asymmetric.** Short reach and slow commitment are strongly punishing and deserve compensation. Long reach and high speed have diminishing rewards.
+3. **Reach selects the next melee tier.** The approved recalibration uses actual damage-weighted grounded-combo reach alone, within 80–120 and with Sword at 100. Slow attacks retain per-hit compensation through speed normalization, not a second tier adjustment. The current legacy tiers remain active until the measurement gate below is satisfied.
 4. **Slow attacks hit harder.** Missed, interrupted, and overkilling slow swings are costly, so committed weapons must visibly pay out per connection.
 5. **Ordinary AOE is not a second damage bar.** Common cleave and sweeps are texture, not a large DPS tax.
 6. **Generic effects count; narrow effects do not.** Armor piercing, armor bypass, unconditional offhand attacks, and generic burst belong in E-DPS. Mob-family bonuses do not.
@@ -18,7 +18,7 @@ The balance philosophy currently covers the Tinkers' Construct family. The style
 
 ## Tinkers' Construct family
 
-### Baseline
+### Active legacy baseline
 
 The authoritative machine-readable catalogue is `kubejs/config/tcon_edps_catalogue.json`. Its neutral grounded-combo baseline excludes dash, air, mount, innate skills, throws, charges, casting, and dual variants. Generic armour effects count; normal AOE does not.
 
@@ -31,6 +31,128 @@ The authoritative machine-readable catalogue is `kubejs/config/tcon_edps_catalog
 | 110 | 99.0% |
 
 The reference is the former same-material TCon Sword baseline. Native attack speed and material scaling are retained, so slow weapons receive larger per-hit multipliers. Pierce and the Estoc's generic bypass are evaluated against the pack armour canon; material traits, upgrades, utility, manufacturing cost, ordinary AOE, and mob-specific effects are excluded.
+
+### Approved reach recalibration — measurement-gated, not active
+
+The catalogue's `reach_normalization` policy records the approved replacement, with
+`status: awaiting_complete_measurements`. Its empty measurement list is deliberately not
+synthetic evidence. Current tiers, the active ×0.9 reference scale and production damage
+remain unchanged until the full recalibration can be solved. The legacy table above describes
+those active values, not the new target. No numerical tier is inferred from a weapon name,
+visual model, trail, collider dimensions alone, or an old tier description.
+
+The frozen scope is every non-ranged catalogue entry in Epic Fight's primary neutral grounded
+mainhand combo, including native two-handed style when required. Optional dual variants, dash,
+air, mount, skills, charges, casts and throws are excluded. Native WoM weapons and vanilla-style
+mining-mode balance are outside this pass. Butcher Knife's Axe form must be measured like the
+rest; its current 105 tier does not predetermine its replacement.
+
+Measure each strike's greatest connecting initial horizontal attacker-to-target **center**
+distance at 0.01-block resolution, confirming boundaries with repeated trials. Use one flat scene,
+fixed-size stationary target, starting orientation and identical unupgraded material/loadout
+conditions. Reset positions for strike-distance trials and prevent knockback contamination;
+include native animation displacement. Record target dimensions, capability/preset, style,
+strike identities, innate reach modifiers and exact candidate/input identities. Retain raw trial
+evidence in classified generated outputs; compact approved inputs/provenance belong in the
+catalogue only after measurement. Runtime measurement remains separately authorized under
+[testing.md](testing.md).
+
+Freeze each strike's pre-retuning, pre-mitigation damage contribution, summing same-strike damage
+events but excluding AOE damage to other targets. Effective reach is
+`R = sum(strike_reach * frozen_damage_weight) / sum(frozen_damage_weight)`.
+For measured Sword reach `S` and the frozen roster's endpoints `Rmin`/`Rmax`:
+
+- Below Sword: `tier = 100 + 20 * (S - R) / (S - Rmin)`.
+- Above Sword: `tier = 100 - 20 * (R - S) / (Rmax - S)`.
+- Equal to Sword: tier 100. Equal reach always gives equal tiers.
+
+Clamp to 80–120 and round half up to six decimals; do not introduce tier bands. An absent side
+of Sword is unused; if all reaches equal Sword, every tier is 100. Future roster additions require
+explicit endpoint recalibration. The digest format and frozen roster identity are in the catalogue.
+
+On activation, **melee only** restores scale 1.0: tier 100 means 100% of the former same-material
+Sword baseline. Ordinary positive-head multipliers become
+`(tier / 100) * 1.6 / (head_scale * speed)`, rounded to six decimals. Pierce, Estoc bypass and
+zero-head Chisel use the separate source-backed scalar models below; generic armor effects change
+the required raw multiplier, not the reach-selected tier. Do not apply the ordinary formula to
+those special models.
+
+Preserve native speeds, head/material scaling, capabilities, colliders and animation mappings.
+Ranged retains its ×0.9 scale and current targets. Explicit alternate-mode budgets also remain;
+any alternate attack inheriting melee damage needs a separately verified compensating coefficient
+before activation. Preserve the Minotaur Axe signature exception. Missing/inconsistent measurements,
+unresolved special models or alternate-budget coupling block publishing the recalibration, not
+just one item's row. Do not partially restore the melee baseline.
+
+`TconReachNormalization` supplies offline weighted-reach, exact-roster/input validation,
+Sword-anchored tier mapping and ordinary-model arithmetic. `TconReachNormalizationTest` covers
+synthetic mathematics and authored legacy resource agreement; neither establishes measured reach,
+activated retuning or candidate-matched native acceptance.
+
+#### Specialized scalar solving and remaining native boundaries
+
+`TconSpecialDamage` implements armor-weighted monotonic inversion using the catalogue's existing
+trash/elite/boss weights, armor and toughness. It solves a selected target tier without needing
+reach measurements; selecting the actual tier still requires them. `TconSpecialDamageTest` checks
+synthetic round trips across 80–120, the retained armor profile and checksum-pinned TCon
+3.11.2.166 bytecode/resources (prepared automatically by the existing Dev native-input scanner).
+It does not load native game classes.
+
+For pre-innate material/base damage `B`, chassis multiplier `m` and innate level `L`, under a
+neutral full-cooldown noncritical single-hit model:
+
+- **Pierce:** main damage `(B + 0.5*L)*m`; armor becomes `max(0, armor - 2*L)`.
+  The pinned `pierce.json` adds 0.5 damage per level and applies effect level `2*L` before melee.
+  `MobEffectModule.applyEffect` subtracts one for the amplifier; `TinkerEffects`' pierce supplier
+  applies -1 armor per amplifier-plus-one. `FloatToolStat.build` multiplies the additive bonus
+  along with base damage.
+- **Estoc legacy Piercing:** main damage `(B - 0.5*L)*m`, plus armor-bypassing secondary
+  damage `L*m`. The pinned `PiercingModifier.addToolStats/afterMeleeHit` and damage-type tag
+  establish these operations. Cooldown/crit scaling is held neutral here. Secondary-hit delivery,
+  invulnerability interaction and Epic Fight hook execution still require native observation.
+- **Fixed Chisel:** main damage `B*m`, with `B=1` from its material-independent authored definition;
+  solve directly against the same armor-weighted Sword target rather than dividing by zero head scale.
+
+The old catalogue coefficients **do not reproduce these native Pierce/Estoc models**. Its Pierce
+numbers reproduce a bonus outside `m` with reductions 3/5; the native resource/stat path puts the
+bonus inside `m` with reductions 2/4. Estoc's old value similarly corresponds to subtracting 0.5
+outside `m`. These are diagnosed model discrepancies, not runtime observations or permission to
+silently change production coefficients. The existing Chisel coefficient does reproduce its
+legacy ×0.9 scalar target.
+
+The scalar inversion uses vanilla armor-only absorption. Material traits, upgrades, enchantments,
+resistance and Epic Fight's per-strike damage/armor-negation routing are not asserted by it. Before
+activation, bind the measured loadout and actual native integration path, verify those hook/strike
+semantics and reconcile the corrected special-model results with that candidate. That boundary
+is **not** blocked by missing reach arithmetic; it is blocked by missing integration evidence.
+
+#### Alternate-mode preservation
+
+For a proven isolated raw-damage path `D = c*m*B`, preserving it after `m_old → m_new` requires
+`c_new = c_old*m_old/m_new`. `preservingAlternateCoefficient` implements this necessary relationship;
+contracts verify it across material bases and charge factors, before armor absorption. It does not
+claim every arbitrary modifier/attribute build follows this linear path.
+
+Pinned native inspection distinguishes the actual alternate owners:
+
+- Blockram, Buckler, Fuma Shuriken and Javelin use `ThrownTool`: its hit context reads
+  `ATTACK_DAMAGE` and multiplies by the stored launch multiplier. `ThrowingModule` takes that
+  multiplier from **velocity**, which also changes trajectory. Do not compensate by altering velocity.
+- Battlesign's native `BonkingModifier.getMeleeDamage` multiplies by a hard-coded 1.5 and its
+  charged hit uses tool/player attributes. It is coupled to melee damage, not an independent JSON
+  damage budget.
+- War Pick is a native `ModifiableCrossbowItem`: its projectile path reads `PROJECTILE_DAMAGE`,
+  not `ATTACK_DAMAGE`; War Charge's conditional formula changes velocity. A pure melee multiplier
+  change therefore does not call for an invented projectile-damage compensation. Native integration
+  still needs candidate-matched verification.
+
+There is currently **no installed item-scoped damage-only compensation hook** for the coupled
+throw/Bonk paths. The relationship is verified, but installing a suitable pre-mitigation hook and
+checking it with the actual candidate remains an explicit activation prerequisite, independent of
+reach measurement. No alternate coefficients, velocities, target labels or current melee damage
+have been changed. Contracts freeze all six alternate target labels and existing chassis values;
+that preserves current inputs, not proof that the old alternate targets were achieved in-game.
+The Minotaur Axe +7 sprint signature exception remains untouched.
 
 ### Epic Fight form map
 

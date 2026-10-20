@@ -19,21 +19,44 @@ The Cursed Pyramid and Ancient Factory share the Fallout destination but use the
 
 ## Depth Director miniboss roster
 
-Each selected miniboss is a one-at-a-time heavy encounter, gated to deep ecology pressure:
+Each selected miniboss remains a deep, Director-only heavy. Mapped Overworld spawns now
+use the local raw-rock habitat, while the historical profiles remain timing/unmapped
+fallback inputs. There is at most one heavy per packet and no simultaneous live heavy
+within an encounter family, including split/merge and unload/reload:
 
-| Ecology | Cataclysm miniboss | Native encounter drop retained |
-| --- | --- | --- |
-| Undead | Aptrgangr | Strange Key, bones, rotten flesh |
-| Carrion | Coralssus | Coral Chunk |
-| Spirits | Ignited Revenant | Burning Ashes (Ignis activation item) |
-| Sculk | The Prowler | Redstone and iron |
-| End | Ender Golem | Void Core |
-| Deep Void | Kobolediator | Kobolediator Skull, Koboleton Bone, Ancient Metal |
+| Historical fallback | Mapped habitat | Cataclysm miniboss | Native encounter drop retained |
+| --- | --- | --- | --- |
+| Undead | Ochre tombs | Aptrgangr | Strange Key, bones, rotten flesh |
+| Carrion | Karst nests | Coralssus | Coral Chunk |
+| Spirits | Silver haunt | Ignited Revenant | Burning Ashes (Ignis activation item) |
+| Sculk | Banded sentinels | The Prowler | Redstone and iron |
+| End | Mineral rifts | Ender Golem | Void Core |
+| Deep Void | Separate dimension roster, unchanged | Kobolediator | Kobolediator Skull, Koboleton Bone, Ancient Metal |
 
-These rewards stay in Cataclysm's native loot tables, so boss preparation materials are found by engaging the corresponding Depth Director encounter. The pack does not add a second reward path or replace Cataclysm drops.
+These six native reward paths remain intact, under the existing global loot policy.
+There is no ecology-specific replacement table, drop suppression or equipment removal.
+The new ordinary Koboleton/Draugr/Endermaptera and Director-only Elite Draugr/Royal Draugr/
+The Watcher placements deliberately export suitable non-boss structure/dimension actors.
+Koboleton and Draugr are ordinary in Ochre tombs; Elite Draugr, Royal Draugr and
+`cataclysm:the_watcher` join Banded sentinels only through the Director; Endermaptera is
+ordinary in Mineral rifts. This intentionally broadens native Ancient Metal and Black Steel
+access. The Watcher here is not `alexscaves:watcher`. Native arena mechanics, equipment,
+loot chances and terrain behavior remain unchanged; occurrence is the new access path.
 
 Natural spawning is denied for all nine Cataclysm minibosses: the six in the roster and Wadjet, Amethyst Crab, and Clawdian. This keeps the selected six in Depth Director encounters while retaining Cataclysm's ambient Deeplings, Koboletons, and other non-miniboss ecology. The DD profiles remain dimension-eligible under Depth Director's normal rules. Lost Cities is disabled and is no longer an active destination; Flesh That Hates is not part of these profiles, and its existing behavior is unchanged by that cut.
 
 ## Change boundary
 
-The five established ecology files and the Deep Void ecology are overlaid from KubeJS data, not edited in the Depth Director source repository. Existing worlds and already-generated chunks are not retroactively relocated or migrated. Pack tests, deployment, and distribution were not part of this content change.
+The five established fallback ecology files and Deep Void overlay remain intact in KubeJS
+data. Ten new `geological_ecologies/` definitions and raw-rock tags provide the mapped
+Overworld roster separately; the source owners implement local selection, ordinary admission
+and finite causal lineage accounting. See [dimension ecology](dimension_ecology.md) for the
+complete populations, tuning, legacy-denial migration and save contract. Existing arenas and
+already-generated chunks are not relocated retroactively; current raw stone, including placed
+raw stone, can change the next local population without replacing any live mob.
+
+This is authored source/data, **not a compiled or runtime-accepted release**. New deterministic
+and retained native fixtures, including live global-loot-policy and six-reward-path assertions,
+remain unrun until separately authorized. A native source fixture cannot establish full-pack
+same-artifact acceptance. No deployment, Packwiz refresh, distribution or release preparation
+is implied by this source change.

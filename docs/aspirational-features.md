@@ -77,7 +77,7 @@ intentional dilution recipe needs separate accounting and balance.
 
 “Brew” is the umbrella, not “ferment”: it includes steeped teas, infusions, cordials and developed
 keg preparations. The keg is a brewing vessel, not proof of literal yeast fermentation or alcohol.
-Draught/alcohol is an explicit profile decision. Do not silently add it when migrating an existing
+Booze/alcohol is an explicit profile decision. Do not silently add it when migrating an existing
 healing or cleansing juice.
 
 ### Brewing agents — proposed
@@ -181,8 +181,8 @@ must choose and inspect the appropriate starch-processing route rather than mere
 | Cabbage | Cabbage Juice | Greenward Kvass | Comfort |
 | Onion | Onion Juice | Hearthroot Infusion | Removes one harmful, curable effect on completion |
 | Garlic | Garlic Juice | Whiteclove Tonic | Removes Poison on completion |
-| Potato | Potato Juice | Vodka | **Existing:** Draught protection/impairment and native alcohol effects |
-| Wheat | Wheat Milk | Beer | **Existing:** Draught protection/impairment and native alcohol effects |
+| Potato | Potato Juice | Vodka | **Existing:** Booze protection/impairment and native alcohol effects |
+| Wheat | Wheat Milk | Beer | **Existing:** Booze protection/impairment and native alcohol effects |
 | Rice | Rice Milk | Rice Wine / Pale Jane | **Existing:** alcohol effects; Pale Jane also grants Comfort |
 | Pumpkin | Pumpkin Juice / Pumpkin Seed Milk | Harvestgold Brew | Absorption |
 | Sugar cane | Cane Juice | Canefire Brew | Speed, with its sugar consequences |

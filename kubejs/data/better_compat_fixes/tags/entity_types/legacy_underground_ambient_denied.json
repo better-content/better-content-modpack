@@ -1,0 +1,117 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "born_in_chaos_v1:baby_skeleton",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:decrepit_skeleton",
+      "required": false
+    },
+    {
+      "id": "goety:rattled",
+      "required": false
+    },
+    {
+      "id": "goety:frayed",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:dread_hound",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:skeleton_demoman",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:barrel_zombie",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:door_knight",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:zombie_clown",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:zombie_lumberjack",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:skeleton_thrasher",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:zombie_bruiser",
+      "required": false
+    },
+    {
+      "id": "quark:forgotten",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:corpse_fly",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:baby_spider",
+      "required": false
+    },
+    {
+      "id": "goety:web_spider",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:bloody_gadfly",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:restless_spirit",
+      "required": false
+    },
+    {
+      "id": "quark:wraith",
+      "required": false
+    },
+    {
+      "id": "goety:wraith",
+      "required": false
+    },
+    {
+      "id": "goety:muck_wraith",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:dark_vortex",
+      "required": false
+    },
+    {
+      "id": "goety:reaper",
+      "required": false
+    },
+    {
+      "id": "born_in_chaos_v1:seared_spirit",
+      "required": false
+    },
+    {
+      "id": "tconstruct:ender_slime",
+      "required": false
+    },
+    {
+      "id": "endermanoverhaul:cave_enderman",
+      "required": false
+    },
+    {
+      "id": "endermanoverhaul:end_enderman",
+      "required": false
+    },
+    {
+      "id": "endermanoverhaul:end_islands_enderman",
+      "required": false
+    }
+  ]
+}

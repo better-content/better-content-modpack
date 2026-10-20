@@ -8,14 +8,14 @@ Every row has exactly one representative in each authority. Formal aspect labels
 
 | Aspect | Glyph | sRGB | RPG development | Diet identity | Ore identity |
 | --- | --- | --- | --- | --- | --- |
-| Impact | ✦ | `#FF4055` | Strength | Sinew (Proteins) | Hotstone |
+| Impact | ✦ | `#FF4055` | Strength | Flesh (Proteins) | Hotstone |
 | Tempo | » | `#00A985` | Hand Speed | Nectar (Sugar) | Copper Bloom |
 | Work | ⚒ | `#F0E2C5` | Tool Handling | Grain (Grains) | Tin Quartz |
-| Mobility | ➜ | `#E0B01F` | Athletics | Berry (Fruits) | Brassroot |
+| Mobility | ➜ | `#E0B01F` | Athletics | Fruit (Fruits) | Brassroot |
 | Endurance | ∞ | `#52606A` | Endurance | Tallow (Fats) | Coal Measures |
-| Robustness | ◆ | `#AF6A2F` | Hardiness | Root (Vegetables) | Ironstone |
+| Robustness | ◆ | `#AF6A2F` | Hardiness | Earth (Vegetables) | Ironstone |
 | Renewal | ✚ | `#6CCAF0` | Preservation | Cream (Dairy) | Evaporite Beds |
-| Control | ⊕ | `#8E5BB7` | Marksmanship | Draught (Alcohol) | Black Shale |
+| Control | ⊕ | `#8E5BB7` | Marksmanship | Booze (Alcohol) | Black Shale |
 
 The shipped ore identity palette is authoritative and is shared by the RPG, bodily-state,
 and Threads aspect definitions. Glyph, name, value structure, morphology, and actual
@@ -79,30 +79,30 @@ Slice of Life: Carrot remains the sole owner of maximum-health progression.
 
 ## Nutrition
 
-The eight food groups match the eight aspect identities and colours. Sinew, Grain, Berry,
-Tallow, Root and Cream are ordinary nutrition; Nectar and Draught are optional temporary
+The eight food groups match the eight aspect identities and colours. Flesh, Grain, Fruit,
+Tallow, Earth and Cream are ordinary nutrition; Nectar and Booze are optional temporary
 loads, never required for dietary completeness. Every ordinary primary scales linearly from
 zero: at 10% nutrition, receive 10% of the unamplified maximum, with no deficiency penalty.
 
 | Group | Primary at 100%, without Nectar | Secondary unlocks |
 | --- | --- | --- |
-| Sinew | +40% melee damage | 40% charged strike; 80% cleave |
+| Flesh | +40% melee damage | 40% charged strike; 80% cleave |
 | Grain | +100% correct-tool mining speed | 40% break sequence; 60% longer grace; 80% work burst |
-| Berry | +25% movement/swimming speed | 20% safer falls; 40% sustained-sprint stride; 80% sprinting leap |
+| Fruit | +25% movement/swimming speed | 20% safer falls; 40% sustained-sprint stride; 80% sprinting leap |
 | Tallow | −50% hunger/thirst/stamina costs | 80% emergency reserve |
-| Root | −70% heat/cold drift | 80% temperature-hit guard |
+| Earth | −70% heat/cold drift | 80% temperature-hit guard |
 | Cream | 2× harmful-effect expiry speed | 40% meal recovery; 80% periodic cleanse |
 
 Nectar amplifies these effects by `1 + load` and accelerates consumption. It does not provide
-another cadence bonus, alter unlock thresholds or multiply RPG allocations. Tallow and Root
-reductions cap at 85% even with Nectar. Draught grants `min(30%, 30% × load × Nectar amplification)`
+another cadence bonus, alter unlock thresholds or multiply RPG allocations. Tallow and Earth
+reductions cap at 85% even with Nectar. Booze grants `min(30%, 30% × load × Nectar amplification)`
 incoming damage reduction. Its movement, work, cadence and resource-cost penalties start above
 30% load and are **also** amplified by Nectar, up to their impairment caps. Blackout starts at
-100% raw load and ends at 85%; maximum Draught remains bad.
+100% raw load and ends at 85%; maximum Booze remains bad.
 
 Secondary abilities have different counts and roles rather than a compulsory four-tier ladder.
 Nutrition no longer grants knockback/stagger, step height, beneficial-effect preservation or
-Root movement speed. RPG owns those complementary capabilities. Exact formulas, perk timings
+Earth movement speed. RPG owns those complementary capabilities. Exact formulas, perk timings
 and source authority belong to the [physiology balance contract](../../mod_source/better-survival-physiology/README.md#nutrition-balance).
 Diet retains native nutrition decay; the additional upper-band drain begins above 80%.
 
@@ -113,7 +113,11 @@ and alcohol time estimates account for sugar falling during the estimate.
 
 Heavy Blow readiness uses the same server-side eligibility predicate as combat. Becoming ready
 plays one Impact systemic-salience motif with its radial particle burst and a transient activation
-label; remaining ready does not repeat the cue. Login/reconnect establishes a silent baseline.
+label; remaining ready does not repeat the cue. Item swaps or other charge-only interruptions
+do not re-arm the announcement while underlying eligibility is uninterrupted. Actual attacks
+or loss of eligibility through nutrition, cooldown, attack quiet period or blackout re-arm it;
+genuine recovery announces once when native charge is sufficient. Login/reconnect establishes
+a silent baseline. Combat eligibility and charge requirements are unchanged.
 The existing empowered strike cue remains separate and occurs once at the target. This adds no
 permanent readiness HUD widget. Source checks cover ordinary attacks and
 Epic Fight's native attack route; full-pack audiovisual acceptance is separate.

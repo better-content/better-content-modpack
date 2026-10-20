@@ -2238,25 +2238,40 @@
   ],
   "capability_roots": [
     {
+      "capability": "tconstruct.seared_metallurgy",
+      "required_proofs": ["kubejs:refractory_compound", "tconstruct:seared_brick"]
+    },
+    {
+      "capability": "create.workshop",
+      "required_proofs": ["create:hand_crank", "create:mechanical_press", "create:mechanical_mixer"]
+    },
+    {
+      "capability": "create.water_wind",
+      "required_proofs": ["aether:skyroot_log"]
+    },
+    {
+      "capability": "create.powered_refinement",
+      "required_proofs": ["minecraft:nether_brick"]
+    },
+    {
       "capability": "create.steam",
       "required_proofs": [
-        "kubejs:brass_machine_block",
+        "create:precision_mechanism",
         "create:steam_engine"
       ]
     },
     {
       "capability": "powergrid.generation",
       "required_proofs": [
-        "kubejs:electrical_machine_block",
+        "powergrid:conductive_casing",
+        "morered:red_alloy_wire",
         "powergrid:generator_housing"
       ]
     },
     {
       "capability": "logistics.tiers",
       "required_proofs": [
-        "the_bumblezone:honey_crystal_shards",
-        "minecraft:blaze_rod",
-        "aether:enchanted_gravitite"
+        "ae2:certus_quartz_crystal"
       ]
     },
     {

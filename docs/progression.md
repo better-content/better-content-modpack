@@ -1,11 +1,37 @@
 # Progression
 
-This pack uses six technology eras. Machine Blocks primarily prove capability
-at explicitly named root machines. Downstream recipes normally return to each
-mod's native manufactured parts; Rail Beetle Tier-II modules are an explicit
-exception described below. Their proof recipes
-produce batches of four Andesite, four Copper, four Brass, two Airtight, two
-Electrical, and one Space Machine Block.
+This pack uses six manufacturing eras and independent material-based capability
+branches. A category does not inherit every other category's gate. Machine Blocks
+are structural assemblies, not universal proof tokens: their chain produces four
+Machine, four Toughened, four Precision, two Airtight, two Electrical and one Space
+assembly. All six registry IDs and placed blocks remain stable; the first three
+names change only in display. Materials may be shared or traded; there are no
+player exploration flags.
+
+## Category × era roots
+
+| Category | Explicit installed roots and manufacturing/material boundary |
+| --- | --- |
+| Transport | `create:track_station`, `create:steam_engine`: precision mechanisms; `trackwork:simple_wheel`: pressed copper; `trackwork:track_level_controller`: brass casing; `vs_eureka:oak_ship_helm` and other wooden helms: ordinary workshop |
+| Automation | `create:mechanical_press`, `create:mechanical_mixer`: iron workshop; `create:deployer`, `create:mechanical_crafter`: metallurgical brass casings; `quark:crafter`: consumes a Mechanical Crafter |
+| Logistics | `prettypipes:pipe`, `prettypipes:blank_module`, `create:redstone_requester`, `sophisticatedstorage:hopper_upgrade`, `rats:rat_upgrade_basic`, `littlelogistics:rapid_hopper`: growable Certus; terminals/Pressurizer additionally use selected finite stone |
+| Material refinement | `create:millstone`, `createsifter:sifter`, `createsifter:brass_sifter`, `create:crushing_wheel`: Nether Brick in each apparatus; hand String Mesh remains earlier |
+| Power generation | `create:hand_crank`: iron; `create:water_wheel`, `create:large_water_wheel`, `create:windmill_bearing`: native Skyroot Logs; steam retains precision and heat; `powergrid:generator_housing`: 2-bar native electrical parts |
+| Building blocks | `create:andesite_casing`: iron nuggets, logs and andesite; `create:copper_casing`: press plate and compacting; `createdeco:industrial_iron_block` and decorative products retain their material recipes, not shared dimensional proofs |
+| Transmission/control | `create:shaft`, `create:cogwheel`, `create:large_cogwheel`, `create:mechanical_bearing`: simple iron/wood fittings; precision and electrical controls retain native manufactured parts |
+| Fluid handling/containment | `create:mechanical_pump`: cogwheel/pipe; `pneumaticcraft:pressure_chamber_interface`, `compressedcreativity:rotational_compressor`, `pneumaticcraft:thermopneumatic_processing_plant`: mechanical assembly of sealed/native parts, not full blocks |
+| Optional associated branches | `vs_clockwork:andesite_flap_bearing`: copper casing; `vs_clockwork:brass_propeller_bearing`: precision/Aether; `vs_clockwork:air_compressor`: pressure parts; `vs_clockwork:gyro`: PowerGrid motor. `better_rail_beetle:*` compact modules use native parts/seals/circuits and consume prior tiers, never full blocks |
+| Aerospace | `creatingspace:rocket_engineer_table`, `creatingspace:mechanical_electrolyzer`: 4.5-bar assembly with native electrical parts; `creatingspace:air_liquefier`: one Space assembly per output |
+
+Create Aquatic Ambitions, Deco and Diesel Generators retain exact upstream
+material/fabrication recipes except existing explicit cuts. Aquatic processing
+inherits its apparatus requirements, not a namespace-wide material replacement. Existing electron-tube/rose-quartz
+Certus composition remains intact in precision control parts; this plan does not
+rebalance their higher-era compositions.
+Diesel stationary generation cuts remain in force: PowerGrid retains that authority.
+Clockwork, Trackwork and Creating Space remain optional engineering branches.
+No generic graph auditor, worldgen change, ore-yield change or magic rebalance is
+part of this category contract.
 
 Progression is communicated by executable recipes, apparatus, native guides,
 item-hover annotations, loading lessons, contextual Threads, and event or world
@@ -48,13 +74,25 @@ on a geological chunk to recover one canonical primary unit. Heat remains a
 four-nugget emergency exit for metal chunks, but nonmetals emerge directly from
 separation and never require ceremonial smelting.
 
-Build native Tinkers' Construct tools and reach the Nether, Aether, or
-Bumblezone Dimension Font. Each origin material makes its own named Font grout,
-and all three grouts smelt to the same Seared Brick. Seared metallurgy owns alloy
-composition: the automated path alloys molten stone with molten iron or zinc,
-then casts molten Andesite Alloy. A Melter can instead consume one andesite with
-10 mB of either molten metal to cast one native Create Andesite Alloy. The Hand
-Crank is the only positive SU source before the Nether.
+Native Tinkers' Construct toolmaking precedes Seared metallurgy. Combine two
+**different** underground families from Gabbro, Slate, Phyllite, Quartzite and
+Schist to make two Refractory Compound. Raw blocks and ordinary cobbled Slate/
+Phyllite qualify; regolith, ores, mossy and decorative forms do not. Schist
+orientations drop the same family item. Each compound smelts or blasts into one
+Seared Brick. Ten unordered family-pair recipes accept either slot order and
+reject same-family pairs. No broad stone tag or mined-location metadata is used.
+
+Native surface-to-Slate/Quartzite, Slate-to-Phyllite, Phyllite-to-Schist and
+Gabbro synthesis recipes are removed. Same-family cobble restoration remains.
+Ordinary grout and the three Font grouts have no production/use routes; the
+pack Font-grout IDs remain inert legacy registrations. Font travel no longer
+unlocks starter metallurgy. The later Scorched/Foundry boundary is separate.
+
+Seared metallurgy retains alloy composition authority: the automated path alloys
+molten stone with molten iron or zinc and casts Andesite Alloy. A Melter can
+instead consume andesite with 10 mB of either molten metal for one native alloy.
+No primitive Andesite Alloy composition recipe is restored. The Hand Crank uses
+iron fittings for the first Press/Mixer; water and wind power branch through Aether.
 
 Font obelisks are powered only by internal charge. An unmodified Font stores
 15,000 charge, costs 600 charge to start, regenerates 1.25 each inactive tick,
@@ -74,8 +112,9 @@ Overworld, but Bumblezone nurseries remain the origin of non-space food seed sto
 and yield two to four propagules from mature plants. Outside an authored origin,
 the current `CultivarLootModifier` returns exactly one propagule for a mature,
 non-persistent-harvest, source-marked crop, and none for an unsourced crop; immature
-or persistent-harvest crops return none off-origin. Flowers use a separate
-20-percent off-origin one-propagule roll. Edible produce is never itself the planting
+or persistent-harvest crops return none off-origin. Decorative flowers relocate
+freely but yield seeds only in Bumblezone, one or two per recovered flower unit.
+Edible produce is never itself the planting
 item. The previously documented ten-percent chance for a second
 off-origin propagule conflicts with this implementation and remains an unresolved
 design-intent decision, not an implemented yield. The Field Cook and Embark selections
@@ -90,10 +129,10 @@ Milling a chunk into two feeds improves primary recovery; Crushing Wheels later
 produce three. Dry Sifting returns the primary product, while a waterlogged
 Sifter can expose coproducts appropriate to its installed mesh.
 
-Font materials root the other scalable logistics branches: Bumblezone honey
-crystal shards supply portable-storage automation, rat work orders, and the
-Rapid Hopper; Nether blaze rods root Create's request network. Pretty Pipes
-instead develops certus-and-redstone routing intelligence before AE2 processors:
+Growable Certus roots scalable logistics: storage hopper automation, rat work
+orders, the Rapid Hopper and Create's request network all consume it. Honey
+crystal shards remain native themed parts, not sufficient routing gates. Pretty
+Pipes develops the same certus-and-redstone routing intelligence before AE2 processors:
 one certus crystal makes eight pipes, and certus supplies blank and high modules.
 Items remain physical cargo in connected inventories, not matter-to-energy
 storage. One finite Sky Stone block anchors an Item Terminal, with none added
@@ -104,17 +143,23 @@ AE2's Energy Acceptor still requires PowerGrid generation, Aether
 material, OC2R computation, meteor material, and Impossible Matter together. Vanilla chests and hoppers, early Create movement,
 Eureka, Little Logistics docks, and Wares remain independent; Little
 Logistics vehicles keep their upstream recipes, and the high-throughput Rapid
-Hopper requires a visible Bumblezone material.
+Hopper combines Certus routing with native honey material.
 
-Craft `kubejs:andesite_machine_block` from one Seared Brick block, four
-Andesite Alloy, and four iron plates. It directly unlocks only the Millstone and
-Mechanical Press. Press-made plates and a whisk unlock the Mixer without a
-second Machine Block.
+Shafts/cogs, casings, bearings, Hand Crank and the first Press close over wood,
+stone and iron without plates, Seared Bricks or Andesite Alloy. Native Depot and
+Basin alloy recipes are also replaced with iron fittings, closing both operating
+support paths. The Press makes plates for the whisk/Mixer, propellers and copper
+casing; sails use wool, wooden rods and iron nuggets. The first structural Machine Block
+uses wood, stone and iron fittings. Compact it with Copper Casing, four copper
+plates, one iron plate and two iron nuggets into Toughened assemblies: no Nether
+or TCon alloy ingredient enters this shared structure.
 
-After reaching the Nether, compact the Andesite block, Copper Casing, four
-copper plates, one Nether brick, and two Andesite Alloy into
-`kubejs:copper_machine_block`. It directly roots water wheels, the Windmill
-Bearing, the Mechanical Pump, and the first optional primitive transport roots.
+Skyroot Logs directly build both sizes of Water Wheel and the Windmill Bearing;
+their fittings need neither Nether nor TCon. Nether Brick directly builds the
+Millstone, standard Sifter, Brass Sifter and mechanically crafted Crushing Wheels,
+including their non-ore uses. The Pump uses a cogwheel and native fluid pipe.
+Chutes, ordinary hoppers, belts and iron-fitted funnels/tunnels stay local handling,
+not meteor-rooted requesting.
 
 ## Era 3 — Create Precision and Steam
 
@@ -126,9 +171,10 @@ to Bulk Washing.
 
 TCon alloying is the only brass composition route. Compact the Copper block,
 Brass Casing, four brass plates, two electron tubes, and polished rose quartz
-into `kubejs:brass_machine_block`. It directly unlocks the Deployer, Mechanical
-Crafter, the first steam engine, and precision transport controls. Precision Mechanisms and native
-components carry all later recipes. Quark's automatic Crafter is downstream of
+into `kubejs:brass_machine_block` (Precision Machine Block). This structural
+assembly feeds Airtight manufacture. The Deployer and Mechanical Crafter use
+Brass Casings; Steam Engine and Track Station use Precision Mechanisms. None
+contains an intact Machine Block. Native components carry later recipes. Quark's automatic Crafter is downstream of
 the Create Mechanical Crafter rather than an independent iron-and-redstone bypass.
 
 ## Era 4 — PneumaticCraft and Heat Sync
@@ -138,13 +184,16 @@ deterministic geological assay. This is the maximum-recovery route, especially
 for trace and precious coproducts.
 
 Native Nether grout is disabled. Foundry access instead uses a heated Create
-Mixer to combine rinsed Hotstone, rinsed Black Shale, and gravel into Scorched
+Mixer to combine rinsed Hotstone, rinsed Black Shale, and Basalt into Scorched
 Bricks, making the geological, kinetic, and TConstruct systems meet at one
 visible boundary. Primitive compressed iron and dried-kelp/iron-plate pressure
 seals keep the pressure entry reachable. Mechanically craft
 `kubejs:airtight_machine_block` from the Brass block, four compressed iron
-ingots, two pressure tubes, and two seals. It directly roots the Rotational
-Compressor and the first Pressure Chamber interface.
+ingots, two pressure tubes, and two seals. It supplies the structural chain into
+Electrical manufacture. The open Rotational Compressor and Pressure Chamber
+interface instead use mechanically assembled seals and native fittings. One
+interface is produced per assembly. The native thermopneumatic plant likewise
+uses Mechanical Crafting, with its existing Magma Cream requirement.
 
 Sugar fermentation supplies renewable ethanol, and an open Create Basin oxidizes
 it into canonical ChemLib acetic acid. Acetic acid preserves Pickled Pickles and,
@@ -171,8 +220,10 @@ Heat Sync stores and moves process heat; its Boiler Heater consumes exactly
 Mechanically apply insulation/red-alloy wiring to Copper Casing for the first
 PowerGrid conductive casing. Pressure-craft `kubejs:electrical_machine_block`
 from Airtight proof, that casing, four copper plates, two primitive MoreRed
-wires, and an electron tube. It directly roots PowerGrid's first stationary
-generator housing and the circuit-design station. PowerGrid is the sole
+wires, and an electron tube. It supplies the structural chain into Space
+manufacture. The open generator frame is independently pressure-assembled at
+2 bar from plates, conductive casings, wiring and an electron tube; the small
+Soldering Table consumes a pressure-made PCB rather than an intact block. PowerGrid is the sole
 stationary electrical-generation authority; PneumaticCraft remains the pressure
 and petroleum authority. Iron-and-coal steel composite smelts into canonical
 TCon steel for that machinery and later transition parts. PowerGrid parts, sensors, motors,
@@ -184,9 +235,32 @@ Pressure-assemble `kubejs:space_machine_block` from Electrical proof, two
 rocket casings, two Inconel sheets, two Hastelloy ingots, and two titanium
 thermal plates. Rocket casings retain their aluminum-and-cobalt composition but
 craft in batches of four for the initial machine set. The Space Machine Block
-directly roots the Rocket Engineer Table, Mechanical Electrolyzer, and Air
-Liquefier. Native frames, tanks, engines, guidance, propellants, and life-support
+directly fits the Air Liquefier: one intact block per output. The undersized
+Rocket Engineer Table and exposed Mechanical Electrolyzer instead pressure-assemble
+native frames, thermal/precision parts and an integrated circuit at 4.5 bar. Native frames, tanks, engines, guidance, propellants, and life-support
 parts carry the rest of the rocket graph.
+
+### Structural resource basis
+
+The resource contracts bind native inspection to the committed Create 6.0.8
+SHA1 `b13d912b9247a38d66d11598c121442585a1c1e9`, Unearthed SHA1
+`5cf92a5a4fef9166501b43609b38d24f56c76dba`, and Creating Space 1.7.13 SHA1
+`7b341b9c32fec9fcf020ae6d8429c59917415f7b`. Deployer housing is 12 deep;
+Press housing is 14 high, Pump 12 wide, Steam Engine 15 high and Track Station
+13 high. Moving hands, shafts and press heads do not supply a missing full body.
+The Millstone's hollow body and 12-high moving insert are reviewed separately,
+not justified by its aggregate 16-cube bounds. The rocket table is 13.5 high and
+12 deep; the live Electrolyzer housing is 14 high despite its extended head.
+The Liquefier has a complete cubic placed body with separate internal propeller;
+it alone retains a full apparatus assembly. Open pressure frames and the
+PowerGrid rotor housing use native sealed/electrical parts instead.
+
+Local-archive resource tests verify SHA1 before reading resources and explicitly
+skip when the exact pinned archive is unavailable; they do not download, build,
+or claim visual/gameplay acceptance. The bounded real-handler fixture covers
+154 authored recipes, all family-pair/form combinations, branch prerequisites
+and exact structural consumer counts. Full Kotlin/Dev and fresh-world runtime
+acceptance remain separate gates.
 
 ## Optional transport
 
@@ -225,13 +299,17 @@ consist. Six module bays accept one module per family.
 Tier-I machinery begins in Precision Factory, mechanical and civil Tier-II
 modules mature in Thermal & Pressure, and efficiency, survey, and dispatch
 Tier-II modules require Electrical Control. Every Tier-II recipe consumes its
-Tier-I assembly. These nine module upgrades explicitly depart from root-only
-Machine Block use: the six mechanical/civil upgrades each consume two Airtight
-Machine Blocks; the three efficiency/survey/dispatch upgrades each consume two
-Electrical Machine Blocks.
+Tier-I assembly. There is no compact-module exception to structural fit: the
+six mechanical/civil upgrades mechanically assemble two pressure seals with the
+prior module and native parts; the three electrical upgrades use integrated
+circuits. PowerGrid flux and pneumatic engine modules use native casings/cylinders,
+not Machine Blocks.
 
 ## World compatibility
 
-This is a clean break for new worlds. Old Machine Casing IDs have no aliases or
-data migration. Back up an existing world before updating; remove old pack-owned
-casings and finish in-flight recipes before attempting a manual conversion.
+New worlds are the acceptance baseline. This change preserves all six Machine
+Block registry IDs and placed blocks; it changes display names and future
+manufacturing recipes only. No migration, confiscation, retroactive conversion,
+worldgen backfill or saved-machine removal is introduced. Source/model inspection
+is not effective-loaded-recipe or gameplay acceptance; those require a separately
+authorized exact-candidate runtime pass.

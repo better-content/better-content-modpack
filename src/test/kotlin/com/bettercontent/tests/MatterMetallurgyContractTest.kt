@@ -21,22 +21,24 @@ class MatterMetallurgyContractTest {
     )
 
     @Test
-    fun `three font grouts retain origin identity and share the seared exit`() {
-        val origins = mapOf(
-            "nether" to "minecraft:netherrack",
-            "aether" to "aether:aether_dirt",
-            "bumblezone" to "the_bumblezone:porous_honeycomb_block",
-        )
-        origins.forEach { (font, binder) ->
-            val grout = "kubejs:${font}_font_grout"
-            assertTrue(startup.contains("['${font}_font_grout',"), grout)
-            assertTrue(handWorkshop.contains("['$font', '$binder', '$grout']"), grout)
-            assertTrue(handWorkshop.contains("font[0] + '_smelting'"))
-            assertTrue(handWorkshop.contains("font[0] + '_blasting'"))
+    fun `refractory geology replaces Font entry while legacy identities remain`() {
+        // Recipe execution and all pair/form combinations are checked by the
+        // bounded CategoryEra fixture; these assertions keep registration and
+        // teaching authority connected, rather than weakening the old gate.
+        assertTrue(startup.contains("['refractory_compound', 'Refractory Compound']"))
+        listOf("nether", "aether", "bumblezone").forEach { font ->
+            assertTrue(startup.contains("['${font}_font_grout',"), "legacy identity $font")
         }
-        assertTrue(handWorkshop.contains("event.smelting('tconstruct:seared_brick', font[2])"))
-        assertTrue(handWorkshop.contains("event.blasting('tconstruct:seared_brick', font[2])"))
+        assertTrue(handWorkshop.contains("BC_REFRACTORY_FAMILIES.slice(index + 1)"))
+        listOf("gabbro", "slate", "phyllite", "quartzite", "schist").forEach { family ->
+            assertTrue(handWorkshop.contains("'unearthed:$family'"), family)
+        }
+        assertTrue(handWorkshop.contains("event.smelting('tconstruct:seared_brick', 'kubejs:refractory_compound')"))
+        assertTrue(handWorkshop.contains("event.blasting('tconstruct:seared_brick', 'kubejs:refractory_compound')"))
+        assertFalse(handWorkshop.contains("font[2]"))
         assertTrue(handWorkshop.contains("event.remove({ output: 'tconstruct:grout' })"))
+        assertTrue(handWorkshop.contains("event.remove({ input: 'tconstruct:grout' })"))
+        assertTrue(handWorkshop.contains("event.remove({ input: 'kubejs:' + origin + '_font_grout' })"))
     }
 
     @Test
@@ -73,6 +75,8 @@ class MatterMetallurgyContractTest {
         assertTrue(thermalPressure.contains("event.remove({ input: 'tconstruct:nether_grout' })"))
         assertTrue(thermalPressure.contains("better_ore_geology:rinsed_hotstone"))
         assertTrue(thermalPressure.contains("better_ore_geology:rinsed_black_shale"))
+        assertTrue(thermalPressure.contains("{ item: 'minecraft:basalt' }"))
+        assertFalse(thermalPressure.contains("minecraft:gravel"))
         assertTrue(thermalPressure.contains("results: [{ item: 'tconstruct:scorched_brick', count: 2 }]"))
         assertFalse(thermalPressure.contains("foundry/nether_grout"))
     }

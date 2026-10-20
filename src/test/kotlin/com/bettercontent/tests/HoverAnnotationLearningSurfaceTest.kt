@@ -63,6 +63,45 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
+    fun `rock category hovers follow ingredient tags with exact concise labels`() {
+        val expected = listOf(
+            Triple("forge:stone", "matter.rock.stone_crafting_category", "Counts as stone"),
+            Triple("forge:cobblestone", "matter.rock.cobblestone_crafting_category", "Counts as cobblestone"),
+        )
+        val rows = registry.path("annotations").toList()
+        val positions = expected.map { (tag, concept, copy) ->
+            val row = rows.single { it.path("selector").path("tag").asText() == tag }
+            assertEquals(concept, row.path("concept_id").asText())
+            assertEquals(1, rows.count { it.path("concept_id").asText() == concept })
+            assertEquals("general_uses", row.path("category").asText())
+            assertEquals("matter.rock", row.path("domain").asText())
+            assertEquals(listOf(copy), row.path("lines").map { it.asText() })
+            assertEquals(
+                "kubejs/server_scripts/compat/retained/check__30_stone_cobble_compat.js; " +
+                    "kubejs/server_scripts/compat/retained/check__75_stone_cobble_tag_compat.js",
+                row.path("owner").asText(),
+            )
+            assertFalse(row.has("required_mod"), "shared crafting categories must not depend on an optional mod")
+            assertFalse(row.has("tone"), "rock category facts use ordinary gray styling")
+            rows.indexOf(row)
+        }
+        assertTrue(positions[0] < positions[1], "stone must precede cobblestone for dual members")
+    }
+
+    @Test
+    fun `actual hover handler registers rock labels once in membership order`() {
+        val output = BoundedCommand.capture(
+            root,
+            listOf("node", root.resolve("src/test/resources/stone-cobble-hover-contract.cjs").toString(), root.toString()),
+            java.time.Duration.ofSeconds(15),
+        )
+        val result = jacksonObjectMapper().readTree(output)
+        assertEquals(2, result.path("category_registrations").asInt())
+        assertEquals(4, result.path("membership_cases").asInt())
+        assertTrue(result.path("gray_styling").asBoolean())
+    }
+
+    @Test
     fun `every path-backed annotation owner and evidence reference resolves`() {
         registry.path("annotations").forEach { row ->
             row.path("owner").asText().split(';').map(String::trim).forEach { owner ->
@@ -496,7 +535,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
-    fun `Font grout hover matches all authored dimension materials and shared smelting output`() {
+    fun `legacy Font grout hover does not advertise a removed metallurgy route`() {
         val workshop = Files.readString(root.resolve("kubejs/server_scripts/progression/10_hand_workshop.js"))
         val row = registry.path("annotations").single { annotation ->
             annotation.path("selector").path("items").any { it.asText() == "kubejs:nether_font_grout" }
@@ -508,12 +547,15 @@ class HoverAnnotationLearningSurfaceTest {
             "bumblezone" to "the_bumblezone:porous_honeycomb_block",
         )
 
-        assertTrue(expected.all { (dimension, material) ->
-            workshop.contains("['$dimension', '$material', 'kubejs:${dimension}_font_grout']")
-        })
+        expected.forEach { (dimension, material) ->
+            assertFalse(workshop.contains("['$dimension', '$material', 'kubejs:${dimension}_font_grout']"))
+        }
         assertEquals(expected.keys.map { "kubejs:${it}_font_grout" }.toSet(), selectedItems)
-        assertTrue(workshop.contains("event.smelting('tconstruct:seared_brick', font[2])"))
-        assertTrue(row.path("lines").map { it.asText() }.single().contains("All three Font variants smelt into the same Seared Brick"))
+        assertTrue(workshop.contains("event.remove({ input: 'kubejs:' + origin + '_font_grout' })"))
+        assertTrue(row.path("lines").single().asText().contains("Legacy Font grout is inert"))
+        val compound = registry.path("annotations").single { it.path("selector").path("item").asText() == "kubejs:refractory_compound" }
+        assertTrue(compound.path("lines").single().asText().contains("two different underground rock families"))
+        assertTrue(workshop.contains("event.smelting('tconstruct:seared_brick', 'kubejs:refractory_compound')"))
     }
 
     @Test
@@ -710,12 +752,19 @@ class HoverAnnotationLearningSurfaceTest {
 
         assertTrue(loot.contains("if (!inOrigin && persistentHarvest) return 0;"))
         assertTrue(loot.contains("return sourcedPlanting ? 1 : 0;"))
-        assertTrue(loot.contains("return inOrigin ? (roll < 0.5F ? 2 : 1) : (roll < 0.2F ? 1 : 0);"))
+        assertTrue(loot.contains("return inOrigin ? (roll < 0.5F ? 2 : 1) : 0;"))
+        val flowers = Files.readString(root.resolve(
+            "../mod_source/better-bumblezone-crops/src/main/java/com/bettercontent/betterbumblezonecrops/FlowerPolicy.java",
+        ).normalize())
+        assertTrue(flowers.contains("if (!inOrigin) return 0;"))
+        assertTrue(flowers.contains("CultivarLootModifier.flowerSeedCount(true, random.nextFloat())"))
         assertTrue(catalogue.contains("\"growthForm\":\"persistent-harvest\""))
         assertTrue(seedTag.contains("better_bumblezone_crops:minecraft_glow_berry_seeds"))
-        assertTrue(copy.contains("Off-origin flowers may yield one seed"))
-        assertTrue(copy.contains("Other crops need Bumblezone-sourced planting"))
-        assertTrue(copy.contains("persistent-harvest yields none"))
+        assertTrue(loot.contains("FlowerPolicy.harvestSeeds(cultivar, loot, inOrigin, context.getRandom())"))
+        assertTrue(copy.contains("Flowers relocate freely; seeds multiply only in Bumblezone"))
+        assertTrue(copy.contains("Off-origin crops need Bumblezone-sourced planting to return one seed"))
+        assertTrue(copy.contains("persistent-harvest plants return none"))
+        assertTrue(row.path("owner").asText().contains("FlowerPolicy.java"))
         assertTrue(row.path("owner").asText().contains("CultivarLootModifier.java"))
     }
 
@@ -801,7 +850,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
-    fun `andesite machine block owner matches its direct machine roots`() {
+    fun `Machine Block hover teaches structure rather than compact apparatus tokens`() {
         val powered = Files.readString(root.resolve("kubejs/server_scripts/progression/20_powered_works.js"))
         val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "kubejs:andesite_machine_block" }
         val owner = row.path("owner").asText()
@@ -809,14 +858,15 @@ class HoverAnnotationLearningSurfaceTest {
 
         assertTrue(powered.contains("event.shaped('4x kubejs:andesite_machine_block'"))
         assertTrue(powered.contains("event.shaped('create:millstone'"))
-        assertTrue(powered.contains("M: 'kubejs:andesite_machine_block'"))
+        assertFalse(powered.contains("M: 'kubejs:andesite_machine_block'"))
         assertTrue(powered.contains("event.shaped('create:mechanical_press'"))
         assertTrue(owner == "kubejs/server_scripts/progression/20_powered_works.js")
-        assertTrue(copy.contains("Millstone") && copy.contains("Mechanical Press"))
+        assertTrue(copy.contains("structural assembly") && copy.contains("Toughened assemblies"))
+        assertFalse(copy.contains("Used to build the Millstone"))
     }
 
     @Test
-    fun `machine block hovers follow their authored direct roots`() {
+    fun `machine block hovers distinguish the structural chain from fitted native roots`() {
         val contracts = listOf(
             Triple("kubejs:copper_machine_block", "20_powered_works.js", listOf("create:water_wheel", "create:large_water_wheel", "create:windmill_bearing", "create:mechanical_pump")),
             Triple("kubejs:brass_machine_block", "30_precision_factory.js", listOf("create:deployer", "create:mechanical_crafter", "create:steam_engine", "create:track_station")),
@@ -834,11 +884,11 @@ class HoverAnnotationLearningSurfaceTest {
             roots.forEach { rootItem -> assertTrue(source.contains(rootItem), "$ownerFile missing direct root $rootItem") }
             val copy = row.path("lines").map { it.asText() }.joinToString(" ")
             val copyHints = mapOf(
-                "kubejs:copper_machine_block" to listOf("water wheels", "wind power", "Mechanical Pump"),
-                "kubejs:brass_machine_block" to listOf("Deployer", "Mechanical Crafter", "steam engine", "Track Station"),
-                "kubejs:airtight_machine_block" to listOf("Rotational Compressor", "Pressure Chamber interface"),
-                "kubejs:electrical_machine_block" to listOf("PowerGrid stationary generation", "Soldering Table"),
-                "kubejs:space_machine_block" to listOf("rocket engineering", "electrolysis", "air liquefaction"),
+                "kubejs:copper_machine_block" to listOf("Press plates", "Basin compacting", "Precision assemblies"),
+                "kubejs:brass_machine_block" to listOf("Metallurgical brass", "Airtight assemblies", "not full blocks"),
+                "kubejs:airtight_machine_block" to listOf("Electrical manufacture", "seals", "native fittings"),
+                "kubejs:electrical_machine_block" to listOf("Space assemblies", "native electrical parts"),
+                "kubejs:space_machine_block" to listOf("One intact", "one Air Liquefier", "4.5 bar"),
             ).getValue(item)
             copyHints.forEach { hint -> assertTrue(copy.contains(hint), "$item copy missing $hint") }
         }
@@ -988,7 +1038,7 @@ class HoverAnnotationLearningSurfaceTest {
     }
 
     @Test
-    fun `hand crank power hover follows the pre Nether machine progression`() {
+    fun `hand crank hover separates iron workshop from Aether power and Nether refinement`() {
         val hand = Files.readString(root.resolve("kubejs/server_scripts/progression/10_hand_workshop.js"))
         val powered = Files.readString(root.resolve("kubejs/server_scripts/progression/20_powered_works.js"))
         val progression = Files.readString(root.resolve("docs/progression.md"))
@@ -996,18 +1046,22 @@ class HoverAnnotationLearningSurfaceTest {
         val copy = row.path("lines").map { it.asText() }.single()
 
         assertTrue(hand.contains("event.shaped('create:hand_crank'"))
-        assertTrue(hand.contains("A: 'create:andesite_alloy'"))
-        assertTrue(powered.contains("{ item: 'minecraft:nether_brick' }"))
-        assertTrue(powered.contains("M: 'kubejs:copper_machine_block'"))
+        assertTrue(hand.contains("A: '#forge:ingots/iron'"))
+        assertFalse(hand.contains("A: 'create:andesite_alloy'"))
+        assertTrue(powered.contains("N: 'minecraft:nether_brick'"))
+        assertTrue(powered.contains("L: 'aether:skyroot_log'"))
+        assertFalse(powered.contains("M: 'kubejs:copper_machine_block'"))
         assertTrue(powered.contains("'create:water_wheel'"))
         assertTrue(powered.contains("'create:large_water_wheel'"))
         assertTrue(powered.contains("'create:windmill_bearing'"))
-        assertTrue(copy.contains("16 SU") && copy.contains("only positive SU source before the Nether"))
-        assertTrue(progression.replace(Regex("\\s+"), " ").contains("The Hand Crank is the only positive SU source before the Nether."))
+        assertTrue(copy.contains("16 SU") && copy.contains("ordinary iron fittings"))
+        assertTrue(copy.contains("Water and wind power require Skyroot Logs"))
+        assertTrue(progression.contains("The Hand Crank uses"))
+        assertFalse(progression.contains("only positive SU source before the Nether"))
     }
 
     @Test
-    fun `metallurgy hovers follow the authored Tinkers alloy and Font grout routes`() {
+    fun `metallurgy hovers retain Tinkers alloys but replace Font entry with refractory geology`() {
         val hand = Files.readString(root.resolve("kubejs/server_scripts/progression/10_hand_workshop.js"))
         val precision = Files.readString(root.resolve("kubejs/server_scripts/progression/30_precision_factory.js"))
         val andesite = registry.path("annotations").single { it.path("selector").path("item").asText() == "create:andesite_alloy" }
@@ -1026,12 +1080,12 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(precision.contains("event.remove({ type: 'create:mixing', output: 'create:brass_ingot' })"))
         assertTrue(brass.path("lines").single().asText().contains("Alloy with Tinkers' Construct"))
         assertTrue(hand.contains("event.remove({ output: 'tconstruct:grout' })"))
-        assertTrue(hand.contains("#kubejs:ordinary_sand"))
-        assertTrue(hand.contains("'minecraft:gravel'"))
-        assertTrue(hand.contains("event.smelting('tconstruct:seared_brick', font[2])"))
+        assertTrue(hand.contains("BC_REFRACTORY_FAMILIES.slice(index + 1)"))
+        assertTrue(hand.contains("event.smelting('tconstruct:seared_brick', 'kubejs:refractory_compound')"))
+        assertTrue(hand.contains("event.blasting('tconstruct:seared_brick', 'kubejs:refractory_compound')"))
         assertEquals(fontIds, fontGrouts.path("selector").path("items").map { it.asText() }.toSet())
-        assertTrue(grout.path("lines").single().asText().contains("material from any active Font"))
-        assertTrue(fontGrouts.path("lines").single().asText().contains("All three Font variants smelt into the same Seared Brick"))
+        assertTrue(grout.path("lines").single().asText().contains("no production route"))
+        assertTrue(fontGrouts.path("lines").single().asText().contains("Legacy Font grout is inert"))
     }
 
     @Test
@@ -1554,10 +1608,11 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(roots.contains(";['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak'].forEach(function (wood) {"))
         assertTrue(roots.contains("kubejs:transport/hand_workshop/eureka/"))
         assertTrue(roots.contains("if (Platform.isLoaded('vs_clockwork'))"))
-        assertTrue(roots.contains("kubejs:copper_machine_block"))
-        assertTrue(roots.contains("kubejs:brass_machine_block"))
-        assertTrue(roots.contains("kubejs:airtight_machine_block"))
-        assertTrue(roots.contains("kubejs:electrical_machine_block"))
+        assertTrue(roots.contains("create:copper_casing"))
+        assertTrue(roots.contains("create:brass_casing"))
+        assertTrue(roots.contains("pneumaticcraft:pneumatic_cylinder"))
+        assertTrue(roots.contains("powergrid:electric_motor"))
+        assertFalse(roots.contains("_machine_block"), "Compact optional vehicle parts never consume intact structural blocks")
         assertTrue(roots.contains("if (Platform.isLoaded('trackwork'))"))
         assertTrue(roots.contains("event.shaped('trackwork:simple_wheel'"))
         assertTrue(roots.contains("event.shaped('trackwork:track_level_controller'"))
@@ -1830,7 +1885,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(ratlantis.contains("event.shaped('littlelogistics:rapid_hopper'"))
         assertTrue(ratlantis.contains("L: 'the_bumblezone:honey_crystal_shards'"))
         assertTrue(rapidHopper.path("owner").asText().contains("20_logistics_roots.js"))
-        assertTrue(copy.contains("requires Honey Crystal Shards from the Bumblezone"))
+        assertTrue(copy.contains("Certus routing logic and Honey Crystal Shards"))
     }
 
     @Test

@@ -57,6 +57,8 @@ tasks.test {
         exec { commandLine("python3", "-B", "scripts/test_ci_boundaries.py") }
         exec { commandLine("python3", "-B", "scripts/test_workspace_coordination.py") }
         exec { commandLine("python3", "-B", "scripts/test_candidate_routing.py") }
+        exec { commandLine("python3", "-B", "scripts/test_food_progression.py") }
+        exec { commandLine("python3", "-B", "scripts/test_wild_crop_forage.py") }
         exec { commandLine("python3", "-B", "scripts/prepare_dev_inputs.py") }
     }
 }

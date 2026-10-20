@@ -8,6 +8,7 @@ runtime logic.
 | System | Owner | Pack boundary |
 | --- | --- | --- |
 | Deposits, chunks, samples, Sifting/Spouting/pressure processing, canonical outputs | Realistic Ores | Physical and magical routes converge on shared products; no duplicate ore registration |
+| Ordinary Overworld terrain constituent recovery | Pack KubeJS | Explicit `kubejs/config/terrain_recovery.json` profiles drive exact-input Crushing Wheel and wet Brass Sifting recipes; existing products only, nominal 25% physical recovery, no metals or precious gems; quartz is allowed as a bulk mineral. See [terrain recovery](realistic_ore_processing.md#ordinary-overworld-terrain-recovery). |
 | Radioactive profiles, disturbance persistence, emissions | Latent ChemLib | Provides progression recipes; the mod owns physical behavior and its gameplay events |
 | Heat storage/transport and Create Boiler Heater | Heat Sync | Provides era placement; native UI and hover own operating facts |
 | Dimension Font obelisks, travel sessions, charge, and arrival sites | Dimension Drink | Pack recipes and learning surfaces may point to Fonts; the mod owns neutral charge generation/drain, session lifecycle, chunk tickets, and destination placement |
@@ -17,13 +18,15 @@ runtime logic.
 | Vanilla boat durability, vessel-drop suppression, reinforced recipes | Better Content Fixes | No boat mutation or hiding scripts |
 | Player-kill spirit release, spirit commerce, eight profession identities, resident barter, and wandering-trader lifecycle | Better Spirit Commerce | The standalone mod owns credited-kill release through Malum's animated spirit entities, eight matching stations/outfits/behaviours, a 280-row profession catalogue, eight 36-row wandering pools (288 authored rows), thirteen core offers selected per visit, 48 Plague Doctor oddities, and matching villager-egg offers. Village residents use native barter rather than the fixed profession catalogue; coins, emerald commerce, and eldritch/umbral trade are closed |
 | Drinking-water quality | Better Drinking Water / Thirst | Dirty (0) or purified (3); legacy intermediate tiers count as dirty. Supported vessels share prepaid fractional sipping; sneak-empty-hand drinking draws from approved cauldrons/tanks. Equipping does not purify. Boiling and configured kettle/sand-filter treatment purify finite supplies; native bucket/fluid transfers preserve quality. Exact support and exclusions live in the [owning source](../../mod_source/better-drinking-water/README.md). |
-| Fractional beverage sipping | Better Drinking Water / Better Survival Physiology | The native Drinks slot accepts the owning mod's explicit beverage catalogue. Paid fractions release hydration, nutrition, Nectar/Draught and timed effects without replaying whole-drink consumption. Accepted items say “Drinks slot compatible”; special-action/manual-only exclusions live in the [owning source](../../mod_source/better-drinking-water/README.md#beverage-catalogue-and-fractional-effects). |
+| Fractional beverage sipping | Better Drinking Water / Better Survival Physiology | The native Drinks slot accepts the owning mod's explicit beverage catalogue. Paid fractions release hydration, nutrition, Nectar/Booze and timed effects without replaying whole-drink consumption. Accepted items say “Drinks slot compatible”; special-action/manual-only exclusions live in the [owning source](../../mod_source/better-drinking-water/README.md#beverage-catalogue-and-fractional-effects). |
 | Wild fruit trees and berry fields | Better Wild Fruit Trees | Fixed-location forage, mature harvest/regrowth, propagation restrictions and diamond-tier direct player removal; non-bush fruit plants and ordinary trees remain native. See the [owning source](../../mod_source/better-wild-fruit-trees/README.md). |
 | Rotten food reuse and chopping feedback | Better Content Fixes | Rotten Produce enters native composting; Rotten Meat is basic Starcatcher bait. Cut-face wood particle rate increases linearly with completion. Source/native checks are not audiovisual acceptance. |
 | Regional pillager familiarity | Better Pillager Campaigns | New campaign work requires the target player's accumulated local Survival presence, not world age; physical enemies retain native pursuit. See the [owning source](../../mod_source/better-pillager-campaigns/README.md). |
 | TCon alloy composition and casting | Tinkers' Construct | Removes bypasses and authors exact cross-mod alloy recipes |
 | Celestial events | Better Celestial Events | Pack authors habitat tags; Font and Commerce owners implement free travel and fair visits. See [Celestial events](celestial-events.md). |
-| Kinetic assembly | Create | Uses Machine Blocks only at listed direct roots |
+| Kinetic assembly | Create | Independent iron workshop; category-specific Skyroot power, Nether refinement and Certus routing. Full Machine Blocks only in demonstrated structural housings, not compact devices |
+| Seared entry | Pack progression and Unearthed | Two distinct underground rock families make Refractory Compound; raw/ordinary cobbled whitelist, no Font grout or geological synthesis shortcuts |
+| Structural assemblies | Pack progression | Six stable Machine Block IDs; first three display as Machine/Toughened/Precision. One Space block per Air Liquefier; other current apparatus roots use fitted era parts. No saved-machine migration |
 | Acid and gas chemistry | ChemLib, PneumaticCraft, Create, Better Content Fixes | Pack authors canonical acid routes and renewable acetic uses; airtight machine upgrades retain gas-state ChemLib contents |
 | Electrical components and stationary generation | PowerGrid and MoreRed | Generator Housing uses plates, conductive casings, wire and an Electron Tube at 2 bar; the Soldering Table uses a printed PCB. Neither consumes an Electrical Machine Block; competing stationary generators are cut |
 | Dragon ecology and materials | Ice and Fire | Replaces vanilla dragon-boss products; rare Overworld ecology supplies tagged products and equal-stat Dragonsteel TCon materials |
@@ -241,6 +244,14 @@ source checks belong to [Spirit Commerce](../../mod_source/better-spirit-commerc
 
 ## Forage, chopping and rotten food
 
+Finite wild vegetable and rice patches use pack-owned data under
+`kubejs/data/kubejs/worldgen/{configured_feature,placed_feature}/forage/` and the matching
+`forge/biome_modifier/forage/` owners. The seven native Farmer's Delight placements remain
+suppressed. Better Bumblezone Crops owns food-only harvest filtering, non-propagation and
+actual-produce discovery events; [food progression](food_progression.md) owns their placement
+parameters and the distinction between wild food and imported planting stock. These patches
+are generated only in new Overworld chunks, not renewed or retrofitted.
+
 Fixed-location berry fields include sweet berry, Fruits Delight blueberry and cranberry, and
 optional Ars Nouveau sourceberry bushes. New decoration targets 30–42 sparsely spaced plants
 within a 47×47 footprint, limited by terrain; existing chunks are not backfilled. Fields are
@@ -278,6 +289,17 @@ per berry type). Protected weighted fruit-tree choices pass a 1-in-256 roll; a r
 returns native unhandled so ordinary biome trees can still be selected. Native preferences,
 global tree density/chance and JoCodes remain; existing resources are not culled. These rolls
 permit clusters and do not guarantee minimum spacing or measured landscape density.
+
+**Fruit extension status — source only, not ready:** the [owning fruit mod](../../mod_source/better-wild-fruit-trees/README.md#optional-food-tree-extension--source-only-not-ready)
+has uncompiled/unexecuted full-policy work for `dynamictreesplus:saguaro_cactus`,
+`dtnatures_spirit:coconut` and `dtquark:ancient`, including exact-origin saguaro→mega
+provenance rather than treating all mega cacti as fruit trees. Food/product routes are preserved
+separately from propagation, including placeable coconut processing without germination. Four
+independent native growth references are still missing; the cactus structural adult-reference
+criterion is unresolved, and native/client/fixture gates remain unrun. No matching runtime JAR
+was built or deployed. The existing thirteen-species descriptions above do not establish that
+these three additions are active or accepted; ordinary cacti, cocoa, archwood pods and Aether
+trees are not new policy targets.
 
 Chopping feedback is a time-integrated rate: `2 + 16 × completion` material chips per second,
 sampled on native mining ticks with fractional carry, not a fixed chip budget per block or a

@@ -10,17 +10,14 @@ ServerEvents.recipes(function (event) {
         M: 'kubejs:pressure_seal', R: 'create:cogwheel'
     }).id('kubejs:tech/pneumatic/air_compressor_pressure_root')
 
-    event.remove({ output: 'pneumaticcraft:thermopneumatic_processing_plant' })
-    event.shaped('pneumaticcraft:thermopneumatic_processing_plant', ['TAT', 'CMC', 'TAT'], {
-        T: 'pneumaticcraft:pressure_tube', A: 'pneumaticcraft:advanced_pressure_tube',
-        C: 'pneumaticcraft:compressed_iron_gear', M: 'kubejs:airtight_machine_block'
-    }).id('kubejs:tech/pneumatic/thermopneumatic_processing')
+    // The open thermopneumatic plant is mechanically assembled from native
+    // tanks and seals in 85_dimension_font_ecology.js; no duplicate root here.
 
     event.remove({ output: 'pneumaticcraft:assembly_controller' })
     global.bcPncrPressure(event, 'kubejs:tech/pneumatic/assembly_controller',
         'pneumaticcraft:assembly_controller', 1, 5.0, [
             'pneumaticcraft:advanced_pressure_tube', 'pneumaticcraft:printed_circuit_board',
-            'powergrid:integrated_circuit', 'kubejs:electrical_machine_block'
+            'powergrid:integrated_circuit', 'powergrid:electric_motor'
         ])
 
     // Plastic remains PneumaticCraft's native petroleum and heat product. The

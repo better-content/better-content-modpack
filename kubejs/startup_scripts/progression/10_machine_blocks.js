@@ -1,9 +1,9 @@
-// Clean-break era proofs. Recipes live in era-local server scripts; these are
+// Structural assemblies, not universal era proofs. Recipes live in era-local scripts; these are
 // the only pack-owned progression blocks registered at startup.
 global.BC_MACHINE_BLOCKS = [
-    ['andesite_machine_block', 'Andesite Machine Block'],
-    ['copper_machine_block', 'Copper Machine Block'],
-    ['brass_machine_block', 'Brass Machine Block'],
+    ['andesite_machine_block', 'Machine Block'],
+    ['copper_machine_block', 'Toughened Machine Block'],
+    ['brass_machine_block', 'Precision Machine Block'],
     ['airtight_machine_block', 'Airtight Machine Block'],
     ['electrical_machine_block', 'Electrical Machine Block'],
     ['space_machine_block', 'Space Machine Block']

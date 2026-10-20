@@ -1,24 +1,114 @@
 # Food progression
 
-Food uses eight named groups. The six lasting nutrients each grant a continuous primary benefit from the first positive trace, with group-specific behavioural unlocks at higher nutrition. Nectar and Draught are temporary loads. Food groups follow Diet's native rules: direct food tags take precedence; otherwise Diet can generate groups from recipe ingredients. Better Survival Physiology does not override that classification or inheritance.
+Food uses eight named groups. The six lasting nutrients each grant a continuous primary benefit from the first positive trace, with group-specific behavioural unlocks at higher nutrition. Nectar and Booze are temporary loads. Food groups follow Diet's native rules: direct food tags take precedence; otherwise Diet can generate groups from recipe ingredients. Better Survival Physiology does not override that classification or inheritance.
+
+## Health progression: native food variety
+
+Spice of Life: Carrot Edition owns maximum-health progression separately from Diet's
+nutrition groups. The [server defaults](../defaultconfigs/solcarrot-server.toml) leave both
+food filters empty: native edible items with at least one half-drumstick of food value
+qualify regardless of mod namespace, including newly added foods. Carrot retains native
+food discovery, unique-item identity, eaten-state tracking, tooltips, food-book listing and
+health awards; recipe ingredients and Diet group inheritance do not determine eligibility.
+
+The unchanged schedule starts at five hearts and adds one heart at each of 30, 60, 89,
+119, 149, 178, 208, 238, 267, 297, 327, 356, 386, 416 and 445 unique qualifying foods,
+for twenty hearts after the final milestone. Eaten history is not reset on death, and
+progression is not restricted to Survival. Native limitations still apply: this is not a
+new integration for non-edible consumables, zero-food-value items, placed-block eating,
+special consumption paths, Drinks-slot servings or NBT variants.
+
+Tracked defaults do not establish or automatically replace an existing world's effective
+server configuration. To adopt this policy manually, stop the world/server, back up the
+world and its `serverconfig/solcarrot-server.toml`, then have the operator review and set
+only `filtering.whitelist` and `filtering.blacklist` to empty arrays in that world's
+configuration before restarting. Do not overwrite other settings, player capabilities or
+eaten history. Retroactive credit for previously excluded foods is not promised;
+authorized runtime verification must establish whether re-consumption is required.
+
+## Nutrition groups
 
 | Group | First dependable source | Later food and role |
 | --- | --- | --- |
-| Sinew | Meat, fish, eggs | Melee damage; charged strikes and cleave |
-| Nectar | Fruit, honey | Multiplies nutrient benefits and Draught protection/impairment; hunger and nutrition drain grow as `8^load` |
-| Grain | Bumblezone grain seed line | Correct-tool mining speed, rhythm and a work burst |
-| Berry | Wild fruit and berries | Movement/swimming speed, safer falls, stride and a sprinting leap |
+| Flesh | Meat, fish, eggs | Melee damage; charged strikes and cleave |
+| Nectar | Fruit, honey | Multiplies nutrient benefits and Booze protection/impairment; hunger and nutrition drain grow as `8^load` |
+| Grain | Finite wild rice; Bumblezone farming stock | Correct-tool mining speed, rhythm and a work burst |
+| Fruit | Wild fruit and berries | Movement/swimming speed, safer falls, stride and a sprinting leap |
 | Tallow | Meat and dairy fat | Hunger, thirst and stamina savings; emergency reserve |
-| Root | Bumblezone vegetable seed line | Heat/cold drift protection and temperature-hit guard |
+| Earth | Finite wild vegetables; Bumblezone farming stock | Heat/cold drift protection and temperature-hit guard |
 | Cream | Cow milk | Faster harmful-effect expiry, meal recovery and cleansing |
-| Draught | Fermented drinks | Up to 30% damage reduction with rising impairment and a blackout at full load |
+| Booze | Fermented drinks | Up to 30% damage reduction with rising impairment and a blackout at full load |
 
-The Overworld supplies wild fruit and animal foods. Farmer's Delight's seven wild crop placements are disabled at their native biome modifier IDs. Cultivatable grain and vegetable stock comes from the Bumblezone. Fruits Delight provides forage plants and cooking recipes. Its Dynamic Trees addon and Better Wild Fruit Trees make thirteen fruit-tree species fixed-location food resources: mature dynamic fruit yields eight times its native product count, while protected planting stock, staff recreation and transformation routes are blocked. Growth potential and connected-branch resistance increase without replacing JoCodes or worldgen density. Trees keep native generated size and fertility; constant per-species wood-growth rates target roughly 30 extended days from fresh geometry to the native adult-trunk reference under favorable conditions. Full-size energy/tapering apply from the outset: no age ramp, day-thirty unlock or automatic fertility refill. Canopy filling can continue naturally, and native conditions/boosts affect actual growth. Sweet berry, blueberry, cranberry and optional sourceberry bushes form sparse 30–42-bush fields within a 47×47 footprint (terrain can reduce a field without backfill). They keep mature foliage dimensions and native per-pick yield/reset/bonemeal behavior, while natural renewal targets roughly 40 berries per mean 36-bush field per 50,000 active game ticks. Protected trees keep eightfold ripe drops but pace successful natural replacements toward 160 fruit over the same reference day, with only a two-replacement bank; geometry and seasons can reduce actual output. Initial ripe stock is not a daily quota. New generation is very rare: fields pass an additional 1-in-128 roll after native placement filters, and protected weighted fruit-tree selections pass a 1-in-256 roll with ordinary-tree fallback. Native biome preferences remain; existing resources are not removed and nearby clusters remain possible. Direct planting and pot propagation are blocked. Normal-player direct removal of those bushes and protected fruit trees requires a functional diamond-or-higher axe, including a Tinkers' Construct axe's real per-stack harvest tier rather than its dummy superclass tier. Ordinary trees, other forage plants, native indirect uprooting and machine/FakePlayer removal keep their separate rules. These are not indestructible trees or a guaranteed fruit-per-hour supply; the [owning mod](../../mod_source/better-wild-fruit-trees/README.md) defines the native behavior. Farmer's Delight fruit salad is available from early fruit and honey; a cooking pot can make fig chicken stew with milk, and later pineapple fried rice combines cultivated grain, vegetables, eggs, meat, and fruit. See the actual recipes in EMI for exact counts and tools.
+The Overworld supplies wild fruit, animal foods and finite wild vegetables and rice. The seven native Farmer's Delight crop biome modifiers remain disabled to avoid duplicate placement; pack-owned patches place carrot, potato, beetroot, cabbage, onion and tomato across suitable ordinary Overworld land, and rice in shallow river/swamp water, only in newly generated chunks. Each land species gets a 1-in-6 patch attempt per eligible chunk; rice gets one attempt per eligible river/swamp chunk. Patches use 32 candidate placements with horizontal spread 7 and vertical spread 3; unsuitable or occupied sites are skipped without backfill. These are placement defaults, not measured food-availability guarantees. Harvest keeps native edible yields (including the native 20% produce chance for wild beetroot, cabbage and tomato), but yields no seeds, transplantable wild plants or companion planting stock, even with shears. Wild crops cannot multiply through bone meal or native growth-machine calls, and edible carrot, potato, onion and rice cannot be planted directly. Consumed patches do not respawn; explored chunks are not retrofitted. Dependable exploration food is the intended balance target, pending fresh-chunk acceptance sampling. Renewable grain and vegetable planting stock still comes from the Bumblezone.
 
-The native Drinks slot prepays supported beverages and releases their nutrition, Nectar/Draught and timed effects proportionally as thirst is restored. Slot-compatible items say **Drinks slot compatible**. Fermented drinks can hydrate while retaining their impairment costs; no beverage is automatically substituted from inventory. Exact support and special-action timing belong to [Better Drinking Water](../../mod_source/better-drinking-water/README.md#beverage-catalogue-and-fractional-effects).
+Fruits Delight provides forage plants and cooking recipes. Its Dynamic Trees addon and Better Wild Fruit Trees make thirteen fruit-tree species fixed-location food resources: mature dynamic fruit yields eight times its native product count, while protected planting stock, staff recreation and transformation routes are blocked. Growth potential and connected-branch resistance increase without replacing JoCodes or worldgen density. Trees keep native generated size and fertility; constant per-species wood-growth rates target roughly 30 extended days from fresh geometry to the native adult-trunk reference under favorable conditions. Full-size energy/tapering apply from the outset: no age ramp, day-thirty unlock or automatic fertility refill. Canopy filling can continue naturally, and native conditions/boosts affect actual growth. Sweet berry, blueberry, cranberry and optional sourceberry bushes form sparse 30–42-bush fields within a 47×47 footprint (terrain can reduce a field without backfill). They keep mature foliage dimensions and native per-pick yield/reset/bonemeal behavior, while natural renewal targets roughly 40 berries per mean 36-bush field per 50,000 active game ticks. Protected trees keep eightfold ripe drops but pace successful natural replacements toward 160 fruit over the same reference day, with only a two-replacement bank; geometry and seasons can reduce actual output. Initial ripe stock is not a daily quota. New generation is very rare: fields pass an additional 1-in-128 roll after native placement filters, and protected weighted fruit-tree selections pass a 1-in-256 roll with ordinary-tree fallback. Native biome preferences remain; existing resources are not removed and nearby clusters remain possible. Direct planting and pot propagation are blocked. Normal-player direct removal of those bushes and protected fruit trees requires a functional diamond-or-higher axe, including a Tinkers' Construct axe's real per-stack harvest tier rather than its dummy superclass tier. Ordinary trees, other forage plants, native indirect uprooting and machine/FakePlayer removal keep their separate rules. These are not indestructible trees or a guaranteed fruit-per-hour supply; the [owning mod](../../mod_source/better-wild-fruit-trees/README.md) defines the native behavior. Farmer's Delight fruit salad is available from early fruit and honey; a cooking pot can make fig chicken stew with milk, and later pineapple fried rice combines cultivated grain, vegetables, eggs, meat, and fruit. See the actual recipes in EMI for exact counts and tools.
+
+**Pending fruit-source extension:** full fixed-location treatment for
+`dynamictreesplus:saguaro_cactus`, `dtnatures_spirit:coconut` and `dtquark:ancient` is authored
+but uncompiled, untested and undeployed in the [owning mod](../../mod_source/better-wild-fruit-trees/README.md#optional-food-tree-extension--source-only-not-ready).
+Their native food/products must remain usable; whole-coconut processing placement is distinct
+from forbidden germination/planting stock. Four measured native growth references, an appropriate
+cactus adult-reference definition and the native/client gates are still outstanding. No matching
+runtime JAR was built or installed, so this is not an expansion of the thirteen active species
+claimed above or evidence of available harvest rates.
+
+The native Drinks slot prepays supported beverages and releases their nutrition, Nectar/Booze and timed effects proportionally as thirst is restored. Slot-compatible items say **Drinks slot compatible**. Fermented drinks can hydrate while retaining their impairment costs; no beverage is automatically substituted from inventory. Exact support and special-action timing belong to [Better Drinking Water](../../mod_source/better-drinking-water/README.md#beverage-catalogue-and-fractional-effects).
 
 Milk drinking directly awards Cream and Tallow because a milk bucket is not an edible food item in Diet. Fruits Delight foods retain their distinct utility effects; newly applied vanilla beneficial effects are limited to level I and 60 seconds, while Health Boost, Cycling's experience orbs, and Digesting's overflow nutrition are suppressed. Existing stronger effects are preserved.
 
-Nectar amplifies the six lasting groups' continuous primaries and supported perks linearly with `1 + load`; hunger cost and both native and upper-band nutrition decay scale with `8^load`. The shared resource-cost hook also accelerates native thirst and stamina costs; Tallow's emergency reserve cannot cancel Nectar's surcharge. Tallow and Root reductions cap at 85%. Draught reduces incoming damage by `min(30%, 30% × load × Nectar amplification)`. Its control and work penalties begin above 30% and are also amplified by Nectar, within their impairment caps. At 100% raw Draught load the player blacks out until load drops to 85%.
+For food and beverage servings already eligible for Nectar, its tag-based load is capped at half the smallest positive whole-serving gain among the six lasting nutrients, including servings supplying only Fruit alongside Nectar. Pure-Nectar servings keep their existing load. The comparison uses potential serving gains, not current nutrient levels or remaining capacity; it does not expand Nectar eligibility through recipe inheritance. Consumption, hover and newly captured Drinks-slot profiles share this cap. Already-paid beverage profiles and existing metabolic loads retain their captured values.
+
+Nectar amplifies the six lasting groups' continuous primaries and supported perks linearly with `1 + load`; hunger cost and both native and upper-band nutrition decay scale with `8^load`. The shared resource-cost hook also accelerates native thirst and stamina costs; Tallow's emergency reserve cannot cancel Nectar's surcharge. Tallow and Earth reductions cap at 85%. Booze reduces incoming damage by `min(30%, 30% × load × Nectar amplification)`. Its control and work penalties begin above 30% and are also amplified by Nectar, within their impairment caps. At 100% raw Booze load the player blacks out until load drops to 85%.
 
 Nutrition owns temporary damage, mining/movement speed, resource savings, temperature protection and harmful-effect recovery. RPG development owns complementary knockback/stagger, cadence, reach, stepping/breathing, stamina capacity, knockback resistance, beneficial-effect preservation and projectile handling. See [body/aspect identities](better_survival_physiology.md#nutrition) and the [owning balance contract](../../mod_source/better-survival-physiology/README.md#nutrition-balance) for exact caps and unlocks.
+
+## Starcatcher: regional fishing and food families
+
+Revisit native fishing regions when their season, time or weather window opens.
+The 46 edible catches with at least one such restriction receive four times their
+native base and correct-bait **selection weights**, once, inside the unchanged
+eligibility rules. This is not four times the absolute catch probability or an
+items-per-hour promise: competing fish and bait still matter. Biomes, dimensions,
+seasons, time, weather, bite timing and the fishing minigame stay native. There are
+no new spatial hotspots, depletion rules or automatic fishing routes.
+
+All 83 native edible raw species supply Flesh. Most remain Flesh-only; regional
+specialties add one other lasting group or a small exceptional Booze load:
+
+| Family | Examples | Raw and basic cooked profile | Cooking output |
+| --- | --- | --- | --- |
+| Plain | Silverveil Perch, Driftfin | Flesh | Native Cooked Starcaught Fish |
+| Rich | Bigeye Tuna, Black Eel, Crystalback Sturgeon | Flesh + Tallow | Cooked Rich Fish (`kubejs:rich_cooked_fish`) |
+| Earth | Shroomfish, Lush Pike, Sage Catfish | Flesh + Earth | Cooked Earth Fish (`kubejs:root_cooked_fish`) |
+| Grain | Rockgill, Peakdweller, Crystalback Trout | Flesh + Grain | Cooked Grain Fish (`kubejs:grain_cooked_fish`) |
+| Uncanny | Twilight Koi, Ghostly Pike | Flesh + 0.06 Booze per item | Cooked Boozy Fish (`kubejs:uncanny_cooked_fish`) |
+
+The [species manifest](../kubejs/config/fish_nutrition.json) owns the exhaustive
+assignments. Basic raw/cooked fish do not gain Nectar, Fruit or Cream; nutrition
+amounts still come from Diet's native food rules, not per-species percentages.
+Obsidian Eel is deliberately absent from the rich raw roster: upstream registers
+it as an inedible fire-resistant item, and that native behavior is preserved.
+
+Smelting, smoking and campfire cooking preserve each family's identity for the
+native supported inputs, using unchanged cooked food properties, one-item yield,
+experience and cooking times. Black Eel, Geode Eel and Chorus Crab remain edible
+raw but have no native basic cooking route; this change does not add one.
+Existing generic cooked stacks remain Flesh-only; no saved stacks are rewritten.
+Native inedible catches retain their pre-existing generic cooking routes without
+becoming edible raw. The already-disabled Aquaculture fillet conversion stays
+disabled rather than reopening a generic route that loses specialty identity.
+
+Shared Ube's Delight dishes keep all native fish ingredients. Their direct Diet
+classifications retain their pre-specialty group sets: Bangsilog has Flesh, Tallow
+and Grain; Kinilaw has Flesh and Earth; Fish Sauce has Flesh. A species used in one
+of these shared recipes does not turn every serving into a specialty meal. Other
+mixed dishes retain ordinary recipe inheritance, including legitimate fruit,
+dairy or sweet ingredients; Booze is explicit per item and never inferred from a
+recipe. New Booze defaults apply through the normal server configuration lifecycle;
+existing worlds' serverconfigs are not edited or migrated automatically.
+
+Use native catch information to choose the region/window, EMI for the cooking
+route, and the ordinary food nutrition tooltip for the resulting groups. These
+source contracts do not establish live-world catch yields, effective existing-world
+server defaults, recipe-viewer behavior or consumption acceptance; those need a
+separately authorized runtime check.

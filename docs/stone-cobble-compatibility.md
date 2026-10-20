@@ -14,6 +14,14 @@ event.replaceInput(genericRockUses, 'minecraft:cobblestone', '#forge:cobblestone
 
 The pinned KubeJS 2001.6.5-build.16 `RecipeFilter.of` parses an array of strings as an OR of exact recipe IDs and `not` negates that whole filter. An ID list inside `id` is not used. There are two filtered substitutions, not one full recipe scan per whitelist entry.
 
+## Crafting-category hover labels
+
+Ordinary item tooltips show **Counts as stone** for members of the `forge:stone` item tag and
+**Counts as cobblestone** for members of `forge:cobblestone`. Dual members show both labels once,
+stone first. The shared inventory/EMI hover registry in `kubejs/config/hover_annotations.json`
+follows ingredient-tag membership, not item names or geological families. These are generic
+crafting categories; they do not override the rock-specific recipe exceptions below.
+
 ## Protected identity products
 
 The whitelist covers the reviewed loaded stone/cobblestone consumers that produce material-specific decoration or transformations:

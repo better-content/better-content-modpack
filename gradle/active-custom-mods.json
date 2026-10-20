@@ -98,7 +98,7 @@
     },
     {
       "repository": "better-compat-fixes",
-      "verificationInputs": ["mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/weapons-of-miracles.pw.toml", "src/test/kotlin/com/bettercontent/tests/SaulomonkSpawnContractTest.kt", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
+      "verificationInputs": ["kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json", "config/incontrol/spawn.json", "src/test/kotlin/com/bettercontent/tests/GeologicalEcologyContractTest.kt", "kubejs/data/minecraft/tags/blocks/needs_diamond_tool.json", "mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/weapons-of-miracles.pw.toml", "src/test/kotlin/com/bettercontent/tests/SaulomonkSpawnContractTest.kt", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
       "buildInputs": [],
       "modId": "better_compat_fixes",
       "artifact": "better-compat-fixes-0.1.9.jar",
@@ -232,10 +232,13 @@
     },
     {
       "repository": "better-cave-encounters",
+      "verificationInputs": ["kubejs/data/better_cave_encounters/**", "kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json", "kubejs/server_scripts/policy/global_loot_progression.js", "kubejs/config/crafting_policy.json", "kubejs/config/quarantined_items.json", "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json", "kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js", "config/better_cave_encounters-common.toml", "config/better_compat_fixes-common.toml", "config/iceandfire-common.toml", "config/endermanoverhaul.json", "config/goety/**", "config/tconstruct-common.toml", "config/twilightforest-common.toml", "config/quark-common.toml", "config/unearthed-common.toml", "config/globalgamerules-common.toml", "config/incontrol/**", "defaultconfigs/incontrol-server.toml", "defaultconfigs/forge-server.toml", "defaultconfigs/curios-server.toml", "defaultconfigs/mantle-server.toml", "mods/born-in-chaos.pw.toml", "mods/goety.pw.toml", "mods/quark.pw.toml", "mods/zeta.pw.toml", "mods/tinkers-construct.pw.toml", "mods/mantle.pw.toml", "mods/geckolib.pw.toml", "mods/curios.pw.toml", "mods/resourceful-lib.pw.toml", "mods/resourceful-config.pw.toml", "mods/enderman-overhaul.pw.toml", "mods/cataclysm.pw.toml", "mods/lionfishapi.pw.toml", "mods/alexs-caves.pw.toml", "mods/citadel.pw.toml", "mods/ice-and-fire-dragons.pw.toml", "mods/the-twilight-forest.pw.toml", "mods/unearthed.pw.toml", "mods/hyle.pw.toml", "mods/kubejs.pw.toml", "mods/rhino.pw.toml", "mods/architectury-api.pw.toml", "mods/lootjs.pw.toml", "mods/global-gamerules.pw.toml", "mods/in-control.pw.toml", "src/test/kotlin/com/bettercontent/tests/GeologicalEcologyContractTest.kt"],
+      "buildInputs": [],
       "modId": "better_cave_encounters",
       "artifact": "better-cave-encounters-0.2.1.jar",
       "tasks": [
         "verifyFull",
+        "verifyWorld",
         "stageRuntimeJar"
       ],
       "dependsOn": [

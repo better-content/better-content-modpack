@@ -25,11 +25,33 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:aerospace/space_machine_block')
 
     ;[
-        ['creatingspace:rocket_engineer_table', ['ABA', 'SMS', 'ACA'], { A: 'creatingspace:rocket_casing', B: 'create:mechanical_crafter', M: 'kubejs:space_machine_block', S: 'creatingspace:inconel_sheet', C: 'create:precision_mechanism' }],
-        ['creatingspace:mechanical_electrolyzer', ['TST', 'AMA', 'TPT'], { T: 'kubejs:titanium_thermal_plate', S: 'creatingspace:hastelloy_ingot', M: 'kubejs:space_machine_block', A: 'creatingspace:rocket_casing', P: 'pneumaticcraft:pressure_tube' }],
+        ['creatingspace:rocket_engineer_table', ['ABA', 'SMS', 'ACA'], { A: 'creatingspace:rocket_casing', B: 'create:mechanical_crafter', M: 'kubejs:titanium_thermal_plate', S: 'creatingspace:inconel_sheet', C: 'create:precision_mechanism' }],
+        ['creatingspace:mechanical_electrolyzer', ['TST', 'AMA', 'TPT'], { T: 'kubejs:titanium_thermal_plate', S: 'creatingspace:hastelloy_ingot', M: 'create:precision_mechanism', A: 'creatingspace:rocket_casing', P: 'pneumaticcraft:pressure_tube' }],
         ['creatingspace:air_liquefier', ['ISI', 'AMA', 'IPI'], { I: 'creatingspace:inconel_sheet', S: 'creatingspace:hastelloy_ingot', M: 'kubejs:space_machine_block', A: 'creatingspace:rocket_casing', P: 'pneumaticcraft:pressure_tube' }]
     ].forEach(function (root) {
-        event.remove({ id: root[0] })
-        event.shaped(root[0], root[1], root[2]).id('kubejs:aerospace/direct_root/' + root[0].substring('creatingspace:'.length))
+        event.remove({ output: root[0] })
+        var id = 'kubejs:aerospace/direct_root/' + root[0].substring('creatingspace:'.length)
+        if (root[0] === 'creatingspace:air_liquefier') {
+            // The liquefier has a complete cubic body; one output uses one block.
+            event.shaped(root[0], root[1], root[2]).id(id)
+        } else {
+            // The engineer table and exposed electrolyzer cannot house a cube.
+            // Retain the aerospace manufacturing surface and electrical parts.
+            var counts = {}
+            root[1].join('').split('').forEach(function (symbol) {
+                if (symbol !== ' ') {
+                    var item = root[2][symbol]
+                    counts[item] = (counts[item] || 0) + 1
+                }
+            })
+            var inputs = Object.keys(counts).map(function (item) {
+                return { type: 'pneumaticcraft:stacked_item', item: item, count: counts[item] }
+            })
+            inputs.push({ type: 'pneumaticcraft:stacked_item', item: 'powergrid:integrated_circuit', count: 1 })
+            event.custom({
+                type: 'pneumaticcraft:pressure_chamber', pressure: 4.5,
+                inputs: inputs, results: [{ item: root[0] }]
+            }).id(id)
+        }
     })
 })

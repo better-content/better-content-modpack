@@ -1,6 +1,7 @@
 // Pretty Pipes is certus-based physical logistics before AE2 processors and
 // matter-to-energy storage. Sky Stone anchors durable network devices only.
-// Other logistics branches retain their visible Font-material roots.
+// Scalable routing shares meteor-derived Certus; native themed materials remain
+// ingredients where they have a separate physical role, not standalone unlocks.
 var BC_DISABLED_INPUTLESS_RAT_OUTPUTS = [
     'rats:rat_upgrade_ore_doubling',
     'rats:rat_upgrade_fisherman',
@@ -97,28 +98,30 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:logistics_roots/proto_ae2/pressurizer')
 
     event.remove({ output: 'sophisticatedstorage:hopper_upgrade' })
-    event.shaped('sophisticatedstorage:hopper_upgrade', ['IRI', 'HLH', ' U '], {
+    event.shaped('sophisticatedstorage:hopper_upgrade', ['IRI', 'HLH', 'QUQ'], {
         I: '#forge:ingots/iron', R: '#forge:dusts/redstone', H: 'minecraft:hopper',
-        L: 'the_bumblezone:honey_crystal_shards', U: 'sophisticatedstorage:upgrade_base'
+        L: 'the_bumblezone:honey_crystal_shards', U: 'sophisticatedstorage:upgrade_base',
+        Q: 'ae2:certus_quartz_crystal'
     }).id('kubejs:logistics_roots/root/sophisticated_automation')
 
     event.remove({ output: 'create:redstone_requester' })
     event.shapeless('create:redstone_requester', [
         'create:stock_link', '#forge:dusts/redstone', '#forge:ingots/iron',
-        'minecraft:blaze_rod'
+        'ae2:certus_quartz_crystal'
     ]).id('kubejs:logistics_roots/root/create_request_logistics')
 
     event.remove({ output: 'rats:rat_upgrade_basic' })
-    event.shaped('rats:rat_upgrade_basic', ['CCC', 'CLC', 'CCC'], {
-        C: '#forge:cheese', L: 'the_bumblezone:honey_crystal_shards'
+    event.shaped('rats:rat_upgrade_basic', ['CCC', 'QLQ', 'CCC'], {
+        C: '#forge:cheese', L: 'the_bumblezone:honey_crystal_shards', Q: 'ae2:certus_quartz_crystal'
     }).id('kubejs:logistics_roots/root/rat_work_orders')
 
     // Ordinary hoppers remain early local transport. The high-throughput
-    // variant is a scalable logistics upgrade rooted in the Bumblezone.
+    // variant is a scalable routing upgrade with Certus logic and native honey parts.
     event.remove({ id: 'littlelogistics:rapid_hopper' })
-    event.shaped('littlelogistics:rapid_hopper', ['GHG', ' L ', ' R '], {
+    event.shaped('littlelogistics:rapid_hopper', ['GHG', 'QLQ', ' R '], {
         G: '#forge:ingots/gold', H: 'minecraft:hopper',
-        L: 'the_bumblezone:honey_crystal_shards', R: 'minecraft:redstone_block'
+        L: 'the_bumblezone:honey_crystal_shards', R: 'minecraft:redstone_block',
+        Q: 'ae2:certus_quartz_crystal'
     }).id('littlelogistics:rapid_hopper')
 
     // Little Logistics watercraft keep their upstream recipes; the

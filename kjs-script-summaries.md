@@ -2,7 +2,7 @@
 
 This index is generated from the three executable KubeJS roots. Every listed JavaScript file is active; directory names such as `retained` and `reviewed` describe review history, not load state. `kubejs/inactive_review` is deliberately excluded because it is outside the executable roots.
 
-Current inventory: **102 active scripts** — 10 client, 82 server, and 10 startup.
+Current inventory: **105 active scripts** — 10 client, 84 server, and 11 startup.
 
 ## Client scripts
 
@@ -60,6 +60,7 @@ Current inventory: **102 active scripts** — 10 client, 82 server, and 10 start
 - `kubejs/server_scripts/policy/removed_items.js` — Applies the exact deny list for intentionally unavailable outputs.
 - `kubejs/server_scripts/policy/tnt_recipe.js` — Restricts TNT to the two vanilla sand inputs instead of broad sand tags.
 - `kubejs/server_scripts/processing/ore_sifting_and_spouting.js` — Disables Bulk Washing, migrates granular separations to waterlogged Sifting, and assigns direct water treatments to Spouting.
+- `kubejs/server_scripts/processing/terrain_recovery.js` — Authors the manifest-owned terrain recovery recipes.
 - `kubejs/server_scripts/progression/00_primitive_workshop.js` — Establishes the pre-Font fiber, fired-goods, and simple-fittings recipe layer for local handling and homestead utilities.
 - `kubejs/server_scripts/progression/10_hand_workshop.js` — Authors four named Font grouts, automated and Melter-scale Andesite Alloy casting, and hand-cranked Create entry.
 - `kubejs/server_scripts/progression/20_logistics_roots.js` — Makes Pretty Pipes certus-based physical logistics (eight pipes per crystal, certus blank/high modules, one raw Sky Stone per Item Terminal or Pressurizer); preserves the other logistics branches' Font roots, AE2's conjunctive energy gate, and removed Ratlantis access.
@@ -88,13 +89,14 @@ Current inventory: **102 active scripts** — 10 client, 82 server, and 10 start
 - `kubejs/server_scripts/policy/ore_raw_material_loot.js` — Replaces raw-metal loot with geological feedstocks across loot-table channels.
 - `kubejs/server_scripts/policy/ore_raw_material_recipes.js` — Redirects raw-metal conversion outputs to authored geological feeds.
 - `kubejs/server_scripts/policy/storage_barrel_recipe.js` — Removes vanilla-barrel conversion and new copper storage acquisition bypasses.
+- `kubejs/server_scripts/progression/22_fish_families.js` — Assigns exact native Diet fish-family groups, preserves existing plain cooking inputs and protects shared dish classifications from species leakage.
 - `kubejs/server_scripts/progression/22_underwater_works.js` — Authors renewable marine workshop routes without replacing geological recovery or Spout water treatment.
 - `kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js` — Prepares initial Soulstone from Black Shale through Hexerei before native Malum processing.
 - `kubejs/server_scripts/progression/80_tech_palette.js` — Gates initial AE2 components through Nether and meteor-field materials.
 - `kubejs/server_scripts/progression/81_pneumaticcraft_progression.js` — Authors pressure machinery and upgrade roots while retaining electrical and acid ownership.
 - `kubejs/server_scripts/progression/82_food_drying.js` — Authors Hexerei rack preservation routes to Heat Sync dried foods.
 - `kubejs/server_scripts/progression/82_pneumaticcraft_acquisition.js` — Replaces low-tier emerald service offers with pressure-system acquisition routes.
-- `kubejs/server_scripts/progression/83_station_crafting.js` — Gives TConstruct's first station a direct material upgrade without pattern consumption or table-exchange bypasses.
+- `kubejs/server_scripts/progression/83_station_crafting.js` — Exchanges vanilla crafting tables and TConstruct crafting stations freely through reciprocal one-item shapeless recipes; removes native alternative station crafts.
 - `kubejs/server_scripts/progression/85_certus_quartz_components.js` — Uses meteor Certus Quartz in selected native quartz-component slots.
 - `kubejs/server_scripts/progression/85_dimension_font_ecology.js` — Authors renewable Font libations and terrain-material machinery routes.
 - `kubejs/server_scripts/progression/86_dimension_transport.js` — Opens repeatable native transport construction through first-trip Font materials.
@@ -115,3 +117,4 @@ Current inventory: **102 active scripts** — 10 client, 82 server, and 10 start
 - `kubejs/startup_scripts/policy/crafting_policy_contract.js` — Loads `bc.crafting_policy.v1` and blocks startup when a loaded namespace has no policy classification.
 - `kubejs/startup_scripts/progression/10_machine_blocks.js` — Registers the six clean-break Machine Blocks used as one-time era proofs.
 - `kubejs/startup_scripts/progression/20_transition_items.js` — Registers the four Font grouts and the remaining pack-owned cross-system intermediates.
+- `kubejs/startup_scripts/progression/22_fish_families.js` — Registers four distinctive cooked fish families with native cooked food properties and original textures.

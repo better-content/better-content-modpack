@@ -154,7 +154,7 @@ private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, 
             } else {
                 val repo = workspace.resolve("mod_source/$name")
                 val tasks = sourceTasks(name, active)
-                val cacheLock = workspace.resolve(".worklane/forge-cache.lock")
+                val cacheLock = root.resolve(".worklane/forge-cache.lock")
                 Files.createDirectories(cacheLock.parent)
                 require(!Files.isSymbolicLink(cacheLock) && !Files.isSymbolicLink(cacheLock.parent)) { "unsafe Forge cache lock" }
                 val status = java.nio.channels.FileChannel.open(cacheLock, java.nio.file.StandardOpenOption.CREATE,

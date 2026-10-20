@@ -35,6 +35,7 @@ standing policies or human authorization.
 - [Content systems](content_systems.md): recipes, materials, machines, loot, trades and surfaces.
 - [Crafting policy](crafting_policy.md): graph, selectors, invariants and known debt.
 - [Balance policy](balance_policy.md): upstream departures, owners and verification.
+- [Muted content](muted-content.md): pack-fitting content retained with deliberately limited acquisition.
 - [Realistic ore processing](realistic_ore_processing.md): geological processing and yields.
 - [Stone/cobble compatibility](stone-cobble-compatibility.md).
 - [Food progression](food_progression.md) and [body/aspect identities](better_survival_physiology.md).

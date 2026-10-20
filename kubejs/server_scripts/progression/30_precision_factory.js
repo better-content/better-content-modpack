@@ -20,11 +20,11 @@ ServerEvents.recipes(function (event) {
 
     event.remove({ id: 'create:crafting/kinetics/deployer' })
     event.shaped('create:deployer', [' E ', ' B ', ' H '], {
-        E: 'create:electron_tube', B: 'kubejs:brass_machine_block', H: 'create:brass_hand'
+        E: 'create:electron_tube', B: 'create:brass_casing', H: 'create:brass_hand'
     }).id('kubejs:precision_factory/direct_root/deployer')
     event.remove({ id: 'create:crafting/kinetics/mechanical_crafter' })
     event.shaped('3x create:mechanical_crafter', [' E ', 'EBE', ' A '], {
-        E: 'create:electron_tube', B: 'kubejs:brass_machine_block', A: 'create:andesite_alloy'
+        E: 'create:electron_tube', B: 'create:brass_casing', A: 'create:andesite_alloy'
     }).id('kubejs:precision_factory/direct_root/mechanical_crafter')
     event.remove({ id: 'quark:automation/crafting/crafter' })
     event.shaped('quark:crafter', ['III', 'ICI', 'RMR'], {
@@ -33,12 +33,12 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:precision_factory/quark_crafter')
     event.remove({ id: 'create:crafting/kinetics/track_station' })
     event.shaped('create:track_station', [' R ', ' B ', ' S '], {
-        R: 'create:railway_casing', B: 'kubejs:brass_machine_block', S: 'create:sturdy_sheet'
+        R: 'create:railway_casing', B: 'create:precision_mechanism', S: 'create:sturdy_sheet'
     }).id('kubejs:precision_factory/transport_root/track_station')
 
     event.remove({ output: 'create:steam_engine' })
     event.shaped('create:steam_engine', [' G ', 'ABA', ' C '], {
         G: '#forge:plates/gold', A: 'create:andesite_alloy',
-        B: 'kubejs:brass_machine_block', C: '#forge:storage_blocks/copper'
+        B: 'create:precision_mechanism', C: '#forge:storage_blocks/copper'
     }).id('kubejs:precision_factory/direct_root/steam_engine')
 })

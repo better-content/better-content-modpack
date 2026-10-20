@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "cookingtime": 600,
+  "experience": 0.35,
+  "ingredient": {
+    "tag": "kubejs:fish/root_cookable"
+  },
+  "result": {
+    "item": "kubejs:root_cooked_fish"
+  }
+}

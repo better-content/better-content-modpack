@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#kubejs:forage_land",
+  "features": "kubejs:forage/carrots",
+  "step": "vegetal_decoration"
+}

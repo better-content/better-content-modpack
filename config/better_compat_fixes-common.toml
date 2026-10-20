@@ -26,6 +26,10 @@
 	decorativeTrampleChance = 0.1
 
 [dynamicTrees]
+	#Multiplies nominal durability charges for player-triggered Dynamic Trees felling before native mitigation.
+	#Ordinary logs, stripping, automation and zero-cost operations remain unchanged. 1 restores upstream wear.
+	#Range: 1 ~ 100
+	fellingDurabilityMultiplier = 10
 	#Replaces Dynamic Trees' NormalSeasonManager season context HashMap with a ConcurrentHashMap.
 	#This is intended to prevent ConcurrentModificationException during parallel feature generation, especially with C2ME threaded features.
 	#Disable this if Dynamic Trees changes this internals or if diagnosing unrelated season behavior.

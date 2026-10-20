@@ -18,15 +18,30 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:thermal_pressure/airtight_machine_block')
 
     event.remove({ output: 'compressedcreativity:rotational_compressor' })
-    event.shaped('compressedcreativity:rotational_compressor', ['XSP', 'GAG', 'CBC'], {
-        P: 'create:propeller', S: 'create:shaft', G: 'pneumaticcraft:compressed_iron_gear',
-        A: 'kubejs:airtight_machine_block', C: 'create:brass_casing', B: 'pneumaticcraft:pressure_tube',
-        X: 'aether:aerogel'
+    // The compressor's core is 12x12x9 inside an open frame. Its era is
+    // demonstrated by mechanical assembly of sealed parts, not a full cube.
+    event.custom({
+        type: 'create:mechanical_crafting', acceptMirrored: false,
+        pattern: ['XSP', 'GAG', 'CBC'],
+        key: {
+            P: { item: 'create:propeller' }, S: { item: 'create:shaft' },
+            G: { item: 'pneumaticcraft:compressed_iron_gear' }, A: { item: 'kubejs:pressure_seal' },
+            C: { item: 'create:brass_casing' }, B: { item: 'pneumaticcraft:pressure_tube' },
+            X: { item: 'aether:aerogel' }
+        },
+        result: { item: 'compressedcreativity:rotational_compressor' }
     }).id('kubejs:thermal_pressure/direct_root/rotational_compressor')
 
-    event.remove({ id: 'pneumaticcraft:pressure_chamber_interface' })
-    event.shaped('2x pneumaticcraft:pressure_chamber_interface', ['HW', 'AW'], {
-        H: 'minecraft:hopper', A: 'kubejs:airtight_machine_block', W: 'pneumaticcraft:pressure_chamber_wall'
+    // An interface is an open airlock frame, not a solid structural block.
+    event.remove({ output: 'pneumaticcraft:pressure_chamber_interface' })
+    event.custom({
+        type: 'create:mechanical_crafting', acceptMirrored: false,
+        pattern: ['HW', 'SW'],
+        key: {
+            H: { item: 'minecraft:hopper' }, S: { item: 'kubejs:pressure_seal' },
+            W: { item: 'pneumaticcraft:pressure_chamber_wall' }
+        },
+        result: { item: 'pneumaticcraft:pressure_chamber_interface' }
     }).id('kubejs:thermal_pressure/direct_root/pressure_chamber_interface')
 
     event.remove({ output: 'tconstruct:nether_grout' })

@@ -48,7 +48,14 @@ layout. A presentation-only native-page fallback preserves Favorites access when
 cannot coexist, and restores the ordinary subpanel on screen/geometry changes. Existing EMI
 preferences can be configured through EMI's sidebar settings; no custom grid or backpack Journal
 decoration is introduced. Mend/Cancel and progress/status use the shared server-authoritative
-Death's Door treatment view on both personal-inventory paths.
+Death's Door treatment view on both personal-inventory paths. Journal lists active maims beside
+Mend (stacked in narrow Record), with a separate server-derived combined-injury penalty summary
+and shared Record scrolling. Essential Journal active-effect rows above the native center replace
+the suppressed native inventory effects panel, with compact icons/overflow hover when height is
+limited and an explicit below-fit notice when icons cannot fit. Native effect visibility, duration,
+HUD state and separate backpack/foreign presentation remain native-owned. Record STANCES is the
+sole style entry with Journal; Compat's central style button remains available without Journal.
+These are source contracts, not evidence of deployed artifacts or paired visual acceptance.
 
 ## Current XP and exclusive backpack equipment (source contract)
 

@@ -1,0 +1,224 @@
+{
+  "schema": "bc.fish_nutrition.v1",
+  "native_pin": "mods/starcatcher.pw.toml",
+  "corrections": {
+    "starcatcher:obsidian_eel": "Native FireResistantBasicItem is inedible; excluded from the approved raw Tallow list. Native behavior is unchanged."
+  },
+  "families": {
+    "plain": {
+      "raw": [
+        "starcatcher:agave_bream",
+        "starcatcher:amethystback",
+        "starcatcher:aquamarine_pike",
+        "starcatcher:aurora",
+        "starcatcher:azure_crystalback_minnow",
+        "starcatcher:blossomfish",
+        "starcatcher:blue_crystal_fin",
+        "starcatcher:bluegigi",
+        "starcatcher:boreal",
+        "starcatcher:bright_amethyst_snapper",
+        "starcatcher:cactifish",
+        "starcatcher:carpenjoe",
+        "starcatcher:charfish",
+        "starcatcher:chorus_crab",
+        "starcatcher:crystalback_minnow",
+        "starcatcher:dark_amethyst_snapper",
+        "starcatcher:downfall_bream",
+        "starcatcher:driftfin",
+        "starcatcher:drifting_bream",
+        "starcatcher:dripfin",
+        "starcatcher:dusktail_snapper",
+        "starcatcher:end_glow",
+        "starcatcher:fossilized_angelfish",
+        "starcatcher:frostgill_chub",
+        "starcatcher:frostjaw_trout",
+        "starcatcher:glowing_dark",
+        "starcatcher:gold_fan",
+        "starcatcher:hollowbelly_darter",
+        "starcatcher:joel",
+        "starcatcher:lightning_bass",
+        "starcatcher:mirage_carp",
+        "starcatcher:mistback_chub",
+        "starcatcher:morganite",
+        "starcatcher:obidontiee",
+        "starcatcher:pale_carp",
+        "starcatcher:pale_pinfish",
+        "starcatcher:petaldrift_carp",
+        "starcatcher:pinfish",
+        "starcatcher:pink_koi",
+        "starcatcher:rose_siamese_fish",
+        "starcatcher:sandtail",
+        "starcatcher:scorchfish",
+        "starcatcher:sculkfish",
+        "starcatcher:sea_bass",
+        "starcatcher:silverfin_pike",
+        "starcatcher:silverveil_perch",
+        "starcatcher:thunder_bass",
+        "starcatcher:vesani",
+        "starcatcher:voidbiter",
+        "starcatcher:ward",
+        "starcatcher:whiteveil",
+        "starcatcher:willow_bream",
+        "starcatcher:wintery_pike",
+        "starcatcher:yellowstone_fish"
+      ],
+      "groups": [
+        "proteins"
+      ],
+      "cooked": "starcatcher:cooked_starcaught_fish",
+      "display_name": "Cooked Starcaught Fish",
+      "alcohol_load": 0.0
+    },
+    "rich": {
+      "raw": [
+        "starcatcher:bigeye_tuna",
+        "starcatcher:black_eel",
+        "starcatcher:blue_herring",
+        "starcatcher:crystalback_sturgeon",
+        "starcatcher:deepjaw_herring",
+        "starcatcher:elderscale",
+        "starcatcher:garnet_mackerel",
+        "starcatcher:geode_eel",
+        "starcatcher:icetooth_sturgeon",
+        "starcatcher:ironjaw_herring",
+        "starcatcher:redscaled_tuna",
+        "starcatcher:sludge_catfish",
+        "starcatcher:stonefish",
+        "starcatcher:sunny_sturgeon"
+      ],
+      "groups": [
+        "proteins",
+        "fats"
+      ],
+      "cooked": "kubejs:rich_cooked_fish",
+      "display_name": "Cooked Rich Fish",
+      "alcohol_load": 0.0
+    },
+    "root": {
+      "raw": [
+        "starcatcher:lily_snapper",
+        "starcatcher:lush_pike",
+        "starcatcher:sage_catfish",
+        "starcatcher:shroomfish",
+        "starcatcher:sporefish",
+        "starcatcher:the_quarrish",
+        "starcatcher:vivid_moss"
+      ],
+      "groups": [
+        "proteins",
+        "vegetables"
+      ],
+      "cooked": "kubejs:root_cooked_fish",
+      "display_name": "Cooked Earth Fish",
+      "alcohol_load": 0.0
+    },
+    "grain": {
+      "raw": [
+        "starcatcher:crystalback_boreal",
+        "starcatcher:crystalback_trout",
+        "starcatcher:deepslatefish",
+        "starcatcher:peakdweller",
+        "starcatcher:rockgill",
+        "starcatcher:sun_seeking_carp"
+      ],
+      "groups": [
+        "proteins",
+        "grains"
+      ],
+      "cooked": "kubejs:grain_cooked_fish",
+      "display_name": "Cooked Grain Fish",
+      "alcohol_load": 0.0
+    },
+    "draught": {
+      "raw": [
+        "starcatcher:ghostly_pike",
+        "starcatcher:twilight_koi"
+      ],
+      "groups": [
+        "proteins"
+      ],
+      "cooked": "kubejs:uncanny_cooked_fish",
+      "display_name": "Cooked Boozy Fish",
+      "alcohol_load": 0.06
+    }
+  },
+  "native_cooking_exclusions": [
+    "starcatcher:black_eel",
+    "starcatcher:chorus_crab",
+    "starcatcher:geode_eel"
+  ],
+  "legacy_plain_cookable": [
+    "starcatcher:cerberay",
+    "starcatcher:cinder_squid",
+    "starcatcher:embergill",
+    "starcatcher:glowstone_pufferfish",
+    "starcatcher:glowstone_seeker",
+    "starcatcher:magma_fish",
+    "starcatcher:molten_deepslate_crab",
+    "starcatcher:molten_shrimp",
+    "starcatcher:pyrotrout",
+    "starcatcher:scalding_pike",
+    "starcatcher:scorched_bloodsucker",
+    "starcatcher:suneater",
+    "starcatcher:willish"
+  ],
+  "window_weight_multiplier": 4,
+  "boosted": [
+    "starcatcher:agave_bream",
+    "starcatcher:azure_crystalback_minnow",
+    "starcatcher:bigeye_tuna",
+    "starcatcher:blossomfish",
+    "starcatcher:blue_crystal_fin",
+    "starcatcher:blue_herring",
+    "starcatcher:bluegigi",
+    "starcatcher:cactifish",
+    "starcatcher:crystalback_boreal",
+    "starcatcher:crystalback_minnow",
+    "starcatcher:crystalback_trout",
+    "starcatcher:deepjaw_herring",
+    "starcatcher:downfall_bream",
+    "starcatcher:driftfin",
+    "starcatcher:drifting_bream",
+    "starcatcher:dusktail_snapper",
+    "starcatcher:elderscale",
+    "starcatcher:frostgill_chub",
+    "starcatcher:hollowbelly_darter",
+    "starcatcher:icetooth_sturgeon",
+    "starcatcher:joel",
+    "starcatcher:lightning_bass",
+    "starcatcher:mirage_carp",
+    "starcatcher:mistback_chub",
+    "starcatcher:morganite",
+    "starcatcher:pale_carp",
+    "starcatcher:pale_pinfish",
+    "starcatcher:peakdweller",
+    "starcatcher:petaldrift_carp",
+    "starcatcher:pinfish",
+    "starcatcher:pink_koi",
+    "starcatcher:redscaled_tuna",
+    "starcatcher:rose_siamese_fish",
+    "starcatcher:sage_catfish",
+    "starcatcher:sandtail",
+    "starcatcher:scorchfish",
+    "starcatcher:sea_bass",
+    "starcatcher:silverveil_perch",
+    "starcatcher:sludge_catfish",
+    "starcatcher:sun_seeking_carp",
+    "starcatcher:sunny_sturgeon",
+    "starcatcher:thunder_bass",
+    "starcatcher:twilight_koi",
+    "starcatcher:vesani",
+    "starcatcher:willow_bream",
+    "starcatcher:wintery_pike"
+  ],
+  "generic_output_groups": {
+    "ubesdelight:bangsilog": ["proteins", "fats", "grains"],
+    "ubesdelight:fish_sauce_bottle": ["proteins"],
+    "ubesdelight:kinilaw": ["proteins", "vegetables"]
+  },
+  "generic_consumers": [
+    "ubesdelight:farmersdelight/cooking/bangsilog_extra_from_cooking_pot",
+    "ubesdelight:farmersdelight/cooking/fish_sauce_bottle_from_water_bucket_from_cooking_pot_extra",
+    "ubesdelight:minecraft/crafting/kinilaw_extra"
+  ]
+}

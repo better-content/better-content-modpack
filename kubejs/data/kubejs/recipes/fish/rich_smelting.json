@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.35,
+  "ingredient": {
+    "tag": "kubejs:fish/rich_cookable"
+  },
+  "result": {
+    "item": "kubejs:rich_cooked_fish"
+  }
+}
