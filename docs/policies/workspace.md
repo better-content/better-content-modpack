@@ -25,7 +25,10 @@ claims are snapshots, not proof of current work; do not reread every old claim o
 Acquire atomic turn-scoped claims before editing and release at the actual end of the turn,
 including failure/cancellation. Tools and automatic continuations belong to the same turn.
 Task assignments, work claims, operation-lifetime leases and retention records are separate.
-Only an owner releases its claim; unknown/inconsistent ownership needs reconciliation.
+Controller claims remain owner-released; unknown/inconsistent ownership needs reconciliation.
+Legacy Markdown claim files may also be removed after confirming their owners are inactive under
+the lane guide's fresh Herdr/ownership checks. This exception does not release controller state,
+resource leases, task registrations or retention records.
 Peer messages coordinate work but never grant user authorization.
 
 Each task has one accountable lead, not a permanent workspace-wide hierarchy. Leads may delegate

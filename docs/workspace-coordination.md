@@ -20,7 +20,10 @@ The live view annotates turns as `live`, `stale` or `unknown`. The Pi hook passe
 Dead/reused identities are stale; absent or inaccessible identity is unknown. Manual CLI calls
 without an explicit actor identity never guess the parent shell PID. Classification does not
 auto-delete claims, release leases, or end tasks/assignments: uncertain ownership still needs
-owner reconciliation.
+owner reconciliation. The lane guide separately permits removing legacy Markdown claim files
+when fresh Herdr/ownership checks confirm their owners are inactive. That exception does not
+permit releasing another owner's controller turn or lease, or clearing tasks, assignments, jobs
+or retention records; use their documented owner/reconciliation interfaces.
 
 State changes use one `flock`, atomic replacement and fsync. Symlink roots/ancestors, state and
 lock files are rejected; request markers use `O_NOFOLLOW`. `live` and `authority` are lock-free,
