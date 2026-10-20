@@ -3135,22 +3135,6 @@
       "override_layers": []
     },
     {
-      "id": "fallout_wastelands_:blocks/medicaltier_1",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
-      "template_consumers": [
-        "kubejs!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:medical_box"
-      ],
-      "table_consumers": [],
-      "active_injections": [],
-      "worldgen_consumers": [],
-      "override_layers": []
-    },
-    {
       "id": "fallout_wastelands_:chests/ammotier_1",
       "kind": "physical",
       "role": "encounter",
@@ -3292,7 +3276,8 @@
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/defense_center_correc1_01.nbt:fallout_wastelands_:medical_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_base_01.nbt:fallout_wastelands_:medical_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:medical_box",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/ruined_building_04.nbt:fallout_wastelands_:medical_box"
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/ruined_building_04.nbt:fallout_wastelands_:medical_box",
+        "kubejs!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:medical_box"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -7327,22 +7312,6 @@
       ]
     },
     {
-      "id": "minecraft:chests/village/village_leatherworker",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
-      "template_consumers": [
-        "towns-and-towers.pw.toml!data/kaisyn/structures/village/exclusives/iberian/professions_misc/iberian_leatherworker_1.nbt:minecraft:chest"
-      ],
-      "table_consumers": [],
-      "active_injections": [],
-      "worldgen_consumers": [],
-      "override_layers": []
-    },
-    {
       "id": "minecraft:chests/village/village_mason",
       "kind": "physical",
       "role": "supplies",
@@ -7598,6 +7567,7 @@
       "table_sha256": "247f99909d01fc5e2c10ec723e2efd2c19d3d28dcbe1fb831468ffa0e4cc9bc0",
       "source": "vanilla!data/minecraft/loot_tables/chests/village/village_tannery.json",
       "template_consumers": [
+        "kubejs!data/kaisyn/structures/village/exclusives/iberian/professions_misc/iberian_leatherworker_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/coconut/houses/coconut_tannery_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/cypress/houses/cypress_tannery_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/wisteria/houses/wisteria_tannery_1.nbt:minecraft:chest",
@@ -11846,7 +11816,7 @@
       "after": "fallout_wastelands_:chests/industrialtier_1",
       "occurrences": 5,
       "pinned_original_sha256": "c1d622cc1e03c7e90b10ef9f23d1bee9a7af08d2eb6d26bb936fa61f07ee9bf8",
-      "authored_sha256": "cfacfed44043c5ecb05ce1d382ec6758b73def6c0781c90ab774be6f92ccf5c6"
+      "authored_sha256": "419c28cd302b1e7dee5f8048618b69d16cb36ccb56b3957e8b1147d0101f695e"
     },
     {
       "resource": "data/fallout_wastelands_/structures/factory_ruin_02_01way.nbt",
@@ -11879,6 +11849,22 @@
       "occurrences": 2,
       "pinned_original_sha256": "b64b31e3b8c19b16c9a9cdd4e58b97cf3e04860ecdc6affa5f0a17ccaab27e69",
       "authored_sha256": "470f1279a2f0095fac16bed416ce89df7623e27c9572c84243bcc2fe16ac5292"
+    },
+    {
+      "resource": "data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt",
+      "before": "fallout_wastelands_:blocks/medicaltier_1",
+      "after": "fallout_wastelands_:chests/hospitaltier_1",
+      "occurrences": 1,
+      "pinned_original_sha256": "c1d622cc1e03c7e90b10ef9f23d1bee9a7af08d2eb6d26bb936fa61f07ee9bf8",
+      "authored_sha256": "419c28cd302b1e7dee5f8048618b69d16cb36ccb56b3957e8b1147d0101f695e"
+    },
+    {
+      "resource": "data/kaisyn/structures/village/exclusives/iberian/professions_misc/iberian_leatherworker_1.nbt",
+      "before": "minecraft:chests/village/village_leatherworker",
+      "after": "minecraft:chests/village/village_tannery",
+      "occurrences": 1,
+      "pinned_original_sha256": "e68690f1b45a78ab26ab9fa18da41aacd84c57d23b537375d0be7ec49fdfe837",
+      "authored_sha256": "250a3e53e939d07995d651388c9c1cd807ac05351bf956e74a31844ce99e5ca9"
     }
   ]
 }

@@ -29,6 +29,8 @@ REFERENCE_REPAIRS = [
     ('fallout-wastelands', 'fallout_wastelands_', 'military_train_01', 'fallout_wastelands_:chests/scientifictier_1', 'fallout_wastelands_:chests/sciencetier_1'),
     ('fallout-wastelands', 'fallout_wastelands_', 'ruined_building_05', 'fallout_wastelands_:chests/scientifictier_1', 'fallout_wastelands_:chests/sciencetier_1'),
     ('cataclysm', 'cataclysm', 'desert_occupied_village', 'minecraft:chests/village_desert_house', 'minecraft:chests/village/village_desert_house'),
+    ('fallout-wastelands', 'fallout_wastelands_', 'factory_ruin_01_01way_v0', 'fallout_wastelands_:blocks/medicaltier_1', 'fallout_wastelands_:chests/hospitaltier_1'),
+    ('towns-and-towers', 'kaisyn', 'village/exclusives/iberian/professions_misc/iberian_leatherworker_1', 'minecraft:chests/village/village_leatherworker', 'minecraft:chests/village/village_tannery'),
 ]
 
 
@@ -49,10 +51,24 @@ def validate_reference_repairs(contract):
         nbt = NbtReader(raw).root()
         occurrences = sum(block.get('nbt', {}).get('LootTable') == before for block in nbt['blocks'])
         assert occurrences > 0 and raw.count(loot_tag(before)) == occurrences
-        expected = raw.replace(loot_tag(before), loot_tag(after))
+        expected = raw
+        for owner, ns, name, old, new in REFERENCE_REPAIRS:
+            if (owner, ns, name) == (mod, namespace, template):
+                expected = expected.replace(loot_tag(old), loot_tag(new))
         authored = ROOT / 'kubejs' / resource
         actual = gzip.decompress(authored.read_bytes())
-        assert actual == expected, ('template changed beyond exact LootTable reference repair', resource)
+        def require_exact(candidate):
+            assert candidate == expected, ('template changed beyond exact LootTable reference repair', resource)
+        require_exact(actual)
+        # Independently reject both a reverted reference and unrelated NBT bytes;
+        # the oracle must not accept a matching review digest as a waiver.
+        for mutation in (raw, actual + b'\x00'):
+            try:
+                require_exact(mutation)
+            except AssertionError:
+                pass
+            else:
+                raise AssertionError('negative template mutation admitted: ' + resource)
         repaired = NbtReader(actual).root()
         assert sum(block.get('nbt', {}).get('LootTable') == after for block in repaired['blocks']) >= occurrences
         observations.append(dict(resource=resource, before=before, after=after, occurrences=occurrences,
