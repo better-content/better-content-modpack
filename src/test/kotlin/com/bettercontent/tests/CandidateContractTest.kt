@@ -28,6 +28,7 @@ class CandidateContractTest {
         @BeforeAll
         fun locate() {
             pair = CandidateLocator.locate(TestConfig.load().root)
+            evidence.run.integrity.registerCandidate(pair)
             evidence.run.event("candidate_selected", mapOf(
                 "client" to pair.client.toString(), "server" to pair.server.toString(),
                 "client_sha256" to pair.clientSha256, "server_sha256" to pair.serverSha256,
@@ -49,12 +50,11 @@ class CandidateContractTest {
     fun serverArchiveHasProductionDefaults() {
         val root = ZipContracts.soleTopLevelDirectory(pair.server)
         val eula = ZipContracts.entryText(pair.server, "$root/eula.txt")
-        val properties = ZipContracts.entryText(pair.server, "$root/server.properties")
+        val authored = java.nio.file.Files.readString(TestConfig.load().root.resolve("server-config/production.properties"))
+        assertEquals(CandidateStateContract.COORDINATE, CandidateStateContract.serverArchive(pair.server, authored))
+        assertEquals(CandidateStateContract.COORDINATE, CandidateStateContract.clientArchive(pair.client))
         val jvm = ZipContracts.entryText(pair.server, "$root/user_jvm_args.txt")
         assertEquals("eula=false\n", eula)
-        assertTrue("online-mode=true" in properties)
-        assertTrue("server-port=25565" in properties)
-        assertTrue("level-type=minecraft\\:normal" in properties || "level-type=minecraft:normal" in properties)
         assertTrue("-Xms4G" in jvm && "-Xmx16G" in jvm)
     }
 

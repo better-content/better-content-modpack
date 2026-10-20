@@ -58,6 +58,7 @@ class ProcessCleanupTest {
             val pid = Regex("child=(\\d+)").find(process.log.readText())!!.groupValues[1].toLong()
             child = ProcessHandle.of(pid).orElseThrow()
             await("child must be observed before the parent exits") { pid in process.trackedPids }
+            process.expectNaturalExit("controlled parent exit in orphan-cleanup fixture")
             process.send("exit")
             await("parent must exit independently") { !process.alive }
             assertTrue(child.isAlive)

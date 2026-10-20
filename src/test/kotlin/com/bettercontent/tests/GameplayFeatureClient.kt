@@ -211,6 +211,7 @@ object GameplayFeatureClient {
         require(worldAfter.path("game_time").asLong() >= worldBefore.path("game_time").asLong())
         require(Hashes.sha256(productionConfig) == productionHash) { "production Oculus configuration changed" }
         io.world("core", "shader-window-return-core")
+        client.expectNativeExit("bound shader-window Minecraft.stop request")
         io.client("exit", "shader-window-native-client-exit")
         awaitNativeClientExit(client, evidence, nonce, "shader-window")
         server.assertHashes(); client.assertHashes()
@@ -227,16 +228,13 @@ object GameplayFeatureClient {
     }
 
     fun closeNativeClient(server: DedicatedServerFixture, client: ClientFixture, evidence: EvidenceRun, nonce: UUID, visit: Int) {
+        client.expectNativeExit("bound gameplay visit-$visit Minecraft.stop request")
         Bridge(server, client, evidence, nonce, if (visit == 1) 19900 else 29900).client("exit", "v$visit-native-client-exit")
         awaitNativeClientExit(client, evidence, nonce, "visit-$visit")
     }
 
     private fun awaitNativeClientExit(client: ClientFixture, evidence: EvidenceRun, nonce: UUID, label: String) {
-        val deadline = System.nanoTime() + Duration.ofMinutes(2).toNanos()
-        while (client.processAlive()) {
-            check(System.nanoTime() < deadline) { "native Minecraft.stop did not exit client within two minutes" }
-            Thread.sleep(100)
-        }
+        client.awaitNativeExit(Duration.ofMinutes(2), "native Minecraft.stop $label")
         evidence.event("gameplay_native_client_stopped", mapOf("stage" to label, "nonce" to nonce.toString(),
             "origin" to "public Minecraft.stop after bound exit ack; no input injection"))
     }

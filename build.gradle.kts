@@ -23,6 +23,9 @@ dependencies {
     implementation("org.ow2.asm:asm:9.7.1")
     testImplementation(platform("org.junit:junit-bom:5.11.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.apache.logging.log4j:log4j-api:2.19.0")
+    testImplementation("org.apache.logging.log4j:log4j-core:2.19.0")
 }
 
 tasks.withType<Test>().configureEach {

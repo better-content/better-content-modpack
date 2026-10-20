@@ -72,10 +72,14 @@ class ClientPackImportFastTest {
             manifest.replace("Better Content Modpack", "bad\\nname"),
             manifest.replace("forge-47.4.22", "fabric-0.16.0"),
             manifest.replace("forge-47.4.22", "forge-latest"),
+            manifest.replace("forge-47.4.22", "forge-47.4.23"),
+            manifest.replace("1.20.1", "1.20.2"),
+            manifest.replace("[{\"id\":\"forge-47.4.22\",\"primary\":true}]", "[{\"id\":\"forge-47.4.22\",\"primary\":true},{\"id\":\"fabric-0.16.0\",\"primary\":false}]"),
             manifest.replace("\"primary\":true", "\"primary\":\"true\""),
             manifest.replace("\"primary\":true", "\"primary\":false"),
             manifest.replace("[{\"id\":\"forge-47.4.22\",\"primary\":true}]", "[{\"id\":\"forge-47.4.22\",\"primary\":true},{\"id\":\"forge-47.4.22\",\"primary\":true}]"),
         )) assertThrows(IllegalArgumentException::class.java, { ClientPackImport.pins(mapper.readTree(bad)) }, bad)
+        assertEquals(CandidateStateContract.COORDINATE, ClientPackImport.pins(good).coordinate)
         assertEquals("", ClientPackImport.pins(good).author) // The actual bound candidate's author is empty, not missing.
     }
 

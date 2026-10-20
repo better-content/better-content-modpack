@@ -24,7 +24,7 @@ class DedicatedServerFixture(
 
 ) : AutoCloseable {
     val config = evidence.config
-    val pair = CandidateLocator.locate(config.root)
+    val pair = CandidateLocator.locate(config.root).also { evidence.integrity.registerCandidate(it) }
     val diagnosticSupport = RuntimeDiagnosticSupport(evidence, pair, "SmokeClient1")
     val serverExtract = evidence.fixture.resolve("server-extract")
     val server: Path
@@ -32,6 +32,7 @@ class DedicatedServerFixture(
     val port = freePort()
     private var process: ManagedProcess
     private var starts = 1
+    private lateinit var auditLaunch: FixtureAuditLogging.Launch
 
     init {
         evidence.event("candidate_selected", mapOf(
@@ -40,6 +41,8 @@ class DedicatedServerFixture(
             "server" to pair.server.toString(),
             "server_sha256" to pair.serverSha256,
         ))
+        val authoredProperties = Files.readString(config.root.resolve("server-config/production.properties"))
+        CandidateStateContract.serverArchive(pair.server, authoredProperties)
         serverExtract.createDirectories()
         Commands.run(
             listOf("unzip", "-q", "--", pair.server.toString(), "-d", serverExtract.toString()),
@@ -49,6 +52,11 @@ class DedicatedServerFixture(
         val roots = Files.list(serverExtract).use { stream -> stream.filter(Files::isDirectory).toList() }
         require(roots.size == 1) { "server candidate must extract to one top-level directory" }
         server = roots.single()
+        CandidateStateContract.extractedServer(server, authoredProperties)
+        val levelName = CandidateStateContract.levelName(CandidateStateContract.properties(
+            Files.readString(server.resolve("server.properties"))))
+        evidence.event("first_launch_freshness", mapOf("role" to "server", "level_name" to levelName,
+            "world_absent" to true, "lifecycle_state_absent" to true))
         disableScheduledBackupsForRuntimeFixture(server)
         if (allowLongClientLogin) configureDedicatedServerMemory(server)
         configureFixtureServerProcessorBudget(server)
@@ -86,12 +94,33 @@ class DedicatedServerFixture(
             val args = server.resolve("user_jvm_args.txt")
             args.toFile().appendText("\n${support.properties}\n")
         }
-        process = ManagedProcess("server", listOf("./run.sh"), server, log, environment)
+        auditLaunch = prepareAudit("server-initial")
+        process = ManagedProcess("server", listOf("./run.sh"), server, log, environment,
+            lifecycleEvent = { evidence.event("process_lifecycle", it) })
         recordServerResourceBudget()
         evidence.event("server_started", mapOf("pid" to process.pid, "port" to port, "directory" to server.toString()))
     }
 
-    fun waitReady(count: Int = 1) = process.waitForLogCount(serverReady, count, Duration.ofMinutes(15), "server readiness $count")
+    private fun prepareAudit(label: String): FixtureAuditLogging.Launch {
+        if (::auditLaunch.isInitialized) auditLaunch.assertStable()
+        val launch = FixtureAuditLogging.prepare(server, label)
+        val args = server.resolve("user_jvm_args.txt")
+        val preserved = args.readText().lineSequence().map { line ->
+            if (line.trimStart().startsWith("#")) line
+            else fixtureJvmTokens(line).filterNot { it.startsWith("-Dlog4j.configurationFile=") }.joinToString(" ")
+        }.joinToString("\n").trimEnd()
+        Files.writeString(args, "$preserved\n${launch.jvmArgument}\n")
+        evidence.registerAudit(launch)
+        return launch
+    }
+
+    fun waitReady(count: Int = 1) {
+        process.waitForLogCount(serverReady, count, Duration.ofMinutes(15), "server readiness $count")
+        evidence.auditReady(auditLaunch)
+    }
+
+    fun assertRunning(stage: String) = process.assertRunning(stage)
+    fun assertHealthyBeforeTeardown(stage: String) = process.assertHealthyBeforeTeardown(stage)
     fun send(command: String) {
         evidence.event("server_command", mapOf("command" to command))
         process.send(command)
@@ -117,8 +146,11 @@ class DedicatedServerFixture(
             val text = if (log.exists()) log.readText() else ""
             while (System.nanoTime() < attemptDeadline) {
                 val current = if (log.exists()) log.readText() else text
-                pattern.find(current.drop(offset))?.let { return it }
-                check(process.alive) { "server exited before $description; see $log" }
+                process.assertRunning(description)
+                pattern.find(current.drop(offset))?.let {
+                    process.assertRunning(description)
+                    return it
+                }
                 Thread.sleep(250)
             }
             if (retryInterval == null) break
@@ -141,6 +173,7 @@ class DedicatedServerFixture(
         require(Hashes.sha256(pair.client) == pair.clientSha256) { "client candidate changed during test" }
         require(Hashes.sha256(pair.server) == pair.serverSha256) { "server candidate changed during test" }
         diagnosticSupport.assertStable()
+        auditLaunch.assertStable()
     }
 
     fun auditLogs(extra: Collection<Path> = emptyList()) {
@@ -167,7 +200,9 @@ class DedicatedServerFixture(
     }
 
     fun stopGracefully() {
+        process.assertHealthyBeforeTeardown("server stop")
         if (process.alive) {
+            process.expectNaturalExit("native server stop command")
             send("stop")
             process.waitForExit(Duration.ofMinutes(3), "server stop")
         }
@@ -176,7 +211,10 @@ class DedicatedServerFixture(
 
     fun restart() {
         require(!process.alive) { "server must be stopped before restart" }
-        process = ManagedProcess("server-restart", listOf("./run.sh"), server, log, environment)
+        process.assertHealthyBeforeTeardown("server restart")
+        auditLaunch = prepareAudit("server-restart-$starts")
+        process = ManagedProcess("server-restart", listOf("./run.sh"), server, log, environment,
+            lifecycleEvent = { evidence.event("process_lifecycle", it) })
         recordServerResourceBudget()
         evidence.event("server_restarted", mapOf("pid" to process.pid, "port" to port, "directory" to server.toString()))
         starts++
@@ -260,6 +298,23 @@ internal fun disableScheduledBackupsForRuntimeFixture(server: Path) {
     replaceExact(config, "\"enabled\": true", "\"enabled\": false")
 }
 
+internal fun portableClientCommand(config: TestConfig, client: Path, pins: ClientPackImport.Pins,
+    jvmArgs: String, username: String, uuid: String, connection: List<String>): List<String> {
+    require(pins.coordinate == CandidateStateContract.COORDINATE) { "unsupported client runtime" }
+    return listOf("pipx", "run", "--spec", "portablemc==4.4.1", "portablemc",
+        "--main-dir", config.clientMain.toString(), "--work-dir", client.toString(), "--timeout", "120",
+        "start", "--jvm", config.java.toString(), "--jvm-args=$jvmArgs",
+        "--resolution", "1280x720", "-u", username, "-i", uuid) + connection + "forge:${pins.coordinate}"
+}
+
+internal fun quickPlayClientCommand(config: TestConfig, client: Path, pins: ClientPackImport.Pins,
+    jvmArgs: String, username: String, uuid: String, world: String): List<String> {
+    require(pins.coordinate == CandidateStateContract.COORDINATE) { "unsupported client runtime" }
+    return listOf("pipx", "run", "--spec", "portablemc==4.4.1", "python",
+        config.root.resolve("src/test/resources/quickplay_world.py").toString(), config.clientMain.toString(),
+        client.toString(), config.java.toString(), jvmArgs, username, uuid, world, pins.coordinate)
+}
+
 class ClientFixture(
     private val evidence: EvidenceRun,
     private val dedicated: DedicatedServerFixture? = null,
@@ -270,7 +325,9 @@ class ClientFixture(
 
 ) : AutoCloseable {
     private val config = evidence.config
-    private val pair = dedicated?.pair ?: CandidateLocator.locate(config.root)
+    private val pair = (dedicated?.pair ?: CandidateLocator.locate(config.root)).also { evidence.integrity.registerCandidate(it) }
+    private lateinit var pins: ClientPackImport.Pins
+    private var auditLaunch: FixtureAuditLogging.Launch? = null
     val diagnosticSupport = dedicated?.diagnosticSupport ?: RuntimeDiagnosticSupport(evidence, pair, username)
     private var quickPlayLogOffset = 0
     private var verifyExitBinding: FixtureVerifyExitBinding? = null
@@ -303,6 +360,9 @@ class ClientFixture(
 
     fun prepare() {
         val importLogName = if (slot == 0) "client-import" else "client-$slot-import"
+        CandidateStateContract.clientArchive(pair.client)
+        pins = ClientPackImport.pins(com.fasterxml.jackson.module.kotlin.jacksonObjectMapper().readTree(
+            ZipContracts.entryText(pair.client, "manifest.json")))
         val initializedBaseline = ClientPackImport.initialize(pair.client, pair.clientSha256, client,
             evidence.directory.resolve(if (slot == 0) "client-init.log" else "client-$slot-init.log"))
         var imported = false
@@ -334,8 +394,12 @@ class ClientFixture(
         TaczFixtureSupport.assertResolvedArtifacts(client, config.root)
         diagnosticSupport.install(client)
         if (dedicated != null || slot == 5 || slot == 6) configureRuntimeClientProfile()
+        CandidateStateContract.extractedFresh(client)
+        evidence.event("first_launch_freshness", mapOf("role" to "client", "client" to username,
+            "packaged_saves_absent" to true, "lifecycle_state_absent" to true))
         client.resolve("saves").createDirectories()
-        xvfb = ManagedProcess("xvfb-$slot", listOf("Xvfb", display, "-screen", "0", "1280x720x24", "-nolisten", "tcp"), client, xvfbLog)
+        xvfb = ManagedProcess("xvfb-$slot", listOf("Xvfb", display, "-screen", "0", "1280x720x24", "-nolisten", "tcp"), client, xvfbLog,
+            lifecycleEvent = { evidence.event("process_lifecycle", it) })
         Thread.sleep(1000)
         check(xvfb!!.alive) { "Xvfb failed; see $xvfbLog" }
     }
@@ -401,39 +465,40 @@ class ClientFixture(
         }
         val exitArgs = verifyExitBinding?.properties.orEmpty()
         val diagnosticArgs = diagnosticSupport.properties
+        val logging = prepareClientAudit("quickplay-$mode")
         val jvmArgs = normalizeFixtureProcessorBudget(
             "$clientJvmArgs $diagnosticArgs $exitArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
-                "-Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")} -Dbc.pack_test.world=$mode",
+                "${logging.jvmArgument} -Dbc.pack_test.world=$mode",
             4,
         )
-        val command = listOf(
-            "pipx", "run", "--spec", "portablemc==4.4.1", "python",
-            config.root.resolve("src/test/resources/quickplay_world.py").toString(),
-            config.clientMain.toString(), client.toString(), config.java.toString(), jvmArgs,
-            username, uuid, world,
-        )
-        launcher = ManagedProcess("minecraft-client", command, client, log, clientEnvironment())
+        val command = quickPlayClientCommand(config, client, pins, jvmArgs, username, uuid, world)
+        launcher = ManagedProcess("minecraft-client", command, client, log, clientEnvironment(),
+            lifecycleEvent = { evidence.event("process_lifecycle", it) })
         recordClientResourceBudget(jvmArgs, "quickplay", requireNotNull(launcher).pid)
     }
 
     private fun launch(connection: List<String>, extraArguments: String = ""): ManagedProcess {
         val environment = clientEnvironment()
+        val logging = prepareClientAudit("client")
         val jvmArgs = normalizeFixtureProcessorBudget(
-            "$clientJvmArgs ${diagnosticSupport.properties} $extraArguments -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false -Dlog4j.configurationFile=${client.resolve("config/better-content-log4j2.xml")}",
+            "$clientJvmArgs ${diagnosticSupport.properties} $extraArguments -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false ${logging.jvmArgument}",
             if (productionWorldStartup) 8 else 4,
         )
-        val command = mutableListOf(
-            "pipx", "run", "--spec", "portablemc==4.4.1", "portablemc",
-            "--main-dir", config.clientMain.toString(), "--work-dir", client.toString(), "--timeout", "120",
-            "start", "--jvm", config.java.toString(),
-            "--jvm-args=$jvmArgs",
-            "--resolution", "1280x720", "-u", username, "-i", uuid,
-        )
-        command += connection
-        command += "forge:1.20.1-47.4.22"
-        val process = ManagedProcess("minecraft-client", command, client, log, environment)
+        val command = portableClientCommand(config, client, pins, jvmArgs, username, uuid, connection)
+        val process = ManagedProcess("minecraft-client", command, client, log, environment,
+            lifecycleEvent = { evidence.event("process_lifecycle", it) })
         recordClientResourceBudget(jvmArgs, "portablemc", process.pid)
         return process
+    }
+
+    private fun prepareClientAudit(label: String): FixtureAuditLogging.Launch {
+        auditLaunch?.assertStable()
+        val launch = FixtureAuditLogging.prepare(client, label)
+        auditLaunch = launch
+        evidence.registerAudit(launch)
+        evidence.event("client_runtime_pins", mapOf("client" to username, "minecraft" to pins.minecraft,
+            "forge" to pins.forge, "coordinate" to pins.coordinate))
+        return launch
     }
 
     private fun recordClientResourceBudget(arguments: String, path: String, pid: Long) {
@@ -477,8 +542,12 @@ class ClientFixture(
             var observed = false
             while (System.nanoTime() < deadline) {
                 val suffix = if (log.exists()) log.readText().drop(quickPlayLogOffset) else ""
-                if (pattern.containsMatchIn(suffix)) { observed = true; break }
-                check(process.alive) { "client exited before fresh singleplayer world probe $marker; see $log" }
+                assertRunning("singleplayer world probe $marker")
+                if (pattern.containsMatchIn(suffix)) {
+                    assertRunning("singleplayer world probe $marker")
+                    observed = true
+                    break
+                }
                 Thread.sleep(250)
             }
             if (!observed) {
@@ -486,6 +555,8 @@ class ClientFixture(
                 error("timed out waiting for fresh singleplayer world probe $marker; see $log")
             }
         } else process.waitForLog(pattern, timeout, "singleplayer world probe $marker")
+        assertRunning("singleplayer world probe complete: $marker")
+        evidence.auditReady(requireNotNull(auditLaunch))
         if (marker == "BC_DEBUG_WORLD_LOADED mode=verify" && binding != null) verifyLoadedObserved = true
         if (marker == "BC_DEBUG_WORLD_EXITED" && binding != null)
             evidence.event("lifecycle_verify_native_exit_observed", mapOf("nonce" to binding.nonce.toString(),
@@ -534,29 +605,54 @@ class ClientFixture(
 
     fun waitDedicatedJoin() {
         val server = requireNotNull(dedicated)
+        assertRunning("dedicated client join start")
         server.waitLogCount(Regex("${Regex.escape(username)} joined the game"), priorJoinCount + 1,
             "fresh dedicated client join", Duration.ofMinutes(10))
+        assertRunning("dedicated client join complete")
+        evidence.auditReady(requireNotNull(auditLaunch))
     }
 
     fun processAlive(): Boolean = launcher?.alive == true
+
+    fun assertRunning(stage: String) {
+        requireNotNull(launcher).assertRunning(stage)
+        requireNotNull(xvfb).assertRunning("$stage display")
+    }
+
+    fun assertHealthyBeforeTeardown(stage: String) {
+        launcher?.assertHealthyBeforeTeardown(stage)
+        xvfb?.assertHealthyBeforeTeardown("$stage display")
+    }
+
+    fun expectNativeExit(reason: String) = requireNotNull(launcher).expectNaturalExit(reason)
+
+    fun awaitNativeExit(timeout: Duration, description: String) = requireNotNull(launcher).waitForExit(timeout, description)
 
     fun waitSettled(timeout: Duration = Duration.ofMinutes(10)) {
         val deadline = System.nanoTime() + timeout.toNanos()
         val settleUntil = System.nanoTime() + Duration.ofSeconds(config.settleSeconds).toNanos()
         while (System.nanoTime() < deadline) {
             val text = if (log.exists()) log.readText() else ""
+            assertRunning("client settling")
             if (System.nanoTime() >= settleUntil && Regex("\\[EMI] Reloaded EMI in [0-9]+ms").containsMatchIn(text) &&
-                Regex("Loaded [0-9]+ advancements").containsMatchIn(text)) return
-            check(launcher?.alive == true) { "client exited before settling; see $log" }
+                Regex("Loaded [0-9]+ advancements").containsMatchIn(text)) {
+                assertRunning("client settled")
+                evidence.auditReady(requireNotNull(auditLaunch))
+                return
+            }
             Thread.sleep(500)
         }
         launcher?.captureDiagnostics(evidence.directory.resolve("client-settle-timeout"))
         error("client settle timed out; see $log")
     }
 
-    fun waitTitleScreen() = requireNotNull(launcher).waitForLog(
-        Regex("ScreenCustomizationLayer registered: title_screen"), Duration.ofMinutes(10), "customized title screen",
-    )
+    fun waitTitleScreen() {
+        requireNotNull(launcher).waitForLog(
+            Regex("ScreenCustomizationLayer registered: title_screen"), Duration.ofMinutes(10), "customized title screen",
+        )
+        assertRunning("title screen")
+        evidence.auditReady(requireNotNull(auditLaunch))
+    }
 
     fun capture(name: String) {
         val target = evidence.directory.resolve(name)
@@ -579,6 +675,7 @@ class ClientFixture(
         require(Hashes.sha256(pair.client) == pair.clientSha256) { "client candidate changed during test" }
         require(Hashes.sha256(pair.server) == pair.serverSha256) { "server candidate changed during test" }
         diagnosticSupport.assertStable()
+        auditLaunch?.assertStable()
     }
 
     override fun close() {

@@ -25,6 +25,7 @@ class MultiplayerRuntimeTest {
         var campaignReady = false
         var fontRoundTrips = false
         var clientRestartAttempt = 0
+        private var whaleBinding: WhaleClientBinding? = null
 
         private val usernames = (1..3).map { "SmokeClient$it" }
         private val positions = listOf(
@@ -53,9 +54,18 @@ class MultiplayerRuntimeTest {
                 mapOf("JAVA_TOOL_OPTIONS" to harnessOptions),
                 allowLongClientLogin = true,
             )
+            whaleBinding = if (evidence.run.target == "restart-compat") {
+                val compact = offlineUuid(usernames.first())
+                val player = java.util.UUID.fromString("${compact.substring(0, 8)}-${compact.substring(8, 12)}-" +
+                    "${compact.substring(12, 16)}-${compact.substring(16, 20)}-${compact.substring(20)}")
+                WhaleClientBinding(evidence.run.config.runId, java.util.UUID.randomUUID(), player, java.util.UUID.randomUUID(),
+                    server.pair.clientSha256, server.pair.serverSha256,
+                    server.diagnosticSupport.runtimeSha256, server.diagnosticSupport.supportSha256)
+            } else null
             clients = usernames.mapIndexed { index, username ->
+                val arguments = if (evidence.run.tier == "debug") "$CLIENT_JVM_ARGS -Dbc.pack_test.debug=true" else CLIENT_JVM_ARGS
                 ClientFixture(evidence.run, server, username, index + 1,
-                    if (evidence.run.tier == "debug") "$CLIENT_JVM_ARGS -Dbc.pack_test.debug=true" else CLIENT_JVM_ARGS)
+                    arguments + if (index == 0 && whaleBinding != null) " ${whaleBinding!!.properties}" else "")
             }
         }
 
@@ -225,14 +235,24 @@ class MultiplayerRuntimeTest {
                         "heartbeat_deadline_seconds" to 90,
                     ))
                     val clientLogOffset = clientLogOffset(lead)
-                    server.send("execute in ${target.id} run tp ${lead.username} $x 200 $z")
-                    server.commandResult(
-                        "execute as ${lead.username} at @s if dimension ${target.id} if entity @s[x=$x,y=200,z=$z,distance=..1] run say $marker",
-                        Regex(Regex.escape(marker)),
-                        "dimension and destination verification ${target.id} location $index ${lead.username}",
-                        Duration.ofSeconds(90),
+                    DimensionArrival.verify(
+                        teleport = { server.send("execute in ${target.id} run tp ${lead.username} $x 200 $z") },
+                        serverPosition = { remaining ->
+                            server.commandResult(
+                                "execute as ${lead.username} at @s if dimension ${target.id} if entity @s[x=$x,y=200,z=$z,distance=..1] run say $marker",
+                                Regex(Regex.escape(marker)),
+                                "dimension and destination verification ${target.id} location $index ${lead.username}", remaining,
+                            )
+                        },
+                        clientPosition = { remaining ->
+                            waitForClientPosition(lead, target.id, clientLogOffset, x shr 4, z shr 4, remaining)
+                        },
+                        report = { measurement ->
+                            evidence.run.event("dimension_arrival_window", mapOf("dimension" to target.id,
+                                "location" to index, "budget_seconds" to 90, "complete" to measurement.complete,
+                                "elapsed_seconds" to measurement.elapsedSeconds, "remaining_seconds" to measurement.remainingSeconds))
+                        },
                     )
-                    waitForClientPosition(lead, target.id, clientLogOffset, x shr 4, z shr 4)
                     if (GeometrySmokePlan.isTerrain(target.id)) {
                         geometry += probeGeometry(lead, target.id, "travel_${target.id.replace(Regex("[^A-Za-z0-9]+"), "_")}_$index")
                     }
@@ -439,16 +459,25 @@ class MultiplayerRuntimeTest {
                 val arrivalOffset = clientLogOffset(lead)
                 server.send("execute in minecraft:overworld run tp ${lead.username} 0 108 0")
                 waitForClientPosition(lead, "minecraft:overworld", arrivalOffset, 0, 0)
-                server.send("execute in minecraft:overworld run summon untamedwilds:baleen_whale 0 101 0")
+                val binding = requireNotNull(whaleBinding)
+                val observationOffset = clientLogOffset(lead)
+                val deadline = ScenarioDeadline(Duration.ofSeconds(30))
+                server.send("execute in minecraft:overworld run summon untamedwilds:baleen_whale 0 101 0 ${binding.summonNbt}")
+                val spawnMarker = "BC_UNTAMED_WHALE_SPAWNED_${binding.nonce}"
                 server.commandResult(
-                    "execute in minecraft:overworld if entity @e[type=untamedwilds:baleen_whale,x=0,y=101,z=0,distance=..20] run say BC_UNTAMED_WHALE_SPAWNED",
-                    Regex("BC_UNTAMED_WHALE_SPAWNED"), "whale visible near reconnecting client", Duration.ofSeconds(30),
+                    "execute in minecraft:overworld if entity @e[type=untamedwilds:baleen_whale,nbt=${binding.summonNbt},limit=1] run say $spawnMarker",
+                    Regex(Regex.escape(spawnMarker)), "exact whale server spawn", deadline.requireRemaining(),
                 )
-                Thread.sleep(5_000)
-                check(itAlive(lead)) { "client exited after Untamed whale spawn; see ${lead.log}" }
+                val observed = waitForWhaleObservation(lead, binding, observationOffset, deadline)
+                requirePlayersOnline("whale client receipt ${binding.nonce}", listOf(lead), deadline)
+                deadline.requireRemaining()
                 server.assertHashes()
                 lead.assertHashes()
-                evidence.run.event("restart_compat_passed", mapOf("whale" to "untamedwilds:baleen_whale"))
+                evidence.run.event("whale_client_observed", observed + mapOf("budget_seconds" to 30,
+                    "remaining_seconds" to deadline.remaining().toNanos() / 1_000_000_000.0,
+                    "acceptance" to "native_client_entity_receipt_not_rendered_visibility"))
+                evidence.run.event("restart_compat_passed", mapOf("whale" to "untamedwilds:baleen_whale",
+                    "entity_uuid" to binding.entity.toString(), "nonce" to binding.nonce.toString()))
             }
             return
         }
@@ -476,6 +505,7 @@ class MultiplayerRuntimeTest {
                 "verify persistence marker before save",
                 Duration.ofSeconds(30),
             )
+            clients.forEach { it.assertHealthyBeforeTeardown("restart client teardown") }
             clients.forEach { it.close() }
             server.stopGracefully()
             server.restart()
@@ -568,6 +598,7 @@ class MultiplayerRuntimeTest {
     @Test @Order(7)
     fun multiplayerEvidenceIsCleanAndCandidatesAreUnchanged() {
         evidence.run.checkpoint("multiplayer log and hash audit") {
+            clients.forEach { it.assertHealthyBeforeTeardown("multiplayer final teardown") }
             clients.forEach { it.close() }
             server.stopGracefully()
             server.auditLogs()
@@ -580,16 +611,21 @@ class MultiplayerRuntimeTest {
 
     private fun itAlive(client: ClientFixture): Boolean = client.processAlive()
 
-    private fun requirePlayersOnline(stage: String, participants: List<ClientFixture>) {
+    private fun requirePlayersOnline(stage: String, participants: List<ClientFixture>, deadline: ScenarioDeadline? = null) {
+        server.assertRunning(stage)
         participants.forEach { client ->
+            client.assertRunning(stage)
             val marker = "BC_PLAYER_HEARTBEAT_${stage.replace(Regex("[^A-Za-z0-9]+"), "_")}_${client.username}"
             server.commandResult(
                 "execute as ${client.username} at @s run say $marker",
                 Regex(Regex.escape(marker)),
                 "${stage} player heartbeat ${client.username}",
-                Duration.ofMinutes(3),
+                deadline?.requireRemaining()?.let { minOf(Duration.ofMinutes(3), it) } ?: Duration.ofMinutes(3),
                 retryInterval = Duration.ofSeconds(10),
             )
+            server.assertRunning(stage)
+            client.assertRunning(stage)
+            deadline?.requireRemaining()
         }
         evidence.run.event("players_online", mapOf("stage" to stage, "players" to participants.map { it.username }))
     }
@@ -611,29 +647,55 @@ class MultiplayerRuntimeTest {
     private fun clientLogOffset(client: ClientFixture): Long =
         if (Files.isRegularFile(client.log)) Files.size(client.log) else 0L
 
+    private fun clientLogSince(client: ClientFixture, offset: Long): String {
+        if (!Files.isRegularFile(client.log)) return ""
+        return java.nio.channels.FileChannel.open(client.log).use { channel ->
+            val size = channel.size()
+            require(size >= offset) { "client log was truncated: ${client.log}" }
+            require(size - offset <= Int.MAX_VALUE) { "client log window is too large: ${client.log}" }
+            val bytes = java.nio.ByteBuffer.allocate((size - offset).toInt())
+            channel.position(offset)
+            while (bytes.hasRemaining() && channel.read(bytes) > 0) Unit
+            String(bytes.array(), 0, bytes.position(), Charsets.UTF_8)
+        }
+    }
+
+    private fun waitForWhaleObservation(
+        client: ClientFixture, binding: WhaleClientBinding, offset: Long, deadline: ScenarioDeadline,
+    ): Map<String, Any> {
+        val marker = "BC_WHALE_CLIENT_OBSERVED "
+        while (!deadline.remaining().isZero) {
+            server.assertRunning("native whale receipt")
+            client.assertRunning("native whale receipt")
+            val observations = clientLogSince(client, offset).substringBeforeLast('\n', "").lineSequence()
+                .filter { marker in it }.map { it.substringAfter(marker) }.toList()
+            require(observations.size <= 1) { "duplicate native whale observation" }
+            observations.singleOrNull()?.let { json ->
+                val result = binding.validate(com.fasterxml.jackson.module.kotlin.jacksonObjectMapper().readTree(json))
+                deadline.requireRemaining()
+                return result
+            }
+            deadline.sleep(Duration.ofMillis(250))
+        }
+        error("native whale client observation expired; see ${client.log}")
+    }
+
     private fun waitForClientPosition(
         client: ClientFixture, dimension: String, offset: Long, chunkX: Int? = null, chunkZ: Int? = null,
         budget: Duration = Duration.ofSeconds(90),
     ) {
         val marker = Regex("BC_DEBUG_CLIENT_POSITION dimension=${Regex.escape(dimension)} chunk_x=(-?\\d+) chunk_z=(-?\\d+)")
-        val deadline = System.nanoTime() + budget.toNanos()
-        while (System.nanoTime() < deadline) {
-            val text = if (Files.isRegularFile(client.log)) {
-                java.nio.channels.FileChannel.open(client.log).use { channel ->
-                    val size = channel.size()
-                    if (size <= offset) "" else {
-                        require(size - offset <= Int.MAX_VALUE) { "client log window is too large: ${client.log}" }
-                        val bytes = java.nio.ByteBuffer.allocate((size - offset).toInt())
-                        channel.position(offset)
-                        while (bytes.hasRemaining() && channel.read(bytes) > 0) Unit
-                        String(bytes.array(), 0, bytes.position(), Charsets.UTF_8)
-                    }
-                }
-            } else ""
+        val deadline = ScenarioDeadline(budget)
+        while (!deadline.remaining().isZero) {
+            client.assertRunning("client-side arrival in $dimension")
+            val text = clientLogSince(client, offset)
             if (marker.findAll(text).any { (chunkX == null || it.groupValues[1].toInt() == chunkX) &&
-                    (chunkZ == null || it.groupValues[2].toInt() == chunkZ) }) return
-            check(client.processAlive()) { "${client.username} exited before client-side arrival in $dimension; see ${client.log}" }
-            Thread.sleep(500)
+                    (chunkZ == null || it.groupValues[2].toInt() == chunkZ) }) {
+                client.assertRunning("client-side arrival in $dimension")
+                deadline.requireRemaining()
+                return
+            }
+            deadline.sleep(Duration.ofMillis(500))
         }
         error("${client.username} never reported client-side arrival in $dimension; see ${client.log}")
     }

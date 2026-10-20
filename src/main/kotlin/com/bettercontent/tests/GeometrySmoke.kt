@@ -7,6 +7,8 @@ import java.nio.file.Path
 data class GeometrySample(val dimension: String, val chunks: Int, val blocks: Map<String, Long>)
 
 object GeometrySmokePlan {
+    const val REQUIRED_NON_AIR_BLOCKS = 1024L
+    const val REQUIRED_EXPECTED_FAMILY_BLOCKS = 256L
     private val mapper = jacksonObjectMapper()
     private val utilityDimensions = setOf(
         "ae2:spatial_storage", "bloodmagic:dungeon",
@@ -67,16 +69,13 @@ object GeometrySmokePlan {
             .fold(0L) { sum, entry -> sum + entry.value }
         val nonAir = histogram.filterKeys { it !in air && it !in harnessBlocks }.values.sum()
         val native = histogram.filterKeys(terrainProfiles.getValue(dimension)).values.sum()
-        // Terrain dimensions produced at least 1,532 native blocks in
-        // retained Debug evidence, so a stronger floor catches mostly empty or
-        // wrong-generator worlds without depending on a lucky biome.
-        val requiredNative = 256L
-        val requiredNonAir = 1024L
-        val passed = nonAir >= requiredNonAir && native >= requiredNative
+        // Combined-sample smoke coverage of native terrain, not a golden world or shape oracle.
+        val passed = nonAir >= REQUIRED_NON_AIR_BLOCKS && native >= REQUIRED_EXPECTED_FAMILY_BLOCKS
         return mapOf(
             "dimension" to dimension, "samples" to samples.size, "chunks" to samples.sumOf { it.chunks },
             "non_air_blocks" to nonAir, "expected_family_blocks" to native,
-            "required_non_air_blocks" to requiredNonAir, "required_expected_family_blocks" to requiredNative,
+            "required_non_air_blocks" to REQUIRED_NON_AIR_BLOCKS,
+            "required_expected_family_blocks" to REQUIRED_EXPECTED_FAMILY_BLOCKS,
             "passed" to passed,
         )
     }

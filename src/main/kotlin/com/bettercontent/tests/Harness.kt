@@ -221,6 +221,28 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
     val tier: String = System.getenv("BC_TEST_TIER")?.takeIf { it in setOf("dist", "debug") } ?: "legacy"
     val target: String? = System.getenv("BC_TEST_TARGET")?.takeIf(String::isNotBlank)
     private val failures = mutableListOf<String>()
+    val integrity = ArtifactIntegrity()
+    private val runtimeAudits = linkedMapOf<FixtureAuditLogging.Launch, Boolean>()
+
+    fun registerAudit(launch: FixtureAuditLogging.Launch) {
+        runtimeAudits[launch] = false
+        event("fixture_audit_logging", mapOf("configuration" to launch.configuration.toString(),
+            "audit_log" to launch.auditLog.toString(), "hashes" to launch.hashes,
+            "scope" to "fixture_only", "production_inputs_changed" to false))
+    }
+
+    fun auditReady(launch: FixtureAuditLogging.Launch) {
+        check(launch in runtimeAudits) { "unregistered runtime audit launch" }
+        runtimeAudits[launch] = true
+        launch.requireNativeRecords()
+    }
+
+    fun auditLogging(): List<String> = runtimeAudits.flatMap { (launch, ready) ->
+        buildList {
+            runCatching { launch.assertStable() }.exceptionOrNull()?.let { add(it.toString()) }
+            if (ready) runCatching { launch.requireNativeRecords() }.exceptionOrNull()?.let { add(it.toString()) }
+        }
+    }
 
     init {
         event("suite_started", mapOf("suite" to suite, "source_suite" to sourceSuite, "tier" to tier,
@@ -276,6 +298,10 @@ class EvidenceRun(val config: TestConfig, val suite: String, val sourceSuite: St
         }
     }
 
+    fun recordFailure(message: String) {
+        if (message !in failures) failures += message
+    }
+
     fun finish(success: Boolean) {
         if (!success && failures.isEmpty()) failures += "suite failed outside a named checkpoint"
         event("suite_finished", mapOf("success" to success, "failures" to failures.toList()))
@@ -313,10 +339,18 @@ class ManagedProcess(
     cwd: Path,
     val log: Path,
     environment: Map<String, String> = emptyMap(),
+    private val lifecycleEvent: (Map<String, Any?>) -> Unit = {},
 ) : AutoCloseable {
     private val process: Process
     private val input: BufferedWriter
     private val tracker: ProcessTracker
+    private val lifecycleLock = Any()
+    private var expectation = "running"
+    private var expectationReason = "process must remain running"
+    private var exitStatus: Int? = null
+    private var exitPublished = false
+    private var lifecycleFailure: ProcessCorrectnessException? = null
+    private var closed = false
 
     init {
         log.parent.createDirectories()
@@ -326,6 +360,59 @@ class ManagedProcess(
         process = builder.start()
         input = process.outputStream.bufferedWriter()
         tracker = ProcessTracker(process.toHandle(), process.pid())
+        process.onExit().thenRun { synchronized(lifecycleLock) { observeExit() } }
+    }
+
+    private fun observeExit() {
+        if (exitStatus != null || process.isAlive) return
+        val status = process.exitValue()
+        exitStatus = status
+        if (expectation == "running" || (expectation == "natural" && status != 0)) {
+            lifecycleFailure = ProcessCorrectnessException(
+                "$name (PID ${process.pid()}) exited $status while $expectation: $expectationReason",
+            )
+        }
+    }
+
+    private fun publishExit() {
+        synchronized(lifecycleLock) {
+            observeExit()
+            if (exitStatus != null && !exitPublished) {
+                exitPublished = true
+                lifecycleEvent(mapOf("name" to name, "pid" to pid, "expectation" to expectation,
+                    "reason" to expectationReason, "exit_status" to exitStatus,
+                    "unexpected" to (lifecycleFailure != null), "error" to lifecycleFailure?.message))
+            }
+        }
+    }
+
+    fun assertRunning(description: String) {
+        synchronized(lifecycleLock) {
+            observeExit()
+            publishExit()
+            lifecycleFailure?.let { throw it }
+            check(process.isAlive) { "$name is not running during $description; see $log" }
+        }
+    }
+
+    fun expectNaturalExit(reason: String) {
+        synchronized(lifecycleLock) {
+            assertRunning("declare expected natural exit: $reason")
+            check(expectation == "running") { "$name already expects $expectation exit" }
+            expectation = "natural"
+            expectationReason = reason
+        }
+        lifecycleEvent(mapOf("name" to name, "pid" to pid, "expectation" to "natural", "reason" to reason))
+    }
+
+    /** Checks an active launch but tolerates one already deliberately stopped. */
+    fun assertHealthyBeforeTeardown(description: String) {
+        synchronized(lifecycleLock) {
+            observeExit()
+            publishExit()
+            lifecycleFailure?.let { throw it }
+            if (expectation == "running") assertRunning(description)
+        }
     }
 
     val alive: Boolean get() = process.isAlive
@@ -333,7 +420,7 @@ class ManagedProcess(
     internal val trackedPids: Set<Long> get() = tracker.trackedPids()
 
     fun send(line: String) {
-        require(process.isAlive) { "$name is not running" }
+        assertRunning("send command")
         input.write(line)
         input.newLine()
         input.flush()
@@ -343,8 +430,11 @@ class ManagedProcess(
         val deadline = System.nanoTime() + timeout.toNanos()
         while (System.nanoTime() < deadline) {
             val text = if (log.exists()) log.readText() else ""
-            if (pattern.containsMatchIn(text)) return
-            check(process.isAlive) { "$name exited before $description; see $log" }
+            assertRunning(description)
+            if (pattern.containsMatchIn(text)) {
+                assertRunning(description)
+                return
+            }
             TimeUnit.NANOSECONDS.sleep(minOf(500_000_000, (deadline - System.nanoTime()).coerceAtLeast(0)))
         }
         captureDiagnostics(log.parent.resolve("$name-timeout"))
@@ -358,8 +448,11 @@ class ManagedProcess(
             check("[net.minecraft.server.Main]: Failed to start the minecraft server" !in text) {
                 "$name reported a fatal server startup failure before $description; see $log"
             }
-            if (pattern.findAll(text).count() >= expected) return
-            check(process.isAlive) { "$name exited before $description; see $log" }
+            assertRunning(description)
+            if (pattern.findAll(text).count() >= expected) {
+                assertRunning(description)
+                return
+            }
             TimeUnit.NANOSECONDS.sleep(minOf(500_000_000, (deadline - System.nanoTime()).coerceAtLeast(0)))
         }
         captureDiagnostics(log.parent.resolve("$name-timeout"))
@@ -390,14 +483,54 @@ class ManagedProcess(
     }
 
     fun stop(timeout: Duration = Duration.ofSeconds(20)) {
-        runCatching { input.close() }
-        tracker.stop(timeout)
+        val requestedTeardown = synchronized(lifecycleLock) {
+            observeExit()
+            var requested = false
+            if (!closed) {
+                // Observe before authorizing signals: a pre-existing exit cannot become teardown.
+                if (expectation == "running" && process.isAlive) {
+                    expectation = "teardown"
+                    expectationReason = "harness requested teardown"
+                    requested = true
+                }
+                closed = true
+            }
+            requested
+        }
+        val reportingFailure = if (requestedTeardown) runCatching {
+            lifecycleEvent(mapOf("name" to name, "pid" to pid, "expectation" to "teardown",
+                "reason" to "harness requested teardown"))
+        }.exceptionOrNull() else null
+        var cleanupFailure: Throwable? = null
+        try {
+            runCatching { input.close() }
+            tracker.stop(timeout)
+        } catch (failure: Throwable) {
+            cleanupFailure = failure
+        }
+        val exitReportingFailure = runCatching { publishExit() }.exceptionOrNull()
+        val correctness = synchronized(lifecycleLock) { lifecycleFailure }
+        val failures = listOfNotNull(cleanupFailure, correctness, reportingFailure, exitReportingFailure)
+        if (failures.isNotEmpty()) {
+            val first = failures.first()
+            failures.drop(1).filter { it !== first }.forEach(first::addSuppressed)
+            throw first
+        }
     }
 
     fun waitForExit(timeout: Duration, description: String) {
         val deadline = System.nanoTime() + timeout.toNanos()
         while (System.nanoTime() < deadline) {
-            if (!process.isAlive && tracker.trackedPids().none { ProcessHandle.of(it).orElse(null)?.isAlive == true }) return
+            if (!process.isAlive && tracker.trackedPids().none { ProcessHandle.of(it).orElse(null)?.isAlive == true }) {
+                publishExit()
+                synchronized(lifecycleLock) {
+                    lifecycleFailure?.let { throw it }
+                    check(expectation == "natural" && exitStatus == 0) {
+                        "$name exited without a successful expected natural exit; see $log"
+                    }
+                }
+                return
+            }
             Thread.sleep(250)
         }
         captureDiagnostics(log.parent.resolve("$name-exit-timeout"))

@@ -5,6 +5,15 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
+/** A correctness failure, independent of whether every owned process was terminated. */
+class ProcessCorrectnessException(message: String) : IllegalStateException(message)
+
+private class FixtureCloseException(val failures: List<Exception>) : IllegalStateException(
+    "${failures.size} fixture cleanup operation(s) failed", failures.first(),
+) {
+    init { failures.drop(1).forEach(::addSuppressed) }
+}
+
 class ProcessCleanupException(val survivingPids: List<Long>) : IllegalStateException(
     "process cleanup failed; surviving PIDs: ${survivingPids.joinToString()}",
 )
@@ -81,9 +90,7 @@ fun closeAll(vararg resources: AutoCloseable?) {
         try { resource.close(); null } catch (failure: Exception) { failure }
     }
     if (failures.isNotEmpty()) {
-        val combined = IllegalStateException("${failures.size} fixture cleanup operation(s) failed", failures.first())
-        failures.drop(1).forEach(combined::addSuppressed)
-        throw combined
+        throw FixtureCloseException(failures)
     }
 }
 
@@ -94,11 +101,20 @@ fun cleanupFixtures(resources: List<AutoCloseable>, report: (Map<String, Any?>) 
         else -> (if (error is ProcessCleanupException) error.survivingPids else emptyList()) +
             survivingPids(error.cause) + error.suppressed.flatMap(::survivingPids)
     }
+    fun leaves(error: Throwable?): List<Throwable> = when (error) {
+        null -> emptyList()
+        is FixtureCloseException -> error.failures.flatMap(::leaves)
+        else -> listOf(error) + error.suppressed.flatMap(::leaves)
+    }
+    val failures = leaves(failure)
+    val correctness = failures.filterIsInstance<ProcessCorrectnessException>()
+    val terminationFailures = failures.filterNot { it is ProcessCorrectnessException }
     val reportingFailure = runCatching {
         report(mapOf(
-            "complete" to (failure == null),
+            "complete" to terminationFailures.isEmpty(),
             "surviving_pids" to survivingPids(failure).distinct().sorted(),
-            "error" to failure?.let { it.cause?.message ?: it.message },
+            "error" to terminationFailures.firstOrNull()?.message,
+            "correctness_errors" to correctness.map { it.message },
         ))
     }.exceptionOrNull()
     if (failure != null) {

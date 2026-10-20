@@ -29,6 +29,35 @@ class GeometrySmokePlanTest {
     }
 
     @Test
+    fun exactThresholdsAndAdjacentFailures() {
+        val dimension = "aether:the_aether"
+        fun sample(nonAir: Long, native: Long) = GeometrySample(dimension, 9,
+            mapOf("aether:holystone" to native, "minecraft:dirt" to nonAir - native))
+        assertEquals(true, GeometrySmokePlan.assess(dimension, listOf(sample(1024, 256)))["passed"])
+        assertEquals(false, GeometrySmokePlan.assess(dimension, listOf(sample(1023, 256)))["passed"])
+        assertEquals(false, GeometrySmokePlan.assess(dimension, listOf(sample(1024, 255)))["passed"])
+        val combined = GeometrySmokePlan.assess(dimension, listOf(sample(512, 128), sample(512, 128)))
+        assertEquals(true, combined["passed"])
+        assertEquals(GeometrySmokePlan.REQUIRED_NON_AIR_BLOCKS, combined["required_non_air_blocks"])
+        assertEquals(GeometrySmokePlan.REQUIRED_EXPECTED_FAMILY_BLOCKS, combined["required_expected_family_blocks"])
+    }
+
+    @Test
+    fun airHarnessBlocksAndIncompleteChunksDoNotSatisfyThresholds() {
+        val dimension = "aether:the_aether"
+        val artificial = GeometrySample(dimension, 9, mapOf("aether:holystone" to 256,
+            "minecraft:air" to 100_000, "minecraft:cave_air" to 100_000, "minecraft:void_air" to 100_000,
+            "minecraft:bedrock" to 100_000, "minecraft:obsidian" to 100_000,
+            "minecraft:oxidized_copper" to 100_000, "better_dimension_fonts:return_seal" to 100_000))
+        val result = GeometrySmokePlan.assess(dimension, listOf(artificial))
+        assertEquals(256L, result["non_air_blocks"])
+        assertEquals(false, result["passed"])
+        assertThrows(IllegalArgumentException::class.java) {
+            GeometrySmokePlan.assess(dimension, listOf(artificial.copy(chunks = 8)))
+        }
+    }
+
+    @Test
     fun acceptsExpectedNativeBlocksAcrossMultipleSamples() {
         val dimension = "aether:the_aether"
         val samples = listOf(

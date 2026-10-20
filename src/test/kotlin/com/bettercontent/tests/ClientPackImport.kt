@@ -10,6 +10,7 @@ import kotlin.io.path.readText
 /** Fresh extracted client setup only. Never repairs or overwrites an existing pack. */
 internal object ClientPackImport {
     data class Pins(val name: String, val author: String, val version: String, val minecraft: String, val forge: String) {
+        val coordinate: String get() = "$minecraft-$forge"
         fun initCommand() = listOf("packwiz", "init", "--name", name, "--author", author,
             "--version", version, "--mc-version", minecraft, "--modloader", "forge", "--forge-version", forge,
             "--index-file", "index.toml", "--pack-file", "pack.toml", "-y")
@@ -17,6 +18,7 @@ internal object ClientPackImport {
 
     fun pins(manifest: JsonNode): Pins {
         require(manifest.isObject) { "client manifest must be an object" }
+        CandidateStateContract.clientCoordinate(manifest)
         fun text(node: JsonNode, key: String, empty: Boolean = false): String {
             val value = node.path(key)
             require(value.isTextual) { "manifest $key must be a string" }

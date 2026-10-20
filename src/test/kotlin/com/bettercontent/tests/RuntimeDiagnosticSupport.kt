@@ -16,6 +16,8 @@ class RuntimeDiagnosticSupport(private val evidence: EvidenceRun, pair: Candidat
     private val installed = mutableListOf<Path>()
     private val policies = mutableMapOf<Path, String>()
     val properties: String
+    val supportSha256: String get() = sourceHash
+    val runtimeSha256: String
     init {
         val mapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
         val binding = System.getenv("BC_CANDIDATE_BINDING")?.takeIf(String::isNotBlank)?.let { mapper.readTree(Path.of(it).toFile()) }
@@ -29,16 +31,17 @@ class RuntimeDiagnosticSupport(private val evidence: EvidenceRun, pair: Candidat
                 ?: error("handoff does not pin the prepared runtime support artifact")
         }
         require(boundHash == sourceHash) { "runtime support artifact is missing/unverified for this candidate" }
+        evidence.integrity.register(source, sourceHash, ArtifactRole.SUPPORT_SOURCE)
         RetiredInventoryArtifactExclusion.validate(pair.client)
         RetiredInventoryArtifactExclusion.validate(pair.server)
-        val runtimeHash=ZipFile(pair.server.toFile()).use { zip ->
+        runtimeSha256=ZipFile(pair.server.toFile()).use { zip ->
             val entries=zip.entries().asSequence().filter { it.name.substringAfterLast('/').startsWith("better-runtime-diagnostics-") && it.name.endsWith(".jar") }.toList()
             require(entries.size==1) { "candidate must contain one runtime diagnostics JAR" }
             zip.getInputStream(entries.single()).use { MessageDigest.getInstance("SHA-256").digest(it.readBytes()).joinToString("") { b -> "%02x".format(b) } }
         }
         properties=mapOf("run_id" to evidence.config.runId,"player" to player,"mode" to evidence.tier,
             "client_sha256" to pair.clientSha256,"server_sha256" to pair.serverSha256,
-            "runtime_sha256" to runtimeHash,"support_sha256" to sourceHash,"dir" to bridge.toString())
+            "runtime_sha256" to runtimeSha256,"support_sha256" to sourceHash,"dir" to bridge.toString())
             .entries.joinToString(" ") { (key,value) ->
                 require(value.none { it.isWhitespace() || it=='\"' || it=='\'' }) { "unsafe diagnostics property" }
                 "-Dbc.pack_test.diagnostics.$key=$value"
@@ -56,9 +59,11 @@ class RuntimeDiagnosticSupport(private val evidence: EvidenceRun, pair: Candidat
         val patched=RuntimeDiagnosticPolicy.classify(original)
         evidence.directory.resolve("diagnostic-policy-${installed.size}-original.json").toFile().writeText(original)
         policy.toFile().writeText(patched);policies[policy]=Hashes.sha256(policy)
+        evidence.integrity.register(policy, policies.getValue(policy), ArtifactRole.FIXTURE_POLICY)
         evidence.event("diagnostic_fixture_classification",mapOf("path" to policy.toString(),"original_policy_sha256" to originalHash,
             "fixture_policy_sha256" to policies.getValue(policy),"namespace" to RuntimeDiagnosticPolicy.NAMESPACE))
         val destination=mods.resolve(source.fileName);Files.copy(source,destination);installed.add(destination)
+        evidence.integrity.register(destination, sourceHash, ArtifactRole.SUPPORT_INSTALLED)
     }
     fun assertStable() {
         require(Hashes.sha256(source)==sourceHash) { "diagnostic source changed" }

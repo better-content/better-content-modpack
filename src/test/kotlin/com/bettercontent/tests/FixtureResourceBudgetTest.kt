@@ -67,7 +67,8 @@ class FixtureResourceBudgetTest {
             assertTrue(path.contains("normalizeFixtureProcessorBudget("))
             assertTrue(path.contains("recordClientResourceBudget("))
         }
-        assertTrue(normal.contains("\"--jvm-args=\$jvmArgs\""))
+        assertTrue(normal.contains("portableClientCommand(config, client, pins, jvmArgs"))
+        assertTrue(quickplay.contains("quickPlayClientCommand(config, client, pins, jvmArgs"))
         assertTrue(source.contains("\"LP_NUM_THREADS\" to \"2\""))
         assertTrue(source.contains("\"LIBGL_ALWAYS_SOFTWARE\" to \"1\""))
         assertTrue(source.contains("\"--resolution\", \"1280x720\""))

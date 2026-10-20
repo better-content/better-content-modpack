@@ -39,6 +39,17 @@ that reports an actual failure still fails on that operation, not its severity o
 quota. Familiar-warning text is not an exemption for an ERROR/FATAL. Existing narrow
 compatibility classifications remain independently tested; none waives a failed launch.
 
+Runtime fixtures retain a separate unfiltered native audit log for each JVM launch. They derive
+fixture-only logging XML from the candidate's production XML, preserve its presentation filters,
+and empty only the extracted Log Begone suppression lists while keeping that mod installed.
+Production files and ZIP bytes are not changed. Original/derived configuration hashes and audit
+paths are recorded; configuration drift or a missing/non-native audit sink after readiness fails.
+Restart launches use distinct retained audit files. Final strict-log, configuration and registered
+artifact-integrity audits run after teardown for every runtime group and targeted retry, including
+when a scenario or cleanup already failed. Each finalizer is attempted independently; additional
+findings remain attached to the original failure and fail structured evidence and JUnit.
+Previously suppressed ERROR/FATAL records are not grandfathered into compatibility exemptions.
+
 Exact native Forge `DeferredWorkQueue` WARN messages reporting elapsed deferred startup work on
 `main` or `Render thread` are **performance diagnostics**, not failed operations. The parser requires
 the complete timestamp/logger/message, a valid mod namespace, and a positive finite duration in
@@ -273,6 +284,15 @@ Targeted fixtures also require a binding or a coordinator handoff whose `artifac
 pin the prepared runtime-support path and SHA-256. A leftover support JAR is not an input merely
 because it exists. Prior run IDs establish diagnostic lineage, not a prior-pass waiver.
 
+Candidate contracts parse effective server properties (including escapes), reject duplicate keys,
+and compare them with authored production defaults. Server worlds, player/identity files and
+lifecycle state, and client saves/state under override roots, are forbidden in candidates. Initial
+extracts must be fresh before fixture mutation; contaminated candidates fail without repair or
+sanitization. Intentional restart and explicitly staged persistence saves do not repeat first-launch
+freshness checks. Client and server loader coordinates must agree with the supported Minecraft
+1.20.1 / Forge 47.4.22 runtime; both normal and quick-play clients launch from validated manifest
+pins, with no independent hard-coded quick-play fallback.
+
 Dist includes Dev, candidate contracts, a real full-pack client joining a fresh dedicated server,
 an online player heartbeat, strict logs, and candidate hashes. It does not run dimension travel.
 Unbound full Debug uses unchanged candidate hashes from its newly packaged Dist run; bound full
@@ -369,8 +389,15 @@ Cleanup retains observed process descendants after their parent exits and checks
 graceful and forced shutdown. Every fixture is closed even when an earlier close fails. The
 `process_cleanup` event reports `complete=false`, surviving PIDs, and an error when cleanup fails;
 the suite then fails and retains its fixture and original failure evidence across task handoff. `complete=true` means
-all tracked processes have exited. Dev tests ordinary, forced, and orphaned-child
-shutdown without launching Minecraft.
+all tracked processes have exited; it does not waive an unexpected exit. Separate lifecycle
+observations retain PID, expected-exit reason and exit status. An unsolicited exit (even status zero)
+is a correctness failure; old readiness/settling markers cannot authorize a dead process. Expected
+natural exit is declared before its triggering request and requires zero status plus the existing
+native completion oracle. Harness-requested TERM/KILL teardown is recorded separately and remains
+idempotent. Client liveness brackets player heartbeats and is checked before teardown. Singleplayer
+`clearLevel` completion stops the integrated world, not its client process. Cleanup still attempts
+every resource and reports actual termination completeness independently of lifecycle correctness.
+Dev tests ordinary, forced, unexpected, and orphaned-child shutdown without launching Minecraft.
 
 A runtime snapshot is evidence for a target only when its snapshot ID appears in that run's server
 events and the run's `candidate_selected` hashes match the target under discussion. Completeness
@@ -383,13 +410,14 @@ The better-runtime-diagnostics completion schema is `bc.runtime_dump_completion.
 from the loaded Creating Space rocket-accessible-dimension registry and enabled Dimension Drink Font
 configuration; target counts are evidence, not hard-coded assumptions. Every discovered target
 must be loaded. A single full-pack client travels as a spectator and requires both a server-side
-position check and a client-side dimension/chunk report within 90 seconds. Font-only destinations
+position check and a client-side dimension/chunk report within one shared 90-second deadline,
+including command time and client polling. Font-only destinations
 require a direct-travel denial guard. Debug
 visits three fresh, pairwise-distant locations per directly teleportable target and always requires three
 consecutive samples at at least 18 mean TPS. The other two clients start only for Debug's
 three-client Survival campaign check.
 For terrain dimensions, Debug counts block IDs in 3×3 already loaded chunks at each visit. A
-dimension passes when the combined samples contain at least 64 non-air blocks and 16 blocks from
+dimension passes when the combined samples contain at least 1,024 non-air, non-harness blocks and 256 blocks from
 its broad expected family. Space and utility dimensions have no terrain threshold. Each of the
 Bumblezone, Aether, and Nether Fonts is also activated through the same server-side
 block interaction used by right-click; the real client must arrive, pass a geometry probe, and
@@ -509,7 +537,7 @@ is disclosed and is not a hardware-accelerated performance or manual visual acce
 | Dimension/Font traversal | Runtime-discovered registries/config, three fresh positions, server/client chunk reports, direct-denial guard and block-family/geometry oracles | Ninety-second arrivals; at least 18 TPS in three consecutive samples within one 180-second stabilization deadline; bounded nested calls |
 | Campaign/repair | Three real Survival clients, fixture corridors, native routed encounters and repair geometry | Recorded three-client resource profile, bounded routed-stage/heartbeat waits; rejected routes recorded, not waived |
 | Observed gameplay | One real Survival client, actual native ticks/monotonic time, saved campaign and ordinary-trader witnesses, native six-fix actions and framebuffer/audio evidence | Fixed 35-minute deadline per visit, each ≥18,000 ticks/900 eligible seconds and <36,000 ticks; existing software-rendered fixture profile, real restart; post-soak shader matrix ≤20 minutes/24,000 ticks after bounded startup |
-| Restart/Flesh/whale | Current fixture saved state, native restart/reconnect and client spawn observations | Bounded stop/restart/client waits; fresh evidence and unchanged candidate hashes |
+| Restart/Flesh/whale | Current fixture saved state, native restart/reconnect; `restart-compat` binds the exact summoned whale UUID to native client join and two subsequent END ticks, not rendered visibility | Bounded stop/restart/client waits; whale receipt and heartbeat share 30 seconds after summon; fresh evidence and unchanged candidate hashes |
 | Lifecycle/snapshot/pyramid | Native completion schema and snapshot ID, one committed lineage archive, pinned structure seed and saved structure record | Bounded native command/completion waits; one generation only; saved evidence belongs to the current run |
 | Final audits/cleanup | Current logs, ZIP/support digests and all owned identities | Bounded diagnostic/TERM/KILL/reap phases; retain evidence across handoffs; process cleanup is not data purge |
 
