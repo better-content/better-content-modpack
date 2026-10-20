@@ -149,10 +149,10 @@ Compressor and the first Pressure Chamber interface.
 Sugar fermentation supplies renewable ethanol, and an open Create Basin oxidizes
 it into canonical ChemLib acetic acid. Acetic acid preserves Pickled Pickles and,
 with kelp-derived cellulose, makes reusable-capacity Acetate Membranes for hazardous
-ChemLib pollutants. Two membranes, two pressure seals, and compressed iron make an
-Airtight Upgrade. Use it on a Basin, Fluid Mixer, or Thermopneumatic Processing Plant
-before processing gas-state ChemLib inputs or outputs; sneak-use empty-handed to
-recover it.
+ChemLib pollutants. Two membranes, two pressure seals, two Bumblezone Carvable Wax,
+and one compressed-iron ingot make an Airtight Upgrade. Use it on a Basin, Fluid Mixer,
+or Thermopneumatic Processing Plant before processing gas-state ChemLib inputs or outputs;
+sneak-use empty-handed to recover it.
 
 The sealed pressure chain electrolyzes water, oxidizes Black Shale sulfur through
 the vanadium contact process, and hydrates sulfur trioxide into sulfuric acid. The

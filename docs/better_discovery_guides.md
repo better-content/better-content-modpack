@@ -98,8 +98,9 @@ documents.
   the player selects Begin or uses Enter, Space, or Escape.
   A lesson needs eight seconds of rendered exposure to advance loading history; quick
   joins and loading stalls do not count as reading. All lessons remain directly available.
-- Movement lessons display the current loaded bindings. Menus must not consume the
-  lifetime of a meal recap, and larger recaps need more reading time than a single line.
+- Movement lessons display the current loaded bindings. Timed teaching feedback must
+  allow enough visible reading time for its content; menus must not consume that time
+  while the feedback is hidden.
 - Show a native doorway only when its installed target can be opened. Do not substitute
   a raw resource ID, a guessed key binding, or a vague message for a working guide.
 - Keep player-authored Trace notes distinct from curated instructions. Their usefulness

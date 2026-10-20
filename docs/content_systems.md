@@ -25,9 +25,9 @@ runtime logic.
 | Celestial events | Better Celestial Events | Pack authors habitat tags; Font and Commerce owners implement free travel and fair visits. See [Celestial events](celestial-events.md). |
 | Kinetic assembly | Create | Uses Machine Blocks only at listed direct roots |
 | Acid and gas chemistry | ChemLib, PneumaticCraft, Create, Better Content Fixes | Pack authors canonical acid routes and renewable acetic uses; airtight machine upgrades retain gas-state ChemLib contents |
-| Electrical components and stationary generation | PowerGrid and MoreRed | Electrical Block starts PowerGrid's first generator/design roots; competing stationary generators are cut |
+| Electrical components and stationary generation | PowerGrid and MoreRed | Generator Housing uses plates, conductive casings, wire and an Electron Tube at 2 bar; the Soldering Table uses a printed PCB. Neither consumes an Electrical Machine Block; competing stationary generators are cut |
 | Dragon ecology and materials | Ice and Fire | Replaces vanilla dragon-boss products; rare Overworld ecology supplies tagged products and equal-stat Dragonsteel TCon materials |
-| Aerospace components | Creating Space | Space Block starts three aerospace roots |
+| Aerospace components | Creating Space | One Space Machine Block fits each Air Liquefier; Rocket Engineer Table and Mechanical Electrolyzer instead use fitted components plus an integrated circuit at 4.5 bar |
 
 ## Stable pack IDs
 

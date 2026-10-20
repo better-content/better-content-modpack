@@ -78,8 +78,10 @@ Complicated Bees, EMI Ores, Forgotten Ruins, Ice and Fire, Hexerei, Malum, Occul
 Goety, Ars Elemental, Ars Creo, Ars Energistique, Polymorph, Supplementaries, Amendments, Genetic
 Animals, Fowl Play, Advanced Chimneys, and Realistic Block Physics are active. Farmer's Delight,
 Ube's Delight, Farmer's Respite, and Brewin' and Chewin' are the active Delight food-and-drink
-set. The Journal inventory owns Sort, Quick Stack, and Trash with Undo; the previous separate
-inventory utility mods are removed. The maintained `config/adchimneys/` definitions cover active furnace,
+set. Supported ordinary inventory/container paths use Quark's native sorting; separate
+Sophisticated screens retain their own native sorting. Journal's custom Sort/Quick Stack/Trash/Undo
+utilities remain retired; see [native inventory parity](inventory-parity.md).
+The maintained `config/adchimneys/` definitions cover active furnace,
 burner, smeltery, and generator emitters.
 
 Create Sifting 1.8.6 is active with Create 6.0.8. String-mesh hand sifting is the
@@ -110,10 +112,12 @@ promise a low-memory target without a new measured comparison against current ma
 texture, atlas, native/render, worldgen, and decorative surfaces must be measured together; JVM
 flag changes alone do not establish a smaller supported profile.
 
-Runtime recipe-audit and block-hardness diagnostics ship disabled. An explicitly requested
-`server` or `all` suite invokes the packaged runtime-data dumper, requires a complete snapshot, and
-atomically refreshes ignored `generated/runtime-dumps/`. Incomplete snapshots never replace the
-last complete one.
+Runtime recipe-audit and block-hardness diagnostics ship disabled. Explicitly authorized full
+Debug through `./test.main.kts debug` includes the packaged runtime-data dumper, requires a complete
+snapshot, and atomically refreshes ignored `generated/runtime-dumps/`. Incomplete snapshots never
+replace the last complete one. The public tiers are Dev, Dist and Debug; `server` and `all` are not
+public selectors. The focused `--target server-ready` checks readiness only, not snapshot promotion.
+See [testing](testing.md) for authorization, candidate binding and the full Debug procedure.
 
 ## Shader block motion classification
 
