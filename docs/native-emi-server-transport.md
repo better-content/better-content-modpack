@@ -47,7 +47,9 @@ launches no Forge instance and does not establish a handshake, fill, persistence
 pointer pass. Explicitly authorized runtime checks must cover native initialization, real
 client/server selection authority, unchanged candidate hashes, strict log audit, persistence
 when affected and process cleanup. Paired inventory acceptance is required for GUI/integration
-changes; native API checks and human pointer checks are separate.
+changes; native API/action checks and LLM review of actual native captures establish automated
+acceptance under that contract. Human-pointer checks remain separate and are `NOT_PERFORMED`
+when not exercised, not a blocking automated gate.
 
 Historical candidate worlds and reports are not standing evidence dependencies. Use evidence
 for diagnosis and retain it across handoffs by default under

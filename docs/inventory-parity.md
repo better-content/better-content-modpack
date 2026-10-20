@@ -77,7 +77,7 @@ commands remain outside ordinary placement admission.
 
 These describe owning source changes, not proof that the bundled pack JARs were deployed.
 Optional-mod/version admission, actual menu identities, paired same-artifact captures and
-human interaction verdicts must still be reported independently.
+automated native-behavior, LLM visual-review and human-interaction verdicts must still be reported independently.
 
 ## Acceptance before claiming completion
 
@@ -90,14 +90,26 @@ human interaction verdicts must still be reported independently.
   or explicitly mark them unverified. Review ordinary inventory with an equipped bag and separate
   native backpacks of representative sizes, narrow views, original personal-inventory panels and
   reload/disabled/foreign fallbacks when affected by the change.
-- Native API verification and actual human pointer verification are distinct verdicts. Automated
-  tests must not synthesize pointer/mouse movement/clicks/scroll/resize. A mocked GUI, static check,
+- Automated production acceptance requires native behavior verification **and LLM inspection of
+  the actual retained native framebuffer images** for both paths on the same candidate. Review
+  readable labels, item counts, ordering, clipping, overlaps, native controls, unchanged personal
+  panels and separate-backpack boundaries against the scenario's explicit visual criteria.
+  Bind each finding to the image path/hash, native screen/menu identity, dimensions/GUI scale
+  and production/support hashes. Missing, ambiguous or defective images fail visual acceptance;
+  image existence, filenames, counters and model-generated previews are not review.
+- Native API/action verification, LLM visual review and actual human pointer verification are
+  distinct verdicts. Human pointer verification is not a blocking production gate; report it as
+  `NOT_PERFORMED` unless actually exercised. Physical listening likewise remains `NOT_PERFORMED`
+  unless performed, without turning mixer activity into a listening claim. Automated tests must
+  not synthesize pointer/mouse movement/clicks/scroll/resize. A mocked GUI, static check,
   successful client join or equipped-only frame cannot replace paired visual acceptance.
 
 Skipping either native path or its real visual/behavioral verification is an implementation and
 acceptance failure for the owning assistant, not completion or inventory-wide partial success.
-Without explicit deployment/runtime authorization, perform local checks and state **paired visual
-acceptance pending**. This contract does not authorize unsolicited deployment or a distribution.
+The automated acceptance change does not weaken native protocol, behavior, parity or image-review
+requirements, and does not claim equivalence to human interaction. Without explicit deployment/runtime
+authorization, perform local checks and state **paired visual acceptance pending**. This contract
+does not authorize unsolicited deployment or a distribution.
 
 ## Independent runtime gates and reporting
 
@@ -105,7 +117,8 @@ Inventory source/artifact audit does not independently requalify third-party sto
 Do not recreate the removed 27-case custom storage qualification driver, commands, fixtures or
 ledger. Keep independent diagnostic mapping/isolation, storage-free world-lifecycle/Blight and
 baseline Dist checks in their owning harness; full Debug remains separately authorized.
-No source/audit/lifecycle/Dist result substitutes for visual or interaction proof.
+No source/audit/lifecycle/Dist result substitutes for the required native behavior and LLM visual
+proof. Human-pointer evidence remains separately labeled and is not a required automated verdict.
 
 During an active task, retain enough captures/logs/hashes for actual review and first-failure
 diagnosis; do not relabel a failed candidate as passed or weaken safety assertions for a retry.

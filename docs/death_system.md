@@ -110,8 +110,10 @@ Native Respawn/Title handlers and enable timing remain unchanged.
 Exact metric definitions, thresholds, ranking, payload bounds and local gates belong
 in [Death's Door's README](../../mod_source/better-deaths-door/README.md#current-world-life-records-and-death-presentation).
 These source changes are not a claim that the tracked bundled JAR was deployed.
-Local gates, isolated visual observations and human interaction acceptance are separate;
-no pack deployment, Packwiz refresh, packaging or Dist/Debug follows from this work.
+Local gates, native behavior, LLM-reviewed native captures and human interaction are separate
+verdicts under the [shared acceptance contract](inventory-parity.md#acceptance-before-claiming-completion).
+Automated acceptance does not require a human-pointer pass or claim one occurred. No pack
+deployment, Packwiz refresh, packaging or Dist/Debug follows from source work alone.
 
 ## Current pack policy and persistence
 

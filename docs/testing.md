@@ -365,9 +365,12 @@ structured evidence beneath `generated/test-evidence/<run-id>/`: incremental JSO
 `bc.modpack_test_run.v1` summary, and candidate hashes. Runtime groups add logs and timeout
 diagnostics; Debug also collects runtime data. The single-player group records the customized
 title screen without injecting input. Failed fixtures remain retained for diagnosis across handoffs by default.
-Automated tests must not synthesize mouse movement or mouse
-clicks. Threads reader development, the Quark chat emote picker, the World Condenser configuration
-screen, and the Create World menu are manual visual gates. The seeded persistence probe's
+Automated tests must not synthesize mouse movement, clicks, scrolling or resizing. Threads reader
+development, the Quark chat emote picker, the World Condenser configuration screen and the Create
+World menu require actual native capture review and native action/behavior verification; they do
+not require a blocking human-pointer verdict. If the harness cannot exercise the native action
+without synthetic pointer input, the behavior remains unverified rather than being waived by
+a capture. Human interaction, when not performed, is explicitly `NOT_PERFORMED`. The seeded persistence probe's
 fallback marker isolates persistence; it is not production spawn-search acceptance. The separate
 unseeded probe creates an absent normal world with a native random seed, observes the production
 resolved marker, uses the typed production onboarding action, and requires Survival and forty
@@ -497,9 +500,10 @@ retains per-launch PCM/header/binding evidence. A Forge source-start observer ad
 the actual native `Channel.playing()` state after play; it does not sample volume/pitch getters
 that advance sound RNG. Dispatch, native source playing and aggregate nonzero mixer output are
 not cue-specific waveform identification or physical listening approval. Likewise,
-native rod-menu/backpack frames do not replace the paired human-pointer inventory checkpoint in
-[inventory parity](inventory-parity.md). Keep those verdicts distinct and report unavailable human
-or physical acceptance as pending, never infer it from source checks or counters. All gameplay
+native rod-menu/backpack frames require paired native behavior and LLM inspection under
+[inventory parity](inventory-parity.md), not just successful frame creation. Human-pointer and
+physical-listening checks are separately `NOT_PERFORMED` when not exercised and do not block
+otherwise complete automated acceptance. Never infer them from source checks or counters. All gameplay
 probe/driver code remains in the isolated supplement, excluded from production/candidate archives.
 
 After the full unshaded soak/restart/familiarity/scout proof, the target normally quits the client,
@@ -526,7 +530,9 @@ expiry fail rather than skip or retry. Each group has a four-hour outer controll
 setup and diagnostics. Individual readiness, command, client-arrival and polling budgets remain
 tighter; no nested operation may reset the TPS stabilization deadline. Resource arguments and
 fixture-only changes are recorded in `fixture_resource_budget`/profile events. Software rendering
-is disclosed and is not a hardware-accelerated performance or manual visual acceptance claim.
+is disclosed and is not a hardware-accelerated performance or human-interaction acceptance claim.
+LLM visual acceptance requires review of the actual retained native frames, not software-renderer
+state or capture counters.
 
 | Scenario family | Inputs and observable oracle | Inner budget/resource contract |
 | --- | --- | --- |
