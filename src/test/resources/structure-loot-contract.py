@@ -7,14 +7,59 @@ native acceptance claim. The existing Node contract exercises production filters
 import collections
 import copy
 import hashlib
+import gzip
 import json
+import struct
+import tomllib
+import zipfile
 from pathlib import Path
 import random
 import sys
 
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from structure_loot_inputs import effective_injections, fingerprint, load, strings
+from structure_loot_inputs import NbtReader, effective_injections, fingerprint, load, strings
+
+
+# Exact path-only repairs, not aliases or reward reconstruction. Immutable pinned
+# originals are independently read from their owning archives on every test run.
+REFERENCE_REPAIRS = [
+    ('fallout-wastelands', 'fallout_wastelands_', 'factory_ruin_01_01way_v0', 'fallout_wastelands_:blocks/industrialtier_1', 'fallout_wastelands_:chests/industrialtier_1'),
+    ('fallout-wastelands', 'fallout_wastelands_', 'factory_ruin_02_01way', 'fallout_wastelands_:blocks/industrialtier_1', 'fallout_wastelands_:chests/industrialtier_1'),
+    ('fallout-wastelands', 'fallout_wastelands_', 'military_train_01', 'fallout_wastelands_:chests/scientifictier_1', 'fallout_wastelands_:chests/sciencetier_1'),
+    ('fallout-wastelands', 'fallout_wastelands_', 'ruined_building_05', 'fallout_wastelands_:chests/scientifictier_1', 'fallout_wastelands_:chests/sciencetier_1'),
+    ('cataclysm', 'cataclysm', 'desert_occupied_village', 'minecraft:chests/village_desert_house', 'minecraft:chests/village/village_desert_house'),
+]
+
+
+def loot_tag(value):
+    encoded = value.encode('utf-8')
+    return b'\x08\x00\x09LootTable' + struct.pack('>H', len(encoded)) + encoded
+
+
+def validate_reference_repairs(contract):
+    observations = []
+    for mod, namespace, template, before, after in REFERENCE_REPAIRS:
+        pin = tomllib.loads((ROOT / f'mods/{mod}.pw.toml').read_text())
+        archive = Path.home() / '.cache/bc/packwiz-downloads/mods' / pin['filename']
+        resource = f'data/{namespace}/structures/{template}.nbt'
+        with zipfile.ZipFile(archive) as jar:
+            original = jar.read(resource)
+        raw = gzip.decompress(original)
+        nbt = NbtReader(raw).root()
+        occurrences = sum(block.get('nbt', {}).get('LootTable') == before for block in nbt['blocks'])
+        assert occurrences > 0 and raw.count(loot_tag(before)) == occurrences
+        expected = raw.replace(loot_tag(before), loot_tag(after))
+        authored = ROOT / 'kubejs' / resource
+        actual = gzip.decompress(authored.read_bytes())
+        assert actual == expected, ('template changed beyond exact LootTable reference repair', resource)
+        repaired = NbtReader(actual).root()
+        assert sum(block.get('nbt', {}).get('LootTable') == after for block in repaired['blocks']) >= occurrences
+        observations.append(dict(resource=resource, before=before, after=after, occurrences=occurrences,
+                                 pinned_original_sha256=hashlib.sha256(original).hexdigest(),
+                                 authored_sha256=hashlib.sha256(authored.read_bytes()).hexdigest()))
+    assert observations == contract['reference_repairs'], 'template repair review drift'
+    return observations
 
 
 def at(obj, path):
@@ -148,6 +193,7 @@ def main():
     effective = effective_injections(injections)
     assert fingerprint(effective) == contract['effective_injection_sha256'], 'effective modifier composition drift'
     rows = validate(tables, candidates, contract, native)
+    repairs = validate_reference_repairs(contract)
     for key, row in rows.items():
         assert row['source'] == sources.get(key), ('source priority changed', key)
         assert row['template_consumers'] == sorted(references.get(key, [])), ('template consumers changed', key)
@@ -177,7 +223,7 @@ def main():
     observations = sample_changed_pools(rows, tables, contract)
     counts = collections.Counter(row['kind'] for row in rows.values())
     print('Structure loot ownership: reviewed pinned candidate inventory; 15 exact table overrides; nine negative mutations rejected.')
-    print(json.dumps({'reviewed':len(rows), 'classifications':dict(counts), 'unresolved':[k for k,v in rows.items() if v['kind']=='unresolved'], 'unknown_consumers':[k for k,v in rows.items() if v['kind']=='unknown-consumer'], 'authored_pool_samples':observations, 'native_acceptance':'PENDING separate exact-candidate runtime probe; source templates do not prove active placements', 'prefilled_template_occurrences_untouched':len(prefilled)}, indent=2))
+    print(json.dumps({'reviewed':len(rows), 'classifications':dict(counts), 'unresolved':[k for k,v in rows.items() if v['kind']=='unresolved'], 'unknown_consumers':[k for k,v in rows.items() if v['kind']=='unknown-consumer'], 'authored_pool_samples':observations, 'exact_reference_repairs':repairs, 'native_acceptance':'PENDING separate exact-candidate runtime probe; source templates do not prove active placements', 'prefilled_template_occurrences_untouched':len(prefilled)}, indent=2))
 
 
 if __name__ == '__main__':

@@ -143,8 +143,11 @@ def load(root, fetch=True, pack_tables=True, details=None):
             elif tag.get('Items'):
                 prefilled.append(witness)
     candidates = {k for k, v in tables.items() if v.get('type', '').removeprefix('minecraft:') == 'chest'
-                  or re.match(r'[^:]+:chests?/', k)} | references.keys()
+                  or re.match(r'[^:]+:(?:chests?|injects?)/', k)} | references.keys()
     # CHEST/path names discover candidates only; roles are finite reviewed input.
+    # Include generic event-injection definitions even when the event dispatcher
+    # constructs their IDs dynamically (e.g. Supplementaries/Moonlight). Forge's
+    # global modifier registry is not the sole native injection mechanism.
     # Follow explicit nested-table and active injection references so generic
     # helper tables cannot disappear merely because they omit a CHEST type.
     resource_references = {}

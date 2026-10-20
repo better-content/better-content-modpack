@@ -2418,6 +2418,54 @@
       ]
     },
     {
+      "id": "artifacts:inject/entities/cow",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "c8968b004729e634840da5e82e81c972db73d7716da86cb3ea8707de59a9318e",
+      "source": "kubejs!data/artifacts/loot_tables/inject/entities/cow.json",
+      "template_consumers": [],
+      "active_injections": [
+        "artifacts:inject/entities/cow"
+      ],
+      "worldgen_consumers": [],
+      "override_layers": [
+        {
+          "source": "artifacts.pw.toml!data/artifacts/loot_tables/inject/entities/cow.json",
+          "sha256": "be0ac6d0095fe69e9aa80a7d127e8861d308424c70d2508d4df47f76985e387e"
+        },
+        {
+          "source": "kubejs!data/artifacts/loot_tables/inject/entities/cow.json",
+          "sha256": "c8968b004729e634840da5e82e81c972db73d7716da86cb3ea8707de59a9318e"
+        }
+      ]
+    },
+    {
+      "id": "artifacts:inject/entities/mooshroom",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "3f6f2bba691ffd7675aefbfcc4c3a150051f93297414a72f2bac879c8aeab35d",
+      "source": "kubejs!data/artifacts/loot_tables/inject/entities/mooshroom.json",
+      "template_consumers": [],
+      "active_injections": [
+        "artifacts:inject/entities/mooshroom"
+      ],
+      "worldgen_consumers": [],
+      "override_layers": [
+        {
+          "source": "artifacts.pw.toml!data/artifacts/loot_tables/inject/entities/mooshroom.json",
+          "sha256": "dffcf6f0379c4ea38fdd22008c0c11fc0a936769a3019c6cd059328e719cff4d"
+        },
+        {
+          "source": "kubejs!data/artifacts/loot_tables/inject/entities/mooshroom.json",
+          "sha256": "3f6f2bba691ffd7675aefbfcc4c3a150051f93297414a72f2bac879c8aeab35d"
+        }
+      ]
+    },
+    {
       "id": "bloodmagic:chests/mines/decent_loot",
       "kind": "physical",
       "role": "encounter",
@@ -3027,9 +3075,9 @@
       "table_sha256": "0c7f077420d5d14219587606dee338058ad477c3c605d86d4cb94a88500bd54d",
       "source": "cataclysm.pw.toml!data/cataclysm/loot_tables/chests/desert_treasure.json",
       "template_consumers": [
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "cataclysm.pw.toml!data/cataclysm/structures/desert_site.nbt:minecraft:chest",
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_temple.nbt:minecraft:chest"
+        "cataclysm.pw.toml!data/cataclysm/structures/desert_temple.nbt:minecraft:chest",
+        "kubejs!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -3087,24 +3135,6 @@
       "override_layers": []
     },
     {
-      "id": "fallout_wastelands_:blocks/industrialtier_1",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
-      "template_consumers": [
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:locker",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:metal_box",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/factory_ruin_02_01way.nbt:fallout_wastelands_:metal_box"
-      ],
-      "table_consumers": [],
-      "active_injections": [],
-      "worldgen_consumers": [],
-      "override_layers": []
-    },
-    {
       "id": "fallout_wastelands_:blocks/medicaltier_1",
       "kind": "unresolved",
       "role": null,
@@ -3113,7 +3143,7 @@
       "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
       "source": null,
       "template_consumers": [
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:medical_box"
+        "kubejs!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:medical_box"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -3132,10 +3162,10 @@
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/defense_center_01.nbt:fallout_wastelands_:ammo_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/defense_center_correc1_01.nbt:fallout_wastelands_:ammo_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_base_01.nbt:fallout_wastelands_:ammo_box",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_train_01.nbt:fallout_wastelands_:ammo_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:ammo_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_house_01.nbt:fallout_wastelands_:ammo_box",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/shipwreck_01.nbt:fallout_wastelands_:ammo_box"
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/shipwreck_01.nbt:fallout_wastelands_:ammo_box",
+        "kubejs!data/fallout_wastelands_/structures/military_train_01.nbt:fallout_wastelands_:ammo_box"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -3282,7 +3312,10 @@
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/radio_tower_01.nbt:fallout_wastelands_:metal_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/radscorpion_cave_01.nbt:fallout_wastelands_:metal_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:metal_box",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/shipwreck_01.nbt:fallout_wastelands_:metal_box"
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/shipwreck_01.nbt:fallout_wastelands_:metal_box",
+        "kubejs!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:locker",
+        "kubejs!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:metal_box",
+        "kubejs!data/fallout_wastelands_/structures/factory_ruin_02_01way.nbt:fallout_wastelands_:metal_box"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -3322,7 +3355,7 @@
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_base_01.nbt:fallout_wastelands_:ammo_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_base_01.nbt:fallout_wastelands_:locker",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_base_01.nbt:fallout_wastelands_:metal_box",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_train_01.nbt:fallout_wastelands_:locker"
+        "kubejs!data/fallout_wastelands_/structures/military_train_01.nbt:fallout_wastelands_:locker"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -3340,7 +3373,7 @@
       "template_consumers": [
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_base_01.nbt:fallout_wastelands_:filing_cabinet",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_base_01.nbt:fallout_wastelands_:locker",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_train_01.nbt:fallout_wastelands_:locker"
+        "kubejs!data/fallout_wastelands_/structures/military_train_01.nbt:fallout_wastelands_:locker"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -3356,9 +3389,9 @@
       "table_sha256": "9f5fb0117795063afcc65c537fa06a3502950967f8140c2d87861cc60247d9a9",
       "source": "fallout-wastelands.pw.toml!data/fallout_wastelands_/loot_tables/chests/militarytier_3.json",
       "template_consumers": [
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_train_01.nbt:fallout_wastelands_:locker",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:metal_box",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/shipwreck_01.nbt:fallout_wastelands_:locker"
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/shipwreck_01.nbt:fallout_wastelands_:locker",
+        "kubejs!data/fallout_wastelands_/structures/military_train_01.nbt:fallout_wastelands_:locker"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -3443,13 +3476,13 @@
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/defense_center_01.nbt:fallout_wastelands_:metal_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/defense_center_correc1_01.nbt:fallout_wastelands_:locker",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/defense_center_correc1_01.nbt:fallout_wastelands_:metal_box",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:locker",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:metal_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_base_01.nbt:fallout_wastelands_:metal_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/scavanger_house1.nbt:fallout_wastelands_:metal_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/scavanger_house_02.nbt:fallout_wastelands_:metal_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/scavanger_house_05.nbt:fallout_wastelands_:metal_box",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/scavanger_house_06.nbt:fallout_wastelands_:metal_box"
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/scavanger_house_06.nbt:fallout_wastelands_:metal_box",
+        "kubejs!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:locker",
+        "kubejs!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:metal_box"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -3466,24 +3499,9 @@
       "source": "fallout-wastelands.pw.toml!data/fallout_wastelands_/loot_tables/chests/sciencetier_1.json",
       "template_consumers": [
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/bos_abandonned_bunker_01.nbt:fallout_wastelands_:locker",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/radio_tower_01.nbt:fallout_wastelands_:metal_box"
-      ],
-      "table_consumers": [],
-      "active_injections": [],
-      "worldgen_consumers": [],
-      "override_layers": []
-    },
-    {
-      "id": "fallout_wastelands_:chests/scientifictier_1",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
-      "template_consumers": [
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_train_01.nbt:fallout_wastelands_:locker",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/ruined_building_05.nbt:fallout_wastelands_:metal_box"
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/radio_tower_01.nbt:fallout_wastelands_:metal_box",
+        "kubejs!data/fallout_wastelands_/structures/military_train_01.nbt:fallout_wastelands_:locker",
+        "kubejs!data/fallout_wastelands_/structures/ruined_building_05.nbt:fallout_wastelands_:metal_box"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -3515,12 +3533,12 @@
       "table_sha256": "55740247d1cf4836e0143285385652946f275cf93254ad96472aea4d0d94bd44",
       "source": "fallout-wastelands.pw.toml!data/fallout_wastelands_/loot_tables/chests/trashtier_1.json",
       "template_consumers": [
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:trash_bin",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/factory_ruin_02_01way.nbt:fallout_wastelands_:metal_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/lobotomite_base_01.nbt:fallout_wastelands_:trash_bin",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/military_base_01.nbt:fallout_wastelands_:trash_bin",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:trash_bin",
-        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/ruined_building_04.nbt:fallout_wastelands_:locker"
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/ruined_building_04.nbt:fallout_wastelands_:locker",
+        "kubejs!data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt:fallout_wastelands_:trash_bin",
+        "kubejs!data/fallout_wastelands_/structures/factory_ruin_02_01way.nbt:fallout_wastelands_:metal_box"
       ],
       "table_consumers": [],
       "active_injections": [],
@@ -4854,6 +4872,84 @@
       "override_layers": []
     },
     {
+      "id": "goety:inject/entities/cave_spider",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "4626a45f566fb01ae5f6f6b94828e26714e350b8f85cc7a3463dc2d1d523d3c3",
+      "source": "goety.pw.toml!data/goety/loot_tables/inject/entities/cave_spider.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "goety:inject/entities/frog",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "8d1c83a8c398026ac213664bfc8d0eec1671dae5c884d1e1f70544ba3ac18ca7",
+      "source": "goety.pw.toml!data/goety/loot_tables/inject/entities/frog.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "goety:inject/entities/ravager",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "9ae5319de99c6e73c134f2055a0c9a25239913d0faedade24e073a9ec7668238",
+      "source": "goety.pw.toml!data/goety/loot_tables/inject/entities/ravager.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "goety:inject/entities/spider",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "bfaeb38b9551503432dfb1106e22b641b24ab962a9a5ee97928350103762c735",
+      "source": "goety.pw.toml!data/goety/loot_tables/inject/entities/spider.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "goety:inject/entities/witch",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "5db556ad926832c2c35b126011bfc7446254ae13883a5465d7cb6d60687a00ce",
+      "source": "goety.pw.toml!data/goety/loot_tables/inject/entities/witch.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "goety:inject/entities/zoglin",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "1a53912e58054338e594c5a95baa544686e8355e151f39b30ff6a4cdd011a2df",
+      "source": "goety.pw.toml!data/goety/loot_tables/inject/entities/zoglin.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
       "id": "hexerei:chests/courier_package",
       "kind": "package",
       "role": null,
@@ -5227,6 +5323,136 @@
       "code_literal_witnesses": [
         "ice-and-fire-dragons.pw.toml!com/github/alexthe666/iceandfire/world/gen/processor/VillageHouseProcessor.class"
       ]
+    },
+    {
+      "id": "immersive_weathering:injects/blaze_ash",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "4c7c86f019a58f50ffd1ca18fdf9d9e0911a417414a67222844661cdf6d2ae38",
+      "source": "immersive-weathering-forge.pw.toml!data/immersive_weathering/loot_tables/injects/blaze_ash.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "immersive_weathering:injects/buried_treasure",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "4664669f07185b7d47293a63865a626710289a935b32b8682f4bae6682443470",
+      "source": "immersive-weathering-forge.pw.toml!data/immersive_weathering/loot_tables/injects/buried_treasure.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "immersive_weathering:injects/farmer_gift",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "70c6e5b32fea10c2f1b83fc8fb8c9d6424f9634e56d26da9b32c8b7dbe247b98",
+      "source": "immersive-weathering-forge.pw.toml!data/immersive_weathering/loot_tables/injects/farmer_gift.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "immersive_weathering:injects/hoglin_tallow",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "54b95184881be4c17bf8c051a3bac0e0b0a51731a0f04fc2f59ab2980dde9253",
+      "source": "immersive-weathering-forge.pw.toml!data/immersive_weathering/loot_tables/injects/hoglin_tallow.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "immersive_weathering:injects/mason_gift",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "002849a53465ec888d4d5819aacc891120c3202cbc2c2ab375cabcda7359d0cc",
+      "source": "immersive-weathering-forge.pw.toml!data/immersive_weathering/loot_tables/injects/mason_gift.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "immersive_weathering:injects/pig_tallow",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "bdad68f21f6518862b72a51302acf6900cb09115533a0468e1be9ab5a210e4b7",
+      "source": "immersive-weathering-forge.pw.toml!data/immersive_weathering/loot_tables/injects/pig_tallow.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "immersive_weathering:injects/shipwreck_supply",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "3d0ba3e9bf52f4b2f45f329aa0bf9ace3ad368b4a7bf96c873cdf23202c0c6e8",
+      "source": "immersive-weathering-forge.pw.toml!data/immersive_weathering/loot_tables/injects/shipwreck_supply.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "immersive_weathering:injects/shipwreck_treasure",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "d4dee2b4f1b2883043127becc820150bef017a276d531a9e34b34b3db0929b12",
+      "source": "immersive-weathering-forge.pw.toml!data/immersive_weathering/loot_tables/injects/shipwreck_treasure.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "immersive_weathering:injects/toolsmith_gift",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "b68576700791930f40c44da99f476d6b1e635dd3efae2cb5c143279fb974ad46",
+      "source": "immersive-weathering-forge.pw.toml!data/immersive_weathering/loot_tables/injects/toolsmith_gift.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "immersive_weathering:injects/weaponsmith_gift",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "c86231735ecb53ac5f2abf01ce8e995360966f980cdc4ba4246e4d6686b041e9",
+      "source": "immersive-weathering-forge.pw.toml!data/immersive_weathering/loot_tables/injects/weaponsmith_gift.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
     },
     {
       "id": "kaisyn:outpost/common/armory",
@@ -6838,8 +7064,8 @@
       "table_sha256": "139f8b2614d02d9230bbbabf45898c94091134149e36c6d2f14eb86463547c24",
       "source": "vanilla!data/minecraft/loot_tables/chests/village/village_armorer.json",
       "template_consumers": [
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "goety.pw.toml!data/goety/structures/ominous_blacksmith/blacksmith.nbt:minecraft:barrel",
+        "kubejs!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/adobe/houses/adobe_armorer_layer_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/wisteria/houses/wisteria_armorer_house_1.nbt:minecraft:chest",
         "towns-and-towers.pw.toml!data/kaisyn/structures/ships/village_ocean/pieces/small_ship/small_ship_4.nbt:minecraft:barrel",
@@ -6891,9 +7117,9 @@
       "table_sha256": "6063c51edc8f30cd3fc85c19e80bc9965b5edc311eb09752b5624a4756709b4e",
       "source": "vanilla!data/minecraft/loot_tables/chests/village/village_butcher.json",
       "template_consumers": [
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "goety.pw.toml!data/goety/structures/blighted_shack/basement.nbt:minecraft:barrel",
         "goety.pw.toml!data/goety/structures/ominous_blacksmith/blacksmith.nbt:minecraft:barrel",
+        "kubejs!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/adobe/houses/adobe_butcher_layer_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/coconut/houses/coconut_butcher_shop_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/coconut/houses/coconut_butcher_shop_2.nbt:minecraft:chest",
@@ -6942,7 +7168,7 @@
       "table_sha256": "d8a9b3ad21a6cf59feee16b67a6c4fc23aaf1a892a15a01f386200aa435932e8",
       "source": "vanilla!data/minecraft/loot_tables/chests/village/village_cartographer.json",
       "template_consumers": [
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
+        "kubejs!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/adobe/houses/adobe_cartographer_back_layer_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/coconut/houses/coconut_cartographer_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/cypress/houses/cypress_cartographer_1.nbt:minecraft:chest",
@@ -6988,7 +7214,7 @@
       "table_sha256": "55226e2a6c5a8c227b88c3c432d15b685a13ac5fb7b0bec126cb93cf59623288",
       "source": "vanilla!data/minecraft/loot_tables/chests/village/village_desert_house.json",
       "template_consumers": [
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
+        "kubejs!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "vanilla!data/minecraft/structures/village/desert/houses/desert_medium_house_1.nbt:minecraft:chest",
         "vanilla!data/minecraft/structures/village/desert/houses/desert_medium_house_2.nbt:minecraft:chest",
         "vanilla!data/minecraft/structures/village/desert/houses/desert_small_house_4.nbt:minecraft:chest",
@@ -7015,8 +7241,8 @@
       "table_sha256": "83ecd5e9404d703e69b3485ec403d038df4ada6461423d8ccd9fcce40de4287b",
       "source": "vanilla!data/minecraft/loot_tables/chests/village/village_fisher.json",
       "template_consumers": [
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "goety.pw.toml!data/goety/structures/secluded_igloo/secluded_igloo.nbt:minecraft:barrel",
+        "kubejs!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/adobe/houses/adobe_fisher_back_layer_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/coconut/houses/coconut_fisher_cottage_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/cypress/houses/cypress_fisher_cottage_1.nbt:minecraft:chest",
@@ -7068,7 +7294,7 @@
       "table_sha256": "f03abade58b63e52a91059e93230cbd1478243ddfbe243cb8755ac9bd96f4f1e",
       "source": "vanilla!data/minecraft/loot_tables/chests/village/village_fletcher.json",
       "template_consumers": [
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
+        "kubejs!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/cypress/houses/cypress_fletcher_2.nbt:minecraft:chest",
         "towns-and-towers.pw.toml!data/kaisyn/structures/village/badlands_pueblo/professions_misc/badlands_fletcher_1.nbt:minecraft:chest",
         "towns-and-towers.pw.toml!data/kaisyn/structures/village/badlands_pueblo/town_centers/badlands_meeting_point_1.nbt:minecraft:chest",
@@ -7125,8 +7351,8 @@
       "table_sha256": "c21191563e1f5ef640c946a9eb2be6bac466ceb52f5a368fd2b68c893d6316d2",
       "source": "vanilla!data/minecraft/loot_tables/chests/village/village_mason.json",
       "template_consumers": [
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "goety.pw.toml!data/goety/structures/ominous_blacksmith/blacksmith.nbt:minecraft:barrel",
+        "kubejs!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/cypress/houses/cypress_masons_house_1.nbt:minecraft:chest",
         "towns-and-towers.pw.toml!data/kaisyn/structures/village/badlands_pueblo/houses/badlands_mason_1.nbt:minecraft:chest",
         "towns-and-towers.pw.toml!data/kaisyn/structures/village/badlands_pueblo/town_centers/badlands_meeting_point_1.nbt:minecraft:chest",
@@ -7455,8 +7681,8 @@
       "table_sha256": "e5412c0e1294d95b564f9f6d6c33193f2334f39b76286b9588f4d658abcff8a3",
       "source": "vanilla!data/minecraft/loot_tables/chests/village/village_toolsmith.json",
       "template_consumers": [
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "goety.pw.toml!data/goety/structures/ominous_blacksmith/blacksmith.nbt:minecraft:barrel",
+        "kubejs!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/adobe/houses/adobe_toolsmith_back_layer_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/cypress/houses/cypress_tool_smith_1.nbt:minecraft:chest",
         "natures-spirit.pw.toml!data/natures_spirit/structures/village/wisteria/houses/wisteria_tool_smith_1.nbt:minecraft:chest",
@@ -7551,22 +7777,6 @@
         "armor-of-the-ages.pw.toml!org/dawnoftime/armoroftheages/loot/LootModifierProvider.class",
         "armor-of-the-ages.pw.toml!org/dawnoftime/armoroftheages/loot/LootTablesToModify.class"
       ]
-    },
-    {
-      "id": "minecraft:chests/village_desert_house",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
-      "template_consumers": [
-        "cataclysm.pw.toml!data/cataclysm/structures/desert_occupied_village.nbt:minecraft:chest"
-      ],
-      "table_consumers": [],
-      "active_injections": [],
-      "worldgen_consumers": [],
-      "override_layers": []
     },
     {
       "id": "minecraft:chests/woodland_mansion",
@@ -7697,6 +7907,37 @@
         "wares.pw.toml!io/github/mortuusars/wares/data/generation/provider/LootTables$ChestLoot.class",
         "weather-storms-tornadoes.pw.toml!weather2/Weather.class"
       ]
+    },
+    {
+      "id": "minecraft:entities/cow",
+      "kind": "mob",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Native mob reward reached through injection discovery; not a physical container.",
+      "table_sha256": "47043280928474c7a56642fdd5b42aa93fc26ef9993cb49379432b817feb1b6b",
+      "source": "vanilla!data/minecraft/loot_tables/entities/cow.json",
+      "template_consumers": [],
+      "active_injections": [
+        "artifacts:inject/entities/cow",
+        "hexerei:animal_fat_from_cow"
+      ],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "minecraft:entities/mooshroom",
+      "kind": "mob",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Native mob reward reached through injection discovery; not a physical container.",
+      "table_sha256": "0b61be6bcb4190b0cc3b4587279d2b1de1b9f5cc956a419b5c6000fdd9ba6dde",
+      "source": "vanilla!data/minecraft/loot_tables/entities/mooshroom.json",
+      "template_consumers": [],
+      "active_injections": [
+        "artifacts:inject/entities/mooshroom"
+      ],
+      "worldgen_consumers": [],
+      "override_layers": []
     },
     {
       "id": "natures_spirit:chests/village/village_adobe_house",
@@ -8288,6 +8529,266 @@
           "sha256": "c76b9f8b1958137b1db0a776c6651a78cdfc65eae630e4b87e07ad7c2f98a1fa"
         }
       ]
+    },
+    {
+      "id": "supplementaries:inject/dungeon_blue_bomb",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "87950f9b313e3705ba643d43cfcb8029ba17ba7a7ca008dd79e9bde5e5abf957",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/dungeon_blue_bomb.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/dungeon_flax",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "daa6c257bed4731546fb783d31ecc70d26f8c99d732c79ab1b6a6e2f11fa083b",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/dungeon_flax.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/dungeon_quiver",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "0cbd60adeaeb04f213a83aec2d87cc5a69c8db39336523f04741440c771e148a",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/dungeon_quiver.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/end_city_stasis",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "e4f7110c7cc5309074146259567367e3080f061a0c83d7cc2d2fca6fc49d6bad",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/end_city_stasis.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/fishing_treasure_antique_ink",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "e0f4b425511245ba10ac4326a36763c1268f6d4b0a47878681b8f05881e952ed",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/fishing_treasure_antique_ink.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/fortress_blue_bomb",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "c8f610e058d9339f22468b6f03fd43037ac4ce1502fd72369e77e5c2f4d6abf7",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/fortress_blue_bomb.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/fortress_bomb",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "a8f0820549ac55ce3b33bd705334b051d2d3f704e9ebbcddd73993b34ec4160d",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/fortress_bomb.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/mansion_quiver",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "4f61ba537a118a1a284aad9130e7d98dc2418d451f2c530b94c4b4fe1f697102",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/mansion_quiver.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/mineshaft_blue_bomb",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "5a7cdba5eed00ac1bf29f1cf5f963aa9966a03cb5e64c200804a6e67d40789f9",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/mineshaft_blue_bomb.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/mineshaft_bomb",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "94e7c6872d03ccea407691ab2585970990544d60c54f6bbecbe8cb4b6b1329a9",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/mineshaft_bomb.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/mineshaft_flax",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "cd5ce215be4449fc59a19d33ed63aa92fe6a24f5c74050ed77d01b777f253f66",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/mineshaft_flax.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/mineshaft_rope",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "4e375db7c57ae0425775c9702a4f3bac6ba2fb68851c150e9f0dbe24d352a5f2",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/mineshaft_rope.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/pillager_flax",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "d3eedd3635f179c5ae70dafbd8c3cc27998f79f476c406245d4d2204c99a0b13",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/pillager_flax.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/shipwreck_storage_flax",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "bef45a2098ba81d0ca28452ddc24764679c283dab1902ae6836784c93bf7bb9a",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/shipwreck_storage_flax.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/shipwreck_treasure_globe",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "379e7f96343d5443a10930996d9a99bbc51cec6047b127b9663eddb6d31e36ef",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/shipwreck_treasure_globe.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/stronghold_blue_bomb",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "ff9e463884daf5d2e208ff3f74ee02b4de5805c1467ed2ac340796e6feadb5df",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/stronghold_blue_bomb.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/stronghold_bomb",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "c5746869c835518d7b958c9a2d9327a54b1cf58b793fb0ed01d3bc70dcc2f561",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/stronghold_bomb.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/temple_blue_bomb",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "224d105944da3e542317424de80df978f112a0dbad40d35821a1da41d0c06486",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/temple_blue_bomb.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/temple_bomb",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "b72c6cf44100e5e31a360054396f230336fd9ad1640162fa9a08c368e95576c9",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/temple_bomb.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
+    },
+    {
+      "id": "supplementaries:inject/temple_spikes",
+      "kind": "helper-or-injection",
+      "role": null,
+      "decision": "unchanged",
+      "rationale": "Injection helper definition, not a directly placed physical container. Conservative discovery includes event-dispatched and inactive definitions; source folder alone is not an active injection claim. Preserve native reward identity and quantities.",
+      "table_sha256": "c2472cd70350d967eb5f949f48a76a28b6e0a0a09eb482705b51395a7f9b08d8",
+      "source": "supplementaries.pw.toml!data/supplementaries/loot_tables/inject/temple_spikes.json",
+      "template_consumers": [],
+      "active_injections": [],
+      "worldgen_consumers": [],
+      "override_layers": []
     },
     {
       "id": "supplementaries:inject/test",
@@ -11336,6 +11837,48 @@
       "active_injections": [],
       "worldgen_consumers": [],
       "override_layers": []
+    }
+  ],
+  "reference_repairs": [
+    {
+      "resource": "data/fallout_wastelands_/structures/factory_ruin_01_01way_v0.nbt",
+      "before": "fallout_wastelands_:blocks/industrialtier_1",
+      "after": "fallout_wastelands_:chests/industrialtier_1",
+      "occurrences": 5,
+      "pinned_original_sha256": "c1d622cc1e03c7e90b10ef9f23d1bee9a7af08d2eb6d26bb936fa61f07ee9bf8",
+      "authored_sha256": "cfacfed44043c5ecb05ce1d382ec6758b73def6c0781c90ab774be6f92ccf5c6"
+    },
+    {
+      "resource": "data/fallout_wastelands_/structures/factory_ruin_02_01way.nbt",
+      "before": "fallout_wastelands_:blocks/industrialtier_1",
+      "after": "fallout_wastelands_:chests/industrialtier_1",
+      "occurrences": 1,
+      "pinned_original_sha256": "14d2e705cbe26914317ab80b99c0fe9efea5d7e8fa9f3a57e6c801a9c6241b10",
+      "authored_sha256": "02324b9c42046d77fb771e8fc1a0990e4c826d2b8401ca51d62e164c49879b9a"
+    },
+    {
+      "resource": "data/fallout_wastelands_/structures/military_train_01.nbt",
+      "before": "fallout_wastelands_:chests/scientifictier_1",
+      "after": "fallout_wastelands_:chests/sciencetier_1",
+      "occurrences": 1,
+      "pinned_original_sha256": "1c8f6844b39c07f58a8e571855ca8ef5e425badff8e880264de9e4b48b9d2f12",
+      "authored_sha256": "cb54acf7fbbd553a5c760d7fdfc41d737118292fed49b6acf8010b8311daf557"
+    },
+    {
+      "resource": "data/fallout_wastelands_/structures/ruined_building_05.nbt",
+      "before": "fallout_wastelands_:chests/scientifictier_1",
+      "after": "fallout_wastelands_:chests/sciencetier_1",
+      "occurrences": 1,
+      "pinned_original_sha256": "10f4a92bce92d4c1567e5f37ad03290597f447204bc836447b5f9b3825d42f44",
+      "authored_sha256": "3af96b17df46b92c99be94ff9c06baa494f8655dd08d9b839ac7616726f63eb5"
+    },
+    {
+      "resource": "data/cataclysm/structures/desert_occupied_village.nbt",
+      "before": "minecraft:chests/village_desert_house",
+      "after": "minecraft:chests/village/village_desert_house",
+      "occurrences": 2,
+      "pinned_original_sha256": "b64b31e3b8c19b16c9a9cdd4e58b97cf3e04860ecdc6affa5f0a17ccaab27e69",
+      "authored_sha256": "470f1279a2f0095fac16bed416ce89df7623e27c9572c84243bcc2fe16ac5292"
     }
   ]
 }
