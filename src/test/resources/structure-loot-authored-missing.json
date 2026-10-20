@@ -1,0 +1,567 @@
+{
+  "schema": "bc.structure_loot_authored_missing.v1",
+  "scope": "Explicit newly authored table-owned designs for eight source-referenced missing definitions. Original missing rewards are unavailable; no reconstruction or preservation of unknown special rewards is claimed. No native active-placement acceptance is implied.",
+  "tables": [
+    {
+      "id": "fallout_wastelands_:chests/raider",
+      "role": "supplies",
+      "rolls": [
+        1,
+        2
+      ],
+      "entries": [
+        {
+          "item": "fallout_wastelands_:bottle_cap",
+          "weight": 4,
+          "count": [
+            3,
+            8
+          ]
+        },
+        {
+          "item": "fallout_wastelands_:cigarettepack",
+          "weight": 3,
+          "count": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "fallout_wastelands_:iguana_on_stick",
+          "weight": 2,
+          "count": 1
+        },
+        {
+          "item": "fallout_wastelands_:tire_iron",
+          "weight": 1,
+          "count": 1
+        }
+      ],
+      "room_evidence": "Personal raider stash: one metal box [4,6,10] in raider_base_01; distinct from its ten existing raiderchest containers.",
+      "template_consumers": [
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:metal_box"
+      ],
+      "source_item_checks": [
+        {
+          "item": "fallout_wastelands_:bottle_cap",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal bottle_cap; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "fallout_wastelands_:cigarettepack",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal cigarettepack; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "fallout_wastelands_:iguana_on_stick",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal iguana_on_stick; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "fallout_wastelands_:tire_iron",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal tire_iron; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        }
+      ],
+      "special_reward_status": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
+    },
+    {
+      "id": "fallout_wastelands_:chests/raidertier_1",
+      "role": "encounter",
+      "rolls": [
+        1,
+        2
+      ],
+      "entries": [
+        {
+          "item": "fallout_wastelands_:ninemmammo",
+          "weight": 4,
+          "count": [
+            4,
+            10
+          ]
+        },
+        {
+          "item": "fallout_wastelands_:thirtytwoammo",
+          "weight": 3,
+          "count": [
+            3,
+            8
+          ]
+        },
+        {
+          "item": "fallout_wastelands_:cloth",
+          "weight": 2,
+          "count": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "minecraft:leather_boots",
+          "weight": 1,
+          "count": 1
+        }
+      ],
+      "room_evidence": "Low-tier combat stores: two metal boxes each in ghoul_farm_01 and raider_base_01. No reuse of tier2 weapon table or existing raiderchest supplies.",
+      "template_consumers": [
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/ghoul_farm_01.nbt:fallout_wastelands_:metal_box",
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:metal_box"
+      ],
+      "source_item_checks": [
+        {
+          "item": "fallout_wastelands_:ninemmammo",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal ninemmammo; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "fallout_wastelands_:thirtytwoammo",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal thirtytwoammo; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "fallout_wastelands_:cloth",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal cloth; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:leather_boots",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/leather_boots.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        }
+      ],
+      "special_reward_status": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
+    },
+    {
+      "id": "fallout_wastelands_:chests/scraptier_1",
+      "role": "supplies",
+      "rolls": [
+        2,
+        3
+      ],
+      "entries": [
+        {
+          "item": "fallout_wastelands_:scrapmetal",
+          "weight": 5,
+          "count": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "fallout_wastelands_:copperwires",
+          "weight": 3,
+          "count": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "fallout_wastelands_:tinnugget",
+          "weight": 3,
+          "count": [
+            2,
+            5
+          ]
+        },
+        {
+          "item": "fallout_wastelands_:nail",
+          "weight": 3,
+          "count": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "fallout_wastelands_:dented_can",
+          "weight": 2,
+          "count": 1
+        }
+      ],
+      "room_evidence": "Dedicated salvage box [14,1,6] in raider_base_01, which separately assigns trash/industrial/ammo/medical stores; explicitly neither trash alias nor general industrial stock.",
+      "template_consumers": [
+        "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:metal_box"
+      ],
+      "source_item_checks": [
+        {
+          "item": "fallout_wastelands_:scrapmetal",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal scrapmetal; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "fallout_wastelands_:copperwires",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal copperwires; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "fallout_wastelands_:tinnugget",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal tinnugget; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "fallout_wastelands_:nail",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal nail; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "fallout_wastelands_:dented_can",
+          "source_registry_identity": "Fallout Wasteland 1.20.1 Beta 3.8.1.jar!net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class literal dented_can; DeferredRegister registry source SHA256 bba64793a81a2c1a160186bec06a20e09423d3b674ca1828701f807f1b247862",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        }
+      ],
+      "special_reward_status": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
+    },
+    {
+      "id": "kaisyn:village/village_birch_forest_house",
+      "role": "supplies",
+      "rolls": [
+        2,
+        3
+      ],
+      "entries": [
+        {
+          "item": "minecraft:bread",
+          "weight": 4,
+          "count": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "minecraft:apple",
+          "weight": 3,
+          "count": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "minecraft:potato",
+          "weight": 3,
+          "count": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "minecraft:string",
+          "weight": 2,
+          "count": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "minecraft:feather",
+          "weight": 2,
+          "count": [
+            1,
+            3
+          ]
+        }
+      ],
+      "room_evidence": "Single chest [4,4,2] in intact birch_forest_small_house_6, with blue bed and domestic birch furniture. Household food and repair supplies, not a new treasure cache.",
+      "template_consumers": [
+        "towns-and-towers.pw.toml!data/kaisyn/structures/village/birch_forest_romanian/houses/birch_forest_small_house_6.nbt:minecraft:chest"
+      ],
+      "source_item_checks": [
+        {
+          "item": "minecraft:bread",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/bread.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:apple",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/apple.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:potato",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/potato.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:string",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/string.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:feather",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/feather.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        }
+      ],
+      "special_reward_status": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
+    },
+    {
+      "id": "kaisyn:village/village_forest_ruins/forest_ruins_butcher",
+      "role": "supplies",
+      "rolls": [
+        1,
+        2
+      ],
+      "entries": [
+        {
+          "item": "minecraft:bone",
+          "weight": 4,
+          "count": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "minecraft:leather",
+          "weight": 3,
+          "count": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "minecraft:beef",
+          "weight": 1,
+          "count": 1
+        }
+      ],
+      "room_evidence": "Separate chest [5,0,4] in forest_library_1 ruins is authored with butcher ID, not library ID; ruined cobblestone shell has no surviving workstation. Proposed remnant hide/bone stock, not preserved unknown original special reward.",
+      "template_consumers": [
+        "towns-and-towers.pw.toml!data/kaisyn/structures/village/forest_ruins/houses/forest_library_1.nbt:minecraft:chest"
+      ],
+      "source_item_checks": [
+        {
+          "item": "minecraft:bone",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/bone.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:leather",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/leather.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:beef",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/beef.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        }
+      ],
+      "special_reward_status": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
+    },
+    {
+      "id": "kaisyn:village/village_forest_ruins/forest_ruins_library",
+      "role": "supplies",
+      "rolls": [
+        1,
+        3
+      ],
+      "entries": [
+        {
+          "item": "minecraft:paper",
+          "weight": 5,
+          "count": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "minecraft:book",
+          "weight": 3,
+          "count": 1
+        },
+        {
+          "item": "minecraft:ink_sac",
+          "weight": 2,
+          "count": 1
+        },
+        {
+          "item": "minecraft:feather",
+          "weight": 2,
+          "count": 1
+        }
+      ],
+      "room_evidence": "Other chest in forest_library_1 ruins explicitly has library ID; paper/writing stock. No invented enchanted-book tier or claim to recover lost rare rewards.",
+      "template_consumers": [
+        "towns-and-towers.pw.toml!data/kaisyn/structures/village/forest_ruins/houses/forest_library_1.nbt:minecraft:chest"
+      ],
+      "source_item_checks": [
+        {
+          "item": "minecraft:paper",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/paper.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:book",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/book.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:ink_sac",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/ink_sac.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:feather",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/feather.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        }
+      ],
+      "special_reward_status": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
+    },
+    {
+      "id": "kaisyn:village/village_forest_ruins/forest_ruins_temple",
+      "role": "supplies",
+      "rolls": [
+        1,
+        2
+      ],
+      "entries": [
+        {
+          "item": "minecraft:candle",
+          "weight": 4,
+          "count": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "minecraft:charcoal",
+          "weight": 3,
+          "count": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "minecraft:gold_nugget",
+          "weight": 1,
+          "count": [
+            1,
+            3
+          ]
+        }
+      ],
+      "room_evidence": "Chest in forest_temple_1 cobblestone ruin; small mundane votive stock, no fabricated relic/progression unlock.",
+      "template_consumers": [
+        "towns-and-towers.pw.toml!data/kaisyn/structures/village/forest_ruins/houses/forest_temple_1.nbt:minecraft:chest"
+      ],
+      "source_item_checks": [
+        {
+          "item": "minecraft:candle",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/candle.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:charcoal",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/charcoal.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:gold_nugget",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/gold_nugget.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        }
+      ],
+      "special_reward_status": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
+    },
+    {
+      "id": "wythers:chests/village/forest_ruins_big_house",
+      "role": "supplies",
+      "rolls": [
+        2,
+        4
+      ],
+      "entries": [
+        {
+          "item": "minecraft:string",
+          "weight": 4,
+          "count": [
+            1,
+            3
+          ]
+        },
+        {
+          "item": "minecraft:iron_nugget",
+          "weight": 3,
+          "count": [
+            2,
+            4
+          ]
+        },
+        {
+          "item": "minecraft:leather",
+          "weight": 3,
+          "count": [
+            1,
+            2
+          ]
+        },
+        {
+          "item": "minecraft:arrow",
+          "weight": 2,
+          "count": [
+            2,
+            4
+          ]
+        }
+      ],
+      "room_evidence": "Trapped chest in forest_large_house_1, referenced by active-source Towns forest ruins pool. The wythers provider table is absent; modest abandoned equipment cache, explicitly new design rather than namespace alias or recovered special rewards.",
+      "template_consumers": [
+        "towns-and-towers.pw.toml!data/kaisyn/structures/village/forest_ruins/houses/forest_large_house_1.nbt:minecraft:trapped_chest"
+      ],
+      "source_item_checks": [
+        {
+          "item": "minecraft:string",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/string.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:iron_nugget",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/iron_nugget.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:leather",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/leather.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        },
+        {
+          "item": "minecraft:arrow",
+          "source_registry_identity": "pinned vanilla 1.20.1 standard item/model identity assets/minecraft/models/item/arrow.json",
+          "progression_cut_match": false,
+          "raw_geology_route": false
+        }
+      ],
+      "special_reward_status": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
+    }
+  ]
+}

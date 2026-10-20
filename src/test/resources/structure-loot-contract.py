@@ -78,6 +78,70 @@ def validate_reference_repairs(contract):
     return observations
 
 
+MISSING_IDS = {
+    'fallout_wastelands_:chests/raider', 'fallout_wastelands_:chests/raidertier_1',
+    'fallout_wastelands_:chests/scraptier_1', 'kaisyn:village/village_birch_forest_house',
+    'kaisyn:village/village_forest_ruins/forest_ruins_butcher',
+    'kaisyn:village/village_forest_ruins/forest_ruins_library',
+    'kaisyn:village/village_forest_ruins/forest_ruins_temple',
+    'wythers:chests/village/forest_ruins_big_house',
+}
+DESIGN_PATH = ROOT / 'src/test/resources/structure-loot-authored-missing.json'
+DESIGN_SPEC = json.loads(DESIGN_PATH.read_text())
+assert DESIGN_SPEC['schema'] == 'bc.structure_loot_authored_missing.v1'
+DESIGNS = {row['id']: row for row in DESIGN_SPEC['tables']}
+assert set(DESIGNS) == MISSING_IDS and len(DESIGN_SPEC['tables']) == len(MISSING_IDS)
+
+
+def authored_table(design):
+    entries = []
+    for item in design['entries']:
+        entry = {'type': 'minecraft:item', 'name': item['item'], 'weight': item['weight']}
+        count = item['count']
+        if count != 1:
+            value = {'type': 'minecraft:uniform', 'min': count[0], 'max': count[1]} if isinstance(count, list) else count
+            entry['functions'] = [{'function': 'minecraft:set_count', 'count': value}]
+        entries.append(entry)
+    lo, hi = design['rolls']
+    return {'type': 'minecraft:chest', 'pools': [{'rolls': {'type': 'minecraft:uniform', 'min': lo, 'max': hi}, 'entries': entries}]}
+
+
+def validate_authored_items():
+    import re
+    explicit = set(re.findall(r"'([a-z0-9_.-]+:[a-z0-9_./-]+)'", (ROOT / 'kubejs/server_scripts/policy/global_loot_progression.js').read_text()))
+    quarantine = set(json.loads((ROOT / 'kubejs/config/quarantined_items.json').read_text())['items'])
+    policy = json.loads((ROOT / 'kubejs/config/crafting_policy.json').read_text())
+    pin = tomllib.loads((ROOT / 'mods/fallout-wastelands.pw.toml').read_text())
+    with zipfile.ZipFile(Path.home() / '.cache/bc/packwiz-downloads/mods' / pin['filename']) as jar:
+        registry = jar.read('net/mcreator/falloutwastelands/init/FalloutWastelandsModItems.class')
+    assert b'DeferredRegister' in registry and b'RegistryObject' in registry
+    with zipfile.ZipFile(Path.home() / '.cache/bc/packwiz-downloads/vanilla/minecraft-client-1.20.1.jar') as vanilla:
+        models = set(vanilla.namelist())
+    for design in DESIGNS.values():
+        assert design['role'] in {'supplies', 'encounter'} and 1 <= design['rolls'][0] <= design['rolls'][1] <= 4
+        assert design['room_evidence'] and design['special_reward_status'] and design['template_consumers']
+        for entry in design['entries']:
+            item = entry['item']; namespace, path = item.split(':')
+            assert item not in explicit | quarantine and not path.startswith('raw_') and not path.endswith('_seeds'), ('new design violates acquisition policy', item)
+            assert path not in {'potion', 'splash_potion', 'lingering_potion', 'tipped_arrow'}
+            assert isinstance(entry['weight'], int) and entry['weight'] > 0
+            count = entry['count']
+            assert count == 1 or (len(count) == 2 and 1 <= count[0] <= count[1] <= 10)
+            for family in policy['families']:
+                if family['disposition'] not in {'cut', 'authority', 'canonical_duplicate'}: continue
+                for selector in family.get('selectors', []):
+                    if selector.get('tag'): continue  # same deliberate omission as production loot policy
+                    if selector.get('exact_id'):
+                        matches = item == selector['exact_id']
+                    else:
+                        matches = bool(selector.get('namespace') or selector.get('id_prefix')) and (not selector.get('namespace') or namespace == selector['namespace']) and (not selector.get('id_prefix') or path.startswith(selector['id_prefix']))
+                    assert not matches, ('new design matches cut family', item, family)
+            if namespace == 'fallout_wastelands_':
+                assert path.encode() in registry, ('missing pinned item registration literal', item)
+            else:
+                assert namespace == 'minecraft' and f'assets/minecraft/models/item/{path}.json' in models
+
+
 def at(obj, path):
     for part in path:
         obj = obj[part]
@@ -100,11 +164,19 @@ def validate(tables, candidates, contract, native):
     assert len(rows) == len(contract['tables']), 'duplicate review'
     assert rows.keys() == candidates | {'quark:entities/stoneling_carry', 'minecraft:empty'}, 'unreviewed candidate or stale review'
     for key, row in rows.items():
-        assert row['rationale'] and row['decision'] in {'tune', 'unchanged'}
+        assert row['rationale'] and row['decision'] in {'tune', 'unchanged', 'author-missing'}
         assert row['kind'] in {'physical', 'mob', 'package', 'non-container', 'helper-or-injection', 'intentional-empty-or-cut', 'unknown-consumer', 'unresolved'}
         assert row['role'] in ({'supplies', 'encounter', 'treasure'} if row['kind'] == 'physical' else {None})
         assert fingerprint(tables.get(key)) == row['table_sha256'], ('review drift', key)
-        if row['decision'] == 'tune':
+        if row['decision'] == 'author-missing':
+            assert key in DESIGNS and key not in native, ('new definition was not missing upstream', key)
+            assert row['kind'] == 'physical' and row['role'] == DESIGNS[key]['role']
+            assert row['new_design_disclosure'] == DESIGNS[key]['special_reward_status']
+            assert row['authored_items'] == sorted(entry['item'] for entry in DESIGNS[key]['entries'])
+            assert tables[key] == authored_table(DESIGNS[key]), ('new authored reward/state changed beyond accepted design', key)
+            assert row['template_consumers'] == DESIGNS[key]['template_consumers'] and row['template_consumers']
+            assert 'edits' not in row
+        elif row['decision'] == 'tune':
             assert row['kind'] == 'physical', ('non-container tuning', key)
             assert edited(native[key], row['edits']) == tables[key], ('unreviewed modification', key)
             # Only bounded count/roll edits: no item substitution, added supplies,
@@ -119,7 +191,8 @@ def validate(tables, candidates, contract, native):
                     assert edit['after'][0]['function'] == 'minecraft:set_count'
         else:
             assert 'edits' not in row
-    assert {key for key, row in rows.items() if row['decision'] == 'tune'} == set(contract['native_probe']['tables']), 'tuning escaped reviewed physical allowlist'
+    assert {key for key, row in rows.items() if row['decision'] == 'author-missing'} == MISSING_IDS
+    assert {key for key, row in rows.items() if row['decision'] in {'tune', 'author-missing'}} == set(contract['native_probe']['tables']), 'tuning escaped reviewed physical allowlist'
     assert rows['quark:entities/stoneling_carry']['kind'] == 'mob'
     assert rows['wares:gameplay/empty_package']['kind'] == 'package'
     assert rows['the_bumblezone:structures/sempiternal_sanctum/sudoku_failed']['kind'] == 'intentional-empty-or-cut'
@@ -150,9 +223,9 @@ def sample_changed_pools(rows, tables, contract):
     assert size >= 20000
     observations = []
     for key, row in rows.items():
-        if row['decision'] != 'tune':
+        if row['decision'] not in {'tune', 'author-missing'}:
             continue
-        pool_ids = sorted({edit['path'][1] for edit in row['edits']})
+        pool_ids = list(range(len(tables[key]['pools']))) if row['decision'] == 'author-missing' else sorted({edit['path'][1] for edit in row['edits']})
         for pool_id in pool_ids:
             pool = tables[key]['pools'][pool_id]
             assert not pool.get('conditions') and not pool.get('functions')
@@ -208,6 +281,8 @@ def main():
     assert fingerprint(injections) == contract['injection_sha256'], 'injection composition drift'
     effective = effective_injections(injections)
     assert fingerprint(effective) == contract['effective_injection_sha256'], 'effective modifier composition drift'
+    assert hashlib.sha256(DESIGN_PATH.read_bytes()).hexdigest() == contract['authored_missing_sha256'], 'authored missing designs changed without review'
+    validate_authored_items()
     rows = validate(tables, candidates, contract, native)
     repairs = validate_reference_repairs(contract)
     for key, row in rows.items():
@@ -236,9 +311,18 @@ def main():
         t[key]['pools'][0]['rolls'] = 8
         next(row for row in p['tables'] if row['id'] == key)['table_sha256'] = fingerprint(t[key])
     reject_mutation(tables, candidates, contract, native, protected_pool_with_updated_digest)
+    # New definitions cannot waive reward, NBT or quantity changes by merely
+    # updating their review digest. They also may not claim a valid upstream table.
+    def changed_new_design(t, c, p, change):
+        key = 'fallout_wastelands_:chests/scraptier_1'
+        change(t[key])
+        next(row for row in p['tables'] if row['id'] == key)['table_sha256'] = fingerprint(t[key])
+    reject_mutation(tables, candidates, contract, native, lambda t,c,p: changed_new_design(t,c,p,lambda table: table['pools'][0].update(rolls=20)))
+    reject_mutation(tables, candidates, contract, native, lambda t,c,p: changed_new_design(t,c,p,lambda table: table['pools'][0]['entries'][0].update(name='minecraft:netherite_ingot')))
+    reject_mutation(tables, candidates, contract, native, lambda t,c,p: changed_new_design(t,c,p,lambda table: table['pools'][0]['entries'][0].update(functions=[{'function':'minecraft:set_nbt','tag':'{forged:1b}'}])))
     observations = sample_changed_pools(rows, tables, contract)
     counts = collections.Counter(row['kind'] for row in rows.values())
-    print('Structure loot ownership: reviewed pinned candidate inventory; 15 exact table overrides; nine negative mutations rejected.')
+    print('Structure loot ownership: reviewed pinned candidate inventory; 15 exact table overrides; eight explicit new missing-table designs; twelve negative table mutations rejected.')
     print(json.dumps({'reviewed':len(rows), 'classifications':dict(counts), 'unresolved':[k for k,v in rows.items() if v['kind']=='unresolved'], 'unknown_consumers':[k for k,v in rows.items() if v['kind']=='unknown-consumer'], 'authored_pool_samples':observations, 'exact_reference_repairs':repairs, 'native_acceptance':'PENDING separate exact-candidate runtime probe; source templates do not prove active placements', 'prefilled_template_occurrences_untouched':len(prefilled)}, indent=2))
 
 

@@ -6,7 +6,7 @@
     "size": 20000,
     "relative_mean_tolerance": 0.04,
     "absolute_probability_tolerance": 0.015,
-    "scope": "Changed authored pools only, zero luck, Python discrete RNG; excludes native GLMs, LootJS, conditions and container splitting. Native candidate probe separately required."
+    "scope": "Changed authored pools and eight explicitly accepted new missing-table designs only, zero luck, Python discrete RNG; excludes native GLMs, LootJS, conditions and container splitting. Native registered-item, ordinary-container and Lootr candidate probes separately required."
   },
   "native_probe": {
     "tables": [
@@ -16,6 +16,13 @@
       "alexscaves:chests/underground_cabin_magnetic_caves",
       "alexscaves:chests/underground_cabin_primordial_caves",
       "alexscaves:chests/underground_cabin_toxic_caves",
+      "fallout_wastelands_:chests/raider",
+      "fallout_wastelands_:chests/raidertier_1",
+      "fallout_wastelands_:chests/scraptier_1",
+      "kaisyn:village/village_birch_forest_house",
+      "kaisyn:village/village_forest_ruins/forest_ruins_butcher",
+      "kaisyn:village/village_forest_ruins/forest_ruins_library",
+      "kaisyn:village/village_forest_ruins/forest_ruins_temple",
       "minecraft:chests/shipwreck_supply",
       "minecraft:chests/simple_dungeon",
       "rats:chest/pet_shop",
@@ -24,7 +31,8 @@
       "wares:chests/village/plains_warehouse",
       "wares:chests/village/savanna_warehouse",
       "wares:chests/village/snowy_warehouse",
-      "wares:chests/village/taiga_warehouse"
+      "wares:chests/village/taiga_warehouse",
+      "wythers:chests/village/forest_ruins_big_house"
     ],
     "negative_tables": [
       "hexerei:chests/courier_package",
@@ -3385,19 +3393,26 @@
     },
     {
       "id": "fallout_wastelands_:chests/raider",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
+      "kind": "physical",
+      "role": "supplies",
+      "decision": "author-missing",
+      "rationale": "Personal raider stash: one metal box [4,6,10] in raider_base_01; distinct from its ten existing raiderchest containers.",
+      "table_sha256": "5810515f7435f525c1b75524b9bb0c6f2a71caa528ee1cde45916e9a426c71ad",
+      "source": "kubejs!data/fallout_wastelands_/loot_tables/chests/raider.json",
       "template_consumers": [
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:metal_box"
       ],
       "table_consumers": [],
       "active_injections": [],
       "worldgen_consumers": [],
-      "override_layers": []
+      "override_layers": [],
+      "authored_items": [
+        "fallout_wastelands_:bottle_cap",
+        "fallout_wastelands_:cigarettepack",
+        "fallout_wastelands_:iguana_on_stick",
+        "fallout_wastelands_:tire_iron"
+      ],
+      "new_design_disclosure": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
     },
     {
       "id": "fallout_wastelands_:chests/raiderchest",
@@ -3419,12 +3434,12 @@
     },
     {
       "id": "fallout_wastelands_:chests/raidertier_1",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
+      "kind": "physical",
+      "role": "encounter",
+      "decision": "author-missing",
+      "rationale": "Low-tier combat stores: two metal boxes each in ghoul_farm_01 and raider_base_01. No reuse of tier2 weapon table or existing raiderchest supplies.",
+      "table_sha256": "e5479df0bacc075a5f6ee5a13bcbca6ea271ebaedecd8c443d13a6ad0f386a99",
+      "source": "kubejs!data/fallout_wastelands_/loot_tables/chests/raidertier_1.json",
       "template_consumers": [
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/ghoul_farm_01.nbt:fallout_wastelands_:metal_box",
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:metal_box"
@@ -3432,7 +3447,14 @@
       "table_consumers": [],
       "active_injections": [],
       "worldgen_consumers": [],
-      "override_layers": []
+      "override_layers": [],
+      "authored_items": [
+        "fallout_wastelands_:cloth",
+        "fallout_wastelands_:ninemmammo",
+        "fallout_wastelands_:thirtytwoammo",
+        "minecraft:leather_boots"
+      ],
+      "new_design_disclosure": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
     },
     {
       "id": "fallout_wastelands_:chests/raidertier_2",
@@ -3495,19 +3517,27 @@
     },
     {
       "id": "fallout_wastelands_:chests/scraptier_1",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
+      "kind": "physical",
+      "role": "supplies",
+      "decision": "author-missing",
+      "rationale": "Dedicated salvage box [14,1,6] in raider_base_01, which separately assigns trash/industrial/ammo/medical stores; explicitly neither trash alias nor general industrial stock.",
+      "table_sha256": "d3b9c6d594006a810e9b8f0143687fe550a083821f292bc1cb8e4343f9b81fda",
+      "source": "kubejs!data/fallout_wastelands_/loot_tables/chests/scraptier_1.json",
       "template_consumers": [
         "fallout-wastelands.pw.toml!data/fallout_wastelands_/structures/raider_base_01.nbt:fallout_wastelands_:metal_box"
       ],
       "table_consumers": [],
       "active_injections": [],
       "worldgen_consumers": [],
-      "override_layers": []
+      "override_layers": [],
+      "authored_items": [
+        "fallout_wastelands_:copperwires",
+        "fallout_wastelands_:dented_can",
+        "fallout_wastelands_:nail",
+        "fallout_wastelands_:scrapmetal",
+        "fallout_wastelands_:tinnugget"
+      ],
+      "new_design_disclosure": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
     },
     {
       "id": "fallout_wastelands_:chests/trashtier_1",
@@ -5744,67 +5774,94 @@
     },
     {
       "id": "kaisyn:village/village_birch_forest_house",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
+      "kind": "physical",
+      "role": "supplies",
+      "decision": "author-missing",
+      "rationale": "Single chest [4,4,2] in intact birch_forest_small_house_6, with blue bed and domestic birch furniture. Household food and repair supplies, not a new treasure cache.",
+      "table_sha256": "79c71f3e4686fd5048bbae60af7819df328bb2eb0a17aae2be4fc662409bdfbe",
+      "source": "kubejs!data/kaisyn/loot_tables/village/village_birch_forest_house.json",
       "template_consumers": [
         "towns-and-towers.pw.toml!data/kaisyn/structures/village/birch_forest_romanian/houses/birch_forest_small_house_6.nbt:minecraft:chest"
       ],
       "table_consumers": [],
       "active_injections": [],
       "worldgen_consumers": [],
-      "override_layers": []
+      "override_layers": [],
+      "authored_items": [
+        "minecraft:apple",
+        "minecraft:bread",
+        "minecraft:feather",
+        "minecraft:potato",
+        "minecraft:string"
+      ],
+      "new_design_disclosure": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
     },
     {
       "id": "kaisyn:village/village_forest_ruins/forest_ruins_butcher",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
+      "kind": "physical",
+      "role": "supplies",
+      "decision": "author-missing",
+      "rationale": "Separate chest [5,0,4] in forest_library_1 ruins is authored with butcher ID, not library ID; ruined cobblestone shell has no surviving workstation. Proposed remnant hide/bone stock, not preserved unknown original special reward.",
+      "table_sha256": "b4f155eabc13fc005b41b0429f0ec2a54743e66b1f2a1f3a95a8bbba6c38c73f",
+      "source": "kubejs!data/kaisyn/loot_tables/village/village_forest_ruins/forest_ruins_butcher.json",
       "template_consumers": [
         "towns-and-towers.pw.toml!data/kaisyn/structures/village/forest_ruins/houses/forest_library_1.nbt:minecraft:chest"
       ],
       "table_consumers": [],
       "active_injections": [],
       "worldgen_consumers": [],
-      "override_layers": []
+      "override_layers": [],
+      "authored_items": [
+        "minecraft:beef",
+        "minecraft:bone",
+        "minecraft:leather"
+      ],
+      "new_design_disclosure": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
     },
     {
       "id": "kaisyn:village/village_forest_ruins/forest_ruins_library",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
+      "kind": "physical",
+      "role": "supplies",
+      "decision": "author-missing",
+      "rationale": "Other chest in forest_library_1 ruins explicitly has library ID; paper/writing stock. No invented enchanted-book tier or claim to recover lost rare rewards.",
+      "table_sha256": "9d15ca544eaeac80ed2616e8a399099448108cd673488e1917d0101350efb210",
+      "source": "kubejs!data/kaisyn/loot_tables/village/village_forest_ruins/forest_ruins_library.json",
       "template_consumers": [
         "towns-and-towers.pw.toml!data/kaisyn/structures/village/forest_ruins/houses/forest_library_1.nbt:minecraft:chest"
       ],
       "table_consumers": [],
       "active_injections": [],
       "worldgen_consumers": [],
-      "override_layers": []
+      "override_layers": [],
+      "authored_items": [
+        "minecraft:book",
+        "minecraft:feather",
+        "minecraft:ink_sac",
+        "minecraft:paper"
+      ],
+      "new_design_disclosure": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
     },
     {
       "id": "kaisyn:village/village_forest_ruins/forest_ruins_temple",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
+      "kind": "physical",
+      "role": "supplies",
+      "decision": "author-missing",
+      "rationale": "Chest in forest_temple_1 cobblestone ruin; small mundane votive stock, no fabricated relic/progression unlock.",
+      "table_sha256": "2a235975e2c1c85a26962aad7fc2c378bbb847cea441b0419fdc0f4935158530",
+      "source": "kubejs!data/kaisyn/loot_tables/village/village_forest_ruins/forest_ruins_temple.json",
       "template_consumers": [
         "towns-and-towers.pw.toml!data/kaisyn/structures/village/forest_ruins/houses/forest_temple_1.nbt:minecraft:chest"
       ],
       "table_consumers": [],
       "active_injections": [],
       "worldgen_consumers": [],
-      "override_layers": []
+      "override_layers": [],
+      "authored_items": [
+        "minecraft:candle",
+        "minecraft:charcoal",
+        "minecraft:gold_nugget"
+      ],
+      "new_design_disclosure": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
     },
     {
       "id": "kaisyn:village/village_jungle_house",
@@ -11794,19 +11851,26 @@
     },
     {
       "id": "wythers:chests/village/forest_ruins_big_house",
-      "kind": "unresolved",
-      "role": null,
-      "decision": "unchanged",
-      "rationale": "Retain unresolved upstream reference without inventing rewards; native placement/loading requires separate repair or explicit acceptance.",
-      "table_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
-      "source": null,
+      "kind": "physical",
+      "role": "supplies",
+      "decision": "author-missing",
+      "rationale": "Trapped chest in forest_large_house_1, referenced by active-source Towns forest ruins pool. The wythers provider table is absent; modest abandoned equipment cache, explicitly new design rather than namespace alias or recovered special rewards.",
+      "table_sha256": "affc5dcb00efb9ef48acecb19d106105f4cac0e95b145b7f40cd121cde08ce93",
+      "source": "kubejs!data/wythers/loot_tables/chests/village/forest_ruins_big_house.json",
       "template_consumers": [
         "towns-and-towers.pw.toml!data/kaisyn/structures/village/forest_ruins/houses/forest_large_house_1.nbt:minecraft:trapped_chest"
       ],
       "table_consumers": [],
       "active_injections": [],
       "worldgen_consumers": [],
-      "override_layers": []
+      "override_layers": [],
+      "authored_items": [
+        "minecraft:arrow",
+        "minecraft:iron_nugget",
+        "minecraft:leather",
+        "minecraft:string"
+      ],
+      "new_design_disclosure": "Original missing table unavailable; new bounded design cannot claim preservation/reconstruction of its special rewards. Existing valid tables remain untouched."
     }
   ],
   "reference_repairs": [
@@ -11866,5 +11930,6 @@
       "pinned_original_sha256": "e68690f1b45a78ab26ab9fa18da41aacd84c57d23b537375d0be7ec49fdfe837",
       "authored_sha256": "250a3e53e939d07995d651388c9c1cd807ac05351bf956e74a31844ce99e5ca9"
     }
-  ]
+  ],
+  "authored_missing_sha256": "41b91b15bf01e13bc27c24a89faa70d38d7b36acd0e382b76e3c15e2d652cc21"
 }
