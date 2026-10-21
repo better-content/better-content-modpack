@@ -16,6 +16,7 @@ import com.bettercontent.tests.release.unusedReflectionAllowances
 import com.bettercontent.tests.release.bytecodeReflectionViolations
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Tag
@@ -432,8 +433,10 @@ class HarnessFastTest {
         zip(bundled, jarContents)
         annotateJar(bundled, mod, commit)
         zip(repository.resolve("build/libs/fixture.jar"), jarContents)
+        val fixtureInput = workspace.resolve("fixture-input.jar")
+        zip(fixtureInput, jarContents)
         val wrapper = repository.resolve("gradlew")
-        wrapper.writeText("#!/bin/sh\nprintf '%s\\n' \"\$@\" > invoked-tasks.txt\n")
+        wrapper.writeText("#!/bin/sh\nprintf '%s\\n' \"\$@\" > invoked-tasks.txt\nmkdir -p build/libs\ncp '$fixtureInput' build/libs/fixture.jar\n")
         assertTrue(wrapper.toFile().setExecutable(true))
         val evidence = root.resolve("generated/test-evidence/fixture/release").also(Files::createDirectories)
         val staging = evidence.resolve("staged-jars").also(Files::createDirectories)
@@ -451,11 +454,43 @@ class HarnessFastTest {
         assertEquals(commit, readSourceCommit(rebuilt.jar, mod))
         assertEquals(commit, readSourceCommit(bundled, mod))
 
+        val retained = evidence.resolve("prior-source-outputs/fixture/build/libs/fixture.jar")
+        assertTrue(Files.isRegularFile(retained), "the previous artifact must survive the requested clean")
+        assertTrue(Files.readAllBytes(retained).contentEquals(Files.readAllBytes(fixtureInput)))
         val deployedBytes = Files.readAllBytes(bundled)
-        wrapper.writeText("#!/bin/sh\nexit 7\n")
-        assertThrows(IllegalArgumentException::class.java) {
-            build(root, workspace, evidence, staging, mod, sourceUpdate, skipTests = false, forceRebuild = true)
+        wrapper.writeText("#!/bin/sh\nprintf 'zero-without-stage\\n' > invoked-tasks.txt\nexit 0\n")
+        val emptyEvidence = root.resolve("generated/test-evidence/fixture-no-stage/release").also(Files::createDirectories)
+        val emptyStaging = emptyEvidence.resolve("staged-jars").also(Files::createDirectories)
+        val absent = assertThrows(IllegalArgumentException::class.java) {
+            build(root, workspace, emptyEvidence, emptyStaging, mod, sourceUpdate, skipTests = false, forceRebuild = true)
         }
+        assertTrue(absent.message.orEmpty().contains("did not stage fixture.jar"), "a zero exit must not inherit the pre-clean JAR")
+        assertEquals(listOf("zero-without-stage"), Files.readAllLines(repository.resolve("invoked-tasks.txt")))
+        assertTrue(Files.isRegularFile(emptyEvidence.resolve("prior-source-outputs/fixture/build/libs/fixture.jar")))
+        assertTrue(Files.readAllBytes(bundled).contentEquals(deployedBytes))
+        Files.createDirectories(repository.resolve("build/libs"))
+        Files.copy(fixtureInput, repository.resolve("build/libs/fixture.jar"))
+        wrapper.writeText("#!/bin/sh\nprintf 'simulated-failure\\n' > invoked-tasks.txt\nexit 7\n")
+        val failedEvidence = root.resolve("generated/test-evidence/fixture-failure/release").also(Files::createDirectories)
+        val failedStaging = failedEvidence.resolve("staged-jars").also(Files::createDirectories)
+        assertThrows(IllegalArgumentException::class.java) {
+            build(root, workspace, failedEvidence, failedStaging, mod, sourceUpdate, skipTests = false, forceRebuild = true)
+        }
+        assertEquals(listOf("simulated-failure"), Files.readAllLines(repository.resolve("invoked-tasks.txt")), "negative control must reach the failing build, not a stale retention destination")
+        assertTrue(Files.isRegularFile(failedEvidence.resolve("prior-source-outputs/fixture/build/libs/fixture.jar")))
+        assertTrue(Files.readAllBytes(bundled).contentEquals(deployedBytes))
+
+        wrapper.writeText("#!/bin/sh\nmkdir -p build/libs build/gametest/fresh/logs\ncp '$fixtureInput' build/libs/fixture.jar\n" +
+            "printf '%s\\n' '[12:00:00] [main/WARN] [net.minecraftforge.common.loot.LootModifierManager]: Could not decode GlobalLootModifier with json id thirst:add_loot_test - error: Unknown serializer thirst:add_loot_table' > build/gametest/fresh/logs/debug.log\n")
+        val nativeEvidence = root.resolve("generated/test-evidence/fixture-native-failure/release").also(Files::createDirectories)
+        val nativeStaging = nativeEvidence.resolve("staged-jars").also(Files::createDirectories)
+        val nativeFailure = assertThrows(IllegalArgumentException::class.java) {
+            build(root, workspace, nativeEvidence, nativeStaging, mod, sourceUpdate, skipTests = false, forceRebuild = true)
+        }
+        assertTrue(nativeFailure.message.orEmpty().contains("source native log audit"))
+        assertTrue(Files.isRegularFile(repository.resolve("build/gametest/fresh/logs/debug.log")), "actual failing native log must survive")
+        assertTrue(Files.isRegularFile(nativeEvidence.resolve("native-log-audits/fixture/default/report.json")))
+        assertFalse(Files.exists(nativeStaging.resolve("fixture.jar")), "failed native operations must block source staging/annotation")
         assertTrue(Files.readAllBytes(bundled).contentEquals(deployedBytes))
     }
 
@@ -778,6 +813,67 @@ class HarnessFastTest {
         val log = root.resolve("operations.log").also { it.writeText(records.joinToString("\n")) }
         assertEquals((1..records.size).toList(), LogPolicy.findings(listOf(log)).map { it.line })
         assertThrows(IllegalArgumentException::class.java) { LogPolicy.requireClean(listOf(log)) }
+    }
+
+    @Test
+    fun nativeLootDecodeFailureBlocksEvenAtWarnWithoutAnException(@TempDir root: Path) {
+        val message = "Could not decode GlobalLootModifier with json id thirst:add_loot_shipwreck_supply - error: " +
+            "Unknown registry key in ResourceKey[minecraft:root / forge:global_loot_modifier_serializers]: thirst:add_loot_table"
+        val failures = listOf(
+            "[21Oct2026 11:29:15.763] [main/WARN] [net.minecraftforge.common.loot.LootModifierManager/]: $message",
+            "[12:00:00] [Server thread/INFO] [net.minecraftforge.common.loot.LootModifierManager]: $message",
+        )
+        val controls = listOf(
+            "[12:00:00] [main/WARN] [net.minecraftforge.common.loot.LootModifierManager]: GlobalLootModifier reload accepted",
+            "[12:00:00] [main/INFO] [fixture.Report]: Quoted fixture sample: $message",
+        )
+        val log = root.resolve("loot-decode.log").also { it.writeText((failures + controls).joinToString("\n")) }
+        assertEquals(listOf(1, 2), LogPolicy.findings(listOf(log)).map { it.line })
+        assertThrows(IllegalArgumentException::class.java) { LogPolicy.requireClean(listOf(log)) }
+        log.writeText(controls.joinToString("\n"))
+        assertTrue(LogPolicy.findings(listOf(log)).isEmpty())
+    }
+
+    @Test
+    fun nativeBlockEntityLoadFailuresBlockEvenWhenFailureVerbComesLast(@TempDir root: Path) {
+        val load = "Tried to load a block entity for block Block{minecraft:air} but failed at location BlockPos{x=246, y=-12, z=229}"
+        val dummy = "Tried to load a DUMMY block entity @ BlockPos{x=246, y=-12, z=229} but found not block entity block Block{minecraft:air} at location"
+        val failures = listOf(
+            "[21Oct2026 02:00:00.000] [Server thread/WARN] [net.minecraft.world.level.chunk.LevelChunk/]: $load",
+            "[21Oct2026 02:00:00.001] [Server thread/WARN] [net.minecraft.world.level.chunk.LevelChunk/]: $dummy",
+            "[12:00:00] [Server thread/INFO] [minecraft/LevelChunk]: $load",
+        )
+        val controls = listOf(
+            "[12:00:00] [Server thread/WARN] [net.minecraft.world.level.chunk.LevelChunk]: Clean block entity load completed",
+            "[12:00:00] [main/INFO] [fixture.Report]: $load",
+            "[12:00:00] [main/INFO] [fixture.Report]: $dummy",
+        )
+        val log = root.resolve("block-entity-load.log").also { it.writeText((failures + controls).joinToString("\n")) }
+        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(log)).map { it.line })
+        assertThrows(IllegalArgumentException::class.java) { LogPolicy.requireClean(listOf(log)) }
+        log.writeText(controls.joinToString("\n"))
+        assertTrue(LogPolicy.findings(listOf(log)).isEmpty())
+    }
+
+    @Test
+    fun unsupportedNativeRootySoilBlocksEvenWithAFallbackAndQuietSeverity(@TempDir root: Path) {
+        val logger = "com.ferreusveritas.dynamictrees.tree.species.Species"
+        val message = "Rooty Dirt block NOT FOUND for soil minecraft:seagrass"
+        val failures = listOf(
+            "[21Oct2026 14:17:34.428] [Worker-Main-9/WARN] [$logger/]: $message",
+            "[12:00:00] [Worker-Main-6/INFO] [$logger]: $message",
+            "[12:00:00] [Worker-Main-6/DEBUG] [$logger/]: $message",
+        )
+        val controls = listOf(
+            "[12:00:00] [Worker-Main-6/WARN] [$logger]: Rooty dirt placement completed",
+            "[12:00:00] [main/INFO] [fixture.Report]: $message",
+            "[12:00:00] [main/INFO] [$logger]: Quoted historical source example: $message",
+        )
+        val log = root.resolve("rooty-soil.log").also { it.writeText((failures + controls).joinToString("\n")) }
+        assertEquals(listOf(1, 2, 3), LogPolicy.findings(listOf(log)).map { it.line })
+        assertThrows(IllegalArgumentException::class.java) { LogPolicy.requireClean(listOf(log)) }
+        log.writeText(controls.joinToString("\n"))
+        assertTrue(LogPolicy.findings(listOf(log)).isEmpty())
     }
 
     @Test

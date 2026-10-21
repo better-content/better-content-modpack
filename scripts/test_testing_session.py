@@ -288,6 +288,15 @@ class SessionTests(unittest.TestCase):
             self.assertEqual(['consumer', 'provider'], sessions.inspect_live(root, fresh)['affected_providers'])
             self.assertIn('provider', sessions.inspect_live(root, fresh)['build_reuse_candidates'])
             mods[0]['tasks'] = ['verify']
+            mods[0]['verificationProfiles'] = [dict(name='optional', tasks=['verify'], properties={'optionalRuntime': 'true'}),
+                                                dict(name='default', tasks=['verify'])]
+            (root / 'gradle/active-custom-mods.json').write_text(json.dumps(manifest))
+            self.assertEqual(['consumer', 'provider'], sessions.inspect_live(root, fresh)['affected_providers'])
+            self.assertIn('provider', sessions.inspect_live(root, fresh)['build_reuse_candidates'])
+            original_profile_contract = sessions.contract_identity(root, mods[0], shared)
+            mods[0]['verificationProfiles'][0]['properties']['optionalRuntime'] = 'false'
+            self.assertNotEqual(original_profile_contract, sessions.contract_identity(root, mods[0], shared))
+            del mods[0]['verificationProfiles']
             mods[0]['buildInputs'] = ['provider-contract.txt']
             (root / 'gradle/active-custom-mods.json').write_text(json.dumps(manifest))
             self.assertNotIn('provider', sessions.inspect_live(root, fresh)['build_reuse_candidates'])
@@ -300,6 +309,12 @@ class SessionTests(unittest.TestCase):
             (archive / 'historical-run.json').write_text(json.dumps(legacy))
             self.assertFalse(sessions.inspect_live(root, fresh)['valid_reuse'])
             self.assertEqual(legacy, json.loads((archive / 'historical-run.json').read_text()))
+
+    def test_profile_identity_matches_kotlin_separator_contract(self):
+        profiles = [dict(name='present', tasks=['verifyFull', 'stageRuntimeJar'], properties={'z': 'false', 'a': 'true'}),
+                    dict(name='default', tasks=['stageRuntimeJar'], clean=False)]
+        self.assertEqual('present\0true\0verifyFull\x01stageRuntimeJar\0a=true\x01z=false\ndefault\0false\0stageRuntimeJar\0',
+                         sessions.verification_profile_identity(profiles))
 
     def test_identity_is_stable_conversation_not_pane(self):
         with patch.dict(os.environ, {'PI_SESSION_ID': 'stable-conversation', 'HERDR_PANE_ID': 'new-pane'}):

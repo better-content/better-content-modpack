@@ -68,9 +68,29 @@ object FixtureAuditLogging {
         require(configuration.children().all { it.tagName in setOf("Properties", "Appenders", "Loggers") }) { "unsupported global Log4j filtering or configuration" }
         val appenders = configuration.singleChild("Appenders")
         val loggers = configuration.singleChild("Loggers")
-        require(loggers.children().map { it.tagName } == listOf("Root")) { "expected a single native root logger" }
+        require(loggers.attributes.length == 0) { "unsupported logger-container attributes" }
+        val nodes = loggers.children()
+        require(nodes.all { it.tagName in setOf("Root", "Logger") }) { "unsupported native logger type" }
+        val scoped = nodes.filter { it.tagName == "Logger" }
+        val scopedNames = scoped.map { it.getAttribute("name") }
+        require(scopedNames.toSet().size == scopedNames.size) { "duplicate playtest logger" }
+        scoped.forEach { child ->
+            val name = child.getAttribute("name")
+            require(name.matches(Regex("bc\\.playtest(?:\\.[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_-]*)*)?"))) {
+                "unsupported scoped logger: $name"
+            }
+            require(child.attributeNames() == setOf("name", "level", "additivity") &&
+                child.getAttribute("additivity") == "true" && child.children().isEmpty()) {
+                "playtest loggers must propagate without filters or private appenders"
+            }
+            val level = child.getAttribute("level")
+            require(level.uppercase() in setOf("TRACE", "DEBUG", "INFO") ||
+                (name == "bc.playtest" && level == "\${sys:bc.playtest.level:-DEBUG}")) {
+                "unsupported playtest logger level"
+            }
+        }
         val logger = loggers.singleChild("Root")
-        require(logger.getAttribute("level").equals("info", true)) { "native root must remain INFO" }
+        require(logger.attributeNames() == setOf("level") && logger.getAttribute("level").equals("info", true)) { "native root must remain INFO without routing overrides" }
         require(logger.children().all { it.tagName in setOf("Filters", "AppenderRef") }) { "unsupported root configuration" }
         val presentation = appenders.children()
         require(presentation.isNotEmpty() && presentation.none { it.getAttribute("name") == APPENDER }) { "invalid presentation appenders" }
@@ -142,6 +162,7 @@ object FixtureAuditLogging {
         isExpandEntityReferences = false
     }.newDocumentBuilder().parse(ByteArrayInputStream(bytes))
 
+    private fun Element.attributeNames(): Set<String> = (0 until attributes.length).map { attributes.item(it).nodeName }.toSet()
     private fun Element.children(): List<Element> = (0 until childNodes.length).mapNotNull { childNodes.item(it) as? Element }
     private fun Element.singleChild(name: String): Element = children().filter { it.tagName == name }.singleOrNull()
         ?: throw IllegalArgumentException("expected exactly one $name")

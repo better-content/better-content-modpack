@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -17,8 +19,8 @@ class FixtureAuditLoggingTest {
     @TempDir lateinit var temp: Path
     private val repo = Path.of(System.getProperty("bc.repo.root", "."))
 
-    private fun fixture(): Path {
-        val root = Files.createDirectory(temp.resolve("fixture"))
+    private fun fixture(name: String = "fixture"): Path {
+        val root = Files.createDirectory(temp.resolve(name))
         Files.createDirectories(root.resolve("config"))
         // Redirect only the copied presentation output; never let an isolated context touch repo logs.
         val xml = Files.readString(repo.resolve("config/better-content-log4j2.xml"))
@@ -75,6 +77,136 @@ class FixtureAuditLoggingTest {
         assertEquals(3.5, LogPolicy.startupTimings(listOf(launch.auditLog)).single().seconds)
         assertArrayEquals(original, Files.readAllBytes(root.resolve("config/better-content-log4j2.xml")))
         assertEquals(4, launch.hashes.size)
+    }
+
+    @Test fun additivePlaytestDebugReachesFileAndAuditButNotConsoleAndCannotHideFailures() {
+        val root = fixture()
+        val launch = FixtureAuditLogging.prepare(root, "playtest")
+        val output = ByteArrayOutputStream()
+        val previous = System.out
+        try {
+            System.setOut(PrintStream(output, true, Charsets.UTF_8))
+            emit(launch) { context ->
+                val log = context.getLogger("bc.playtest.test_mod.transaction")
+                log.debug("BC_PLAYTEST schema=bc.playtest.v1 event=debug_visible reason=ordinary")
+                log.trace("trace_not_selected")
+                log.error("Recipe count failed to load child fixture", IllegalStateException("child exception detail"))
+                log.fatal("child fatal remains visible")
+                context.getLogger("fixture.native").info("native readiness")
+            }
+        } finally { System.setOut(previous) }
+        launch.requireNativeRecords()
+        val raw = Files.readString(launch.auditLog)
+        val file = Files.readString(root.resolve("presentation/latest.log"))
+        val console = output.toString(Charsets.UTF_8)
+        assertTrue(raw.contains("debug_visible"))
+        assertTrue(file.contains("debug_visible"))
+        assertFalse(console.contains("debug_visible"))
+        assertFalse(raw.contains("trace_not_selected"))
+        assertTrue(raw.contains("Recipe count failed to load child fixture"))
+        assertTrue(raw.contains("child fatal remains visible"))
+        assertTrue(raw.contains("java.lang.IllegalStateException: child exception detail"))
+        assertFalse(file.contains("Recipe count failed to load child fixture"))
+        assertTrue(console.contains("child fatal remains visible"))
+        val findings = LogPolicy.findings(listOf(launch.auditLog))
+        assertTrue(findings.any { it.text.contains("Recipe count failed to load child fixture") })
+        assertTrue(findings.any { it.text.contains("child fatal remains visible") })
+        assertFalse(findings.any { it.text.contains("debug_visible") })
+    }
+
+    @Test fun scopedLevelsRemainAdditiveForAllAllowedOverrides() {
+        val root = fixture()
+        val xml = root.resolve("config/better-content-log4j2.xml")
+        Files.writeString(xml, Files.readString(xml).replace("<Loggers>", """<Loggers>
+            <Logger name="bc.playtest.test_mod" level="INFO" additivity="true"/>
+            <Logger name="bc.playtest.test_mod.focus" level="TRACE" additivity="true"/>"""))
+        val launch = FixtureAuditLogging.prepare(root, "overrides")
+        emit(launch) { context ->
+            context.getLogger("bc.playtest.test_mod.ordinary").debug("mod_debug_disabled")
+            context.getLogger("bc.playtest.test_mod.focus").trace("explicitly_selected_trace")
+            context.getLogger("bc.playtest.test_mod.ordinary").error("ordinary child error")
+            context.getLogger("bc.playtest.test_mod.focus").fatal("focused child fatal")
+        }
+        launch.requireNativeRecords()
+        val raw = Files.readString(launch.auditLog)
+        assertFalse(raw.contains("mod_debug_disabled"))
+        assertTrue(raw.contains("explicitly_selected_trace"))
+        assertTrue(raw.contains("ordinary child error"))
+        assertTrue(raw.contains("focused child fatal"))
+    }
+
+    @Test fun globalProfilePropertyCanDisableVerboseWithoutDisablingErrors() {
+        val previous = System.getProperty("bc.playtest.level")
+        try {
+            for (level in listOf("INFO", "DEBUG", "TRACE")) {
+                System.setProperty("bc.playtest.level", level)
+                val root = fixture("mode-$level")
+                val launch = FixtureAuditLogging.prepare(root, "mode-$level")
+                emit(launch) { context ->
+                    val log = context.getLogger("bc.playtest.test_mod.action")
+                    log.debug("mode_debug")
+                    log.trace("mode_trace")
+                    log.error("mode_error")
+                }
+                val raw = Files.readString(launch.auditLog)
+                assertEquals(level != "INFO", raw.contains("mode_debug"), level)
+                assertEquals(level == "TRACE", raw.contains("mode_trace"), level)
+                assertTrue(raw.contains("mode_error"), level)
+                launch.requireNativeRecords()
+            }
+        } finally {
+            if (previous == null) System.clearProperty("bc.playtest.level") else System.setProperty("bc.playtest.level", previous)
+        }
+    }
+
+    @Test fun debugOnlyRecordsDoNotEstablishNativeReadiness() {
+        val launch = FixtureAuditLogging.prepare(fixture(), "debug-only")
+        emit(launch) { it.getLogger("bc.playtest.test_mod.action").debug("debug_only_record") }
+        assertTrue(Files.readString(launch.auditLog).contains("debug_only_record"))
+        assertThrows(IllegalArgumentException::class.java) { launch.requireNativeRecords() }
+    }
+
+    @Test fun privateFilteringAndUnknownLoggerRoutesAreRejectedBeforeAnyPatch() {
+        val invalid = listOf(
+            """<Logger name="bc.playtest.evil" level="DEBUG" additivity="false"/>""",
+            """<Logger name="bc.playtest.evil" level="OFF" additivity="true"/>""",
+            """<Logger name="bc.playtest.evil" level="DEBUG" additivity="true"><AppenderRef ref="File"/></Logger>""",
+            """<Logger name="bc.playtest.evil" level="DEBUG" additivity="true"><Filters/></Logger>""",
+            """<Logger name="bc.playtest.evil" level="DEBUG" additivity="true" includeLocation="false"/>""",
+            """<Logger name="bc.playtesting.evil" level="DEBUG" additivity="true"/>""",
+            """<AsyncLogger name="bc.playtest.evil" level="DEBUG" additivity="true"/>""",
+            """<Logger name="bc.playtest" level="DEBUG" additivity="true"/>""",
+        )
+        invalid.forEachIndexed { index, node ->
+            val root = fixture("invalid-$index")
+            val logbegone = Files.readString(root.resolve("config/logbegone.toml"))
+            val xml = root.resolve("config/better-content-log4j2.xml")
+            Files.writeString(xml, Files.readString(xml).replace("<Loggers>", "<Loggers>$node"))
+            assertThrows(IllegalArgumentException::class.java) { FixtureAuditLogging.prepare(root, "invalid-$index") }
+            assertEquals(logbegone, Files.readString(root.resolve("config/logbegone.toml")))
+            assertFalse(Files.exists(root.resolve(".fixture-audit")))
+        }
+    }
+
+    @Test fun sizeRolloverRetainsMoreThanTheNativeDefaultSevenArchives() {
+        val root = fixture()
+        val xml = root.resolve("config/better-content-log4j2.xml")
+        val production = Files.readString(xml)
+        assertTrue(production.contains("SizeBasedTriggeringPolicy size=\"32 MB\""))
+        assertTrue(production.contains("DefaultRolloverStrategy fileIndex=\"nomax\""))
+        // Shrink only this copied fixture's trigger, not the production policy.
+        Files.writeString(xml, production.replace("size=\"32 MB\"", "size=\"1 KB\""))
+        val launch = FixtureAuditLogging.prepare(root, "rollover")
+        emit(launch) { context ->
+            val log = context.getLogger("bc.playtest.test_mod.action")
+            repeat(20) { log.debug("rollover-$it " + "x".repeat(1200)) }
+            context.getLogger("fixture.native").info("native ready after rollover")
+        }
+        launch.requireNativeRecords()
+        val archives = Files.list(root.resolve("presentation")).use { paths -> paths.filter { it.fileName.toString().endsWith(".log.gz") }.count() }
+        assertTrue(archives > 7, "non-deleting rollover retained only $archives archives")
+        val raw = Files.readString(launch.auditLog)
+        repeat(20) { assertTrue(raw.contains("rollover-$it "), "audit lost record $it") }
     }
 
     @Test fun restartKeepsOldAuditAndGeneratesDistinctConfigAndSink() {

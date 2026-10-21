@@ -1,5 +1,7 @@
 package com.bettercontent.tests
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import java.nio.file.Files
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.ExtensionContext
@@ -76,6 +78,19 @@ class EvidenceExtension(
                 mapOf("count" to findings.size,
                     "first" to findings.take(25).map { "${it.path}:${it.line}: ${it.text}" }))
             check(findings.isEmpty()) { "correctness log findings detected: ${findings.take(25)}" }
+        }
+        finalizeStep("playtest_logging") {
+            val binding = run.directory.resolve("candidate-binding.json")
+            val sources = if (Files.isRegularFile(binding)) jacksonObjectMapper().readTree(binding.toFile()).path("mods")
+                .associate { it.path("mod_id").asText() to it.path("commit").asText() } else emptyMap()
+            val paths = run.readyAuditLogs()
+            val report = PlaytestLoggingAudit.scan(paths, sources, requireActivation = sources.isNotEmpty())
+            run.event("final_playtest_logging", mapOf("count" to report.findings.size, "findings" to report.findings.take(25),
+                "native_launches" to paths.size, "records" to report.records, "detail_records" to report.detailRecords,
+                "native_record_utf8_bytes" to report.nativeUtf8Bytes, "activations" to report.activations,
+                "summary_totals" to report.summaries,
+                "note" to "Distinct ready-launch raw audits only, not mirrored aggregate logs. Payload/native-line growth and coalesced suppression are observations, not a gameplay-coverage or overhead verdict; existing TPS/deadline/strict-log oracles remain blocking."))
+            check(report.findings.isEmpty()) { "playtest logging contract failed: ${report.findings.take(25)}" }
         }
         finalizeStep("startup_diagnostics") {
             val timings = LogPolicy.startupTimings(collectLogs(run.directory))

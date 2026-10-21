@@ -55,6 +55,7 @@ standing policies or human authorization.
 
 - [Aspirational features](aspirational-features.md): wanted features outside current scope; not implementation authorization.
 - [Performance/mod integration](performance_and_mods.md).
+- [Bounded playtest logging](playtest-logging.md): producer contract, profile activation and audit boundary.
 - [Celestial events](celestial-events.md): four rare nights, travel, encounters and finite-stock visits.
 - [Cataclysm/cave encounters](cataclysm_better_cave_encounters_integration.md).
 - [Untamed Wilds](untamed_wilds_integration.md).

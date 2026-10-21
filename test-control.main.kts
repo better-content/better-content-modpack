@@ -172,7 +172,11 @@ private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, 
                 val status = java.nio.channels.FileChannel.open(cacheLock, java.nio.file.StandardOpenOption.CREATE,
                     java.nio.file.StandardOpenOption.WRITE).use { channel ->
                     channel.lock().use {
-                        launch(listOf(repo.resolve("gradlew").toString(), "--no-daemon") + tasks,
+                        val command = listOf(repo.resolve("gradlew").toString(), "--no-daemon") + tasks
+                        val boundCommand = if (name != "better-bumblezone-crops") command else
+                            listOf("python3", "-B", root.resolve("scripts/crops_source_inputs.py").toString(),
+                                "--root", root.toString(), "--repository", repo.toString(), "--") + command
+                        launch(boundCommand,
                             repo, controlPath(id).parent.resolve("source-$name.log"),
                             mapOf("BC_CUSTOM_MOD_JAR_DIR" to staged.toString()))
                     }

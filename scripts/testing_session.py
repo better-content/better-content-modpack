@@ -174,12 +174,20 @@ def current_shared_entries(root, patterns, context):
         ('kotlin', file_identity(Path(context.get('_kotlin_path', '/nonexistent')))), ('gradle', gradle_hash)]
 
 
+def verification_profile_identity(profiles):
+    # Same separators/order as Kotlin verificationProfileIdentity; profile values exclude controls.
+    return '\n'.join('\0'.join((profile['name'], str(profile.get('clean', True)).lower(),
+        '\x01'.join(profile['tasks']), '\x01'.join(f'{key}={value}' for key, value in sorted(profile.get('properties', {}).items()))))
+        for profile in profiles)
+
+
 def contract_identity(root, mod, shared):
     patterns = mod.get('verificationInputs', [])
     return fingerprint(shared + live_entries(root, patterns) + [
         ('build_identity', build_identity(root, mod, shared)),
         ('scoped_patterns', '\0'.join(patterns)), ('repository', mod['repository']),
         ('artifact', mod['artifact']), ('mod_id', mod['modId']), ('tasks', '\0'.join(mod['tasks'])),
+        ('profiles', verification_profile_identity(mod.get('verificationProfiles', []))),
         ('dependencies', '\0'.join(mod.get('dependsOn', []))), ('support', '\0'.join(mod.get('supportArtifacts', [])))])
 
 

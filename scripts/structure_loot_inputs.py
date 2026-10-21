@@ -75,10 +75,8 @@ class NbtReader:
         return self.payload(10)
 
 
-def load(root, fetch=True, pack_tables=True, details=None):
+def _archives(root, fetch):
     cache = Path.home() / '.cache/bc/packwiz-downloads'
-    tables, sources, templates, code, injections = {}, {}, {}, {}, {}
-    layers, worldgen_documents = {}, {}
     pins = [('vanilla', VANILLA)]
     pins += [(p.name, tomllib.loads(p.read_text())) for p in sorted((root / 'mods').glob('*.pw.toml'))]
     archives = []
@@ -91,6 +89,51 @@ def load(root, fetch=True, pack_tables=True, details=None):
         archives.append((owner, path))
     archives += [(p.name, p) for p in sorted((root / 'mods').glob('*.jar'))]
     archives += [(p.name, p) for p in sorted((root / 'datapacks').glob('*.zip'))]
+    return archives
+
+
+def load_table_baseline(root, *, template_references, injections, worldgen_consumers):
+    """Independently reread the table map of load(fetch=False, pack_tables=False).
+
+    Verify every pinned archive again and preserve all archive/datapack priority.
+    Do not borrow effective/overridden tables or persist a cache. Reuse only the
+    full reader's non-table discovery witnesses (identical for pack_tables=False)
+    to retain the original native candidate/nested-reference validation as well.
+    The caller must still run the full template/class/modifier/worldgen inventory.
+    """
+    tables = {}
+    pattern = re.compile(r'data/([^/]+)/loot_tables/(.+)\.json')
+
+    def accept(name, raw):
+        match = pattern.fullmatch(name)
+        tables[match[1] + ':' + match[2]] = json.loads(raw)
+
+    for _, path in _archives(root, fetch=False):
+        with zipfile.ZipFile(path) as archive:
+            for name in archive.namelist():
+                if pattern.fullmatch(name):
+                    accept(name, archive.read(name))
+    # pack_tables=False excludes KubeJS tables, not authored directory datapacks.
+    for data in sorted((root / 'datapacks').glob('*/data')):
+        for path in sorted(data.rglob('*')):
+            if path.is_file():
+                name = 'data/' + path.relative_to(data).as_posix()
+                if pattern.fullmatch(name):
+                    accept(name, path.read_bytes())
+    # Preserve root AND nested candidate-shape failures, including malformed
+    # upstream values hidden by an effective KubeJS table override. Non-table
+    # discovery is reused, never the effective table documents or their closure.
+    candidates = {k for k, v in tables.items() if v.get('type', '').removeprefix('minecraft:') == 'chest'
+                  or re.match(r'[^:]+:(?:chests?|injects?)/', k)} | template_references.keys()
+    candidates.update(worldgen_consumers.keys() & tables.keys())
+    _complete_candidates(tables, candidates, injections)
+    return tables
+
+
+def load(root, fetch=True, pack_tables=True, details=None):
+    tables, sources, templates, code, injections = {}, {}, {}, {}, {}
+    layers, worldgen_documents = {}, {}
+    archives = _archives(root, fetch)
 
     def accept(name, raw, source):
         match = re.fullmatch(r'data/([^/]+)/loot_tables/(.+)\.json', name)
@@ -155,6 +198,14 @@ def load(root, fetch=True, pack_tables=True, details=None):
         for key in set(strings(document)) & tables.keys():
             resource_references.setdefault(key, []).append(source)
             candidates.add(key)
+    candidates = _complete_candidates(tables, candidates, injections)
+    if details is not None:
+        details['table_layers'] = {key: value for key, value in layers.items() if len(value) > 1}
+        details['worldgen_consumers'] = {key: sorted(value) for key, value in resource_references.items()}
+    return tables, sources, references, candidates, code, injections, prefilled
+
+
+def _complete_candidates(tables, candidates, injections):
     effective = effective_injections(injections)
     for modifier in effective.values():
         values = set(strings(modifier))
@@ -164,12 +215,8 @@ def load(root, fetch=True, pack_tables=True, details=None):
         nested = {child for key in candidates for child in table_references(tables.get(key, {}))}
         missing = nested - candidates
         if not missing:
-            break
+            return candidates
         candidates.update(missing)
-    if details is not None:
-        details['table_layers'] = {key: value for key, value in layers.items() if len(value) > 1}
-        details['worldgen_consumers'] = {key: sorted(value) for key, value in resource_references.items()}
-    return tables, sources, references, candidates, code, injections, prefilled
 
 
 def strings(value):

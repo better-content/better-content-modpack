@@ -221,7 +221,18 @@ object LogPolicy {
 
     private fun operationFailed(text: String): Boolean {
         val record = parseRecord(text)
-        return record?.severity in setOf("ERROR", "FATAL") ||
+        val failedLootDecode = record?.logger?.removeSuffix("/") == "net.minecraftforge.common.loot.LootModifierManager" &&
+            record.message.startsWith("Could not decode GlobalLootModifier with json id ")
+        val failedBlockEntityLoad = record != null && record.logger?.removeSuffix("/") in setOf("net.minecraft.world.level.chunk.LevelChunk", "minecraft/LevelChunk") &&
+            (record.message.startsWith("Tried to load a block entity for block ") && record.message.contains(" but failed at location ") ||
+                record.message.startsWith("Tried to load a DUMMY block entity @ ") && record.message.contains(" but found not block entity block "))
+        // Species reports an unsupported original soil and returns false after
+        // attempting its dirt fallback. This is not proof the whole tree aborted,
+        // nor may a later GameTest count conceal the failed original operation.
+        val unsupportedRootySoil = record?.logger?.removeSuffix("/") ==
+            "com.ferreusveritas.dynamictrees.tree.species.Species" &&
+            record.message.startsWith("Rooty Dirt block NOT FOUND for soil ")
+        return record?.severity in setOf("ERROR", "FATAL") || failedLootDecode || failedBlockEntityLoad || unsupportedRootySoil ||
             (record == null && errorEnvelope.containsMatchIn(text)) ||
             failedOperation.containsMatchIn(record?.message ?: text)
     }

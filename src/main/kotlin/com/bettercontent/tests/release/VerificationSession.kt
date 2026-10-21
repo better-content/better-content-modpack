@@ -450,7 +450,8 @@ internal class VerificationSession(
 
     private fun contractIdentity(mod: ActiveMod): String = fingerprint(sharedEntries() + scopedEntries(mod) + listOf(
         "build_identity" to buildIdentity(mod), "repository" to mod.repository, "artifact" to mod.artifact, "mod_id" to mod.modId,
-        "tasks" to mod.tasks.joinToString("\u0000"), "dependencies" to mod.dependsOn.joinToString("\u0000"),
+        "tasks" to mod.tasks.joinToString("\u0000"), "profiles" to verificationProfileIdentity(mod.verificationProfiles),
+        "dependencies" to mod.dependsOn.joinToString("\u0000"),
         "support" to mod.supportArtifacts.joinToString("\u0000")))
 
     private fun buildIdentity(mod: ActiveMod): String = fingerprint(sharedEntries() +

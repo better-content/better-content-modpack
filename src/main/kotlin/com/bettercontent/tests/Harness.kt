@@ -302,6 +302,9 @@ class EvidenceRun private constructor(val config: TestConfig, val suite: String,
         launch.requireNativeRecords()
     }
 
+    /** One unfiltered file per native launch; exclude aggregate mirrors from logging measurements. */
+    fun readyAuditLogs(): List<Path> = runtimeAudits.filterValues { it }.keys.map { it.auditLog }
+
     fun auditLogging(): List<String> = (if (activeFamily == null) emptyList() else listOf("fixture family ${activeFamily?.family} was not completely cleaned up")) + runtimeAudits.flatMap { (launch, ready) ->
         buildList {
             runCatching { launch.assertStable() }.exceptionOrNull()?.let { add(it.toString()) }

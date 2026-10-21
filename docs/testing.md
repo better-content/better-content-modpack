@@ -120,6 +120,13 @@ hashes. Cold-cache source inspection rehydrates only the native JAR/ZIP archives
 `scripts/prepare_dev_inputs.py`, verifies each active pin's hash and exercises that rehydration's
 synthetic tests. These downloads remain generated dependencies retained by default; no Minecraft launch, deployment
 or distribution is performed. Fresh-dist preparation refreshes them once after source and pack changes settle.
+The structure-loot Dev contract retains its exact ownership/pin/protected-pool checks and all
+20,000 seeded samples per changed pool with unchanged tolerances. Its independent upstream table
+baseline re-verifies every pinned archive without repeating the full template/class/worldgen scan;
+it never borrows effective KubeJS table overrides. Synthetic reader controls cover override priority,
+missing/mutated inputs and malformed upstream data. These source checks do not establish native
+loot composition, placement, inventory delivery or performance acceptance. Report JUnit cases
+separately from the Python/Node guards they invoke; guard counts are not additional JUnit cases.
 Pack-level tiers run only when explicitly requested:
 
 ```sh
@@ -154,8 +161,42 @@ Direct full Dist and Debug require clean active custom-mod repositories. Authori
 revalidates retained provider checkpoints and verifies affected providers and their transitive
 consumers, clean-rebuilding whenever exact build-only reuse is ineligible. With no eligible
 checkpoints, or with `--rebuild-all`, it runs every active mod's verification tasks; matching embedded source metadata
-alone cannot skip verification. It stages and
-deploys the coherent set, refreshes Packwiz and packages once. Runtime suites still use fresh
+alone cannot skip verification. Before an existing clean build, the canonical preparer atomically
+relocates complete prior SDK build outputs (including nested Gradle modules) and explicit legacy
+`run-gametest` / `run-gametest-validation` instances into that release's `prior-source-outputs/`
+evidence. Ordinary developer `run`, visual and datagen instances are neither moved nor traversed. Reverification that reuses compiled
+outputs retains those build trees in place but isolates old native instances. A TSV records completed
+relocations; none confer acceptance. Tracked inputs, symlink output/destination roots, existing
+destinations and unsupported cross-device moves fail closed before Gradle; there is no delete fallback.
+Where declared, ordered `verificationProfiles` run the owning repository's public Gradle tasks and
+project properties under the same whole-invocation cache lock, with separate logs/retention roots
+under `source-profiles/<repository>/<profile>/`. They must retain every ordinary/default task and
+stage the final artifact with default properties. Profile tasks, properties, ordering and clean policy
+participate in both Kotlin and Python checkpoint fingerprints; a default-only receipt cannot stand
+in for a required optional-present/absent matrix. Multi-profile recipes rebuild rather than treating
+restored compiled bytes as profile verification. Client visual profiles remain separate acceptance.
+After each source invocation, the preparer applies the existing strict `LogPolicy` to actual SDK
+native log files (including retained gzip archives and discovered nested modules), before artifact
+staging/annotation, source checkpoint creation or deployment. This catches failed operations at
+WARN as well as ERROR/FATAL, including native `LootModifierManager` decode failures and `LevelChunk`
+failed/DUMMY block-entity loads (including reverse-worded “tried … but failed” records), and the
+exact `Species` unsupported-rooty-soil diagnostic. That native method attempts a dirt fallback and
+returns false; detecting it does not assert that the entire tree aborted. A Gradle zero exit and
+passing test counts cannot conceal that operation or missing serializers. Per-module/profile reports under
+`native-log-audits/` preserve original paths/hashes and identify any expanded audit copies.
+An empty or clean log report supplies no native readiness, profile coverage, gameplay or runtime
+acceptance claim; owning source gates and final pack acceptance remain mandatory.
+For Crops, the source invocation additionally uses `scripts/crops_source_inputs.py` inside the
+same whole-invocation lock. It registers the owning snapshot/raw-cache retention scopes before
+Gradle, rehydrates only the reviewed recipe's named raw parents from actual Root pins, and passes
+explicit `BC_CANONICAL_PACK_ROOT`, `BC_CANONICAL_ARCHIVES`, `BC_CANONICAL_ACTIVITY` and
+`BC_OWNER_SESSION` bindings. The owning ordinary native task automatically prepares its fresh
+immutable canonical snapshot; no conversation-created snapshot or sibling-checkout inference is
+required. Existing anomalous cache bytes fail closed and remain retained. Failed/interrupted
+invocations retain active activity for quiet/recovery; successful finish deletes nothing and is
+not an acceptance verdict. These bindings do not enable an optional weaker fixture or alter
+ordinary tasks, source-only/production archive exclusions, required codec/data assertions or logs.
+The canonical preparer stages and deploys the coherent set, refreshes Packwiz and packages once. Runtime suites still use fresh
 fixtures; the receipt never replaces pack acceptance. Release evidence binds tier IDs and hashes.
 Unbound candidate discovery binds the exact `pack.toml` `Build N`/lettered version to its client
 and server ZIPs under `dist/build-N.../`; older builds may coexist. Missing/partial current builds,

@@ -5,7 +5,6 @@ better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnost
 better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnostics/ReflectivePneumaticRecipeAdapter.java
 better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnostics/ReflectiveRecipeFamilyAdapter.java
 better-runtime-diagnostics	src/test/java/com/bettercontent/betterruntimediagnostics/RecipeGraphExporterTest.java
-better-arena-trials	src/main/java/com/bettercontent/betterarenatrials/server/ArenaTraceBridge.java
 # Isolated native heart diagnostics inspect synchronized fixture state and optional Mantle config.
 better-deaths-door	src/injuryVisual/java/com/bettercontent/betterdeathsdoor/heartreview/HeartVisualReview.java
 # Isolated, non-pack native test reporter resolves registered GameTest witness identities only.

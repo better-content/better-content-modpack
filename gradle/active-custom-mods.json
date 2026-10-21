@@ -10,6 +10,7 @@
     "gradle.properties",
     "src/main/kotlin/com/bettercontent/tests/release/*.kt",
     "src/main/kotlin/com/bettercontent/tests/BoundedCommand.kt",
+    "src/main/kotlin/com/bettercontent/tests/Validation.kt",
     "src/main/kotlin/com/bettercontent/tests/RunnerMutex.kt"
   ],
   "mods": [
@@ -17,6 +18,13 @@
       "repository": "better-wild-fruit-trees",
       "modId": "better_wild_fruit_trees",
       "artifact": "better-wild-fruit-trees-0.1.1.jar",
+      "verificationProfiles": [
+        {"name": "optional-present", "tasks": ["verifyFull", "stageRuntimeJar"]},
+        {"name": "optional-absent", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {
+          "withoutTConFixture": "true", "withoutArsFixture": "true", "withoutWildAddonsFixture": "true"
+        }},
+        {"name": "stage-default", "tasks": ["stageRuntimeJar"], "clean": false}
+      ],
       "verificationInputs": [
         "mods/dynamictrees.pw.toml",
         "mods/dynamic-trees-fruits-delight.pw.toml",
@@ -64,6 +72,10 @@
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
+      ],
+      "verificationInputs": [
+        "mods/just-enough-effect-descriptions-jeed.pw.toml",
+        "kubejs/data/malum/advancements/recipes/*.json"
       ]
     },
     {
@@ -85,6 +97,10 @@
       "buildInputs": ["kubejs/data/malum/**"],
       "modId": "better_spirit_commerce",
       "artifact": "better-spirit-commerce-1.0.1.jar",
+      "verificationProfiles": [
+        {"name": "celestial-present", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"celestialRuntime": "true"}},
+        {"name": "default", "tasks": ["verifyFull", "stageRuntimeJar"]}
+      ],
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
@@ -98,10 +114,16 @@
     },
     {
       "repository": "better-compat-fixes",
-      "verificationInputs": ["kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json", "config/incontrol/spawn.json", "src/test/kotlin/com/bettercontent/tests/GeologicalEcologyContractTest.kt", "kubejs/data/minecraft/tags/blocks/needs_diamond_tool.json", "mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/weapons-of-miracles.pw.toml", "src/test/kotlin/com/bettercontent/tests/SaulomonkSpawnContractTest.kt", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
+      "verificationInputs": ["config/adpother-common.toml", "config/forgeendertech-common.toml", "kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json", "config/incontrol/spawn.json", "src/test/kotlin/com/bettercontent/tests/GeologicalEcologyContractTest.kt", "kubejs/data/minecraft/tags/blocks/needs_diamond_tool.json", "mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/weapons-of-miracles.pw.toml", "src/test/kotlin/com/bettercontent/tests/SaulomonkSpawnContractTest.kt", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
       "buildInputs": [],
       "modId": "better_compat_fixes",
       "artifact": "better-compat-fixes-0.1.9.jar",
+      "verificationProfiles": [
+        {"name": "without-bees", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"colonyWithoutBees": "true"}},
+        {"name": "without-heat", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"spoilageWithoutHeat": "true"}},
+        {"name": "without-curios", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"backpackWithoutCurios": "true"}},
+        {"name": "default", "tasks": ["verifyFull", "stageRuntimeJar"]}
+      ],
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
@@ -158,6 +180,17 @@
     },
     {
       "repository": "better-bumblezone-crops",
+      "verificationInputs": [
+        "mods/aether.pw.toml", "mods/ars-elemental.pw.toml", "mods/ars-nouveau.pw.toml",
+        "mods/blueprint.pw.toml", "mods/born-in-chaos.pw.toml", "mods/citadel.pw.toml",
+        "mods/curios.pw.toml", "mods/genetic-animals.pw.toml", "mods/farmers-delight.pw.toml",
+        "mods/farmers-respite.pw.toml", "mods/geckolib.pw.toml", "mods/goety.pw.toml",
+        "mods/hexerei.pw.toml", "mods/ice-and-fire-dragons.pw.toml", "mods/selene.pw.toml",
+        "mods/natures-spirit.pw.toml", "mods/project-vibrant-journeys.pw.toml", "mods/quark.pw.toml",
+        "mods/supplementaries.pw.toml", "mods/terrablender.pw.toml", "mods/the-bumblezone.pw.toml",
+        "mods/the-deep-void.pw.toml", "mods/the-twilight-forest.pw.toml", "mods/ubes-delight.pw.toml",
+        "mods/upgrade-aquatic.pw.toml", "mods/zeta.pw.toml"
+      ],
       "modId": "better_bumblezone_crops",
       "artifact": "better-bumblezone-crops-0.1.0.jar",
       "tasks": [
@@ -232,7 +265,7 @@
     },
     {
       "repository": "better-cave-encounters",
-      "verificationInputs": ["kubejs/data/better_cave_encounters/**", "kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json", "kubejs/server_scripts/policy/global_loot_progression.js", "kubejs/config/crafting_policy.json", "kubejs/config/quarantined_items.json", "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json", "kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js", "config/better_cave_encounters-common.toml", "config/better_compat_fixes-common.toml", "config/iceandfire-common.toml", "config/endermanoverhaul.json", "config/goety/**", "config/tconstruct-common.toml", "config/twilightforest-common.toml", "config/quark-common.toml", "config/unearthed-common.toml", "config/globalgamerules-common.toml", "config/incontrol/**", "defaultconfigs/incontrol-server.toml", "defaultconfigs/forge-server.toml", "defaultconfigs/curios-server.toml", "defaultconfigs/mantle-server.toml", "mods/born-in-chaos.pw.toml", "mods/goety.pw.toml", "mods/quark.pw.toml", "mods/zeta.pw.toml", "mods/tinkers-construct.pw.toml", "mods/mantle.pw.toml", "mods/geckolib.pw.toml", "mods/curios.pw.toml", "mods/resourceful-lib.pw.toml", "mods/resourceful-config.pw.toml", "mods/enderman-overhaul.pw.toml", "mods/cataclysm.pw.toml", "mods/lionfishapi.pw.toml", "mods/alexs-caves.pw.toml", "mods/citadel.pw.toml", "mods/ice-and-fire-dragons.pw.toml", "mods/the-twilight-forest.pw.toml", "mods/unearthed.pw.toml", "mods/hyle.pw.toml", "mods/kubejs.pw.toml", "mods/rhino.pw.toml", "mods/architectury-api.pw.toml", "mods/lootjs.pw.toml", "mods/global-gamerules.pw.toml", "mods/in-control.pw.toml", "src/test/kotlin/com/bettercontent/tests/GeologicalEcologyContractTest.kt"],
+      "verificationInputs": ["kubejs/data/better_cave_encounters/**", "kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json", "kubejs/server_scripts/policy/global_loot_progression.js", "kubejs/config/crafting_policy.json", "kubejs/config/quarantined_items.json", "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json", "kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js", "config/better_cave_encounters-common.toml", "config/better_compat_fixes-common.toml", "config/iceandfire-common.toml", "config/endermanoverhaul.json", "config/goety/**", "config/tconstruct-common.toml", "config/twilightforest-common.toml", "config/quark-common.toml", "config/unearthed-common.toml", "config/globalgamerules-common.toml", "config/incontrol/**", "defaultconfigs/incontrol-server.toml", "defaultconfigs/forge-server.toml", "defaultconfigs/curios-server.toml", "defaultconfigs/mantle-server.toml", "mods/born-in-chaos.pw.toml", "mods/goety.pw.toml", "mods/quark.pw.toml", "mods/zeta.pw.toml", "mods/tinkers-construct.pw.toml", "mods/mantle.pw.toml", "mods/geckolib.pw.toml", "mods/curios.pw.toml", "mods/resourceful-lib.pw.toml", "mods/resourceful-config.pw.toml", "mods/enderman-overhaul.pw.toml", "mods/cataclysm.pw.toml", "mods/lionfishapi.pw.toml", "mods/alexs-caves.pw.toml", "mods/citadel.pw.toml", "mods/ice-and-fire-dragons.pw.toml", "mods/the-twilight-forest.pw.toml", "mods/unearthed.pw.toml", "mods/hyle.pw.toml", "mods/the-deep-void.pw.toml", "mods/kubejs.pw.toml", "mods/rhino.pw.toml", "mods/architectury-api.pw.toml", "mods/lootjs.pw.toml", "mods/global-gamerules.pw.toml", "mods/in-control.pw.toml", "src/test/kotlin/com/bettercontent/tests/GeologicalEcologyContractTest.kt"],
       "buildInputs": [],
       "modId": "better_cave_encounters",
       "artifact": "better-cave-encounters-0.2.1.jar",
@@ -250,6 +283,13 @@
       "repository": "better-dimension-fonts",
       "modId": "better_dimension_fonts",
       "artifact": "better-dimension-fonts-1.0.0.jar",
+      "verificationProfiles": [
+        {"name": "default-absent", "tasks": ["verifyFull"]},
+        {"name": "celestial-present", "tasks": ["headlessGameTest"], "clean": false, "properties": {
+          "dimensionDrinkGameTestSelection": "celestial", "dimensionDrinkIncludeCelestialRuntime": "true"
+        }},
+        {"name": "stage-default", "tasks": ["stageRuntimeJar"], "clean": false}
+      ],
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
@@ -284,6 +324,7 @@
     },
     {
       "repository": "better-hexerei-dynamic-trees",
+      "verificationInputs": ["mods/patchouli.pw.toml"],
       "modId": "better_hexerei_dynamic_trees",
       "artifact": "better-hexerei-dynamic-trees-1.0.1.jar",
       "tasks": [
@@ -293,6 +334,7 @@
     },
     {
       "repository": "better-malum-dynamic-trees",
+      "verificationInputs": ["mods/patchouli.pw.toml"],
       "modId": "better_malum_dynamic_trees",
       "artifact": "better-malum-dynamic-trees-1.0.1.jar",
       "tasks": [
@@ -510,6 +552,7 @@
     },
     {
       "repository": "better-drinking-water",
+      "dependsOn": ["better-compat-fixes"],
       "verificationInputs": ["config/thirst/item_settings.toml", "mods/farmers-delight.pw.toml", "mods/farmers-respite.pw.toml", "mods/brewin-and-chewin.pw.toml", "mods/fruits-delight.pw.toml", "mods/create.pw.toml", "mods/aether.pw.toml", "mods/the-bumblezone.pw.toml", "mods/hexerei.pw.toml", "mods/malum.pw.toml", "mods/ubes-delight.pw.toml", "mods/fallout-wastelands.pw.toml", "mods/the-deep-void.pw.toml", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
       "buildInputs": [],
       "modId": "better_drinking_water",

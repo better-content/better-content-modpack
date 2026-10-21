@@ -29,7 +29,35 @@ data class ActiveMod(
     val supportArtifacts: List<String> = emptyList(),
     val verificationInputs: List<String> = emptyList(),
     val buildInputs: List<String>? = null,
-)
+    val verificationProfiles: List<VerificationProfile> = emptyList(),
+) {
+    init {
+        if (verificationProfiles.isNotEmpty()) {
+            require(verificationProfiles.map { it.name }.distinct().size == verificationProfiles.size) { "duplicate verification profile" }
+            require(verificationProfiles.first().clean) { "profile verification must start with the existing clean build" }
+            val ordinaryTasks = verificationProfiles.filter { it.properties.isEmpty() }.flatMap { it.tasks }
+            require(tasks.all { it in ordinaryTasks }) { "profiles must retain every declared task in the ordinary/default configuration" }
+            require(verificationProfiles.last().properties.isEmpty() && verificationProfiles.last().tasks.last() == tasks.last()) {
+                "the final artifact must be staged in the ordinary/default configuration"
+            }
+        }
+    }
+}
+
+data class VerificationProfile(val name: String, val tasks: List<String>,
+    val properties: Map<String, String> = emptyMap(), val clean: Boolean = true) {
+    init {
+        require(name.matches(Regex("[a-z][a-z0-9-]{0,63}"))) { "unsafe verification profile name" }
+        require(tasks.isNotEmpty() && tasks.all { it.matches(Regex(":?[A-Za-z][A-Za-z0-9_.-]*(?::[A-Za-z][A-Za-z0-9_.-]*)*")) }) { "invalid profile task selector" }
+        require(properties.all { (key, value) -> key.matches(Regex("[A-Za-z][A-Za-z0-9_.-]{0,127}")) &&
+            value.matches(Regex("[A-Za-z0-9_.:-]{1,128}")) }) { "invalid profile project property" }
+    }
+}
+
+internal fun verificationProfileIdentity(profiles: List<VerificationProfile>): String = profiles.joinToString("\n") { profile ->
+    listOf(profile.name, profile.clean.toString(), profile.tasks.joinToString("\u0001"),
+        profile.properties.toSortedMap().entries.joinToString("\u0001") { "${it.key}=${it.value}" }).joinToString("\u0000")
+}
 
 data class ActiveModManifest(val schema: String, val mods: List<ActiveMod>,
     val verificationInputs: List<String> = listOf("**"))
@@ -305,28 +333,41 @@ internal fun build(
     }
     val initialSource = sourceIdentity(repository)
     val expectedCommit = sourceUpdate.localCommit
-    val tasks = if (skipTests) listOf("stageRuntimeJar") else mod.tasks
+    val reusable = reusableBuild.takeIf { mod.verificationProfiles.isEmpty() }
+    val profiles = if (!skipTests && mod.verificationProfiles.isNotEmpty()) mod.verificationProfiles else
+        listOf(VerificationProfile("default", if (skipTests) listOf("stageRuntimeJar") else mod.tasks, clean = reusable == null))
     val jar = repository.resolve("build/libs").resolve(mod.artifact)
-    val buildCommand = providerVerificationCommand(repository, tasks, reusableBuild != null)
     withForgeCacheLock(root) {
-        // Restore mutable build outputs under the same lock as reset/clean and all readers.
-        if (reusableBuild != null) {
-            require(!skipTests && reusableBuild.commit == expectedCommit && reusableBuild.buildId != null) {
-                "build reuse requires exact source provenance and fresh verification"
+        val tracked = capture(repository, listOf("git", "ls-files", "-z")).split('\u0000').filter(String::isNotBlank).toSet()
+        for (profile in profiles) {
+            val explicit = !skipTests && mod.verificationProfiles.isNotEmpty()
+            val scope = if (explicit) evidence.resolve("source-profiles/${mod.repository}/${profile.name}") else evidence
+            Files.createDirectories(scope)
+            retainSourceOutputsForVerification(repository, scope, tracked, includeBuild = profile.clean)
+            // Simple build-only checkpoints retain their existing restoration path; multi-profile
+            // recipes deliberately rebuild and preserve each preceding profile before another clean.
+            if (reusable != null) {
+                require(!skipTests && reusable.commit == expectedCommit && reusable.buildId != null) {
+                    "build reuse requires exact source provenance and fresh verification"
+                }
+                requireSafeBuildOutput(repository, jar)
+                Files.createDirectories(jar.parent)
+                Files.copy(reusable.jar, jar, StandardCopyOption.REPLACE_EXISTING)
+                require(Hashes.sha256(jar) == reusable.sha256) { "restored build bytes changed" }
             }
-            requireSafeBuildOutput(repository, jar)
-            Files.createDirectories(jar.parent)
-            Files.copy(reusableBuild.jar, jar, StandardCopyOption.REPLACE_EXISTING)
-            require(Hashes.sha256(jar) == reusableBuild.sha256) { "restored build bytes changed" }
-        }
-        runLogged(repository, buildCommand, log, providerBuildEnvironment(staging))
-    }
-    if (!skipTests && mod.repository != "better-exploration-load-control") {
-        val output = Files.readString(log)
-        if (output.contains(":runGameTestServer")) {
-            require(Regex("All [1-9][0-9]* required tests passed").containsMatchIn(output)) {
-                "${mod.repository} did not report a passing GameTest run; see $log"
+            val profileLog = if (explicit) scope.resolve("verification.log") else log
+            val command = providerVerificationCommand(repository, profile.tasks, !profile.clean, profile.properties)
+            runLogged(repository, if (skipTests) command else cropsSourceInputCommand(root, repository, command),
+                profileLog, providerBuildEnvironment(staging))
+            auditSourceNativeLogs(repository, scope.resolve("native-log-audits/${mod.repository}/${profile.name}"))
+            val output = Files.readString(profileLog)
+            if (!skipTests && mod.repository != "better-exploration-load-control" && output.contains(":runGameTestServer")) {
+                require(Regex("All [1-9][0-9]* required tests passed").containsMatchIn(output)) {
+                    "${mod.repository}/${profile.name} did not report a passing GameTest run; see $profileLog"
+                }
             }
+            if (explicit) Files.writeString(log, "# verification_profile=${profile.name}\n$output\n",
+                java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND)
         }
     }
     require(Files.isRegularFile(jar)) { "${mod.repository} did not stage ${mod.artifact}" }
@@ -339,14 +380,16 @@ internal fun build(
     if (readSourceCommit(staged, mod) != expectedCommit) annotateJar(staged, mod, expectedCommit)
     val sha = Hashes.sha256(staged)
     val support = if (skipTests) emptyMap() else supportArtifactHashes(repository, mod)
-    val retained = reusableBuild != null && sha == reusableBuild.sha256 && support == reusableBuild.supportHashes
+    val retained = reusable != null && sha == reusable.sha256 && support == reusable.supportHashes
     return BuiltMod(mod, commit, staged, sha, if (retained) "build-reused-verified" else "rebuilt",
-        support, if (retained) reusableBuild!!.buildId else null)
+        support, if (retained) reusable!!.buildId else null)
 }
 
-internal fun providerVerificationCommand(repository: Path, tasks: List<String>, restoredBuild: Boolean): List<String> =
+internal fun providerVerificationCommand(repository: Path, tasks: List<String>, restoredBuild: Boolean,
+    properties: Map<String, String> = emptyMap()): List<String> =
     listOf(repository.resolve("gradlew").toString(), "--no-daemon") +
-        (if (restoredBuild) emptyList() else listOf("clean")) + tasks
+        (if (restoredBuild) emptyList() else listOf("clean")) +
+        properties.toSortedMap().map { (key, value) -> "-P$key=$value" } + tasks
 
 internal fun requireSafeBuildOutput(repository: Path, output: Path) {
     val base = repository.toAbsolutePath().normalize()
@@ -444,6 +487,12 @@ internal fun packageResolveCommand(root: Path, target: Path): List<String> = lis
 
 internal fun providerBuildEnvironment(staging: Path): Map<String, String> =
     mapOf("BC_CUSTOM_MOD_JAR_DIR" to staging.toAbsolutePath().normalize().toString())
+
+internal fun cropsSourceInputCommand(root: Path, repository: Path, command: List<String>): List<String> =
+    if (repository.fileName.toString() != "better-bumblezone-crops") command else
+        listOf("python3", "-B", root.resolve("scripts/crops_source_inputs.py").toString(),
+            "--root", root.toAbsolutePath().normalize().toString(),
+            "--repository", repository.toAbsolutePath().normalize().toString(), "--") + command
 
 private fun runLogged(cwd: Path, command: List<String>, log: Path, environment: Map<String, String> = emptyMap()) {
     log.parent.createDirectories()

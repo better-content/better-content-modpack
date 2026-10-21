@@ -18,7 +18,7 @@ import sys
 
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from structure_loot_inputs import NbtReader, effective_injections, fingerprint, load, strings
+from structure_loot_inputs import NbtReader, effective_injections, fingerprint, load, load_table_baseline, strings
 from structure_loot_unused import CONTEXTS as UNUSED_CONTEXTS, compute as unused_source_evidence
 
 
@@ -338,7 +338,10 @@ def main():
         assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected, ('independent acquisition policy changed; review effective rewards', name)
     details = {}
     tables, sources, references, candidates, code, injections, prefilled = load(ROOT, details=details)
-    native, *_ = load(ROOT, fetch=False, pack_tables=False)
+    # Independently verified upstream table baseline; the full inventory above
+    # already covers the identical non-table templates/code/modifier witnesses.
+    native = load_table_baseline(ROOT, template_references=references, injections=injections,
+                                 worldgen_consumers=details['worldgen_consumers'])
     assert fingerprint(injections) == contract['injection_sha256'], 'injection composition drift'
     effective = effective_injections(injections)
     assert fingerprint(effective) == contract['effective_injection_sha256'], 'effective modifier composition drift'

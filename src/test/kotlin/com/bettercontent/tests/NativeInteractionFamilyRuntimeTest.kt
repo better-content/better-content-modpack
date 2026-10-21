@@ -47,6 +47,7 @@ class NativeInteractionFamilyRuntimeTest {
     private lateinit var second: ClientFixture
     private lateinit var io: GameplayFeatureClient.Bridge
     private lateinit var selected: String
+    private var requireTntLoggingCausality = false
 
     @BeforeEach fun start(info: TestInfo) {
         selected = families.getValue(info.testMethod.orElseThrow().name)
@@ -89,11 +90,21 @@ class NativeInteractionFamilyRuntimeTest {
 
     @AfterEach fun stop() {
         if (!::child.isInitialized) return
+        var cleaned = false
         closeAll(AutoCloseable {
             cleanupFixtures(buildList { if (::client.isInitialized) add(client); if (::second.isInitialized) add(second); if (::server.isInitialized) add(server) }) {
                 child.event("process_cleanup", it)
             }
-        }, AutoCloseable { if (::server.isInitialized) server.diagnosticSupport.preserveBridge() }, child)
+            cleaned = true
+        }, AutoCloseable {
+            if (::server.isInitialized) server.diagnosticSupport.preserveBridge()
+            if (cleaned && requireTntLoggingCausality) child.checkpoint("native bounded TNT/buried causal logging") {
+                // The shared parent audit registry also includes earlier families: those must never
+                // satisfy this fresh family's contract. Check only complete, stopped native files.
+                val raw = child.readyAuditLogs().filter { it.startsWith(child.directory) }
+                child.event("native_playtest_tnt_buried_causality", PlaytestLoggingAudit.tntBuriedCausality(raw))
+            }
+        }, child)
     }
 
     private fun world(action: String, extra: Map<String, Any> = emptyMap()): JsonNode =
@@ -159,6 +170,7 @@ class NativeInteractionFamilyRuntimeTest {
         }
         val result = worldFinish()
         child.event("native_deferred_applicability", mapOf("verdict" to deferredVerdict(result), "reason" to "actual typed effective EO configuration; inactive is not a deferred native PASS"))
+        requireTntLoggingCausality = true
     }
     @Test @Order(20) fun nativeRegolithTransactions() = child.checkpoint("native 170-case Regolith tool/resource/action outcomes") {
         worldStart(); require(world("world-hooks-till").path("regolith_cases").size() == 170); worldFinish()

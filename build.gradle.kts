@@ -26,7 +26,16 @@ dependencies {
     testImplementation("org.junit.platform:junit-platform-launcher")
     testImplementation("org.apache.logging.log4j:log4j-api:2.19.0")
     testImplementation("org.apache.logging.log4j:log4j-core:2.19.0")
+    testImplementation("org.slf4j:slf4j-api:2.0.1")
 }
+
+// Test-only portable producer reference: prove the parser consumes the actual shared emitter.
+// No mod provider/dependency or helper class is added to the production harness artifact.
+val playtestReference by tasks.registering(Copy::class) {
+    from(layout.projectDirectory.file("../mod_source/better-gameplay-notices/src/main/java/com/bettercontent/gameplaynotices/diagnostics/PlaytestLog.java"))
+    into(layout.buildDirectory.dir("generated/sources/playtest-reference/java"))
+}
+sourceSets.test { java.srcDir(playtestReference) }
 
 tasks.withType<Test>().configureEach {
     // Pack suites create run-scoped evidence and exercise external processes. Reusing a
