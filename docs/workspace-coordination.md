@@ -113,6 +113,43 @@ unconfirmed supervisor cleanup remains an unresolved job blocker even after its 
 PID absence alone is not tree-cleanup proof. `fixture-job` is a separate fixed bounded inert sleep
 diagnostic. Any broader adapter needs equally explicit ownership, not guessed PIDs.
 
+## Explicit reboot recovery
+
+After explicit user authorization, `reboot-recover` transfers one stale actor claim to its
+current continuation. It is not automatic stale-claim garbage collection or a cancellation.
+Recover the lead first, then each existing helper in its own unchanged pane/conversation:
+
+```sh
+python3 -B scripts/workspace_coordination.py reboot-recover \
+  --task TASK --generation GENERATION --old-owner PREVIOUS_PRINCIPAL \
+  --owner CURRENT_PRINCIPAL --reason 'Explicitly authorized recovery after reboot'
+```
+
+Both claims must exist. The new actor must be live; the old exact PID/start/boot identity must
+be conclusively stale and from a different canonical boot. Both must carry the same stable
+agent conversation and exact injected Herdr session/workspace/tab/pane. A fresh Herdr probe
+must independently match that live pane and conversation. The old actor must be this task's
+registered lead or a current assigned helper. Missing/unknown/live identities, wrong topology,
+conversation, generation or membership fail closed. This operation does not infer permission
+from process age or silently create a new actor claim.
+
+The same nonblocking admission lock protects validation, overlap checks, transfer and an audit
+record in the atomically fsynced state. The audit retains both prior claims and the reason.
+Only the named old claim is replaced; its nonidentity scopes and exact task/generation binding
+are restored in the current claim. For a claim made by the initial recovery implementation that
+omitted a helper binding, only its exact stored actor/session/topology audit and original bound
+claim can establish that binding; topology alone is insufficient. Repeated reboots are tested.
+Lead recovery changes only that task's owner. Task generation, operations, assignments, other
+tasks/claims and all outputs/retention remain unchanged. Replay/conflicting transfers are rejected.
+Target-task/actor resource leases or unresolved jobs and maintenance reservations block recovery;
+they require separate reconciliation, never automatic release or PID adoption. No hook, managed
+bundle or operating-system setting is replaced.
+
+Before resuming producers, inspect retained interrupted outputs and current process/lock state.
+Partial logs are not passes. Revalidate scoped inputs and rerun only interrupted or invalidated
+gates, using fresh output paths and the ordinary authorization/locks. Recovery grants no new
+build, deployment, Native, purge or helper scope.
+
 ## Maintenance exclusion
 
 The importable API is `Coordinator(root)`. Maintenance uses the same admission lock as tasks,

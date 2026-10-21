@@ -345,6 +345,159 @@ path.write_text(json.dumps(s));print(json.dumps({'result':r}))
             self.assertFalse(any('split' in a for a in calls))
             with self.assertRaises(Conflict): self.c.result(one['assignment'],1)
 
+    def recovery_fixture(self, name='', helper=False):
+        c = Coordinator(self.root / name) if name else self.c
+        top = dict(session='fixture', workspace='lead-workspace', tab='lead-tab', pane='lead-pane')
+        c.register('recover', 'old' if not helper else 'lead', top, operations=['dev'])
+        if helper:
+            top = dict(top, workspace='helpers', tab='helper-tab', pane='helper-pane')
+            c.assign('recover', 'lead', 'helper', top['workspace'], top['tab'], top['pane'], 'token:old')
+        identity = dict(process_identity(os.getpid()), boot='00000000-0000-0000-0000-000000000000')
+        with patch('workspace_coordination.process_identity', return_value=identity):
+            c.claim('old', ['token:old', 'identity:old'], 'recover' if helper else None,
+                    1 if helper else None, top, actor_pid=os.getpid(), session_id='conversation')
+        c.claim('new', ['token:new'], topology=top, actor_pid=os.getpid(), session_id='conversation')
+        env = {'HERDR_'+k.upper()+('_ID' if k != 'session' else ''):v for k,v in top.items()}
+        agent = dict(pane_id=top['pane'], tab_id=top['tab'], workspace_id=top['workspace'],
+                     agent_status='working', agent_session={'kind':'path', 'value':'/fixture/start_conversation.jsonl'})
+        return c, env, agent
+
+    def recover(self, c, env, agent):
+        with patch.dict(os.environ, env), patch.object(Coordinator, 'agents', return_value=[agent]):
+            return c.reboot_recover('recover', 1, 'old', 'new', 'explicit reboot recovery')
+
+    def test_reboot_lead_transfer_audited_preserves_task_assignments_foreign_state(self):
+        c, env, agent = self.recovery_fixture()
+        c.assign('recover', 'old', 'helper', 'helpers', 'helper-tab', 'helper-pane', 'token:helper')
+        c.register('unrelated', 'foreign')
+        c.claim('foreign', ['token:foreign'])
+        before = c.snapshot()
+        result = self.recover(c, env, agent)
+        after = c.snapshot()
+        self.assertTrue(result['lead_transfer'])
+        self.assertEqual(after['tasks']['recover'], dict(before['tasks']['recover'], owner='new'))
+        self.assertEqual(after['tasks']['unrelated'], before['tasks']['unrelated'])
+        self.assertEqual(after['assignments'], before['assignments'])
+        self.assertEqual(after['turns']['foreign'], before['turns']['foreign'])
+        self.assertNotIn('old', after['turns'])
+        self.assertEqual(after['turns']['new']['areas'], ['token:new', 'token:old'])
+        self.assertEqual(after['recoveries'][result['recovery']]['previous_claim'], before['turns']['old'])
+        with self.assertRaises(Conflict): self.recover(c, env, agent)
+
+    def test_reboot_helper_restores_claim_without_changing_lead_or_assignment(self):
+        c, env, agent = self.recovery_fixture(helper=True)
+        before = c.snapshot()
+        self.assertFalse(self.recover(c, env, agent)['lead_transfer'])
+        after = c.snapshot()
+        self.assertEqual(after['tasks'], before['tasks'])
+        self.assertEqual(after['assignments'], before['assignments'])
+        self.assertEqual(after['turns']['new']['actor_identity'], before['turns']['new']['actor_identity'])
+        self.assertEqual(after['turns']['new']['task'], 'recover')
+        self.assertEqual(after['turns']['new']['generation'], 1)
+
+    def test_reboot_helper_survives_second_boot_with_preserved_binding(self):
+        self.second_boot_helper(legacy=False)
+
+    def test_reboot_helper_legacy_unbound_claim_requires_exact_audit(self):
+        self.second_boot_helper(legacy=True)
+
+    def second_boot_helper(self, legacy):
+        c, env, agent = self.recovery_fixture(helper=True)
+        self.recover(c, env, agent)
+        if legacy:
+            # Reproduce only the initial implementation's recorded omission.
+            with c.transaction() as s:
+                s['turns']['new']['task'] = None
+                s['turns']['new']['generation'] = None
+        identity = dict(process_identity(os.getpid()), boot='11111111-1111-1111-1111-111111111111')
+        with patch('workspace_coordination.process_identity', return_value=identity):
+            c.claim('newer', ['token:second'], topology=c.snapshot()['turns']['new']['topology'],
+                    actor_pid=os.getpid(), session_id='conversation')
+            with patch.dict(os.environ, env), patch.object(Coordinator, 'agents', return_value=[agent]):
+                if legacy:
+                    before = (c.root/'state.json').read_bytes()
+                    with c.transaction() as s:
+                        audit = next(iter(s['recoveries'].values()))
+                        audit['current_claim_before']['session_id'] = 'wrong'
+                    with self.assertRaises(Conflict): c.reboot_recover('recover', 1, 'new', 'newer', 'second boot')
+                    with c.transaction() as s:
+                        next(iter(s['recoveries'].values()))['current_claim_before']['session_id'] = 'conversation'
+                    self.assertEqual(before, (c.root/'state.json').read_bytes())
+                c.reboot_recover('recover', 1, 'new', 'newer', 'second boot')
+        after = c.snapshot()
+        self.assertEqual(after['turns']['newer']['task'], 'recover')
+        self.assertEqual(after['turns']['newer']['generation'], 1)
+        self.assertEqual(len(after['recoveries']), 2)
+        self.assertEqual(after['tasks']['recover']['owner'], 'lead')
+
+    def test_reboot_rejects_live_unknown_and_same_boot_actors_atomically(self):
+        for kind in ('live', 'unknown', 'same-boot', 'new-dead'):
+            with self.subTest(kind=kind):
+                c, env, agent = self.recovery_fixture(kind)
+                with c.transaction() as s:
+                    if kind == 'live': s['turns']['old']['actor_identity'] = process_identity(os.getpid())
+                    elif kind == 'unknown': s['turns']['old']['actor_identity'] = None
+                    elif kind == 'new-dead': s['turns']['new']['actor_identity']['boot'] = '00000000-0000-0000-0000-000000000000'
+                    else: s['turns']['old']['actor_identity'] = dict(process_identity(os.getpid()), start='different')
+                before = (c.root/'state.json').read_bytes()
+                with self.assertRaises(Conflict): self.recover(c, env, agent)
+                self.assertEqual(before, (c.root/'state.json').read_bytes())
+
+    def test_reboot_rejects_wrong_session_pane_and_live_conversation(self):
+        for kind in ('conversation', 'pane', 'herdr-session', 'live-conversation', 'unknown-agent'):
+            with self.subTest(kind=kind):
+                c, env, agent = self.recovery_fixture(kind)
+                if kind == 'conversation':
+                    with c.transaction() as s: s['turns']['new']['session_id'] = 'wrong'
+                elif kind == 'pane': env['HERDR_PANE_ID'] = 'wrong'
+                elif kind == 'herdr-session': env['HERDR_SESSION'] = 'wrong'
+                elif kind == 'unknown-agent': agent['agent_status'] = 'unknown'
+                else: agent['agent_session']['value'] = '/fixture/wrong.jsonl'
+                before = (c.root/'state.json').read_bytes()
+                with self.assertRaises(Conflict): self.recover(c, env, agent)
+                self.assertEqual(before, (c.root/'state.json').read_bytes())
+
+    def test_reboot_rejects_leases_jobs_reservations_and_foreign_membership(self):
+        for kind in ('lease', 'job', 'reservation', 'foreign-task', 'generation', 'overlap'):
+            with self.subTest(kind=kind):
+                c, env, agent = self.recovery_fixture(kind)
+                with c.transaction() as s:
+                    if kind == 'lease': s['leases']['held'] = dict(task='recover', owner='old', resource='cache')
+                    elif kind == 'job': s['jobs']['pending'] = dict(task='recover', owner='old', kind='bounded-facade', state='interrupted')
+                    elif kind == 'reservation': s['reservation'] = dict(owner='maintenance')
+                    elif kind == 'foreign-task': s['turns']['old']['task'] = 'foreign'
+                    elif kind == 'generation': s['tasks']['recover']['generation'] = 2
+                    else: s['turns']['foreign'] = dict(s['turns']['old'], areas=['token:old'])
+                before = (c.root/'state.json').read_bytes()
+                with self.assertRaises(Conflict): self.recover(c, env, agent)
+                self.assertEqual(before, (c.root/'state.json').read_bytes())
+
+    def test_reboot_transfer_conflicting_requests_have_one_atomic_winner(self):
+        c, env, agent = self.recovery_fixture()
+        results = []
+        def attempt():
+            try: c.reboot_recover('recover', 1, 'old', 'new', 'race fixture'); results.append(True)
+            except Conflict: results.append(False)
+        with patch.dict(os.environ, env), patch.object(Coordinator, 'agents', return_value=[agent]):
+            threads = [threading.Thread(target=attempt) for _ in range(2)]
+            for thread in threads: thread.start()
+            for thread in threads: thread.join(10); self.assertFalse(thread.is_alive())
+        self.assertEqual(sorted(results), [False, True])
+        self.assertEqual(len(c.snapshot()['recoveries']), 1)
+
+    def test_reboot_cli_uses_injected_identity_and_actual_herdr_probe(self):
+        c, env, agent = self.recovery_fixture()
+        executable = c.root/'bin/herdr'
+        executable.parent.mkdir()
+        executable.write_text('#!'+sys.executable+'\nimport json\nprint('+repr(json.dumps({'result':{'agents':[agent]}}))+')\n')
+        executable.chmod(0o700)
+        env = dict(os.environ, **env, PATH=str(executable.parent)+os.pathsep+os.environ['PATH'])
+        result = subprocess.run([sys.executable, '-B', str(SCRIPT), '--root', str(c.root),
+            'reboot-recover', '--task', 'recover', '--generation', '1', '--old-owner', 'old',
+            '--owner', 'new', '--reason', 'explicit CLI fixture'], env=env, capture_output=True, text=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue(json.loads(result.stdout)['lead_transfer'])
+
     def test_cli_authority_fail_closed_and_corrupt_state(self):
         def cli(*args):
             return subprocess.run([sys.executable,'-B',str(SCRIPT),'--root',str(self.root),*args],capture_output=True,text=True)

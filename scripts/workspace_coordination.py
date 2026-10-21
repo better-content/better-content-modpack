@@ -179,6 +179,94 @@ class Coordinator:
             s['tasks'][task] = t
             return dict(t)
 
+    def reboot_recover(self, task, generation, old_owner, owner, reason):
+        """Explicit same-conversation reboot transfer; never reconcile jobs/leases."""
+        if not isinstance(reason, str) or not reason.strip() or len(reason) > 1000 or old_owner == owner:
+            raise Conflict('distinct principals and a bounded recovery reason required')
+        topology = {k: os.environ.get('HERDR_' + k.upper() + ('_ID' if k != 'session' else ''), '')
+                    for k in ('session', 'workspace', 'tab', 'pane')}
+        with self.transaction(admission=True) as s:
+            self.admit(s)
+            t = self.active(s, task, generation)
+            old = s['turns'].get(old_owner)
+            current = s['turns'].get(owner)
+            if not old or not current or not all(topology.values()):
+                raise Conflict('both actor claims and injected Herdr topology required')
+            if old.get('topology') != topology or current.get('topology') != topology:
+                raise Conflict('recovery requires the exact same Herdr session/workspace/tab/pane')
+            session_id = current.get('session_id')
+            if not session_id or old.get('session_id') != session_id:
+                raise Conflict('recovery requires the same agent conversation session')
+            previous_identity, identity = old.get('actor_identity'), current.get('actor_identity')
+            if identity_liveness(identity) != 'live' or identity_liveness(previous_identity) != 'stale':
+                raise Conflict('new actor must be live and old actor conclusively stale')
+            if previous_identity['boot'] == identity['boot']:
+                raise Conflict('reboot recovery requires different boot identities')
+            for observed in (previous_identity, identity):
+                try:
+                    if str(uuid.UUID(observed['boot'])) != observed['boot']:
+                        raise ValueError()
+                except (ValueError, AttributeError):
+                    raise Conflict('canonical boot identities required')
+            lead = t['owner'] == old_owner
+            bound = old.get('task') == task and old.get('generation') == generation
+            # The initial recovery implementation copied scopes but omitted helper
+            # bindings. Accept only its exact audited actor/session predecessor,
+            # never an arbitrary unbound claim or topology-only helper inference.
+            if old.get('task') is None and old.get('generation') is None:
+                bound = any(r.get('owner') == old_owner and r.get('task') == task
+                    and r.get('generation') == generation and r.get('lead_transfer') is False
+                    and r.get('current_claim_before', {}).get('actor_identity') == previous_identity
+                    and r.get('current_claim_before', {}).get('session_id') == session_id
+                    and r.get('current_claim_before', {}).get('topology') == topology
+                    and r.get('previous_claim', {}).get('task') == task
+                    and r.get('previous_claim', {}).get('generation') == generation
+                    for r in s.get('recoveries', {}).values())
+            if lead:
+                if t.get('topology') != topology:
+                    raise Conflict('registered lead topology mismatch')
+            elif not bound or not any(
+                    a['task'] == task and a['generation'] == generation and a['state'] == 'active'
+                    and all(a.get(k) == topology[k] for k in ('workspace', 'tab', 'pane'))
+                    for a in s['assignments'].values()):
+                raise Conflict('actor is not a current helper of this task')
+            if old.get('task') not in (None, task) or current.get('task') not in (None, task):
+                raise Conflict('foreign task claim')
+            if any(k != task and v['state'] == 'active' and v['owner'] == old_owner for k, v in s['tasks'].items()):
+                raise Conflict('actor also owns another active task')
+            if any(v['task'] == task or v['owner'] in (old_owner, owner) for v in s['leases'].values()):
+                raise Conflict('resource leases require separate owner reconciliation')
+            if any((v.get('task') == task or v.get('owner') in (old_owner, owner)) and self.unresolved_job(v)
+                   for v in s['jobs'].values()):
+                raise Conflict('unresolved jobs require separate reconciliation')
+            agents = self.agents()
+            matching = [a for a in agents if a.get('pane_id') == topology['pane']]
+            if len(matching) != 1:
+                raise Conflict('exact live Herdr agent required')
+            agent = matching[0]
+            agent_session = agent.get('agent_session', {})
+            if (agent.get('workspace_id') != topology['workspace'] or agent.get('tab_id') != topology['tab']
+                    or agent.get('agent_status') not in ('working', 'idle', 'done')
+                    or agent_session.get('kind') != 'path'
+                    or Path(agent_session.get('value', '')).stem.rsplit('_', 1)[-1] != session_id):
+                raise Conflict('live Herdr agent/conversation mismatch')
+            areas = sorted(set(current['areas'] + [a for a in old['areas'] if a != 'identity:' + old_owner]))
+            for other, claim in s['turns'].items():
+                if other not in (old_owner, owner) and any(self.overlaps(self.area(a, current['cwd']),
+                        self.area(b, claim.get('cwd', current['cwd']))) for a in areas for b in claim['areas']):
+                    raise Conflict('recovered writer overlaps another actor')
+            key = uuid.uuid4().hex
+            audit = dict(task=task, generation=generation, old_owner=old_owner, owner=owner,
+                         reason=reason.strip(), at=time.time(), previous_claim=old,
+                         current_claim_before=current, lead_transfer=lead, areas=areas)
+            s.setdefault('recoveries', {})[key] = audit
+            s['turns'][owner] = dict(current, areas=areas, task=task, generation=generation)
+            del s['turns'][old_owner]
+            if lead:
+                t['owner'] = owner
+            return dict(recovery=key, task=task, generation=generation, owner=owner,
+                        old_owner=old_owner, lead_transfer=lead, areas=len(areas))
+
     def assign(self, task, owner, helper, workspace, tab, pane, area):
         with self.transaction(admission=True) as s:
             self.admit(s)
@@ -615,6 +703,7 @@ def main(argv=None):
     sub = p.add_subparsers(dest='command', required=True)
     specs = {
         'live': [], 'authority': ['task', 'generation'], 'task-register': ['task', 'owner'],
+        'reboot-recover': ['task', 'generation', 'old-owner', 'owner', 'reason'],
         'task-cancel': ['task', 'owner'], 'task-complete': ['task', 'owner'],
         'turn-acquire': ['owner', 'area'], 'turn-release': ['owner'], 'turn-check': ['owner','path'], 'turn-scope': ['owner'],
         'maintenance-reserve': ['owner'], 'maintenance-release': ['owner'],
@@ -654,6 +743,7 @@ def main(argv=None):
         if cmd == 'live': r = c.live()
         elif cmd == 'authority': r = c.authority(a.task, a.generation, a.owner, a.operation)
         elif cmd == 'task-register': r = c.register(a.task, a.owner, helper_limit=a.helper_limit, operations=a.operation)
+        elif cmd == 'reboot-recover': r = c.reboot_recover(a.task, a.generation, a.old_owner, a.owner, a.reason)
         elif cmd in ('task-cancel', 'task-complete'): r = c.cancel(a.task, a.owner, cmd == 'task-complete')
         elif cmd == 'turn-acquire':
             topology = {k: os.environ.get('HERDR_' + k.upper() + ('_ID' if k != 'session' else ''), '') for k in ('session','workspace','tab','pane')}
