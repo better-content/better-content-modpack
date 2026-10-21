@@ -179,8 +179,14 @@ class InteractionRuntimeTest {
 
     private fun awaitBeeAppearance(initial: JsonNode, label: String, deadline: Long): JsonNode {
         var observed = initial
+        var appearanceDeadline: Long? = null
         while (!observed.path("ready").asBoolean() || !observed.path("appearance_ready").asBoolean()) {
-            check(System.nanoTime() < deadline) { "native colony appearance/eligibility did not synchronize within one natural daylight cycle: $observed" }
+            val now = System.nanoTime()
+            if (observed.path("ready").asBoolean() && appearanceDeadline == null)
+                appearanceDeadline = minOf(deadline, now + Duration.ofSeconds(30).toNanos())
+            check(now < (appearanceDeadline ?: deadline)) {
+                "native colony eligibility/appearance missed natural-cycle or30second synchronization bound: $observed"
+            }
             Thread.sleep(1000)
             observed = io.world("bees-observe", "$label-conditions-${io.next}").path("native_probe")
         }
@@ -355,7 +361,11 @@ internal object NativeBeeColorReceipt {
             if (species == "complicated_bees:plains") require(nestRgb != rgb.toLong()) { "Plains body must not use its distinct nest color" }
         }
         val nativeQueen = state == "active-apiary"
-        flag(node, "native_queen_present", nativeQueen); flag(node, "native_queen_satisfied", nativeQueen)
+        flag(node, "native_queen_present", nativeQueen)
+        // Native BeeLogic retains its cached queen/satisfaction when slot0 becomes empty.
+        // Empty slot +inactive/unknown cosmetics is authoritative, not a fabricated cache reset.
+        require(node.path("native_queen_satisfied").isBoolean)
+        if (nativeQueen) flag(node, "native_queen_satisfied", true)
         flag(node, "native_genome_oracle_checked", nativeQueen); flag(node, "native_genome_oracle_unchanged", nativeQueen)
         if (nativeQueen) { flag(node, "native_output_empty", true); flag(node, "native_dandelion_present", true) }
     }

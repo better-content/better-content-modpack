@@ -41,6 +41,10 @@ class NativeBeeColorReceiptTest {
                 NativeBeeColorReceipt.server(server(state, species, rgb), state, species, rgb)
         for (state in listOf("empty-nest", "inactive-apiary"))
             NativeBeeColorReceipt.server(server(state, "invalid", -1), state, "invalid", -1)
+        // Native BaseBeeHousing only replaces BeeLogic's cached queen on an actual QueenItem.
+        // Removing slot0 need not reset the cached satisfaction bit; it cannot keep cosmetics active.
+        NativeBeeColorReceipt.server(server("inactive-apiary", "invalid", -1).put("native_queen_satisfied", true),
+            "inactive-apiary", "invalid", -1)
         NativeBeeColorReceipt.client(client(true), "active-apiary", "normal", "complicated_bees:plains", 0xFC030F)
         NativeBeeColorReceipt.client(client(false), "inactive-apiary", "normal", "invalid", -1)
     }
