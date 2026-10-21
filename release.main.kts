@@ -62,6 +62,9 @@ while (index < args.size) {
     }
 }
 if (verificationSession != null && !Regex("[a-f0-9]{32}").matches(verificationSession!!)) error("invalid verification session ID")
+require(System.getenv("BC_RELEASE_DIAGNOSTIC_CONTROLS").isNullOrBlank() || diagnosticControls != null) {
+    "release requires explicit --diagnostic-controls; ambient diagnostic environment is only for bound runtime tests"
+}
 require(diagnosticControls == null || (!skipTests && verificationSession == null && !rebuildAll)) {
     "diagnostic Controls mode retains all other gates and cannot use verified sessions or skip-tests"
 }

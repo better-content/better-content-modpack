@@ -762,7 +762,9 @@ deployment/refresh/package. `dist.sh` remains the unchanged package-once entry p
 Provenance uses distinct `bc.diagnostic_dist_provenance.v1`, `DIAGNOSTIC_UNQUALIFIED` qualification
 and the exact retained Controls/rejection/context hashes. Bound runtime tests accept it only with
 explicit matching `BC_RELEASE_DIAGNOSTIC_CONTROLS=/absolute/deferral.json` (propagated by the release
-facade). Other provider/source/support and candidate hashes remain mandatory. This is never accepted
+facade). An ambient diagnostic environment alone is rejected by the release facade: preparation
+requires its explicit CLI option, so an inherited runtime opt-in cannot produce a normal-success
+release status for an unqualified candidate. Other provider/source/support and candidate hashes remain mandatory. This is never accepted
 as ordinary verified provenance. Strict runtime findings remain failures; normal Dist prerequisite
 failure still prevents full Debug. Even otherwise successful runtime execution returns release
 exit6 and cannot establish complete-source/Dist/Debug acceptance. Existing visual/inventory/TPS
