@@ -9,6 +9,7 @@ import java.security.MessageDigest
 import kotlin.system.exitProcess
 
 val root = __FILE__.canonicalFile.parentFile
+val usage = "usage: ./release.main.kts [--jobs 1..4] [--skip-tests|--target TARGET [--retry-of RUN_ID]|--debug] [--diagnostic-controls INPUT]"
 var jobs = 2
 var skipTests = false
 var debugMode = false
@@ -16,12 +17,13 @@ var target: String? = null
 var retryOf: String? = null
 var verificationSession: String? = null
 var rebuildAll = false
+var diagnosticControls: String? = null
 var index = 0
 while (index < args.size) {
     when (args[index]) {
         "--jobs" -> {
             if (index + 1 >= args.size) {
-                System.err.println("usage: ./release.main.kts [--jobs 1..4] [--skip-tests|--target TARGET [--retry-of RUN_ID]|--debug]")
+                System.err.println(usage)
                 exitProcess(2)
             }
             jobs = args[index + 1].toIntOrNull() ?: 0
@@ -29,6 +31,11 @@ while (index < args.size) {
         }
         "--verification-session" -> {
             verificationSession = args.getOrNull(index + 1) ?: error("--verification-session needs a session ID")
+            index += 2
+        }
+        "--diagnostic-controls" -> {
+            diagnosticControls = args.getOrNull(index + 1) ?: error("--diagnostic-controls needs the bound deferral JSON")
+            require(Path.of(diagnosticControls!!).isAbsolute) { "diagnostic Controls input must be absolute" }
             index += 2
         }
         "--rebuild-all" -> { rebuildAll = true; index++ }
@@ -49,12 +56,15 @@ while (index < args.size) {
             index += 2
         }
         else -> {
-            System.err.println("usage: ./release.main.kts [--jobs 1..4] [--skip-tests|--target TARGET [--retry-of RUN_ID]|--debug]")
+            System.err.println(usage)
             exitProcess(2)
         }
     }
 }
 if (verificationSession != null && !Regex("[a-f0-9]{32}").matches(verificationSession!!)) error("invalid verification session ID")
+require(diagnosticControls == null || (!skipTests && verificationSession == null && !rebuildAll)) {
+    "diagnostic Controls mode retains all other gates and cannot use verified sessions or skip-tests"
+}
 require(!(skipTests && (verificationSession != null || rebuildAll))) { "unverified release cannot consume verification receipts" }
 if (jobs !in 1..4) {
     System.err.println("release jobs must be between 1 and 4")
@@ -67,10 +77,11 @@ val validTarget = target == null || target in setOf("join", "fonts", "dimensions
 if (!validTarget || args.count { it == "--jobs" } > 1 || args.count { it == "--skip-tests" } > 1 || args.count { it == "--debug" } > 1 ||
     args.count { it == "--target" } > 1 || args.count { it == "--retry-of" } > 1 ||
     args.count { it == "--verification-session" } > 1 || args.count { it == "--rebuild-all" } > 1 ||
+    args.count { it == "--diagnostic-controls" } > 1 ||
     (skipTests && (target != null || debugMode)) || (debugMode && target != null) || (retryOf != null && target == null) ||
     (retryOf != null && (!Regex("\\d{8}T\\d{6}Z-\\d+").matches(retryOf!!) ||
         !root.resolve("generated/test-evidence/$retryOf").isDirectory))) {
-    System.err.println("usage: ./release.main.kts [--jobs 1..4] [--skip-tests|--target TARGET [--retry-of RUN_ID]|--debug]")
+    System.err.println(usage)
     exitProcess(2)
 }
 
@@ -92,11 +103,12 @@ val forceRebuild = rebuildAll
 val evidence = root.resolve("generated/test-evidence/$runId")
 evidence.mkdirs()
 evidence.resolve("release-request.txt").writeText(
-    "run_id=$runId\njobs=$jobs\ntier=${if (debugMode) "debug" else if (target == null) "dist" else "targeted"}\ntarget=${target ?: ""}\nretry_of=${retryOf ?: ""}\nskip_tests=$skipTests\nforce_rebuild=$forceRebuild\ncommand=./release.main.kts --jobs $jobs${if (skipTests) " --skip-tests" else ""}${if (debugMode) " --debug" else ""}${target?.let { " --target $it" } ?: ""}\nstarted_at=${java.time.Instant.now()}\n",
+    "run_id=$runId\njobs=$jobs\ntier=${if (debugMode) "debug" else if (target == null) "dist" else "targeted"}\ntarget=${target ?: ""}\nretry_of=${retryOf ?: ""}\nskip_tests=$skipTests\ndiagnostic_controls=${diagnosticControls ?: ""}\nforce_rebuild=$forceRebuild\ncommand=./release.main.kts --jobs $jobs${if (skipTests) " --skip-tests" else ""}${if (debugMode) " --debug" else ""}${target?.let { " --target $it" } ?: ""}${diagnosticControls?.let { " --diagnostic-controls $it" } ?: ""}\nstarted_at=${java.time.Instant.now()}\n",
 )
 
 fun run(vararg command: String): Int = superviseFacade(root, command.toList(), environment = buildMap {
     put("BC_TEST_RUN_ID", runId)
+    diagnosticControls?.let { put("BC_RELEASE_DIAGNOSTIC_CONTROLS", it) }
     verificationSession?.let { put("BC_VERIFICATION_SESSION", it) }
     target?.let { put("BC_RELEASE_TARGET", it) }
     if (debugMode) put("BC_RELEASE_DEBUG", "1")
@@ -158,6 +170,7 @@ if (debugMode) {
         if (existingCandidate) command += "--existing-candidate"
         return superviseFacade(root, command, environment = buildMap {
             put("BC_TEST_RUN_ID", testRunId)
+            diagnosticControls?.let { put("BC_RELEASE_DIAGNOSTIC_CONTROLS", it) }
             put("BC_RELEASE_PREPARED", "1")
             if (existingCandidate) put("BC_PRIOR_DIST_RUN_ID", distRunId)
         })
@@ -182,15 +195,20 @@ if (debugMode) {
     println("Dist run: $distRunId")
     println("Debug run: $debugRunId")
     println("evidence: ${evidence.absolutePath}")
-    exitProcess(debugStatus)
+    if (diagnosticControls != null) println("DIAGNOSTIC_UNQUALIFIED: Controls deferred; no full release acceptance")
+    exitProcess(if (diagnosticControls != null && debugStatus == 0) 6 else debugStatus)
 }
 
 val testArgs = mutableListOf(root.resolve("test.main.kts").absolutePath, if (target == null || target == "join") "dist" else "debug")
 if (!skipTests) testArgs += listOf("--candidate-binding", evidence.resolve("release/provenance.json").absolutePath)
 target?.let { testArgs += listOf("--target", it) }
 retryOf?.let { testArgs += listOf("--retry-of", it) }
-val tests = if (skipTests) 0 else superviseFacade(root, testArgs, environment = mapOf("BC_RELEASE_PREPARED" to "1"))
+val tests = if (skipTests) 0 else superviseFacade(root, testArgs, environment = buildMap {
+    put("BC_RELEASE_PREPARED", "1")
+    diagnosticControls?.let { put("BC_RELEASE_DIAGNOSTIC_CONTROLS", it) }
+})
 println("release run: $runId")
 println("evidence: ${evidence.absolutePath}")
 if (skipTests) println("tests: skipped by explicit request")
-exitProcess(tests)
+if (diagnosticControls != null) println("DIAGNOSTIC_UNQUALIFIED: Controls deferred; runtime result=$tests; no complete46 acceptance")
+exitProcess(if (diagnosticControls != null && tests == 0) 6 else tests)

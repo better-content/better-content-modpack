@@ -102,6 +102,18 @@ private fun prepareRelease(args: Array<String>) {
         require(mod.dependsOn.all { it in repositories }) { "${mod.repository} has an unknown release dependency" }
     }
 
+    val diagnostic = System.getenv(DiagnosticControls.ENV)?.let { input ->
+        require(!skipTests && System.getenv("BC_VERIFICATION_SESSION").isNullOrBlank()) {
+            "diagnostic release cannot skip other gates or consume a verified session"
+        }
+        DiagnosticControls.load(Path.of(input), manifest.mods.single { it.repository == DiagnosticControls.REPOSITORY })
+    }
+    val diagnosticSources = if (diagnostic == null) emptyMap() else manifest.mods
+        .filterNot { it.repository == DiagnosticControls.REPOSITORY }
+        .associate { it.repository to sourceIdentity(workspace.resolve("mod_source/${it.repository}")) }
+    val diagnosticInputs = if (diagnostic == null) null else com.bettercontent.tests.runtimeInputIdentity(root)
+    val diagnosticContracts = if (diagnostic == null) null else diagnosticPackContracts(root, manifest)
+
     val runId = System.getenv("BC_TEST_RUN_ID")?.takeIf { it.isNotBlank() }
         ?: DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC)
             .format(Instant.now()) + "-" + ProcessHandle.current().pid()
@@ -120,13 +132,14 @@ private fun prepareRelease(args: Array<String>) {
 
     val preflight = manifest.mods.map { mod ->
         val repository = workspace.resolve("mod_source").resolve(mod.repository)
-        if (!repository.resolve(".git").exists()) "${mod.repository}\tmissing" else {
+        if (diagnostic != null && mod.repository == DiagnosticControls.REPOSITORY) "${mod.repository}\tDEFERRED_UNQUALIFIED"
+        else if (!repository.resolve(".git").exists()) "${mod.repository}\tmissing" else {
             val status = capture(repository, listOf("git", "status", "--porcelain"))
             if (status.isBlank()) "${mod.repository}\tclean" else "${mod.repository}\tdirty\t${status.replace('\n', ' ')}"
         }
     }
     Files.writeString(evidence.resolve("preflight.tsv"), preflight.joinToString("\n", postfix = "\n"))
-    require(preflight.all { it.endsWith("\tclean") }) { "all active repositories must exist and be clean; see ${evidence.resolve("preflight.tsv")}" }
+    require(preflight.all { it.endsWith("\tclean") || (diagnostic != null && it == "${DiagnosticControls.REPOSITORY}\tDEFERRED_UNQUALIFIED") }) { "all active repositories must exist and be clean; see ${evidence.resolve("preflight.tsv")}" }
 
     val reflectionAllowances = readReflectionAllowlist(root.resolve("gradle/reflection-allowlist.txt"))
     val customRepositories = Files.list(workspace.resolve("mod_source")).use { stream ->
@@ -152,7 +165,8 @@ private fun prepareRelease(args: Array<String>) {
         "reflection allowlist contains source paths without reflection: " +
             unusedReflectionAllowances.joinToString { "${it.repository}:${it.sourcePath}" }
     }
-    val sourceReflection = sourceReflectionViolations(workspace, customRepositories, reflectionAllowances)
+    val sourceReflection = sourceReflectionViolations(workspace,
+        customRepositories.filterNot { diagnostic != null && it == DiagnosticControls.REPOSITORY }, reflectionAllowances)
     Files.writeString(
         evidence.resolve("reflection-source-audit.tsv"),
         if (sourceReflection.isEmpty()) "PASS\n" else sourceReflection.joinToString("\n", postfix = "\n"),
@@ -161,7 +175,7 @@ private fun prepareRelease(args: Array<String>) {
         "custom source uses forbidden reflection; see ${evidence.resolve("reflection-source-audit.tsv")}"
     }
 
-    val verification = if (skipTests) null else VerificationSession(root, manifest.mods, runId, forceRebuild, sharedInputs = manifest.verificationInputs)
+    val verification = if (skipTests || diagnostic != null) null else VerificationSession(root, manifest.mods, runId, forceRebuild, sharedInputs = manifest.verificationInputs)
     try {
     val dependencyWarmup = root.resolve("build/release-dependency-warmup/$runId")
     // Run-scoped dependency preparation is retained on success and failure alike.
@@ -179,12 +193,19 @@ private fun prepareRelease(args: Array<String>) {
         val futures = ready.associateWith { mod ->
             executor.submit(Callable {
                 val update = sourceUpdatesByRepository.getValue(mod.repository)
-                val mustBuild = verification?.affected?.contains(mod.repository) ?: forceRebuild
+                // Diagnostic mode performs EVERY ordinary/profile gate for all other providers.
+                val mustBuild = diagnostic != null || (verification?.affected?.contains(mod.repository) ?: forceRebuild)
                 val consumed = mod.dependsOn.associateWith { dependency ->
                     completedHashes.getValue(dependency)
                 }
                 verification?.requireConsumedStages(mod, consumed)
-                val item = if (verification != null && !mustBuild) verification.reusable(mod) ?:
+                val item = if (diagnostic != null && mod.repository == DiagnosticControls.REPOSITORY) {
+                    diagnostic.revalidate()
+                    val staged = staging.resolve(mod.artifact)
+                    Files.copy(diagnostic.artifact, staged)
+                    require(Hashes.sha256(staged) == diagnostic.artifactSha256) { "deferred Controls copy changed" }
+                    BuiltMod(mod, diagnostic.artifactCommit, staged, diagnostic.artifactSha256, "DEFERRED_UNQUALIFIED")
+                } else if (verification != null && !mustBuild) verification.reusable(mod) ?:
                     build(root, workspace, evidence, staging, mod, update.copy(status = "same"), skipTests, false)
                 else build(root, workspace, evidence, staging, mod, update, skipTests, mustBuild,
                     if (verification != null && mustBuild) verification.reusableBuild(mod, consumed) else null)
@@ -231,6 +252,17 @@ private fun prepareRelease(args: Array<String>) {
     }
 
     val verificationOrigins = verification?.validateComplete(built)
+    if (diagnostic != null) {
+        diagnostic.revalidate()
+        require(built.size == manifest.mods.size && built.map { it.definition.repository }.toSet() == repositories) {
+            "diagnostic provider set incomplete"
+        }
+        require(com.bettercontent.tests.runtimeInputIdentity(root) == diagnosticInputs &&
+            diagnosticPackContracts(root, manifest) == diagnosticContracts) { "diagnostic consumed pack inputs/contracts changed during preparation" }
+        diagnosticSources.forEach { (name, identity) ->
+            require(sourceIdentity(workspace.resolve("mod_source/$name")) == identity) { "$name changed during diagnostic preparation" }
+        }
+    }
     built.forEach { item ->
         require(Hashes.sha256(item.jar) == item.sha256) { "verified staged artifact changed: ${item.jar}" }
         if (!skipTests) require(supportArtifactHashes(workspace.resolve("mod_source/${item.definition.repository}"), item.definition) == item.supportHashes) {
@@ -258,7 +290,9 @@ private fun prepareRelease(args: Array<String>) {
     runLogged(root, listOf(root.resolve("dist.sh").toString()), evidence.resolve("dist.log"))
     val candidates = CandidateLocator.locate(root)
     val provenance = mapOf(
-        "schema" to "bc.fresh_dist_provenance.v1",
+        "schema" to if (diagnostic == null) "bc.fresh_dist_provenance.v1" else DiagnosticControls.SCHEMA,
+        "qualification" to when { diagnostic != null -> "DIAGNOSTIC_UNQUALIFIED"; skipTests -> "UNTESTED"; else -> "VERIFIED_SOURCE_PENDING_RUNTIME" },
+        "deferred_controls" to diagnostic?.provenance(),
         "created_at" to Instant.now().toString(),
         "test_tier" to if (skipTests) "none" else if (System.getenv("BC_RELEASE_DEBUG") == "1") "debug" else if (System.getenv("BC_RELEASE_TARGET") != null) "targeted" else "dist",
         "target" to System.getenv("BC_RELEASE_TARGET"),
@@ -294,6 +328,8 @@ private fun prepareRelease(args: Array<String>) {
                 "sha256" to it.sha256,
                 "mode" to it.mode,
                 "verification_id" to verificationOrigins?.getValue(it.definition.repository),
+                "source_gate_status" to if (it.mode == "DEFERRED_UNQUALIFIED") "DEFERRED_UNQUALIFIED" else if (skipTests) "NOT_VERIFIED" else "PASSED_OWNING_GATES",
+                "diagnostic_gate_run" to if (diagnostic != null && it.mode != "DEFERRED_UNQUALIFIED") runId else null,
                 "build_id" to (it.buildId ?: if (it.mode == "rebuilt") runId else null),
                 "support_hashes" to it.supportHashes,
             )
@@ -301,7 +337,8 @@ private fun prepareRelease(args: Array<String>) {
     )
     mapper.writerWithDefaultPrettyPrinter().writeValue(evidence.resolve("provenance.json").toFile(), provenance)
     verification?.commit(built)
-    println("fresh candidate prepared once; tests have not run yet")
+    println(if (diagnostic == null) "fresh candidate prepared once; tests have not run yet"
+        else "DIAGNOSTIC candidate packaged once; Controls DEFERRED_UNQUALIFIED; no complete verified baseline or acceptance")
     println("verification session: ${verification?.id ?: "unverified release"}")
     println("release evidence: $evidence")
     } finally { verification?.close() }

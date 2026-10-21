@@ -37,15 +37,32 @@ object CandidateBinding {
         }
     }
 
-    fun select(root: Path, binding: Path): CandidatePair {
+    fun select(root: Path, binding: Path, diagnosticInput: Path? =
+        System.getenv(com.bettercontent.tests.release.DiagnosticControls.ENV)?.let { Path.of(it) }): CandidatePair {
         requireOrdinary(root)
         requireOrdinary(binding)
         require(!Files.isSymbolicLink(binding) && Files.isRegularFile(binding) && Files.size(binding) <= 1024 * 1024) {
             "invalid candidate binding: $binding"
         }
         val document = jacksonObjectMapper().readTree(binding.toFile())
-        require(document.path("schema").asText() == "bc.fresh_dist_provenance.v1" && !document.path("tests_skipped").asBoolean(true)) {
-            "candidate binding must be canonical verified release provenance"
+        if (diagnosticInput == null) require(document.path("schema").asText() == "bc.fresh_dist_provenance.v1" &&
+            !document.path("tests_skipped").asBoolean(true)) { "candidate binding must be canonical verified release provenance" }
+        val manifest = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
+        val diagnostic = diagnosticInput?.let { input ->
+            val declared = manifest.path("mods").single {
+                it.path("repository").asText() == com.bettercontent.tests.release.DiagnosticControls.REPOSITORY
+            }
+            com.bettercontent.tests.release.DiagnosticControls.load(input,
+                jacksonObjectMapper().treeToValue(declared, com.bettercontent.tests.release.ActiveMod::class.java))
+        }
+        if (diagnostic != null) {
+            require(document.path("schema").asText() == com.bettercontent.tests.release.DiagnosticControls.SCHEMA &&
+                document.path("qualification").asText() == "DIAGNOSTIC_UNQUALIFIED" &&
+                !document.path("tests_skipped").asBoolean(true) && document.path("verification_session").isNull &&
+                document.path("deferred_controls") == jacksonObjectMapper().valueToTree<com.fasterxml.jackson.databind.JsonNode>(diagnostic.provenance())) {
+                "diagnostic candidate must preserve the exact unqualified Controls binding"
+            }
+            println("DIAGNOSTIC_UNQUALIFIED candidate: Controls deferred; runtime results cannot establish complete release acceptance")
         }
         require(document.path("runtime_input_sha256").asText() == runtimeInputIdentity(root)) {
             "production/runtime inputs changed; prepare a new canonical candidate"
@@ -67,12 +84,26 @@ object CandidateBinding {
         }
         val client = side("client"); val server = side("server")
         require(client.parent.parent == server.parent.parent) { "candidate sides belong to different releases" }
-        val manifest = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         require(document.path("mods").isArray && document.path("mods").map { it.path("repository").asText() }.toSet() ==
             manifest.path("mods").map { it.path("repository").asText() }.toSet()) { "candidate binding has an incomplete provider set" }
         document.path("mods").forEach { mod ->
             val name = mod.path("repository").asText()
             require(Regex("[a-z0-9-]+").matches(name)) { "invalid repository in candidate binding" }
+            if (diagnostic != null) {
+                require(document.path("mods").size() == manifest.path("mods").size()) { "duplicate diagnostic provider" }
+                if (name == com.bettercontent.tests.release.DiagnosticControls.REPOSITORY) {
+                    require(mod.path("mode").asText() == "DEFERRED_UNQUALIFIED" &&
+                        mod.path("source_gate_status").asText() == "DEFERRED_UNQUALIFIED" &&
+                        mod.path("sha256").asText() == diagnostic.artifactSha256 &&
+                        mod.path("commit").asText() == diagnostic.artifactCommit &&
+                        mod.path("verification_id").isNull && mod.path("support_hashes").size() == 0) {
+                        "Controls cannot be promoted from deferred to verified"
+                    }
+                    return@forEach
+                }
+                require(mod.path("source_gate_status").asText() == "PASSED_OWNING_GATES" &&
+                    mod.path("diagnostic_gate_run").asText().isNotBlank()) { "$name was not verified for this diagnostic candidate" }
+            }
             val source = root.parent.resolve("mod_source/$name")
             require(BoundedCommand.capture(source, listOf("git", "rev-parse", "HEAD"), Duration.ofSeconds(30)).trim() == mod.path("commit").asText() &&
                 BoundedCommand.capture(source, listOf("git", "status", "--porcelain"), Duration.ofSeconds(30)).isBlank()) {

@@ -741,6 +741,33 @@ named file under `/home/dev/.worklane/` is a different lock and does not seriali
 BSD `flock` is not interchangeable. Consumers should bind immutable validated provider snapshots,
 not a sibling output that another producer may replace.
 
+### Task-scoped Controls-deferred diagnostic candidate
+
+For the explicitly authorized `logging-implementation-20261020` generation1 task only,
+`./release.main.kts --diagnostic-controls /absolute/deferral.json` can prepare a **diagnostic,
+unqualified** candidate. This is not `--skip-tests`, a verified baseline or permission to bypass
+another provider. The input schema `bc.diagnostic_controls_deferral.v1` binds that exact task,
+generation1, repository `better-oc2r-create-controls`, status `DEFERRED_UNQUALIFIED`, and absolute
+`artifact`, `rejected_evidence`, `source_context` paths with their corresponding `_sha256`
+fields. `artifact_source_commit` must match actual embedded identity, or explicitly `UNKNOWN`;
+historical gate HEAD/dirt is not proof of that artifact's producer context. Preserve that distinction.
+
+Only the bound retained Controls JAR is copied unchanged, without rebuilding, annotating or
+inventing qualification. All other repositories must be clean and execute every ordinary/profile
+source gate, including strict native-log audits, against the coherent staged provider set.
+The diagnostic path does not consume/create normal verified-session checkpoints. It cannot combine
+with `--skip-tests`, `--verification-session` or `--rebuild-all`. Failed other gates still prevent
+deployment/refresh/package. `dist.sh` remains the unchanged package-once entry point.
+
+Provenance uses distinct `bc.diagnostic_dist_provenance.v1`, `DIAGNOSTIC_UNQUALIFIED` qualification
+and the exact retained Controls/rejection/context hashes. Bound runtime tests accept it only with
+explicit matching `BC_RELEASE_DIAGNOSTIC_CONTROLS=/absolute/deferral.json` (propagated by the release
+facade). Other provider/source/support and candidate hashes remain mandatory. This is never accepted
+as ordinary verified provenance. Strict runtime findings remain failures; normal Dist prerequisite
+failure still prevents full Debug. Even otherwise successful runtime execution returns release
+exit6 and cannot establish complete-source/Dist/Debug acceptance. Existing visual/inventory/TPS
+requirements remain unchanged. Old and failed artifacts/evidence remain retained.
+
 `--skip-tests` is the explicit untested-release path. It still reuses valid source-identical
 bundled JARs. Changed or unannotated sources build through `stageRuntimeJar` without the custom-mod
 verification tasks; the complete staged set is deployed, release preparation refreshes Packwiz, and packaging runs
