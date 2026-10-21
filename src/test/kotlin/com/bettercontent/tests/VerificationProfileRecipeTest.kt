@@ -83,6 +83,40 @@ class VerificationProfileRecipeTest {
         assertEquals(listOf("verifyFull", "stageRuntimeJar"), anchors.tasks)
     }
 
+    @Test fun cropsVerificationReuseBindsExistingDataParentsAndPreparation() {
+        val root = Path.of(System.getProperty("bc.repo.root"))
+        val manifest = jacksonObjectMapper().readValue(root.resolve("gradle/active-custom-mods.json").toFile(), ActiveModManifest::class.java)
+        val crops = manifest.mods.single { it.repository == "better-bumblezone-crops" }
+        // Original26 pins remain; the same canonical72 recipe also consumes these46 raw parents.
+        val pins = """
+            aether alexs-caves armor-of-the-ages ars-elemental ars-nouveau artifacts blood-magic blueprint
+            born-in-chaos brewin-and-chewin citadel cold-sweat create curios dynamic-trees-quark
+            dynamic-trees-the-twilight-forest epic-fight-mod everythingcopper farmers-delight farmers-respite
+            geckolib genetic-animals goety hexerei ice-and-fire-dragons natures-spirit occultism
+            pneumaticcraft-repressurized project-vibrant-journeys protection-pixel quark rats relics-mod selene
+            sophisticated-backpacks supplementaries terrablender the-bumblezone the-deep-void the-twilight-forest
+            thirst-was-taken timeless-and-classics-zero tinkers-construct ubes-delight upgrade-aquatic zeta
+        """.trim().split(Regex("\\s+")).map { "mods/$it.pw.toml" }.toSet()
+        assertEquals(46, pins.size)
+        val ordinaryResources = setOf(
+            "farmersrespite/loot_tables/blocks/kettle.json", "farmersrespite/advancements/main/stunt_tea_bush.json",
+            "farmersrespite/recipes/filling/water_cup.json", "farmersrespite/recipes/emptying/water_cup.json",
+            "farmersrespite/recipes/pouring/water_cup.json", "farmersrespite/tags/items/drinks.json",
+            "the_bumblezone/bz_pollen_puff_entity_flowers/goety.json", "farmersdelight/loot_modifiers/straw_from_grass.json",
+            "farmersdelight/loot_modifiers/straw_from_sandy_shrub.json", "farmersdelight/loot_modifiers/straw_from_tall_grass.json"
+        ).map { "kubejs/data/$it" }.toSet()
+        assertEquals(10, ordinaryResources.size)
+        val contracts = pins + ordinaryResources + setOf(
+            "config/supplementaries-common.toml", "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json",
+            "scripts/crops_source_inputs.py", "scripts/prepare_dev_inputs.py", "scripts/bounded_facade.py")
+        assertEquals(61, contracts.size)
+        assertEquals(contracts, crops.verificationInputs.toSet(),
+            "Reuse must bind actual existing inputs, not just the original26 pins or unrelated Root files")
+        assertEquals(61, crops.verificationInputs.size)
+        contracts.forEach { assertTrue(Files.isRegularFile(root.resolve(it)), "Missing consumed Root input: $it") }
+        assertEquals(listOf("verifyFull", "stageRuntimeJar"), crops.tasks)
+    }
+
     private fun fixture(wrapperBody: String): Triple<Path, Path, String> {
         val root = directory.resolve("better-content-modpack").also { Files.createDirectories(it) }
         val source = directory.resolve("mod_source/fixture").also { Files.createDirectories(it) }
