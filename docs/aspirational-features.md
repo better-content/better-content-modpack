@@ -14,6 +14,71 @@ entry after moving any still-relevant guidance to the proper living subject; do 
 historical completion reports here. See the [documentation authority map](README.md),
 [workspace policy](policies/workspace.md) and [testing policy](testing.md).
 
+## Chilli and a saturation-backed, constrained health economy
+
+**Status:** Early discussion only; explicitly **not ready for implementation**. Further owner
+discussion is required before selecting mechanics or approving a design. Recording these ideas
+authorizes documentation only, not source changes, effect rebalancing, deployment or testing.
+
+**Goal:** Give spicy food a distinct dietary identity and make health recovery depend on finite
+consumed resources. Highly filling meals should be useful fuel for heightened performance, not
+merely leave the player full for ages. See [food progression](food_progression.md) for current
+behavior; none of the proposals below changes that contract.
+
+### Discussion direction — not an approved specification
+
+- **Chilli is broader than peppers.** It covers culinary heat, pungency and tingling/numbing
+  spice, including Sichuan pepper. Garlic, onion and clove also contribute, but far less than
+  chilli peppers. This is an evocative food-group identity, not a capsaicin measurement. Exact
+  ingredient membership and amounts remain open; aromatic flavor alone need not qualify.
+- **Seasoning should be broadly applicable to food.** Adding spice to ordinary meals would
+  add Chilli alongside their existing groups. How seasoning is applied, represented and divided
+  among servings remains unresolved; this does not approve a recipe or item-variant system.
+- **Trade actual HP for boosts.** The owner's direction is substantial direct player damage
+  from strong spice, not temporary maximum-HP reservation. The meal's food reserves can then
+  support recovery, connecting the boost to food consumption. Mild pungent ingredients imply
+  much smaller exposure. Boost identities, damage timing and scaling, duration, lethality and
+  whether Chilli is a lasting group or temporary load all need further discussion.
+- **Saturation would be the sole fuel for restoring player HP.** Recovery should actually spend
+  stored saturation, not merely require it to be positive. Elapsed time may control delivery or
+  conversion speed, but should not independently supply unlimited healing. The hunger-only,
+  zero-saturation natural-healing fallback would need reconsideration under this direction.
+- **Redirect other healing into that economy.** The discussed example is an Instant Health
+  potion becoming roughly ten seconds of saturation delivery rather than direct HP restoration.
+  Ten seconds is illustrative, not settled tuning: total resource yield must be bounded as well
+  as delivery rate. Regeneration and other healing sources would need reconciliation rather
+  than silently remaining bypasses. Existing Saturation-like effects would be heavily reduced;
+  stored food saturation and the Saturation status effect are distinct balance surfaces.
+- **Review Nourishment and recovery modifiers.** Nourishment should not make recovery free;
+  conserving ordinary activity expenditure while retaining healing expenditure is one proposal.
+  Recovery-speed and efficiency bonuses need distinct budgets. Pinned native behavior and pack
+  overrides must be inspected before deciding replacements; this entry is not a completed audit.
+
+The intended loop is **eat a seasoned meal → take Chilli damage and gain boosts → spend stored
+food energy recovering HP → need more food sooner**. A substantial meal can support its own
+spice cost better than a raw pepper, or players can pair spice with separate restorative food.
+Healing counteracting Chilli damage is intentional; effectively free, always-optimal maximum
+spice is not the goal.
+
+### Open questions and conditions for revisiting
+
+- Discuss and approve the core health economy and Chilli's benefits before implementation.
+  Establish useful mild seasoning, deliberate extreme-spice risks and the desired combat loop;
+  no numerical damage, healing, saturation or boost values are approved here.
+- Decide saturation capacity, hunger requirements, HP conversion cost/rate, full-hunger eating
+  when saturation is depleted, overflow/waste and whether food can refuel recovery reliably.
+  Do not assume damage alone makes the player able to eat again.
+- Inspect all player-healing paths, including potions, food/drinks, magic, lifesteal, auras and
+  physiology perks. Decide how renewable or non-food sources fund saturation without defeating
+  the finite-resource goal. Absorption, damage mitigation, damage-triggered effects and lethal
+  spice handling also need explicit decisions, not accidental bypasses or feedback loops.
+- Select ownership only after native-source inspection. Diet classification/inheritance,
+  arbitrary seasoning and physiology recovery have separate responsibilities; this entry does
+  not authorize replacing those systems or promise compatibility with every food/effect.
+- Require a further owner-approved design and separate implementation authorization before
+  work starts. Source, multiplayer, balance, native UI/visual and exact-candidate acceptance
+  scope must be agreed later under the shared testing policy.
+
 ## Plant drinks: normalized juices, teas and botanical brews
 
 **Status:** Owner-approved implementation in progress; native packaged acceptance is pending.
