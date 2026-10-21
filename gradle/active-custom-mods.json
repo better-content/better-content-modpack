@@ -75,6 +75,13 @@
       ],
       "verificationInputs": [
         "mods/just-enough-effect-descriptions-jeed.pw.toml",
+        "mods/emi.pw.toml",
+        "mods/malum.pw.toml",
+        "mods/ars-nouveau.pw.toml",
+        "mods/blood-magic.pw.toml",
+        "mods/goety.pw.toml",
+        "mods/pneumaticcraft-repressurized.pw.toml",
+        "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json",
         "kubejs/data/malum/advancements/recipes/*.json"
       ]
     },

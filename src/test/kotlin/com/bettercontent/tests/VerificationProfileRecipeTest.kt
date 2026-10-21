@@ -56,6 +56,33 @@ class VerificationProfileRecipeTest {
         assertEquals(listOf("verifyFull", "headlessGameTest", "stageRuntimeJar"), profiles.getValue("better-dimension-fonts").flatMap { it.tasks })
     }
 
+    @Test fun anchorsVerificationReuseBindsEveryConsumedCanonicalContract() {
+        val root = Path.of(System.getProperty("bc.repo.root"))
+        val manifest = jacksonObjectMapper().readValue(root.resolve("gradle/active-custom-mods.json").toFile(), ActiveModManifest::class.java)
+        val anchors = manifest.mods.single { it.repository == "better-magic-chunk-anchors" }
+        val exactInputs = setOf(
+            "mods/just-enough-effect-descriptions-jeed.pw.toml", "mods/emi.pw.toml", "mods/malum.pw.toml",
+            "mods/ars-nouveau.pw.toml", "mods/blood-magic.pw.toml", "mods/goety.pw.toml",
+            "mods/pneumaticcraft-repressurized.pw.toml", "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json")
+        val malumPattern = "kubejs/data/malum/advancements/recipes/*.json"
+        assertEquals(exactInputs + malumPattern, anchors.verificationInputs.toSet(),
+            "Reuse must bind the actual canonical index and SDK/policy pins without widening to unrelated Root files")
+        assertEquals(9, anchors.verificationInputs.size)
+        val malumInputs = Files.list(root.resolve("kubejs/data/malum/advancements/recipes")).use { files ->
+            files.filter { Files.isRegularFile(it) && it.fileName.toString().endsWith(".json") }
+                .map { root.relativize(it).toString() }.toList()
+        }
+        assertEquals(36, malumInputs.size, "Preserve all original36 canonical policy resources")
+        val consumed = exactInputs + malumInputs
+        assertEquals(44, consumed.size)
+        val matchers = anchors.verificationInputs.map { root.fileSystem.getPathMatcher("glob:$it") }
+        consumed.forEach { name ->
+            assertTrue(Files.isRegularFile(root.resolve(name)), "Consumed Root input missing: $name")
+            assertTrue(matchers.any { it.matches(Path.of(name)) }, "Consumed Root input would not invalidate reuse: $name")
+        }
+        assertEquals(listOf("verifyFull", "stageRuntimeJar"), anchors.tasks)
+    }
+
     private fun fixture(wrapperBody: String): Triple<Path, Path, String> {
         val root = directory.resolve("better-content-modpack").also { Files.createDirectories(it) }
         val source = directory.resolve("mod_source/fixture").also { Files.createDirectories(it) }
