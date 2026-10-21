@@ -314,7 +314,7 @@
         "better-block-placement-preview"
       ],
       "risk": "high",
-      "contract": "Real synchronized empty/occupied nests and inactive/active apiaries; normal/reduced/minimal/disabled/range,675 native colony block entities, real chunk unload and client process reconnect, native ParticleEngine creation/submission budgets and framebuffer review.",
+      "contract": "Real synchronized empty/occupied nests and inactive/active apiaries; normal/reduced/minimal/disabled/range,675 native colony block entities, real chunk unload and client process reconnect, native ParticleEngine creation/submission budgets and framebuffer review. Existing forest/plains body-color pair, same-native-body species/queen change and invalidation bind independent server authority to typed client windows and frames.",
       "layer": "native interaction family",
       "target": "bees-cosmetics",
       "fixture_intervention": "New native family fixture required.",
@@ -398,7 +398,7 @@
         "better-block-placement-preview"
       ],
       "risk": "high",
-      "contract": "Real synchronized empty/occupied nests and inactive/active apiaries; normal/reduced/minimal/disabled/range,675 native colony block entities, real chunk unload and client process reconnect, native ParticleEngine creation/submission budgets and framebuffer review.",
+      "contract": "Real synchronized empty/occupied nests and inactive/active apiaries; normal/reduced/minimal/disabled/range,675 native colony block entities, real chunk unload and client process reconnect, native ParticleEngine creation/submission budgets and framebuffer review. Existing forest/plains body-color pair, same-native-body species/queen change and invalidation bind independent server authority to typed client windows and frames.",
       "layer": "full-pack-native",
       "target": "bees-cosmetics",
       "fixture_intervention": "Explicit candidate-bound nonshipping native fixture, authored setup only; native clocks unchanged.",
@@ -6954,6 +6954,48 @@
       "native_scene_correct",
       "no_visual_artifact",
       "effect_visible",
+      "control_matches_native_observation"
+    ],
+    "bees-occupied-nest-native-color-forest-native-frame": [
+      "native_scene_correct",
+      "native_forest_body_rgb_03fce8",
+      "unchanged_wings_marks_silhouette",
+      "effect_visible",
+      "control_matches_native_observation"
+    ],
+    "bees-occupied-nest-native-color-plains-native-frame": [
+      "native_scene_correct",
+      "native_plains_body_rgb_fc030f_not_nest_c92d02",
+      "unchanged_wings_marks_silhouette",
+      "effect_visible",
+      "no_stale_forest_particles_after_100_native_ticks",
+      "control_matches_native_observation"
+    ],
+    "bees-occupied-nest-native-color-invalid-native-frame": [
+      "native_scene_correct",
+      "effect_absent",
+      "no_stale_tinted_particles_after_100_native_ticks",
+      "control_matches_native_observation"
+    ],
+    "bees-active-apiary-native-color-forest-native-frame": [
+      "native_scene_correct",
+      "native_forest_body_rgb_03fce8",
+      "unchanged_wings_marks_silhouette",
+      "effect_visible",
+      "native_resident_queen_and_color_receipts_agree"
+    ],
+    "bees-active-apiary-native-color-plains-native-frame": [
+      "native_scene_correct",
+      "native_plains_body_rgb_fc030f_not_nest_c92d02",
+      "unchanged_wings_marks_silhouette",
+      "effect_visible",
+      "no_stale_forest_particles_after_100_native_ticks",
+      "native_resident_queen_and_color_receipts_agree"
+    ],
+    "bees-active-apiary-native-color-invalid-native-frame": [
+      "native_scene_correct",
+      "effect_absent",
+      "no_stale_tinted_particles_after_100_native_ticks",
       "control_matches_native_observation"
     ],
     "plant-stock-page-0-native-frame": [

@@ -99,7 +99,12 @@ images, with explicit feature criteria and candidate/support/image hashes. Inspe
 item/fluid distinctions, layout/clipping/overlap, native menu boundaries and the expected visible
 state. EMI review includes promoted category/recipe ordering and explicit-focus behavior; bee review
 includes occupied/active versus empty/inactive and reduced/disabled states; drink review includes
-plain/specialty identity and legibility. Shader/campfire review covers the real palette/phase matrix,
+plain/specialty identity and legibility. The retained bee species pair is native forest/plains,
+including same-body nest/queen change and invalidation. Independent server species/body-color
+receipts bind typed client100-tick windows and their actual frames; plains uses its body color,
+not its distinct nest color. Color criteria name native RGB authority, not byte-identical raster
+pixels under lighting. Each pair retains one shared20-minute natural eligibility bound; no clock,
+weather or queen-condition bypass, and the original controls/dense/unload/reconnect remain required. Shader/campfire review covers the real palette/phase matrix,
 not just API state. Both personal-inventory paths and relevant separate native backpacks remain
 mandatory under [inventory parity](inventory-parity.md). Missing, ambiguous or defective captures
 block visual acceptance. Capture files, counters, mocked previews and placeholder browser images

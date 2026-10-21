@@ -144,14 +144,61 @@ class InteractionRuntimeTest {
                 beeWindow(state, "normal", "bees-native-reconnected")
             }
         }
+        // Retained species acceptance, not a new species campaign. Each native body changes
+        // forest -> plains -> invalid in place; unchanged native conditions govern eligibility.
+        for (state in listOf("occupied-nest", "active-apiary")) {
+            val label = "bees-$state-native-color"
+            val eligibility = System.nanoTime() + Duration.ofMinutes(20).toNanos()
+            val setup = io.world("bees-setup", "$label-forest-world",
+                mapOf("state" to state, "species_id" to "complicated_bees:forest")).path("native_probe")
+            val forest = awaitBeeAppearance(setup, "$label-forest", eligibility)
+            NativeBeeColorReceipt.server(forest, state, "complicated_bees:forest", 0x03FCE8)
+            beeWindow(state, "normal", "$label-forest", forest)
+            val change = io.world("bees-species-change", "$label-plains-change",
+                mapOf("species_id" to "complicated_bees:plains")).path("native_probe")
+            require(change.path("same_native_block_entity").asBoolean()) { "native colony was replaced during species change: $change" }
+            val plains = awaitBeeAppearance(change, "$label-plains", eligibility)
+            NativeBeeColorReceipt.server(plains, state, "complicated_bees:plains", 0xFC030F)
+            beeWindow(state, "normal", "$label-plains", plains)
+            val invalid = io.world("bees-species-change", "$label-invalid-change",
+                mapOf("species_id" to "invalid")).path("native_probe")
+            require(invalid.path("same_native_block_entity").asBoolean()) { "native colony was replaced during invalidation: $invalid" }
+            val inactiveState = if (state == "occupied-nest") "empty-nest" else "inactive-apiary"
+            val inactive = awaitBeeAppearance(invalid, "$label-invalid", eligibility)
+            NativeBeeColorReceipt.server(inactive, inactiveState, "invalid", -1)
+            beeWindow(inactiveState, "normal", "$label-invalid", inactive)
+            evidence.run.event("native_bee_species_transition", mapOf("native_kind" to state,
+                "forest" to forest, "same_body_plains_change" to change, "plains" to plains,
+                "same_body_invalidation" to invalid, "inactive" to inactive,
+                "visual_verdict" to "PENDING_LLM_FRAMEBUFFER_REVIEW"))
+        }
         io.world("bees-setup", "bees-native-clear", mapOf("state" to "clear"))
         io.world("core", "bees-native-return-core")
         server.assertHashes(); client.assertHashes(); server.auditLogs()
     }
 
-    private fun beeWindow(state: String, control: String, label: String): JsonNode {
-        io.client("bee-window-start", "$label-arm", mapOf("state" to state, "control" to control))
+    private fun awaitBeeAppearance(initial: JsonNode, label: String, deadline: Long): JsonNode {
+        var observed = initial
+        while (!observed.path("ready").asBoolean() || !observed.path("appearance_ready").asBoolean()) {
+            check(System.nanoTime() < deadline) { "native colony appearance/eligibility did not synchronize within one natural daylight cycle: $observed" }
+            Thread.sleep(1000)
+            observed = io.world("bees-observe", "$label-conditions-${io.next}").path("native_probe")
+        }
+        return observed
+    }
+
+    private fun beeWindow(state: String, control: String, label: String, nativeColor: JsonNode? = null): JsonNode {
+        val parameters = buildMap<String, Any> {
+            put("state", state); put("control", control)
+            if (nativeColor != null) {
+                put("expected_species_id", nativeColor.path("native_species_id").asText())
+                put("expected_native_rgb", nativeColor.path("native_body_rgb").asInt())
+            }
+        }
+        io.client("bee-window-start", "$label-arm", parameters)
         val observed = awaitProbe("client", "bee-window-observe", label)
+        if (nativeColor != null) NativeBeeColorReceipt.client(observed, state, control,
+            nativeColor.path("native_species_id").asText(), nativeColor.path("native_body_rgb").asInt())
         evidence.run.event("native_bee_window", mapOf("state" to state, "control" to control, "observation" to observed))
         // 100 actual native ticks drains the production particles' <=80-tick lifetime.
         // Keep tested settings installed until the native framebuffer is captured.
@@ -270,5 +317,66 @@ class InteractionRuntimeTest {
             check(System.nanoTime() < deadline) { "native $side/$action readiness deadline: $node" }
             Thread.sleep(50)
         }
+    }
+}
+
+/** Receipt assertions only: counters/configuration are not native color or framebuffer proof. */
+internal object NativeBeeColorReceipt {
+    private fun flag(node: JsonNode, name: String, expected: Boolean) {
+        require(node.path(name).isBoolean && node.path(name).asBoolean() == expected) { "Invalid native bee $name: $node" }
+    }
+    private fun text(node: JsonNode, name: String, expected: String) {
+        require(node.path(name).isTextual && node.path(name).asText() == expected) { "Invalid native bee $name: $node" }
+    }
+    private fun number(node: JsonNode, name: String): Long {
+        require(node.path(name).isIntegralNumber && node.path(name).canConvertToLong()) { "Missing/nonintegral native bee $name: $node" }
+        return node.path(name).asLong()
+    }
+    private fun positive(state: String, species: String, rgb: Int): Boolean {
+        require(state in setOf("occupied-nest", "active-apiary", "empty-nest", "inactive-apiary"))
+        val positive = state == "occupied-nest" || state == "active-apiary"
+        require(if (positive) species in setOf("complicated_bees:forest", "complicated_bees:plains") && rgb in 0..0xffffff
+            else species == "invalid" && rgb == -1)
+        return positive
+    }
+    fun server(node: JsonNode, state: String, species: String, rgb: Int) {
+        val positive = positive(state, species, rgb)
+        text(node, "state", state); flag(node, "ready", true); flag(node, "appearance_ready", true)
+        text(node, "requested_species_id", species); text(node, "native_species_id", species)
+        require(number(node, "native_body_rgb") == rgb.toLong()) { "Native species body color mismatch: $node" }
+        flag(node, "native_occupied", positive); flag(node, "cosmetic_active", positive)
+        flag(node, "cosmetic_color_known", positive)
+        require(number(node, "cosmetic_body_rgb") == if (positive) rgb.toLong() else 0L)
+        val nestRgb = number(node, "native_nest_rgb")
+        if (positive) {
+            flag(node, "shared_species_climate", true)
+            text(node, "native_temperature", "NORMAL"); text(node, "native_humidity", "NORMAL")
+            require(nestRgb in 0..0xffffff)
+            if (species == "complicated_bees:plains") require(nestRgb != rgb.toLong()) { "Plains body must not use its distinct nest color" }
+        }
+        val nativeQueen = state == "active-apiary"
+        flag(node, "native_queen_present", nativeQueen); flag(node, "native_queen_satisfied", nativeQueen)
+        flag(node, "native_genome_oracle_checked", nativeQueen); flag(node, "native_genome_oracle_unchanged", nativeQueen)
+        if (nativeQueen) { flag(node, "native_output_empty", true); flag(node, "native_dandelion_present", true) }
+    }
+    fun client(node: JsonNode, state: String, control: String, species: String, rgb: Int) {
+        val positive = positive(state, species, rgb)
+        text(node, "state", state); text(node, "control", control); flag(node, "ready", true)
+        text(node, "native_expected_species_id", species)
+        require(number(node, "native_expected_rgb") == rgb.toLong())
+        flag(node, "native_color_agreement", true); flag(node, "native_occupied", positive)
+        flag(node, "native_chunk_loaded", true); flag(node, "cosmetic_color_known", positive)
+        require(number(node, "cosmetic_body_rgb") == if (positive) rgb.toLong() else 0L)
+        val ticks = number(node, "native_ticks"); require(ticks >= 100)
+        val legacy = number(node, "engine_creations_legacy")
+        val typed = number(node, "engine_creations_tinted_v1")
+        val created = number(node, "engine_creations")
+        val submitted = number(node, "engine_submissions")
+        val requested = number(node, "emission_requests")
+        val maximum = 8 * (ticks / 10 + 1) // Same inclusive ten-tick cap as the native fixture.
+        require(listOf(legacy, typed, created, submitted, requested).all { it in 0..maximum })
+        require(legacy == 0L && created == typed)
+        require(if (positive) typed > 0 && submitted > 0 && requested > 0 else created == 0L && submitted == 0L && requested == 0L)
+        text(node, "visual_verdict", "PENDING_LLM_FRAMEBUFFER_REVIEW")
     }
 }
