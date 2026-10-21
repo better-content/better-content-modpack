@@ -19,6 +19,48 @@ class SessionTests(unittest.TestCase):
         self.root = Path(tempfile.mkdtemp(prefix='retained-', dir=output))
         # Retain receipts, artifact snapshots and failure state on every test outcome.
 
+    def test_scoped_git_preselection_preserves_original_matcher_domain(self):
+        subprocess.run(['git', 'init', '-q'], cwd=self.root, check=True, timeout=5)
+        for name in ('contracts/One.kt', 'contracts/deep/Two.kt', 'config/a[1].toml',
+                     'mods/pin.pw.toml', 'options.txt', 'space dir/é.txt', 'workspace_artifacts/retained/world.dat'):
+            path = self.root / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(name)
+        subprocess.run(['git', 'add', 'contracts/One.kt'], cwd=self.root, check=True, timeout=5)
+        base = ['ls-files', '-z', '--cached', '--others', '--exclude-standard']
+        all_names = set(sessions.git_text(self.root, *base).split('\0')) - {''}
+        for patterns in (['contracts/*.kt', 'mods/*.pw.toml'], ['contracts/**/*.kt', 'space dir/é.txt'],
+                         ['config/a[1].toml'], ['**'], [''], []):
+            expected = {(name, sessions.file_identity(self.root / name)) for name in all_names
+                        if any(sessions.matches_pattern(name, pattern) for pattern in patterns)}
+            self.assertEqual(expected, set(sessions.live_entries(self.root, patterns)), patterns)
+        self.assertEqual(base, sessions.scoped_git_input_args(['**/*.kt']))
+        with patch.object(sessions, 'git_text', side_effect=AssertionError('empty scope must not enumerate')):
+            self.assertEqual([], sessions.live_entries(self.root, []))
+        for invalid in ('/absolute', '../file', 'config/../file'):
+            with self.assertRaises(ValueError):
+                sessions.scoped_git_input_args([invalid])
+
+    def test_retained_names_are_excluded_before_bounded_live_capture(self):
+        subprocess.run(['git', 'init', '-q'], cwd=self.root, check=True, timeout=5)
+        (self.root / 'contracts').mkdir()
+        selected = self.root / 'contracts/One.kt'
+        selected.write_text('authored')
+        evidence = self.root / 'workspace_artifacts/retained'
+        evidence.mkdir(parents=True)
+        for number in range(32):
+            (evidence / (str(number) + '-' + 'x' * 180)).write_text('retained')
+        original = sessions.git_text
+        def bounded(repo, *args):
+            self.assertIn('--', args)
+            output = original(repo, *args)
+            self.assertLess(len(output.encode()), 1024)
+            return output
+        with patch.object(sessions, 'git_text', side_effect=bounded):
+            self.assertEqual([('contracts/One.kt', sessions.file_identity(selected))],
+                             sessions.live_entries(self.root, ['contracts/*.kt']))
+        self.assertEqual(32, len(list(evidence.iterdir())))
+
     def test_begin_is_pending_and_owner_cannot_be_adopted(self):
         receipt = sessions.begin(self.root, 'conversation')
         self.assertEqual('pending', receipt['baseline'])

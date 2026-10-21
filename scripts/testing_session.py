@@ -153,10 +153,29 @@ def no_symlink(root, path):
     return True
 
 
-def live_entries(root, patterns, shared=False):
+def scoped_git_input_args(patterns):
+    # Conservative preselection only; the existing matcher remains the fingerprint authority.
     if any(pattern.startswith('/') or '..' in pattern.split('/') for pattern in patterns):
         raise ValueError('unsafe verification input pattern')
-    names = set(git_text(root, 'ls-files', '-z', '--cached', '--others', '--exclude-standard').split('\0')) - {''}
+    base = ['ls-files', '-z', '--cached', '--others', '--exclude-standard']
+    if not patterns:
+        return base + ['--', ':(exclude)**']
+    roots = []
+    for pattern in patterns:
+        meta = min((pattern.index(char) for char in '*?[{\\' if char in pattern), default=-1)
+        literal = pattern if meta < 0 else pattern[:meta]
+        prefix = literal if meta < 0 else literal[:literal.rfind('/') + 1]
+        if not prefix:
+            return base  # Explicit root-wide glob: do not silently narrow its domain.
+        if prefix not in roots:
+            roots.append(prefix)
+    return base + ['--'] + [':(top,literal)' + prefix for prefix in roots]
+
+
+def live_entries(root, patterns, shared=False):
+    if len(patterns) == 0:
+        return []
+    names = set(git_text(root, *scoped_git_input_args(patterns)).split('\0')) - {''}
     return [(name, file_identity(root / name)) for name in names
             if any(matches_pattern(name, pattern) for pattern in patterns) and not (shared and (
                 name in ('gradle/active-custom-mods.json', 'index.toml') or

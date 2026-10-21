@@ -12,7 +12,7 @@ internal fun diagnosticPackContracts(root: Path, manifest: ActiveModManifest): M
     require(patterns.isNotEmpty() && patterns.all { !it.startsWith("/") && ".." !in it.split('/') }) { "unsafe diagnostic verification inputs" }
     val matchers = patterns.map { root.fileSystem.getPathMatcher("glob:$it") }
     val names = com.bettercontent.tests.BoundedCommand.capture(root,
-        listOf("git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"),
+        listOf("git") + scopedGitInputArgs(patterns),
         java.time.Duration.ofSeconds(30), 4 * 1024 * 1024).split('\u0000').filter { it.isNotBlank() }
         .filter { name -> matchers.any { it.matches(Path.of(name)) } }
         .filterNot { it == "index.toml" || (it.startsWith("mods/") && it.endsWith(".jar")) || it.startsWith(".worklane/") }

@@ -8,14 +8,14 @@ import java.time.Duration
 
 /** Production inputs only. A harness-only repair must not silently select another candidate. */
 fun runtimeInputIdentity(root: Path): String {
-    val names = BoundedCommand.capture(root, listOf("git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"),
+    val directories = listOf("mods/", "config/", "defaultconfigs/", "datapacks/", "defaultresources/", "globalresources/",
+        "kubejs/", "resourcepacks/", "shaderpacks/", "tacz/", "server-config/")
+    val files = setOf("options.txt", "server.properties", "pack.toml", "index.toml", "user_jvm_args.txt",
+        "run.sh", "run-forge.sh", "better-world-management-server.sh", "package.sh", "dist.sh")
+    val names = BoundedCommand.capture(root, listOf("git") +
+        com.bettercontent.tests.release.scopedGitInputArgs(directories + files),
         Duration.ofSeconds(30), 4 * 1024 * 1024).split('\u0000').filter { it.isNotBlank() }.distinct().sorted()
-        .filter { name ->
-            listOf("mods/", "config/", "defaultconfigs/", "datapacks/", "defaultresources/", "globalresources/",
-                "kubejs/", "resourcepacks/", "shaderpacks/", "tacz/", "server-config/").any(name::startsWith) ||
-                name in setOf("options.txt", "server.properties", "pack.toml", "index.toml", "user_jvm_args.txt",
-                    "run.sh", "run-forge.sh", "better-world-management-server.sh", "package.sh", "dist.sh")
-        }
+        .filter { name -> directories.any(name::startsWith) || name in files }
     val digest = MessageDigest.getInstance("SHA-256")
     names.forEach { name ->
         val path = root.resolve(name)

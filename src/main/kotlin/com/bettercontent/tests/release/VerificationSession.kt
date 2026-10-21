@@ -462,8 +462,9 @@ internal class VerificationSession(
 
     private fun scopedEntries(mod: ActiveMod, patterns: List<String> = mod.verificationInputs): List<Pair<String, String>> {
         require(patterns.all { !it.startsWith("/") && ".." !in it.split('/') }) { "unsafe scoped verification input" }
+        if (patterns.isEmpty()) return listOf("scoped_patterns" to "")
         val matchers = patterns.map { root.fileSystem.getPathMatcher("glob:$it") }
-        return git(root, "ls-files", "-z", "--cached", "--others", "--exclude-standard")
+        return git(root, *scopedGitInputArgs(patterns).toTypedArray())
             .split('\u0000').filter { it.isNotBlank() }.distinct()
             .filter { name -> matchers.any { it.matches(Path.of(name)) } }
             .map { it to fileIdentity(root.resolve(it)) } + ("scoped_patterns" to patterns.joinToString("\u0000"))
@@ -528,7 +529,7 @@ internal class VerificationSession(
             "shared verification inputs must be nonempty workspace-relative patterns"
         }
         val matchers = sharedInputs.map { root.fileSystem.getPathMatcher("glob:$it") }
-        val names = git(root, "ls-files", "-z", "--cached", "--others", "--exclude-standard")
+        val names = git(root, *scopedGitInputArgs(sharedInputs).toTypedArray())
             .split('\u0000').filter { it.isNotBlank() }.distinct()
             .filter { name -> matchers.any { it.matches(Path.of(name)) } }
             .filterNot { it == "gradle/active-custom-mods.json" || it == "index.toml" || (it.startsWith("mods/") && it.endsWith(".jar")) || it.startsWith(".worklane/") }
