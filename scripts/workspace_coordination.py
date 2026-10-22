@@ -181,6 +181,13 @@ class Coordinator:
 
     def reboot_recover(self, task, generation, old_owner, owner, reason):
         """Explicit same-conversation reboot transfer; never reconcile jobs/leases."""
+        return self._recover_actor(task, generation, old_owner, owner, reason, continuation=False)
+
+    def continuation_recover(self, task, generation, old_owner, owner, reason):
+        """Explicit same-boot process continuation, not another task or resource adoption."""
+        return self._recover_actor(task, generation, old_owner, owner, reason, continuation=True)
+
+    def _recover_actor(self, task, generation, old_owner, owner, reason, *, continuation):
         if not isinstance(reason, str) or not reason.strip() or len(reason) > 1000 or old_owner == owner:
             raise Conflict('distinct principals and a bounded recovery reason required')
         topology = {k: os.environ.get('HERDR_' + k.upper() + ('_ID' if k != 'session' else ''), '')
@@ -190,6 +197,20 @@ class Coordinator:
             t = self.active(s, task, generation)
             old = s['turns'].get(old_owner)
             current = s['turns'].get(owner)
+            predecessor_audit = None
+            if continuation and old is None and t['owner'] == old_owner:
+                # A released turn is not a live writer. Only an already durable exact
+                # lead-recovery audit can recover its identity/conversation; never
+                # infer either from a pane name or caller-supplied predecessor file.
+                candidates = [(key, record['current_claim_before'])
+                    for key, record in s.get('recoveries', {}).items()
+                    if record.get('owner') == old_owner and record.get('task') == task
+                    and record.get('generation') == generation and record.get('lead_transfer') is True
+                    and isinstance(record.get('current_claim_before'), dict)]
+                if not candidates or any(claim != candidates[0][1] for _, claim in candidates):
+                    raise Conflict('released lead requires one unambiguous durable predecessor claim')
+                predecessor_audit, old = candidates[0]
+                old = dict(old, areas=[])  # Never resurrect already released historical writer scopes.
             if not old or not current or not all(topology.values()):
                 raise Conflict('both actor claims and injected Herdr topology required')
             if old.get('topology') != topology or current.get('topology') != topology:
@@ -200,7 +221,10 @@ class Coordinator:
             previous_identity, identity = old.get('actor_identity'), current.get('actor_identity')
             if identity_liveness(identity) != 'live' or identity_liveness(previous_identity) != 'stale':
                 raise Conflict('new actor must be live and old actor conclusively stale')
-            if previous_identity['boot'] == identity['boot']:
+            if continuation:
+                if previous_identity['boot'] != identity['boot']:
+                    raise Conflict('process continuation requires the same boot identity')
+            elif previous_identity['boot'] == identity['boot']:
                 raise Conflict('reboot recovery requires different boot identities')
             for observed in (previous_identity, identity):
                 try:
@@ -259,9 +283,11 @@ class Coordinator:
             audit = dict(task=task, generation=generation, old_owner=old_owner, owner=owner,
                          reason=reason.strip(), at=time.time(), previous_claim=old,
                          current_claim_before=current, lead_transfer=lead, areas=areas)
+            if continuation:
+                audit.update(kind='same-boot-process-continuation', predecessor_audit=predecessor_audit)
             s.setdefault('recoveries', {})[key] = audit
             s['turns'][owner] = dict(current, areas=areas, task=task, generation=generation)
-            del s['turns'][old_owner]
+            s['turns'].pop(old_owner, None)
             if lead:
                 t['owner'] = owner
             return dict(recovery=key, task=task, generation=generation, owner=owner,
@@ -704,6 +730,7 @@ def main(argv=None):
     specs = {
         'live': [], 'authority': ['task', 'generation'], 'task-register': ['task', 'owner'],
         'reboot-recover': ['task', 'generation', 'old-owner', 'owner', 'reason'],
+        'continuation-recover': ['task', 'generation', 'old-owner', 'owner', 'reason'],
         'task-cancel': ['task', 'owner'], 'task-complete': ['task', 'owner'],
         'turn-acquire': ['owner', 'area'], 'turn-release': ['owner'], 'turn-check': ['owner','path'], 'turn-scope': ['owner'],
         'maintenance-reserve': ['owner'], 'maintenance-release': ['owner'],
@@ -744,6 +771,7 @@ def main(argv=None):
         elif cmd == 'authority': r = c.authority(a.task, a.generation, a.owner, a.operation)
         elif cmd == 'task-register': r = c.register(a.task, a.owner, helper_limit=a.helper_limit, operations=a.operation)
         elif cmd == 'reboot-recover': r = c.reboot_recover(a.task, a.generation, a.old_owner, a.owner, a.reason)
+        elif cmd == 'continuation-recover': r = c.continuation_recover(a.task, a.generation, a.old_owner, a.owner, a.reason)
         elif cmd in ('task-cancel', 'task-complete'): r = c.cancel(a.task, a.owner, cmd == 'task-complete')
         elif cmd == 'turn-acquire':
             topology = {k: os.environ.get('HERDR_' + k.upper() + ('_ID' if k != 'session' else ''), '') for k in ('session','workspace','tab','pane')}

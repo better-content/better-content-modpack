@@ -150,6 +150,28 @@ Partial logs are not passes. Revalidate scoped inputs and rerun only interrupted
 gates, using fresh output paths and the ordinary authorization/locks. Recovery grants no new
 build, deployment, Native, purge or helper scope.
 
+## Explicit same-boot process continuation
+
+A restarted agent process in the same conversation is not a reboot. With explicit user resumption,
+use the separate `continuation-recover` command with the same task, generation, old/new principal
+and bounded reason arguments as `reboot-recover`. It requires the **same** canonical boot and a
+conclusively stale previous PID/start identity; live or unknown predecessors are rejected. The
+new actor, exact injected Herdr topology, stable conversation, live Herdr probe, task membership,
+nonoverlap and lease/job/reservation exclusions are identical to reboot recovery. It never adopts
+processes, grants producer permission, increments generation or creates replacement helpers.
+
+If the prior turn was legitimately released, only the registered lead may be recovered without
+an extant old claim. Its exact identity/conversation/topology must already exist as an unambiguous
+`current_claim_before` in the coordinator's durable lead-recovery audit for that principal and
+exact task/generation. Missing, conflicting or mismatching evidence fails closed; caller-supplied
+predecessor files and topology alone are not authority. Released historical writer scopes are
+**not** restored. The new atomic audit binds the predecessor audit and the current claim, and
+only that task's lead owner changes. All foreign state and original outputs remain untouched.
+Helpers whose turns are released may acquire their own fresh task/generation claims in their
+unchanged registered pane; they must not impersonate a previous principal or reuse old leases,
+controllers or execution grants. Current process/lock/source preflight and separate fresh exact
+execution admission remain necessary before any producer.
+
 ## Maintenance exclusion
 
 The importable API is `Coordinator(root)`. Maintenance uses the same admission lock as tasks,

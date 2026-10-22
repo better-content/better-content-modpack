@@ -366,6 +366,79 @@ path.write_text(json.dumps(s));print(json.dumps({'result':r}))
         with patch.dict(os.environ, env), patch.object(Coordinator, 'agents', return_value=[agent]):
             return c.reboot_recover('recover', 1, 'old', 'new', 'explicit reboot recovery')
 
+    def continuation_fixture(self, name='', released=False):
+        c, env, agent = self.recovery_fixture(name)
+        with c.transaction() as s:
+            old = s['turns']['old']
+            old['actor_identity'] = dict(process_identity(os.getpid()), start='0')
+            if released:
+                s.setdefault('recoveries', {})['predecessor'] = dict(owner='old', task='recover',
+                    generation=1, lead_transfer=True, current_claim_before=dict(old))
+                del s['turns']['old']
+        return c, env, agent
+
+    def continue_actor(self, c, env, agent):
+        with patch.dict(os.environ, env), patch.object(Coordinator, 'agents', return_value=[agent]):
+            return c.continuation_recover('recover', 1, 'old', 'new', 'explicit process continuation')
+
+    def test_continuation_released_lead_uses_durable_audit_without_resurrecting_scopes(self):
+        c, env, agent = self.continuation_fixture(released=True)
+        c.assign('recover', 'old', 'helper', 'helpers', 'tab', 'pane', 'token:helper')
+        c.register('foreign', 'foreign')
+        c.claim('foreign', ['token:old'])  # Released old writer scope is no longer owned.
+        before = c.snapshot()
+        result = self.continue_actor(c, env, agent)
+        after = c.snapshot()
+        self.assertEqual(after['tasks']['recover'], dict(before['tasks']['recover'], owner='new'))
+        self.assertEqual(after['tasks']['foreign'], before['tasks']['foreign'])
+        self.assertEqual(after['assignments'], before['assignments'])
+        self.assertEqual(after['turns']['foreign'], before['turns']['foreign'])
+        self.assertEqual(after['turns']['new']['areas'], ['token:new'])
+        audit = after['recoveries'][result['recovery']]
+        self.assertEqual(audit['predecessor_audit'], 'predecessor')
+        self.assertEqual(audit['kind'], 'same-boot-process-continuation')
+        with self.assertRaises(Conflict): self.continue_actor(c, env, agent)
+
+    def test_continuation_extant_claim_preserves_existing_scopes(self):
+        c, env, agent = self.continuation_fixture()
+        self.continue_actor(c, env, agent)
+        self.assertEqual(c.snapshot()['turns']['new']['areas'], ['token:new', 'token:old'])
+
+    def test_continuation_released_predecessor_failures_are_atomic(self):
+        for kind in ('missing', 'session', 'topology', 'generation', 'not-lead', 'ambiguous'):
+            with self.subTest(kind=kind):
+                c, env, agent = self.continuation_fixture(kind, released=True)
+                with c.transaction() as s:
+                    record = s['recoveries']['predecessor']
+                    if kind == 'missing': del s['recoveries']['predecessor']
+                    elif kind == 'session': record['current_claim_before']['session_id'] = 'other'
+                    elif kind == 'topology': record['current_claim_before']['topology'] = {}
+                    elif kind == 'generation': record['generation'] = 2
+                    elif kind == 'not-lead': record['lead_transfer'] = False
+                    else:
+                        s['recoveries']['ambiguous'] = dict(record, current_claim_before={})
+                before = (c.root/'state.json').read_bytes()
+                with self.assertRaises(Conflict): self.continue_actor(c, env, agent)
+                self.assertEqual(before, (c.root/'state.json').read_bytes())
+
+    def test_continuation_liveness_boot_resources_and_live_agent_fail_closed(self):
+        for kind in ('live', 'unknown', 'different-boot', 'lease', 'job', 'reservation', 'agent', 'conversation'):
+            with self.subTest(kind=kind):
+                c, env, agent = self.continuation_fixture(kind, released=True)
+                with c.transaction() as s:
+                    old = s['recoveries']['predecessor']['current_claim_before']
+                    if kind == 'live': old['actor_identity'] = process_identity(os.getpid())
+                    elif kind == 'unknown': old['actor_identity'] = None
+                    elif kind == 'different-boot': old['actor_identity']['boot'] = '00000000-0000-0000-0000-000000000000'
+                    elif kind == 'lease': s['leases']['held'] = dict(task='recover', owner='old')
+                    elif kind == 'job': s['jobs']['job'] = dict(task='recover', owner='old', kind='bounded-facade', state='interrupted')
+                    elif kind == 'reservation': s['reservation'] = dict(owner='maintenance')
+                    elif kind == 'agent': agent['agent_status'] = 'unknown'
+                    else: agent['agent_session']['value'] = '/fixture/other.jsonl'
+                before = (c.root/'state.json').read_bytes()
+                with self.assertRaises(Conflict): self.continue_actor(c, env, agent)
+                self.assertEqual(before, (c.root/'state.json').read_bytes())
+
     def test_reboot_lead_transfer_audited_preserves_task_assignments_foreign_state(self):
         c, env, agent = self.recovery_fixture()
         c.assign('recover', 'old', 'helper', 'helpers', 'helper-tab', 'helper-pane', 'token:helper')
