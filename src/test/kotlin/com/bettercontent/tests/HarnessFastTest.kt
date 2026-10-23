@@ -226,6 +226,14 @@ class HarnessFastTest {
         fun dependencies(repository: String) = mods.single { it.path("repository").asText() == repository }
             .path("dependsOn").map { it.asText() }
         assertEquals(listOf("better-industrial-heat"), dependencies("better-chemlib-hazards"))
+        assertEquals(listOf("better-compat-fixes", "better-gameplay-notices"), dependencies("better-bumblezone-crops"))
+        assertEquals(listOf("better-compat-fixes", "better-gameplay-notices"), dependencies("better-magic-chunk-anchors"))
+        val compat = mods.single { it.path("repository").asText() == "better-compat-fixes" }
+        val profiles = compat.path("verificationProfiles").toList()
+        assertEquals(listOf("registrate-present", "without-bees", "without-heat", "without-curios", "default"), profiles.map { it.path("name").asText() })
+        assertEquals("true", profiles.first().path("properties").path("withRegistrateFixture").asText())
+        assertTrue(profiles.all { it.path("tasks").map { task -> task.asText() } == listOf("verifyFull", "stageRuntimeJar") })
+        assertTrue(compat.path("verificationInputs").any { it.asText() == "mods/create.pw.toml" })
         assertEquals(listOf("better-compat-fixes", "better-gameplay-notices", "better-dimension-fonts", "better-celestial-events"), dependencies("better-spirit-commerce"))
         assertEquals(
             listOf("better-gameplay-notices", "better-survival-hud", "better-industrial-heat"),

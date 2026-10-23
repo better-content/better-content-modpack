@@ -159,6 +159,19 @@ Pack-level tiers run only when explicitly requested:
 ```
 
 Agents can use `test-control.main.kts` for JSON lines with stable run IDs and evidence paths.
+For `run source --repo NAME` (or `--all`), active providers and their dependency closure use the
+same internal Root owning-gate backend as fresh releases: forced fresh builds, every mandatory
+verification profile in manifest order with ordinary/default staging last, strict native-log audit,
+support hashes and the common `bc.custom_mod_source.v1` source stamp. Only that requested closure
+must have clean, unchanged source HEADs; unrelated providers do not gate a selected source run.
+Fresh run-local `source-jars` and `source-verification/result.json` bind successful provider stages,
+source identities and consumed provider hashes; failed dependencies block consumers, with no
+historical/bundled-stage fallback. Existing stages, unsafe/symlink paths, missing outputs and changed
+sources are refused. These are independent source task qualifications, not canonical verification
+session/epoch checkpoints or pack/runtime acceptance. They do not deploy, refresh or package anything.
+The two supported non-active legacy trees remain validation-only and receive no qualified runtime JAR.
+Root host orchestration holds no outer Forge cache lock; the shared build backend owns each actual
+source Gradle invocation's cache lock. The legacy validation branch retains its existing lock.
 `run` prints a running record immediately, then a final record; `status` and `wait` work from
 another terminal while it runs. `wait` returns 4 when its bounded timeout expires or a completed
 full Debug awaits visual review, 1 for a failed run, and 0 for a passed run. `awaiting_review` is

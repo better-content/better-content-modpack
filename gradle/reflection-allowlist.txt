@@ -21,3 +21,15 @@ better-deaths-door	src/test/java/com/bettercontent/betterdeathsdoor/client/Mantl
 # fixture setup and Corrodent isDigging() observation. Optional actors remain runtime-only;
 # missing/drifted public methods fail, and this file is excluded from production artifacts.
 better-cave-encounters	src/worldGameTest/java/com/bettercontent/bettercaveencounters/GeologicalWorldGameTests.java
+# Nonshipping audit negative control deliberately compiles Class.forName to prove both runtime-role
+# bytecode guards reject it. Test outputs are never production/native runtime source roots or archives.
+better-magic-chunk-anchors	src/test/java/com/bettercontent/bettermagicchunkanchors/ReflectionBoundaryTest.java
+# Nonshipping direct diagnostic-hook control invokes the private warning wrapper and a refusing
+# Logger proxy to prove exact-once original forwarding/exception identity despite observer failure.
+# This admits only the test; the capture/wrapper/shutdown observer retain the runtime reflection ban.
+better-rail-beetle	src/nativeFixtureTest/java/com/bettercontent/betterrailbeetle/nativefixture/PromotionWarningHookTest.java
+# Nonshipping producer-diagnostic direct controls only: inspect declared scalar record schemas and
+# execute the ACTUAL private wrappers in an inert child ABI realm to check original forwarding.
+# These do not admit reflection in production, native capture, readiness or shutdown paths.
+better-rail-beetle	src/nativeFixtureTest/java/com/bettercontent/betterrailbeetle/nativefixture/ProducerAbiTest.java
+better-rail-beetle	src/nativeFixtureTest/java/com/bettercontent/betterrailbeetle/nativefixture/ProducerForwardingTest.java

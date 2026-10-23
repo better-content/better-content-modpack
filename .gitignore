@@ -44,6 +44,9 @@ exports/
 # Local coordination locks and verification metadata are never authored inputs.
 /.worklane/
 
+# Retained development evidence/proposals, also excluded from runtime by .packwizignore.
+/workspace_artifacts/
+
 # Local run artifacts
 logs/
 /error.txt

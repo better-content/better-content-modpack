@@ -106,6 +106,19 @@ tasks.register("modpackTest") {
     dependsOn(tasks.test, candidateTest, serverTest, multiplayerTest, singleplayerTest, gameplayTest, interactionTest)
 }
 
+// Internal host entry for test-control source only: no release/package/session effects.
+tasks.register<JavaExec>("qualifySourceControl") {
+    group = "verification"
+    description = "Qualifies a requested source dependency closure through the common owning gates."
+    dependsOn(tasks.classes)
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("com.bettercontent.tests.release.SourceVerificationKt")
+    systemProperty("bc.gradle.home", gradle.gradleHomeDir!!.absolutePath)
+    args(layout.projectDirectory.asFile.absolutePath,
+        providers.gradleProperty("sourceControlRunId").orElse("").get(),
+        providers.gradleProperty("sourceControlRepositories").orElse("").get())
+}
+
 tasks.register<JavaExec>("prepareFreshDist") {
     group = "distribution"
     description = "Validates active mod repositories, deploys fresh JARs, and packages one candidate pair."

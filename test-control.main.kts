@@ -152,8 +152,33 @@ private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, 
     if (all && !names.containsAll(active.map { it.repository })) fail("active source inventory is incomplete")
     val completed = linkedMapOf<String, String>()
     val staged = controlPath(id).parent.resolve("source-jars")
-    Files.createDirectories(staged)
-    val pending = names.toMutableSet()
+    // Active providers must use the exact ReleasePipeline gates/stamps. This Root host
+    // orchestration intentionally holds no ForgeCacheLock: common build owns that lock.
+    val activeNames = names.filter { name -> active.any { it.repository == name } }
+    if (activeNames.isNotEmpty()) {
+        val status = launch(listOf(root.resolve("gradlew").toString(), "--no-daemon", "qualifySourceControl",
+            "-PsourceControlRunId=$id", "-PsourceControlRepositories=${activeNames.joinToString(",")}"),
+            root, controlPath(id).parent.resolve("source-backend.log"))
+        val result = controlPath(id).parent.resolve("source-verification/result.json")
+        if (Files.isRegularFile(result) && !Files.isSymbolicLink(result)) {
+            val (readStatus, output) = capture(listOf("jq", "-r", ".checks | to_entries[] | [.key,.value] | @tsv", result.toString()))
+            require(readStatus == 0) { "invalid source backend result" }
+            output.lineSequence().filter(String::isNotBlank).forEach { line ->
+                val fields = line.split('\t', limit = 2)
+                require(fields.size == 2 && fields[0] in activeNames && fields[0] !in completed) { "unexpected source backend result" }
+                completed[fields[0]] = fields[1]
+            }
+        }
+        activeNames.forEach { completed.putIfAbsent(it, "failed (missing backend result; exit $status)") }
+        if (status != 0 && activeNames.all { completed[it] == "passed" })
+            activeNames.forEach { completed[it] = "failed (backend exit $status)" }
+    }
+    // The two validation-only legacy trees have no active runtime artifact/stamp.
+    if (activeNames.isEmpty()) {
+        require(!Files.exists(staged, java.nio.file.LinkOption.NOFOLLOW_LINKS)) { "source staging already exists" }
+        Files.createDirectory(staged)
+    }
+    val pending = names.filterNot { it in activeNames }.toMutableSet()
     while (pending.isNotEmpty()) {
         val ready = pending.sorted().filter { name ->
             active.firstOrNull { it.repository == name }?.dependencies.orEmpty().all { it in completed }
@@ -164,6 +189,7 @@ private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, 
             if (mod != null && mod.dependencies.any { completed[it] != "passed" }) {
                 completed[name] = "blocked-by-provider"
             } else {
+                require(mod == null) { "active source providers must use the qualified backend" }
                 val repo = workspace.resolve("mod_source/$name")
                 val tasks = sourceTasks(name, active)
                 val cacheLock = root.resolve(".worklane/forge-cache.lock")
@@ -190,11 +216,6 @@ private fun sourceRun(id: String, selected: String?, all: Boolean): Map<String, 
                     status != 0 -> "failed ($status)"
                     gameTestsMissing -> "failed (GameTest run did not pass)"
                     else -> "passed"
-                }
-                if (completed[name] == "passed" && mod != null) {
-                    val jar = repo.resolve("build/libs").resolve(mod.artifact)
-                    if (Files.isRegularFile(jar)) Files.copy(jar, staged.resolve(mod.artifact), StandardCopyOption.REPLACE_EXISTING)
-                    else completed[name] = "failed (missing staged JAR)"
                 }
             }
             pending.remove(name)

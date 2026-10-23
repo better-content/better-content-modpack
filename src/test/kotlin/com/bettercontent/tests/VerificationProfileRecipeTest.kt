@@ -48,7 +48,8 @@ class VerificationProfileRecipeTest {
         val manifest = jacksonObjectMapper().readValue(Path.of(System.getProperty("bc.repo.root")).resolve("gradle/active-custom-mods.json").toFile(), ActiveModManifest::class.java)
         val profiles = manifest.mods.filter { it.verificationProfiles.isNotEmpty() }.associate { it.repository to it.verificationProfiles }
         assertEquals(setOf("better-compat-fixes", "better-spirit-commerce", "better-dimension-fonts", "better-wild-fruit-trees"), profiles.keys)
-        assertEquals(listOf("colonyWithoutBees", "spoilageWithoutHeat", "backpackWithoutCurios"), profiles.getValue("better-compat-fixes").dropLast(1).map { it.properties.keys.single() })
+        assertEquals(listOf("withRegistrateFixture", "colonyWithoutBees", "spoilageWithoutHeat", "backpackWithoutCurios"), profiles.getValue("better-compat-fixes").dropLast(1).map { it.properties.keys.single() })
+        assertEquals(mapOf("withRegistrateFixture" to "true"), profiles.getValue("better-compat-fixes").first().properties)
         val fruit = profiles.getValue("better-wild-fruit-trees")
         assertTrue(fruit.first().properties.isEmpty(), "hasProperty switches must be omitted, never set false, for present fixtures")
         assertEquals(setOf("withoutTConFixture", "withoutArsFixture", "withoutWildAddonsFixture"), fruit[1].properties.keys)
@@ -63,18 +64,19 @@ class VerificationProfileRecipeTest {
         val exactInputs = setOf(
             "mods/just-enough-effect-descriptions-jeed.pw.toml", "mods/emi.pw.toml", "mods/malum.pw.toml",
             "mods/ars-nouveau.pw.toml", "mods/blood-magic.pw.toml", "mods/goety.pw.toml",
-            "mods/pneumaticcraft-repressurized.pw.toml", "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json")
+            "mods/pneumaticcraft-repressurized.pw.toml", "mods/create.pw.toml",
+            "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json")
         val malumPattern = "kubejs/data/malum/advancements/recipes/*.json"
         assertEquals(exactInputs + malumPattern, anchors.verificationInputs.toSet(),
             "Reuse must bind the actual canonical index and SDK/policy pins without widening to unrelated Root files")
-        assertEquals(9, anchors.verificationInputs.size)
+        assertEquals(10, anchors.verificationInputs.size)
         val malumInputs = Files.list(root.resolve("kubejs/data/malum/advancements/recipes")).use { files ->
             files.filter { Files.isRegularFile(it) && it.fileName.toString().endsWith(".json") }
                 .map { root.relativize(it).toString() }.toList()
         }
         assertEquals(36, malumInputs.size, "Preserve all original36 canonical policy resources")
         val consumed = exactInputs + malumInputs
-        assertEquals(44, consumed.size)
+        assertEquals(45, consumed.size)
         val matchers = anchors.verificationInputs.map { root.fileSystem.getPathMatcher("glob:$it") }
         consumed.forEach { name ->
             assertTrue(Files.isRegularFile(root.resolve(name)), "Consumed Root input missing: $name")

@@ -68,6 +68,7 @@
     },
     {
       "repository": "better-magic-chunk-anchors",
+      "dependsOn": ["better-compat-fixes", "better-gameplay-notices"],
       "modId": "better_magic_chunk_anchors",
       "artifact": "better-magic-chunk-anchors-0.1.0.jar",
       "tasks": [
@@ -82,6 +83,7 @@
         "mods/blood-magic.pw.toml",
         "mods/goety.pw.toml",
         "mods/pneumaticcraft-repressurized.pw.toml",
+        "mods/create.pw.toml",
         "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json",
         "kubejs/data/malum/advancements/recipes/*.json"
       ]
@@ -122,11 +124,12 @@
     },
     {
       "repository": "better-compat-fixes",
-      "verificationInputs": ["config/adpother-common.toml", "config/forgeendertech-common.toml", "kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json", "config/incontrol/spawn.json", "src/test/kotlin/com/bettercontent/tests/GeologicalEcologyContractTest.kt", "kubejs/data/minecraft/tags/blocks/needs_diamond_tool.json", "mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/weapons-of-miracles.pw.toml", "src/test/kotlin/com/bettercontent/tests/SaulomonkSpawnContractTest.kt", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
+      "verificationInputs": ["mods/supplementaries.pw.toml", "mods/selene.pw.toml", "config/adpother-common.toml", "config/forgeendertech-common.toml", "kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json", "config/incontrol/spawn.json", "src/test/kotlin/com/bettercontent/tests/GeologicalEcologyContractTest.kt", "kubejs/data/minecraft/tags/blocks/needs_diamond_tool.json", "mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/weapons-of-miracles.pw.toml", "src/test/kotlin/com/bettercontent/tests/SaulomonkSpawnContractTest.kt", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json", "mods/create.pw.toml"],
       "buildInputs": [],
       "modId": "better_compat_fixes",
       "artifact": "better-compat-fixes-0.1.9.jar",
       "verificationProfiles": [
+        {"name": "registrate-present", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"withRegistrateFixture": "true"}},
         {"name": "without-bees", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"colonyWithoutBees": "true"}},
         {"name": "without-heat", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"spoilageWithoutHeat": "true"}},
         {"name": "without-curios", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"backpackWithoutCurios": "true"}},
@@ -188,6 +191,7 @@
     },
     {
       "repository": "better-bumblezone-crops",
+      "dependsOn": ["better-compat-fixes", "better-gameplay-notices"],
       "verificationInputs": [
         "mods/aether.pw.toml", "mods/ars-elemental.pw.toml", "mods/ars-nouveau.pw.toml",
         "mods/blueprint.pw.toml", "mods/born-in-chaos.pw.toml", "mods/citadel.pw.toml",
