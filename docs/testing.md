@@ -660,10 +660,14 @@ retained. Human-pointer and physical-listening verdicts remain independently `NO
 
 ## Task registration and handoff
 
-Before source verification, a release, or a multi-command test/retry sequence, register its task
-and consumed/output boundaries with `maintenance.main.kts begin --task TASK_ID --path PATH`.
-All tests/retries in that task keep the same candidate alive until diagnosis/testing/delivery
-ends. Queue handoffs remain active consumers until their callbacks/delivery complete.
+Activity bookkeeping is optional for source verification, Dev, native checks and releases.
+`maintenance.main.kts begin --task TASK_ID --path PATH` may document consumed/output boundaries,
+but stale activity rows, historical UNKNOWN states and task-specific guardian receipts are not
+execution prerequisites. The retired lifecycle guardian/reconciliation tooling must not be run
+or repaired to admit ordinary work. Preserve the candidate/support bytes through diagnosis and
+delivery regardless of registration state. Queue handoffs remain active consumers until their
+callbacks/delivery complete; the ordinary single-run Forge kernel mutex still prevents concurrent
+cache writes, and substantive source/gameplay tests and release provenance remain mandatory.
 
 Before final success/failure/cancellation/blocked handoff, report results and stop owned producers.
 Finish closes activity and releases its lease; it deletes nothing. Preserve outputs, caches,

@@ -37,10 +37,12 @@ is an optimization: documented tests must still work with empty generated/cache 
 ## Activity, retention and ownership are separate
 
 Task assignments, turn-scoped work claims, operation-lifetime resource leases and retention
-records are separate. See [workspace policy](workspace.md). Register producers/consumers before
-using outputs, including exact candidate and support boundaries. Read-only consumers may omit
-the shared build-cache lease. Shut down owned producers gracefully before closing their activity;
-never kill unrelated processes. Queue requests remain consumers until completed or cancelled.
+records are separate. See [workspace policy](workspace.md). Activity records may document consumed
+outputs and candidate/support retention, but are not build, test or release admission gates.
+Stale or unknown historical registrations do not require reconciliation before ordinary work.
+Actual concurrent Forge writes remain serialized by the ordinary kernel mutex described in
+[testing.md](../testing.md). Shut down owned producers before closing their activity; never kill
+unrelated processes. Queue requests remain consumers until completed or cancelled.
 
 `finish` closes only the named owner's activity and deletes **nothing**. Its old `--apply` spelling
 is accepted for compatibility but does not prune. Closed task records and paths remain retained.
@@ -51,6 +53,14 @@ Legacy registrations preserve their paths and data. Unknown ownership requires e
 reconciliation with a reason; current actors must not impersonate an old owner. Do not clear
 another task's registration merely because its agent disappeared. No installation-time purge,
 old-plan replay, or wholesale migration cleanup is permitted.
+
+The task-specific lifecycle guardian and `reconcile-finish-four` / `reconcile-finish-twelve`
+interfaces are retired. Their historical source, failed runs and receipts remain retained evidence,
+not executable prerequisites for Dev, native verification or release. Do not launch them, develop
+replacement guardian campaigns, or require old ledger rows to be finished before building.
+This retirement does not delete registrations or outputs, adopt foreign owners, weaken retention
+or authorize purge. Ordinary owner-scoped `finish` remains non-destructive; actual live-process
+ownership, the Forge write mutex, substantive tests and truthful release provenance still apply.
 
 ## Inventory and commands
 
