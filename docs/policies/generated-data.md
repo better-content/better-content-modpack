@@ -40,9 +40,12 @@ Task assignments, turn-scoped work claims, operation-lifetime resource leases an
 records are separate. See [workspace policy](workspace.md). Activity records may document consumed
 outputs and candidate/support retention, but are not build, test or release admission gates.
 Stale or unknown historical registrations do not require reconciliation before ordinary work.
-Actual concurrent Forge writes remain serialized by the ordinary kernel mutex described in
-[testing.md](../testing.md). Shut down owned producers before closing their activity; never kill
-unrelated processes. Queue requests remain consumers until completed or cancelled.
+Conflicting writes to the same mutable Forge cache remain serialized by kernel locks described
+in [testing.md](../testing.md). Validated private resource domains use per-worker cache and
+repository-workspace locks; shared seed capture and legacy shared-cache fallback retain the global
+Forge mutex. Isolation never permits conflicting writes to shared mutable state. Shut down owned
+producers before closing their activity; never kill unrelated processes. Queue requests remain
+consumers until completed or cancelled.
 
 `finish` closes only the named owner's activity and deletes **nothing**. Its old `--apply` spelling
 is accepted for compatibility but does not prune. Closed task records and paths remain retained.
@@ -60,7 +63,8 @@ not executable prerequisites for Dev, native verification or release. Do not lau
 replacement guardian campaigns, or require old ledger rows to be finished before building.
 This retirement does not delete registrations or outputs, adopt foreign owners, weaken retention
 or authorize purge. Ordinary owner-scoped `finish` remains non-destructive; actual live-process
-ownership, the Forge write mutex, substantive tests and truthful release provenance still apply.
+ownership, the applicable Forge cache/workspace locks, substantive tests and truthful release
+provenance still apply.
 
 ## Inventory and commands
 

@@ -102,6 +102,99 @@ a gameplay verdict or declare a performance regression repaired from a successfu
 performance budgets require a documented workload/resource profile and measured acceptance criterion,
 not a threshold tuned to a retained historical run. No Debug scope is implied by this separation.
 
+## Timing observations and timeout policy
+
+Record individual tests, suites/tasks and enclosing processes separately; a Gradle task duration
+is not an individual native GameTest duration. Monotonic wallclock durations and native tick
+counts are distinct measurements and must retain explicit units. Persist start and terminal
+observations incrementally in durable evidence, including on failure/cancellation; a missing
+terminal record is interrupted/UNKNOWN, never a successful sample. Retention and timing records
+confer neither verification reuse nor runtime acceptance.
+
+A measured hard timeout is **twice the empirical expected runtime of comparable successful
+executions**. Record the sample count, selection/aggregation method, source and input identity,
+environment/resource profile, setup scope and cache state supporting that expectation. Keep
+setup, test, suite and process scopes distinguishable. Failed, cancelled, timed-out or otherwise
+censored observations are diagnostic evidence, not successful baseline samples. Missing or
+incomparable measurements mean **UNKNOWN**: do not infer an expectation by halving an existing
+cap, doubling a tick count, borrowing another workload's duration or choosing an arbitrary value.
+Do not silently inflate a deadline or mutate it during a running invocation. Existing fixed
+readiness/cleanup/controller safety caps remain independently enforced; their presence is not
+proof that an empirical twice-expected timeout has been established. New measurements require
+an explicitly recorded comparable baseline before that policy can be claimed implemented.
+
+Bounded Python supervisor and JVM `BoundedCommand` execution automatically append
+`bc.timing.v1` JSONL to `<log>.timing.jsonl`; supervisor calls without a log use
+`generated/timing/<uuid>.jsonl`. `BC_TIMING_FILE` can select an absolute retained output sink.
+Records have a UUID `operation_id`, `start`/`terminal` events, monotonic `duration_ns`, explicit
+scope/status and the scope's own `configured_timeout_ns` (`timeout_scope=scope`). Optional
+`BC_TIMING_{RUN_ID,REVISION,INPUT_ID,PROFILE,ENVIRONMENT_ID,CACHE_ID}` metadata is `UNKNOWN` when
+missing; a path label alone is not a validated cache/input identity. Process terminal states
+include success, failure, timeout and cancellation. Missing terminals remain unknown.
+
+The generic `gradle/test-timing.init.gradle` hook is activated with `--init-script` by integrated
+source invocations. Its default sink is `<settings-root>/generated/timing/<uuid>.jsonl`, overridden
+by `BC_TIMING_FILE`. It separates `gradle_task`, `junit_suite` and `junit_test` scopes; task skip,
+up-to-date and no-source outcomes are not fresh test executions. JUnit outcomes preserve actual
+Gradle result enums. An unfinished callback observed at build completion is `INTERRUPTED`.
+`configured_timeout_ns` is the process's actual budget, a Gradle task's actual configured
+`Task.timeout`, or null/UNKNOWN for JUnit; it never borrows the enclosing budget. Gradle records
+separately carry `enclosing_process_timeout_ns` from `BC_TIMING_TIMEOUT_SECONDS`; process records
+leave that enclosing field null. These observers currently leave `expected_runtime_ns=null`
+and `timeout_policy=UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED`: they do not select a baseline or
+automatically implement the twice-expected policy.
+
+For an offline report from explicit retained observations, use:
+
+```sh
+python3 -B scripts/timing_report.py --output /absolute/output/report.json /absolute/input/timing.jsonl
+```
+
+The `bc.timing_report.v1` reducer groups comparable scope/units/clock/duration boundaries,
+revision/input/profile/environment/cache identities and scope-specific operation identities.
+Run/operation/invocation UUIDs remain provenance, not grouping keys. It retains sample count
+and provenance and uses the empirical median of **all** paired comparable successful durations;
+the recommendation is exactly twice that median, with no minimum sample count, padding or
+outlier removal. Missing identity/boundary/measurement yields UNKNOWN. Failures, cancellations,
+timeouts, skips and nonexecution are excluded from successful baselines. Missing start/terminal
+pairs make observations `INCOMPLETE`; malformed, duplicate or truncated records make them
+`INVALID` and suppress all recommendations. Native ticks, native milliseconds and monotonic
+nanoseconds remain separate, never converted through assumed 20 TPS.
+
+The reducer writes serialized, atomic durable reports from bounded, locked input snapshots;
+it does not discover history, change caps or authenticate producer identity claims. Report
+`COMPLETE` means observation completeness only, with acceptance `NOT_EVALUATED`, not a test
+pass. Own-scope cap comparisons report `UNKNOWN`, `MATCHES_2X_EMPIRICAL_MEDIAN` or
+`DOES_NOT_MATCH_2X_EMPIRICAL_MEDIAN`; an enclosing cap is not an individual-test cap. Observer
+`expected_runtime_ns` remains null: a report recommendation does not retroactively establish
+that an actual deadline was selected or enforced from that baseline. The supervisor and Gradle build-finished hooks automatically refresh reports; explicit
+`BoundedCommand` profile sinks also refresh after their durable process terminal. Incidental
+captures inheriting a shared sink do not spawn a reducer per Git query. These reports do not
+mean all public commands have report coverage or all configured caps comply.
+
+Root harness tests and integrated source profiles opt into `scripts/timing-python/sitecustomize.py`.
+It records actual standard unittest callbacks as `python_test` and real suite invocations as
+`python_suite`, without result proxies or changed original arguments/returns. Expected failures,
+unexpected successes, skips and unknown outcomes remain distinct, nonbaseline case outcomes.
+The successful `TextTestRunner` path fails closed on observer errors; manually consumed custom
+results outside that runner do not have equivalent acceptance authority. Process selectors
+`BC_TIMING_PROCESS_NAME`/`process_name` are invocation-local: the reducer uses one only with a
+known SHA-256 input binding, retaining real cwd/argv hashes as raw provenance. Selectors are not
+inherited by arbitrary nested commands.
+
+The opt-in source-only native GameTest adapter is implemented in
+`gradle/native-test-timing.gradle` and `src/nativeTiming/`. Its ordinary recorder/listener helpers
+are outside the reserved `.mixin` package. It preserves original reporters and observes actual
+attempt terminal callbacks, not final flaky-test acceptance; native ticks, native stopwatch
+milliseconds and observed monotonic nanoseconds remain separate. Exact named SDK class hashes,
+archive exclusions and a fresh post-task health receipt are mandatory. Its Java support compiled
+against the pinned official/Parchment source SDKs and passed inert writer controls, but real
+transformed execution, the Gradle/Forge RunConfig attachment and shipping exclusion acceptance
+remain **UNVERIFIED**. Packaged runtime/Dist native-case coverage is not implemented by this
+source-only hook. Existing terminal-only XML is not durable start/censor evidence. Do not claim
+all-test coverage, provider acceptance or completed empirical timeout selection from these hooks.
+Legacy configured caps remain unchanged, not universally empirical 2× compliant.
+
 ## Failure diagnosis and automated visual review
 
 A failing experimental scenario is evidence to diagnose, not an instruction to change production
@@ -206,7 +299,7 @@ outputs retains those build trees in place but isolates old native instances. A 
 relocations; none confer acceptance. Tracked inputs, symlink output/destination roots, existing
 destinations and unsupported cross-device moves fail closed before Gradle; there is no delete fallback.
 Where declared, ordered `verificationProfiles` run the owning repository's public Gradle tasks and
-project properties under the same whole-invocation cache lock, with separate logs/retention roots
+project properties under the selected whole-invocation cache/workspace locks, with separate logs/retention roots
 under `source-profiles/<repository>/<profile>/`. They must retain every ordinary/default task and
 stage the final artifact with default properties. Profile tasks, properties, ordering and clean policy
 participate in both Kotlin and Python checkpoint fingerprints; a default-only receipt cannot stand
@@ -710,8 +803,8 @@ but stale activity rows, historical UNKNOWN states and task-specific guardian re
 execution prerequisites. The retired lifecycle guardian/reconciliation tooling must not be run
 or repaired to admit ordinary work. Preserve the candidate/support bytes through diagnosis and
 delivery regardless of registration state. Queue handoffs remain active consumers until their
-callbacks/delivery complete; the ordinary single-run Forge kernel mutex still prevents concurrent
-cache writes, and substantive source/gameplay tests and release provenance remain mandatory.
+callbacks/delivery complete; source cache/workspace locks still prevent conflicting mutable
+writes, and substantive source/gameplay tests and release provenance remain mandatory.
 
 Before final success/failure/cancellation/blocked handoff, report results and stop owned producers.
 Finish closes activity and releases its lease; it deletes nothing. Preserve outputs, caches,
@@ -781,17 +874,52 @@ Dependency resolution classifies manifests only from the production content root
 `workspace_artifacts/` task trees are excluded from discovery, like build/generated evidence;
 unknown manifests elsewhere still fail classification rather than being silently packaged.
 
-Release workers may concurrently inspect/reuse/stage artifacts, but source Gradle invocations
-share a workspace-level Forge cache lock. ForgeGradle's generated MCP/mapped JARs are not safe
-for concurrent generation or reading during generation, especially after cache disposal. The
-lock serializes complete source verification/staging invocations without skipping any gate or
-changing Forge pins. Do not launch uncoordinated manual source Gradle builds against the same
-cache during release preparation. The single canonical path is
-`/home/dev/better-content-modpack/.worklane/forge-cache.lock`, held with POSIX `fcntl.lockf`
-for the complete invocation, including any mutable build/world archival or reset. A similarly
-named file under `/home/dev/.worklane/` is a different lock and does not serialize this cache;
-BSD `flock` is not interchangeable. Consumers should bind immutable validated provider snapshots,
-not a sibling output that another producer may replace.
+### Dependency-aware source workers and cache isolation
+
+**Current safety boundary: real provider preparation accepts `--jobs 1` only.** Larger values
+fail before work because immutable per-consumer build/test/audit input views and atomic candidate
+publication have not been implemented/proven. The CLI's default remains two, so an authorized
+serial invocation must explicitly select one; there is no silent fallback. The scheduler/private
+worker implementation and real minimal Gradle overlap controls do **not** enable or establish safe
+provider-parallel qualification. Required direct/transitive/optional/test-only inputs must first
+be reconciled with authoritative declarations, copied without mutable aliases, hash-bound to
+qualified same-candidate receipts, and used by both build and audit. Global staging must publish
+only strict-gated complete artifacts atomically. Missing view/mismatch/partial-publication proofs
+remain outstanding. No actual provider/native overlap or throughput is accepted.
+
+The internal scheduler supports one to four workers independently of the workspace
+controller's helper limit. The scheduler admits only providers whose declared dependencies have
+completed successfully and binds consumers to those staged provider hashes. A provider failure
+stops new admissions; already-running workers retain their evidence and must finish cleanup.
+Incomplete worker cleanup prevents the deploy/package barrier. Parallelism changes neither the
+manifest's mandatory tasks/profile order nor strict native-log, source/support-hash, coherent-set
+and package-once gates. It does not authorize any producer or release operation.
+
+The isolated-worker path uses retained run-local `build-isolation/` homes, Gradle user homes,
+project caches, XDG directories, `BC_PACKAGE_ARTIFACT_CACHE` and temporary directories. It also binds Java `user.home` and
+`java.io.tmpdir`; changing shell HOME alone is insufficient. Workers receive independent file
+copies, not mutable symlinks or hardlinks into shared caches. Only dependency-download bytes
+(`caches/modules-2/files-2.1`) and wrapper distributions seed these homes. Generated Forge
+MCP/deobfuscation caches, transforms, compiled scripts, daemon state and project caches are not
+seeded. Seed copying is bounded, checks filesystem headroom and rejects symlink/special-file
+inputs; all partial/complete seed and worker outputs remain retained on failure or cancellation.
+
+When private builds are needed, seed preparation precedes legacy writer admission. Shared seed
+capture and legacy shared-cache fallback use the canonical POSIX `fcntl.lockf` mutex `/home/dev/better-content-modpack/.worklane/forge-cache.lock`. A similarly named file under
+`/home/dev/.worklane/` is a different lock; BSD `flock` is not interchangeable. Private worker
+cache locks and repository `.gradle/bc-source-workspace.lock` serialize each worker/repository's
+mutable invocation, including build/world archival or reset. Legacy scripts with detected absolute
+shared-cache/output references or relevant symlinks fall back to the whole-invocation global lock
+rather than silently sharing generated Forge state. Independent `run source` and legacy validation
+keep their existing shared-cache locking; they do not imply isolated parallel execution.
+
+Run evidence records per-provider isolation/fallback decisions in `build-isolation-policy.tsv`
+and seed identity in `build-isolation/seed-identity.tsv`. Inspect the actual decisions and inputs:
+static fallback detection is conservative, not proof that arbitrary build scripts cannot escape
+isolation. Native/provider overlap, cold/warm fallback coverage and throughput still require
+explicitly authorized real evidence; no measured speedup follows from synthetic scheduler tests.
+Do not launch uncoordinated manual Gradle builds against shared caches or the same source outputs.
+Consumers must use immutable validated provider snapshots, not replaceable sibling build outputs.
 
 ### Task-scoped Controls-deferred diagnostic candidate
 

@@ -5,6 +5,9 @@ itself cannot prove cleanup; callers must reconcile that interruption explicitly
 """
 import argparse
 import ctypes
+import fcntl
+import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -12,6 +15,69 @@ import signal
 import subprocess
 import sys
 import time
+import uuid
+from datetime import datetime, timezone
+
+
+class TimingObservation:
+    """Durable observations, not acceptance or an inferred expected-runtime baseline."""
+    def __init__(self, args, command):
+        self.started = time.monotonic_ns()
+        self.result = dict(cleanup_complete=None, process_exit_code=None)
+        self.path = output_path(os.environ.get('BC_TIMING_FILE') or
+                                (args.log + '.timing.jsonl' if args.log else
+                                 str(Path(__file__).absolute().parent.parent / 'generated' / 'timing' /
+                                     (str(uuid.uuid4()) + '.jsonl'))))
+        self.fields = dict(schema='bc.timing.v1', operation_id=str(uuid.uuid4()), scope='process',
+                           units='nanoseconds', clock='monotonic', duration_boundary='supervision_including_cleanup',
+                           configured_timeout_ns=int(args.budget_seconds * 1_000_000_000), timeout_scope='process',
+                           enclosing_process_timeout_ns=None, expected_runtime_ns=None, timeout_policy='UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED',
+                           cwd=str(Path(args.cwd).absolute()), log=args.log,
+                           command_sha256=hashlib.sha256('\0'.join(command).encode()).hexdigest())
+        for key in ('RUN_ID', 'REVISION', 'INPUT_ID', 'PROFILE', 'ENVIRONMENT_ID', 'CACHE_ID'):
+            self.fields[key.lower()] = os.environ.get('BC_TIMING_' + key) or (
+                os.environ.get('BC_TEST_RUN_ID') if key == 'RUN_ID' else None) or 'UNKNOWN'
+        if os.environ.get('BC_TIMING_PROCESS_NAME', '').strip():
+            self.fields['process_name'] = os.environ['BC_TIMING_PROCESS_NAME']
+        self.append(event='start', status='RUNNING', duration_ns=None)
+
+    def append(self, **fields):
+        payload = (json.dumps(dict(self.fields, observed_at=datetime.now(timezone.utc).isoformat(),
+                                   **fields), separators=(',', ':')) + '\n').encode()
+        fd = os.open(self.path, os.O_CREAT | os.O_WRONLY | os.O_NOFOLLOW, 0o600)
+        try:
+            # POSIX record locks interoperate with JVM FileChannel.lock (flock does not).
+            fcntl.lockf(fd, fcntl.LOCK_EX)
+            os.lseek(fd, 0, os.SEEK_END)
+            view = memoryview(payload)
+            while view:
+                written = os.write(fd, view)
+                if not written:
+                    raise OSError('timing append made no progress')
+                view = view[written:]
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+
+    def finish(self, status, failure):
+        reason = self.result.get('reason')
+        outcome = ('CANCELLED' if isinstance(failure, (KeyboardInterrupt, SystemExit)) or
+                   reason in ('cancelled', 'parent exited') else
+                   'TIMED_OUT' if reason == 'deadline exhausted' else
+                   'SUCCEEDED' if failure is None and status == 0 else 'FAILED')
+        self.append(event='terminal', status=outcome,
+                    duration_ns=max(0, time.monotonic_ns() - self.started), exit_code=status,
+                    exception_type=type(failure).__name__ if failure else None, **self.result)
+        # Explicit sibling dependency: copied fixtures must include the reporter too. Never
+        # silently degrade a production invocation to manual-only/missing reports.
+        module_path = Path(__file__).with_name('timing_report.py')
+        spec = importlib.util.spec_from_file_location('bc_timing_report', module_path)
+        reporter = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = reporter
+        spec.loader.exec_module(reporter)
+        report = reporter.write_report([self.path], self.path.with_name(self.path.name + '.report.json'))
+        if report.get('status') not in ('COMPLETE', 'INCOMPLETE'):
+            raise ValueError('automatic timing report is invalid: ' + str(self.path))
 
 
 def snapshot():
@@ -107,6 +173,27 @@ def main():
     command = args.command[1:] if args.command[:1] == ['--'] else args.command
     if not command or not 0 < args.budget_seconds <= 28800 or not 0 <= args.capture_limit <= 4194304:
         raise ValueError('invalid bounded command contract')
+    timing = TimingObservation(args, command)
+    status = None
+    failure = None
+    try:
+        status = supervise(args, command, timing)
+        return status
+    except BaseException as error:
+        failure = error
+        raise
+    finally:
+        try:
+            timing.finish(status, failure)
+        except Exception as timing_error:
+            if failure is not None or (status is not None and status != 0):
+                # Do not replace the process failure/status with a telemetry error.
+                print('timing recording failed: ' + str(timing_error), file=sys.stderr)
+            else:
+                raise
+
+
+def supervise(args, command, timing):
     # PR_SET_CHILD_SUBREAPER is unprivileged and applies to this invocation only.
     if ctypes.CDLL(None, use_errno=True).prctl(36, 1, 0, 0, 0) != 0:
         raise OSError(ctypes.get_errno(), 'owned subprocess subreaper unavailable')
@@ -120,8 +207,19 @@ def main():
     if args.capture_limit and log is None:
         raise ValueError('bounded capture requires file-backed output')
     stream = log.open('wb') if log else None
-    process = subprocess.Popen(command, cwd=args.cwd, stdout=stream, stderr=subprocess.STDOUT if stream else None,
-                               start_new_session=True)
+    try:
+        environment = dict(os.environ)
+        # The root Gradle/JUnit writer shares this invocation sink unless a narrower source
+        # profile deliberately binds another sink. No environment dump is recorded.
+        environment.setdefault('BC_TIMING_FILE', str(timing.path))
+        # A logical selector names this supervised process, not nested invocations.
+        environment.pop('BC_TIMING_PROCESS_NAME', None)
+        process = subprocess.Popen(command, cwd=args.cwd, stdout=stream, stderr=subprocess.STDOUT if stream else None,
+                                   start_new_session=True, env=environment)
+    except BaseException:
+        if stream:
+            stream.close()
+        raise
     table = snapshot()
     known = {process.pid: table[process.pid][1]} if process.pid in table else {}
     end = time.monotonic() + args.budget_seconds
@@ -155,6 +253,8 @@ def main():
     if survivors:
         reason = (reason or 'command completed') + '; owned process cleanup incomplete'
         status = 125
+    timing.result.update(reason=reason, surviving_pids=survivors, cleanup_complete=not survivors,
+                         process_exit_code=process.returncode)
     if reason or status:
         diagnostic = dict(schema='bc.bounded_facade.v1', pid=process.pid, status=status, reason=reason,
                           surviving_pids=survivors, budget_seconds=args.budget_seconds, cwd=args.cwd, command=command)

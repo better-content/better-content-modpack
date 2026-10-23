@@ -1,0 +1,168 @@
+import groovy.json.JsonSlurper
+import java.nio.file.Files
+import java.security.MessageDigest
+import java.util.zip.ZipFile
+import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
+
+// PROJECT script, opt-in only. Apply from gradle.beforeProject BEFORE the Forge plugin is applied:
+// project.apply(from: '/canonical/pack/gradle/native-test-timing.gradle')
+// The early afterEvaluate callback must precede Forge's own RunConfig -> JavaExec generation.
+// No new mod, production sourceSet dependency, original test task/body, timeout or invocation changes.
+if (System.getenv('BC_TIMING_NATIVE') != 'true') return
+if (project.extensions.extraProperties.has('bcNativeTimingInstalled')) return
+project.extensions.extraProperties.set('bcNativeTimingInstalled', true)
+def supportRoot = buildscript.sourceFile.canonicalFile.parentFile.parentFile
+
+def safePath = { File file ->
+    def path = file.toPath()
+    if (!path.isAbsolute() || path != path.normalize()) throw new GradleException('Unsafe native timing path')
+    for (def ancestor = path; ancestor != null; ancestor = ancestor.parent)
+        if (Files.isSymbolicLink(ancestor)) throw new GradleException('Native timing symlink path')
+    path
+}
+
+project.afterEvaluate {
+    def minecraft = project.extensions.findByName('minecraft')
+    if (minecraft == null || !project.plugins.hasPlugin('net.minecraftforge.gradle')) return
+    def selected = minecraft.runs.findAll { it.name.toLowerCase(Locale.ROOT).contains('gametest') }
+    if (selected.empty) return
+    def sets = project.extensions.getByName('sourceSets')
+    if (sets.findByName('bcNativeTiming') != null) throw new GradleException('Reserved native timing sourceSet collision')
+    def main = sets.getByName('main')
+    def timing = sets.create('bcNativeTiming')
+    timing.java.setSrcDirs([new File(supportRoot, 'src/nativeTiming/java')])
+    timing.resources.setSrcDirs([new File(supportRoot, 'src/nativeTiming/resources')])
+    timing.compileClasspath = main.compileClasspath
+    timing.runtimeClasspath = timing.output + timing.compileClasspath
+
+    // These exact cached source-SDK class bytes were reviewed using javap -c -p. They prove the
+    // named selectors, sole Stopwatch.start before return/no body dispatch, tick listener ordering,
+    // millisecond stopwatch getter and retry-new-instance lifecycle. SRG/unknown bytes fail closed.
+    def reviewed = [
+        'net/minecraft/gametest/framework/GameTestInfo.class': [
+            'da7c3a642aee7d357df84a5caea93ee09c8b6e0b39e1e75a80874441c2d3eabe', // .13/.22 official
+            'c998fac6a498f510b6fa35a483437af0aca6a533afb25ac31b9340ea0a2f7b46'], // .13 Parchment
+        'net/minecraft/gametest/framework/GameTestServer.class': [
+            'f3d8dfa04059f50cf78b6ef48cd39003a1cfa7465182292bd7ad95618cd01985',
+            '32a6ab00a5edd9aedb407220c6636d324d825c991bd98a0a33fbf1947c8048fa'],
+        'net/minecraft/gametest/framework/GameTestListener.class': [
+            '8af1df5903504a2b65412b2718d45b3ff5b468143dbcc00b21e7a1da483128f4'],
+        'net/minecraft/gametest/framework/ReportGameListener.class': [
+            'ec170f75d7b673d663ff8cb2bf253d9f11c76f99b947565725c56ef6976ccf70',
+            '4e009c6275a86cfe4e72436b5a941ca0675bcfb3fe048a17578c8f42b02f3f3a'],
+        'net/minecraft/gametest/framework/GameTestRunner.class': [
+            'a35e495714b03182f4e646b8345736a97d37f9a030a67bda0e2e0fbf9f6e65fe',
+            'baac171315410c281984f8a76156d7d508e70db662196e7bc5b9a8864002a599']
+    ]
+    def abi = tasks.register('verifyBcNativeTimingAbi') {
+        group = 'verification'
+        description = 'Rejects unreviewed/SRG source SDK timing lifecycle ABI without running Minecraft.'
+        doLast {
+            def configuration = new JsonSlurper().parse(new File(supportRoot, 'src/nativeTiming/resources/bc_native_timing.mixins.json'))
+            if (configuration.package != 'bc.nonshipping.nativetiming.mixin' ||
+                    configuration.mixins != ['GameTestServerTimingMixin', 'GameTestInfoTimingMixin'])
+                throw new GradleException('Unexpected native timing Mixin namespace/inventory')
+            def reserved = new File(supportRoot, 'src/nativeTiming/java/' + configuration.package.replace('.', '/'))
+            def reservedSources = project.fileTree(reserved).matching { include '**/*.java' }.files*.name.sort()
+            if (reservedSources != ['GameTestInfoTimingMixin.java', 'GameTestServerTimingMixin.java'])
+                throw new GradleException('Non-Mixin helper in reserved native timing namespace')
+            ['NativeTimingObserver.java', 'NativeTimingRecords.java'].each { name ->
+                def helper = new File(supportRoot, 'src/nativeTiming/java/bc/nonshipping/nativetiming/' + name)
+                if (!helper.isFile() || !helper.getText('UTF-8').startsWith('package bc.nonshipping.nativetiming;'))
+                    throw new GradleException('Native timing helper escaped ordinary namespace: ' + name)
+            }
+            def found = [:].withDefault { [] }
+            timing.compileClasspath.files.findAll { it.isFile() && it.name.endsWith('.jar') }.each { jar ->
+                new ZipFile(jar).withCloseable { zip ->
+                    reviewed.each { name, hashes ->
+                        def entry = zip.getEntry(name)
+                        if (entry != null) {
+                            def hash = zip.getInputStream(entry).withCloseable { input ->
+                                MessageDigest.getInstance('SHA-256').digest(input.bytes).encodeHex().toString()
+                            }
+                            if (!hashes.contains(hash)) throw new GradleException('Unreviewed native timing SDK ABI: ' + name)
+                            found[name].add(jar.canonicalPath)
+                        }
+                    }
+                }
+            }
+            reviewed.keySet().each { name ->
+                if (found[name].size() != 1) throw new GradleException('Missing/ambiguous native timing SDK ABI: ' + name)
+            }
+        }
+    }
+    tasks.named(timing.compileJavaTaskName, JavaCompile).configure {
+        dependsOn(abi)
+        options.release.set(17)
+        options.annotationProcessorPath = files()
+        options.compilerArgs.add('-proc:none')
+    }
+
+    // These exclusions cover both classes/resources and sources archives, including custom Jar tasks.
+    tasks.withType(AbstractArchiveTask).configureEach {
+        exclude('bc/nonshipping/nativetiming/**', '**/bc_native_timing.mixins.json', '**/src/nativeTiming/**')
+    }
+
+    selected.each { run ->
+        // Only attach to the existing actual main-owning mod. Never create an overlay mod/JPMS module.
+        def owners = run.mods.findAll { mod -> mod.sources.contains(main) }
+        if (owners.size() != 1) throw new GradleException('Native timing requires exactly one main-owning mod: ' + run.name)
+        owners.first().source(timing)
+        run.args('--mixin.config', 'bc_native_timing.mixins.json')
+        String suffix = UUID.randomUUID().toString()
+        File health = layout.buildDirectory.file('native-timing/' + run.name + '/' + suffix + '.health.json').get().asFile
+        def requested = System.getenv('BC_TIMING_FILE')
+        File sink = requested ? new File(requested) : new File(project.rootDir, 'generated/timing/native-' + suffix + '.jsonl')
+        safePath(health)
+        safePath(sink)
+        run.property('bc.nativeTiming.file', sink.absolutePath)
+        run.property('bc.nativeTiming.health', health.absolutePath)
+        run.property('bc.nativeTiming.task', project.path == ':' ? ':' + run.taskName : project.path + ':' + run.taskName)
+        run.property('bc.nativeTiming.buildRoot', project.rootDir.absolutePath)
+        def finalizeTiming = tasks.register('verifyBcNativeTiming' + run.name.capitalize()) {
+            group = 'verification'
+            description = 'Checks durable native attempt observation health, not native test acceptance.'
+            doLast {
+                safePath(health)
+                if (!health.isFile()) throw new GradleException('Missing native timing health (not observed/hard-killed JVM): ' + health)
+                def receipt = new JsonSlurper().parse(health)
+                if (receipt.schema != 'bc.native_timing_health.v1' || receipt.healthy != true ||
+                        receipt.interrupted != false || receipt.started_count != receipt.terminal_count)
+                    throw new GradleException('Native timing incomplete/unhealthy: ' + health)
+                def starts = [] as Set
+                def terminals = [] as Set
+                safePath(sink)
+                if (receipt.started_count > 0 && !sink.isFile()) throw new GradleException('Missing native timing records')
+                // Another process may be appending to the shared sink. Only consume complete
+                // newline-delimited records from this read snapshot; our own records were fsynced
+                // before the health receipt. A foreign partial tail is not our missing terminal.
+                String snapshot = sink.isFile() ? sink.getText('UTF-8') : ''
+                int complete = snapshot.lastIndexOf('\n')
+                String completeLines = complete < 0 ? '' : snapshot.substring(0, complete + 1)
+                completeLines.eachLine { line ->
+                    def record = new JsonSlurper().parseText(line)
+                    if (record.schema == 'bc.timing.v1' && record.scope == 'native_test' &&
+                            record.invocation_id == receipt.invocation_id) {
+                        if (record.event == 'start') {
+                            if (record.status != 'RUNNING' || record.duration_ns != null || !starts.add(record.operation_id))
+                                throw new GradleException('Invalid/duplicate native timing start')
+                        } else if (record.event == 'terminal') {
+                            if (!starts.contains(record.operation_id) || !terminals.add(record.operation_id) ||
+                                    !(record.status in ['SUCCEEDED', 'FAILED', 'TIMED_OUT']) ||
+                                    !(record.duration_ns instanceof Number) || record.duration_ns < 0 ||
+                                    !(record.native_duration_ms instanceof Number) || record.native_duration_ms < 0)
+                                throw new GradleException('Invalid/duplicate/incomplete native timing terminal')
+                        } else throw new GradleException('Unknown native timing event')
+                    }
+                }
+                if (starts != terminals || starts.size() != receipt.started_count)
+                    throw new GradleException('Unbalanced native timing records')
+            }
+        }
+        tasks.matching { it.name == run.taskName }.configureEach {
+            dependsOn(tasks.named(timing.classesTaskName))
+            finalizedBy(finalizeTiming)
+        }
+    }
+}

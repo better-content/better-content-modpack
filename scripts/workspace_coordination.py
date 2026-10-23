@@ -179,6 +179,38 @@ class Coordinator:
             s['tasks'][task] = t
             return dict(t)
 
+    def task_settings(self, task, generation, owner, helper_limit):
+        """Change only an active lead's helper bound; registration stays initial-only."""
+        if type(generation) is not int or generation < 1:
+            raise Conflict('positive exact task generation required')
+        if type(helper_limit) is not int or not 0 <= helper_limit <= 16:
+            raise Conflict('helper limit must be an integer 0..16')
+        topology = {k: os.environ.get('HERDR_' + k.upper() + ('_ID' if k != 'session' else ''), '')
+                    for k in ('session', 'workspace', 'tab', 'pane')}
+        with self.transaction(admission=True) as s:
+            self.admit(s)
+            t = self.active(s, task, generation)
+            if not owner or t['owner'] != owner:
+                raise Conflict('only the accountable task owner may change settings')
+            if not all(topology.values()) or t.get('topology') != topology:
+                raise Conflict('task settings require the registered lead exact Herdr topology')
+            # Partial/failed launches still own slots. Count conservatively across
+            # all generations of this task; never repair or discard assignments here.
+            live = sum(a['task'] == task and a['state'] in ('active', 'launching', 'launch-failed')
+                       for a in s['assignments'].values())
+            if helper_limit < live:
+                raise Conflict('helper limit cannot be below live assignments (including partial launches)')
+            previous = t['helper_limit']
+            if type(previous) is not int or not 0 <= previous <= 16:
+                raise Conflict('malformed registered helper limit')
+            if previous != helper_limit:
+                key = uuid.uuid4().hex
+                s.setdefault('settings_changes', {})[key] = dict(task=task, generation=generation,
+                    owner=owner, topology=topology, previous_helper_limit=previous,
+                    helper_limit=helper_limit, live_assignments=live, at=time.time())
+                t['helper_limit'] = helper_limit
+            return dict(t)
+
     def reboot_recover(self, task, generation, old_owner, owner, reason):
         """Explicit same-conversation reboot transfer; never reconcile jobs/leases."""
         return self._recover_actor(task, generation, old_owner, owner, reason, continuation=False)
@@ -737,6 +769,7 @@ def main(argv=None):
         'lease-acquire': ['task', 'generation', 'owner', 'resource'], 'lease-release': ['lease', 'owner'],
         'fixture-job': ['task', 'generation', 'owner'],
         'assign': ['task', 'owner', 'helper', 'workspace', 'tab', 'pane', 'area'],
+        'task-settings': ['task', 'generation', 'owner', 'helper-limit'],
         'result': ['assignment', 'generation'],
         'helper-launch': ['task', 'owner', 'helper', 'area', 'prompt', 'cwd']}
     for name, fields in specs.items():
@@ -755,7 +788,7 @@ def main(argv=None):
             q.add_argument('--helper-limit', type=int, default=4)
             q.add_argument('--operation', action='append', default=[])
         for f in fields:
-            q.add_argument('--' + f, required=True, type=int if f == 'generation' else str,
+            q.add_argument('--' + f, required=True, type=int if f in ('generation', 'helper-limit') else str,
                            **({'action': 'append'} if f == 'area' and name == 'turn-acquire' else {}))
     q = sub.add_parser('job-run')
     for field in ('task','owner','operation','cwd','log'):
@@ -770,6 +803,7 @@ def main(argv=None):
         if cmd == 'live': r = c.live()
         elif cmd == 'authority': r = c.authority(a.task, a.generation, a.owner, a.operation)
         elif cmd == 'task-register': r = c.register(a.task, a.owner, helper_limit=a.helper_limit, operations=a.operation)
+        elif cmd == 'task-settings': r = c.task_settings(a.task, a.generation, a.owner, a.helper_limit)
         elif cmd == 'reboot-recover': r = c.reboot_recover(a.task, a.generation, a.old_owner, a.owner, a.reason)
         elif cmd == 'continuation-recover': r = c.continuation_recover(a.task, a.generation, a.old_owner, a.owner, a.reason)
         elif cmd in ('task-cancel', 'task-complete'): r = c.cancel(a.task, a.owner, cmd == 'task-complete')

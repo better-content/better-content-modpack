@@ -1,0 +1,171 @@
+import groovy.json.JsonOutput
+import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
+import java.nio.file.Files
+import java.nio.file.LinkOption
+import java.nio.file.StandardOpenOption
+import java.time.Instant
+import java.util.concurrent.ConcurrentHashMap
+import org.gradle.api.execution.TaskExecutionListener
+import org.gradle.api.tasks.TaskState
+import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.TestDescriptor
+import org.gradle.api.tasks.testing.TestListener
+import org.gradle.api.tasks.testing.TestResult
+
+// Invoke with --init-script. No verdict reuse, test selection or timeout mutation.
+// Native JavaExec/GameTest tasks are task scope, NEVER individual-test scope.
+// May be installed by both --init-script and root apply(from=...). Install once per Gradle.
+if (gradle.extensions.extraProperties.has('bcTimingInstalled')) return
+gradle.extensions.extraProperties.set('bcTimingInstalled', true)
+def monitor = new Object()
+def active = new ConcurrentHashMap<Object, Map>()
+def invocation = UUID.randomUUID().toString()
+def hookRoot = buildscript.sourceFile.canonicalFile.parentFile.parentFile
+def sink = null
+def context = [:]
+['RUN_ID', 'REVISION', 'INPUT_ID', 'PROFILE', 'ENVIRONMENT_ID', 'CACHE_ID'].each {
+    context[it.toLowerCase(Locale.ROOT)] = System.getenv('BC_TIMING_' + it) ?:
+        (it == 'RUN_ID' ? System.getenv('BC_TEST_RUN_ID') : null) ?: 'UNKNOWN'
+}
+def budget = System.getenv('BC_TIMING_TIMEOUT_SECONDS')
+def timeoutNs = budget ? new BigDecimal(budget).multiply(new BigDecimal('1000000000')).longValueExact() : null
+if (timeoutNs != null && timeoutNs <= 0) throw new GradleException('Invalid configured timing timeout')
+
+def append = { Map record ->
+    synchronized (monitor) {
+        if (sink == null) throw new GradleException('Timing sink not initialized')
+        def path = sink.toPath().toAbsolutePath()
+        if (path != path.normalize()) throw new GradleException('Timing output traversal')
+        for (def ancestor = path; ancestor != null; ancestor = ancestor.parent) {
+            if (Files.isSymbolicLink(ancestor)) throw new GradleException('Timing output symlink: ' + ancestor)
+        }
+        Files.createDirectories(path.parent)
+        byte[] bytes = (JsonOutput.toJson(record + [observed_at: Instant.now().toString()]) + '\n').getBytes('UTF-8')
+        FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE, LinkOption.NOFOLLOW_LINKS).withCloseable { channel ->
+            channel.lock().withCloseable {
+                channel.position(channel.size())
+                def buffer = ByteBuffer.wrap(bytes)
+                while (buffer.hasRemaining()) channel.write(buffer)
+                channel.force(true)
+            }
+        }
+    }
+}
+def begin = { Object key, String scope, Map detail ->
+    def observation = [fields: context + [schema: 'bc.timing.v1', operation_id: UUID.randomUUID().toString(),
+        invocation_id: invocation, scope: scope, units: 'nanoseconds', clock: 'monotonic',
+        duration_boundary: ['gradle_task': 'gradle_beforeExecute_to_afterExecute_callbacks',
+            'junit_suite': 'gradle_beforeSuite_to_afterSuite_callbacks',
+            'junit_test': 'gradle_beforeTest_to_afterTest_callbacks'][scope],
+        configured_timeout_ns: null, timeout_scope: scope, enclosing_process_timeout_ns: timeoutNs, expected_runtime_ns: null,
+        timeout_policy: 'UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED'] + detail, started: System.nanoTime()]
+    append(observation.fields + [event: 'start', status: 'RUNNING', duration_ns: null])
+    active.put(key, observation)
+}
+def finish = { Object key, String status, Map detail ->
+    def observation = active.get(key)
+    if (observation == null) throw new GradleException('Missing timing start: ' + key)
+    append(observation.fields + [event: 'terminal', status: status,
+        duration_ns: Math.max(0L, System.nanoTime() - observation.started)] + detail)
+    active.remove(key, observation)
+}
+
+def configureSink = { File root ->
+    def requested = System.getenv('BC_TIMING_FILE')
+    sink = requested ? new File(requested) : new File(root, 'generated/timing/' + invocation + '.jsonl')
+    if (!sink.isAbsolute()) throw new GradleException('BC_TIMING_FILE must be absolute')
+    gradle.extensions.extraProperties.set('bcTimingFile', sink.absolutePath)
+}
+// Init scripts run before settings; project-applied scripts run after that callback.
+def targetProject = null
+try { targetProject = project } catch (MissingPropertyException ignored) { }
+if (targetProject != null) configureSink(targetProject.rootDir)
+else gradle.settingsEvaluated { settings -> configureSink(settings.rootDir) }
+
+// Explicitly source-native only. Merely applying this timing script never changes JavaExec,
+// Minecraft client/server or packaged runtime classpaths. The native adapter owns RunConfig checks.
+if (System.getenv('BC_TIMING_NATIVE') == 'true') {
+    def nativeScript = new File(hookRoot, 'gradle/native-test-timing.gradle')
+    if (!nativeScript.isFile()) throw new GradleException('Enabled native timing adapter is missing: ' + nativeScript)
+    // Apply before the owning build script: the adapter must register afterEvaluate
+    // before Forge registers RunConfig -> JavaExec generation. It checks Forge itself.
+    def attachNative = { project -> project.apply(from: nativeScript) }
+    gradle.beforeProject { project -> attachNative(project) }
+    if (targetProject != null) attachNative(targetProject)
+}
+gradle.addListener(new TaskExecutionListener() {
+    void beforeExecute(Task task) {
+        begin(task, 'gradle_task', [task_path: task.path, build_root: task.project.rootDir.absolutePath,
+            configured_timeout_ns: task.timeout.orNull?.toNanos()])
+    }
+    void afterExecute(Task task, TaskState state) {
+        def status = state.failure != null ? 'FAILED' : state.noSource ? 'NO_SOURCE' :
+            state.upToDate ? 'UP_TO_DATE' : state.skipped ? 'SKIPPED' : 'SUCCEEDED'
+        finish(task, status, [exception_type: state.failure?.class?.name, skip_message: state.skipMessage])
+    }
+})
+gradle.allprojects { project ->
+    project.tasks.withType(Test).configureEach { Test task ->
+        task.addTestListener(new TestListener() {
+            void beforeSuite(TestDescriptor descriptor) {
+                begin([task.path, descriptor], 'junit_suite', [task_path: task.path,
+                    build_root: task.project.rootDir.absolutePath, name: descriptor.name,
+                    class_name: descriptor.className, parent_name: descriptor.parent?.name])
+            }
+            void afterSuite(TestDescriptor descriptor, TestResult result) {
+                finish([task.path, descriptor], result.resultType.toString(), [test_count: result.testCount,
+                    failed_count: result.failedTestCount, skipped_count: result.skippedTestCount])
+            }
+            void beforeTest(TestDescriptor descriptor) {
+                begin([task.path, descriptor], 'junit_test', [task_path: task.path,
+                    build_root: task.project.rootDir.absolutePath, name: descriptor.name,
+                    class_name: descriptor.className, parent_name: descriptor.parent?.name])
+            }
+            void afterTest(TestDescriptor descriptor, TestResult result) {
+                finish([task.path, descriptor], result.resultType.toString(), [exception_types: result.exceptions.collect { it.class.name }])
+            }
+        })
+    }
+}
+gradle.buildFinished { result ->
+    // Attempt each finalizer independently and preserve the original build failure.
+    Throwable finalizationFailure = null
+    active.keySet().toList().each { key ->
+        try { finish(key, 'INTERRUPTED', [:]) }
+        catch (Throwable failure) {
+            if (finalizationFailure == null) finalizationFailure = failure
+            else finalizationFailure.addSuppressed(failure)
+        }
+    }
+    try {
+        def reporter = new File(hookRoot, 'scripts/timing_report.py')
+        if (!reporter.isFile()) throw new GradleException('Automatic timing reporter is missing: ' + reporter)
+        if (sink != null && sink.isFile()) {
+            def output = new File(sink.parentFile, sink.name + '.report.json')
+            def reportLog = new File(sink.parentFile, sink.name + '.report.log')
+            def process = new ProcessBuilder('python3', '-B', reporter.absolutePath, '--allow-incomplete', '--output',
+                output.absolutePath, sink.absolutePath).redirectErrorStream(true).redirectOutput(reportLog).start()
+            try {
+                // A separate fixed safety cap for this inert stdlib reducer, not a test timeout.
+                if (!process.waitFor(30, java.util.concurrent.TimeUnit.SECONDS))
+                    throw new GradleException('Automatic timing report exceeded reporting safety cap; log=' + reportLog)
+                if (process.exitValue() != 0)
+                    throw new GradleException('Automatic timing report failed (' + process.exitValue() + '); log=' + reportLog)
+            } finally {
+                if (process.isAlive()) {
+                    process.destroyForcibly()
+                    if (!process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS))
+                        throw new GradleException('Automatic timing reporter cleanup incomplete; pid=' + process.pid())
+                }
+            }
+        }
+    } catch (Throwable failure) {
+        if (finalizationFailure == null) finalizationFailure = failure
+        else finalizationFailure.addSuppressed(failure)
+    }
+    if (finalizationFailure != null) {
+        if (result.failure != null) result.failure.addSuppressed(finalizationFailure)
+        else throw finalizationFailure
+    }
+}

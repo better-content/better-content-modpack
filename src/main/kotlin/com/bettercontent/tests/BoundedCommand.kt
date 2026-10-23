@@ -22,6 +22,38 @@ object BoundedCommand {
     fun run(cwd: Path, command: List<String>, log: Path, budget: Duration,
             environment: Map<String, String> = emptyMap(), input: String? = null): Int {
         require(command.isNotEmpty() && !budget.isNegative && !budget.isZero)
+        val timing = TimingRecords.process(log.toAbsolutePath(), cwd, command, budget, environment)
+        var status: Int? = null
+        var primary: Throwable? = null
+        try {
+            return runOwned(cwd, command, log, budget, environment, input, timing).also { status = it }
+        } catch (failure: Throwable) {
+            primary = failure
+            throw failure
+        } finally {
+            val outcome = when {
+                primary is InterruptedException || primary is java.util.concurrent.CancellationException -> "CANCELLED"
+                primary?.message?.startsWith("command timed out after ") == true -> "TIMED_OUT"
+                primary != null -> "FAILED"
+                status == 0 -> "SUCCEEDED"
+                else -> "FAILED"
+            }
+            // FileChannel locks are interruptible. Persist cancellation before restoring the flag.
+            val interrupted = Thread.interrupted()
+            try { timing.finish(outcome, status, primary) }
+            catch (timingFailure: Throwable) {
+                val original = primary
+                if (original != null) original.addSuppressed(timingFailure)
+                else if (status != null && status != 0) {
+                    // Preserve the exact nonzero process status; it cannot become acceptance.
+                    System.err.println("timing recording failed for $log: $timingFailure")
+                } else throw timingFailure
+            } finally { if (interrupted) Thread.currentThread().interrupt() }
+        }
+    }
+
+    private fun runOwned(cwd: Path, command: List<String>, log: Path, budget: Duration,
+                         environment: Map<String, String>, input: String?, timing: TimingRecords.Observation): Int {
         val output = log.toAbsolutePath()
         require(output == output.normalize()) { "command output must not contain traversal components" }
         val home = Path.of(System.getProperty("user.home")).toAbsolutePath().normalize()
@@ -40,6 +72,8 @@ object BoundedCommand {
             ProcessBuilder(listOf("setsid", "--wait") + command).directory(cwd.toFile()).redirectErrorStream(true)
                 .redirectOutput(output.toFile()).apply {
                     environment().putAll(environment)
+                    // A logical selector names this invocation, never arbitrary nested commands.
+                    environment().remove("BC_TIMING_PROCESS_NAME")
                     if (inputFile != null) redirectInput(inputFile.toFile())
                 }.start()
         } catch (failure: Throwable) { inputFile?.let(Files::deleteIfExists); throw failure }
@@ -69,12 +103,17 @@ object BoundedCommand {
             }.exceptionOrNull()?.let(failure::addSuppressed)
             throw failure
         } finally {
-            try { tracker.stop(Duration.ofSeconds(2), Duration.ofSeconds(5)) }
+            try {
+                tracker.stop(Duration.ofSeconds(2), Duration.ofSeconds(5))
+                timing.cleanupComplete = true
+            }
             catch (cleanup: Throwable) {
+                timing.cleanupComplete = false
                 val original = primary
                 if (original != null) { original.addSuppressed(cleanup); throw original } else throw cleanup
             }
             finally {
+                timing.processExitCode = runCatching { process.exitValue() }.getOrNull()
                 runCatching { inputFile?.let(Files::deleteIfExists) }.exceptionOrNull()?.let {
                     val original = primary
                     if (original != null) original.addSuppressed(it) else throw it

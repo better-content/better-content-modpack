@@ -10,6 +10,13 @@
     "gradle.properties",
     "src/main/kotlin/com/bettercontent/tests/release/*.kt",
     "src/main/kotlin/com/bettercontent/tests/BoundedCommand.kt",
+    "src/main/kotlin/com/bettercontent/tests/TimingRecords.kt",
+    "scripts/bounded_facade.py",
+    "scripts/timing_report.py",
+    "scripts/timing-python/sitecustomize.py",
+    "gradle/test-timing.init.gradle",
+    "gradle/native-test-timing.gradle",
+    "src/nativeTiming/**",
     "src/main/kotlin/com/bettercontent/tests/Validation.kt",
     "src/main/kotlin/com/bettercontent/tests/Oc2rCompatibilityEvidence.kt",
     "src/main/kotlin/com/bettercontent/tests/RunnerMutex.kt"

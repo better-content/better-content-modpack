@@ -10,8 +10,6 @@ import java.nio.file.StandardCopyOption
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
@@ -89,6 +87,13 @@ private fun prepareRelease(args: Array<String>) {
     val skipTests = args[2].toBooleanStrict()
     val forceRebuild = args[3].toBooleanStrict()
     require(jobs in 1..4) { "release jobs must be between 1 and 4" }
+    // The scheduler/private-worker controls are available, but real provider concurrency
+    // must not consume a mutable global candidate-JAR directory. Until the authoritative
+    // build/test dependency views and atomic publication are proven, reject it BEFORE work.
+    require(jobs == 1) {
+        "Provider-parallel qualification is NOT READY: immutable build/audit dependency views " +
+            "and atomic candidate publication remain unvalidated. Only jobs=1 is currently supported."
+    }
     require(!skipTests || !forceRebuild) { "forced rebuild requires source verification" }
     val workspace = root.parent
     val manifest: ActiveModManifest = mapper.readValue(root.resolve("gradle/active-custom-mods.json").toFile())
@@ -181,36 +186,40 @@ private fun prepareRelease(args: Array<String>) {
     // Run-scoped dependency preparation is retained on success and failure alike.
     runLogged(root, packageResolveCommand(root, dependencyWarmup), evidence.resolve("dependency-cache.log"))
 
-    val built = mutableListOf<BuiltMod>()
-    val failures = mutableListOf<String>()
-    val pending = manifest.mods.associateBy { it.repository }.toMutableMap()
-    while (pending.isNotEmpty() && failures.isEmpty()) {
-        val completed = built.map { it.definition.repository }.toSet()
-        val completedHashes = built.associate { it.definition.repository to it.sha256 }
-        val ready = pending.values.filter { mod -> mod.dependsOn.all { it in completed } }
-        require(ready.isNotEmpty()) { "active-mod release dependencies contain a cycle: ${pending.keys.sorted()}" }
-        val executor = Executors.newFixedThreadPool(jobs)
-        val futures = ready.associateWith { mod ->
-            executor.submit(Callable {
+    val isolation = BuildIsolationPool(root, evidence.resolve("build-isolation"), jobs)
+    Files.writeString(evidence.resolve("build-isolation-policy.tsv"), manifest.mods.joinToString("\n", postfix = "\n") { mod ->
+        val reasons = BuildIsolationPool.sharedCacheReasons(workspace.resolve("mod_source/${mod.repository}"))
+        "${mod.repository}\t${if (reasons.isNotEmpty()) "GLOBAL_LOCK_LEGACY" else "PRIVATE_WORKER_HOME"}\t${reasons.joinToString(";")}"
+    })
+    // Snapshot before admitting legacy writers, so their whole-invocation global lock
+    // cannot postpone seed creation until after a long first provider has finished.
+    if (manifest.mods.any { mod ->
+        !BuildIsolationPool.requiresSharedCache(workspace.resolve("mod_source/${mod.repository}")) &&
+            (diagnostic != null || (verification?.affected?.contains(mod.repository)
+                ?: (forceRebuild || sourceUpdatesByRepository.getValue(mod.repository).status != "same")))
+    }) isolation.prepare()
+    val scheduled = ParallelBuildScheduler(jobs).run<BuiltMod>(manifest.mods.associate { it.repository to it.dependsOn }) { name, dependencies ->
+                val mod = manifest.mods.single { it.repository == name }
                 val update = sourceUpdatesByRepository.getValue(mod.repository)
                 // Diagnostic mode performs EVERY ordinary/profile gate for all other providers.
                 val mustBuild = diagnostic != null || (verification?.affected?.contains(mod.repository) ?: forceRebuild)
                 val consumed = mod.dependsOn.associateWith { dependency ->
-                    completedHashes.getValue(dependency)
+                    dependencies.getValue(dependency).sha256
                 }
-                verification?.requireConsumedStages(mod, consumed)
+                verification?.let { synchronized(it) { it.requireConsumedStages(mod, consumed) } }
                 val item = if (diagnostic != null && mod.repository == DiagnosticControls.REPOSITORY) {
                     diagnostic.revalidate()
                     val staged = staging.resolve(mod.artifact)
                     Files.copy(diagnostic.artifact, staged)
                     require(Hashes.sha256(staged) == diagnostic.artifactSha256) { "deferred Controls copy changed" }
                     BuiltMod(mod, diagnostic.artifactCommit, staged, diagnostic.artifactSha256, "DEFERRED_UNQUALIFIED")
-                } else if (verification != null && !mustBuild) verification.reusable(mod) ?:
-                    build(root, workspace, evidence, staging, mod, update.copy(status = "same"), skipTests, false)
+                } else if (verification != null && !mustBuild) synchronized(verification) { verification.reusable(mod) } ?:
+                    build(root, workspace, evidence, staging, mod, update.copy(status = "same"), skipTests, false, isolation = isolation)
                 else build(root, workspace, evidence, staging, mod, update, skipTests, mustBuild,
-                    if (verification != null && mustBuild) verification.reusableBuild(mod, consumed) else null)
-                verification?.requireConsumedStages(mod, consumed)
-                if (verification != null && !mustBuild) verification.requireReusable(item)
+                    if (verification != null && mustBuild) synchronized(verification) { verification.reusableBuild(mod, consumed) } else null,
+                    isolation = isolation)
+                verification?.let { synchronized(it) { it.requireConsumedStages(mod, consumed) } }
+                if (verification != null && !mustBuild) synchronized(verification) { verification.requireReusable(item) }
                 val reflection = bytecodeReflectionViolations(mod.repository,
                     workspace.resolve("mod_source/${mod.repository}"), item.jar, reflectionAllowances)
                 require(reflection.isEmpty()) {
@@ -220,18 +229,9 @@ private fun prepareRelease(args: Array<String>) {
                     verification.checkpoint(item, consumed)
                 }
                 item
-            })
-        }
-        executor.shutdown()
-        futures.forEach { (mod, future) ->
-            try {
-                built += future.get()
-                pending.remove(mod.repository)
-            } catch (error: Exception) {
-                failures += "${mod.repository}: ${error.cause?.message ?: error.message}"
-            }
-        }
     }
+    val built = scheduled.completed.values.toList()
+    val failures = scheduled.failures
     if (failures.isNotEmpty()) Files.writeString(evidence.resolve("failures.txt"), failures.joinToString("\n", postfix = "\n"))
     require(failures.isEmpty()) { "custom-mod validation failed; nothing was deployed:\n${failures.joinToString("\n")}" }
 
@@ -354,6 +354,24 @@ internal fun build(
     skipTests: Boolean,
     forceRebuild: Boolean,
     reusableBuild: BuiltMod? = null,
+    isolation: BuildIsolationPool? = null,
+): BuiltMod {
+    val repository = workspace.resolve("mod_source").resolve(mod.repository)
+    val action: (BuildIsolationContext?) -> BuiltMod = { context ->
+        buildWithResources(root, workspace, evidence, staging, mod, sourceUpdate, skipTests, forceRebuild, reusableBuild, context)
+    }
+    if (sourceUpdate.status == "same" && !forceRebuild) {
+        return withBuildResourceLock(repository.resolve(".gradle/bc-source-workspace.lock")) { action(null) }
+    }
+    return if (isolation != null) isolation.withWorker(repository, action) else withForgeCacheLock(root) {
+        withBuildResourceLock(repository.resolve(".gradle/bc-source-workspace.lock")) { action(null) }
+    }
+}
+
+private fun buildWithResources(
+    root: Path, workspace: Path, evidence: Path, staging: Path, mod: ActiveMod,
+    sourceUpdate: SourceUpdate, skipTests: Boolean, forceRebuild: Boolean,
+    reusableBuild: BuiltMod?, context: BuildIsolationContext?,
 ): BuiltMod {
     val repository = workspace.resolve("mod_source").resolve(mod.repository)
     val log = evidence.resolve("mod-${mod.repository}.log")
@@ -374,7 +392,7 @@ internal fun build(
     val profiles = if (!skipTests && mod.verificationProfiles.isNotEmpty()) mod.verificationProfiles else
         listOf(VerificationProfile("default", if (skipTests) listOf("stageRuntimeJar") else mod.tasks, clean = reusable == null))
     val jar = repository.resolve("build/libs").resolve(mod.artifact)
-    withForgeCacheLock(root) {
+    run {
         val tracked = capture(repository, listOf("git", "ls-files", "-z")).split('\u0000').filter(String::isNotBlank).toSet()
         for (profile in profiles) {
             val explicit = !skipTests && mod.verificationProfiles.isNotEmpty()
@@ -393,9 +411,64 @@ internal fun build(
                 require(Hashes.sha256(jar) == reusable.sha256) { "restored build bytes changed" }
             }
             val profileLog = if (explicit) scope.resolve("verification.log") else log
-            val command = providerVerificationCommand(repository, profile.tasks, !profile.clean, profile.properties)
-            runLogged(repository, if (skipTests) command else cropsSourceInputCommand(root, repository, command),
-                profileLog, providerBuildEnvironment(staging))
+            val ordinaryCommand = providerVerificationCommand(repository, profile.tasks, !profile.clean, profile.properties) +
+                listOf("--init-script", root.resolve("gradle/test-timing.init.gradle").toAbsolutePath().toString())
+            val command = context?.command(repository, ordinaryCommand) ?: ordinaryCommand
+            val rootInput = BuildIsolationTiming.rootInput(root, evidence) { sourceIdentity(root) }
+            val consumedInputs = if (mod.dependsOn.isEmpty()) emptyMap() else {
+                val definitions: ActiveModManifest = mapper.readValue(root.resolve("gradle/active-custom-mods.json").toFile())
+                mod.dependsOn.associateWith { dependency ->
+                    val provider = definitions.mods.single { it.repository == dependency }
+                    Hashes.sha256(staging.resolve(provider.artifact))
+                }
+            }
+            val recipe = BuildIsolationTiming.digest(mapOf(
+                "repository" to mod.repository, "artifact" to mod.artifact, "tasks" to mod.tasks.joinToString("\u0000"),
+                "profile" to verificationProfileIdentity(listOf(profile)),
+                "all-profiles" to verificationProfileIdentity(mod.verificationProfiles),
+                "support" to mod.supportArtifacts.joinToString("\u0000"), "skip-tests" to skipTests.toString(),
+            ))
+            val inputId = BuildIsolationTiming.inputIdentity(rootInput, initialSource, recipe, consumedInputs)
+            val environmentFacts = BuildIsolationTiming.environmentFacts(context != null)
+            val environmentId = BuildIsolationTiming.digest(environmentFacts)
+            val cache = context?.cacheObservation() ?: BuildIsolationCacheObservation("UNKNOWN",
+                mapOf("mode" to "legacy-shared", "cache-condition" to "UNKNOWN"))
+            Files.writeString(scope.resolve("timing-context-${mod.repository}-${profile.name}.tsv"),
+                (environmentFacts.mapKeys { "environment:${it.key}" } + cache.facts.mapKeys { "cache:${it.key}" } + mapOf(
+                    "input-id" to inputId, "root-input-id" to rootInput, "provider-source-id" to initialSource,
+                    "recipe-id" to recipe, "environment-id" to environmentId, "cache-id" to cache.id,
+                ) + consumedInputs.mapKeys { "dependency:${it.key}" }).toSortedMap().entries.joinToString("\n", postfix = "\n") {
+                    "${it.key}\t${it.value.replace("\n", "\\n").replace("\t", "\\t")}" })
+            val timing = mapOf(
+                "BC_TIMING_FILE" to scope.resolve("timing-${mod.repository}-${profile.name}.jsonl").toAbsolutePath().toString(),
+                "BC_TIMING_TIMEOUT_SECONDS" to "2700",
+                "BC_TIMING_RUN_ID" to (System.getenv("BC_TEST_RUN_ID") ?: evidence.parent.fileName.toString()),
+                "BC_TIMING_REVISION" to expectedCommit,
+                "BC_TIMING_INPUT_ID" to inputId,
+                "BC_TIMING_PROFILE" to "${mod.repository}/${profile.name}",
+                "BC_TIMING_PROCESS_NAME" to "source:${mod.modId}:${profile.name}",
+                "BC_TIMING_ENVIRONMENT_ID" to environmentId,
+                "BC_TIMING_CACHE_ID" to cache.id,
+                "BC_TIMING_NATIVE" to "true",
+                "BC_TIMING_PYTHON" to "true",
+                "PYTHONPATH" to (root.resolve("scripts/timing-python").toAbsolutePath().toString() +
+                    (System.getenv("PYTHONPATH")?.takeIf { it.isNotEmpty() }?.let { java.io.File.pathSeparator + it } ?: "")),
+            )
+            var commandFailure: Throwable? = null
+            try {
+                runLogged(repository, if (skipTests) command else cropsSourceInputCommand(root, repository, command),
+                    profileLog, providerBuildEnvironment(staging) + (context?.environment() ?: emptyMap()) + timing)
+            } catch (error: Throwable) {
+                commandFailure = error
+                throw error
+            } finally {
+                try {
+                    context?.recordInvocation(inputId, environmentId, "${mod.repository}/${profile.name}",
+                        if (commandFailure == null) "PROCESS_PASSED" else "PROCESS_FAILED_OR_INTERRUPTED")
+                } catch (historyFailure: Throwable) {
+                    if (commandFailure != null) commandFailure.addSuppressed(historyFailure) else throw historyFailure
+                }
+            }
             auditSourceNativeLogs(repository, scope.resolve("native-log-audits/${mod.repository}/${profile.name}"), staging)
             val output = Files.readString(profileLog)
             if (!skipTests && mod.repository != "better-exploration-load-control" && output.contains(":runGameTestServer")) {

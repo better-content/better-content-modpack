@@ -90,18 +90,21 @@ class BoundedCommandTest {
             System.setProperty("bc.repo.root", pack.toString())
             for (log in listOf(pack.resolve("build/output.log"), pack.resolve("generated/output.log"),
                 root.resolve("workspace_artifacts/output.log"))) {
-                assertEquals(0, BoundedCommand.run(pack, listOf("true"), log, Duration.ofSeconds(5)))
+                assertEquals(0, BoundedCommand.run(pack, listOf("true"), log, Duration.ofSeconds(5),
+                    mapOf("BC_TIMING_FILE" to "")))
             }
             for (log in listOf(pack.resolve("build/../escape.log"), pack.resolve("build-escape/output.log"))) {
                 assertThrows(IllegalArgumentException::class.java) {
-                    BoundedCommand.run(pack, listOf("true"), log, Duration.ofSeconds(5))
+                    BoundedCommand.run(pack, listOf("true"), log, Duration.ofSeconds(5),
+                        mapOf("BC_TIMING_FILE" to ""))
                 }
             }
             val alias = root.resolve("alias")
             Files.createSymbolicLink(alias, pack)
             System.setProperty("bc.repo.root", alias.toString())
             assertThrows(IllegalArgumentException::class.java) {
-                BoundedCommand.run(pack, listOf("true"), alias.resolve("build/unsafe.log"), Duration.ofSeconds(5))
+                BoundedCommand.run(pack, listOf("true"), alias.resolve("build/unsafe.log"), Duration.ofSeconds(5),
+                    mapOf("BC_TIMING_FILE" to ""))
             }
             assertFalse(Files.exists(pack.resolve("build/unsafe.log")))
         } finally {

@@ -1,9 +1,20 @@
 import org.gradle.api.tasks.testing.Test
+import java.io.File
 
 plugins {
     kotlin("jvm") version "2.2.21"
     application
 }
+
+// The same durable timing hook covers direct harness Gradle calls and source facades.
+// It observes tests/tasks without selecting tests, changing verdicts or inflating timeouts.
+apply(from = "gradle/test-timing.init.gradle")
+val pythonTimingEnvironment = mapOf(
+    "BC_TIMING_PYTHON" to "true",
+    "BC_TIMING_FILE" to gradle.extensions.extraProperties.get("bcTimingFile").toString(),
+    "PYTHONPATH" to (layout.projectDirectory.dir("scripts/timing-python").asFile.absolutePath +
+        (System.getenv("PYTHONPATH")?.takeIf(String::isNotEmpty)?.let { File.pathSeparator + it } ?: "")),
+)
 
 repositories {
     mavenCentral()
@@ -42,6 +53,7 @@ tasks.withType<Test>().configureEach {
     // previous Test result would create a false green run with no current evidence.
     outputs.upToDateWhen { false }
     useJUnitPlatform()
+    environment(pythonTimingEnvironment)
     reports.junitXml.required.set(true)
     reports.html.required.set(true)
     testLogging {
@@ -50,6 +62,8 @@ tasks.withType<Test>().configureEach {
         showStandardStreams = true
     }
     systemProperty("bc.repo.root", layout.projectDirectory.asFile.absolutePath)
+    // Focused integration fixtures launch this exact immutable distribution, with private caches.
+    systemProperty("bc.retool.gradle.home", gradle.gradleHomeDir!!.absolutePath)
     val testTemp = layout.buildDirectory.dir("tmp/tests")
     systemProperty("java.io.tmpdir", testTemp.get().asFile.absolutePath)
     systemProperty("junit.jupiter.tempdir.cleanup.mode.default", "NEVER")
@@ -60,17 +74,20 @@ tasks.test {
     description = "Runs fast, Minecraft-free test-harness checks."
     useJUnitPlatform { includeTags("fast") }
     doFirst {
-        exec { commandLine("python3", "-B", "scripts/test_testing_session.py") }
-        exec { commandLine("python3", "-B", "scripts/test_bounded_facade.py") }
-        exec { commandLine("python3", "-B", "scripts/test_prepare_dev_inputs.py") }
-        exec { commandLine("python3", "-B", "scripts/test_ci_boundaries.py") }
-        exec { commandLine("python3", "-B", "scripts/test_debug_coverage.py") }
-        exec { commandLine("python3", "-B", "scripts/test_workspace_coordination.py") }
-        exec { commandLine("python3", "-B", "scripts/test_candidate_routing.py") }
-        exec { commandLine("python3", "-B", "scripts/test_food_progression.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_testing_session.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_bounded_facade.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_bounded_timing.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_timing_report.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_python_timing.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_prepare_dev_inputs.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_ci_boundaries.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_debug_coverage.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_workspace_coordination.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_candidate_routing.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_food_progression.py") }
         exec { commandLine("node", "scripts/test_plant_drinks.mjs") }
-        exec { commandLine("python3", "-B", "scripts/test_wild_crop_forage.py") }
-        exec { commandLine("python3", "-B", "scripts/prepare_dev_inputs.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_wild_crop_forage.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/prepare_dev_inputs.py") }
     }
 }
 

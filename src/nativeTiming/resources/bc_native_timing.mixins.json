@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "bc.nonshipping.nativetiming.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": ["GameTestServerTimingMixin", "GameTestInfoTimingMixin"],
+  "injectors": {"defaultRequire": 1}
+}

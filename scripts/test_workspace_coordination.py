@@ -28,7 +28,7 @@ def claim_worker(root, owner, event, results):
 class CoordinationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        base = Path('/home/dev/.tmp')
+        base = Path(os.environ.get('WORKSPACE_COORDINATION_TEST_FIXTURES', '/home/dev/.tmp'))
         base.mkdir(parents=True, exist_ok=True)
         cls.fixtures = Path(tempfile.mkdtemp(prefix='coordination-tests-', dir=base))
         print(f'RETAINED_FIXTURES={cls.fixtures}', flush=True)
@@ -59,6 +59,115 @@ class CoordinationTests(unittest.TestCase):
         with self.assertRaises(Conflict): self.c.assign('t','lead','h4','helpers','t4','p4','f')
         self.assertTrue(self.c.result(assignments[0]['assignment'],1)['accepted'])
         with self.assertRaises(Conflict): self.c.result(assignments[0]['assignment'],1)
+
+    def settings_fixture(self):
+        topology = dict(session='fixture-session', workspace='lead-workspace', tab='lead-tab', pane='lead-pane')
+        self.c.register('t', 'lead', topology, helper_limit=4, operations=['synthetic', 'docs'])
+        self.c.register('foreign', 'other', topology, operations=['synthetic'])
+        self.c.claim('lead', ['token:lead'])
+        self.c.lease('t', 1, 'lead', 'token:settings-fixture')
+        for i, state in enumerate(('active', 'launching', 'launch-failed')):
+            assignment = self.c.assign('t', 'lead', f'h{i}', 'helpers', f't{i}', f'p{i}', 'file')
+            if state != 'active':
+                with self.c.transaction() as s:
+                    s['assignments'][assignment['assignment']]['state'] = state
+        self.c.assign('foreign', 'other', 'foreign-helper', 'foreign-helpers', 'ft', 'fp', 'file')
+        return {'HERDR_' + k.upper() + ('_ID' if k != 'session' else ''): v for k, v in topology.items()}
+
+    def test_task_settings_preserves_active_jobs_and_all_other_state(self):
+        env = self.settings_fixture()
+        owned = self.c.fixture_job('t', 1, 'lead')
+        foreign = self.c.fixture_job('foreign', 1, 'other')
+        try:
+            before = self.c.snapshot()
+            with patch.dict(os.environ, env):
+                updated = self.c.task_settings('t', 1, 'lead', 12)
+                self.assertEqual(updated['helper_limit'], 12)
+                after = self.c.snapshot()
+                expected = json.loads(json.dumps(before))
+                expected['tasks']['t']['helper_limit'] = 12
+                audit = after.pop('settings_changes')
+                self.assertEqual(after, expected)
+                self.assertEqual(len(audit), 1)
+                record = next(iter(audit.values()))
+                self.assertEqual(record['previous_helper_limit'], 4)
+                self.assertEqual(record['helper_limit'], 12)
+                self.assertEqual(record['live_assignments'], 3)
+                self.assertEqual(record['task'], 't')
+                self.assertEqual(record['owner'], 'lead')
+                self.assertEqual(record['generation'], 1)
+                self.assertEqual(record['topology'], before['tasks']['t']['topology'])
+                self.assertIsNotNone(process_identity(owned['pid']))
+                self.assertIsNotNone(process_identity(foreign['pid']))
+                # Existing registration remains idempotent, not a settings/operation API.
+                saved = (self.root/'state.json').read_bytes()
+                self.assertEqual(self.c.register('t', 'lead', helper_limit=16,
+                    operations=['pack-test:dist'])['helper_limit'], 12)
+                self.c.task_settings('t', 1, 'lead', 12)
+                self.assertEqual((self.root/'state.json').read_bytes(), saved)
+                self.c.task_settings('t', 1, 'lead', 3)  # Exact occupied bound is valid.
+                with self.assertRaises(Conflict):
+                    self.c.launch_helper('t', 'lead', 'extra', 'file', '[AGENT MESSAGE] inert', self.root)
+        finally:
+            self.c.cancel('t', 'lead')
+            self.c.cancel('foreign', 'other')
+            for job in (owned, foreign):
+                os.waitpid(job['pid'], 0)
+
+    def test_task_settings_rejects_without_mutation(self):
+        env = self.settings_fixture()
+        def rejected(task='t', generation=1, owner='lead', limit=12):
+            before = (self.root/'state.json').read_bytes()
+            with self.assertRaises(Conflict):
+                self.c.task_settings(task, generation, owner, limit)
+            self.assertEqual((self.root/'state.json').read_bytes(), before)
+        with patch.dict(os.environ, env):
+            rejected(owner='other')
+            rejected(owner='h0')
+            rejected(owner='')
+            rejected(task='missing')
+            for generation in (0, 2, True, '1', None):
+                rejected(generation=generation)
+            for limit in (-1, 17, True, 3.5, '12', None, 0, 1, 2):
+                rejected(limit=limit)
+            for key in env:
+                with patch.dict(os.environ, {key: 'wrong'}):
+                    rejected()
+                with patch.dict(os.environ, {key: ''}):
+                    rejected()
+            for state in ('cancelled', 'complete'):
+                with self.c.transaction() as s:
+                    s['tasks']['t']['state'] = state
+                rejected()
+            with self.c.transaction() as s:
+                s['tasks']['t']['state'] = 'active'
+                s['reservation'] = dict(owner='maintenance')
+            rejected()
+            self.assertTrue(self.c.maintenance_should_yield())
+
+    def test_task_settings_cli_bounds_and_stale_generation(self):
+        env = self.settings_fixture()
+        command = [sys.executable, '-B', str(SCRIPT), '--root', str(self.root),
+            'task-settings', '--task', 't', '--owner', 'lead', '--generation', '1', '--helper-limit']
+        with patch.dict(os.environ, env):
+            for limit in (12, 16, 3):
+                p = subprocess.run(command + [str(limit)], capture_output=True, text=True, timeout=5)
+                self.assertEqual(p.returncode, 0, p.stderr)
+                self.assertEqual(json.loads(p.stdout)['helper_limit'], limit)
+            before = (self.root/'state.json').read_bytes()
+            for value, code in (('-1', 3), ('17', 3), ('2', 3), ('not-int', 2)):
+                p = subprocess.run(command + [value], capture_output=True, text=True, timeout=5)
+                self.assertEqual(p.returncode, code, p.stderr)
+                self.assertEqual((self.root/'state.json').read_bytes(), before)
+            self.c.cancel('t', 'lead')
+            self.c.register('t', 'lead', dict(session=env['HERDR_SESSION'], workspace=env['HERDR_WORKSPACE_ID'],
+                tab=env['HERDR_TAB_ID'], pane=env['HERDR_PANE_ID']))
+            before = (self.root/'state.json').read_bytes()
+            p = subprocess.run(command + ['12'], capture_output=True, text=True, timeout=5)
+            self.assertEqual(p.returncode, 3)
+            self.assertEqual((self.root/'state.json').read_bytes(), before)
+            self.c.task_settings('t', 3, 'lead', 0)
+            self.assertEqual(self.c.snapshot()['tasks']['t']['helper_limit'], 0)
 
     def test_atomic_writer_claims(self):
         event = multiprocessing.Event()

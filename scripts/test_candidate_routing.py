@@ -23,7 +23,7 @@ class CandidateRoutingTests(unittest.TestCase):
         print('synthetic fixture:', self.root, flush=True)
         subprocess.run(['git', 'init', '-q', str(self.root)], check=True, capture_output=True)
         (self.root / 'scripts').mkdir()
-        for name in ('BoundedFacade.main.kts', 'bounded_facade.py', 'runner_lock.py', 'candidate_paths.py', 'workspace_coordination.py', 'debug_coverage.py', 'debug_source_registration.py', 'testing_session.py'):
+        for name in ('BoundedFacade.main.kts', 'bounded_facade.py', 'timing_report.py', 'runner_lock.py', 'candidate_paths.py', 'workspace_coordination.py', 'debug_coverage.py', 'debug_source_registration.py', 'testing_session.py'):
             shutil.copy2(REPO / 'scripts' / name, self.root / 'scripts' / name)
             if name.endswith('.main.kts'):
                 with (self.root / 'scripts' / name).open('a') as stream:
@@ -35,7 +35,8 @@ class CandidateRoutingTests(unittest.TestCase):
         (self.root / 'gradle').mkdir()
         for name in ('active-custom-mods.json', 'debug-interactions.json'):
             shutil.copy2(REPO / 'gradle' / name, self.root / 'gradle' / name)
-        self.env = dict(os.environ, BC_PACK_TEST_STATE_ROOT=str(self.root / 'runner-state'), WORKSPACE_COORDINATION_ROOT=str(self.root))
+        self.env = dict(os.environ, BC_PACK_TEST_STATE_ROOT=str(self.root / 'runner-state'), WORKSPACE_COORDINATION_ROOT=str(self.root),
+                        BC_TIMING_FILE=str(self.root / 'generated/timing/fixture.jsonl'))
         for name in ('BC_PACK_TEST_LOCK_TOKEN', 'BC_PACK_TEST_LOCK_OWNER', 'BC_PACK_TEST_HANDOFF', 'BC_PRIOR_DIST_RUN_ID', 'BC_CANDIDATE_BINDING'):
             self.env.pop(name, None)
         (self.root / 'pack.toml').write_text('version = "Build 10"\n')

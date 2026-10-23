@@ -36,7 +36,9 @@ closed. This is coordination among one user's agents, not a security boundary ag
   The generation survives final state as a tombstone; re-registration cannot revive old results.
 - **Assignment:** a bounded helper subtask with exact workspace/tab/pane and generation.
   Helpers do not recursively delegate. Default helper limit is four, explicitly configurable
-  at initial registration to at most sixteen. Current explicit task scope may use a smaller bound.
+  at initial registration to at most sixteen. The accountable lead may explicitly update this
+  bound through `task-settings` without replacing the task. Current explicit task scope may use
+  a smaller bound.
 - **Turn claim:** current writer intent, exact shared area tokens and injected Herdr topology.
   Only the owner releases it. Paths normalize relative to declared cwd and reject symlink
   ancestry; parent/child paths conflict. `token:`, `resource:` and `identity:` areas use exact
@@ -58,6 +60,7 @@ Run from the modpack; keep user authorization separate from these registrations:
 ```sh
 python3 -B scripts/workspace_coordination.py live
 python3 -B scripts/workspace_coordination.py task-register --task TASK --owner LEAD --helper-limit 4 --operation synthetic --operation docs
+python3 -B scripts/workspace_coordination.py task-settings --task TASK --generation 1 --owner LEAD --helper-limit 12
 python3 -B scripts/workspace_coordination.py authority --task TASK --generation 1 --owner LEAD --operation synthetic
 python3 -B scripts/workspace_coordination.py turn-acquire --owner AGENT --area shared-area
 python3 -B scripts/workspace_coordination.py turn-release --owner AGENT
@@ -73,7 +76,26 @@ malformed or unreadable state. With `--operation`, `--owner` is mandatory and bo
 lead and exact task operation must match. No-operation queries establish task liveness only.
 Initial registration takes repeatable `--operation` tokens and defaults to **no allowed
 operations**. Existing active registration is idempotent and never silently widens permissions.
-A changed authorization scope needs a new task generation/registration. Queue/Harness consumers
+A changed operation authorization scope needs a new task generation/registration.
+
+`Coordinator(root).task_settings(task, generation, owner, helper_limit)` / `task-settings` changes
+**only** the helper limit on an active, exact-generation task owned by the named accountable lead.
+Run it from that lead's exact injected Herdr session/workspace/tab/pane; missing or different
+injected topology, a foreign/helper principal, missing/inactive task or stale generation fails
+closed. The limit must be an integer in `0..16` and cannot be below the task's occupied assignments,
+including `launching` and `launch-failed` slots (conservatively across generations). Completed or
+cancelled assignments do not occupy slots. No assignments are cancelled or reconciled by this
+command. User authorization for a larger helper scope remains independently required.
+
+The existing nonblocking admission transaction rejects maintenance reservation/contention and
+atomically fsyncs the helper-limit change with a `settings_changes` audit (task, owner, generation,
+exact topology, previous/new limit, occupied count and time). Repeating the current valid setting
+is a no-op. Task generation, operations, topology, helper workspace/pending launches, assignments,
+active jobs, claims, leases, execution epoch metadata and foreign state remain unchanged; no
+producer is signalled or restarted. `task-register` remains initial-only/idempotent, not a settings
+update path. Do not hand-edit controller state or cancel/re-register to change a live helper bound.
+
+Queue/Harness consumers
 carry ID, generation, accountable owner and requested operation (`pack-test:dist` or
 `pack-test:debug`) and revalidate before admission/execution, not merely at handoff creation.
 A query is a snapshot, not a reservation: cancellation may occur afterward, so operation leases
