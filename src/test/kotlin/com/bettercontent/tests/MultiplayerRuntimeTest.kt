@@ -176,7 +176,10 @@ class MultiplayerRuntimeTest {
             server.diagnosticSupport.assertStable()
             server.assertHashes(); player.assertHashes()
             deadline.requireRemaining()
-            if (evidence.run.target != null) LogPolicy.requireClean(collectLogs(evidence.run.directory))
+            if (evidence.run.target != null) {
+                val logs = collectLogs(evidence.run.directory)
+                LogPolicy.requireClean(logs, runtimeLogCompatibility(evidence.run, logs))
+            }
         }
     }
 

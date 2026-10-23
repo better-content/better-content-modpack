@@ -396,7 +396,7 @@ internal fun build(
             val command = providerVerificationCommand(repository, profile.tasks, !profile.clean, profile.properties)
             runLogged(repository, if (skipTests) command else cropsSourceInputCommand(root, repository, command),
                 profileLog, providerBuildEnvironment(staging))
-            auditSourceNativeLogs(repository, scope.resolve("native-log-audits/${mod.repository}/${profile.name}"))
+            auditSourceNativeLogs(repository, scope.resolve("native-log-audits/${mod.repository}/${profile.name}"), staging)
             val output = Files.readString(profileLog)
             if (!skipTests && mod.repository != "better-exploration-load-control" && output.contains(":runGameTestServer")) {
                 require(Regex("All [1-9][0-9]* required tests passed").containsMatchIn(output)) {

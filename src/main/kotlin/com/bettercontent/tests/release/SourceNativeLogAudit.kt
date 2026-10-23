@@ -16,7 +16,7 @@ import java.util.zip.GZIPInputStream
  * native readiness, test counts, profile applicability or gameplay proof; those remain owning gates.
  * Prior outputs have already been retained outside the repository before a clean invocation.
  */
-internal fun auditSourceNativeLogs(repository: Path, evidence: Path) {
+internal fun auditSourceNativeLogs(repository: Path, evidence: Path, staging: Path? = null) {
     require(repository.isAbsolute && evidence.isAbsolute) { "source native audit requires absolute repository/evidence paths" }
     CandidateBinding.requireOrdinary(repository)
     CandidateBinding.requireOrdinary(evidence)
@@ -39,6 +39,7 @@ internal fun auditSourceNativeLogs(repository: Path, evidence: Path) {
             }.forEach { logs.add(it) }
         }
     }
+    val compatibility = staging?.let { com.bettercontent.tests.Oc2rCompatibilityEvidence.source(repository, it, logs) }
     Files.createDirectories(evidence)
     val rows = logs.sorted().map { original ->
         CandidateBinding.requireOrdinary(original)
@@ -53,7 +54,7 @@ internal fun auditSourceNativeLogs(repository: Path, evidence: Path) {
             }
             expanded
         } else original
-        val findings = LogPolicy.findings(listOf(audited))
+        val findings = LogPolicy.findings(listOf(audited), compatibility)
         require(Hashes.sha256(original) == before) { "native log changed during source audit: $original" }
         mapOf("original" to original.toString(), "sha256" to before, "bytes" to Files.size(original),
             "audited" to audited.toString(), "findings" to findings.map { mapOf("line" to it.line, "text" to it.text) })
@@ -61,7 +62,7 @@ internal fun auditSourceNativeLogs(repository: Path, evidence: Path) {
     val failed = rows.any { (it.getValue("findings") as List<*>).isNotEmpty() }
     val report = mapOf("schema" to "bc.source_native_log_audit.v1", "repository" to repository.toString(),
         "status" to if (failed) "failed" else if (rows.isEmpty()) "no-native-logs-observed" else "clean",
-        "native_readiness_claim" to false, "logs" to rows)
+        "native_readiness_claim" to false, "oc2r_compatibility_bound" to (compatibility != null), "logs" to rows)
     Files.write(evidence.resolve("report.json"), jacksonObjectMapper().writeValueAsBytes(report), CREATE_NEW)
     require(!failed) { "source native log audit found failed operations; see ${evidence.resolve("report.json")}" }
 }

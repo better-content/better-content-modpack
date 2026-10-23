@@ -11,6 +11,7 @@
     "src/main/kotlin/com/bettercontent/tests/release/*.kt",
     "src/main/kotlin/com/bettercontent/tests/BoundedCommand.kt",
     "src/main/kotlin/com/bettercontent/tests/Validation.kt",
+    "src/main/kotlin/com/bettercontent/tests/Oc2rCompatibilityEvidence.kt",
     "src/main/kotlin/com/bettercontent/tests/RunnerMutex.kt"
   ],
   "mods": [
@@ -419,6 +420,16 @@
     },
     {
       "repository": "better-oc2r-create-controls",
+      "supportArtifacts": [
+        "build/compatibility/oc2r-compatibility.json"
+      ],
+      "dependsOn": [
+        "better-compat-fixes",
+        "better-gameplay-notices"
+      ],
+      "verificationInputs": [
+        "mods/oc2r.pw.toml"
+      ],
       "modId": "better_oc2r_create_controls",
       "artifact": "better-oc2r-create-controls-0.1.0.jar",
       "tasks": [

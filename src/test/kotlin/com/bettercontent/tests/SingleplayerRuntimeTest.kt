@@ -93,7 +93,8 @@ class SingleplayerRuntimeTest {
             fresh.close()
             require(Files.isRegularFile(world.resolve("level.dat"))) { "normal native world stop did not produce level.dat" }
             fresh.assertHashes()
-            LogPolicy.requireClean(collectLogs(evidence.run.directory))
+            val logs = collectLogs(evidence.run.directory)
+            LogPolicy.requireClean(logs, runtimeLogCompatibility(evidence.run, logs))
         }
     }
 
@@ -170,7 +171,8 @@ class SingleplayerRuntimeTest {
                 reopened.client.resolve("saves/DebugWorld"), savedLoci.claims)
             evidence.run.event("blight_locus_claims_observed", reopenedLoci.evidence("integrated_reopen_normal_close"))
             if (evidence.run.target != null) {
-                LogPolicy.requireClean(collectLogs(evidence.run.directory))
+                val logs = collectLogs(evidence.run.directory)
+                LogPolicy.requireClean(logs, runtimeLogCompatibility(evidence.run, logs))
                 seed.assertHashes()
                 first.assertHashes()
                 reopened.assertHashes()
@@ -183,7 +185,8 @@ class SingleplayerRuntimeTest {
         evidence.run.checkpoint("single-player log and hash audit") {
             titleClientOrNull()?.close()
             debugClients.forEach { it.close() }
-            LogPolicy.requireClean(collectLogs(evidence.run.directory))
+            val logs = collectLogs(evidence.run.directory)
+            LogPolicy.requireClean(logs, runtimeLogCompatibility(evidence.run, logs))
             titleClientOrNull()?.assertHashes()
             debugClients.forEach { it.assertHashes() }
             seedServer?.assertHashes()

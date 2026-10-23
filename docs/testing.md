@@ -50,6 +50,22 @@ when a scenario or cleanup already failed. Each finalizer is attempted independe
 findings remain attached to the original failure and fail structured evidence and JUnit.
 Previously suppressed ERROR/FATAL records are not grandfathered into compatibility exemptions.
 
+OC2R 2.2.12 has two separately proved compatibility diagnostics, not a general networking/error
+exemption. Its native ICMP-unavailable startup branch disables only the native echo path; the
+pinned JVM fallback had an exhausted-buffer ownership defect repaired by Better Compat Fixes.
+Controls preserves its original tests and additionally exercises delayed original echo tasks with
+caller-storage mutation, actual TCP/UDP loopbacks, and exact loaded rootfs/scripts contents.
+Its pinned reader accepts only JSON filesystem descriptors; the uppercase README is documentation,
+not a failed descriptor. Only the exact null-native-return and README diagnostics can be classified,
+after all four required native tests, original proof/log/provider/input hash bindings, startup and
+shutdown succeed. Corrupt/data-mismatched libraries, failed fallback operations, malformed/missing
+real descriptors, repeated diagnostics, missing/changed evidence and every other ERROR/FATAL stay
+blocking. Raw logs remain unchanged. The gate-produced `build/compatibility/oc2r-compatibility.json`
+support bundle is declared in the provider graph and bound by canonical checkpoints/provenance.
+Runtime eligibility explicitly revalidates that exact support hash and candidate repair-provider
+bytes; the source controls never stand in for current pack runtime acceptance. Without valid
+context the log policy remains strict.
+
 Exact native Forge `DeferredWorkQueue` WARN messages reporting elapsed deferred startup work on
 `main` or `Render thread` are **performance diagnostics**, not failed operations. The parser requires
 the complete timestamp/logger/message, a valid mod namespace, and a positive finite duration in

@@ -237,13 +237,15 @@ object LogPolicy {
             failedOperation.containsMatchIn(record?.message ?: text)
     }
 
-    fun findings(paths: Collection<Path>): List<Finding> = buildList {
+    fun findings(paths: Collection<Path>, oc2r: Oc2rCompatibilityEvidence? = null): List<Finding> = buildList {
+        oc2r?.assertStable()
         paths.distinct().filter { Files.isRegularFile(it) }.forEach { path ->
             val group = mutableListOf<Pair<Int, String>>()
             fun flush() {
                 val diagnostics = optionalProbeLines(group)
                 group.forEach { (number, text) ->
-                    if (number !in diagnostics && !ignoredWomAnimationSchemaProbe(text) && operationFailed(text))
+                    if (number !in diagnostics && !ignoredWomAnimationSchemaProbe(text) &&
+                        oc2r?.classifies(path, parseRecord(text)) != true && operationFailed(text))
                         add(Finding(path, number, text))
                 }
             }
@@ -256,10 +258,11 @@ object LogPolicy {
             }
             flush()
         }
+        oc2r?.assertStable()
     }
 
-    fun requireClean(paths: Collection<Path>) {
-        val found = findings(paths)
+    fun requireClean(paths: Collection<Path>, oc2r: Oc2rCompatibilityEvidence? = null) {
+        val found = findings(paths, oc2r)
         require(found.isEmpty()) {
             found.take(25).joinToString(prefix = "correctness log findings detected:\n", separator = "\n") {
                 "${it.path}:${it.line}: ${it.text}"

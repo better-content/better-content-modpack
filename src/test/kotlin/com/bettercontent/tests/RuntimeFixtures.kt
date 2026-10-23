@@ -178,7 +178,8 @@ class DedicatedServerFixture(
 
     fun auditLogs(extra: Collection<Path> = emptyList()) {
         preserveState()
-        LogPolicy.requireClean(collectLogs(evidence.directory) + extra)
+        val logs = collectLogs(evidence.directory) + extra
+        LogPolicy.requireClean(logs, runtimeLogCompatibility(evidence, logs))
     }
 
     fun preserveState() {

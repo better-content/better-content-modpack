@@ -73,7 +73,8 @@ class EvidenceExtension(
             check(findings.isEmpty()) { "fixture audit logging integrity failed: $findings" }
         }
         finalizeStep("strict_logs") {
-            val findings = LogPolicy.findings(collectLogs(run.directory))
+            val logs = collectLogs(run.directory)
+            val findings = LogPolicy.findings(logs, runtimeLogCompatibility(run, logs))
             run.event(if (run.target != null) "target_log_findings" else "runtime_log_findings",
                 mapOf("count" to findings.size,
                     "first" to findings.take(25).map { "${it.path}:${it.line}: ${it.text}" }))

@@ -116,7 +116,8 @@ class GameplayRuntimeTest {
         // The window owns its native quit/relaunch/final native quit sequence.
         GameplayFeatureClient.runShaderWindow(server, client, evidence.run, nonce)
         server.assertHashes(); client.assertHashes(); server.auditLogs()
-        LogPolicy.requireClean(collectLogs(evidence.run.directory))
+        val logs = collectLogs(evidence.run.directory)
+        LogPolicy.requireClean(logs, runtimeLogCompatibility(evidence.run, logs))
     }
 
     private fun validateSelectedTraderPoolAgainstFreshRegistry() {
