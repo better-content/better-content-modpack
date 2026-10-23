@@ -6,11 +6,15 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 /** Eligibility for two exact upstream diagnostics, never a blanket networking or runtime verdict. */
-class Oc2rCompatibilityEvidence private constructor(private val logs: Map<Path, String>) {
+class Oc2rCompatibilityEvidence private constructor(private val logs: Map<Path, String>, private val frozenLogs: Boolean) {
     fun classifies(path: Path, record: LogPolicy.Record?): Boolean =
         path.toAbsolutePath().normalize() in logs && exactDiagnostic(record)
 
-    fun assertStable() = logs.forEach { (path, hash) -> require(Hashes.sha256(path) == hash) { "OC2R classified log changed: $path" } }
+    fun assertStable() {
+        if (frozenLogs) logs.forEach { (path, hash) ->
+            require(Hashes.sha256(path) == hash) { "OC2R classified log changed: $path" }
+        }
+    }
 
     companion object {
         const val SUPPORT = "build/compatibility/oc2r-compatibility.json"
@@ -58,10 +62,13 @@ class Oc2rCompatibilityEvidence private constructor(private val logs: Map<Path, 
             require(o.path("schema").asText() == "bc.oc2r_native_observations.v1" && o.path("expected_tests").asInt() == 4 &&
                 o.path("completed_tests").map { it.asInt() } == listOf(4) && o.path("required_passed").map { it.asInt() } == listOf(4) &&
                 o.path("startup_observed").asBoolean() && o.path("shutdown_observed").asBoolean()) { "Incomplete OC2R native population/lifecycle" }
+            require(data.path("native_logs").size() == 2 &&
+                data.path("native_logs").map { Path.of(it.path("path").asText()).fileName.toString() }.toSet() == setOf("latest.log", "debug.log") &&
+                data.path("native_logs").all { hex.matches(it.path("sha256").asText()) }) { "Incomplete OC2R original log binding" }
             return data
         }
 
-        private fun bind(paths: Collection<Path>): Oc2rCompatibilityEvidence {
+        private fun bind(paths: Collection<Path>, frozenLogs: Boolean = true): Oc2rCompatibilityEvidence {
             val logs = paths.distinct().filter(Files::isRegularFile).associate { path ->
                 val p = ordinary(path)
                 val records = Files.readAllLines(p).mapNotNull(LogPolicy::parseRecord).filter(::exactDiagnostic)
@@ -70,7 +77,7 @@ class Oc2rCompatibilityEvidence private constructor(private val logs: Map<Path, 
                 }
                 p to Hashes.sha256(p)
             }
-            return Oc2rCompatibilityEvidence(logs)
+            return Oc2rCompatibilityEvidence(logs, frozenLogs)
         }
 
         /** Called only after the complete successful source invocation, before checkpoint admission. */
@@ -90,7 +97,7 @@ class Oc2rCompatibilityEvidence private constructor(private val logs: Map<Path, 
                 "OC2R original proof/receipt changed"
             }
             val declared = data.path("native_logs").associate { row -> ordinary(Path.of(row.path("path").asText())) to row.path("sha256").asText() }
-            require(declared.isNotEmpty() && declared.keys.all { it.parent == fixture.resolve("logs") }) { "OC2R native log scope differs" }
+            require(declared.size == 2 && declared.keys.all { it.parent == fixture.resolve("logs") }) { "OC2R native log scope differs" }
             for ((log, hash) in declared) {
                 require(Hashes.sha256(log) == hash) { "OC2R native source log changed: $log" }
                 val text = Files.readString(log)
@@ -115,7 +122,11 @@ class Oc2rCompatibilityEvidence private constructor(private val logs: Map<Path, 
             require(compat.path("source_gate_status").asText() == "PASSED_OWNING_GATES") { "Unqualified OC2R repair provider" }
             val provider = ordinary(root.resolve("mods").resolve(compat.path("artifact").asText()))
             require(Hashes.sha256(provider) == compat.path("sha256").asText()) { "OC2R candidate repair provider changed" }
-            validateBundle(bundle, Hashes.sha256(provider))
+            val data = validateBundle(bundle, Hashes.sha256(provider))
+            // Revalidate retained original functional proof, receipt and post-JVM logs; no imported gameplay verdict.
+            require(source(root.parent.resolve("mod_source/better-oc2r-create-controls"), root.resolve("mods"),
+                data.path("native_logs").map { Path.of(it.path("path").asText()) }) != null)
+            require(Hashes.sha256(bundle) == expected) { "OC2R candidate support changed during validation" }
             val pair = CandidateLocator.locate(root)
             require(binding.path("candidates").path("client_sha256").asText() == pair.clientSha256 &&
                 binding.path("candidates").path("server_sha256").asText() == pair.serverSha256) { "OC2R candidate binding differs" }
@@ -129,7 +140,10 @@ class Oc2rCompatibilityEvidence private constructor(private val logs: Map<Path, 
             }
             val upstream = ordinary(root.parent.resolve(".cache/bc/packwiz-downloads/mods/oc2r-1.20.1-forge-2.2.12-all.jar"))
             require(Hashes.sha256(upstream) == ARCHIVE) { "OC2R candidate upstream archive differs" }
-            return bind(paths)
+            // Runtime writers can still be active during intermediate audits. LogPolicy audits a read
+            // snapshot and rejects repeats in that snapshot; teardown audits the complete final logs again.
+            // Original source logs/proof above stay immutable and hash-bound even during live audits.
+            return bind(paths, frozenLogs = false)
         }
     }
 }

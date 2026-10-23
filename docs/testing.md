@@ -63,8 +63,11 @@ real descriptors, repeated diagnostics, missing/changed evidence and every other
 blocking. Raw logs remain unchanged. The gate-produced `build/compatibility/oc2r-compatibility.json`
 support bundle is declared in the provider graph and bound by canonical checkpoints/provenance.
 Runtime eligibility explicitly revalidates that exact support hash and candidate repair-provider
-bytes; the source controls never stand in for current pack runtime acceptance. Without valid
-context the log policy remains strict.
+bytes and the retained original proof/receipt/latest+debug log hashes; the source controls never
+stand in for current pack runtime acceptance. Intermediate live audits inspect a read snapshot,
+allowing normal INFO appends without pretending the active log is immutable. Duplicate classified
+records in that snapshot remain failures; teardown audits the complete final logs again. Source
+proof logs remain immutable throughout. Without valid context the log policy remains strict.
 
 Exact native Forge `DeferredWorkQueue` WARN messages reporting elapsed deferred startup work on
 `main` or `Render thread` are **performance diagnostics**, not failed operations. The parser requires

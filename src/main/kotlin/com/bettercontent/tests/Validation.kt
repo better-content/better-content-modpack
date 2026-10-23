@@ -241,11 +241,15 @@ object LogPolicy {
         oc2r?.assertStable()
         paths.distinct().filter { Files.isRegularFile(it) }.forEach { path ->
             val group = mutableListOf<Pair<Int, String>>()
+            val classifiedMessages = mutableSetOf<String>()
             fun flush() {
                 val diagnostics = optionalProbeLines(group)
                 group.forEach { (number, text) ->
+                    val record = parseRecord(text)
+                    val classified = oc2r?.classifies(path, record) == true &&
+                        classifiedMessages.add(requireNotNull(record).message)
                     if (number !in diagnostics && !ignoredWomAnimationSchemaProbe(text) &&
-                        oc2r?.classifies(path, parseRecord(text)) != true && operationFailed(text))
+                        !classified && operationFailed(text))
                         add(Finding(path, number, text))
                 }
             }

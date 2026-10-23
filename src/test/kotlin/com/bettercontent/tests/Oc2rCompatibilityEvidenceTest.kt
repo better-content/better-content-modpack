@@ -101,6 +101,24 @@ class Oc2rCompatibilityEvidenceTest {
         val extra = fixture("extra"); val other = extra.logs.first().parent.resolve("unbound.log"); Files.writeString(other, capability)
         assertThrows(IllegalArgumentException::class.java) { Oc2rCompatibilityEvidence.source(extra.repository, extra.staging, extra.logs + other) }
     }
+    @Test fun missingOriginalDebugLogCannotQualify() {
+        val f = fixture("missing-debug")
+        val data = mapper.readTree(f.bundle.toFile()) as ObjectNode
+        (data.path("native_logs") as com.fasterxml.jackson.databind.node.ArrayNode).remove(1)
+        mapper.writeValue(f.bundle.toFile(), data)
+        assertThrows(IllegalArgumentException::class.java) { context(f) }
+    }
+    @Test fun liveSnapshotPermitsInfoAppendsButNotRepeatedDiagnosticsOrNewErrors() {
+        val f = fixture("live")
+        // Reflect a synthetic live context only to test scanning; this is not a public eligibility factory.
+        val constructor = Oc2rCompatibilityEvidence::class.java.getDeclaredConstructor(Map::class.java, Boolean::class.javaPrimitiveType!!)
+        constructor.isAccessible = true
+        val live = constructor.newInstance(f.logs.associate { it.toAbsolutePath().normalize() to Hashes.sha256(it) }, false)
+        Files.writeString(f.logs.first(), "[00:00:01] [main/INFO] [fixture/]: still running\n", java.nio.file.StandardOpenOption.APPEND)
+        assertTrue(LogPolicy.findings(f.logs, live).isEmpty())
+        Files.writeString(f.logs.first(), "$capability\n[00:00:02] [main/ERROR] [fixture/]: unexpected operation error\n", java.nio.file.StandardOpenOption.APPEND)
+        assertEquals(2, LogPolicy.findings(f.logs, live).size)
+    }
     @Test fun invalidCompletionAndUnqualifiedCandidateCannotImportSourceVerdict() {
         val f = fixture("completion")
         val data = mapper.readTree(f.bundle.toFile()) as ObjectNode
