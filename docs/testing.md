@@ -212,6 +212,18 @@ stage the final artifact with default properties. Profile tasks, properties, ord
 participate in both Kotlin and Python checkpoint fingerprints; a default-only receipt cannot stand
 in for a required optional-present/absent matrix. Multi-profile recipes rebuild rather than treating
 restored compiled bytes as profile verification. Client visual profiles remain separate acceptance.
+
+Cave's two long native suites are **Debug-only**: `DepthDirectorWorldGameTests.realCataloguePlayersAndNaturalDepthCadence`
+(80,000 ticks) and `GeologicalWorldGameTests.pinnedGeologyCatalogueLineagesAndNaturalPopulations`
+(240,000 ticks). Source/Dist preparation requests only Cave `verifyFull` and `stageRuntimeJar`,
+retaining its short unit/parser/ABI/JAR checks, native parser startup and strict native error gate.
+Neither long suite may return through an indirect source prerequisite. Explicitly ordered Cave
+`./gradlew verifyDebug` reaches the existing `verifyWorld` task and both unchanged suites; this
+routing change does not authorize execution. Their current source/Dist status is **DEFERRED / NOT RUN**,
+not PASS; the earlier World timeout and all worlds/logs remain evidence. Debug's boundary inventory
+records them as uncovered until explicitly executed and admitted, not covered by ordinary source
+qualification. This narrow tier decision waives neither other providers nor final same-artifact Dist.
+
 After each source invocation, the preparer applies the existing strict `LogPolicy` to actual SDK
 native log files (including retained gzip archives and discovered nested modules), before artifact
 staging/annotation, source checkpoint creation or deployment. This catches failed operations at

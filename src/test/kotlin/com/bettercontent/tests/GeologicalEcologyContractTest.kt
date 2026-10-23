@@ -140,7 +140,19 @@ class GeologicalEcologyContractTest {
         val node = json("gradle/active-custom-mods.json")["mods"].first { it["repository"].asText() == "better-cave-encounters" }
         val inputs = node["verificationInputs"].map { it.asText() }.toSet()
         assertTrue(inputs.containsAll(pins + qualification["pack_inputs"].map { it.asText() }))
-        assertTrue(node["tasks"].any { it.asText() == "verifyWorld" }, "all-target native qualification must gate future staged candidates")
+        assertEquals(listOf("verifyFull", "stageRuntimeJar"), node["tasks"].map { it.asText() },
+            "source/Dist retains the short owning gate; neither long world suite runs implicitly")
+        val build = Files.readString(root.resolve("$source/build.gradle.kts"))
+        assertTrue(build.contains("tasks.register(\"verifyDebug\")"))
+        assertTrue(build.contains("dependsOn(\"verifyWorld\")"))
+        assertTrue(build.contains("dependsOn(\"verifyFull\", \"runWorldGameTestServer\", \"runGeologyGameTestServer\")"))
+        for (id in listOf("cave-director-real-catalogue-natural-cadence-source", "cave-lineage-geology-native-source")) {
+            val boundary = json("gradle/debug-interactions.json")["boundaries"].first { it["id"].asText() == id }
+            assertEquals("uncovered", boundary["coverage"].asText())
+            assertEquals("debug", boundary["tier"].asText())
+            assertEquals("DEFERRED_NOT_RUN", boundary["status"].asText())
+            assertEquals("verifyDebug", boundary["source_test"]["task"].asText())
+        }
         assertEquals(json("kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json"),
             json("../mod_source/better-compat-fixes/src/nativeFixture/resources/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json"))
     }

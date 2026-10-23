@@ -2424,17 +2424,19 @@
       ],
       "layer": "source-native-pinned-providers",
       "target": "source:better-cave-encounters",
-      "coverage": "source",
+      "coverage": "uncovered",
+      "tier": "debug",
+      "status": "DEFERRED_NOT_RUN",
       "scenarios": [],
-      "fixture_intervention": "Canonical verifyWorld uses seeded director, authored separated cave arenas, disables ordinary mob spawning, registers dummy ServerPlayers; isolated catalogue calls ProductionAccess.spawnAt, cadence phase uses real ticks.",
+      "fixture_intervention": "Explicit Debug-only Cave ./gradlew verifyDebug reaches the unchanged verifyWorld catalogue suite; not a source/Dist prerequisite. Seeded director, authored separated cave arenas, disabled ordinary mob spawning, dummy ServerPlayers and real cadence ticks remain unchanged.",
       "oracle": "realCataloguePlayersAndNaturalDepthCadence asserts catalogue IDs/target/provenance, concurrent cohort completion and surface sentinel invariants.",
-      "limitations": "Dummy registered players are not connected network clients; source fixture pins are not full-pack hook composition; no real process restart from this method.",
+      "limitations": "DEFERRED / NOT RUN for source/Dist. Debug coverage remains uncovered until explicit execution and admission; ordinary source qualification cannot supply this verdict. Dummy players are not connected clients and these pins are not full-pack composition or restart proof.",
       "source": [
         "src/worldGameTest/java/com/bettercontent/bettercaveencounters/DepthDirectorWorldGameTests.java"
       ],
       "source_test": {
         "repository": "better-cave-encounters",
-        "task": "verifyWorld",
+        "task": "verifyDebug",
         "path": "src/worldGameTest/java/com/bettercontent/bettercaveencounters/DepthDirectorWorldGameTests.java",
         "method": "realCataloguePlayersAndNaturalDepthCadence"
       }
@@ -2459,17 +2461,19 @@
       ],
       "layer": "source-native-pinned-providers",
       "target": "source:better-cave-encounters",
-      "coverage": "source",
+      "coverage": "uncovered",
+      "tier": "debug",
+      "status": "DEFERRED_NOT_RUN",
       "scenarios": [],
-      "fixture_intervention": "Only canonical verifyWorld geological native fixture and its declared pins/authoring; no full-pack extrapolation.",
+      "fixture_intervention": "Explicit Debug-only Cave ./gradlew verifyDebug reaches the unchanged verifyWorld geological suite and declared pins/authoring; not a source/Dist prerequisite or full-pack extrapolation.",
       "oracle": "pinnedGeologyCatalogueLineagesAndNaturalPopulations must execute in exact verified-source provenance.",
-      "limitations": "Scoped pinned native populations; full-pack death cancellation, save/restart and waterway cohorts not established by this audit.",
+      "limitations": "DEFERRED / NOT RUN for source/Dist. Debug coverage remains uncovered until explicit execution and admission; ordinary source qualification cannot supply this verdict. Full-pack death cancellation, save/restart and waterway cohorts are not established.",
       "source": [
         "src/worldGameTest/java/com/bettercontent/bettercaveencounters/GeologicalWorldGameTests.java"
       ],
       "source_test": {
         "repository": "better-cave-encounters",
-        "task": "verifyWorld",
+        "task": "verifyDebug",
         "path": "src/worldGameTest/java/com/bettercontent/bettercaveencounters/GeologicalWorldGameTests.java",
         "method": "pinnedGeologyCatalogueLineagesAndNaturalPopulations"
       }

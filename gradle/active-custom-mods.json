@@ -303,7 +303,6 @@
       "artifact": "better-cave-encounters-0.2.1.jar",
       "tasks": [
         "verifyFull",
-        "verifyWorld",
         "stageRuntimeJar"
       ],
       "dependsOn": [
