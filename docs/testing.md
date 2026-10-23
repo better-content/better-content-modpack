@@ -733,6 +733,10 @@ then packages once and runs complete Dist and Debug. Release evidence records
 each mod's build mode and JAR hash.
 Legacy JARs without source metadata are replaced during this bootstrap run.
 
+Dependency resolution classifies manifests only from the production content roots. Retained
+`workspace_artifacts/` task trees are excluded from discovery, like build/generated evidence;
+unknown manifests elsewhere still fail classification rather than being silently packaged.
+
 Release workers may concurrently inspect/reuse/stage artifacts, but source Gradle invocations
 share a workspace-level Forge cache lock. ForgeGradle's generated MCP/mapped JARs are not safe
 for concurrent generation or reading during generation, especially after cache disposal. The

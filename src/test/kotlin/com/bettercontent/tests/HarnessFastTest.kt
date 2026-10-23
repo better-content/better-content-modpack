@@ -171,6 +171,24 @@ class HarnessFastTest {
     }
 
     @Test
+    fun packageResolverIgnoresRetainedEvidenceButRejectsUnknownProductionManifests(@TempDir fixture: Path) {
+        val repository = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val retained = fixture.resolve("workspace_artifacts/old-run/mods").also { it.createDirectories() }
+        retained.resolve("not-production.pw.toml").writeText("not valid TOML")
+        val command = listOf(repository.resolve("package.sh").toString(), "resolve", fixture.toString(),
+            fixture.resolve("build/resolved").toString(), "client")
+        val output = BoundedCommand.capture(repository, command, Duration.ofSeconds(15))
+        assertTrue(output.contains("hits=0 downloads=0 uncached=0"))
+
+        val unknown = fixture.resolve("unexpected").also { it.createDirectories() }.resolve("mod.pw.toml")
+        unknown.writeText("not valid TOML")
+        val failure = assertThrows(IllegalStateException::class.java) {
+            BoundedCommand.capture(repository, command, Duration.ofSeconds(15))
+        }
+        assertTrue(failure.message.orEmpty().contains("unclassified Packwiz manifests: $unknown"))
+    }
+
+    @Test
     fun activeReleaseInventoryIsUniqueAndMatchesCurrentSources() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val document = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())

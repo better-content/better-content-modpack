@@ -60,11 +60,17 @@ manifest_files = []
 for folder in ('mods','resourcepacks','shaderpacks','tacz'):
     manifest_files.extend((folder, manifest) for manifest in sorted((root / folder).glob('*.pw.toml')))
 classified_paths = {manifest for _, manifest in manifest_files}
-ignored_roots = tuple(root / folder for folder in ('build', 'dist', 'generated', '.gradle', '.git'))
-unclassified = sorted(
-    path for path in root.rglob('*.pw.toml')
-    if path not in classified_paths and not any(ignored in path.parents for ignored in ignored_roots)
-)
+# Retained task evidence is not a production input, matching .packwizignore.
+ignored_folders = {'build', 'dist', 'generated', '.gradle', '.git', 'workspace_artifacts'}
+unclassified = []
+for directory, folders, files in os.walk(root):
+    if pathlib.Path(directory) == root:
+        folders[:] = [folder for folder in folders if folder not in ignored_folders]
+    unclassified.extend(
+        pathlib.Path(directory) / name for name in files
+        if name.endswith('.pw.toml') and pathlib.Path(directory) / name not in classified_paths
+    )
+unclassified.sort()
 if unclassified:
     raise SystemExit("unclassified Packwiz manifests: " + ', '.join(str(path) for path in unclassified))
 
