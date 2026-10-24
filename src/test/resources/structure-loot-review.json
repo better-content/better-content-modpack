@@ -11935,7 +11935,7 @@
   "unused_definition_review": {
     "schema": "bc.structure_loot_unused.v2",
     "scan_identity": "sorted-class-and-data-entry-sha256",
-    "scan_input_sha256": "040a04a5bf0a5917a89732490fc642fa923e05dcdd6a00d5fbf07498e38cc126",
+    "scan_input_sha256": "901b6bd13fc72129be5d2651295a8fdb3caf3512ca185c712727f174650fc372",
     "limits": "Automatic structure-container consumers only, not arbitrary administrator /loot commands. Closed pinned source contexts only; literal search cannot prove arbitrary dynamic code impossible. Positive native selected consumers invalidate unused classification. Registry existence or absence is not a consumer verdict.",
     "definitions": [
       {
