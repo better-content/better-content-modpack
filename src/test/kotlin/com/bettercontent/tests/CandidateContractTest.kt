@@ -77,6 +77,13 @@ class CandidateContractTest {
 
     @Test
     @Order(4)
+    fun localRuntimeCorrectionsBindExactQualifiedBytesAndNeverDownloadDuplicateOriginals() {
+        com.bettercontent.tests.release.UpstreamRuntimeOverrides.validateCandidates(
+            TestConfig.load().root, pair.client, pair.server)
+    }
+
+    @Test
+    @Order(4)
     fun contractChecksDoNotMutateCandidates() {
         assertEquals(pair.clientSha256, Hashes.sha256(pair.client))
         assertEquals(pair.serverSha256, Hashes.sha256(pair.server))

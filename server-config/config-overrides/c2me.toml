@@ -1,0 +1,59 @@
+version = 3
+
+# Dedicated-server counterpart of config/c2me.toml. Only the client-side
+# view-distance module is disabled here; all world-generation/I/O settings match.
+defaultGlobalExecutorParallelismExpression = "default"
+globalExecutorParallelism = "default"
+
+[generalOptimizations]
+	midTickChunkTasksInterval = "default"
+	optimizeAsyncChunkRequest = "true"
+
+	[generalOptimizations.autoSave]
+		mode = "default"
+		delay = "default"
+
+[fixes]
+	disableLoggingShutdownHook = "default"
+	enforceSafeWorldRandomAccess = "true"
+
+[threadedWorldGen]
+	# Better Caves liquid regions are disabled separately because they are the
+	# documented C2ME 1.20.1 conflict. Keep async chunk scheduling enabled for
+	# Weather2/Burnt tick samplers, which can otherwise block on terrain loads.
+	enabled = "true"
+	# Cataclysm's burning_arena emits far-chunk setBlock errors during parallel
+	# feature-stage placement. Keep features on the serialized generation path.
+	allowThreadedFeatures = "false"
+	reduceLockRadius = "true"
+	asyncScheduling = "true"
+
+[ioSystem]
+	# Keep the replacement I/O implementation paired with async I/O. Leaving
+	# replacement storage enabled by itself can stall vanilla IOWorker futures
+	# during a World Lifecycle Manager successor restart.
+	replaceImpl = "false"
+	# Dynamic Trees mutates its Poisson-disc chunk cache during chunk-data load.
+	# C2ME's async path can invoke that callback concurrently and corrupt the
+	# cache's plain HashMap, so keep chunk loading/unloading on the main thread.
+	async = "false"
+	gcFreeChunkSerializer = "default"
+	chunkDataCacheSoftLimit = "default"
+	chunkDataCacheLimit = "default"
+	chunkStreamVersion = "default"
+
+[noTickViewDistance]
+	enabled = "true"
+	maxConcurrentChunkLoads = "default"
+	compatibilityMode = "default"
+	ensureChunkCorrectness = "default"
+
+[clientSideConfig]
+
+	[clientSideConfig.modifyMaxVDConfig]
+		enabled = false
+		maxViewDistance = "default"
+
+[vanillaWorldGenOptimizations]
+	optimizeAquifer = false
+	useEndBiomeCache = "default"

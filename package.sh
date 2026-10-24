@@ -133,6 +133,163 @@ print(f"artifact cache: side={side} hits={stats['hits']} downloads={stats['downl
 PY
 }
 
+# Prepared bytes are qualified by the caller, not by this input-assembly step.
+# Interface: apply_runtime_overrides tree|client-zip TARGET
+apply_runtime_overrides() {
+  [ -e "$ROOT/config/better-content-runtime-overrides.json" ] || return 0
+  python3 - "$ROOT" "$1" "$2" "${BC_PACKAGE_RUNTIME_OVERRIDES:-}" <<'PY'
+import json, os, pathlib, shutil, stat, sys, tempfile, zipfile
+
+root, mode, target, prepared = pathlib.Path(sys.argv[1]), sys.argv[2], pathlib.Path(sys.argv[3]), sys.argv[4]
+
+def fail(message):
+    raise ValueError(message)
+
+def unique_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            fail(f'duplicate JSON key: {key}')
+        result[key] = value
+    return result
+
+def load_json(data):
+    return json.loads(data, object_pairs_hook=unique_object)
+
+def basename(value, suffix):
+    if (not isinstance(value, str) or not value.endswith(suffix)
+            or value in ('.', '..') or '/' in value or '\\' in value
+            or any(ord(c) < 32 for c in value) or ':' in value):
+        fail(f'unsafe {suffix} basename: {value!r}')
+    return value
+
+def safe_path(path):
+    if not path.is_absolute() or '..' in path.parts:
+        fail(f'expected absolute non-escaping path: {path}')
+    for part in (path, *path.parents):
+        if part.is_symlink():
+            fail(f'symlink path is not a packaging input: {part}')
+    return path
+
+try:
+    if not prepared:
+        pointer = safe_path(root / '.worklane/runtime-overrides/current.path')
+        prepared = pointer.read_text().strip()
+    source = safe_path(pathlib.Path(prepared))
+    selection = safe_path(source / 'selection.json')
+    plan = load_json(selection.read_text())
+    if (not isinstance(plan, dict) or set(plan) != {'schema', 'artifacts'}
+            or plan['schema'] != 'bc.package_runtime_overrides.v1'
+            or not isinstance(plan['artifacts'], list) or not plan['artifacts']):
+        fail('invalid runtime override selection schema')
+    artifacts = plan['artifacts']
+    names, manifests, identities = set(), set(), set()
+    for entry in artifacts:
+        if not isinstance(entry, dict) or set(entry) != {'input', 'output', 'manifest', 'project_id', 'file_id'}:
+            fail('invalid runtime override artifact fields')
+        original = basename(entry['input'], '.jar')
+        output = basename(entry['output'], '.jar')
+        manifest = basename(entry['manifest'], '.pw.toml')
+        if original in names or output in names or original == output or manifest in manifests:
+            fail('duplicate or ambiguous runtime override names')
+        names.update((original, output))
+        manifests.add(manifest)
+        pair = (entry['project_id'], entry['file_id'])
+        if any(type(n) is not int or n <= 0 for n in pair) or pair in identities:
+            fail('duplicate or invalid CurseForge identity')
+        identities.add(pair)
+        jar = safe_path(source / output)
+        if not jar.is_file():
+            fail(f'missing prepared runtime override: {jar}')
+    target = safe_path(target.absolute())
+    if mode == 'tree':
+        mods = safe_path(target / 'mods')
+        # Preflight all destinations before changing this generated tree.
+        for entry in artifacts:
+            for key in ('input', 'output', 'manifest'):
+                path = safe_path(mods / entry[key])
+                if path.exists() and not path.is_file():
+                    fail(f'not a regular generated mod file: {path}')
+            if (mods / entry['output']).exists():
+                fail(f'corrected output already exists: {entry["output"]}')
+        mods.mkdir(parents=True, exist_ok=True)
+        for entry in artifacts:
+            (mods / entry['input']).unlink(missing_ok=True)
+            (mods / entry['manifest']).unlink(missing_ok=True)
+            shutil.copy2(source / entry['output'], mods / entry['output'])
+    elif mode == 'client-zip':
+        with zipfile.ZipFile(target) as archive:
+            infos = archive.infolist()
+            seen = set()
+            for info in infos:
+                name = info.filename
+                parts = name.rstrip('/').split('/')
+                if (name in seen or name.startswith('/') or '\\' in name or ':' in name
+                        or any(p in ('', '.', '..') for p in parts)
+                        or any(ord(c) < 32 for c in name)
+                        or stat.S_ISLNK(info.external_attr >> 16)):
+                    fail(f'unsafe or duplicate client ZIP entry: {name!r}')
+                seen.add(name)
+            if 'manifest.json' not in seen:
+                fail('client ZIP has no manifest.json')
+            manifest = load_json(archive.read('manifest.json'))
+            if not isinstance(manifest, dict) or not isinstance(manifest.get('files'), list):
+                fail('invalid client manifest files')
+            overrides = manifest.get('overrides')
+            if (not isinstance(overrides, str) or overrides.startswith('/') or '\\' in overrides
+                    or ':' in overrides or any(ord(c) < 32 for c in overrides)
+                    or any(p in ('', '.', '..') for p in overrides.split('/'))):
+                fail('unsafe client overrides root')
+            found = set()
+            files = []
+            for item in manifest['files']:
+                if not isinstance(item, dict):
+                    fail('invalid CurseForge manifest entry')
+                pair = (item.get('projectID'), item.get('fileID'))
+                if any(type(n) is not int or n <= 0 for n in pair):
+                    fail('invalid CurseForge manifest identity')
+                if pair in found:
+                    fail('duplicate CurseForge manifest identity')
+                found.add(pair)
+                if pair not in identities:
+                    files.append(item)
+            if not identities <= found:
+                fail('client manifest missing selected original CurseForge identity')
+            manifest['files'] = files
+            removed = {f'{overrides}/mods/{entry[key]}' for entry in artifacts for key in ('input', 'manifest')}
+            added = {f'{overrides}/mods/{entry["output"]}': source / entry['output'] for entry in artifacts}
+            if seen & added.keys():
+                fail('corrected output already exists in client ZIP')
+            # A file cannot also be a parent directory of another entry, including
+            # the new corrected files. Do not produce ambiguous launcher inputs.
+            file_names = {info.filename for info in infos if not info.is_dir()}
+            for name in seen | added.keys():
+                if any(str(parent) in file_names for parent in pathlib.PurePosixPath(name).parents if str(parent) != '.'):
+                    fail(f'ambiguous client ZIP path: {name!r}')
+            if any(name + '/' in seen for name in added):
+                fail('corrected output conflicts with a client ZIP directory')
+            descriptor, temporary_name = tempfile.mkstemp(prefix=f'.{target.name}.', suffix='.tmp', dir=target.parent)
+            os.close(descriptor)
+            temporary = pathlib.Path(temporary_name)
+            try:
+                with zipfile.ZipFile(temporary, 'w') as output:
+                    output.comment = archive.comment
+                    for info in infos:
+                        if info.filename not in removed:
+                            data = (json.dumps(manifest, indent=2) + '\n').encode() if info.filename == 'manifest.json' else archive.read(info)
+                            output.writestr(info, data)
+                    for name, jar in added.items():
+                        output.write(jar, name, compress_type=zipfile.ZIP_DEFLATED)
+                os.replace(temporary, target)
+            finally:
+                temporary.unlink(missing_ok=True)
+    else:
+        fail(f'unknown runtime override assembly mode: {mode}')
+except (OSError, ValueError, KeyError, TypeError, zipfile.BadZipFile) as error:
+    raise SystemExit(f'package failed: runtime overrides: {error}') from error
+PY
+}
+
 stage_side() {
   local side="$1" target="$2"
   copy_content "$target"
@@ -141,6 +298,7 @@ stage_side() {
     cp -a "$ROOT/server-config/config-overrides/." "$target/config/"
   fi
   resolve_artifacts "$target" "$side"
+  apply_runtime_overrides tree "$target"
 }
 
 install_server() {
@@ -221,6 +379,7 @@ package_dist() {
   sed -i -E "0,/^version *=/{s|^version *=.*$|version = \"$escaped_version\"|}" "$ROOT/pack.toml"
   mkdir -p "$client_dir" "$stage"
   (cd "$ROOT" && packwiz curseforge export -o "$client_dir/better-content.zip" -s client -y)
+  apply_runtime_overrides client-zip "$client_dir/better-content.zip"
   stage_side server "$stage"
   install_server "$stage" false production 25565
   cat > "$stage/SERVER_README.txt" <<'TXT'

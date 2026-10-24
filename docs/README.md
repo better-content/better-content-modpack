@@ -17,6 +17,7 @@ copying policies. All shared Better Content policy is versioned in this modpack 
 | Local build commands and unique mod constraints | Owning repository `AGENTS.md` / `README.md` |
 | Repository identities, provider graph and staging | [Custom-mod workspace](custom-mod-workspace.md); executable `gradle/active-custom-mods.json` |
 | Installed local SDKs/tools | [Toolchains](toolchains.md) |
+| Local upstream runtime archive corrections and publication boundary | [Runtime overrides](upstream-runtime-overrides.md) |
 
 Current explicit user instructions determine task scope/authorization. Source/configuration
 establish implemented behavior. Exact-candidate observations establish runtime results only for
@@ -55,6 +56,8 @@ standing policies or human authorization.
 
 - [Aspirational features](aspirational-features.md): wanted features outside current scope; not implementation authorization.
 - [Performance/mod integration](performance_and_mods.md).
+- [Local upstream runtime corrections](upstream-runtime-overrides.md): exact qualified support bytes,
+  original-pin preservation, same-candidate checks and restricted-binary publication boundary.
 - [Bounded playtest logging](playtest-logging.md): producer contract, profile activation and audit boundary.
 - [Celestial events](celestial-events.md): four rare nights, travel, encounters and finite-stock visits.
 - [Cataclysm/cave encounters](cataclysm_better_cave_encounters_integration.md).
