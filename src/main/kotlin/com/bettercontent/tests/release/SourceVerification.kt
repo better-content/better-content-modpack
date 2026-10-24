@@ -85,8 +85,8 @@ internal fun requireSourceClean(repository: Path): String {
 internal fun verifySourceClosure(
     root: Path, runId: String, manifest: ActiveModManifest, requested: List<String>,
     expectedManifestHash: String? = null,
-    owningBuild: (Path, Path, Path, Path, ActiveMod, SourceUpdate) -> BuiltMod = { r, w, e, s, m, u ->
-        build(r, w, e, s, m, u, skipTests = false, forceRebuild = true)
+    owningBuild: (Path, Path, Path, Path, ActiveMod, SourceUpdate, ProviderInputView) -> BuiltMod = { r, w, e, s, m, u, inputs ->
+        build(r, w, e, s, m, u, skipTests = false, forceRebuild = true, inputView = inputs)
     },
 ): SourceVerificationResult {
     require(runId.matches(Regex("[0-9]{8}T[0-9]{6}Z-[0-9]+"))) { "unsafe source run ID" }
@@ -127,6 +127,7 @@ internal fun verifySourceClosure(
                 "source_gate_status" to "PASSED_OWNING_GATES", "support_hashes" to item.supportHashes,
                 "consumed_stages" to item.definition.dependsOn.associateWith { dep -> built.single { it.definition.repository == dep }.sha256 },
                 "source_identity" to identities.getValue(item.definition.repository).second,
+                "input_view_sha256" to item.inputViewSha256,
             ) },
         ))
     }
@@ -153,7 +154,10 @@ internal fun verifySourceClosure(
                 val target = staging.resolve(mod.artifact)
                 requireSourceOrdinary(target)
                 require(!Files.exists(target, NOFOLLOW_LINKS)) { "source stage already exists" }
-                val item = owningBuild(root, workspace, evidence, staging, mod, inspectSourceUpdate(root, workspace, mod))
+                val inputs = providerInputView(manifest, mod, built.associateBy { it.definition.repository },
+                    workspace, evidence.resolve("provider-inputs/${mod.repository}"))
+                val item = owningBuild(root, workspace, evidence, staging, mod, inspectSourceUpdate(root, workspace, mod), inputs)
+                ProviderInputs.verify(inputs)
                 requireSourceOrdinary(target)
                 requireSafeBuildOutput(repo, repo.resolve("build/libs/${mod.artifact}"))
                 unchanged(mod)

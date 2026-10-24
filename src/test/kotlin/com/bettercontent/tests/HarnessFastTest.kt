@@ -450,7 +450,7 @@ class HarnessFastTest {
         }
         git("init", "-q")
         // Authored source identity excludes declared build outputs, not arbitrary new files.
-        Files.writeString(repository.resolve(".gitignore"), "build/\ninvoked-tasks.txt\n")
+        Files.writeString(repository.resolve(".gitignore"), "build/\n.gradle/\ninvoked-tasks.txt\n")
         git("add", ".gitignore")
         git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--allow-empty", "-qm", "fixture")
         val commit = git("rev-parse", "HEAD")
@@ -475,7 +475,8 @@ class HarnessFastTest {
             "the actual release build must lock the pack root")
         assertTrue(!Files.exists(workspace.resolve(".worklane/forge-cache.lock")),
             "a similarly named workspace-parent lock does not protect the canonical cache")
-        assertEquals(listOf("--no-daemon", "clean", "verifyFull", "stageRuntimeJar"),
+        assertEquals(listOf("--no-daemon", "clean", "verifyFull", "stageRuntimeJar", "--init-script",
+            root.resolve("gradle/test-timing.init.gradle").toString()),
             Files.readAllLines(repository.resolve("invoked-tasks.txt")))
         assertEquals(commit, readSourceCommit(rebuilt.jar, mod))
         assertEquals(commit, readSourceCommit(bundled, mod))
@@ -528,7 +529,14 @@ class HarnessFastTest {
 
         // Full tiers set a real binding. Discovery's synthetic fixture must neither
         // consume that binding nor mutate the parent JVM's production environment.
-        val classpath = listOf(CandidateDiscoveryFixtureProbe::class.java, CandidateLocator::class.java, kotlin.Unit::class.java)
+        // Discovery now supervises its Git query with durable timing, so the isolated JVM
+        // needs the real main runtime's JSON dependencies too, not a timing opt-out.
+        val classpath = listOf(CandidateDiscoveryFixtureProbe::class.java, CandidateLocator::class.java, kotlin.Unit::class.java,
+            com.fasterxml.jackson.databind.ObjectMapper::class.java,
+            com.fasterxml.jackson.core.JsonFactory::class.java,
+            com.fasterxml.jackson.annotation.JsonProperty::class.java,
+            com.fasterxml.jackson.module.kotlin.KotlinModule::class.java,
+            Class.forName("kotlin.reflect.jvm.internal.ReflectionFactoryImpl"))
             .map { Path.of(it.protectionDomain.codeSource.location.toURI()).toString() }.distinct().joinToString(java.io.File.pathSeparator)
         val output = BoundedCommand.capture(root, listOf("env", "-u", "BC_CANDIDATE_BINDING", "-u", "BC_PACK_TEST_HANDOFF",
             Path.of(System.getProperty("java.home"), "bin/java").toString(), "-Dbc.repo.root=${System.getProperty("bc.repo.root")}", "-cp", classpath,

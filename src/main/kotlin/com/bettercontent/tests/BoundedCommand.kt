@@ -7,8 +7,9 @@ import java.util.concurrent.TimeUnit
 
 /** One absolute monotonic budget, shared by nested operations (diagnostics/cleanup are separate). */
 class ScenarioDeadline(budget: Duration, private val clock: () -> Long = System::nanoTime) {
-    private val end = clock() + budget.toNanos().also { require(it > 0) }
-    fun remaining(): Duration = Duration.ofNanos((end - clock()).coerceAtLeast(0))
+    private val budgetNs = budget.toNanos().also { require(it > 0) }
+    private val started = clock()
+    fun remaining(): Duration = Duration.ofNanos((budgetNs - (clock() - started).coerceAtLeast(0)).coerceAtLeast(0))
     fun requireRemaining(): Duration = remaining().also { check(!it.isZero) { "scenario deadline exhausted" } }
     fun sleep(duration: Duration) {
         val remaining = requireRemaining()
@@ -26,7 +27,7 @@ object BoundedCommand {
         var status: Int? = null
         var primary: Throwable? = null
         try {
-            return runOwned(cwd, command, log, budget, environment, input, timing).also { status = it }
+            return runOwned(cwd, command, log, timing.effectiveBudget, environment, input, timing).also { status = it }
         } catch (failure: Throwable) {
             primary = failure
             throw failure
@@ -68,19 +69,25 @@ object BoundedCommand {
         }
         Files.createDirectories(output.parent)
         val inputFile = input?.let { text -> Files.createTempFile(output.parent, ".command-input-", ".txt").also { Files.writeString(it, text) } }
+        val launchStarted = System.nanoTime()
         val process = try {
             ProcessBuilder(listOf("setsid", "--wait") + command).directory(cwd.toFile()).redirectErrorStream(true)
                 .redirectOutput(output.toFile()).apply {
+                    environment().remove("BC_TIMING_OWNED_GRADLE")
                     environment().putAll(environment)
+                    if ("--no-daemon" in command && Path.of(command.first()).fileName.toString() in setOf("gradle", "gradlew"))
+                        environment()["BC_TIMING_OWNED_GRADLE"] = "true"
                     // A logical selector names this invocation, never arbitrary nested commands.
                     environment().remove("BC_TIMING_PROCESS_NAME")
+                    environment()["BC_TIMING_TIMEOUT_NS"] = budget.toNanos().toString()
+                    environment()["BC_TIMING_TIMEOUT_SECONDS"] = java.math.BigDecimal.valueOf(budget.toNanos(), 9).toPlainString()
                     if (inputFile != null) redirectInput(inputFile.toFile())
                 }.start()
         } catch (failure: Throwable) { inputFile?.let(Files::deleteIfExists); throw failure }
         val tracker = ProcessTracker(process.toHandle(), process.pid())
         var primary: Throwable? = null
         try {
-            check(process.waitFor(budget.toMillis().coerceAtLeast(1), TimeUnit.MILLISECONDS)) {
+            check(process.waitFor((budget.toNanos() - (System.nanoTime() - launchStarted)).coerceAtLeast(0), TimeUnit.NANOSECONDS)) {
                 "command timed out after $budget: ${command.joinToString(" ")}; cwd=$cwd; pid=${process.pid()}; log=$output; tail=${tail(output)}"
             }
             val status = process.exitValue()
@@ -129,7 +136,9 @@ object BoundedCommand {
         val log = Files.createTempFile(directory, "command-", ".log")
         var successful = false
         try {
-            val status = run(cwd, command, log, budget)
+            // Incidental control/Git captures retain their independent safety cap and raw
+            // observations; they do not repeatedly resolve the enclosing profile's catalog.
+            val status = run(cwd, command, log, budget, mapOf("BC_TIMING_BASELINES" to ""))
             check(status == 0) { "command failed ($status): $command; cwd=$cwd; log=$log; tail=${tail(log)}" }
             check(Files.size(log) <= limit) { "command output exceeds capture limit $limit; log=$log" }
             val result = Files.readString(log)

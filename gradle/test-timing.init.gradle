@@ -1,4 +1,5 @@
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.nio.file.Files
@@ -13,13 +14,26 @@ import org.gradle.api.tasks.testing.TestDescriptor
 import org.gradle.api.tasks.testing.TestListener
 import org.gradle.api.tasks.testing.TestResult
 
-// Invoke with --init-script. No verdict reuse, test selection or timeout mutation.
+// Invoke with --init-script. No verdict reuse or test selection.
+// Comparable task budgets are frozen at graph readiness, before Gradle snapshots Task.timeout.
 // Native JavaExec/GameTest tasks are task scope, NEVER individual-test scope.
 // May be installed by both --init-script and root apply(from=...). Install once per Gradle.
-if (gradle.extensions.extraProperties.has('bcTimingInstalled')) return
+if (gradle.extensions.extraProperties.has('bcTimingInstalled')) {
+    // An init application precedes Root's extra-property opt-in. Its later Project
+    // application must still attach the engine adapter, without duplicating observers.
+    def laterProject = null
+    try { laterProject = project } catch (MissingPropertyException ignored) { }
+    if (laterProject != null && (System.getenv('BC_TIMING_JUNIT') == 'true' ||
+        (laterProject.extensions.extraProperties.has('bcTimingJunitEnabled') &&
+            laterProject.extensions.extraProperties.get('bcTimingJunitEnabled') == true))) {
+        laterProject.apply(from: new File(buildscript.sourceFile.canonicalFile.parentFile, 'junit-test-timing.gradle'))
+    }
+    return
+}
 gradle.extensions.extraProperties.set('bcTimingInstalled', true)
 def monitor = new Object()
 def active = new ConcurrentHashMap<Object, Map>()
+def taskBudgets = new ConcurrentHashMap<Object, Map>()
 def invocation = UUID.randomUUID().toString()
 def hookRoot = buildscript.sourceFile.canonicalFile.parentFile.parentFile
 def sink = null
@@ -62,12 +76,15 @@ def begin = { Object key, String scope, Map detail ->
         timeout_policy: 'UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED'] + detail, started: System.nanoTime()]
     append(observation.fields + [event: 'start', status: 'RUNNING', duration_ns: null])
     active.put(key, observation)
+    gradle.extensions.extraProperties.get('bcTimingTaskDeadlineStart').call(observation.fields, (long) observation.started)
 }
 def finish = { Object key, String status, Map detail ->
     def observation = active.get(key)
     if (observation == null) throw new GradleException('Missing timing start: ' + key)
+    long elapsed = Math.max(0L, System.nanoTime() - observation.started)
+    Map owned = gradle.extensions.extraProperties.get('bcTimingTaskDeadlineFinish').call(observation.fields.operation_id.toString(), status)
     append(observation.fields + [event: 'terminal', status: status,
-        duration_ns: Math.max(0L, System.nanoTime() - observation.started)] + detail)
+        duration_ns: elapsed] + detail + owned)
     active.remove(key, observation)
 }
 
@@ -83,6 +100,13 @@ try { targetProject = project } catch (MissingPropertyException ignored) { }
 if (targetProject != null) configureSink(targetProject.rootDir)
 else gradle.settingsEvaluated { settings -> configureSink(settings.rootDir) }
 
+// Task.timeout interrupts; this companion contains an interruption-ignoring task in an
+// explicitly owned disposable Gradle JVM. It never changes the original task verdict.
+def ownedTaskScript = new File(hookRoot, 'gradle/owned-task-deadlines.gradle')
+if (!ownedTaskScript.isFile()) throw new GradleException('Owned task deadline companion missing: ' + ownedTaskScript)
+if (targetProject != null) targetProject.apply(from: ownedTaskScript)
+else apply from: ownedTaskScript
+
 // Explicitly source-native only. Merely applying this timing script never changes JavaExec,
 // Minecraft client/server or packaged runtime classpaths. The native adapter owns RunConfig checks.
 if (System.getenv('BC_TIMING_NATIVE') == 'true') {
@@ -94,10 +118,96 @@ if (System.getenv('BC_TIMING_NATIVE') == 'true') {
     gradle.beforeProject { project -> attachNative(project) }
     if (targetProject != null) attachNative(targetProject)
 }
+// Engine-native JUnit observations/deadlines are separately opt-in; the generic listener
+// below remains unchanged and never pretends to enforce individual-case hard timeouts.
+if (System.getenv('BC_TIMING_JUNIT') == 'true' ||
+    (targetProject != null && targetProject.extensions.extraProperties.has('bcTimingJunitEnabled') &&
+        targetProject.extensions.extraProperties.get('bcTimingJunitEnabled') == true)) {
+    def junitScript = new File(hookRoot, 'gradle/junit-test-timing.gradle')
+    if (!junitScript.isFile()) throw new GradleException('Enabled JUnit timing adapter is missing: ' + junitScript)
+    def attachJunit = { project -> project.apply(from: junitScript) }
+    gradle.beforeProject { project -> attachJunit(project) }
+    if (targetProject != null) attachJunit(targetProject)
+}
+// A single explicit raw-observation snapshot per invocation; never discover historical files.
+// Publish it for source-native observers, which may only select their OWN comparable scope.
+gradle.taskGraph.whenReady { graph ->
+    Map catalog = [schema: 'bc.timing_budget_catalog.v1', status: 'UNKNOWN',
+        reason: 'BC_TIMING_BASELINES is not configured', sources: [], groups: []]
+    if (System.getenv('BC_TIMING_BASELINES')) {
+        def selector = new File(hookRoot, 'scripts/timing_budget.py')
+        if (!selector.isFile()) throw new GradleException('Timing budget selector is missing: ' + selector)
+        def catalogFile = new File(sink.parentFile, sink.name + '.catalog.json')
+        def catalogLog = new File(sink.parentFile, sink.name + '.catalog.log')
+        [catalogFile, catalogLog].each { file ->
+            def path = file.toPath().toAbsolutePath()
+            if (path != path.normalize()) throw new GradleException('Timing catalog output traversal')
+            for (def ancestor = path; ancestor != null; ancestor = ancestor.parent) {
+                if (Files.isSymbolicLink(ancestor)) throw new GradleException('Timing catalog output symlink: ' + ancestor)
+            }
+        }
+        Files.createDirectories(sink.toPath().parent)
+        def process = new ProcessBuilder('python3', '-B', selector.absolutePath, 'catalog')
+            .redirectOutput(catalogFile).redirectError(catalogLog).start()
+        try {
+            if (!process.waitFor(30, java.util.concurrent.TimeUnit.SECONDS))
+                throw new GradleException('Timing catalog exceeded fixed selection safety cap; log=' + catalogLog)
+            if (process.exitValue() != 0)
+                throw new GradleException('Timing catalog failed (' + process.exitValue() + '); log=' + catalogLog)
+            if (catalogFile.length() > 64L * 1024L * 1024L)
+                throw new GradleException('Timing catalog exceeds 64 MiB')
+            catalog = (Map) new JsonSlurper().parse(catalogFile)
+            if (catalog.schema != 'bc.timing_budget_catalog.v1' || !(catalog.status in ['VALID', 'UNKNOWN']))
+                throw new GradleException('Invalid timing budget catalog ABI')
+        } finally {
+            if (process.isAlive()) {
+                process.destroyForcibly()
+                if (!process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS))
+                    throw new GradleException('Timing catalog cleanup incomplete; pid=' + process.pid())
+            }
+        }
+    }
+    gradle.extensions.extraProperties.set('bcTimingBudgetCatalog', catalog)
+    graph.allTasks.each { Task task ->
+        def identity = [scope: 'gradle_task', units: 'nanoseconds', clock: 'monotonic',
+            duration_boundary: 'gradle_beforeExecute_to_afterExecute_callbacks',
+            build_root: task.project.rootDir.absolutePath, task_path: task.path]
+        ['revision', 'input_id', 'profile', 'environment_id', 'cache_id'].each { identity[it] = context[it] }
+        def matches = catalog.status == 'VALID' ? catalog.groups.findAll { it.identity == identity } : []
+        if (matches.size() > 1) throw new GradleException('Ambiguous task timing baseline: ' + task.path)
+        def selected = matches ? matches[0] : null
+        def original = task.timeout.orNull?.toNanos()
+        def detail = [original_configured_timeout_ns: original, successful_sample_count: 0,
+            baseline_sources: catalog.sources, baseline_samples: [], expected_runtime_ns: null,
+            expected_runtime_rational: null, timeout_policy: 'UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED',
+            selection_reason: catalog.status == 'VALID' ? 'No exact comparable successful task baseline' : catalog.reason,
+            timeout_enforcement: 'GRADLE_TASK_TIMEOUT', timeout_selection_phase: 'TASK_GRAPH_READY',
+            selection_method: 'empirical_median_all_comparable_successes',
+            selection_frozen_before_invocation: true]
+        if (selected != null) {
+            long cap = new BigDecimal(selected.effective_timeout_ns.toString()).longValueExact()
+            if (cap <= 0 || !(selected.successful_sample_count > 0))
+                throw new GradleException('Invalid empirical task timeout: ' + task.path)
+            // Setting here (NOT beforeExecute/doFirst) precedes Gradle task execution-engine snapshots.
+            task.timeout.set(java.time.Duration.ofNanos(cap))
+            detail += [expected_runtime_ns: selected.expected_runtime_ns,
+                expected_runtime_rational: selected.expected_runtime_rational,
+                successful_sample_count: selected.successful_sample_count,
+                baseline_sources: catalog.sources, baseline_samples: selected.samples,
+                timeout_policy: 'EXACT_2X_EMPIRICAL_MEDIAN', selection_reason: 'Exact comparable successful task baseline']
+        }
+        detail.selected_timeout_ns = task.timeout.orNull?.toNanos()
+        taskBudgets.put(task, detail)
+    }
+}
 gradle.addListener(new TaskExecutionListener() {
     void beforeExecute(Task task) {
-        begin(task, 'gradle_task', [task_path: task.path, build_root: task.project.rootDir.absolutePath,
-            configured_timeout_ns: task.timeout.orNull?.toNanos()])
+        def selected = taskBudgets.get(task)
+        def actual = task.timeout.orNull?.toNanos()
+        if (selected?.timeout_policy == 'EXACT_2X_EMPIRICAL_MEDIAN' && actual != selected.selected_timeout_ns)
+            throw new GradleException('Task timeout changed after empirical selection: ' + task.path)
+        begin(task, 'gradle_task', (selected ?: [:]) + [task_path: task.path, build_root: task.project.rootDir.absolutePath,
+            configured_timeout_ns: actual])
     }
     void afterExecute(Task task, TaskState state) {
         def status = state.failure != null ? 'FAILED' : state.noSource ? 'NO_SOURCE' :
@@ -111,7 +221,9 @@ gradle.allprojects { project ->
             void beforeSuite(TestDescriptor descriptor) {
                 begin([task.path, descriptor], 'junit_suite', [task_path: task.path,
                     build_root: task.project.rootDir.absolutePath, name: descriptor.name,
-                    class_name: descriptor.className, parent_name: descriptor.parent?.name])
+                    class_name: descriptor.className, parent_name: descriptor.parent?.name,
+                    timeout_enforcement: 'UNSUPPORTED_BY_GRADLE_TEST_LISTENER',
+                    selection_reason: 'No supported observer-only own-suite hard timeout API'])
             }
             void afterSuite(TestDescriptor descriptor, TestResult result) {
                 finish([task.path, descriptor], result.resultType.toString(), [test_count: result.testCount,
@@ -120,7 +232,9 @@ gradle.allprojects { project ->
             void beforeTest(TestDescriptor descriptor) {
                 begin([task.path, descriptor], 'junit_test', [task_path: task.path,
                     build_root: task.project.rootDir.absolutePath, name: descriptor.name,
-                    class_name: descriptor.className, parent_name: descriptor.parent?.name])
+                    class_name: descriptor.className, parent_name: descriptor.parent?.name,
+                    timeout_enforcement: 'UNSUPPORTED_BY_GRADLE_TEST_LISTENER',
+                    selection_reason: 'No supported observer-only own-case hard timeout API'])
             }
             void afterTest(TestDescriptor descriptor, TestResult result) {
                 finish([task.path, descriptor], result.resultType.toString(), [exception_types: result.exceptions.collect { it.class.name }])

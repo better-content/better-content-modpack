@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.attribute.PosixFilePermission
 import java.time.Duration
 import java.util.UUID
 import java.util.concurrent.Callable
@@ -58,6 +59,18 @@ class VerificationCheckpointAdversarialTest {
             mods.forEach { mod -> session.checkpoint(item(mod), mod.dependsOn.associateWith { dependency -> item(mods.first { it.repository == dependency }).sha256 }) }
         }
         fun partial() { session("origin").use { it.checkpoint(item(), emptyMap()) } }
+        fun tamperSealedFixture(path: Path, text: String) {
+            require(path.toAbsolutePath().normalize().startsWith(root))
+            assertTrue(Files.isRegularFile(path, java.nio.file.LinkOption.NOFOLLOW_LINKS))
+            val permissions = Files.getPosixFilePermissions(path)
+            assertFalse(permissions.any { it.name.endsWith("_WRITE") }, "fixture publication must first be sealed")
+            // These independent synthetic files model an owner-level attacker defeating
+            // permissions. Never chmod a real checkpoint or stop at AccessDenied instead
+            // of exercising the existing byte/provenance rejection assertions below.
+            Files.setPosixFilePermissions(path, permissions + PosixFilePermission.OWNER_WRITE)
+            Files.writeString(path, text)
+            assertEquals(text, Files.readString(path), "the deliberate byte fault must land")
+        }
         override fun close() { /* Preserve synthetic receipts, snapshots and failure state for inspection. */ }
     }
     private fun repository(path: Path) {
@@ -134,7 +147,7 @@ class VerificationCheckpointAdversarialTest {
     @Test fun `snapshot and original artifact tampering cannot retain an old verification identity`() {
         Fixture().use { f ->
             f.partial()
-            Files.writeString(f.root.resolve(f.read().checkpoints.getValue("provider").staged_path), "tampered")
+            f.tamperSealedFixture(f.root.resolve(f.read().checkpoints.getValue("provider").staged_path), "tampered")
             f.session("resume").use { s -> assertTrue("provider" in s.affected); assertNull(s.reusable(mods[0])) }
         }
         Fixture().use { f ->
@@ -151,7 +164,7 @@ class VerificationCheckpointAdversarialTest {
         f.partial()
         f.session("resume").use { s ->
             val reused = requireNotNull(s.reusable(mods[0]))
-            Files.writeString(reused.jar, "changed after checkpoint staging")
+            f.tamperSealedFixture(reused.jar, "changed after checkpoint staging")
             assertThrows(IllegalArgumentException::class.java) { s.requireReusable(reused) }
             assertEquals("origin", f.read().checkpoints.getValue("provider").verification_id)
             assertNotEquals("complete", f.read().baseline)
@@ -177,7 +190,7 @@ class VerificationCheckpointAdversarialTest {
             assertThrows(IllegalArgumentException::class.java) { s.checkpoint(f.item(mods[1]), mapOf("provider" to "0".repeat(64))) }
             s.checkpoint(f.item(mods[1]), mapOf("provider" to f.item().sha256))
         }
-        Files.writeString(f.root.resolve(f.read().checkpoints.getValue("provider").staged_path), "dependency tampered")
+        f.tamperSealedFixture(f.root.resolve(f.read().checkpoints.getValue("provider").staged_path), "dependency tampered")
         f.session("resume").use { s ->
             assertTrue(s.affected.containsAll(setOf("provider", "consumer")))
             assertNull(s.reusable(mods[1]))
@@ -189,7 +202,7 @@ class VerificationCheckpointAdversarialTest {
             val provider = f.item()
             s.checkpoint(provider, emptyMap())
             val snapshot = f.root.resolve(f.read().checkpoints.getValue("provider").staged_path)
-            Files.writeString(snapshot, "changed dependency bytes")
+            f.tamperSealedFixture(snapshot, "changed dependency bytes")
             assertThrows(IllegalArgumentException::class.java) {
                 s.checkpoint(f.item(mods[1]), mapOf("provider" to provider.sha256))
             }
@@ -205,7 +218,7 @@ class VerificationCheckpointAdversarialTest {
         f.session("origin", definitions = definitions).use { it.checkpoint(f.item(provider), emptyMap()) }
         val snapshot = f.root.resolve(f.read().checkpoints.getValue("provider").staged_path)
             .resolveSibling("provider.jar.support/build/libs/support.jar")
-        Files.writeString(snapshot, "tampered support")
+        f.tamperSealedFixture(snapshot, "tampered support")
         f.session("resume", definitions = definitions).use { s ->
             assertTrue(s.affected.containsAll(setOf("provider", "consumer")))
             assertNull(s.reusable(provider))

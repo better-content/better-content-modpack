@@ -60,7 +60,8 @@ internal fun verificationProfileIdentity(profiles: List<VerificationProfile>): S
 data class ActiveModManifest(val schema: String, val mods: List<ActiveMod>,
     val verificationInputs: List<String> = listOf("**"))
 data class BuiltMod(val definition: ActiveMod, val commit: String, val jar: Path, val sha256: String, val mode: String,
-    val supportHashes: Map<String, String> = emptyMap(), val buildId: String? = null)
+    val supportHashes: Map<String, String> = emptyMap(), val buildId: String? = null,
+    val inputViewSha256: String? = null)
 data class SourceUpdate(
     val repository: String,
     val artifact: String,
@@ -87,13 +88,8 @@ private fun prepareRelease(args: Array<String>) {
     val skipTests = args[2].toBooleanStrict()
     val forceRebuild = args[3].toBooleanStrict()
     require(jobs in 1..4) { "release jobs must be between 1 and 4" }
-    // The scheduler/private-worker controls are available, but real provider concurrency
-    // must not consume a mutable global candidate-JAR directory. Until the authoritative
-    // build/test dependency views and atomic publication are proven, reject it BEFORE work.
-    require(jobs == 1) {
-        "Provider-parallel qualification is NOT READY: immutable build/audit dependency views " +
-            "and atomic candidate publication remain unvalidated. Only jobs=1 is currently supported."
-    }
+    // Readiness uses the authoritative DAG; build and audit consume the same sealed byte view.
+    // Only strict-gated no-replace publications enter the qualified global stage.
     require(!skipTests || !forceRebuild) { "forced rebuild requires source verification" }
     val workspace = root.parent
     val manifest: ActiveModManifest = mapper.readValue(root.resolve("gradle/active-custom-mods.json").toFile())
@@ -106,6 +102,9 @@ private fun prepareRelease(args: Array<String>) {
         require(mod.repository !in mod.dependsOn) { "${mod.repository} cannot depend on itself" }
         require(mod.dependsOn.all { it in repositories }) { "${mod.repository} has an unknown release dependency" }
     }
+
+    // Validate the entire authoritative graph before preparation, cache seeding, or worker work.
+    sourceVerificationClosure(manifest, manifest.mods.map { it.repository })
 
     val diagnostic = System.getenv(DiagnosticControls.ENV)?.let { input ->
         require(!skipTests && System.getenv("BC_VERIFICATION_SESSION").isNullOrBlank()) {
@@ -198,26 +197,35 @@ private fun prepareRelease(args: Array<String>) {
             (diagnostic != null || (verification?.affected?.contains(mod.repository)
                 ?: (forceRebuild || sourceUpdatesByRepository.getValue(mod.repository).status != "same")))
     }) isolation.prepare()
+    val completedProviders = java.util.concurrent.ConcurrentHashMap<String, BuiltMod>()
+    val inputMode = if (skipTests || diagnostic != null) ProviderInputMode.EXPLICIT_UNTESTED else ProviderInputMode.QUALIFIED
     val scheduled = ParallelBuildScheduler(jobs).run<BuiltMod>(manifest.mods.associate { it.repository to it.dependsOn }) { name, dependencies ->
                 val mod = manifest.mods.single { it.repository == name }
                 val update = sourceUpdatesByRepository.getValue(mod.repository)
-                // Diagnostic mode performs EVERY ordinary/profile gate for all other providers.
-                val mustBuild = diagnostic != null || (verification?.affected?.contains(mod.repository) ?: forceRebuild)
                 val consumed = mod.dependsOn.associateWith { dependency ->
                     dependencies.getValue(dependency).sha256
                 }
                 verification?.let { synchronized(it) { it.requireConsumedStages(mod, consumed) } }
+                val inputs = providerInputView(manifest, mod, completedProviders, workspace,
+                    evidence.resolve("provider-inputs/${mod.repository}"), inputMode,
+                    checkActive = { check(!Thread.currentThread().isInterrupted) { "provider admission cancelled" } })
+                verification?.admitInputView(mod, inputs.digest)
+                // Input-view changes truthfully invalidate this node and its not-yet-admitted descendants.
+                val mustBuild = diagnostic != null || (verification?.affected?.contains(mod.repository) ?: forceRebuild)
                 val item = if (diagnostic != null && mod.repository == DiagnosticControls.REPOSITORY) {
                     diagnostic.revalidate()
                     val staged = staging.resolve(mod.artifact)
-                    Files.copy(diagnostic.artifact, staged)
-                    require(Hashes.sha256(staged) == diagnostic.artifactSha256) { "deferred Controls copy changed" }
-                    BuiltMod(mod, diagnostic.artifactCommit, staged, diagnostic.artifactSha256, "DEFERRED_UNQUALIFIED")
-                } else if (verification != null && !mustBuild) synchronized(verification) { verification.reusable(mod) } ?:
-                    build(root, workspace, evidence, staging, mod, update.copy(status = "same"), skipTests, false, isolation = isolation)
+                    ProviderInputs.publish(diagnostic.artifact, staged, diagnostic.artifactSha256,
+                        strictGate = { diagnostic.revalidate(); ProviderInputs.verify(inputs) })
+                    BuiltMod(mod, diagnostic.artifactCommit, staged, diagnostic.artifactSha256,
+                        "DEFERRED_UNQUALIFIED", inputViewSha256 = inputs.digest)
+                } else if (verification != null && !mustBuild) synchronized(verification) { verification.reusable(mod, inputs.digest) } ?:
+                    build(root, workspace, evidence, staging, mod, update.copy(status = "same"), skipTests, false,
+                        isolation = isolation, inputView = inputs)
                 else build(root, workspace, evidence, staging, mod, update, skipTests, mustBuild,
-                    if (verification != null && mustBuild) synchronized(verification) { verification.reusableBuild(mod, consumed) } else null,
-                    isolation = isolation)
+                    if (verification != null && mustBuild) synchronized(verification) { verification.reusableBuild(mod, consumed, inputs.digest) } else null,
+                    isolation = isolation, inputView = inputs)
+                ProviderInputs.verify(inputs)
                 verification?.let { synchronized(it) { it.requireConsumedStages(mod, consumed) } }
                 if (verification != null && !mustBuild) synchronized(verification) { verification.requireReusable(item) }
                 val reflection = bytecodeReflectionViolations(mod.repository,
@@ -228,6 +236,8 @@ private fun prepareRelease(args: Array<String>) {
                 if (verification != null && mustBuild) {
                     verification.checkpoint(item, consumed)
                 }
+                // Only fully gated/checkpointed records become available to descendants.
+                completedProviders[name] = item
                 item
     }
     val built = scheduled.completed.values.toList()
@@ -332,6 +342,7 @@ private fun prepareRelease(args: Array<String>) {
                 "diagnostic_gate_run" to if (diagnostic != null && it.mode != "DEFERRED_UNQUALIFIED") runId else null,
                 "build_id" to (it.buildId ?: if (it.mode == "rebuilt") runId else null),
                 "support_hashes" to it.supportHashes,
+                "input_view_sha256" to it.inputViewSha256,
             )
         },
     )
@@ -355,10 +366,15 @@ internal fun build(
     forceRebuild: Boolean,
     reusableBuild: BuiltMod? = null,
     isolation: BuildIsolationPool? = null,
+    inputView: ProviderInputView? = null,
 ): BuiltMod {
     val repository = workspace.resolve("mod_source").resolve(mod.repository)
+    val inputs = inputView ?: emptyProviderInputView(evidence, mod, skipTests)
+    require(skipTests || inputs.mode == ProviderInputMode.QUALIFIED ||
+        !System.getenv(DiagnosticControls.ENV).isNullOrBlank()) { "unqualified inputs require explicit untested/diagnostic mode" }
+    ProviderInputs.verify(inputs)
     val action: (BuildIsolationContext?) -> BuiltMod = { context ->
-        buildWithResources(root, workspace, evidence, staging, mod, sourceUpdate, skipTests, forceRebuild, reusableBuild, context)
+        buildWithResources(root, workspace, evidence, staging, mod, sourceUpdate, skipTests, forceRebuild, reusableBuild, context, inputs)
     }
     if (sourceUpdate.status == "same" && !forceRebuild) {
         return withBuildResourceLock(repository.resolve(".gradle/bc-source-workspace.lock")) { action(null) }
@@ -371,7 +387,7 @@ internal fun build(
 private fun buildWithResources(
     root: Path, workspace: Path, evidence: Path, staging: Path, mod: ActiveMod,
     sourceUpdate: SourceUpdate, skipTests: Boolean, forceRebuild: Boolean,
-    reusableBuild: BuiltMod?, context: BuildIsolationContext?,
+    reusableBuild: BuiltMod?, context: BuildIsolationContext?, inputs: ProviderInputView,
 ): BuiltMod {
     val repository = workspace.resolve("mod_source").resolve(mod.repository)
     val log = evidence.resolve("mod-${mod.repository}.log")
@@ -381,10 +397,16 @@ private fun buildWithResources(
         require(Files.isRegularFile(bundled) && jarDeclaresMod(bundled, mod.modId)) {
             "unchanged ${mod.repository} has no valid bundled artifact to reuse"
         }
-        Files.copy(bundled, staged, StandardCopyOption.REPLACE_EXISTING)
         val commit = sourceUpdate.localCommit
-        return BuiltMod(mod, commit, staged, Hashes.sha256(staged), "reused",
-            if (skipTests) emptyMap() else supportArtifactHashes(repository, mod))
+        val sha = Hashes.sha256(bundled)
+        val support = if (skipTests) emptyMap() else supportArtifactHashes(repository, mod)
+        ProviderInputs.publish(bundled, staged, sha, strictGate = {
+            ProviderInputs.verify(inputs)
+            require(jarDeclaresMod(bundled, mod.modId) && readSourceCommit(bundled, mod) == commit) {
+                "bundled artifact provenance changed before publication"
+            }
+        })
+        return BuiltMod(mod, commit, staged, sha, "reused", support, inputViewSha256 = inputs.digest)
     }
     val initialSource = sourceIdentity(repository)
     val expectedCommit = sourceUpdate.localCommit
@@ -407,21 +429,27 @@ private fun buildWithResources(
                 }
                 requireSafeBuildOutput(repository, jar)
                 Files.createDirectories(jar.parent)
-                Files.copy(reusable.jar, jar, StandardCopyOption.REPLACE_EXISTING)
-                require(Hashes.sha256(jar) == reusable.sha256) { "restored build bytes changed" }
+                if (Files.exists(jar)) {
+                    val prior = scope.resolve("prior-restored-jars")
+                    Files.createDirectories(prior)
+                    val retained = Files.createTempDirectory(prior, "jar-").resolve(jar.fileName)
+                    Files.move(jar, retained, StandardCopyOption.ATOMIC_MOVE)
+                }
+                Files.copy(reusable.jar, jar)
+                require(Hashes.sha256(jar) == reusable.sha256 && jar.toFile().setWritable(true, true)) {
+                    "restored build output must be writable and byte-exact; immutable checkpoint remains untouched"
+                }
             }
             val profileLog = if (explicit) scope.resolve("verification.log") else log
-            val ordinaryCommand = providerVerificationCommand(repository, profile.tasks, !profile.clean, profile.properties) +
+            val fixedProperties = providerInputProperties(inputs)
+            require(profile.properties.keys.none { it in fixedProperties }) { "profile cannot override an admitted provider view" }
+            val ordinaryCommand = providerVerificationCommand(repository, profile.tasks, !profile.clean, profile.properties + fixedProperties) +
                 listOf("--init-script", root.resolve("gradle/test-timing.init.gradle").toAbsolutePath().toString())
             val command = context?.command(repository, ordinaryCommand) ?: ordinaryCommand
             val rootInput = BuildIsolationTiming.rootInput(root, evidence) { sourceIdentity(root) }
-            val consumedInputs = if (mod.dependsOn.isEmpty()) emptyMap() else {
-                val definitions: ActiveModManifest = mapper.readValue(root.resolve("gradle/active-custom-mods.json").toFile())
-                mod.dependsOn.associateWith { dependency ->
-                    val provider = definitions.mods.single { it.repository == dependency }
-                    Hashes.sha256(staging.resolve(provider.artifact))
-                }
-            }
+            // The sealed manifest binds every actual direct/transitive/runtime/support byte,
+            // not just declared direct edges or whatever happened to be in global staging.
+            val consumedInputs = mapOf("provider-view" to inputs.digest)
             val recipe = BuildIsolationTiming.digest(mapOf(
                 "repository" to mod.repository, "artifact" to mod.artifact, "tasks" to mod.tasks.joinToString("\u0000"),
                 "profile" to verificationProfileIdentity(listOf(profile)),
@@ -449,15 +477,18 @@ private fun buildWithResources(
                 "BC_TIMING_PROCESS_NAME" to "source:${mod.modId}:${profile.name}",
                 "BC_TIMING_ENVIRONMENT_ID" to environmentId,
                 "BC_TIMING_CACHE_ID" to cache.id,
+                "BC_TIMING_OWNED_GRADLE" to "true", // Also covers trusted Crops --no-daemon wrapper.
                 "BC_TIMING_NATIVE" to "true",
+                "BC_TIMING_JUNIT" to "true",
                 "BC_TIMING_PYTHON" to "true",
                 "PYTHONPATH" to (root.resolve("scripts/timing-python").toAbsolutePath().toString() +
                     (System.getenv("PYTHONPATH")?.takeIf { it.isNotEmpty() }?.let { java.io.File.pathSeparator + it } ?: "")),
             )
+            ProviderInputs.verify(inputs)
             var commandFailure: Throwable? = null
             try {
                 runLogged(repository, if (skipTests) command else cropsSourceInputCommand(root, repository, command),
-                    profileLog, providerBuildEnvironment(staging) + (context?.environment() ?: emptyMap()) + timing)
+                    profileLog, providerBuildEnvironment(inputs.directory) + (context?.environment() ?: emptyMap()) + timing)
             } catch (error: Throwable) {
                 commandFailure = error
                 throw error
@@ -469,7 +500,8 @@ private fun buildWithResources(
                     if (commandFailure != null) commandFailure.addSuppressed(historyFailure) else throw historyFailure
                 }
             }
-            auditSourceNativeLogs(repository, scope.resolve("native-log-audits/${mod.repository}/${profile.name}"), staging)
+            ProviderInputs.verify(inputs)
+            auditSourceNativeLogs(repository, scope.resolve("native-log-audits/${mod.repository}/${profile.name}"), inputs.directory)
             val output = Files.readString(profileLog)
             if (!skipTests && mod.repository != "better-exploration-load-control" && output.contains(":runGameTestServer")) {
                 require(Regex("All [1-9][0-9]* required tests passed").containsMatchIn(output)) {
@@ -482,17 +514,34 @@ private fun buildWithResources(
     }
     require(Files.isRegularFile(jar)) { "${mod.repository} did not stage ${mod.artifact}" }
     require(jarDeclaresMod(jar, mod.modId)) { "${mod.artifact} does not declare ${mod.modId}" }
-    Files.copy(jar, staged, StandardCopyOption.REPLACE_EXISTING)
     val commit = capture(repository, listOf("git", "rev-parse", "HEAD")).trim()
     require(commit == expectedCommit && sourceIdentity(repository) == initialSource) {
         "${mod.repository} source changed during verification; refusing later-HEAD annotation"
     }
-    if (readSourceCommit(staged, mod) != expectedCommit) annotateJar(staged, mod, expectedCommit)
-    val sha = Hashes.sha256(staged)
+    // Annotation and strict bytecode checks happen privately, never at a final-name stage path.
+    val preparedDirectory = evidence.resolve("qualified-artifacts/${mod.repository}")
+    Files.createDirectories(preparedDirectory)
+    val prepared = Files.createTempFile(preparedDirectory, "artifact-", ".prepared")
+    Files.copy(jar, prepared, StandardCopyOption.REPLACE_EXISTING)
+    if (readSourceCommit(prepared, mod) != expectedCommit) annotateJar(prepared, mod, expectedCommit)
+    val sha = Hashes.sha256(prepared)
     val support = if (skipTests) emptyMap() else supportArtifactHashes(repository, mod)
+    val allowancesPath = root.resolve("gradle/reflection-allowlist.txt")
+    val allowances = if (Files.isRegularFile(allowancesPath)) readReflectionAllowlist(allowancesPath) else emptySet()
+    ProviderInputs.publish(prepared, staged, sha, strictGate = {
+        ProviderInputs.verify(inputs)
+        require(sourceIdentity(repository) == initialSource &&
+            capture(repository, listOf("git", "rev-parse", "HEAD")).trim() == expectedCommit &&
+            Hashes.sha256(prepared) == sha && jarDeclaresMod(prepared, mod.modId) &&
+            readSourceCommit(prepared, mod) == expectedCommit) { "provider changed before final publication" }
+        require(bytecodeReflectionViolations(mod.repository, repository, prepared, allowances).isEmpty()) {
+            "${mod.repository} prepared bytecode uses forbidden reflection"
+        }
+        require(skipTests || supportArtifactHashes(repository, mod) == support) { "support changed before publication" }
+    }, checkActive = { check(!Thread.currentThread().isInterrupted) { "provider publication cancelled" } })
     val retained = reusable != null && sha == reusable.sha256 && support == reusable.supportHashes
     return BuiltMod(mod, commit, staged, sha, if (retained) "build-reused-verified" else "rebuilt",
-        support, if (retained) reusable!!.buildId else null)
+        support, if (retained) reusable!!.buildId else null, inputs.digest)
 }
 
 internal fun providerVerificationCommand(repository: Path, tasks: List<String>, restoredBuild: Boolean,

@@ -216,10 +216,11 @@ class BoundedTimingTests(unittest.TestCase):
         command = self.command('print("original process output")')
         command[command.index(str(SCRIPT))] = str(copied)
         result = subprocess.run(command, env=self.env, capture_output=True, timeout=8)
-        self.assertEqual(2, result.returncode, result.stderr)
-        self.assertIn(b'timing_report.py', result.stderr)
-        self.assertEqual('original process output\n', self.log.read_text())
-        # Explicitly include the actual reviewed dependency; no fallback skips reporting.
+        self.assertNotEqual(0, result.returncode, result.stderr)
+        self.assertIn(b'timing_budget', result.stderr)
+        self.assertFalse(self.log.exists())  # required pre-invocation selector cannot be skipped
+        # Explicitly include both reviewed dependencies; no fallback skips selection/reporting.
+        shutil.copyfile(SCRIPT.with_name('timing_budget.py'), scripts / 'timing_budget.py')
         shutil.copyfile(SCRIPT.with_name('timing_report.py'), scripts / 'timing_report.py')
         result = subprocess.run(command, env=self.env, capture_output=True, timeout=8)
         self.assertEqual(0, result.returncode, result.stderr)

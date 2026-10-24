@@ -1,0 +1,157 @@
+import groovy.json.JsonOutput
+import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
+import java.nio.file.Files
+import java.nio.file.LinkOption
+import java.nio.file.StandardOpenOption
+import java.time.Instant
+
+// Companion to test-timing.init.gradle, not a replacement for Task.timeout. Only the
+// supported facade may assert disposable ownership, on an actual --no-daemon command.
+// Registry values are copied scalars: never Task/Project/TestCase/world/Throwable objects.
+class BcOwnedTaskDeadlineBridge {
+    static final long CLEANUP_NS = 2_000_000_000L
+    static final long SHUTDOWN_NS = 2_000_000_000L
+    final Map<String, Map> active = new LinkedHashMap<>()
+    boolean exceeded = false
+    boolean observerFailed = false
+    boolean watching = false
+
+    // nanoTime subtraction is wrap-safe for intervals less than 2^63 ns. Never add
+    // cap+grace to a timestamp (or to each other), which could overflow.
+    static long elapsed(long now, long start) { now - start }
+
+    static void durable(Map entry, String event, long elapsedNs) {
+        def path = new File((String) entry.health_path).toPath().toAbsolutePath()
+        if (path != path.normalize()) throw new IllegalStateException('Deadline health output traversal')
+        for (def p = path; p != null; p = p.parent) {
+            if (Files.isSymbolicLink(p)) throw new IllegalStateException('Deadline health output symlink: ' + p)
+        }
+        Files.createDirectories(path.parent)
+        Map record = [schema: 'bc.timing_deadline_health.v1', event: event,
+            operation_id: entry.operation_id, invocation_id: entry.invocation_id,
+            scope: 'gradle_task', task_path: entry.task_path,
+            configured_timeout_ns: entry.cap_ns, elapsed_ns: elapsedNs,
+            timeout_policy: 'EXACT_2X_EMPIRICAL_MEDIAN', deadline_exceeded: true,
+            deadline_cleanup_grace_ns: CLEANUP_NS, deadline_shutdown_grace_ns: SHUTDOWN_NS,
+            deadline_enforcement: 'OWN_DISPOSABLE_GRADLE_JVM', observed_at: Instant.now().toString()]
+        byte[] bytes = (JsonOutput.toJson(record) + '\n').getBytes('UTF-8')
+        FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE,
+            LinkOption.NOFOLLOW_LINKS).withCloseable { channel ->
+            channel.lock().withCloseable {
+                channel.position(channel.size())
+                def buffer = ByteBuffer.wrap(bytes)
+                while (buffer.hasRemaining()) channel.write(buffer)
+                channel.force(true)
+            }
+        }
+    }
+
+    private void intent(Map entry, long age) {
+        if (entry.intent == true) return
+        exceeded = true
+        entry.intent = true
+        try { durable(entry, 'deadline_intent', age) }
+        catch (Throwable failure) {
+            observerFailed = true
+            System.err.println('Owned task deadline health write failed: ' + failure.class.name)
+        }
+    }
+
+    synchronized void start(Map fields, long startedNano, boolean owned, String sink) {
+        if (fields.scope != 'gradle_task' || fields.timeout_policy != 'EXACT_2X_EMPIRICAL_MEDIAN') return
+        if (!owned) throw new IllegalStateException('Empirical task deadline requires BC_TIMING_OWNED_GRADLE=true on a disposable --no-daemon invocation')
+        long cap = new BigDecimal(fields.configured_timeout_ns.toString()).longValueExact()
+        if (cap <= 0) throw new IllegalStateException('Invalid owned task deadline')
+        if (!sink || !new File(sink).isAbsolute()) throw new IllegalStateException('Owned task deadline requires absolute bcTimingFile')
+        String id = fields.operation_id?.toString()
+        if (!id || active.containsKey(id)) throw new IllegalStateException('Missing/duplicate owned task operation_id')
+        active[id] = [operation_id: id, invocation_id: fields.invocation_id?.toString(),
+            task_path: fields.task_path?.toString(), started_ns: startedNano, cap_ns: cap,
+            health_path: sink + '.owned-deadlines.health.jsonl', intent: false]
+        if (!watching) {
+            watching = true
+            Thread thread = new Thread({ watch() } as Runnable, 'bc-owned-gradle-deadlines')
+            thread.daemon = true
+            thread.start()
+        }
+        notifyAll()
+    }
+
+    synchronized Map finish(String id, String rawStatus) {
+        Map entry = active.remove(id)
+        if (entry == null) return [:]
+        long age = elapsed(System.nanoTime(), (long) entry.started_ns)
+        boolean late = age >= (long) entry.cap_ns
+        if (late) intent(entry, age)
+        notifyAll()
+        // The caller keeps its actual original raw status; this does not fabricate a terminal.
+        return [deadline_exceeded: late, deadline_cleanup_grace_ns: CLEANUP_NS,
+            deadline_shutdown_grace_ns: SHUTDOWN_NS,
+            deadline_enforcement: 'OWN_DISPOSABLE_GRADLE_JVM']
+    }
+
+    private void watch() {
+        while (true) {
+            boolean terminate = false
+            synchronized (this) {
+                long now = System.nanoTime()
+                long waitNs = 10_000_000L
+                active.values().each { Map entry ->
+                    long age = elapsed(now, (long) entry.started_ns)
+                    long cap = (long) entry.cap_ns
+                    if (age >= cap) {
+                        intent(entry, age)
+                        long cleanupAge = age - cap
+                        if (cleanupAge >= CLEANUP_NS) {
+                            try { durable(entry, 'owned_jvm_exit_requested', age) }
+                            catch (Throwable failure) { observerFailed = true }
+                            terminate = true
+                        } else waitNs = Math.min(waitNs, CLEANUP_NS - cleanupAge)
+                    } else waitNs = Math.min(waitNs, cap - age)
+                }
+                if (!terminate) {
+                    try { wait(waitNs.intdiv(1_000_000L) as long, (waitNs % 1_000_000L) as int) }
+                    catch (InterruptedException ignored) { /* no external thread controls containment */ }
+                }
+            }
+            if (terminate) {
+                // Escalation is independent of System.exit, which can hang in shutdown hooks.
+                Thread escalation = new Thread({
+                    long started = System.nanoTime()
+                    while (elapsed(System.nanoTime(), started) < SHUTDOWN_NS) {
+                        long left = SHUTDOWN_NS - elapsed(System.nanoTime(), started)
+                        if (left > 0) java.util.concurrent.locks.LockSupport.parkNanos(left)
+                        Thread.interrupted()
+                    }
+                    Runtime.getRuntime().halt(124)
+                } as Runnable, 'bc-owned-gradle-halt')
+                escalation.daemon = true
+                escalation.start()
+                System.exit(124) // This JVM only; never PID lookup, external signals or world APIs.
+                return
+            }
+        }
+    }
+
+    synchronized boolean unhealthy() { exceeded || observerFailed }
+}
+
+if (gradle.extensions.extraProperties.has('bcTimingOwnedDeadlinesInstalled')) return
+gradle.extensions.extraProperties.set('bcTimingOwnedDeadlinesInstalled', true)
+def bridge = new BcOwnedTaskDeadlineBridge()
+gradle.extensions.extraProperties.set('bcTimingTaskDeadlineStart', { Map fields, long startedNano ->
+    def extras = gradle.extensions.extraProperties
+    String sink = extras.has('bcTimingFile') ? extras.get('bcTimingFile').toString() : null
+    bridge.start(fields, startedNano, System.getenv('BC_TIMING_OWNED_GRADLE') == 'true', sink)
+})
+gradle.extensions.extraProperties.set('bcTimingTaskDeadlineFinish', { String operationId, String status ->
+    bridge.finish(operationId, status)
+})
+gradle.buildFinished { result ->
+    if (bridge.unhealthy()) {
+        def diagnostic = new GradleException('Owned Gradle task deadline exceeded or deadline observer failed; see .owned-deadlines.health.jsonl')
+        if (result.failure != null) result.failure.addSuppressed(diagnostic)
+        else throw diagnostic
+    }
+}

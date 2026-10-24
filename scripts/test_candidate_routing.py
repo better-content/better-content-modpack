@@ -23,7 +23,7 @@ class CandidateRoutingTests(unittest.TestCase):
         print('synthetic fixture:', self.root, flush=True)
         subprocess.run(['git', 'init', '-q', str(self.root)], check=True, capture_output=True)
         (self.root / 'scripts').mkdir()
-        for name in ('BoundedFacade.main.kts', 'bounded_facade.py', 'timing_report.py', 'runner_lock.py', 'candidate_paths.py', 'workspace_coordination.py', 'debug_coverage.py', 'debug_source_registration.py', 'testing_session.py'):
+        for name in ('BoundedFacade.main.kts', 'bounded_facade.py', 'timing_report.py', 'timing_budget.py', 'runner_lock.py', 'candidate_paths.py', 'workspace_coordination.py', 'debug_coverage.py', 'debug_source_registration.py', 'testing_session.py'):
             shutil.copy2(REPO / 'scripts' / name, self.root / 'scripts' / name)
             if name.endswith('.main.kts'):
                 with (self.root / 'scripts' / name).open('a') as stream:

@@ -1,7 +1,5 @@
 import groovy.json.JsonSlurper
 import java.nio.file.Files
-import java.security.MessageDigest
-import java.util.zip.ZipFile
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.bundling.AbstractArchiveTask
 
@@ -11,8 +9,12 @@ import org.gradle.api.tasks.bundling.AbstractArchiveTask
 // No new mod, production sourceSet dependency, original test task/body, timeout or invocation changes.
 if (System.getenv('BC_TIMING_NATIVE') != 'true') return
 if (project.extensions.extraProperties.has('bcNativeTimingInstalled')) return
+if (project.plugins.hasPlugin('net.minecraftforge.gradle'))
+    throw new GradleException('Native timing must be applied before the Forge plugin (use the init script)')
 project.extensions.extraProperties.set('bcNativeTimingInstalled', true)
 def supportRoot = buildscript.sourceFile.canonicalFile.parentFile.parentFile
+def contractLoader = new GroovyClassLoader(getClass().classLoader)
+def sdkContract = contractLoader.parseClass(new File(supportRoot, 'src/nativeTiming/contracts/NativeTimingSdkContract.groovy'))
 
 def safePath = { File file ->
     def path = file.toPath()
@@ -72,24 +74,7 @@ project.afterEvaluate {
                 if (!helper.isFile() || !helper.getText('UTF-8').startsWith('package bc.nonshipping.nativetiming;'))
                     throw new GradleException('Native timing helper escaped ordinary namespace: ' + name)
             }
-            def found = [:].withDefault { [] }
-            timing.compileClasspath.files.findAll { it.isFile() && it.name.endsWith('.jar') }.each { jar ->
-                new ZipFile(jar).withCloseable { zip ->
-                    reviewed.each { name, hashes ->
-                        def entry = zip.getEntry(name)
-                        if (entry != null) {
-                            def hash = zip.getInputStream(entry).withCloseable { input ->
-                                MessageDigest.getInstance('SHA-256').digest(input.bytes).encodeHex().toString()
-                            }
-                            if (!hashes.contains(hash)) throw new GradleException('Unreviewed native timing SDK ABI: ' + name)
-                            found[name].add(jar.canonicalPath)
-                        }
-                    }
-                }
-            }
-            reviewed.keySet().each { name ->
-                if (found[name].size() != 1) throw new GradleException('Missing/ambiguous native timing SDK ABI: ' + name)
-            }
+            sdkContract.verifySdk(timing.compileClasspath.files, reviewed)
         }
     }
     tasks.named(timing.compileJavaTaskName, JavaCompile).configure {
@@ -100,15 +85,28 @@ project.afterEvaluate {
     }
 
     // These exclusions cover both classes/resources and sources archives, including custom Jar tasks.
-    tasks.withType(AbstractArchiveTask).configureEach {
+    tasks.withType(AbstractArchiveTask).configureEach { archive ->
         exclude('bc/nonshipping/nativetiming/**', '**/bc_native_timing.mixins.json', '**/src/nativeTiming/**')
+        // Inspect actual ZIP bytes too: custom CopySpecs must not quietly undo the source-only role.
+        // This includes jar/sourcesJar/jarJar outputs, never a permission to package a distribution.
+        doLast {
+            File output = archive.archiveFile.get().asFile
+            if (output.name.endsWith('.jar') || output.name.endsWith('.zip')) {
+                sdkContract.verifyArchive(output)
+            }
+        }
     }
 
     selected.each { run ->
         // Only attach to the existing actual main-owning mod. Never create an overlay mod/JPMS module.
+        // ForgeGradle 6 ModConfig has source(SourceSet), not sources(SourceSet).
+        // Fail closed if attachment was attempted late/through an inherited ambiguous owner.
         def owners = run.mods.findAll { mod -> mod.sources.contains(main) }
         if (owners.size() != 1) throw new GradleException('Native timing requires exactly one main-owning mod: ' + run.name)
-        owners.first().source(timing)
+        def owner = owners.first()
+        owner.source(timing)
+        if (owner.sources.count { it == timing } != 1 || main.output.classesDirs.files.any { timing.output.classesDirs.files.contains(it) })
+            throw new GradleException('Native timing sourceSet attachment/production isolation failed: ' + run.name)
         run.args('--mixin.config', 'bc_native_timing.mixins.json')
         String suffix = UUID.randomUUID().toString()
         File health = layout.buildDirectory.file('native-timing/' + run.name + '/' + suffix + '.health.json').get().asFile
@@ -120,6 +118,9 @@ project.afterEvaluate {
         run.property('bc.nativeTiming.health', health.absolutePath)
         run.property('bc.nativeTiming.task', project.path == ':' ? ':' + run.taskName : project.path + ':' + run.taskName)
         run.property('bc.nativeTiming.buildRoot', project.rootDir.absolutePath)
+        File catalogFile = layout.buildDirectory.file('native-timing/' + run.name + '/' + suffix + '.catalog.json').get().asFile
+        safePath(catalogFile)
+        run.property('bc.nativeTiming.catalog', catalogFile.absolutePath)
         def finalizeTiming = tasks.register('verifyBcNativeTiming' + run.name.capitalize()) {
             group = 'verification'
             description = 'Checks durable native attempt observation health, not native test acceptance.'
@@ -128,7 +129,10 @@ project.afterEvaluate {
                 if (!health.isFile()) throw new GradleException('Missing native timing health (not observed/hard-killed JVM): ' + health)
                 def receipt = new JsonSlurper().parse(health)
                 if (receipt.schema != 'bc.native_timing_health.v1' || receipt.healthy != true ||
-                        receipt.interrupted != false || receipt.started_count != receipt.terminal_count)
+                        receipt.invocation_id == null || receipt.sink != sink.absolutePath ||
+                        receipt.task_path != (project.path == ':' ? ':' + run.taskName : project.path + ':' + run.taskName) ||
+                        receipt.interrupted != false || receipt.wall_timed_out != false || !(receipt.started_count instanceof Number) ||
+                        receipt.started_count < 0 || receipt.started_count != receipt.terminal_count)
                     throw new GradleException('Native timing incomplete/unhealthy: ' + health)
                 def starts = [] as Set
                 def terminals = [] as Set
@@ -151,7 +155,11 @@ project.afterEvaluate {
                             if (!starts.contains(record.operation_id) || !terminals.add(record.operation_id) ||
                                     !(record.status in ['SUCCEEDED', 'FAILED', 'TIMED_OUT']) ||
                                     !(record.duration_ns instanceof Number) || record.duration_ns < 0 ||
-                                    !(record.native_duration_ms instanceof Number) || record.native_duration_ms < 0)
+                                    !((record.native_duration_ms instanceof Number && record.native_duration_ms >= 0) ||
+                                        (record.status == 'TIMED_OUT' && record.native_duration_ms == null &&
+                                         record.exception_type == 'bc.nonshipping.nativetiming.WallDeadlineExceeded' &&
+                                         receipt.wall_timed_out == true && record.configured_timeout_ns instanceof Number &&
+                                         record.configured_timeout_ns > 0)))
                                 throw new GradleException('Invalid/duplicate/incomplete native timing terminal')
                         } else throw new GradleException('Unknown native timing event')
                     }
@@ -162,6 +170,22 @@ project.afterEvaluate {
         }
         tasks.matching { it.name == run.taskName }.configureEach {
             dependsOn(tasks.named(timing.classesTaskName))
+            doFirst {
+                // The generic timing adapter validates raw BC_TIMING_BASELINES exactly once at
+                // graph readiness. Never accept a caller-supplied persisted catalog as authority.
+                def extra = gradle.extensions.extraProperties
+                def catalog = extra.has('bcTimingBudgetCatalog') ? extra.get('bcTimingBudgetCatalog') :
+                        [schema: 'bc.timing_budget_catalog.v1', status: 'UNKNOWN', reason: 'no_validated_bootstrap_catalog', sources: [], groups: []]
+                safePath(catalogFile)
+                Files.createDirectories(catalogFile.toPath().parent)
+                def payload = java.nio.ByteBuffer.wrap((groovy.json.JsonOutput.toJson(catalog) + '\n').getBytes('UTF-8'))
+                java.nio.channels.FileChannel.open(catalogFile.toPath(),
+                        java.nio.file.StandardOpenOption.CREATE_NEW, java.nio.file.StandardOpenOption.WRITE,
+                        java.nio.file.LinkOption.NOFOLLOW_LINKS).withCloseable { channel ->
+                    while (payload.hasRemaining()) channel.write(payload)
+                    channel.force(true)
+                }
+            }
             finalizedBy(finalizeTiming)
         }
     }

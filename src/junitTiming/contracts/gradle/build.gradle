@@ -1,0 +1,27 @@
+plugins { id 'java' }
+// Explicit installed SDK files only: no repositories, downloads or dependency upgrades.
+def pinned = System.getenv('BC_JUNIT_CONTROL_CLASSPATH')
+if (!pinned) throw new GradleException('Explicit BC_JUNIT_CONTROL_CLASSPATH required')
+dependencies { testImplementation files(pinned.split(java.util.regex.Pattern.quote(File.pathSeparator))) }
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    outputs.upToDateWhen { false }
+    systemProperty 'control.mode', findProperty('controlMode') ?: 'success'
+    afterTest { descriptor, result ->
+        file('original-callbacks.jsonl').append(groovy.json.JsonOutput.toJson([
+            name: descriptor.name, result: result.resultType.toString(),
+            exception_types: result.exceptions.collect { it.class.name }]) + '\n')
+    }
+    if (findProperty('disableSpi') == 'true') {
+        doFirst {
+            // Negative health control only: remove service resources, not classes/Gradle reporter.
+            classpath = files(classpath.files.findAll { !it.absolutePath.endsWith('/src/junitTiming/resources') })
+        }
+    }
+}
+// Deliberately try to archive the support outputs. Adapter must exclude classes AND service entry.
+tasks.register('observerLeakProbe', Jar) {
+    dependsOn('compileBcJunitTiming')
+    from(layout.buildDirectory.dir('bc-junit-timing/classes'))
+    from(new File(System.getenv('BC_JUNIT_ADAPTER_ROOT'), 'src/junitTiming/resources'))
+}

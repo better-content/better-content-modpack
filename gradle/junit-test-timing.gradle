@@ -1,0 +1,154 @@
+import org.gradle.api.GradleException
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+import java.nio.file.Files
+import java.nio.file.LinkOption
+import java.nio.file.StandardOpenOption
+import java.util.concurrent.atomic.AtomicLong
+import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.TestListener
+import org.gradle.api.tasks.testing.TestDescriptor
+import org.gradle.api.tasks.testing.TestResult
+import org.gradle.api.tasks.testing.junitplatform.JUnitPlatformOptions
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
+
+// Project attachment only; inert unless source invocations explicitly opt in.
+if (System.getenv('BC_TIMING_JUNIT') != 'true' &&
+    !(project.extensions.extraProperties.has('bcTimingJunitEnabled') &&
+        project.extensions.extraProperties.get('bcTimingJunitEnabled') == true)) return
+if (project.extensions.extraProperties.has('bcJunitTimingAttached')) return
+project.extensions.extraProperties.set('bcJunitTimingAttached', true)
+def adapterRoot = buildscript.sourceFile.canonicalFile.parentFile.parentFile
+def support = new File(adapterRoot, 'src/junitTiming')
+def checked = { File file ->
+    def path = file.toPath().toAbsolutePath()
+    if (path != path.normalize()) throw new GradleException('JUnit timing traversal: ' + file)
+    for (def at = path; at != null; at = at.parent)
+        if (Files.isSymbolicLink(at)) throw new GradleException('JUnit timing symlink: ' + at)
+    path
+}
+plugins.withId('java') {
+    def healthChecks = [:]
+    def healthWiringClosed = [value: false]
+    // Compile against the owning test SDK, not Gradle's launcher or an upgraded dependency.
+    def compileObserver = tasks.register('compileBcJunitTiming', JavaCompile) {
+        source(fileTree(new File(support, 'java')) { include '**/*.java' })
+        // Runtime-only launcher declarations are valid too. Gradle's bundled SPI is a compile-only
+        // fallback for its own implicit worker launcher; these jars are NEVER added to Test runtime.
+        classpath = sourceSets.test.runtimeClasspath + fileTree(new File(gradle.gradleHomeDir, 'lib/plugins')) {
+            include 'junit-platform-launcher-*.jar', 'junit-platform-engine-*.jar', 'junit-platform-commons-*.jar', 'apiguardian-api-*.jar'
+        }
+        destinationDirectory.set(layout.buildDirectory.dir('bc-junit-timing/classes'))
+        options.release.set(17)
+        javaCompiler.set(javaToolchains.compilerFor { languageVersion.set(JavaLanguageVersion.of(17)) })
+    }
+    tasks.withType(AbstractArchiveTask).configureEach {
+        exclude 'bc/nonshipping/junittiming/**', '**/bc/nonshipping/junittiming/**',
+            'META-INF/services/org.junit.platform.launcher.TestExecutionListener', 'src/junitTiming/**'
+        doLast {
+            def archive = archiveFile.get().asFile
+            if (archive.name.endsWith('.jar') || archive.name.endsWith('.zip')) {
+                new java.util.zip.ZipFile(archive).withCloseable { zip ->
+                    zip.entries().each { entry ->
+                        if (entry.name.contains('bc/nonshipping/junittiming/') ||
+                            entry.name == 'META-INF/services/org.junit.platform.launcher.TestExecutionListener' ||
+                            entry.name.startsWith('src/junitTiming/'))
+                            throw new GradleException('Nonshipping JUnit observer leaked into ' + archive)
+                    }
+                }
+            }
+        }
+    }
+    tasks.withType(Test).configureEach { Test tested ->
+        if (healthWiringClosed.value) throw new GradleException('JUnit Test task registered after health wiring: ' + tested.path)
+        dependsOn(compileObserver)
+        // No production sourceSet/dependency, launcher replacement, invocation wrapper or test discovery changes.
+        // Append after the owning Test task's complete configuration, not here: its later
+        // classpath assignment must not silently discard this opt-in nonshipping adapter.
+        def nonce = UUID.randomUUID().toString()
+        def healthDir = layout.buildDirectory.dir('bc-junit-timing/' + name + '/' + nonce).get().asFile
+        def bootstrap = new File(healthDir, 'bootstrap.json')
+        def observed = new AtomicLong()
+        def prepared = [value: false]
+        def sinkPath = [value: null]
+        addTestListener(new TestListener() {
+            void beforeSuite(TestDescriptor descriptor) { }
+            void beforeTest(TestDescriptor descriptor) { }
+            void afterTest(TestDescriptor descriptor, TestResult result) { }
+            void afterSuite(TestDescriptor descriptor, TestResult result) {
+                if (descriptor.parent == null) observed.set(result.testCount)
+            }
+        })
+        doFirst {
+            if (!(options instanceof JUnitPlatformOptions))
+                throw new GradleException('BC_TIMING_JUNIT supports JUnit Platform Test tasks only: ' + path)
+            def extras = gradle.extensions.extraProperties
+            if (!extras.has('bcTimingFile') || !extras.has('bcTimingBudgetCatalog'))
+                throw new GradleException('JUnit timing requires generic timing hook and fresh catalog snapshot')
+            def sink = new File(extras.get('bcTimingFile').toString())
+            checked(sink); checked(bootstrap)
+            if (healthDir.exists()) throw new GradleException('Fresh JUnit health directory already exists: ' + healthDir)
+            Files.createDirectories(healthDir.toPath())
+            def context = [build_root: project.rootDir.absolutePath, task_path: path, task_nonce: nonce]
+            ['RUN_ID', 'REVISION', 'INPUT_ID', 'PROFILE', 'ENVIRONMENT_ID', 'CACHE_ID'].each {
+                context[it.toLowerCase(Locale.ROOT)] = System.getenv('BC_TIMING_' + it) ?:
+                    (it == 'RUN_ID' ? System.getenv('BC_TEST_RUN_ID') : null) ?: 'UNKNOWN'
+            }
+            def config = [schema: 'bc.junit_timing_bootstrap.v1', sink: sink.absolutePath,
+                health_dir: healthDir.absolutePath, context: context, catalog: extras.get('bcTimingBudgetCatalog')]
+            def bytes = JsonOutput.toJson(config).getBytes('UTF-8')
+            if (bytes.length > 64L * 1024L * 1024L) throw new GradleException('JUnit bootstrap exceeds 64 MiB')
+            Files.write(bootstrap.toPath(), bytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE, LinkOption.NOFOLLOW_LINKS)
+            systemProperty('bc.junit.timing.bootstrap', bootstrap.absolutePath)
+            sinkPath.value = sink.absolutePath
+            prepared.value = true
+        }
+        def checkHealth = {
+                if (!prepared.value || tested.state.noSource || tested.state.upToDate || tested.state.skipped) return
+                try {
+                    checked(healthDir)
+                    def receipts = healthDir.listFiles().findAll { it.name != 'bootstrap.json' && it.name.endsWith('.json') }
+                    if (receipts.isEmpty()) throw new GradleException('Missing fresh JUnit SPI health receipt: ' + healthDir)
+                    long terminals = 0
+                    receipts.each { receipt ->
+                        checked(receipt)
+                        if (receipt.length() > 1024 * 1024) throw new GradleException('Oversize JUnit health receipt')
+                        def data = new JsonSlurper().parse(receipt)
+                        if (data.schema != 'bc.junit_timing_health.v1' || data.task_nonce != nonce ||
+                            data.task_path != tested.path || data.sink != sinkPath.value || data.healthy != true ||
+                            data.interrupted != false || data.started_count != data.terminal_count ||
+                            !(data.gradle_owned_plan instanceof Boolean) ||
+                            data.plan_role != (data.gradle_owned_plan ? 'GRADLE_OWNED' : 'ENCLOSED_ENGINE'))
+                            throw new GradleException('Unhealthy/foreign JUnit SPI recorder: ' + receipt)
+                        // All receipts must be healthy/balanced, including real nested engine
+                        // executions. Only outer plans correspond to the original Gradle reporter.
+                        if (data.gradle_owned_plan) terminals += data.terminal_count as long
+                    }
+                    if (terminals != observed.get()) throw new GradleException(
+                        'JUnit SPI/Gradle case count mismatch: ' + terminals + ' != ' + observed.get())
+                } catch (Throwable failure) {
+                    // Original test/task failure remains primary; successful originals fail closed here.
+                    if (tested.state.failure != null) tested.state.failure.addSuppressed(failure)
+                    else throw failure
+                }
+        }
+        healthChecks[tested.path] = [task: tested, check: checkHealth]
+    }
+    // Gradle forbids registering tasks from another task's configureEach mutation guard.
+    // Snapshot/realize the Test collection first, then register one health finalizer per task.
+    gradle.projectsEvaluated {
+        def tests = tasks.withType(Test).toList()
+        tests.each { tested ->
+            def health = healthChecks[tested.path]
+            if (health == null) throw new GradleException('Missing JUnit health wiring: ' + tested.path)
+            tested.classpath = tested.classpath + files(compileObserver.flatMap { it.destinationDirectory }, new File(support, 'resources'))
+            def guard = tasks.register(tested.name + 'BcJunitTimingHealth') {
+                doLast { health.check.call() }
+            }
+            tested.finalizedBy(guard)
+        }
+        healthWiringClosed.value = true
+    }
+}

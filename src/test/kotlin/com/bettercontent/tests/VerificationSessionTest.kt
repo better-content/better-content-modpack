@@ -31,7 +31,7 @@ class VerificationSessionTest {
             Files.createDirectories(source)
             git(source, "init", "-q")
             Files.writeString(source.resolve("source.txt"), mod.repository)
-            Files.writeString(source.resolve(".gitignore"), "build/\n")
+            Files.writeString(source.resolve(".gitignore"), "build/\n.gradle/\n")
             git(source, "add", "source.txt", ".gitignore")
             git(source, "-c", "user.email=test@example.invalid", "-c", "user.name=Test", "commit", "-qm", "fixture")
             Files.writeString(root.resolve("mods/${mod.artifact}"), mod.repository)
@@ -103,6 +103,7 @@ class VerificationSessionTest {
             val receipt: VerificationReceipt = mapper.readValue(root.resolve(".worklane/testing-sessions/$id.json").toFile())
             return root.resolve(receipt.checkpoints.getValue(repository).staged_path)
         }
+        assertTrue(snapshot("provider").toFile().setWritable(true)) // Deliberate adversarial tamper of sealed bytes.
         Files.writeString(snapshot("provider"), "corrupt")
         assertEquals(setOf("provider", "consumer"), verify(root, id))
         Files.delete(snapshot("independent"))
@@ -166,16 +167,52 @@ class VerificationSessionTest {
             assertTrue(it.affected.isEmpty())
             assertNotNull(it.reusable(active.first()))
             assertEquals("verified support", Files.readString(support))
+            assertTrue(Files.getPosixFilePermissions(support).contains(java.nio.file.attribute.PosixFilePermission.OWNER_WRITE))
             it.commit(artifacts())
         }
         val receipt: VerificationReceipt = mapper.readValue(root.resolve(".worklane/testing-sessions/$id.json").toFile())
         val snapshot = root.resolve(receipt.checkpoints.getValue("provider").staged_path)
             .resolveSibling("provider.jar.support/build/libs/support.jar")
+        assertTrue(snapshot.toFile().setWritable(true)) // Deliberate adversarial tamper of sealed support.
         Files.writeString(snapshot, "corrupt retained support")
         VerificationSession(root, active, "corrupt-support", false, "conversation", id).use {
             assertEquals(setOf("provider", "consumer"), it.affected)
         }
     }
+    @Test fun `support restore retains different failed bytes and makes only mutable copy writable`() {
+        val root = fixture(); val id = begin(root)
+        val active = mods.map { if (it.repository == "provider") it.copy(supportArtifacts = listOf("build/support.json")) else it }
+        val output = root.parent.resolve("mod_source/provider/build/support.json")
+        Files.createDirectories(output.parent); Files.writeString(output, "verified support")
+        VerificationSession(root, active, "support-origin", false, "conversation", id).use { session ->
+            val items = built(root).map { item ->
+                val mod = active.single { it.repository == item.definition.repository }
+                item.copy(definition = mod, supportHashes = supportArtifactHashes(root.parent.resolve("mod_source/${mod.repository}"), mod))
+            }
+            checkpointAffected(session, items); session.commit(items)
+        }
+        val snapshot = root.resolve(".worklane/testing-sessions/artifacts/support-origin/provider.jar.support/build/support.json")
+        assertFalse(Files.getPosixFilePermissions(snapshot).contains(java.nio.file.attribute.PosixFilePermission.OWNER_WRITE))
+        Files.writeString(output, "failed retry evidence")
+        VerificationSession(root, active, "support-restore", false, "conversation", id).use { session ->
+            assertNotNull(session.reusableBuild(active[0], emptyMap()))
+            assertEquals("verified support", Files.readString(output))
+            assertTrue(Files.getPosixFilePermissions(output).contains(java.nio.file.attribute.PosixFilePermission.OWNER_WRITE))
+            val retained = root.resolve("generated/test-evidence/support-restore/release/retained-support/provider")
+            Files.walk(retained).use { paths ->
+                val files = paths.filter { Files.isRegularFile(it) }.toList()
+                assertEquals(1, files.size)
+                assertEquals("failed retry evidence", Files.readString(files.single()))
+            }
+            val key = Files.readAttributes(output, java.nio.file.attribute.BasicFileAttributes::class.java).fileKey()
+            assertNotNull(session.reusableBuild(active[0], emptyMap()))
+            assertEquals(key, Files.readAttributes(output, java.nio.file.attribute.BasicFileAttributes::class.java).fileKey(), "same hash avoids rewriting")
+            Files.writeString(output, "mutable gate rerun")
+            assertEquals("verified support", Files.readString(snapshot))
+            assertFalse(Files.getPosixFilePermissions(snapshot).contains(java.nio.file.attribute.PosixFilePermission.OWNER_WRITE))
+        }
+    }
+
     @Test fun `scoped pack contracts invalidate provider closure but unrelated prose does not`() {
         val root = fixture(); val id = begin(root)
         val active = mods.map { if (it.repository == "provider") it.copy(verificationInputs = listOf("contract.txt")) else it }
@@ -231,6 +268,9 @@ class VerificationSessionTest {
             assertEquals(setOf("provider", "consumer"), session.affected)
             val provider = requireNotNull(session.reusableBuild(active[0], emptyMap()))
             assertEquals("original-build", provider.buildId)
+            assertEquals(root.resolve(".worklane/testing-sessions/artifacts/original-build/provider.jar"), provider.jar)
+            val qualified = root.resolve("generated/test-evidence/new-verification/release/staged-jars/provider.jar")
+            assertFalse(Files.exists(qualified), "build-only restoration must not publish qualified bytes")
             val repository = root.parent.resolve("mod_source/provider")
             assertFalse("clean" in providerVerificationCommand(repository, active[0].tasks, true))
             assertTrue(providerVerificationCommand(repository, active[0].tasks, true).containsAll(active[0].tasks))
@@ -243,6 +283,9 @@ class VerificationSessionTest {
             }
             val freshlyVerified = provider.copy(mode = "build-reused-verified")
             session.checkpoint(freshlyVerified, emptyMap())
+            assertFalse(Files.exists(qualified), "checkpoint storage is not global qualified publication")
+            Files.createDirectories(qualified.parent)
+            ProviderInputs.publish(freshlyVerified.jar, qualified, freshlyVerified.sha256, strictGate = {})
             val consumer = requireNotNull(session.reusableBuild(active[1], mapOf("provider" to provider.sha256)))
                 .copy(mode = "build-reused-verified")
             session.checkpoint(consumer, mapOf("provider" to provider.sha256))
@@ -278,6 +321,122 @@ class VerificationSessionTest {
                 assertNull(session.reusableBuild(active[0], emptyMap()))
             }
         } finally { System.setProperty("java.version", oldVersion) }
+    }
+
+    @Test fun `qualified restore publishes exact immutable bytes without overwrite or symlink following`() {
+        val root = fixture(); val id = begin(root); verify(root, id)
+        VerificationSession(root, mods, "atomic-restore", false, "conversation", id).use { session ->
+            val provider = requireNotNull(session.reusable(mods[0]))
+            assertEquals(root.resolve("generated/test-evidence/atomic-restore/release/staged-jars/provider.jar").toAbsolutePath(), provider.jar)
+            assertEquals(provider.sha256, Hashes.sha256(provider.jar))
+            assertThrows(IllegalArgumentException::class.java) { session.reusable(mods[0]) }
+            assertEquals(provider.sha256, Hashes.sha256(provider.jar))
+            val blocked = provider.jar.resolveSibling("consumer.jar")
+            Files.writeString(blocked, "existing final")
+            assertThrows(IllegalArgumentException::class.java) { session.reusable(mods[1]) }
+            assertEquals("existing final", Files.readString(blocked))
+            val linked = provider.jar.resolveSibling("independent.jar")
+            Files.createSymbolicLink(linked, provider.jar)
+            assertThrows(IllegalArgumentException::class.java) { session.reusable(mods[2]) }
+            assertTrue(Files.isSymbolicLink(linked))
+            Files.list(provider.jar.parent).use { paths ->
+                assertEquals(setOf("provider.jar", "consumer.jar", "independent.jar"),
+                    paths.filter { it.fileName.toString().endsWith(".jar") }.map { it.fileName.toString() }.toList().toSet())
+            }
+        }
+    }
+
+    @Test fun `checkpoint publication is qualified immutable idempotent and preserves input view provenance`() {
+        val root = fixture(); val id = begin(root)
+        val digest = "a".repeat(64)
+        VerificationSession(root, mods, "checkpoint-atomic", false, "conversation", id).use { session ->
+            val items = built(root).map { it.copy(inputViewSha256 = digest) }
+            checkpointAffected(session, items)
+            session.checkpoint(items[0], emptyMap()) // Exact current qualified entry is idempotent.
+            val checkpoint = root.resolve(".worklane/testing-sessions/artifacts/checkpoint-atomic/provider.jar")
+            assertEquals(items[0].sha256, Hashes.sha256(checkpoint))
+            assertThrows(IllegalArgumentException::class.java) {
+                session.checkpoint(items[0].copy(inputViewSha256 = "b".repeat(64)), emptyMap())
+            }
+            session.commit(items)
+        }
+        val receipt: VerificationReceipt = mapper.readValue(root.resolve(".worklane/testing-sessions/$id.json").toFile())
+        assertEquals(digest, receipt.checkpoints.getValue("provider").input_view_sha256)
+        assertEquals(digest, receipt.mods.getValue("provider").input_view_sha256)
+        VerificationSession(root, mods, "digest-restore", false, "conversation", id).use { session ->
+            assertNull(session.reusable(mods[0], "b".repeat(64)))
+            assertNull(session.reusableBuild(mods[0], emptyMap(), "b".repeat(64)))
+            assertFalse(Files.exists(root.resolve("generated/test-evidence/digest-restore/release/staged-jars/provider.jar")))
+            val restored = requireNotNull(session.reusable(mods[0], digest))
+            assertEquals(digest, restored.inputViewSha256)
+            assertEquals(digest, requireNotNull(session.reusableBuild(mods[0], emptyMap(), digest)).inputViewSha256)
+            assertThrows(IllegalArgumentException::class.java) { session.requireReusable(restored.copy(inputViewSha256 = null)) }
+        }
+    }
+
+    @Test fun `input view admission promotes dependent closure durably without changing epoch or unrelated checkpoints`() {
+        val root = fixture(); val id = begin(root)
+        val digest = "a".repeat(64)
+        VerificationSession(root, mods, "admission-origin", false, "conversation", id).use { session ->
+            val items = built(root).map { it.copy(inputViewSha256 = digest) }
+            checkpointAffected(session, items); session.commit(items)
+        }
+        val path = root.resolve(".worklane/testing-sessions/$id.json")
+        val original: VerificationReceipt = mapper.readValue(path.toFile())
+        mapper.writeValue(path.toFile(), original.copy(reuse_history = false))
+        VerificationSession(root, mods, "admission-new", false, "conversation", id).use { session ->
+            assertTrue(session.affected.isEmpty())
+            val before: VerificationReceipt = mapper.readValue(path.toFile())
+            session.admitInputView(mods[0], digest)
+            assertEquals(before, mapper.readValue<VerificationReceipt>(path.toFile()))
+            session.admitInputView(mods[0], "b".repeat(64))
+            assertEquals(setOf("provider", "consumer"), session.affected)
+            val after: VerificationReceipt = mapper.readValue(path.toFile())
+            assertEquals(setOf("independent"), after.checkpoints.keys)
+            assertEquals(before.checkpoints.getValue("independent"), after.checkpoints.getValue("independent"))
+            assertEquals(before.generation, after.generation)
+            assertEquals(before.session_id, after.session_id)
+            assertEquals(before.owner, after.owner)
+            assertEquals(before.active_run, after.active_run)
+            assertEquals(before.baseline, after.baseline)
+            assertEquals(before.reuse_history, after.reuse_history)
+            assertEquals(before.mods, after.mods)
+            assertTrue(after.invalidations.any { it.startsWith("input view changed: provider") })
+            assertNull(session.reusable(mods[0], "b".repeat(64)))
+            assertNull(session.reusableBuild(mods[0], emptyMap(), "b".repeat(64)))
+            assertNotNull(session.reusableBuild(mods[0], emptyMap(), digest), "build candidates survive admission")
+            session.admitInputView(mods[1], "c".repeat(64)) // Already-affected nodes do not mutate the receipt.
+            assertEquals(after, mapper.readValue<VerificationReceipt>(path.toFile()))
+            assertNotNull(session.reusable(mods[2], digest))
+        }
+        VerificationSession(root, mods, "admission-resume", false, "conversation", id).use { session ->
+            assertEquals(setOf("provider", "consumer"), session.affected)
+        }
+    }
+
+    @Test fun `missing legacy input view promotes instead of authorizing unchanged bundled bytes`() {
+        val root = fixture(); val id = begin(root); verify(root, id)
+        VerificationSession(root, mods, "legacy-view-admit", false, "conversation", id).use { session ->
+            assertTrue(session.affected.isEmpty())
+            session.admitInputView(mods[0], "a".repeat(64))
+            assertEquals(setOf("provider", "consumer"), session.affected)
+            assertNull(session.reusable(mods[0]))
+            assertNull(session.reusableBuild(mods[0], emptyMap(), "a".repeat(64)))
+        }
+    }
+
+    @Test fun `unowned existing checkpoint final is never overwritten or adopted`() {
+        val root = fixture(); val id = begin(root)
+        VerificationSession(root, mods, "collision", false, "conversation", id).use { session ->
+            val items = built(root)
+            val target = root.resolve(".worklane/testing-sessions/artifacts/collision/provider.jar")
+            Files.createDirectories(target.parent)
+            Files.writeString(target, "collision")
+            assertThrows(IllegalArgumentException::class.java) { session.checkpoint(items[0], emptyMap()) }
+            assertEquals("collision", Files.readString(target))
+            val receipt: VerificationReceipt = mapper.readValue(root.resolve(".worklane/testing-sessions/$id.json").toFile())
+            assertFalse("provider" in receipt.checkpoints)
+        }
     }
 
     @Test fun `legacy receipts are preserved without promotion`() {

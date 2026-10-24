@@ -5,8 +5,10 @@
 This is the canonical shared policy for `/home/dev/better-content-modpack` and all
 `/home/dev/mod_source/<repository>` checkouts. Start at [the documentation index](../README.md).
 Global environment/tooling/Herdr behavior belongs to `/home/dev/.config/agent-guidance/lane.md`.
-Explicit current user instructions determine task authorization; a claim, old plan, available
-command, or installed tool does not grant it. Repository `AGENTS.md` owns unique local commands
+Standing build/test/release authorization and cost warnings live in [testing.md](../testing.md);
+no separate human approval is required for those operations. Current user goals and new explicit
+stops/exclusions determine what work is useful. A claim, old plan or installed tool is not proof
+of correctness or a reason to launch unnecessary work. Repository `AGENTS.md` owns unique local commands
 and constraints, not a second copy of shared policy.
 
 ## Layout and ownership
@@ -63,9 +65,12 @@ are not required. Source/resource changes still use the repository's full docume
 Commit each coherent validated repository-local change, stage only owned files, and push the
 current branch when a canonical remote exists. Do not push while a required check fails.
 
-Source validation does not authorize deployment, another repository's builds, Packwiz refresh,
-packaging or runtime suites. [testing.md](../testing.md) is the sole shared test/release procedure
-and authorization policy. Explicitly ordered package-only revisions use untested letter suffixes
+Builds, source qualification, native/runtime validation, deployment, Packwiz refresh, packaging,
+release preparation and Dist/Debug have standing user authorization; do not add per-command or
+per-phase approval gates. Aggregate changes, check relevant agents have finished their handoffs
+before heavy runs, avoid wasteful parallel Dist/Debug, and treat Debug as an extremely slow/heavy
+last resort. [testing.md](../testing.md) owns the procedure, warnings and standing authorization;
+new explicit stops/exclusions, correctness, resource locks and retention protections still apply. Explicitly ordered package-only revisions use untested letter suffixes
 (e.g. `443a`); they never inherit the parent build's acceptance. Follow its
 [untested lettered-build procedure](../testing.md#untested-lettered-builds), respecting any explicit
 prohibition on builds or checks. Do not deploy development-mapped or sources JARs. After disposal,
@@ -74,7 +79,7 @@ provider artifacts must be regenerated in dependency order before consumer sourc
 Inventory GUI/compatibility work anywhere in the workspace must follow
 [inventory-parity.md](../inventory-parity.md), covering both native paths and the same changed
 artifact. Source checks and client join do not constitute visual acceptance. Lack of explicit
-runtime authorization means visual acceptance is pending, not silently waived.
+completed runtime evidence means visual acceptance is pending, not silently waived.
 
 ## Documentation and toolchains
 

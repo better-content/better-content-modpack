@@ -3,7 +3,10 @@
 Forge 1.20.1 content/integration repository. Read [docs/README.md](docs/README.md) and
 [workspace policy](docs/policies/workspace.md) before changes. Shared rules have one owner:
 
-- [Testing/releases](docs/testing.md): explicit user authorization; supported facades and locks.
+- [Testing/releases](docs/testing.md): standing authorization replaces build/test/release approval
+  gates. Aggregate changes, check relevant agent handoffs before heavy launches, avoid wasteful
+  parallel Dist/Debug, and use extremely slow/heavy Debug only as a last resort. Supported facades,
+  locks, correctness and retention remain binding; follow new explicit user stops/exclusions.
 - [Generated-data retention](docs/policies/generated-data.md): retain worlds/saves, fixtures,
   evidence, candidates, receipts, caches and build outputs by default across handoffs and
   conversations. Finish closes activity and deletes nothing. Purge is separately gated by quiet,
@@ -35,4 +38,6 @@ Forge 1.20.1 content/integration repository. Read [docs/README.md](docs/README.m
 
 For docs-only work: `python3 -B scripts/check_documentation.py` and `git diff --check`.
 For relevant pack source/maintenance changes: `./test.main.kts dev` (Minecraft-free).
-Deployment, refresh, packaging and Dist/Debug are intentionally omitted unless explicitly ordered.
+Builds, qualification, deployment, refresh, packaging and Dist/Debug need no separate approval.
+Use them judiciously under the shared cost/coordination warnings; earlier approval-only holds are
+superseded, not correctness checks, safe resource ownership or retention protections.

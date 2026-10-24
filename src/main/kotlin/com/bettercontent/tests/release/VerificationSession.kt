@@ -19,6 +19,7 @@ internal data class VerifiedArtifact(
     val tasks: List<String>,
     val verification_id: String,
     val support_hashes: Map<String, String> = emptyMap(),
+    val input_view_sha256: String? = null,
 )
 internal data class ProviderCheckpoint(
     val source: String,
@@ -32,6 +33,7 @@ internal data class ProviderCheckpoint(
     val staged_path: String,
     val build_fingerprint: String? = null,
     val build_id: String? = null,
+    val input_view_sha256: String? = null,
 )
 internal data class VerificationReceipt(
     val schema: String = "bc.testing_session.v2",
@@ -92,7 +94,8 @@ internal class VerificationSession(
     private val contracts = mods.associate { it.repository to contractIdentity(it) }
     private val builds = mods.associate { it.repository to buildIdentity(it) }
     private val buildCandidates: Map<String, ProviderCheckpoint>
-    val affected: Set<String>
+    @Volatile var affected: Set<String>
+        private set
     val fullBaseline: Boolean
 
     init {
@@ -138,11 +141,39 @@ internal class VerificationSession(
         }
     }
 
+    /** Admit the exact compiler/audit view before the DAG selects reuse versus fresh verification. */
+    @Synchronized fun admitInputView(mod: ActiveMod, digest: String) {
+        require(mod in mods && Regex("[a-f0-9]{64}").matches(digest)) { "invalid provider input-view admission" }
+        if (mod.repository in affected) return
+        val checkpoint = receipt.checkpoints[mod.repository]
+        val savedDigest = if (checkpoint != null) checkpoint.input_view_sha256
+            else receipt.mods[mod.repository]?.input_view_sha256
+        if (savedDigest == digest) return
+        val promoted = affectedProviders(mods, setOf(mod.repository))
+        val nextAffected = (affected + promoted).toSet()
+        locked {
+            val current = read()
+            require(current == receipt && current.active_run == runId && current.owner == receipt.owner) {
+                "session ownership changed before input-view admission"
+            }
+            val updated = current.copy(
+                checkpoints = current.checkpoints.filterKeys { it !in promoted },
+                invalidations = (current.invalidations + promoted.sorted() +
+                    "input view changed: ${mod.repository} (${savedDigest ?: "missing"} -> $digest)").distinct(),
+            )
+            save(updated)
+            receipt = updated
+            affected = nextAffected
+        }
+    }
+
     fun requireReusable(item: BuiltMod) {
         val checkpoint = receipt.checkpoints[item.definition.repository]
         val expectedSha = checkpoint?.sha256 ?: receipt.mods.getValue(item.definition.repository).sha256
         val expectedSupport = checkpoint?.support_hashes ?: receipt.mods.getValue(item.definition.repository).support_hashes
         require(item.sha256 == expectedSha && item.supportHashes == expectedSupport &&
+            item.inputViewSha256 == (if (checkpoint != null) checkpoint.input_view_sha256
+                else receipt.mods.getValue(item.definition.repository).input_view_sha256) &&
             Hashes.sha256(item.jar) == expectedSha) {
             "artifact changed after reuse decision: ${item.definition.repository}"
         }
@@ -156,6 +187,7 @@ internal class VerificationSession(
     @Synchronized fun checkpoint(item: BuiltMod, dependencyHashes: Map<String, String>) {
         val mod = item.definition
         require(mod in mods && mod.repository in affected) { "provider is not scheduled for verification" }
+        require(item.inputViewSha256 == null || Regex("[a-f0-9]{64}").matches(item.inputViewSha256)) { "invalid input view digest" }
         require(item.mode in setOf("rebuilt", "build-reused-verified")) { "only a freshly verified provider can be checkpointed" }
         if (item.mode == "build-reused-verified") {
             val origin = buildCandidates[mod.repository]
@@ -180,25 +212,16 @@ internal class VerificationSession(
         val destination = checkpointPath(mod, runId)
         requireNoSymlink(destination)
         Files.createDirectories(destination.parent)
-        val temporary = Files.createTempFile(destination.parent, ".checkpoint-", ".jar")
-        try {
-            Files.copy(item.jar, temporary, StandardCopyOption.REPLACE_EXISTING)
-            require(Hashes.sha256(temporary) == item.sha256 && Hashes.sha256(item.jar) == item.sha256) {
-                "provider bytes changed during checkpoint copy"
-            }
-            if (Files.exists(destination, LinkOption.NOFOLLOW_LINKS)) {
-                require(Files.isRegularFile(destination, LinkOption.NOFOLLOW_LINKS) &&
-                    Hashes.sha256(destination) == item.sha256) { "divergent checkpoint candidate" }
-            } else Files.move(temporary, destination, StandardCopyOption.ATOMIC_MOVE)
-        } finally { Files.deleteIfExists(temporary) }
-        require(Hashes.sha256(destination) == item.sha256) { "checkpoint candidate changed" }
         item.supportHashes.forEach { (relative, hash) ->
             val support = supportPath(mod, runId, relative)
             requireNoSymlink(support)
             Files.createDirectories(support.parent)
             val input = root.parent.resolve("mod_source/${mod.repository}/$relative")
-            if (!Files.exists(support)) Files.copy(input, support)
-            require(Hashes.sha256(input) == hash && Hashes.sha256(support) == hash) { "support snapshot changed" }
+            if (!Files.exists(support, LinkOption.NOFOLLOW_LINKS)) ProviderInputs.publish(input, support, hash,
+                strictGate = { require(Hashes.sha256(input) == hash) { "support input changed" } },
+                checkActive = { require(read() == receipt && receipt.active_run == runId) { "session ownership changed" } })
+            require(Files.isRegularFile(support, LinkOption.NOFOLLOW_LINKS) &&
+                Hashes.sha256(input) == hash && Hashes.sha256(support) == hash) { "support snapshot changed" }
         }
         requireConsumedStages(mod, dependencyHashes)
         locked {
@@ -232,14 +255,37 @@ internal class VerificationSession(
             }) { "checkpoint consumed different dependency bytes" }
             val entry = ProviderCheckpoint(sources.getValue(mod.repository), item.sha256,
                 dependencyHashes, mod.tasks, runId, item.supportHashes, contracts.getValue(mod.repository),
-                current.owner, root.relativize(destination).toString(), builds.getValue(mod.repository), item.buildId ?: runId)
+                current.owner, root.relativize(destination).toString(), builds.getValue(mod.repository), item.buildId ?: runId,
+                item.inputViewSha256)
+            val strictGate = {
+                require(read() == current && current.active_run == runId) { "session ownership changed before publication" }
+                require(sourceIdentity(root.parent.resolve("mod_source/${mod.repository}")) == sources.getValue(mod.repository) &&
+                    contractIdentity(mod) == contracts.getValue(mod.repository)) { "provider inputs changed before publication" }
+                require(Files.isRegularFile(item.jar, LinkOption.NOFOLLOW_LINKS) && Hashes.sha256(item.jar) == item.sha256) {
+                    "provider bytes changed before publication"
+                }
+                require(supportArtifactHashes(root.parent.resolve("mod_source/${mod.repository}"), mod) == item.supportHashes &&
+                    item.supportHashes.all { (relative, hash) ->
+                        val support = supportPath(mod, runId, relative)
+                        requireNoSymlink(support)
+                        Files.isRegularFile(support, LinkOption.NOFOLLOW_LINKS) && Hashes.sha256(support) == hash
+                    }) { "support snapshot changed before publication" }
+                requireConsumedStages(mod, dependencyHashes)
+            }
+            strictGate()
+            if (Files.exists(destination, LinkOption.NOFOLLOW_LINKS)) {
+                require(current.checkpoints[mod.repository] == entry && checkpointValid(mod, entry, dependencyHashes)) {
+                    "existing checkpoint is not this exact qualified entry"
+                }
+            } else ProviderInputs.publish(item.jar, destination, item.sha256, strictGate,
+                checkActive = { require(read() == current && current.active_run == runId) { "session ownership changed" } })
             require(checkpointValid(mod, entry, dependencyHashes)) { "checkpoint failed final validation" }
             receipt = current.copy(checkpoints = current.checkpoints + (mod.repository to entry))
             save(receipt)
         }
     }
 
-    /** The compiler consumes these current-run staged bytes, not the immutable snapshots. */
+    /** Validate the current-qualified publication store; compiler/audit consume a separate immutable input view. */
     fun requireConsumedStages(mod: ActiveMod, dependencyHashes: Map<String, String>) {
         require(dependencyHashes.keys == mod.dependsOn.toSet()) { "staged dependency set differs from manifest" }
         mod.dependsOn.forEach { dependency ->
@@ -254,35 +300,34 @@ internal class VerificationSession(
     }
 
     /** Returns only byte-validated checkpoint output; bundled complete-baseline reuse stays in build(). */
-    fun reusable(mod: ActiveMod): BuiltMod? {
+    fun reusable(mod: ActiveMod, expectedInputViewSha256: String? = null): BuiltMod? {
         if (mod.repository in affected) return null
         val checkpoint = receipt.checkpoints[mod.repository] ?: return null
+        if (expectedInputViewSha256 != null && checkpoint.input_view_sha256 != expectedInputViewSha256) return null
         val dependencies = mod.dependsOn.associateWith { dependency ->
             receipt.checkpoints[dependency]?.sha256 ?: receipt.mods[dependency]?.sha256 ?: "missing"
         }
         require(checkpointValid(mod, checkpoint, dependencies)) { "checkpoint invalidated before reuse: ${mod.repository}" }
-        return stageCheckpoint(mod, checkpoint)
+        return restoreCheckpoint(mod, checkpoint, publishQualified = true)
     }
 
     /** Build reuse is not verification reuse: the caller must rerun every required task. */
-    fun reusableBuild(mod: ActiveMod, dependencies: Map<String, String>): BuiltMod? {
+    fun reusableBuild(mod: ActiveMod, dependencies: Map<String, String>, expectedInputViewSha256: String? = null): BuiltMod? {
         val checkpoint = buildCandidates[mod.repository] ?: return null
+        if (expectedInputViewSha256 != null && checkpoint.input_view_sha256 != expectedInputViewSha256) return null
         if (!checkpointBuildValid(mod, checkpoint, dependencies)) return null
         require(buildIdentity(mod) == builds.getValue(mod.repository)) { "build inputs changed before restore" }
-        return stageCheckpoint(mod, checkpoint)
+        return restoreCheckpoint(mod, checkpoint, publishQualified = false)
     }
 
-    private fun stageCheckpoint(mod: ActiveMod, checkpoint: ProviderCheckpoint): BuiltMod {
+    private fun restoreCheckpoint(mod: ActiveMod, checkpoint: ProviderCheckpoint, publishQualified: Boolean): BuiltMod {
         val source = checkpointPath(mod, checkpoint.verification_id)
-        val destination = root.resolve("generated/test-evidence/$runId/release/staged-jars/${mod.artifact}")
-        requireNoSymlink(destination)
-        Files.createDirectories(destination.parent)
-        Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING)
-        require(Hashes.sha256(source) == checkpoint.sha256 && Hashes.sha256(destination) == checkpoint.sha256) {
-            "checkpoint bytes changed during staging"
-        }
-        checkpoint.support_hashes.forEach { (relative, hash) ->
-            val output = root.parent.resolve("mod_source/${mod.repository}/$relative")
+        val repository = root.parent.resolve("mod_source/${mod.repository}")
+        if (checkpoint.support_hashes.isNotEmpty()) withBuildResourceLock(repository.resolve(".gradle/bc-source-workspace.lock")) {
+          locked {
+            require(read() == receipt && receipt.active_run == runId) { "session ownership changed before support restoration" }
+            checkpoint.support_hashes.forEach { (relative, hash) ->
+            val output = repository.resolve(relative)
             require(relative in mod.supportArtifacts && !Files.isSymbolicLink(output)) { "unsafe support output" }
             var ancestor = output.toAbsolutePath().normalize()
             val workspace = root.parent.toAbsolutePath().normalize()
@@ -291,12 +336,55 @@ internal class VerificationSession(
                 require(!Files.isSymbolicLink(ancestor)) { "support output contains a symlink" }
                 ancestor = ancestor.parent
             }
+            val snapshot = supportPath(mod, checkpoint.verification_id, relative)
+            requireNoSymlink(snapshot)
+            require(Files.isRegularFile(snapshot, LinkOption.NOFOLLOW_LINKS) && Hashes.sha256(snapshot) == hash) {
+                "support snapshot changed before restoration"
+            }
             Files.createDirectories(output.parent)
-            Files.copy(supportPath(mod, checkpoint.verification_id, relative), output, StandardCopyOption.REPLACE_EXISTING)
+            if (Files.exists(output, LinkOption.NOFOLLOW_LINKS)) {
+                require(Files.isRegularFile(output, LinkOption.NOFOLLOW_LINKS) && !Files.isSameFile(output, snapshot)) {
+                    "support output is not an independent ordinary file"
+                }
+                val previousHash = Hashes.sha256(output)
+                if (previousHash != hash) {
+                    val retainedRoot = root.resolve("generated/test-evidence/$runId/release/retained-support/${mod.repository}")
+                    requireNoSymlink(retainedRoot)
+                    Files.createDirectories(retainedRoot)
+                    val retained = Files.createDirectory(retainedRoot.resolve(UUID.randomUUID().toString())).resolve(output.fileName)
+                    require(read() == receipt && receipt.active_run == runId) { "session ownership changed before support retention" }
+                    Files.move(output, retained, StandardCopyOption.ATOMIC_MOVE) // Same filesystem only; no overwrite/delete fallback.
+                    require(Files.isRegularFile(retained, LinkOption.NOFOLLOW_LINKS) && Hashes.sha256(retained) == previousHash) {
+                        "retained support output changed"
+                    }
+                }
+            }
+            if (!Files.exists(output, LinkOption.NOFOLLOW_LINKS)) Files.copy(snapshot, output)
+            val permissions = Files.getPosixFilePermissions(output, LinkOption.NOFOLLOW_LINKS).toMutableSet()
+            permissions.add(java.nio.file.attribute.PosixFilePermission.OWNER_WRITE)
+            Files.setPosixFilePermissions(output, permissions) // Mutable build copy only, never the immutable snapshot.
             require(Hashes.sha256(output) == hash) { "support snapshot changed during staging" }
+            }
+          }
         }
+        val destination = if (publishQualified) {
+            val staged = root.resolve("generated/test-evidence/$runId/release/staged-jars/${mod.artifact}")
+            requireNoSymlink(staged)
+            Files.createDirectories(staged.parent)
+            ProviderInputs.publish(source, staged, checkpoint.sha256, strictGate = {
+                require(sourceIdentity(root.parent.resolve("mod_source/${mod.repository}")) == sources.getValue(mod.repository) &&
+                    contractIdentity(mod) == contracts.getValue(mod.repository)) { "provider inputs changed before qualified restore" }
+                require(checkpointValid(mod, checkpoint, mod.dependsOn.associateWith { dependency ->
+                    receipt.checkpoints[dependency]?.sha256 ?: receipt.mods[dependency]?.sha256 ?: "missing"
+                })) { "checkpoint changed before qualified publication" }
+                require(supportArtifactHashes(root.parent.resolve("mod_source/${mod.repository}"), mod) == checkpoint.support_hashes) {
+                    "restored support changed before qualified publication"
+                }
+            }, checkActive = { require(read() == receipt && receipt.active_run == runId) { "session ownership changed" } })
+        } else source // Unrequalified build restoration must never occupy the qualified final name.
         return BuiltMod(mod, git(root.parent.resolve("mod_source/${mod.repository}"), "rev-parse", "HEAD").trim(),
-            destination, checkpoint.sha256, "checkpoint-reused", checkpoint.support_hashes, checkpoint.build_id)
+            destination, checkpoint.sha256, "checkpoint-reused", checkpoint.support_hashes, checkpoint.build_id,
+            checkpoint.input_view_sha256)
     }
 
     private fun checkpointPath(mod: ActiveMod, originRun: String): Path {
@@ -336,6 +424,7 @@ internal class VerificationSession(
         require(checkpoint.owner.isNotBlank() && checkpoint.shared_fingerprint == contracts.getValue(mod.repository) &&
             checkpoint.source == sources.getValue(mod.repository) && checkpoint.tasks == mod.tasks &&
             checkpoint.dependencies == dependencies &&
+            (checkpoint.input_view_sha256 == null || Regex("[a-f0-9]{64}").matches(checkpoint.input_view_sha256)) &&
             checkpoint.staged_path == root.relativize(candidate).toString())
         requireNoSymlink(candidate)
         Files.isRegularFile(candidate, LinkOption.NOFOLLOW_LINKS) && Hashes.sha256(candidate) == checkpoint.sha256 &&
@@ -375,7 +464,8 @@ internal class VerificationSession(
             val dependencies = mod.dependsOn.associateWith { hashes.getValue(it) }
             if (mod.repository in affected) {
                 require(checkpoint != null && checkpoint.verification_id == runId && checkpoint.sha256 == item.sha256 &&
-                    checkpoint.support_hashes == item.supportHashes && checkpointValid(mod, checkpoint, dependencies)) {
+                    checkpoint.support_hashes == item.supportHashes && checkpoint.input_view_sha256 == item.inputViewSha256 &&
+                    checkpointValid(mod, checkpoint, dependencies)) {
                     "rebuilt provider lacks a valid current-run checkpoint: ${mod.repository}"
                 }
             } else requireReusable(item)
@@ -390,7 +480,7 @@ internal class VerificationSession(
             val mod = item.definition
             mod.repository to VerifiedArtifact(sources.getValue(mod.repository), item.sha256,
                 mod.dependsOn.associateWith { hashes.getValue(it) }, mod.tasks,
-                origins.getValue(mod.repository), item.supportHashes)
+                origins.getValue(mod.repository), item.supportHashes, item.inputViewSha256)
         }
         locked {
             require(read() == receipt && receipt.active_run == runId) {

@@ -9,8 +9,9 @@ import java.nio.file.Path
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
 
+@org.junit.jupiter.api.Tag("fast")
 class SourceVerificationControlTest {
-    @TempDir lateinit var temporary: Path
+    @TempDir(cleanup = org.junit.jupiter.api.io.CleanupMode.NEVER) lateinit var temporary: Path
     private val provider = ActiveMod("provider", "provider", "provider.jar", listOf("verifyFull", "stageRuntimeJar"))
     private val consumer = ActiveMod("consumer", "consumer", "consumer.jar", listOf("verifyFull", "stageRuntimeJar"), listOf("provider"))
     private val id = "20261023T120000Z-1"
@@ -29,7 +30,7 @@ class SourceVerificationControlTest {
         names.forEach { name ->
             val repo = temporary.resolve("mod_source/$name")
             Files.createDirectories(repo)
-            Files.writeString(repo.resolve(".gitignore"), "build/\n")
+            Files.writeString(repo.resolve(".gitignore"), "build/\n.gradle/\n")
             Files.writeString(repo.resolve("input.txt"), "original\n")
             git(repo, "init", "-q")
             git(repo, "add", ".")
@@ -64,7 +65,11 @@ class SourceVerificationControlTest {
     @Test fun qualifiedStagesAndDependencyBindingsUseFreshClosureOnly() {
         val root = fixture("provider", "consumer")
         val calls = mutableListOf<String>()
-        val result = verifySourceClosure(root, id, manifest(consumer, provider), listOf("consumer")) { r, _, _, s, m, u ->
+        val result = verifySourceClosure(root, id, manifest(consumer, provider), listOf("consumer")) { r, _, _, s, m, u, inputs ->
+            if (m == consumer) {
+                assertEquals(Hashes.sha256(s.resolve(provider.artifact)), Hashes.sha256(inputs.directory.resolve(provider.artifact)))
+                assertNotEquals(s.resolve(provider.artifact).toRealPath(), inputs.directory.resolve(provider.artifact).toRealPath())
+            }
             calls += m.repository
             built(r, s, m, u)
         }
@@ -76,7 +81,7 @@ class SourceVerificationControlTest {
         assertFalse(Files.exists(root.resolve("mods")))
         assertFalse(Files.exists(root.resolve("generated/verification-sessions")))
         assertThrows(java.nio.file.FileAlreadyExistsException::class.java) {
-            verifySourceClosure(root, id, manifest(provider), listOf("provider")) { _, _, _, _, _, _ -> error("must not reuse") }
+            verifySourceClosure(root, id, manifest(provider), listOf("provider")) { _, _, _, _, _, _, _ -> error("must not reuse") }
         }
     }
     @Test fun failedDependencyCannotConsumeHistoricalStage() {
@@ -84,7 +89,7 @@ class SourceVerificationControlTest {
         Files.createDirectories(root.resolve("mods"))
         Files.writeString(root.resolve("mods/provider.jar"), "historical invalid bytes")
         val calls = mutableListOf<String>()
-        val result = verifySourceClosure(root, id, manifest(provider, consumer), listOf("consumer")) { _, _, _, _, mod, _ ->
+        val result = verifySourceClosure(root, id, manifest(provider, consumer), listOf("consumer")) { _, _, _, _, mod, _, _ ->
             calls += mod.repository
             error("owning gates failed")
         }
@@ -98,7 +103,7 @@ class SourceVerificationControlTest {
         val root = fixture("provider")
         Files.writeString(temporary.resolve("mod_source/provider/input.txt"), "dirty")
         var calls = 0
-        val result = verifySourceClosure(root, id, manifest(provider, consumer), listOf("consumer")) { _, _, _, _, _, _ ->
+        val result = verifySourceClosure(root, id, manifest(provider, consumer), listOf("consumer")) { _, _, _, _, _, _, _ ->
             calls++; error("not admitted")
         }
         assertEquals(0, calls)
@@ -109,7 +114,7 @@ class SourceVerificationControlTest {
         val root = fixture("provider")
         Files.createSymbolicLink(root.resolve("generated"), temporary)
         assertThrows(IllegalArgumentException::class.java) {
-            verifySourceClosure(root, id, manifest(provider), listOf("provider")) { _, _, _, _, _, _ -> error("not admitted") }
+            verifySourceClosure(root, id, manifest(provider), listOf("provider")) { _, _, _, _, _, _, _ -> error("not admitted") }
         }
         val ordinary = temporary.resolve("mod_source/provider")
         Files.createSymbolicLink(temporary.resolve("linked-provider"), ordinary)
@@ -118,23 +123,23 @@ class SourceVerificationControlTest {
     }
     @Test fun changedSourcesOrMissingOutputsNeverReceiveQualifiedReceipt() {
         val root = fixture("provider")
-        val result = verifySourceClosure(root, id, manifest(provider), listOf("provider")) { r, _, _, s, m, u ->
+        val result = verifySourceClosure(root, id, manifest(provider), listOf("provider")) { r, _, _, s, m, u, _ ->
             val item = built(r, s, m, u)
             Files.writeString(temporary.resolve("mod_source/provider/input.txt"), "changed inside owning gates")
             item
         }
         assertTrue(result.checks.getValue("provider").startsWith("failed"))
         assertTrue(result.built.isEmpty())
-        val result2 = verifySourceClosure(root, "20261023T120001Z-1", manifest(provider), listOf("provider")) { _, _, _, _, _, _ -> error("dirty") }
+        val result2 = verifySourceClosure(root, "20261023T120001Z-1", manifest(provider), listOf("provider")) { _, _, _, _, _, _, _ -> error("dirty") }
         assertTrue(result2.checks.getValue("provider").startsWith("failed"))
     }
     @Test fun missingAndUnstampedOutputsAreRejected() {
         val root = fixture("provider")
-        val result = verifySourceClosure(root, id, manifest(provider), listOf("provider")) { _, _, _, s, m, u ->
+        val result = verifySourceClosure(root, id, manifest(provider), listOf("provider")) { _, _, _, s, m, u, _ ->
             BuiltMod(m, u.localCommit, s.resolve(m.artifact), "0".repeat(64), "rebuilt")
         }
         assertTrue(result.checks.getValue("provider").startsWith("failed"))
-        val result2 = verifySourceClosure(root, "20261023T120001Z-1", manifest(provider), listOf("provider")) { r, _, _, s, m, u ->
+        val result2 = verifySourceClosure(root, "20261023T120001Z-1", manifest(provider), listOf("provider")) { r, _, _, s, m, u, _ ->
             val item = built(r, s, m, u)
             // A later corruption cannot inherit the earlier owning-gate result/hash.
             Files.writeString(item.jar, "stale or corrupted stage")
@@ -171,7 +176,8 @@ class SourceVerificationControlTest {
             VerificationProfile("default", provider.tasks)))
         val result = verifySourceClosure(root, id, manifest(profiled), listOf("provider"))
         assertEquals(mapOf("provider" to "passed"), result.checks)
-        assertEquals(listOf("--no-daemon clean -PnativeProfile=true verifyFull", "--no-daemon clean verifyFull stageRuntimeJar"),
+        assertEquals(listOf("--no-daemon clean -PnativeProfile=true verifyFull", "--no-daemon clean verifyFull stageRuntimeJar")
+                .map { "$it --init-script ${root.resolve("gradle/test-timing.init.gradle")}" },
             Files.readAllLines(temporary.resolve("calls.log")))
         assertEquals(requireSourceClean(temporary.resolve("mod_source/provider")), readSourceCommit(result.built.single().jar, profiled))
         assertTrue(Files.isRegularFile(root.resolve(".worklane/forge-cache.lock")))
@@ -192,7 +198,9 @@ class SourceVerificationControlTest {
     }
     @Test fun lateProviderChangesInvalidateDependentQualification() {
         val root = fixture("provider", "consumer")
-        val result = verifySourceClosure(root, id, manifest(provider, consumer), listOf("consumer")) { r, _, _, s, m, u ->
+        val result = verifySourceClosure(root, id, manifest(provider, consumer), listOf("consumer")) { r, _, _, s, m, u, inputs ->
+            if (m == consumer) assertEquals(Hashes.sha256(s.resolve(provider.artifact)),
+                Hashes.sha256(inputs.directory.resolve(provider.artifact)))
             val item = built(r, s, m, u)
             if (m == consumer) Files.writeString(s.resolve(provider.artifact), "corrupted after provider gate")
             item
@@ -205,13 +213,13 @@ class SourceVerificationControlTest {
         val root = fixture("provider")
         Files.createSymbolicLink(temporary.resolve("mod_source/provider/build"), temporary)
         var called = false
-        val result = verifySourceClosure(root, id, manifest(provider), listOf("provider")) { _, _, _, _, _, _ ->
+        val result = verifySourceClosure(root, id, manifest(provider), listOf("provider")) { _, _, _, _, _, _, _ ->
             called = true; error("not admitted")
         }
         assertFalse(called)
         assertTrue(result.checks.getValue("provider").startsWith("failed"))
         assertThrows(IllegalArgumentException::class.java) {
-            verifySourceClosure(root, "20261023T120001Z-1", manifest(provider), listOf("provider"), "0".repeat(64)) { _, _, _, _, _, _ ->
+            verifySourceClosure(root, "20261023T120001Z-1", manifest(provider), listOf("provider"), "0".repeat(64)) { _, _, _, _, _, _, _ ->
                 error("changed inventory not admitted")
             }
         }
@@ -219,7 +227,7 @@ class SourceVerificationControlTest {
     @Test fun productionDelegatesWithoutStandaloneAnnotationOrPackageSessionMutation() {
         val root = Path.of(System.getProperty("bc.repo.root", System.getProperty("user.dir")))
         val source = Files.readString(root.resolve("src/main/kotlin/com/bettercontent/tests/release/SourceVerification.kt"))
-        assertTrue(source.contains("build(r, w, e, s, m, u, skipTests = false, forceRebuild = true)"))
+        assertTrue(source.contains("build(r, w, e, s, m, u, skipTests = false, forceRebuild = true, inputView = inputs)"))
         listOf("annotateJar(", "VerificationSession(", "prepareRelease(", "packageResolveCommand(", "REPLACE_EXISTING", "checkpoint(", "withForgeCacheLock(").forEach {
             assertFalse(source.contains(it), "unexpected alternate authority: $it")
         }
@@ -229,7 +237,8 @@ class SourceVerificationControlTest {
         assertTrue(facade.indexOf("qualifySourceControl") < facade.indexOf("channel.lock().use"))
         assertTrue(facade.contains("names.filterNot { it in activeNames }"))
         val common = Files.readString(root.resolve("src/main/kotlin/com/bettercontent/tests/release/ReleasePipeline.kt"))
-        listOf("mod.verificationProfiles", "auditSourceNativeLogs(", "annotateJar(staged", "supportArtifactHashes(repository, mod)").forEach {
+        listOf("mod.verificationProfiles", "auditSourceNativeLogs(", "annotateJar(prepared", "supportArtifactHashes(repository, mod)",
+            "providerBuildEnvironment(inputs.directory)", "ProviderInputs.publish(prepared, staged").forEach {
             assertTrue(common.contains(it), "missing common owning gate: $it")
         }
     }

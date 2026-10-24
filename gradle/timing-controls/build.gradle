@@ -1,0 +1,51 @@
+plugins { id 'java' }
+
+// Inert/offline fixture: JUnit/Hamcrest are pinned by the selected Gradle distribution.
+// No repository, Forge, native, provider, or shared pack output is touched.
+dependencies {
+    testImplementation files(new File(gradle.gradleHomeDir, 'lib/junit-4.13.2.jar'))
+    testImplementation files(new File(gradle.gradleHomeDir, 'lib/hamcrest-core-1.3.jar'))
+}
+
+tasks.register('probe') {
+    timeout = java.time.Duration.ofSeconds(20)
+    doLast {
+        // Explicit negative fault injection, NOT a comparable production-input benchmark.
+        if (findProperty('ignoreInterrupt') == 'true') {
+            long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.MILLISECONDS.toNanos((findProperty('sleepMs') ?: '200') as long)
+            while (System.nanoTime() < deadline) {
+                try { Thread.sleep(25) }
+                catch (InterruptedException ignored) { file('probe-ignored-interrupt.txt').text = 'ignored original interrupt' }
+            }
+            file('probe-ignored-completed.txt').text = 'hard containment failed'
+            return
+        }
+        try {
+            Thread.sleep((findProperty('sleepMs') ?: '200') as long)
+            file('probe-completed.txt').text = 'completed'
+        } catch (InterruptedException failure) {
+            file('probe-interrupted.txt').text = failure.class.name
+            throw failure
+        }
+    }
+}
+tasks.register('fails') {
+    timeout = java.time.Duration.ofSeconds(5)
+    doLast { throw new IllegalStateException('original-control-failure') }
+}
+tasks.register('skips') {
+    timeout = java.time.Duration.ofSeconds(7)
+    onlyIf { false }
+    doLast { throw new AssertionError('must not execute') }
+}
+tasks.named('test', Test) {
+    useJUnit()
+    timeout = java.time.Duration.ofSeconds(30)
+    systemProperty 'timing.control.fail', findProperty('caseFailure') ?: 'false'
+    afterTest { descriptor, result ->
+        // Original fixture callback must remain alongside the observer, not get replaced.
+        file('original-callbacks.jsonl').append(groovy.json.JsonOutput.toJson([
+            name: descriptor.name, result: result.resultType.toString(),
+            exception_types: result.exceptions.collect { it.class.name }]) + '\n')
+    }
+}

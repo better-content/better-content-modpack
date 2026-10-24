@@ -2,11 +2,30 @@
 
 ## Scope and authorization
 
-This is the sole shared test/release procedure for Better Content. Repository-local source
-checks do not authorize cross-repository builds, deployment, Packwiz refresh, packaging or
-pack suites. Ordinary changes use the smallest relevant local check. Runtime pack tests and
-fresh distributions require explicit user orders, never an inferred risk assessment. State
-when pack testing is intentionally omitted. `dist.sh` packages once; it is not validation.
+This is the sole shared test/release procedure for Better Content. Standing user authorization
+covers local and cross-repository builds, source/artifact checks, native Minecraft/runtime tests,
+deployment, Packwiz refresh, packaging, source qualification, release preparation and Dist/Debug.
+There is no separate human approval gate for these operations, their setup, or bounded
+fix/diagnosis/retry cycles. This is the canonical shared rule across the modpack and custom-mod
+repositories; older repository-local approval wording does not reinstate a shared approval gate. Select useful work to complete the user's goal; permission is not a
+reason to run unnecessary work. This standing policy replaces earlier workspace per-operation
+approval requirements and approval-only wait-for-go-ahead holds. A new explicit stop or scope
+exclusion still controls the task. It does not waive correctness, provenance, process ownership,
+resource locks, retention/deletion protections or honest reporting.
+
+**Cost and coordination warnings (not human approval gates):**
+- Running Dist or Debug in parallel is wasteful: duplicate preparation and competing Minecraft
+  processes consume substantial resources. Aggregate related changes into one coherent candidate
+  and one coordinated run rather than launching a run per helper or edit. Keep the runner mutex.
+- Before launching a heavy run, check live agents and their handoffs: confirm relevant source,
+  configuration and artifact producers have finished and integrate their changes first. An idle
+  status alone is not a completed handoff; unrelated agents need not stop working.
+- **Debug is extremely slow and resource-heavy, a last-resort tool.** Prefer focused source/unit
+  checks, targeted native scenarios and Dist where sufficient. Explain why full Debug is needed,
+  record its expected cost/budget and announce it before launch; do not ask for permission.
+
+Use the smallest relevant checks and record scope, resource limits, results and retained evidence.
+State when pack testing is intentionally omitted. `dist.sh` packages once; it is not validation.
 Only release preparation refreshes tracked Packwiz hashes; authoring/deployment steps do not.
 
 Docs-only changes use `python3 -B scripts/check_documentation.py` and `git diff --check` rather
@@ -140,9 +159,20 @@ Gradle result enums. An unfinished callback observed at build completion is `INT
 `configured_timeout_ns` is the process's actual budget, a Gradle task's actual configured
 `Task.timeout`, or null/UNKNOWN for JUnit; it never borrows the enclosing budget. Gradle records
 separately carry `enclosing_process_timeout_ns` from `BC_TIMING_TIMEOUT_SECONDS`; process records
-leave that enclosing field null. These observers currently leave `expected_runtime_ns=null`
-and `timeout_policy=UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED`: they do not select a baseline or
-automatically implement the twice-expected policy.
+leave that enclosing field null. At task-graph readiness, before Gradle snapshots execution
+budgets, the hook selects exact comparable task baselines and sets `Task.timeout`; a changed
+selected cap at execution is rejected. `owned-task-deadlines.gradle` additionally contains an
+interruption-ignoring task in its disposable Gradle JVM; `Task.timeout` alone is only an interrupt.
+Supported supervisors automatically set `BC_TIMING_OWNED_GRADLE=true` for their `--no-daemon`
+commands (including the trusted Crops wrapper). A known task budget without disposable ownership
+fails before the task body instead of killing a shared daemon. Expiry writes a separate durable
+health intent, allows two seconds for the original task callback to finish, then requests own-JVM
+exit 124; an independent two-second shutdown grace permits own-JVM halt if necessary. Both graces
+are separate from the exact selected task cap. Original task status remains unchanged;
+`deadline_exceeded` prevents a late original success from becoming a baseline. Abrupt termination
+leaves its original start unmatched, not a fabricated terminal. The generic Gradle Test listener remains observational:
+its own case/suite caps are null, with `UNSUPPORTED_BY_GRADLE_TEST_LISTENER` enforcement. It does
+not borrow a task deadline or claim individual-case enforcement.
 
 For an offline report from explicit retained observations, use:
 
@@ -165,9 +195,28 @@ The reducer writes serialized, atomic durable reports from bounded, locked input
 it does not discover history, change caps or authenticate producer identity claims. Report
 `COMPLETE` means observation completeness only, with acceptance `NOT_EVALUATED`, not a test
 pass. Own-scope cap comparisons report `UNKNOWN`, `MATCHES_2X_EMPIRICAL_MEDIAN` or
-`DOES_NOT_MATCH_2X_EMPIRICAL_MEDIAN`; an enclosing cap is not an individual-test cap. Observer
-`expected_runtime_ns` remains null: a report recommendation does not retroactively establish
-that an actual deadline was selected or enforced from that baseline. The supervisor and Gradle build-finished hooks automatically refresh reports; explicit
+`DOES_NOT_MATCH_2X_EMPIRICAL_MEDIAN`; an enclosing cap is not an individual-test cap.
+A report recommendation does not retroactively establish that an actual deadline was selected
+or enforced. The separate pre-invocation selector `scripts/timing_budget.py` consumes
+`BC_TIMING_BASELINES`, a JSON array of 1–64 explicit absolute **raw observation** paths. It
+revalidates bounded snapshots with the reducer; persisted reports/catalogs, history discovery
+and enclosing-scope caps are not baseline authority. Complete comparable successful samples
+select `EXACT_2X_EMPIRICAL_MEDIAN`, preserving source/sample provenance, sample count and exact
+rational expected runtime (including half-nanosecond medians). Zero/unrepresentable selections,
+invalid/incomplete observations or unknown identities do not acquire an empirical cap.
+
+Python supervision and JVM `BoundedCommand` freeze the selected positive nanosecond budget before
+launch and enforce it; the effective process budget is propagated to child timing metadata.
+Gradle takes one validated raw catalog snapshot per invocation, shared with the opt-in case
+adapters, whose distinct boundaries require their own matching samples. Missing comparable
+baselines retain existing process/task safety caps with
+`UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED`; unknown case caps remain null. No deadline changes
+mid-invocation, tick-to-wall conversion, padding or automatic historical baseline search occur.
+Diagnostic/report/selector safety caps and teardown grace are separate from measured execution
+budgets. Process observations retain their declared supervision-including-cleanup boundary;
+cleanup does not silently extend an enforced execution budget.
+
+The supervisor and Gradle build-finished hooks automatically refresh reports; explicit
 `BoundedCommand` profile sinks also refresh after their durable process terminal. Incidental
 captures inheriting a shared sink do not spawn a reducer per Git query. These reports do not
 mean all public commands have report coverage or all configured caps comply.
@@ -176,24 +225,75 @@ Root harness tests and integrated source profiles opt into `scripts/timing-pytho
 It records actual standard unittest callbacks as `python_test` and real suite invocations as
 `python_suite`, without result proxies or changed original arguments/returns. Expected failures,
 unexpected successes, skips and unknown outcomes remain distinct, nonbaseline case outcomes.
+One lazy canonical catalog snapshot supplies exact comparable case/suite 2× budgets in memory;
+UNKNOWN own caps stay null. Scalar deadlines durably record timeout/unhealthy intent and signal
+only their own Python process through its unchanged SIGTERM handler. After a separately recorded
+two-second cleanup grace, `_exit(124)` contains a still-unreturned boundary; an already-returned
+boundary cancels escalation. Neither sys.path/argv nor preexisting reporter modules are replaced.
 The successful `TextTestRunner` path fails closed on observer errors; manually consumed custom
 results outside that runner do not have equivalent acceptance authority. Process selectors
 `BC_TIMING_PROCESS_NAME`/`process_name` are invocation-local: the reducer uses one only with a
 known SHA-256 input binding, retaining real cwd/argv hashes as raw provenance. Selectors are not
 inherited by arbitrary nested commands.
 
-The opt-in source-only native GameTest adapter is implemented in
-`gradle/native-test-timing.gradle` and `src/nativeTiming/`. Its ordinary recorder/listener helpers
-are outside the reserved `.mixin` package. It preserves original reporters and observes actual
-attempt terminal callbacks, not final flaky-test acceptance; native ticks, native stopwatch
-milliseconds and observed monotonic nanoseconds remain separate. Exact named SDK class hashes,
-archive exclusions and a fresh post-task health receipt are mandatory. Its Java support compiled
-against the pinned official/Parchment source SDKs and passed inert writer controls, but real
-transformed execution, the Gradle/Forge RunConfig attachment and shipping exclusion acceptance
-remain **UNVERIFIED**. Packaged runtime/Dist native-case coverage is not implemented by this
-source-only hook. Existing terminal-only XML is not durable start/censor evidence. Do not claim
-all-test coverage, provider acceptance or completed empirical timeout selection from these hooks.
-Legacy configured caps remain unchanged, not universally empirical 2× compliant.
+The source-only JUnit Platform adapter (`gradle/junit-test-timing.gradle`, `src/junitTiming/`)
+uses the engine service SPI, not the generic Gradle listener, for individual `isTest` start/terminal
+callbacks, including parameterized/dynamic cases. `BC_TIMING_JUNIT=true` opts in; integrated source
+profiles set it explicitly. Root enables it automatically with `bcTimingJunitEnabled`, including
+idempotent init-script plus Project application. Runtime attachment occurs after the owning Test
+configuration so a later classpath assignment cannot discard the service adapter. It retains original engine invocation/thread/results and distinguishes
+its `junit_platform_executionStarted_to_executionFinished` boundary from Gradle callback timing.
+Skipped/aborted/nonexecuted cases are not successful samples. Exact own-case baselines enable a
+worker-local wall watchdog; UNKNOWN-only cases schedule none. Engine-authored timeouts remain
+independent. Fresh task-nonce health receipts must be balanced and healthy for every plan; only
+Gradle-owned plans are compared with actual Gradle case counts. Tests launching an enclosed
+Platform plan still emit every case, with the distinct
+`junit_platform_enclosed_executionStarted_to_executionFinished` boundary, so neither count nor
+baseline authority is borrowed between plans. Scalar admission retains no plan/test objects, and
+enclosed observer failure marks the worker unhealthy. Missing, disabled or broken SPI cannot silently pass. Observer findings are suppressed onto an existing
+test/task failure rather than replacing it.
+
+The source-only native GameTest adapter (`gradle/native-test-timing.gradle`, `src/nativeTiming/`)
+is attached with `BC_TIMING_NATIVE=true`, also set by integrated source profiles. The init hook
+applies it before Forge RunConfig generation. It attaches a nonshipping sourceSet to exactly one
+existing main-owning mod for each selected GameTest run, never an overlay mod or production
+source dependency. Ordinary helpers stay outside the reserved `.mixin` package. Exact reviewed
+SDK class hashes/lifecycle selectors, archive exclusions and actual ZIP-entry checks, plus a fresh
+balanced healthy post-task receipt, are mandatory. Original reporters, arguments, results and
+Throwable identity remain intact. Observations cover individual attempts, not final flaky-test
+acceptance; native ticks/stopwatch milliseconds/monotonic nanoseconds stay separate. Comparable
+own-attempt wall baselines enable scalar-only deadlines without changing native tick caps;
+UNKNOWN leaves native timeout behavior intact. Timing helpers retain no World, block-entity or
+RNG references and perform no gameplay calls.
+
+Both case watchdogs arbitrate deadline/terminal races: original failures delivered before expiry
+remain failures, and a late terminal cannot become a successful baseline sample. Expiry durably
+records TIMED_OUT, pending interruptions, unhealthy receipt and shutdown intent, then exits only
+the owned JVM with status 124. A separately recorded fixed two-second shutdown-hook cleanup grace
+permits owned-JVM halt escalation; it is not added to the selected case budget. Scheduler/write
+latency is not a hard-real-time guarantee. Observer classes/resources/service entries are excluded
+from production/source archives; native and JUnit adapter archive checks remain required.
+
+Focused raw-selector/process/Python controls, 93 focused Root tests, full Dev's 574 original JUnit
+cases plus four enclosed engine probe observations, and nine actual Gradle task controls passed.
+The four probe outcomes remain separate from the 574 passing Gradle cases. Actual Gradle engine
+controls verified original success/failure/skip, disabled-SPI rejection, archive helper-byte
+exclusion, and measured 95,866,141 ns case execution selecting/enforcing exactly 191,732,282 ns,
+including hanging-shutdown containment. Controlled
+Notices/TNT source compilations overlapped in private workers; the unchanged TNT native test
+executed/passed with a fresh balanced healthy timing receipt, clean native-log audit and helper-free
+JAR/reobf outputs. Evidence is retained in
+`generated/test-evidence/fresh-fixes-20261023/retool-finish/` (`unit-6`, `root-dev-3`,
+`gradle-controls-1`, `junit-gradle-3/result.json`, `real-2.source/proof.json`). Earlier failures
+remain retained: isolated discovery needed real JSON runtime dependencies, fake argv expectations
+needed the timing init hook, sealed adversarial fixtures needed explicit owner-level corruption
+to reach the unchanged hash/provenance rejection assertions, and enclosed engine probes needed
+distinct count accounting. Archive empty directories are not helper bytes, Gradle captures
+shutdown stdout in binary results, and TNT explicitly disables the native class-name prefix. These controls do
+not qualify all 46 providers or establish distribution/gameplay acceptance or natural throughput. Packaged runtime/Dist native-case coverage is not
+implemented by these source-only adapters. Terminal-only XML is not durable start/censor evidence.
+Legacy caps without comparable explicit raw baselines remain UNKNOWN, not universally empirical
+2× compliant; no production expected-runtime baseline or release acceptance is inferred.
 
 ## Failure diagnosis and automated visual review
 
@@ -244,7 +344,8 @@ it never borrows effective KubeJS table overrides. Synthetic reader controls cov
 missing/mutated inputs and malformed upstream data. These source checks do not establish native
 loot composition, placement, inventory delivery or performance acceptance. Report JUnit cases
 separately from the Python/Node guards they invoke; guard counts are not additional JUnit cases.
-Pack-level tiers run only when explicitly requested:
+Pack-level tiers are available without separate approval; apply the aggregation, live-agent and
+Debug last-resort warnings above before choosing a heavy run:
 
 ```sh
 ./test.main.kts dist
@@ -312,7 +413,7 @@ Cave's two long native suites are **Debug-only**: `DepthDirectorWorldGameTests.r
 retaining its short unit/parser/ABI/JAR checks, native parser startup and strict native error gate.
 Neither long suite may return through an indirect source prerequisite. Explicitly ordered Cave
 `./gradlew verifyDebug` reaches the existing `verifyWorld` task and both unchanged suites; this
-routing change does not authorize execution. Their current source/Dist status is **DEFERRED / NOT RUN**,
+routing change is not evidence of execution. Their current source/Dist status is **DEFERRED / NOT RUN**,
 not PASS; the earlier World timeout and all worlds/logs remain evidence. Debug's boundary inventory
 records them as uncovered until explicitly executed and admitted, not covered by ordinary source
 qualification. This narrow tier decision waives neither other providers nor final same-artifact Dist.
@@ -364,8 +465,8 @@ Use the coordinator's stable conversation ID (`PI_SESSION_ID` in Pi; explicitly 
 ./test-control.main.kts session end SESSION_ID
 ```
 
-Opening a receipt or ordinary source/Dev checks does not authorize preparation or establish a
-baseline. Independent `run source` checks are explicitly noncanonical and do not consume or
+Opening a receipt or ordinary source/Dev checks does not establish a verified preparation
+baseline; standing authorization permits useful preparation without another approval. Independent `run source` checks are explicitly noncanonical and do not consume or
 advance release checkpoints; their runtime acceptance is `NOT_EVALUATED`. They reject
 `--verification-session` rather than accept an ignored receipt flag. Use canonical release
 preparation with the owned session for checkpoint creation and revalidation.
@@ -555,8 +656,9 @@ Task owner, generation and selector-authorized operation are rechecked through
 under its Debug operation. Task registration grants these with repeatable `--operation`; an empty
 grant set admits no pack tests. Producer agent identity alone confers no authority. The controller
 uses `WORKSPACE_COORDINATION_ROOT` or `~/.worklane/coordination`, not the modpack root. These grants
-are operator metadata, not cryptographic proof of a user conversation; explicit user authorization
-remains a separate mandatory condition.
+are operator metadata, not cryptographic proof of a user conversation. The standing authorization
+in this document satisfies the user-authorization condition; retain `authorization.explicit=true`
+and normal owner/operation registration without asking for another approval.
 Queued full Debug runs against that pinned pair and does not rebuild sources or package another
 pair.
 
@@ -742,8 +844,8 @@ thirty-minute shader performance verdict. Production Oculus config remains uncha
 framebuffer inspection is separate from API-state/counter success.
 
 Debug's lifecycle smoke verifies one lineage transition, its committed archive, and final clean state.
-It intentionally avoids a second generation; longer persistence matrices require separate explicit
-authorization.
+It intentionally avoids a second generation; longer persistence matrices add substantial cost and
+should be used only when needed, under the same last-resort warning, not a separate approval gate.
 
 ## Runtime scenario contracts
 
@@ -848,7 +950,8 @@ that same policy and is independent of acceptance.
 
 ## Fresh distributions
 
-Only an explicit fresh-dist request authorizes:
+For a useful fresh distribution, use the supported release facade without another approval;
+aggregate changes and check producer handoffs before launching:
 
 ```sh
 ./release.main.kts
@@ -864,7 +967,7 @@ full verification baseline when no eligible verified checkpoints remain
 or `--rebuild-all` is requested. It annotates and deploys the coherent staged set, refreshes Packwiz
 hashes and checks the diff, runs `dist.sh`
 exactly once, and then runs the complete Dist tier. Targeted and queued Debug can test that
-unchanged ZIP pair when explicitly requested. Direct full Debug uses persistent source verification
+unchanged ZIP pair when useful under the last-resort warning above. Direct full Debug uses persistent source verification
 under a conversation-owned active control,
 then packages once and runs complete Dist and Debug. Release evidence records
 each mod's build mode and JAR hash.
@@ -876,16 +979,40 @@ unknown manifests elsewhere still fail classification rather than being silently
 
 ### Dependency-aware source workers and cache isolation
 
-**Current safety boundary: real provider preparation accepts `--jobs 1` only.** Larger values
-fail before work because immutable per-consumer build/test/audit input views and atomic candidate
-publication have not been implemented/proven. The CLI's default remains two, so an authorized
-serial invocation must explicitly select one; there is no silent fallback. The scheduler/private
-worker implementation and real minimal Gradle overlap controls do **not** enable or establish safe
-provider-parallel qualification. Required direct/transitive/optional/test-only inputs must first
-be reconciled with authoritative declarations, copied without mutable aliases, hash-bound to
-qualified same-candidate receipts, and used by both build and audit. Global staging must publish
-only strict-gated complete artifacts atomically. Missing view/mismatch/partial-publication proofs
-remain outstanding. No actual provider/native overlap or throughput is accepted.
+Provider preparation supports `--jobs 1` through `--jobs 4`, default two. The temporary serial-only
+guard was removed after integrated immutable-view/publication/checkpoint controls, actual Gradle
+attachment/deadline/archive controls, and controlled two-provider private-cache compilation/native
+proof passed. This enables the implementation, not a claim that a fresh 46-provider set or a
+measured natural-throughput target has already passed. Qualification still requires every owning
+gate and the complete-set deployment/package barrier.
+
+`ProviderInputRecipes.kt` derives each consumer's transitive provider inventory from the existing
+active manifest and completed owning-gate records, including declared support artifacts.
+`ProviderInputs.kt` copies exact hash/provenance-bound bytes into a fresh run-local
+`provider-inputs/<repository>/` view, writes `provider-inputs.tsv` and its digest, and seals copied
+files/directories read-only. It rejects aliases, unsafe/special paths, collisions, missing inputs
+and unqualified records in qualified mode; failed partial views remain retained. Explicit
+untested/diagnostic mode remains separately identified and never upgrades qualification.
+Builds receive this view through `BC_CUSTOM_MOD_JAR_DIR`; native-log audits use the same view,
+not a mutable global stage or sibling fallback. Existing Water/Physiology provider-JAR property
+aliases are forced to that same view with highest-precedence CLI properties; profiles cannot
+replace them with ambient overrides. Crops' policy-pinned bundled witnesses, including its prior
+bundled self JAR, remain separately verified fixed bytes, not SOURCE/self edges. Exact manifest, inventory and bytes are rechecked
+around use, including detection of extra files/directories and mutations. View digests participate
+in build/checkpoint/provenance bindings. Missing or changed stored view digests invalidate the
+provider's authoritative descendant closure before build admission, preserving epoch/ownership.
+Build-only checkpoint reuse never publishes a qualified final before fresh gates. Support restore
+uses the repository/session locks, retains differing old output bytes, and makes only independent
+mutable build copies writable; immutable checkpoint bytes remain sealed.
+
+Candidate publication copies to a private non-JAR partial, forces and hashes bytes, applies the
+strict owning gate, rechecks the view/source/artifact, then uses Linux atomic no-replace rename
+and forces the parent directory. Existing/raced targets and unsupported atomic publication fail
+closed; there is no overwrite, hardlink or non-atomic fallback. Gate/cancellation failures retain
+partials and original failures. Focused direct controls passed for view integrity, provenance,
+mutation/cancellation, strict-gate failures and publication races; this is not real-provider or
+release acceptance. Required optional/test/audit inputs still depend on correct authoritative
+manifest declarations, not directory discovery or speculative all-mod dependencies.
 
 The internal scheduler supports one to four workers independently of the workspace
 controller's helper limit. The scheduler admits only providers whose declared dependencies have
@@ -893,7 +1020,7 @@ completed successfully and binds consumers to those staged provider hashes. A pr
 stops new admissions; already-running workers retain their evidence and must finish cleanup.
 Incomplete worker cleanup prevents the deploy/package barrier. Parallelism changes neither the
 manifest's mandatory tasks/profile order nor strict native-log, source/support-hash, coherent-set
-and package-once gates. It does not authorize any producer or release operation.
+and package-once gates. Standing authorization does not waive these execution-safety requirements.
 
 The isolated-worker path uses retained run-local `build-isolation/` homes, Gradle user homes,
 project caches, XDG directories, `BC_PACKAGE_ARTIFACT_CACHE` and temporary directories. It also binds Java `user.home` and
@@ -916,8 +1043,10 @@ keep their existing shared-cache locking; they do not imply isolated parallel ex
 Run evidence records per-provider isolation/fallback decisions in `build-isolation-policy.tsv`
 and seed identity in `build-isolation/seed-identity.tsv`. Inspect the actual decisions and inputs:
 static fallback detection is conservative, not proof that arbitrary build scripts cannot escape
-isolation. Native/provider overlap, cold/warm fallback coverage and throughput still require
-explicitly authorized real evidence; no measured speedup follows from synthetic scheduler tests.
+isolation. Controlled real-provider compile overlap and one transformed native run are proven;
+full-provider cold/warm/fallback coverage and natural throughput still require their own evidence.
+No separate per-run approval is needed within task scope, and no measured speedup follows from
+synthetic scheduler tests or the controlled handshake.
 Do not launch uncoordinated manual Gradle builds against shared caches or the same source outputs.
 Consumers must use immutable validated provider snapshots, not replaceable sibling build outputs.
 
@@ -954,4 +1083,5 @@ requirements remain unchanged. Old and failed artifacts/evidence remain retained
 bundled JARs. Changed or unannotated sources build through `stageRuntimeJar` without the custom-mod
 verification tasks; the complete staged set is deployed, release preparation refreshes Packwiz, and packaging runs
 exactly once. It skips the full pack suite. Release evidence and provenance record that tests
-were skipped; use this only when the fresh-dist request explicitly prohibits tests.
+were skipped; choose this only for an intentionally untested build and disclose the omission,
+never as a substitute for a tested acceptance claim.

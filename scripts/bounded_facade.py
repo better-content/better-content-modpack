@@ -16,13 +16,14 @@ import subprocess
 import sys
 import time
 import uuid
+from decimal import Decimal
+from timing_budget import resolve
 from datetime import datetime, timezone
 
 
 class TimingObservation:
     """Durable observations, not acceptance or an inferred expected-runtime baseline."""
     def __init__(self, args, command):
-        self.started = time.monotonic_ns()
         self.result = dict(cleanup_complete=None, process_exit_code=None)
         self.path = output_path(os.environ.get('BC_TIMING_FILE') or
                                 (args.log + '.timing.jsonl' if args.log else
@@ -30,15 +31,20 @@ class TimingObservation:
                                      (str(uuid.uuid4()) + '.jsonl'))))
         self.fields = dict(schema='bc.timing.v1', operation_id=str(uuid.uuid4()), scope='process',
                            units='nanoseconds', clock='monotonic', duration_boundary='supervision_including_cleanup',
-                           configured_timeout_ns=int(args.budget_seconds * 1_000_000_000), timeout_scope='process',
+                           configured_timeout_ns=int(Decimal(str(args.budget_seconds)) * 1_000_000_000), timeout_scope='process',
                            enclosing_process_timeout_ns=None, expected_runtime_ns=None, timeout_policy='UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED',
-                           cwd=str(Path(args.cwd).absolute()), log=args.log,
+                           cwd=str(Path(args.cwd).absolute()), log=args.log, command=list(command),
                            command_sha256=hashlib.sha256('\0'.join(command).encode()).hexdigest())
         for key in ('RUN_ID', 'REVISION', 'INPUT_ID', 'PROFILE', 'ENVIRONMENT_ID', 'CACHE_ID'):
             self.fields[key.lower()] = os.environ.get('BC_TIMING_' + key) or (
                 os.environ.get('BC_TEST_RUN_ID') if key == 'RUN_ID' else None) or 'UNKNOWN'
         if os.environ.get('BC_TIMING_PROCESS_NAME', '').strip():
             self.fields['process_name'] = os.environ['BC_TIMING_PROCESS_NAME']
+        decision = resolve(self.fields, self.fields['configured_timeout_ns'])
+        self.fields.update(decision)
+        self.budget_ns = decision['effective_timeout_ns']
+        self.fields['configured_timeout_ns'] = self.budget_ns
+        self.started = time.monotonic_ns()
         self.append(event='start', status='RUNNING', duration_ns=None)
 
     def append(self, **fields):
@@ -209,11 +215,18 @@ def supervise(args, command, timing):
     stream = log.open('wb') if log else None
     try:
         environment = dict(os.environ)
+        environment.pop('BC_TIMING_OWNED_GRADLE', None)
+        if '--no-daemon' in command and Path(command[0]).name in {'gradle', 'gradlew'}:
+            environment['BC_TIMING_OWNED_GRADLE'] = 'true'
         # The root Gradle/JUnit writer shares this invocation sink unless a narrower source
         # profile deliberately binds another sink. No environment dump is recorded.
         environment.setdefault('BC_TIMING_FILE', str(timing.path))
         # A logical selector names this supervised process, not nested invocations.
         environment.pop('BC_TIMING_PROCESS_NAME', None)
+        # Decimal serialization preserves the ACTUAL chosen cap, even below a millisecond.
+        environment['BC_TIMING_TIMEOUT_SECONDS'] = str(Decimal(timing.budget_ns) / Decimal(1_000_000_000))
+        environment['BC_TIMING_TIMEOUT_NS'] = str(timing.budget_ns)
+        launch_started = time.monotonic_ns()
         process = subprocess.Popen(command, cwd=args.cwd, stdout=stream, stderr=subprocess.STDOUT if stream else None,
                                    start_new_session=True, env=environment)
     except BaseException:
@@ -222,7 +235,7 @@ def supervise(args, command, timing):
         raise
     table = snapshot()
     known = {process.pid: table[process.pid][1]} if process.pid in table else {}
-    end = time.monotonic() + args.budget_seconds
+    end = launch_started + timing.budget_ns
     status = None
     reason = None
     survivors = []
@@ -241,11 +254,11 @@ def supervise(args, command, timing):
                 reason = 'capture output limit exhausted'
                 status = 125
                 break
-            if time.monotonic() >= end:
+            if time.monotonic_ns() >= end:
                 reason = 'deadline exhausted'
                 status = 124
                 break
-            time.sleep(0.025)
+            time.sleep(min(0.025, max(0, end - time.monotonic_ns()) / 1_000_000_000))
     finally:
         survivors = cleanup(process, known)
         if stream:
@@ -257,7 +270,8 @@ def supervise(args, command, timing):
                          process_exit_code=process.returncode)
     if reason or status:
         diagnostic = dict(schema='bc.bounded_facade.v1', pid=process.pid, status=status, reason=reason,
-                          surviving_pids=survivors, budget_seconds=args.budget_seconds, cwd=args.cwd, command=command)
+                          surviving_pids=survivors, budget_seconds=str(Decimal(timing.budget_ns) / Decimal(1_000_000_000)),
+                          effective_timeout_ns=timing.budget_ns, cwd=args.cwd, command=command)
         print(json.dumps(diagnostic), file=sys.stderr)
         if log:
             log.with_name(log.name + '.diagnostic.json').write_text(json.dumps(diagnostic) + '\n')

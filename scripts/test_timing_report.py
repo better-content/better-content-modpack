@@ -50,6 +50,17 @@ class TimingReportTest(unittest.TestCase):
         self.source.write_text(''.join(json.dumps(row) + '\n' for row in rows))
         return timing.write_report([self.source], self.output)
 
+    def test_original_task_success_after_own_deadline_is_not_a_successful_baseline(self):
+        rows = self.pair(100, scope='gradle_task', task_path=':probe', build_root='/synthetic',
+                         duration_boundary='gradle_beforeExecute_to_afterExecute_callbacks')
+        rows[-1]['deadline_exceeded'] = True
+        report = self.report(rows)
+        self.assertEqual('COMPLETE', report['status'])
+        group, = report['groups']
+        self.assertEqual(0, group['successful_sample_count'])
+        self.assertIsNone(group['expected_runtime_ns'])
+        self.assertEqual('SUCCEEDED', rows[-1]['status'])
+
     def test_bound_logical_process_groups_across_private_paths(self):
         report = self.report(self.pair(10, input_id='a'*64, process_name='source:fixture:default', cwd='/private/a') +
                              self.pair(20, input_id='a'*64, process_name='source:fixture:default',

@@ -23,6 +23,7 @@ object TimingRecords {
 
     class Observation internal constructor(private val path: Path, private val fields: Map<String, Any?>,
                                            private val reportRoot: Path? = null) {
+        val effectiveBudget: Duration = Duration.ofNanos((fields["configured_timeout_ns"] as Number).toLong())
         private val start = System.nanoTime()
         internal var cleanupComplete: Boolean? = null
         internal var processExitCode: Int? = null
@@ -50,7 +51,7 @@ object TimingRecords {
             "configured_timeout_ns" to budget.toNanos(), "timeout_scope" to "process",
             "enclosing_process_timeout_ns" to null, "expected_runtime_ns" to null,
             "timeout_policy" to "UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED", "cwd" to cwd.toAbsolutePath().toString(),
-            "log" to log.toString(), "command_sha256" to MessageDigest.getInstance("SHA-256")
+            "log" to log.toString(), "command" to command.toList(), "command_sha256" to MessageDigest.getInstance("SHA-256")
                 .digest(command.joinToString("\u0000").toByteArray(Charsets.UTF_8)).joinToString("") { "%02x".format(it) })
         metadata.forEach { key -> fields[key.lowercase()] = env("BC_TIMING_$key")?.takeIf(String::isNotBlank)
             ?: (if (key == "RUN_ID") env("BC_TEST_RUN_ID")?.takeIf(String::isNotBlank) else null) ?: "UNKNOWN" }
@@ -63,7 +64,68 @@ object TimingRecords {
             pack.resolve("build"), pack.resolve("generated")).any(output::startsWith)) {
             "timing output must be inside approved temporary/output roots"
         }
+        var ancestor: Path? = output
+        while (ancestor != null) {
+            require(!Files.isSymbolicLink(ancestor)) { "timing output has a symlink ancestor: $ancestor" }
+            ancestor = ancestor.parent
+        }
+        val decision = selectBudget(fields, budget.toNanos(), env("BC_TIMING_BASELINES"), output, pack)
+        fields.putAll(decision)
+        fields["configured_timeout_ns"] = decision.getValue("effective_timeout_ns")
         return Observation(output, fields, if (!environment["BC_TIMING_FILE"].isNullOrBlank()) pack else null)
+    }
+
+    private fun selectBudget(fields: Map<String, Any?>, fallback: Long, baselines: String?,
+                             output: Path, root: Path): Map<String, Any?> {
+        fun unknown(reason: String) = mapOf<String, Any?>("effective_timeout_ns" to fallback,
+            "legacy_safety_cap_ns" to fallback, "expected_runtime_ns" to null, "expected_runtime_rational" to null,
+            "successful_sample_count" to 0, "timeout_policy" to "UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED",
+            "baseline_sources" to emptyList<Any>(), "baseline_samples" to emptyList<Any>(),
+            "selection_reason" to reason, "selection_frozen_before_invocation" to true,
+            "selection_method" to "empirical_median_all_comparable_successes")
+        // No subprocess per incidental Git/control query when there is no explicit ingress.
+        if (baselines.isNullOrBlank()) return unknown("no explicit BC_TIMING_BASELINES")
+        if (baselines.length > 65536) return unknown("baseline ingress exceeds 65536 characters")
+        val selector = root.resolve("scripts/timing_budget.py")
+        if (!Files.isRegularFile(selector)) return unknown("timing budget selector missing")
+        Files.createDirectories(output.parent)
+        val result = Files.createTempFile(output.parent, ".budget-selection-", ".json")
+        val errors = result.resolveSibling(result.fileName.toString() + ".log")
+        var process: Process? = null
+        var primary: Throwable? = null
+        try {
+            process = ProcessBuilder("python3", "-B", selector.toString(), "resolve", "--fields-json",
+                mapper.writeValueAsString(fields), "--fallback-ns", fallback.toString())
+                .redirectOutput(result.toFile()).redirectError(errors.toFile()).apply {
+                    environment()["BC_TIMING_BASELINES"] = baselines
+                }.start()
+            if (!process.waitFor(30, java.util.concurrent.TimeUnit.SECONDS))
+                return unknown("baseline selection exceeded independent safety cap; evidence=$result")
+            if (process.exitValue() != 0 || Files.size(result) > 32 * 1024 * 1024)
+                return unknown("baseline selection failed or output bound exceeded; evidence=$result")
+            val decision: Map<String, Any?> = mapper.readValue(Files.readAllBytes(result),
+                object : com.fasterxml.jackson.core.type.TypeReference<Map<String, Any?>>() {})
+            val effective = (decision["effective_timeout_ns"] as? Number)?.toLong()
+            if (effective == null || effective <= 0) return unknown("invalid selected cap; evidence=$result")
+            return decision
+        } catch (failure: InterruptedException) {
+            primary = failure
+            throw failure
+        } catch (failure: Exception) {
+            return unknown("baseline selection unavailable: ${failure.javaClass.simpleName}; evidence=$result")
+        } finally {
+            val interrupted = Thread.interrupted()
+            try {
+                if (process?.isAlive == true) {
+                    process.destroyForcibly()
+                    check(process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)) {
+                        "baseline selector cleanup incomplete; evidence=$result"
+                    }
+                }
+            } catch (cleanup: Throwable) {
+                if (primary != null) primary.addSuppressed(cleanup) else throw cleanup
+            } finally { if (interrupted || primary is InterruptedException) Thread.currentThread().interrupt() }
+        }
     }
 
     private fun report(path: Path, root: Path) {

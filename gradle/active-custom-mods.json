@@ -13,10 +13,14 @@
     "src/main/kotlin/com/bettercontent/tests/TimingRecords.kt",
     "scripts/bounded_facade.py",
     "scripts/timing_report.py",
+    "scripts/timing_budget.py",
     "scripts/timing-python/sitecustomize.py",
     "gradle/test-timing.init.gradle",
+    "gradle/owned-task-deadlines.gradle",
     "gradle/native-test-timing.gradle",
+    "gradle/junit-test-timing.gradle",
     "src/nativeTiming/**",
+    "src/junitTiming/**",
     "src/main/kotlin/com/bettercontent/tests/Validation.kt",
     "src/main/kotlin/com/bettercontent/tests/Oc2rCompatibilityEvidence.kt",
     "src/main/kotlin/com/bettercontent/tests/RunnerMutex.kt"
@@ -571,7 +575,7 @@
     },
     {
       "repository": "better-survival-physiology",
-      "dependsOn": ["better-drinking-water"],
+      "dependsOn": ["better-drinking-water", "better-compat-fixes", "better-gameplay-notices"],
       "verificationInputs": ["mods/diet.pw.toml", "mods/brewin-and-chewin.pw.toml"],
       "modId": "better_survival_physiology",
       "artifact": "better-survival-physiology-0.1.1.jar",
@@ -600,7 +604,7 @@
     },
     {
       "repository": "better-drinking-water",
-      "dependsOn": ["better-compat-fixes"],
+      "dependsOn": ["better-compat-fixes", "better-gameplay-notices"],
       "verificationInputs": ["config/thirst/item_settings.toml", "mods/farmers-delight.pw.toml", "mods/farmers-respite.pw.toml", "mods/brewin-and-chewin.pw.toml", "mods/fruits-delight.pw.toml", "mods/create.pw.toml", "mods/aether.pw.toml", "mods/the-bumblezone.pw.toml", "mods/hexerei.pw.toml", "mods/malum.pw.toml", "mods/ubes-delight.pw.toml", "mods/fallout-wastelands.pw.toml", "mods/the-deep-void.pw.toml", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json"],
       "buildInputs": [],
       "modId": "better_drinking_water",

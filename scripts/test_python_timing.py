@@ -217,6 +217,131 @@ assert len(result.errors) == 1
         suites = [r for r in records if r['scope'] == 'python_suite' and r['event'] == 'terminal']
         self.assertEqual(1, sum(r['status'] == 'FAILED' for r in suites))
 
+    def deadline_fixture(self):
+        script = self.root / 'deadline-fixture.py'
+        script.write_text('''import os, signal, sys, time, types, unittest
+sentinel = types.ModuleType('timing_report')
+sys.modules['timing_report'] = sentinel
+before_path, before_argv = list(sys.path), list(sys.argv)
+mode = os.environ.get('DEADLINE_MODE', 'fast')
+if mode == 'hanging_handler':
+    def hang(*args):
+        while True: time.sleep(.05)
+    signal.signal(signal.SIGTERM, hang)
+if mode in ('race', 'recovered'): signal.signal(signal.SIGTERM, lambda *args: None)
+class Case(unittest.TestCase):
+    def test_case(self):
+        print('READY', flush=True)
+        if mode == 'freeze':
+            open(os.environ['MUTATE_BASELINE'], 'w').write('{invalid}\\n')
+        time.sleep(.08 if mode == 'fast' else .4 if mode in ('race', 'recovered') else 10)
+        if mode == 'race': self.fail('original failure after timeout')
+result = unittest.TextTestRunner(verbosity=0).run(unittest.TestSuite([Case('test_case')]))
+assert sys.modules['timing_report'] is sentinel
+assert sys.path == before_path and sys.argv == before_argv
+raise SystemExit(0 if result.wasSuccessful() else 1)
+''')
+        return script
+
+    def deadline_run(self, script, label, mode='fast', baseline=None, **overrides):
+        sink = self.root / (label + '.jsonl')
+        env = dict(os.environ, PYTHONPATH=str(HOOK), PYTHONDONTWRITEBYTECODE='1',
+                   BC_TIMING_PYTHON='true', BC_TIMING_FILE=str(sink), DEADLINE_MODE=mode,
+                   BC_TIMING_REVISION='controlled', BC_TIMING_INPUT_ID='a'*64,
+                   BC_TIMING_PROFILE='inert-case', BC_TIMING_ENVIRONMENT_ID='local', BC_TIMING_CACHE_ID='none',
+                   BC_TIMING_BASELINES=json.dumps([str(baseline)]) if baseline else '')
+        env.update(overrides)
+        started = time.monotonic()
+        result = subprocess.run([sys.executable, '-B', str(script)], env=env, capture_output=True, timeout=6)
+        (self.root / (label + '.stderr')).write_bytes(result.stderr)
+        return result, sink, time.monotonic()-started
+
+    def test_real_measured_case_and_suite_deadlines_and_hanging_signal_handler(self):
+        script = self.deadline_fixture()
+        result, raw, _ = self.deadline_run(script, 'measured')
+        self.assertEqual(0, result.returncode, result.stderr)
+        baseline = self.records(raw)
+        for scope in ('python_test', 'python_suite'):
+            selected = [row for row in baseline if row['scope'] == scope]
+            duration = next(row['duration_ns'] for row in selected if row['event'] == 'terminal')
+            source = self.root / (scope + '-baseline.jsonl')
+            source.write_text(''.join(json.dumps(row)+'\n' for row in selected))
+            result, sink, elapsed = self.deadline_run(script, scope+'-timeout', 'slow', source)
+            self.assertEqual(-signal.SIGTERM, result.returncode, result.stderr)
+            terminal = next(row for row in self.records(sink) if row['scope'] == scope and row['event'] == 'terminal')
+            self.assertEqual('TIMED_OUT', terminal['status'])
+            self.assertEqual(duration*2, terminal['configured_timeout_ns'])
+            self.assertEqual(duration, terminal['expected_runtime_ns'])
+            self.assertEqual('EXACT_2X_EMPIRICAL_MEDIAN', terminal['timeout_policy'])
+            self.assertLess(elapsed, 2)
+            health = self.records(Path(str(sink)+'.health.jsonl'))
+            self.assertEqual(2_000_000_000, health[0]['cleanup_budget_ns'])
+        source = self.root / 'python_test-baseline.jsonl'
+        result, sink, elapsed = self.deadline_run(script, 'hanging-handler', 'hanging_handler', source)
+        self.assertEqual(124, result.returncode, result.stderr)
+        self.assertGreaterEqual(elapsed, 2)
+        self.assertLess(elapsed, 4)
+        self.assertIn('cleanup_exhausted', [r['event'] for r in self.records(Path(str(sink)+'.health.jsonl'))])
+        print('retained real Python deadline evidence:', self.root)
+
+    def test_unknown_invalid_mismatch_and_frozen_catalog(self):
+        script = self.deadline_fixture()
+        result, raw, _ = self.deadline_run(script, 'freeze-measured')
+        self.assertEqual(0, result.returncode, result.stderr)
+        for label, source, extra in [('mismatch', raw, {'BC_TIMING_CACHE_ID': 'changed'}),
+                                     ('unknown', raw, {'BC_TIMING_INPUT_ID': 'UNKNOWN'})]:
+            result, sink, _ = self.deadline_run(script, label, baseline=source, **extra)
+            self.assertEqual(0, result.returncode, result.stderr)
+            self.assertTrue(all(r['configured_timeout_ns'] is None for r in self.records(sink)))
+        invalid = self.root / 'invalid-baseline.jsonl'
+        invalid.write_text('{invalid}\n')
+        result, sink, _ = self.deadline_run(script, 'invalid', baseline=invalid)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertTrue(all(r['configured_timeout_ns'] is None for r in self.records(sink)))
+        result, sink, _ = self.deadline_run(script, 'frozen', 'freeze', raw, MUTATE_BASELINE=str(raw))
+        self.assertEqual(-signal.SIGTERM, result.returncode, result.stderr)
+        starts = [r for r in self.records(sink) if r['event'] == 'start']
+        self.assertTrue(all(r['timeout_policy'] == 'EXACT_2X_EMPIRICAL_MEDIAN' for r in starts))
+        self.assertEqual('{invalid}\n', raw.read_text())
+
+    def test_non_success_outcomes_are_not_catalog_baselines(self):
+        metadata = {'BC_TIMING_' + key: value for key, value in
+                    [('REVISION', 'controlled'), ('INPUT_ID', 'a'*64), ('PROFILE', 'inert'),
+                     ('ENVIRONMENT_ID', 'local'), ('CACHE_ID', 'none')]}
+        for mode in ('pass', 'fail', 'error', 'skip', 'unexpected', 'cancel'):
+            result, raw = self.run_fixture(mode, extra=metadata)
+            env = dict(os.environ, BC_TIMING_BASELINES=json.dumps([str(raw)]))
+            reduced = subprocess.run([sys.executable, '-B', str(HOOK.parent/'timing_budget.py'), 'catalog'],
+                                     env=env, capture_output=True, timeout=5)
+            self.assertEqual(0, reduced.returncode, reduced.stderr)
+            catalog = json.loads(reduced.stdout)
+            self.assertEqual('VALID', catalog['status'])
+            for group in catalog['groups']:
+                self.assertEqual('python_test', group['identity']['scope'])
+                self.assertEqual('test_case', group['identity']['test_name'])
+                self.assertIn(mode, ('pass', 'unexpected'))
+
+    def test_timeout_teardown_race_preserves_original_failure_and_health(self):
+        script = self.deadline_fixture()
+        result, raw, _ = self.deadline_run(script, 'race-measured')
+        self.assertEqual(0, result.returncode, result.stderr)
+        selected = [r for r in self.records(raw) if r['scope'] == 'python_test']
+        source = self.root / 'race-case-baseline.jsonl'
+        source.write_text(''.join(json.dumps(row)+'\n' for row in selected))
+        result, sink, _ = self.deadline_run(script, 'race', 'race', source)
+        self.assertEqual(1, result.returncode)
+        self.assertIn(b'original failure after timeout', result.stderr)
+        self.assertNotIn(b'TimingObserverError', result.stderr)
+        health = self.records(Path(str(sink)+'.health.jsonl'))
+        self.assertIn('FAILED', [row.get('callback_status') for row in health])
+        case = [r for r in self.records(sink) if r['scope'] == 'python_test']
+        self.assertEqual(['start', 'terminal'], [r['event'] for r in case])
+        self.assertEqual('TIMED_OUT', case[-1]['status'])
+        recovered, recovered_sink, _ = self.deadline_run(script, 'recovered', 'recovered', source)
+        self.assertNotEqual(0, recovered.returncode)
+        self.assertIn(b'TimingObserverError', recovered.stderr)
+        self.assertIn('TIMED_OUT', [r['status'] for r in self.records(recovered_sink)])
+
     def test_concurrent_process_append(self):
         sink = self.root / 'concurrent.jsonl'
         env = dict(os.environ, PYTHONPATH=str(HOOK), BC_TIMING_PYTHON='true',

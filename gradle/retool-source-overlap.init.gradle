@@ -1,0 +1,44 @@
+import groovy.json.JsonOutput
+import java.nio.file.Files
+import java.nio.file.StandardOpenOption
+import org.gradle.api.tasks.compile.JavaCompile
+
+// Controlled actual-source overlap fixture ONLY; never applied by the provider pipeline.
+if (System.getenv('BC_FOCUSED_PROVIDER_RUNTIME') != 'true')
+    throw new GradleException('Explicit focused runtime opt-in required')
+def directory = new File(System.getenv('BC_FOCUSED_OVERLAP_DIRECTORY') ?: '').toPath()
+def own = System.getenv('BC_FOCUSED_OVERLAP_OWN')
+def peer = System.getenv('BC_FOCUSED_OVERLAP_PEER')
+if (!directory.isAbsolute() || directory != directory.normalize() || own == peer ||
+        !([own, peer].every { it in ['better-gameplay-notices', 'scalable-tnt'] }))
+    throw new GradleException('Invalid controlled overlap bindings')
+for (def p = directory; p != null; p = p.parent)
+    if (Files.isSymbolicLink(p)) throw new GradleException('Symlink overlap directory')
+def emit = { String event, Map fields ->
+    def path = directory.resolve(own + '.' + event + '.json')
+    byte[] bytes = (JsonOutput.toJson([schema: 'bc.controlled_source_overlap.v1', repository: own,
+        event: event, monotonic_ns: System.nanoTime(), epoch_ms: System.currentTimeMillis()] + fields) + '\n').getBytes('UTF-8')
+    java.nio.channels.FileChannel.open(path, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE).withCloseable { channel ->
+        def buffer = java.nio.ByteBuffer.wrap(bytes)
+        while (buffer.hasRemaining()) channel.write(buffer)
+        channel.force(true)
+    }
+}
+gradle.projectsEvaluated {
+    def task = gradle.rootProject.tasks.named('compileJava', JavaCompile).get()
+    task.doFirst {
+        emit('entered', [task: task.path])
+        long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(120)
+        while (!Files.isRegularFile(directory.resolve(peer + '.entered.json'))) {
+            if (System.nanoTime() >= deadline) throw new GradleException('Peer compileJava did not enter in 120 seconds')
+            Thread.sleep(25)
+        }
+        // Last doFirst is first action: peer-seen precedes the original compiler action.
+        emit('peer-seen', [peer: peer, task: task.path])
+    }
+    task.doLast {
+        def classes = gradle.rootProject.fileTree(task.destinationDirectory).matching { include '**/*.class' }.files
+        if (!task.didWork || classes.empty) throw new GradleException('Actual compiler/class output missing')
+        emit('completed', [task: task.path, did_work: task.didWork, class_count: classes.size()])
+    }
+}

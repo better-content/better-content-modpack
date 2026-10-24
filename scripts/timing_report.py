@@ -108,6 +108,8 @@ def _validate(row):
     for key in ('operation_id', 'scope', 'units', 'clock', 'event', 'status', 'observed_at'):
         if not isinstance(row.get(key), str) or not row[key].strip():
             raise ValueError('missing/invalid ' + key)
+    if 'deadline_exceeded' in row and type(row['deadline_exceeded']) is not bool:
+        raise ValueError('invalid deadline_exceeded')
     uuid.UUID(row['operation_id'])
     if row['scope'] not in IDENTITY or row['units'] != 'nanoseconds' or row['clock'] != 'monotonic':
         raise ValueError('unsupported scope/units/clock (no implicit conversion)')
@@ -241,7 +243,7 @@ def reduce_records(inputs):
         key = json.dumps(identity, sort_keys=True, separators=(',', ':'))
         group = groups.setdefault(key, dict(identity=identity, missing_identity=missing, counts=Counter(),
                                             successful_sample_count=0, samples=[], observations=[]))
-        observation = dict(operation_id=operation_id, run_id=row.get('run_id'),
+        observation = dict(operation_id=operation_id, deadline_exceeded=row.get('deadline_exceeded', False), run_id=row.get('run_id'),
                            invocation_id=row.get('invocation_id'), status=row['status'],
                            configured_timeout_ns=row.get('configured_timeout_ns'), timeout_scope=row.get('timeout_scope'),
                            enclosing_process_timeout_ns=row.get('enclosing_process_timeout_ns'),
@@ -277,7 +279,7 @@ def reduce_records(inputs):
         if row['status'] in SUCCESS:
             if row.get('duration_ns') is None:
                 issue('incomplete', operation_id=operation_id, reason='success missing measurement')
-            elif not missing:
+            elif not missing and row.get('deadline_exceeded') is not True:
                 group['samples'].append(dict(operation_id=operation_id, run_id=row.get('run_id'),
                                              duration_ns=row['duration_ns'], provenance=observation['provenance']))
     invalid = any(i['kind'] == 'invalid' for i in report['issues'])

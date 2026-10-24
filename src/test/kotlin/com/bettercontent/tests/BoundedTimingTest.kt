@@ -21,6 +21,63 @@ class BoundedTimingTest {
     private fun terminal(log: Path) = Files.readAllLines(log.resolveSibling(log.fileName.toString() + ".timing.jsonl"))
         .map(mapper::readTree).also { assertEquals(listOf("start", "terminal"), it.map { row -> row["event"].asText() }) }.last()
 
+    @Test fun `real successful measurement selects exact frozen cap and actually times out with child provenance`() {
+        val root = directory()
+        val baselineLog = root.resolve("measured.log")
+        val baseline = root.resolve("measured.log.timing.jsonl")
+        val metadata = mapOf("BC_TIMING_REVISION" to "controlled-fixture", "BC_TIMING_INPUT_ID" to "a".repeat(64),
+            "BC_TIMING_PROFILE" to "controlled-process", "BC_TIMING_ENVIRONMENT_ID" to "inert-local",
+            "BC_TIMING_CACHE_ID" to "none", "BC_TIMING_PROCESS_NAME" to "controlled-fixture",
+            "BC_TIMING_BASELINES" to "")
+        val command = listOf("python3", "-c", "import os,time; print(os.environ['BC_TIMING_TIMEOUT_NS'],flush=True); time.sleep(float(os.environ['CONTROLLED_SLEEP']))")
+        assertEquals(0, BoundedCommand.run(root, command, baselineLog, Duration.ofSeconds(5),
+            metadata + mapOf("BC_TIMING_FILE" to baseline.toString(), "CONTROLLED_SLEEP" to "0.2")))
+        val measured = terminal(baselineLog)["duration_ns"].asLong()
+        val actualLog = root.resolve("enforced.log")
+        val actualSink = root.resolve("enforced.log.timing.jsonl")
+        val started = System.nanoTime()
+        val failure = assertThrows(IllegalStateException::class.java) {
+            BoundedCommand.run(root, command, actualLog, Duration.ofSeconds(5), metadata + mapOf(
+                "BC_TIMING_FILE" to actualSink.toString(), "CONTROLLED_SLEEP" to "10",
+                "BC_TIMING_BASELINES" to mapper.writeValueAsString(listOf(baseline.toString()))))
+        }
+        assertTrue(failure.message!!.startsWith("command timed out after "))
+        assertTrue(System.nanoTime() - started < Duration.ofSeconds(4).toNanos())
+        val record = terminal(actualLog)
+        assertEquals("TIMED_OUT", record["status"].asText())
+        assertEquals(measured * 2, record["configured_timeout_ns"].asLong())
+        assertEquals("EXACT_2X_EMPIRICAL_MEDIAN", record["timeout_policy"].asText())
+        assertEquals(measured, record["expected_runtime_ns"].asLong())
+        assertEquals(1, record["successful_sample_count"].asInt())
+        assertTrue(record["selection_frozen_before_invocation"].asBoolean())
+        assertEquals((measured * 2).toString(), Files.readString(actualLog).trim())
+        assertEquals(command, record["command"].map { it.asText() })
+        assertEquals(root.toString(), record["cwd"].asText())
+        assertTrue(record["cleanup_complete"].asBoolean())
+    }
+
+    @Test fun `invalid explicit baselines retain honest legacy cap and deadline arithmetic does not overflow`() {
+        val root = directory()
+        val log = root.resolve("unknown-baseline.log")
+        val sink = root.resolve("unknown-baseline.log.timing.jsonl")
+        assertEquals(0, BoundedCommand.run(root, listOf("true"), log, Duration.ofSeconds(3), mapOf(
+            "BC_TIMING_FILE" to sink.toString(), "BC_TIMING_BASELINES" to "[\"relative.jsonl\"]")))
+        val record = terminal(log)
+        assertEquals(3_000_000_000, record["configured_timeout_ns"].asLong())
+        assertEquals("UNKNOWN_UNTIL_COMPARABLE_SUCCESS_MEASURED", record["timeout_policy"].asText())
+        assertTrue(record["expected_runtime_ns"].isNull)
+        var now = Long.MAX_VALUE - 10
+        val deadline = ScenarioDeadline(Duration.ofNanos(100)) { now }
+        now += 20 // monotonic counters may wrap; elapsed subtraction remains valid
+        assertEquals(Duration.ofNanos(80), deadline.remaining())
+        now += 100
+        assertEquals(Duration.ZERO, deadline.remaining())
+        assertThrows(ArithmeticException::class.java) {
+            BoundedCommand.run(root, listOf("true"), root.resolve("overflow.log"), Duration.ofSeconds(Long.MAX_VALUE))
+        }
+        assertFalse(Files.exists(root.resolve("overflow.log")))
+    }
+
     @Test fun `logical selector is durable but is not inherited by nested commands`() {
         val root = directory()
         val log = root.resolve("selector.log")

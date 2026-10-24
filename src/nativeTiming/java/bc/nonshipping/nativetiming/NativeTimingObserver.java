@@ -2,6 +2,9 @@ package bc.nonshipping.nativetiming;
 
 import java.math.BigDecimal;
 import java.nio.file.Path;
+import java.nio.file.Files;
+import com.google.gson.GsonBuilder;
+import com.google.gson.ToNumberPolicy;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -37,7 +40,7 @@ public final class NativeTimingObserver {
         context.put("build_root", System.getProperty("bc.nativeTiming.buildRoot", "UNKNOWN"));
         NativeTimingRecords created = new NativeTimingRecords(
                 Path.of(System.getProperty("bc.nativeTiming.file")),
-                Path.of(System.getProperty("bc.nativeTiming.health")), context, System::nanoTime);
+                Path.of(System.getProperty("bc.nativeTiming.health")), context, System::nanoTime, loadBaselines());
         if (recordingFailure) created.recordingFailed();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try { created.close(); }
@@ -47,12 +50,30 @@ public final class NativeTimingObserver {
         return created;
     }
 
+    @SuppressWarnings("unchecked")
+    private static NativeTimingBaselines loadBaselines() {
+        String value = System.getProperty("bc.nativeTiming.catalog");
+        if (value == null) return NativeTimingBaselines.unknown();
+        Path path = Path.of(value);
+        if (!path.isAbsolute() || !path.equals(path.normalize())) throw new IllegalArgumentException("Unsafe native catalog");
+        for (Path current = path; current != null; current = current.getParent())
+            if (Files.isSymbolicLink(current)) throw new IllegalArgumentException("Native catalog symlink");
+        try {
+            if (Files.size(path) > 32 * 1024 * 1024) throw new IllegalArgumentException("Native catalog too large");
+            Map<String, Object> catalog = new GsonBuilder().setObjectToNumberStrategy(ToNumberPolicy.BIG_DECIMAL)
+                    .create().fromJson(Files.readString(path), Map.class);
+            if (!"bc.timing_budget_catalog.v1".equals(catalog.get("schema"))) throw new IllegalArgumentException("Native catalog schema");
+            return new NativeTimingBaselines(catalog);
+        } catch (java.io.IOException error) { throw new IllegalStateException("Cannot read prepared native catalog", error); }
+    }
+
     /** Called only after the native stopwatch has started, before original test dispatch. */
     public static void started(GameTestInfo info) {
         try {
             NativeTimingRecords sink = initialize();
             String id = sink.begin(info.getTestName(), info.getStructureName(), info.getTimeoutTicks(),
                     info.isRequired(), info.isFlaky(), info.maxAttempts(), info.requiredSuccesses());
+            NativeTimingWatchdog.start(sink); // No thread at all for UNKNOWN native wall baselines.
             // Listener stores UUID only, not info, the sink, a lambda capture or any world reference.
             info.addListener(new AttemptListener(id));
         } catch (Throwable error) { noteFailure(error, info.getError()); }
@@ -72,9 +93,7 @@ public final class NativeTimingObserver {
         if (records != null) records.recordingFailed();
         // Do not throw into the native listener loop: every original reporter still gets invoked.
         // The post-task health guard is independently authoritative even without an original error.
-        if (original != null && original != error) {
-            try { original.addSuppressed(error); } catch (Throwable ignored) { /* health remains failed */ }
-        }
+        // Preserve even the original Throwable's suppressed list; health is our independent oracle.
         System.err.println("BC_NATIVE_TIMING_RECORDING_FAILED " + error.getClass().getName());
     }
 

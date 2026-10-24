@@ -6,8 +6,9 @@ plugins {
     application
 }
 
-// The same durable timing hook covers direct harness Gradle calls and source facades.
-// It observes tests/tasks without selecting tests, changing verdicts or inflating timeouts.
+// Automatic scalar timing for direct harness calls and source facades. Comparable successful
+// observations select exact2x owned deadlines; UNKNOWN keeps explicit legacy safety caps.
+extra["bcTimingJunitEnabled"] = true
 apply(from = "gradle/test-timing.init.gradle")
 val pythonTimingEnvironment = mapOf(
     "BC_TIMING_PYTHON" to "true",
@@ -77,6 +78,7 @@ tasks.test {
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_testing_session.py") }
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_bounded_facade.py") }
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_bounded_timing.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_timing_budget.py") }
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_timing_report.py") }
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_python_timing.py") }
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_prepare_dev_inputs.py") }
