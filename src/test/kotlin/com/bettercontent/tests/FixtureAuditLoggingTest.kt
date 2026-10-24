@@ -260,6 +260,25 @@ class FixtureAuditLoggingTest {
         assertThrows(IllegalArgumentException::class.java) { launch.requireNativeRecords() }
     }
 
+    @Test fun nativeEmptyTomlSerializationIsStableButEvenWhitespaceDriftStillFails() {
+        val root = fixture()
+        val config = root.resolve("config/logbegone.toml")
+        val production = Files.readAllBytes(config)
+        val launch = FixtureAuditLogging.prepare(root, "native-toml")
+        // Exact bytes emitted by the pinned NightConfig 3.6.4 writer, also observed
+        // after real Forge initialization in Build 466. No semantic-only hash exemption.
+        val nativeEmpty = "\n[logbegone]\n\tregex = []\n\tphrases = []\n\n"
+        assertEquals(nativeEmpty, Files.readString(config))
+        assertArrayEquals(production, Files.readAllBytes(root.resolve(".fixture-audit/logbegone.original.toml")))
+        Files.writeString(config, nativeEmpty)
+        launch.assertStable()
+        Files.writeString(config, nativeEmpty.replace("\t", "  "))
+        assertThrows(IllegalArgumentException::class.java) { launch.assertStable() }
+        Files.writeString(config, nativeEmpty)
+        launch.assertStable()
+        FixtureAuditLogging.prepare(root, "native-toml-restart").assertStable()
+    }
+
     @Test fun configDriftFailsBeforeAndAfterLaunch() {
         val root = fixture()
         val launch = FixtureAuditLogging.prepare(root, "server")

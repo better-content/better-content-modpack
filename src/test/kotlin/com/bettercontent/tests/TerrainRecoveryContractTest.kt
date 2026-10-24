@@ -21,7 +21,7 @@ class TerrainRecoveryContractTest {
         assertTrue(result.path("inputs").asInt() >= 200)
         assertTrue(result.path("routes").path("crushing").asInt() > 100)
         assertTrue(result.path("routes").path("sifting").asInt() > 50)
-        assertTrue(result.path("negative_controls").asInt() >= 13)
+        assertTrue(result.path("negative_controls").asInt() >= 20)
         assertTrue(result.path("existing_washing_handler_executed").asBoolean())
     }
 

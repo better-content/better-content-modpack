@@ -35,7 +35,11 @@ function fixture(data = clone(catalogue), missing = null, mutate = null, washing
   const pristine = clone([...recipes]);
   let handler;
   const context = {
-    JsonIO: { read: file => { assert.equal(file, 'kubejs/config/terrain_recovery.json'); return data; } },
+    JsonIO: {
+      // Do not mock Java-backed JsonIO.read as a native JS object: that hid the Rhino failure.
+      read() { assert.fail('terrain validation must parse raw JSON, not Java Map/List/Number wrappers'); },
+      readString: file => { assert.equal(file, 'kubejs/config/terrain_recovery.json'); return JSON.stringify(data); }
+    },
     Item: { exists: id => items.has(id) && id !== missing },
     Ingredient: { of: () => ({ itemIds: [] }) },
     ServerEvents: { recipes: fn => { handler = fn; } },
@@ -116,6 +120,13 @@ function reject(change, missing) {
   negatives++;
 }
 reject(d => d.schema = 'future');
+reject(d => d.processing_time = '500');
+reject(d => d.processing_time = 501);
+reject(d => d.recovery = '0.25');
+reject(d => d.recovery = 0.5);
+reject(d => d.entries = []);
+reject(d => d.profiles.mafic.physical[0].count = '1');
+reject(d => d.profiles.mafic.physical[0].chance = '0.125');
 reject(d => d.unknown = true);
 reject(d => d.entries.push(d.entries[0]));
 reject(d => d.entries[0].profile = 'unknown');

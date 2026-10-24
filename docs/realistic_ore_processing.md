@@ -152,6 +152,12 @@ manufactured-family recycling stays native. Generic gravel downcycling remains a
 not a second competing Crushing recipe for an exact terrain input. Ores/deposits, manufactured
 masonry, living plants and other-dimension-only terrain are excluded.
 
+The handler reads the catalogue through `JsonIO.readString` and native `JSON.parse`.
+KubeJS's `JsonIO.read` returns Java-backed maps/lists/numbers; treating those numeric wrappers
+as native JavaScript numbers breaks the strict constant/type checks in Rhino. Parsing the
+unchanged JSON text preserves those checks and the authored numeric types without coercing
+numeric strings or relaxing budgets.
+
 Minecraft-free terrain contracts inspect hash-pinned resources and exercise the production
 handler, catalogue budgets, declared consumers and the bounded conversion model. They do not
 establish final loaded coverage, EMI appearance, machine execution or statistical chance

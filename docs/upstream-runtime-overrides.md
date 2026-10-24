@@ -87,6 +87,26 @@ alone are not runtime acceptance. Fixture audit derivation additionally admits a
 DEBUG application records while retaining the INFO root, all failure severities and unchanged
 packaged production logging. No suppression or audit exemption is added.
 
+## Remaining native blockers and frozen-contract limits
+
+The local Build 466 dedicated-server attempt reached readiness and recorded all three
+replacement-Mixin applications. It did **not** establish clean Dist acceptance, client join,
+fuel consumption or no-double-emission behavior. The retained native audit exposes another
+obsolete AdPother selector: the kept Boiler transformer searches `tick` for a `setFuel(int)`
+call no longer present in Cold Sweat 2.4. Its script has no config gate. The frozen v1 policy
+binds the exact final AdPother archive, so removing a fourth registration is incompatible with
+that policy even if all 3,144 class bytes remain invariant. Do not bypass the validator, add
+shadow classes or weaken logging to make this candidate pass. A successor correction contract
+requires explicit review; v1 receipts and failed archives remain retained.
+
+Additional native findings include Epic Fight's automatic KubeJS binding reflecting a public
+client-only method descriptor on a dedicated server, and an AllTheLeaks Citadel repair assuming
+a removed static `dataMap`. Neither has been repaired or accepted by these recipes. Moonlight's
+Fabric-API-ID diagnostic also fires for intentionally installed Forgified Fabric API; that log
+alone does not establish a broken API, and this observation is not a log-policy exemption or
+permission to remove the API. Actual consumption and multiplicity checks are still required
+for the shared Hearth fuel path; application witnesses alone do not establish their results.
+
 ## C2ME and Registrate companions
 
 The server-only `server-config/config-overrides/c2me.toml` uses C2ME's supported module gate to set

@@ -17,7 +17,10 @@ import javax.xml.transform.stream.StreamResult
 
 /** Fixture-only derivation. Never edits the packaged production XML or a repository config. */
 object FixtureAuditLogging {
-    private const val EMPTY_LOGBEGONE = "[logbegone]\n  regex = []\n  phrases = []\n"
+    // Match Forge's pinned NightConfig TOML writer exactly: otherwise its harmless save
+    // rewrites whitespace after startup and correctly trips the immutable-byte audit.
+    // The two lists remain empty; assertStable still rejects every subsequent byte change.
+    private const val EMPTY_LOGBEGONE = "\n[logbegone]\n\tregex = []\n\tphrases = []\n\n"
     private const val APPENDER = "FixtureRawAudit"
     private const val PATTERN = "[%d{HH:mm:ss}] [%t/%level] [%logger]: %msg{nolookups}%n%ex{full}"
     private val nativeRecord = Regex("(?m)^\\[\\d{2}:\\d{2}:\\d{2}] \\[[^\\r\\n]+/(?:INFO|WARN|ERROR|FATAL)] \\[[^\\r\\n]+]: .+")

@@ -13,7 +13,9 @@
         if (typeof id !== 'string' || !/^[a-z0-9_.-]+:[a-z0-9_./-]+$/.test(id) || !Item.exists(id)) fail('missing/invalid item ' + id)
     }
     ServerEvents.recipes(function (event) {
-        var data = JsonIO.read('kubejs/config/terrain_recovery.json')
+        // JsonIO.read returns Java Map/List/Number wrappers, not native JSON values.
+        // Parse the unchanged JSON text so strict type/constant checks stay meaningful in Rhino.
+        var data = JSON.parse(JsonIO.readString('kubejs/config/terrain_recovery.json'))
         if (!data || data.schema !== 'bc.terrain_recovery.v1') fail('missing catalogue or unsupported schema')
         keys(data, ['schema', 'survey_pins', 'processing_time', 'recovery', 'archives', 'physical_units', 'profiles', 'entries', 'exclusions', 'remove_recipes', 'recycling_exclusions', 'chemistry_audit', 'conversion_sources'], 'catalogue')
         if (data.processing_time !== 500 || data.recovery !== 0.25 || !data.entries || !data.entries.length) fail('invalid catalogue constants')
