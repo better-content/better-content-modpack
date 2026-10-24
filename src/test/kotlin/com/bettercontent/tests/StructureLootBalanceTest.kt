@@ -22,6 +22,14 @@ class StructureLootBalanceTest {
     }
 
     @Test
+    fun `unused consumer scan binds every searched byte without zip metadata churn`() {
+        val root = Path.of(System.getProperty("bc.repo.root"))
+        BoundedCommand.capture(root, listOf(
+            "python3", "-B", root.resolve("scripts/test_structure_loot_unused.py").toString(),
+        ), Duration.ofSeconds(30))
+    }
+
+    @Test
     fun `reviewed pinned table inventory preserves protected pools and bounded quantities`() {
         val root = Path.of(System.getProperty("bc.repo.root"))
         val output = BoundedCommand.capture(root, listOf(

@@ -31,6 +31,14 @@ def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def scanned_entries(jar):
+    """Exactly the class/data bytes searched for consumers, independent of ZIP metadata."""
+    names = [name for name in jar.namelist() if name.endswith('.class') or name.startswith('data/')]
+    assert len(names) == len(set(names)), 'duplicate scanned archive entry'
+    for name in sorted(names):
+        yield name, jar.read(name)
+
+
 def compute(root):
     root = Path(root)
     cache = Path.home() / '.cache/bc/packwiz-downloads'
@@ -50,13 +58,12 @@ def compute(root):
     scan_inputs = []
     for owner, path in archives:
         archive_sha = sha(path.read_bytes())
-        scan_inputs.append([owner, archive_sha])
+        scanned = []
         with zipfile.ZipFile(path) as jar:
-            for name in jar.namelist():
+            for name, raw in scanned_entries(jar):
+                # Bind every searched byte/name, not ZIP timestamps or unsearched source metadata.
+                scanned.append([name, sha(raw)])
                 is_class = name.endswith('.class')
-                if not is_class and not name.startswith('data/'):
-                    continue
-                raw = jar.read(name)
                 if name.endswith('.nbt') and raw[:2] == b'\x1f\x8b':
                     raw = gzip.decompress(raw)
                 for key, context in CONTEXTS.items():
@@ -76,6 +83,7 @@ def compute(root):
                     if any(needle in raw for needle in needles):
                         field = 'classes' if is_class else 'external_data'
                         hits[key][field].append({'source': owner+'!'+name, 'sha256': sha(raw)})
+        scan_inputs.append([owner, fingerprint(scanned)])
     for directory in ['kubejs', 'config', 'defaultconfigs', 'datapacks', 'global_packs']:
         for path in sorted((root/directory).rglob('*')):
             if not path.is_file():
@@ -117,7 +125,8 @@ def compute(root):
     assert len(blocks)==1
     block=blocks[0]; state=nbt['palette'][block['state']]['Name']
     assert state=='minecraft:suspicious_gravel' and block['nbt']['id']=='minecraft:brushable_block'
-    return dict(schema='bc.structure_loot_unused.v1', scan_input_sha256=fingerprint(scan_inputs),
+    return dict(schema='bc.structure_loot_unused.v2', scan_identity='sorted-class-and-data-entry-sha256',
+        scan_input_sha256=fingerprint(scan_inputs),
         limits='Automatic structure-container consumers only, not arbitrary administrator /loot commands. Closed pinned source contexts only; literal search cannot prove arbitrary dynamic code impossible. Positive native selected consumers invalidate unused classification. Registry existence or absence is not a consumer verdict.',
         definitions=records, nonphysical_context=dict(id='goety:archaelogy/ruined_monastery',
             template='goety:ruined_monastery/rubbles_4', resource=resource, template_sha256=sha(raw),

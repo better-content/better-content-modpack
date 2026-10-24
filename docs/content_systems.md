@@ -108,6 +108,13 @@ Minecraft-free checks are not full-pack runtime acceptance.
 [`structure_loot_inputs.py`](../scripts/structure_loot_inputs.py), checks review/input
 identity and effective authored Forge modifiers, compares protected table structure,
 and exercises negative mutations plus seeded distributions for changed pools.
+The closed unused-definition scan's v2 identity hashes every sorted class/data entry name and byte
+from all current archives, not ZIP timestamps/order or unsearched `META-INF` source provenance.
+Pinned upstream archive integrity and exact owning class/template witnesses remain independently
+required. All current class/data bytes are still searched; changed/added/removed consumer bytes and
+duplicate scanned entries fail closed. This avoids a self-invalidating archive-header fingerprint
+when fresh custom JARs are stamped, without ignoring a new consumer or accepting historical scan
+output. The owning controls cover metadata-only rebuilds and changed byte/name/scope negatives.
 The sample profile and tolerances live in the executable review inputs; the Python
 sampler does not implement native GLMs, LootJS, conditional pools or container
 splitting. Full-pack native rolls, actual structure consumers and Lootr personal-roll
