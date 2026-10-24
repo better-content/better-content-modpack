@@ -51,6 +51,10 @@ class VerificationProfileRecipeTest {
         assertEquals(listOf("withRegistrateFixture", "colonyWithoutBees", "spoilageWithoutHeat", "backpackWithoutCurios"), profiles.getValue("better-compat-fixes").dropLast(1).map { it.properties.keys.single() })
         assertEquals(mapOf("withRegistrateFixture" to "true"), profiles.getValue("better-compat-fixes").first().properties)
         val fruit = profiles.getValue("better-wild-fruit-trees")
+        assertEquals(listOf("optional-present", "optional-absent", "stage-default"), fruit.map { it.name })
+        assertEquals(listOf(tasks, tasks, listOf("stageRuntimeJar")), fruit.map { it.tasks },
+            "Both WFT dependency profiles still execute the ordinary functional gate; no calibration task/profile replaces it")
+        assertTrue(fruit.last().properties.isEmpty(), "Final WFT staging must not opt back into a retired diagnostic scope")
         assertTrue(fruit.first().properties.isEmpty(), "hasProperty switches must be omitted, never set false, for present fixtures")
         assertEquals(setOf("withoutTConFixture", "withoutArsFixture", "withoutWildAddonsFixture"), fruit[1].properties.keys)
         assertEquals(setOf("true"), fruit[1].properties.values.toSet())

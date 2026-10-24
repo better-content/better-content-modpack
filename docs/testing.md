@@ -407,6 +407,17 @@ participate in both Kotlin and Python checkpoint fingerprints; a default-only re
 in for a required optional-present/absent matrix. Multi-profile recipes rebuild rather than treating
 restored compiled bytes as profile verification. Client visual profiles remain separate acceptance.
 
+WFT's adult-size/manual-growth-pulse-versus-fixed-reference calibration category is retired,
+including the legacy/v2 fixtures, optional-tree reference grow-outs and their diagnostic/matrix
+qualification prerequisites. It must not be restored through an optional profile or an indirect
+source task. Its retirement changes test scope, not production growth rates or reference values.
+Both ordinary optional-present/absent `verifyFull` profiles remain required, including functional
+pulse cadence, constant normalization, persistence and the other native integration cases; final
+staging still uses default properties. The owning Source inventory defines the remaining native
+identities. Historical calibration failures/worlds remain retained, not reclassified as passes.
+Source/verification-input changes invalidate affected checkpoints through the normal fingerprints;
+new qualification must execute the remaining gates before fresh packaging and same-artifact Dist.
+
 Cave's two long native suites are **Debug-only**: `DepthDirectorWorldGameTests.realCataloguePlayersAndNaturalDepthCadence`
 (80,000 ticks) and `GeologicalWorldGameTests.pinnedGeologyCatalogueLineagesAndNaturalPopulations`
 (240,000 ticks). Source/Dist preparation requests only Cave `verifyFull` and `stageRuntimeJar`,

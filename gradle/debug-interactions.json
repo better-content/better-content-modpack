@@ -3386,9 +3386,9 @@
       "target": "source:better-wild-fruit-trees",
       "coverage": "source",
       "scenarios": [],
-      "fixture_intervention": "Canonical baseline GrowthRateGameTests fixture draws4096 deterministic RNG values through native species.grow with a counting TreePart, authors obsolete age tags/calendar boundaries and reconstructs a root; ordinary oak control. Audit does not run, author or recalibrate it.",
+      "fixture_intervention": "Canonical functional GrowthRateGameTests fixture draws4096 deterministic RNG values through native species.grow with a counting TreePart, authors obsolete age tags/calendar boundaries and reconstructs a root; ordinary oak control. This verifies pulse cadence, constant normalization and persistence, not growth-to-adult calibration.",
       "oracle": "nativeGrowthFrequencyIsConstantWithoutAgeOrSizeTransitions must execute under exact source verifyFull.",
-      "limitations": "Does not assert guaranteed adult deadline or full-pack30-day ecological performance; source-native calibration scope only.",
+      "limitations": "Functional native cadence, constant normalization and persistence only; no adult-size/manual-pulse-count calibration, guaranteed adult deadline or full-pack30-day ecological-performance acceptance.",
       "source": [
         "src/main/java/com/bettercontent/betterwildfruittrees/gametest/GrowthRateGameTests.java"
       ],
