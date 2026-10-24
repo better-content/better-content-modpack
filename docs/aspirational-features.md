@@ -11,8 +11,7 @@ Keep entries focused on the player-facing goal, proposed boundaries, unresolved 
 conditions for revisiting. When a feature enters explicitly approved work, update its status and
 link its owning subject or source repository. Once implemented or declined, remove the deferred
 entry after moving any still-relevant guidance to the proper living subject; do not accumulate
-historical completion reports here. See the [documentation authority map](README.md),
-[workspace policy](policies/workspace.md) and [testing policy](testing.md).
+historical completion reports here.
 
 ## Chilli and a saturation-backed, constrained health economy
 

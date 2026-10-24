@@ -128,21 +128,6 @@ silhouettes and mannequins. Use concrete objects, mechanisms, environments, and 
 creatures to explain the event. All 48 active card illustrations and 18 loading/Lessons
 illustrations use reviewed Journal copperplate art; the card copy and triggers are active.
 
-## Review and validation
-
-- Trace every changed claim and trigger to its implementation; inspect related surfaces
-  for contradictory copy or duplicated authority.
-- Check stable concepts, current native doorways, bounded copy, and relevant existing
-  repository-local tests. Follow [Thread Art Direction](thread_art_direction.md) for art.
-- Review reader layout, loading presentation, and item interactions manually when
-  changed. Automated tests must not synthesize mouse movement or clicks.
-- Report changed player-visible behavior and verification. Run pack suites only when
-  explicitly ordered through `test.main.kts`; otherwise state that pack testing was
-  intentionally omitted under the Dev/Dist/Debug testing policy.
-
-Do not recreate a quest compiler, layout harness, atlas exporter, or parallel validation
-framework. Durable guidance belongs here; raw evidence belongs outside living docs.
-
 ## Main-menu, Esc-menu, and death tips
 
 The fixed 135-tip catalogue declares each tip's eligible surface, requirements, relevant

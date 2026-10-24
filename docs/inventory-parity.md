@@ -120,16 +120,8 @@ baseline Dist checks in their owning harness; full Debug remains separately auth
 No source/audit/lifecycle/Dist result substitutes for the required native behavior and LLM visual
 proof. Human-pointer evidence remains separately labeled and is not a required automated verdict.
 
-During an active task, retain enough captures/logs/hashes for actual review and first-failure
-diagnosis; do not relabel a failed candidate as passed or weaken safety assertions for a retry.
-Retain worlds, captures, ZIPs and evidence across handoffs by default under
-[generated-data.md](policies/generated-data.md), regardless of result. Finish closes activity
-and deletes nothing; purge is separately gated and protects the last known good build and latest
-candidate with their support/evidence. Retained history is not fresh acceptance. Do not claim
-recovery of historical item loss or fresh runtime verification from source-only checks.
 
 ## Related policies
 
-- [Workspace authority](policies/workspace.md)
 - [Testing and release authorization](testing.md)
 - [Journal-specific acceptance](../../mod_source/better-journal-inventory/docs/inventory-acceptance.md)

@@ -6,8 +6,7 @@ This maintained subject owns the native-behavior boundaries referenced by the pa
 annotation metadata. It is authored contract documentation, not retained task evidence or a
 runtime acceptance report. Exact upstream inputs are selected by committed Packwiz metadata;
 `HoverAnnotationLearningSurfaceTest.kt` and `GunManufacturingContractTest.kt` inspect those
-hash-verified inputs directly. See [teaching policy](better_discovery_guides.md),
-[testing](testing.md), and [generated-data boundaries](policies/generated-data.md).
+hash-verified inputs directly. See [teaching policy](better_discovery_guides.md).
 
 Player-facing lines and selectors remain in `kubejs/config/hover_annotations.json`. Update the
 owning pin, direct native-input assertions, and this contract together when upstream behavior

@@ -75,6 +75,4 @@ Read-only bytecode inspection established:
 
 The focused Dev source guards verify the native feature key, supported priority,
 exact four filters, public cache call, and absence of recipe/cache mutation. These
-checks are not native runtime proof. Packaging, refresh and pack retry remain separately authorized under
-[testing.md](testing.md). Task evidence follows
-[generated-data.md](policies/generated-data.md); no old fixture is permanently retained.
+checks are not native runtime proof.

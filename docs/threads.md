@@ -81,7 +81,5 @@ are documented in the [source teaching guide](../../mod_source/better-discovery-
 ## Review
 
 All 48 active card illustrations and 18 loading illustrations follow the
-[no-humans art direction](thread_art_direction.md). The Learning Surfaces repository's required
-local gate is `./gradlew verifyFull stageRuntimeJar`; isolated real-client fixtures
-review compact/wide journal and native death-screen rendering. Provider repositories
-verify their own outcomes. These checks do not imply pack deployment or full-pack tests.
+[no-humans art direction](thread_art_direction.md). Compact/wide journal and native death-screen
+rendering are distinct presentation surfaces.

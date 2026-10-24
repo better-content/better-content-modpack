@@ -5,9 +5,7 @@
 This subject owns the shared producer/output contract for playtest logging in active local
 custom mods. The executable inventory is `gradle/active-custom-mods.json`; each owning source
 repository documents its actual feature events and local tests. Source implementation establishes
-coverage, not this document or an activation banner. [Testing](testing.md) owns release/runtime
-acceptance and the unfiltered fixture audit. [Generated-data policy](policies/generated-data.md)
-owns retention; logging does not authorize disposal or deployment.
+coverage, not this document or an activation banner.
 
 Use loader-provided SLF4J loggers named `bc.playtest.<modId>.<category>`. Small Java 17 helpers
 are repository-local copies, callable from Kotlin, with distinct owning packages. They are not a
@@ -61,9 +59,7 @@ must not accidentally report another mod's commit. A status proves only initiali
 not successful gameplay, executed hooks, complete native coverage or deployed source equivalence.
 
 The rolling file additionally rolls at 32 MiB using `fileIndex="nomax"`. Archives are not deleted
-by count or expiry. Size rollover is not a total-disk quota. Preserve run-scoped raw audits,
-failed evidence and existing archives; finishing a task deletes nothing. Deliberate reclamation
-remains separately governed by the retention policy.
+by count or expiry. Size rollover is not a total-disk quota.
 
 ## Events and limits
 

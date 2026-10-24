@@ -365,6 +365,4 @@ such a seed is not evidence of a real elapsed 30-minute session or restart accep
 
 The refactor supplies no old-world identity migration. New worlds are the supported baseline
 because deposit identities, placed small chunks, disturbed radioactivity and Machine Block
-identities participate in saved state. This development environment is not a save-backup service:
-worlds/saves are generated data retained by default under
-[generated-data.md](policies/generated-data.md); ending a task does not delete them.
+identities participate in saved state.

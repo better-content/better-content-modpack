@@ -272,11 +272,8 @@ as endgame acceptance. The matrix must include:
   approach/escalation/world-loss feedback. Integrated single-player must pass its own lifecycle
   cases before parity is claimed; current disabled behavior is not acceptance of that future path.
 
-Use the owning repository's documented gates and the pack's supported facades under
-[testing](testing.md). Aggregate source changes before heavy pack runs; Debug is a last resort.
-Retain worlds, candidates, receipts and captures under the
-[generated-data policy](policies/generated-data.md). UI/source checks, simulated agents and a
-successful server join are not interchangeable with native behavior or visual acceptance.
+UI/source checks, simulated agents and a successful server join are not interchangeable
+with native behavior or visual acceptance.
 
 **Exit:** the same qualified artifacts demonstrate the agreed complete loop, persistent rewards,
 non-player recognition and multi-curse consequences on every platform claimed as supported.
@@ -285,4 +282,3 @@ Unimplemented platforms, absent roster entries and unobserved runtime behavior r
 ## Compact contract
 
 > Entropy caching makes worlds economically expendable. Condemnation lets the player deliberately increase the value of every moment a threatened world survives. Curses are autonomous apocalypse-scale systems with agendas and victory conditions, capable of fighting the player and each other. Extreme failure may force Prestige but still advances the lineage. Narrative progression comes largely from mechanically grounded evidence that other actors have encountered, understood, or exploited analogous lineage-scale phenomena—often revealed accidentally, with neither side possessing complete information.
-

@@ -259,6 +259,3 @@ become native AdPother pollutant blocks at the configured contained-mass boundar
 owns movement, wind, impacts, detection, protection, emitters, chimneys, filters, and cleanup.
 PneumaticCraft retains native pressure and thermo-plant behavior, with explicit normal-air and
 chemical-service ledgers at the Latent boundary.
-
-Rebuild and deploy custom JARs through [Custom Mod Workspace](custom-mod-workspace.md). Run pack
-suites only when explicitly ordered, following [Testing and fresh distributions](testing.md).

@@ -68,8 +68,3 @@ when affected and process cleanup. Paired inventory acceptance is required for G
 changes; native API/action checks and LLM review of actual native captures establish automated
 acceptance under that contract. Human-pointer checks remain separate and are `NOT_PERFORMED`
 when not exercised, not a blocking automated gate.
-
-Historical candidate worlds and reports are not standing evidence dependencies. Use evidence
-for diagnosis and retain it across handoffs by default under
-[generated-data.md](policies/generated-data.md). Finish closes activity and deletes nothing;
-purge is separately gated. Retention does not make historical observations fresh acceptance.

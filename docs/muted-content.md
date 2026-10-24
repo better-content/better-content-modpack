@@ -57,5 +57,4 @@ in [testing](testing.md). Source checks do not demonstrate save compatibility or
 Separately authorized, exact-candidate runtime acceptance must inspect eligibility in Overworld
 water and other reachable fishing destinations, confirm ordinary catches still qualify, and
 exercise loading/use of an existing fish item, filled bucket and placed fish plus creative/command
-access. A finite streak without a catch is not proof of exclusion. No worlds, saved fish or
-retained evidence are deleted by this policy; [retention](policies/generated-data.md) still applies.
+access. A finite streak without a catch is not proof of exclusion.

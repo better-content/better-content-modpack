@@ -17,8 +17,7 @@ wrappers and pinned hashes; a global Gradle installation does not replace them.
 | Flite narrator runtime | Debian `libflite1` `2.2-7`, amd64 | `$HOME/.local/share/minecraft-native/libflite1-2.2-7` | Extract the pinned package below without installation/system writes; pass its `usr/lib/x86_64-linux-gnu` directory through `LD_LIBRARY_PATH` |
 
 `$HOME/.local/bin/kotlin` and `kotlinc` resolve through SDKMAN's current candidate, so cleanup does
-not need to download Kotlin. Tool installation and fresh-login verification conventions belong
-in the global lane guide. Keep this inventory current after SDK changes.
+not need to download Kotlin.
 
 ## Native narrator package
 
@@ -53,9 +52,3 @@ whole mapped roots. Extracted base/interaction/resource modules are compile-only
 runtime mods. Raw production archives and the existing correction recipes remain unchanged. These
 local-only SDKs are operating inputs to actual integration tests, not public redistribution grants
 or reusable historical runtime acceptance.
-
-## Related guidance
-
-- [Workspace policy](policies/workspace.md)
-- [Dependency/provider bootstrap](custom-mod-workspace.md)
-- [Disposable caches](policies/generated-data.md)

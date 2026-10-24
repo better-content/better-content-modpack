@@ -5,8 +5,7 @@ This is the authority for the five **local-only** resource-corrected archive ide
 contract in `config/better-content-interface-runtime-overrides.json`, and the independent
 ATL applicability correction in `config/better-content-startup-runtime-overrides.json`.
 Legacy `config/better-content-runtime-overrides.json`, its builder/specification and historical
-receipts remain unchanged; they are not the active successor qualification. This document does not replace [testing](testing.md),
-[source qualification](custom-mod-workspace.md), or [retention](policies/generated-data.md).
+receipts remain unchanged; they are not the active successor qualification.
 
 ## Scope and original identity
 

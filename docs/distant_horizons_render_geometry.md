@@ -7,7 +7,6 @@ This living integration document records the source geometry boundary for the pi
 - CurseForge project/file: `508933/7375280`
 - Packwiz SHA-1: `ce3814dd5971edda4d04c3a42ef0df5c6cf8e10d`
 - Authority: current `mods/distant-horizons.pw.toml` pin and upstream artifact source.
-  Historical fixture copies are disposable under [generated-data.md](policies/generated-data.md).
 
 ## Transform path
 

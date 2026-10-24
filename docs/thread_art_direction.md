@@ -35,10 +35,6 @@ and loading masters in [`authoring/lessons/`](../../mod_source/better-discovery-
 These are source inputs, not historical review captures.
 
 `authoring/prepare_art.py` uses those canonical inputs to create deterministic runtime derivatives
-and facsimile model overrides; an optional active-task `REVIEW_BUNDLE` can override them during
-review. It does not generate new artwork. Visually inspect every master for forbidden figures,
-subject accuracy, text artifacts and small-scale clarity, then inspect actual compact/wide reader
-and loading surfaces when runtime review is explicitly authorized. Contact sheets, original
-imagegen/session outputs and earlier review bundles are retained across handoffs by default under
-[generated-data.md](policies/generated-data.md). Finish closes activity and deletes nothing;
-purge is separately gated. Retention does not make an old review bundle a standing test dependency.
+and facsimile model overrides; an optional `REVIEW_BUNDLE` can override them for previews.
+It does not generate new artwork. Forbidden figures, subject accuracy, text artifacts and
+small-scale clarity remain part of the visual contract for compact/wide reader and loading surfaces.
