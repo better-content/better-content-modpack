@@ -36,7 +36,9 @@ project.afterEvaluate {
     timing.java.setSrcDirs([new File(supportRoot, 'src/nativeTiming/java')])
     timing.resources.setSrcDirs([new File(supportRoot, 'src/nativeTiming/resources')])
     timing.compileClasspath = main.compileClasspath
-    timing.runtimeClasspath = timing.output + timing.compileClasspath
+    // Compilation needs optional target APIs; observation must NOT activate compileOnly mods.
+    // Preserve the original runtime closure (including runtimeOnly), plus only helper outputs.
+    timing.runtimeClasspath = timing.output + main.runtimeClasspath
 
     // These exact cached source-SDK class bytes were reviewed using javap -c -p. They prove the
     // named selectors, sole Stopwatch.start before return/no body dispatch, tick listener ordering,

@@ -17,6 +17,66 @@ import java.util.UUID
 class RetoolingBuildIntegrationTest {
     private data class Artifact(val path: Path, val sha256: String)
 
+    @Test fun nativeObserverRuntimePreservesRuntimeOnlyAndExcludesCompileOnlyInputs() {
+        val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
+        val gradle = Path.of(System.getProperty("bc.retool.gradle.home"), "bin", "gradle")
+        assertTrue(Files.isExecutable(gradle))
+        val output = root.resolve("generated/test-evidence/fresh-fixes-20261023/retool-focused")
+        Files.createDirectories(output)
+        val fixture = Files.createDirectory(output.resolve("native-runtime-role-${UUID.randomUUID()}"))
+        val pack = Files.createDirectory(fixture.resolve("inert-pack"))
+        val seed = Files.createDirectory(fixture.resolve("empty-seed"))
+        val repo = Files.createDirectory(fixture.resolve("project"))
+        // Execute the ACTUAL production assignments against real Gradle SourceSets. These
+        // inert membership witnesses are not JARs, SDKs, native tests or provider acceptance.
+        val assignments = Files.readAllLines(root.resolve("gradle/native-test-timing.gradle"))
+            .map(String::trim).filter {
+                it.startsWith("timing.compileClasspath =") || it.startsWith("timing.runtimeClasspath =")
+            }
+        assertEquals(2, assignments.size, "the production classpath assignments must be unambiguous")
+        listOf("compile-only", "implementation", "runtime-only").forEach {
+            Files.writeString(repo.resolve("$it.witness"), "INERT_CLASSPATH_MEMBERSHIP_WITNESS\n")
+        }
+        Files.writeString(repo.resolve("settings.gradle"), "rootProject.name = 'native-runtime-role'\n")
+        Files.writeString(repo.resolve("build.gradle"), """
+            plugins { id 'java' }
+            dependencies {
+                compileOnly files('compile-only.witness')
+                implementation files('implementation.witness')
+                runtimeOnly files('runtime-only.witness')
+            }
+            def main = sourceSets.main
+            def timing = sourceSets.create('bcNativeTiming')
+            ${assignments.joinToString("\n")}
+            tasks.register('verifyRuntimeRole') {
+                doLast {
+                    assert timing.compileClasspath.files == main.compileClasspath.files
+                    assert timing.compileClasspath.files.contains(file('compile-only.witness'))
+                    assert !timing.compileClasspath.files.contains(file('runtime-only.witness'))
+                    assert timing.runtimeClasspath.files == ((timing.output.files + main.runtimeClasspath.files) as Set)
+                    assert !timing.runtimeClasspath.files.contains(file('compile-only.witness'))
+                    assert timing.runtimeClasspath.files.contains(file('implementation.witness'))
+                    assert timing.runtimeClasspath.files.contains(file('runtime-only.witness'))
+                    assert timing.runtimeClasspath.files.containsAll(timing.output.files)
+                    assert main.output.classesDirs.files.intersect(timing.output.classesDirs.files).empty
+                    println 'ACTUAL_GRADLE_SOURCESET_RUNTIME_ROLE_PASS_NOT_NATIVE_ACCEPTANCE'
+                }
+            }
+        """.trimIndent() + "\n")
+        val pool = BuildIsolationPool(pack, fixture.resolve("worker"), 1, sharedGradleHome = seed)
+        pool.prepare()
+        pool.withWorker(repo) { supplied ->
+            val context = requireNotNull(supplied)
+            val command = context.command(repo, listOf(gradle.toString(), "--no-daemon", "--offline",
+                "--max-workers=1", "--init-script", root.resolve("gradle/test-timing.init.gradle").toString(), "verifyRuntimeRole"))
+            val status = BoundedCommand.run(repo, command, fixture.resolve("verification.log"), Duration.ofSeconds(90),
+                context.environment() + mapOf("BC_TIMING_NATIVE" to "false",
+                    "BC_TIMING_FILE" to fixture.resolve("timing.jsonl").toString(),
+                    "BC_TIMING_PROFILE" to "SYNTHETIC_NATIVE_RUNTIME_ROLE_NOT_PROVIDER_ACCEPTANCE"))
+            assertEquals(0, status, "actual Gradle runtime closure regression; retained evidence: $fixture")
+        }
+    }
+
     @Test fun independentGradleBuildsOverlapAndConsumerUsesCompletedProviderBytes() {
         val root = Path.of(System.getProperty("bc.repo.root")).toAbsolutePath().normalize()
         val gradle = Path.of(System.getProperty("bc.retool.gradle.home"), "bin", "gradle")
