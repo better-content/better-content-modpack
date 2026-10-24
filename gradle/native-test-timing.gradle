@@ -46,7 +46,10 @@ project.afterEvaluate {
     def reviewed = [
         'net/minecraft/gametest/framework/GameTestInfo.class': [
             'da7c3a642aee7d357df84a5caea93ee09c8b6e0b39e1e75a80874441c2d3eabe', // .13/.22 official
-            'c998fac6a498f510b6fa35a483437af0aca6a533afb25ac31b9340ea0a2f7b46'], // .13 Parchment
+            'c998fac6a498f510b6fa35a483437af0aca6a533afb25ac31b9340ea0a2f7b46', // .13 Parchment (warm SDK)
+            // Cold Librarian SDK: only spawnStructure's LocalVariableTable name differs
+            // (pPos -> p_127620_); all methods/instructions match the reviewed Parchment SDK.
+            '5cf6e0388b9bb3e0f2710c953496ab93937315724d4cd75c653c4febb4ffb942'], // .13 Parchment (cold SDK)
         'net/minecraft/gametest/framework/GameTestServer.class': [
             'f3d8dfa04059f50cf78b6ef48cd39003a1cfa7465182292bd7ad95618cd01985',
             '32a6ab00a5edd9aedb407220c6636d324d825c991bd98a0a33fbf1947c8048fa'],
