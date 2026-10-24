@@ -61,6 +61,21 @@ class VerificationProfileRecipeTest {
         assertEquals(listOf("verifyFull", "headlessGameTest", "stageRuntimeJar"), profiles.getValue("better-dimension-fonts").flatMap { it.tasks })
     }
 
+    @Test fun compatVerificationReuseBindsAllThreeProductionDefaultsWithoutWideningBuildInputs() {
+        val root = Path.of(System.getProperty("bc.repo.root"))
+        val manifest = jacksonObjectMapper().readValue(root.resolve("gradle/active-custom-mods.json").toFile(), ActiveModManifest::class.java)
+        val compat = manifest.mods.single { it.repository == "better-compat-fixes" }
+        val defaults = setOf("config/adpother-common.toml", "config/forgeendertech-common.toml",
+            "config/sophisticatedcore-common.toml")
+        assertTrue(compat.verificationInputs.containsAll(defaults),
+            "Changing any exact production default consumed by the cold fixture must invalidate verification reuse")
+        defaults.forEach { assertTrue(Files.isRegularFile(root.resolve(it)), "Missing production default: $it") }
+        assertEquals(emptyList<String>(), compat.buildInputs,
+            "Fixture-only configuration inputs must not become production compilation dependencies")
+        assertEquals(listOf("registrate-present", "without-bees", "without-heat", "without-curios", "default"),
+            compat.verificationProfiles.map { it.name })
+    }
+
     @Test fun anchorsVerificationReuseBindsEveryConsumedCanonicalContract() {
         val root = Path.of(System.getProperty("bc.repo.root"))
         val manifest = jacksonObjectMapper().readValue(root.resolve("gradle/active-custom-mods.json").toFile(), ActiveModManifest::class.java)
