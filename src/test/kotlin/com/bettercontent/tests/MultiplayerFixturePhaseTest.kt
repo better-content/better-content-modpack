@@ -25,17 +25,18 @@ class MultiplayerFixturePhaseTest {
             .findAll(source).map { it.groupValues[2] to it.groupValues[1].toInt() }.toList()
         assertEquals(listOf(
             "leadClientJoinsFreshDedicatedServer" to 1,
-            "debugNativeDeepVoidEntry" to 2,
-            "debugNativeFontRoundTrips" to 3,
-            "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations" to 4,
-            "threeSurvivalPlayersStartCampaigns" to 5,
-            "debugServerRestartAndClientReconnectPreserveWorld" to 6,
-            "multiplayerEvidenceIsCleanAndCandidatesAreUnchanged" to 7,
+            "moonlightRealClientHeldMapRoundTrip" to 2,
+            "debugNativeDeepVoidEntry" to 3,
+            "debugNativeFontRoundTrips" to 4,
+            "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations" to 5,
+            "threeSurvivalPlayersStartCampaigns" to 6,
+            "debugServerRestartAndClientReconnectPreserveWorld" to 7,
+            "multiplayerEvidenceIsCleanAndCandidatesAreUnchanged" to 8,
         ), orders.sortedBy { it.second })
     }
 
     @Test fun initialNativeFixturesDoNotPrepareCampaignTerrain() {
-        for (name in listOf("start", "leadClientJoinsFreshDedicatedServer",
+        for (name in listOf("start", "leadClientJoinsFreshDedicatedServer", "moonlightRealClientHeldMapRoundTrip",
             "debugNativeDeepVoidEntry", "debugNativeFontRoundTrips",
             "everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations")) {
             val fixture = body(name)

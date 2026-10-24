@@ -157,11 +157,32 @@ That setup correction retained production hooks and all assertions; the failed e
 The remaining optional populations and full same-candidate Dist still require execution. This
 source-native proof is not pack startup, client join or overall acceptance.
 
-Moonlight's Fabric-API-ID diagnostic also fires for intentionally installed native Forgified
-Fabric API. That log alone does not establish a broken API, and this observation is not a
-log-policy exemption or permission to remove the API. A principled provider/platform correction
-needs actual native integration facts and API qualification, not a logger change or ID rename.
-Full same-artifact startup/join/heartbeat/teardown and unchanged strict raw audits remain required.
+## Bounded native Forge API compatibility scope
+
+The pack deliberately retains native Forge Forgified Fabric API and establishes a pack-owned,
+version-pinned compatibility scope with Moonlight. This is **not** an upstream endorsement,
+permission to load arbitrary Fabric/Connector providers, or a claim that every API/module/rendering
+path is tested. Moonlight's current ID-only detector cannot distinguish this real native Forge
+implementation from an unsupported provider. The correction must classify the exact provider at
+its one callsite, not make global `ModList` presence lie, rename/remove the API, change the logger,
+or exempt a failure from the audit.
+
+Admission requires unambiguous JavaFML ownership, actual native entrypoint instances, exact
+qualified root/nested identities and ABIs, and the exact Moonlight pair. Unknown, incomplete,
+unreadable or mismatched providers retain the original diagnostic branch. Raw production and
+explicitly qualified nonshipping mapped SDK roles must not be confused. Existing resource-only
+corrections and all 3,144 production class bytes remain unchanged; SDK mappings are separate,
+retained development inputs, never production overrides.
+
+A separate `native-forge-api` source profile adds exactly two required tests (87 with the ordinary
+85-case graph): natural server interaction through Forge to the real Fabric callback and Moonlight
+map persistence, plus native pack/reload coexistence and actual generated-resource visibility.
+All prior profiles and identities remain required. Native tests must reject duplicate dispatch,
+verify nonmatching/cancellation behavior and preserve original operations; API existence, direct
+callback invocation and INFO logs are not integration proof. The first owning native invocation passed all 87
+required cases, including both additions and strict native logs. That is not canonical 46-provider
+qualification or full-pack/client acceptance. Full same-artifact client startup/assets/join, relevant
+map/resource observations, heartbeats, teardown and unchanged strict raw audits remain required.
 
 ## C2ME and Registrate companions
 

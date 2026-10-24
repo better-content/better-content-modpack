@@ -30,6 +30,30 @@ allow Mojang's pinned `text2speech` JNA binding to resolve the native libraries.
 runtime SDK, not a system package installation. Native initialization is separate from playback
 or gameplay-audio acceptance.
 
+## Nonshipping native Forge API SDK
+
+Compat's sixth `native-forge-api` profile uses Forge **47.4.13** / Java 17; the production pack uses
+Forge **47.4.22**. These are explicit, separate qualified roles, not interchangeable version claims.
+The owning wrapper and `gradle/native-forge-api-fixture.gradle` derive the current private worker's
+Minecraft 1.20.1 official mappings through ordinary Forge compilation. Forge `installertools 1.4.4`
+(`SRG_TO_MCP`) is a pinned build dependency, not a new global executable or host installation.
+
+`prepare_native_forge_api_sdk.py` binds the tool SHA-256
+`3de0f0899c060b6f5aa79d4d9d79063ca9029cfefa19e792cb222782f754184d` and mapping ZIP SHA-256
+`84e2278aeeabd496194dbe2fa08031be58bad277d7e3aee036b79d9222d8cbc7`, recursively maps the exact
+resource-corrected FFAPI root plus nested modules and Moonlight, and retains originals, snapshots,
+outputs, receipts and failed attempts under the current Gradle home's
+`bettercontent-local-sdk/native-forge-api-v1/`. Lazy file dependencies wait for this producer; no
+configuration-time classpath resolution or global/historical MCP-cache fallback is supported.
+
+Mapped runtime roots are FFAPI SHA-256
+`447b9e285717e66e95924e190a13f5a2079b969af70ed4c6577d40cad9423351` and Moonlight SHA-256
+`ec130f96cb65ce97d600880127322656021bd5c6e60a976de9eb9403e5f3d5a3`. Only that profile loads these
+whole mapped roots. Extracted base/interaction/resource modules are compile-only, never duplicate
+runtime mods. Raw production archives and the existing correction recipes remain unchanged. These
+local-only SDKs are operating inputs to actual integration tests, not public redistribution grants
+or reusable historical runtime acceptance.
+
 ## Related guidance
 
 - [Workspace policy](policies/workspace.md)

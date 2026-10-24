@@ -48,7 +48,7 @@ class VerificationProfileRecipeTest {
         val manifest = jacksonObjectMapper().readValue(Path.of(System.getProperty("bc.repo.root")).resolve("gradle/active-custom-mods.json").toFile(), ActiveModManifest::class.java)
         val profiles = manifest.mods.filter { it.verificationProfiles.isNotEmpty() }.associate { it.repository to it.verificationProfiles }
         assertEquals(setOf("better-compat-fixes", "better-spirit-commerce", "better-dimension-fonts", "better-wild-fruit-trees"), profiles.keys)
-        assertEquals(listOf("withRegistrateFixture", "colonyWithoutBees", "spoilageWithoutHeat", "backpackWithoutCurios"), profiles.getValue("better-compat-fixes").dropLast(1).map { it.properties.keys.single() })
+        assertEquals(listOf("withRegistrateFixture", "colonyWithoutBees", "spoilageWithoutHeat", "backpackWithoutCurios", "withNativeForgeApiFixture"), profiles.getValue("better-compat-fixes").dropLast(1).map { it.properties.keys.single() })
         assertEquals(mapOf("withRegistrateFixture" to "true"), profiles.getValue("better-compat-fixes").first().properties)
         val fruit = profiles.getValue("better-wild-fruit-trees")
         assertEquals(listOf("optional-present", "optional-absent", "stage-default"), fruit.map { it.name })
@@ -72,8 +72,12 @@ class VerificationProfileRecipeTest {
         defaults.forEach { assertTrue(Files.isRegularFile(root.resolve(it)), "Missing production default: $it") }
         assertEquals(emptyList<String>(), compat.buildInputs,
             "Fixture-only configuration inputs must not become production compilation dependencies")
-        assertEquals(listOf("registrate-present", "without-bees", "without-heat", "without-curios", "default"),
+        assertEquals(listOf("registrate-present", "without-bees", "without-heat", "without-curios", "native-forge-api", "default"),
             compat.verificationProfiles.map { it.name })
+        assertEquals(mapOf("withNativeForgeApiFixture" to "true"),
+            compat.verificationProfiles.single { it.name == "native-forge-api" }.properties)
+        assertTrue(compat.verificationProfiles.last().properties.isEmpty(),
+            "Final staged production provider must not retain the nonshipping whole mapped API runtime")
     }
 
     @Test fun anchorsVerificationReuseBindsEveryConsumedCanonicalContract() {

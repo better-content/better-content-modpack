@@ -157,6 +157,7 @@
         {"name": "without-bees", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"colonyWithoutBees": "true"}},
         {"name": "without-heat", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"spoilageWithoutHeat": "true"}},
         {"name": "without-curios", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"backpackWithoutCurios": "true"}},
+        {"name": "native-forge-api", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"withNativeForgeApiFixture": "true"}},
         {"name": "default", "tasks": ["verifyFull", "stageRuntimeJar"]}
       ],
       "tasks": [

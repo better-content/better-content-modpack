@@ -344,7 +344,7 @@ class ClientFixture(
     )
         private set
     private val xvfbLog = evidence.directory.resolve(if (slot == 0) "xvfb.log" else "xvfb-$slot.log")
-    private val display = ":${200 + ((ProcessHandle.current().pid() + slot) % 500)}"
+    internal val display = ":${200 + ((ProcessHandle.current().pid() + slot) % 500)}"
     private var xvfb: ManagedProcess? = null
     private var launcher: ManagedProcess? = null
     private var priorJoinCount = 0

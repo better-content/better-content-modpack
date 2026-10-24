@@ -115,6 +115,22 @@ class MultiplayerRuntimeTest {
         }
     }
 
+    @Test @Order(2)
+    fun moonlightRealClientHeldMapRoundTrip() {
+        if (!MoonlightClientObservation.shouldRun(evidence.run.tier, evidence.run.target)) {
+            evidence.run.event("scenario_omitted", mapOf("name" to "Moonlight real-client held-map roundtrip", "tier" to evidence.run.tier,
+                "target" to evidence.run.target, "reason" to "full Dist/Debug multiplayer only; unrelated targeted scenarios are not map acceptance"))
+            return
+        }
+        evidence.run.checkpoint("Moonlight real-client held-map roundtrip and retained render frames") {
+            require(joined) { "full held-map scenario requires successful fresh lead-client join" }
+            val lead = clients.first()
+            requirePlayersOnline("Moonlight map roundtrip start", listOf(lead))
+            MoonlightClientObservation.observe(evidence.run, server, lead)
+            requirePlayersOnline("Moonlight map roundtrip end", listOf(lead))
+        }
+    }
+
     private fun prepareTargetJoin(needsInventory: Boolean = false) {
         if (joined || evidence.run.target == null) return
         server.waitReady()
@@ -129,7 +145,7 @@ class MultiplayerRuntimeTest {
         joined = true
     }
 
-    @Test @Order(2)
+    @Test @Order(3)
     fun debugNativeDeepVoidEntry() {
         if (evidence.run.tier != "debug") return
         prepareTargetJoin()
@@ -183,7 +199,7 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    @Test @Order(4)
+    @Test @Order(5)
     fun everyFontAndCreatingSpaceDimensionStabilizesAtFreshLocations() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "dimension traversal and TPS stabilization", "tier" to evidence.run.tier))
@@ -292,7 +308,7 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    @Test @Order(5)
+    @Test @Order(6)
     fun threeSurvivalPlayersStartCampaigns() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "three-player campaigns", "tier" to evidence.run.tier))
@@ -436,7 +452,7 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    @Test @Order(6)
+    @Test @Order(7)
     fun debugServerRestartAndClientReconnectPreserveWorld() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "restart and reconnect", "tier" to evidence.run.tier))
@@ -527,7 +543,7 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    @Test @Order(3)
+    @Test @Order(4)
     fun debugNativeFontRoundTrips() {
         if (evidence.run.tier != "debug") {
             evidence.run.event("scenario_omitted", mapOf("name" to "native Font round trip", "tier" to evidence.run.tier))
@@ -598,7 +614,7 @@ class MultiplayerRuntimeTest {
         }
     }
 
-    @Test @Order(7)
+    @Test @Order(8)
     fun multiplayerEvidenceIsCleanAndCandidatesAreUnchanged() {
         evidence.run.checkpoint("multiplayer log and hash audit") {
             clients.forEach { it.assertHealthyBeforeTeardown("multiplayer final teardown") }
