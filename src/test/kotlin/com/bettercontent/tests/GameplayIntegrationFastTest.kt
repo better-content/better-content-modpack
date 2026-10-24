@@ -43,20 +43,64 @@ class GameplayIntegrationFastTest {
         require(build.contains("bettercontent.fixture.") && build.contains("BC_CUSTOM_MOD_JAR_DIR"))
     }
 
+    @Test fun reservedMixinNamespaceContainsOnlyRegisteredTopLevelMixins() {
+        val config = jacksonObjectMapper().readTree(diagnostics.resolve("src/testSupport/resources/better_runtime_test_support.mixins.json").toFile())
+        val reserved = "com.bettercontent.runtimetestsupport.mixin"
+        require(config.path("package").asText() == reserved)
+        val worldMixins = listOf("ExplosionRadiusAccess", "BuriedTrackerObservationMixin", "BuriedSpawnerObservationMixin", "NativeEngineObservationMixin", "NativeCraterObservationMixin")
+        require(config.path("mixins").map { it.asText() } ==
+            listOf("diagnostics.NonfiniteRotationMixin", "diagnostics.UntamedSpeciesObservationMixin") + worldMixins.map { "gameplay.$it" })
+        val registered = (config.path("mixins").map { it.asText() } + config.path("client").map { it.asText() }).map { "$reserved.$it" }
+        require(registered.size == registered.toSet().size)
+        require(!config.path("plugin").asText().startsWith("$reserved."))
+        val actual = mutableSetOf<String>()
+        for (sourceSet in listOf("testSupport", "testSupportPure")) {
+            val sourceRoot = diagnostics.resolve("src/$sourceSet/java")
+            Files.walk(sourceRoot).use { paths ->
+                for (path in paths.filter { it.toString().endsWith(".java") }.toList()) {
+                    val source = text(path)
+                    val namespace = Regex("(?m)^package ([\\w.]+);").find(source)!!.groupValues[1]
+                    val type = path.fileName.toString().removeSuffix(".java")
+                    val qualified = "$namespace.$type"
+                    val mixin = Regex("@Mixin\\s*\\(").containsMatchIn(source)
+                    val inside = namespace == reserved || namespace.startsWith("$reserved.")
+                    require(inside == mixin) { "Only Mixin types may occupy reserved namespace: $path" }
+                    require(sourceRoot.relativize(path).toString().replace('\\', '/') == qualified.replace('.', '/') + ".java")
+                    if (inside) {
+                        require(!Regex("@Mod\\s*\\(").containsMatchIn(source))
+                        require(!source.contains("implements IMixinConfigPlugin"))
+                        require(Regex("(?m)^public (?:abstract )?(?:class|interface) $type\\b").containsMatchIn(source))
+                        actual.add(qualified)
+                    }
+                }
+            }
+        }
+        require(actual == registered.toSet()) { "Every reserved source must be registered exactly once" }
+        val entrypoint = text(diagnostics.resolve("src/testSupport/java/com/bettercontent/runtimetestsupport/RuntimeTestSupport.java"))
+        require(entrypoint.contains("package com.bettercontent.runtimetestsupport;"))
+        require(entrypoint.contains("@Mod("))
+        val probe = text(diagnostics.resolve("src/testSupport/java/com/bettercontent/runtimetestsupport/gameplay/WorldHooksInteractionWorldProbe.java"))
+        require(probe.contains("import $reserved.gameplay.ExplosionRadiusAccess;"))
+        require(!probe.contains("@Mixin("))
+        val plugin = text(diagnostics.resolve("src/testSupport/java/com/bettercontent/runtimetestsupport/diagnostics/NonfiniteRotationMixinPlugin.java"))
+        require(plugin.contains("String owner=\"$reserved.gameplay.\";"))
+        for (name in worldMixins) require(plugin.contains("owner+\"$name\""))
+    }
+
     @Test fun gameplayClientHooksAreExplicitlyDebugGatedAndIsolated() {
         val mapper = jacksonObjectMapper()
         val config = mapper.readTree(diagnostics.resolve("src/testSupport/resources/better_runtime_test_support.mixins.json").toFile())
-        val mixinPackage = "com.bettercontent.runtimetestsupport"
+        val mixinPackage = "com.bettercontent.runtimetestsupport.mixin"
         val clientMixins = listOf("diagnostics.GameplayParticleMixin", "diagnostics.GameplayCutMixin", "diagnostics.GameplayCutDriverMixin")
         require(config.path("package").asText() == mixinPackage)
-        require(config.path("plugin").asText() == "$mixinPackage.diagnostics.NonfiniteRotationMixinPlugin")
+        require(config.path("plugin").asText() == "com.bettercontent.runtimetestsupport.diagnostics.NonfiniteRotationMixinPlugin")
         require(config.path("client").map { it.asText() } == clientMixins)
         val plugin = text(diagnostics.resolve("src/testSupport/java/com/bettercontent/runtimetestsupport/diagnostics/NonfiniteRotationMixinPlugin.java"))
         require(plugin.contains("if (!enabled) return false;"))
         require(plugin.contains("if (!requested || !\"debug\".equals(mode)) return false;"))
         require(plugin.contains("Boolean.getBoolean(\"bc.pack_test.gameplay_client\")"))
         for (name in clientMixins) require(plugin.contains("$mixinPackage.$name"))
-        require(Regex("""com\.bettercontent\.runtimetestsupport\.diagnostics\.Gameplay[A-Za-z]+Mixin""")
+        require(Regex("""com\.bettercontent\.runtimetestsupport\.mixin\.diagnostics\.Gameplay[A-Za-z]+Mixin""")
             .findAll(plugin).map { it.value }.toSet() == clientMixins.map { "$mixinPackage.$it" }.toSet())
         require(plugin.indexOf("if (!enabled) return false;") < plugin.indexOf("if (gameplayMixin(target, mixin,"))
         val build = text(diagnostics.resolve("build.gradle.kts"))

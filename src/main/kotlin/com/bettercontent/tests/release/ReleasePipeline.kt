@@ -300,10 +300,18 @@ private fun prepareRelease(args: Array<String>) {
         UpstreamRuntimeOverrides.prepare(root, workspace.resolve("mod_source/better-compat-fixes"),
             evidence, provider.jar, provider.supportHashes)
     }
+    val interfaceOverrideInputs = if (skipTests) null else {
+        val provider = built.single { it.definition.repository == "better-compat-fixes" }
+        UpstreamInterfaceRuntimeOverrides.prepare(root, workspace.resolve("mod_source/better-compat-fixes"),
+            evidence, provider.jar, provider.supportHashes)
+    }
     runLogged(root, listOf("packwiz", "refresh"), evidence.resolve("packwiz-refresh.log"))
     runLogged(root, listOf("git", "diff", "--check"), evidence.resolve("diff-check.log"))
-    runLogged(root, listOf(root.resolve("dist.sh").toString()), evidence.resolve("dist.log"),
-        runtimeOverrideInputs?.let { mapOf("BC_PACKAGE_RUNTIME_OVERRIDES" to it.directory.toString()) } ?: emptyMap())
+    val packagingEnvironment = buildMap {
+        runtimeOverrideInputs?.let { put("BC_PACKAGE_RUNTIME_OVERRIDES", it.directory.toString()) }
+        interfaceOverrideInputs?.let { put("BC_PACKAGE_INTERFACE_OVERRIDES", it.directory.toString()) }
+    }
+    runLogged(root, listOf(root.resolve("dist.sh").toString()), evidence.resolve("dist.log"), packagingEnvironment)
     val candidates = CandidateLocator.locate(root)
     val provenance = mapOf(
         "schema" to if (diagnostic == null) "bc.fresh_dist_provenance.v1" else DiagnosticControls.SCHEMA,
@@ -321,6 +329,10 @@ private fun prepareRelease(args: Array<String>) {
         "runtime_acceptance" to "pending; historical runtime verdicts are never imported",
         "runtime_input_sha256" to com.bettercontent.tests.runtimeInputIdentity(root),
         "runtime_archive_overrides" to (runtimeOverrideInputs?.provenance ?: mapOf(
+            "qualification" to "UNTESTED_EXISTING_PREPARED_INPUTS",
+            "runtime_acceptance" to "NOT_EVALUATED",
+            "publication" to "LOCAL_ONLY_NOT_AUTHORIZED")),
+        "runtime_interface_overrides" to (interfaceOverrideInputs?.provenance ?: mapOf(
             "qualification" to "UNTESTED_EXISTING_PREPARED_INPUTS",
             "runtime_acceptance" to "NOT_EVALUATED",
             "publication" to "LOCAL_ONLY_NOT_AUTHORIZED")),

@@ -1,7 +1,8 @@
-# Local upstream runtime resource corrections
+# Local upstream runtime corrections
 
-This is the authority for the five **local-only** corrected runtime archive identities in
-`config/better-content-runtime-overrides.json`. It does not replace [testing](testing.md),
+This is the authority for the five **local-only** resource-corrected archive identities in
+`config/better-content-runtime-overrides.json` and the separate two-artifact compatibility
+contract in `config/better-content-interface-runtime-overrides.json`. It does not replace [testing](testing.md),
 [source qualification](custom-mod-workspace.md), or [retention](policies/generated-data.md).
 
 ## Scope and original identity
@@ -57,6 +58,35 @@ exclusion and actual Compat replacement/config registration on **both** archives
 initialization, join, heartbeats and strict native audits are still required. Resource/class controls
 alone are not proof of an actual native fuel-consumption operation or full-pack acceptance.
 
+## Independent interface/side compatibility corrections
+
+The separate `bc-interface.1` recipe, builder and 12 actual-original/pure controls are owned by
+Compat's `src/upstreamRuntime/interface-overrides-v1.json` and `interface-README.md`. It does
+**not** modify the preceding five-artifact recipe, its outputs, or its 3,144-class invariant.
+
+- Move only Epic ParCool's client animation accessor from common to client.
+- Move only VS's Create chain-conveyor interaction/rendering Mixin from common to client.
+- For the exact VS vibration ticker interface, change exactly three PRIVATE|STATIC method
+  access words to PUBLIC|STATIC. Preserve STATIC, every descriptor/annotation/Code attribute,
+  instruction and all other class bytes. The third handler still delegates with INVOKESTATIC.
+  This backports declaration visibility for active Mixin 0.8.5; it does not replace global libraries.
+
+The additional two originals contain 8,062 recursive classes; exactly one changes three access
+bytes. Root independently derives those offsets and compares the complete expected class, not
+just a permissive `class_bytes_invariant=false` flag. Unexpected body, metadata, static-bit,
+method, resource or archive changes reject. Relics' mixed client/server Item Mixin stays common;
+its server cooldown and registration behavior must not be dropped to hide a client-type warning.
+
+`qualifyUpstreamInterfaceOverrides` retains separate originals/attempts and publishes three
+source-qualified support files under `build/upstream-interface-overrides/`. Root seals separate
+`interface-overrides/` evidence and `.worklane/interface-overrides/current.path`; the sole packager
+applies old five then new two, with one normal Packwiz export and seven exact CF tuple exclusions.
+The new receipt has no variable provider field or normalization. Both validators bind both exact
+ZIPs. All startup/join/heartbeat/teardown and raw-log requirements remain; source/class controls
+alone are not runtime acceptance. Fixture audit derivation additionally admits additive Mixin
+DEBUG application records while retaining the INFO root, all failure severities and unchanged
+packaged production logging. No suppression or audit exemption is added.
+
 ## C2ME and Registrate companions
 
 The server-only `server-config/config-overrides/c2me.toml` uses C2ME's supported module gate to set
@@ -72,7 +102,7 @@ Unknown, partial and mixed pairs reject. This is separate from the resource arch
 ## Publication boundary
 
 **Do not publish these corrected binaries or generated local ZIPs based on this recipe/receipt.**
-Relics and AdPother declare All Rights Reserved without a located grant. Other artifacts carry
+Relics, AdPother and Epic ParCool declare All Rights Reserved without a located grant. Other artifacts carry
 notice/source obligations, including YACL's LGPL metadata. Existing license/notices are preserved,
 but preservation and passing tests are not redistribution permission or complete compliance.
 Only patch source/specifications are committed here; corrected third-party archives remain local

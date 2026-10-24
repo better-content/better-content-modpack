@@ -108,6 +108,14 @@ object FixtureAuditLogging {
             }
             logger.removeChild(filters)
         }
+        // Mixin application witnesses are DEBUG, below the unchanged native INFO root.
+        // This fixture-only additive logger admits evidence; it filters/downgrades nothing
+        // and never changes the packaged production XML or any failure classification.
+        loggers.appendChild(document.createElement("Logger").apply {
+            setAttribute("name", "mixin")
+            setAttribute("level", "DEBUG")
+            setAttribute("additivity", "true")
+        })
         val auditDirectory = root.resolve(".fixture-audit")
         Files.createDirectories(auditDirectory)
         require(!Files.isSymbolicLink(auditDirectory)) { "symlink audit directory" }

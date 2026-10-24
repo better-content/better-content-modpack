@@ -49,6 +49,9 @@ class RuntimeOverridesTest(unittest.TestCase):
     def call(self, mode='tree', target=None, prepared=True, script=None, success=True):
         env = os.environ.copy()
         env.pop('BC_PACKAGE_RUNTIME_OVERRIDES', None)
+        env.pop('BC_PACKAGE_INTERFACE_OVERRIDES', None)
+        if getattr(self, 'interface_env', False):
+            env['BC_PACKAGE_INTERFACE_OVERRIDES'] = str(self.interface_directory)
         if prepared:
             env['BC_PACKAGE_RUNTIME_OVERRIDES'] = str(self.prepared)
         result = subprocess.run(
@@ -300,6 +303,200 @@ stage_side "$3" "$4"'''
         self.assertTrue((mods / 'original-0.jar').exists())
         archive = self.client_zip(extra={f'overrides/mods/{output}': b'existing'})
         self.call('client-zip', archive, success=False)
+
+    def interface_selection(self, old_active=True, pointer=False):
+        (self.root / 'config/better-content-interface-runtime-overrides.json').write_text('{}')
+        if not old_active:
+            (self.root / 'config/better-content-runtime-overrides.json').unlink()
+        self.interface_directory = self.base / 'interface-prepared'
+        self.interface_directory.mkdir()
+        self.interface_env = not pointer
+        self.interface_plan = {'schema': 'bc.package_runtime_overrides.v1', 'artifacts': [
+            {'input': 'epic x parcool-forge-20.12.0.1-1.20.1.jar',
+             'output': 'epic x parcool-forge-20.12.0.1-1.20.1-bc-interface.1.jar',
+             'manifest': 'epic-parcool.pw.toml', 'project_id': 700, 'file_id': 800},
+            {'input': 'valkyrienskies-120-2.4.11.jar',
+             'output': 'valkyrienskies-120-2.4.11-bc-interface.1.jar',
+             'manifest': 'valkyrienskies.pw.toml', 'project_id': 701, 'file_id': 801}]}
+        (self.interface_directory / 'selection.json').write_text(json.dumps(self.interface_plan))
+        for entry in self.interface_plan['artifacts']:
+            with zipfile.ZipFile(self.interface_directory / entry['output'], 'w') as archive:
+                archive.writestr('interface.txt', entry['output'])
+        if pointer:
+            path = self.root / '.worklane/interface-overrides/current.path'
+            path.parent.mkdir(parents=True)
+            path.write_text(str(self.interface_directory) + '\n')
+        self.active_artifacts = (self.plan['artifacts'] if old_active else []) + self.interface_plan['artifacts']
+        self.plan = {'schema': 'bc.package_runtime_overrides.v1', 'artifacts': self.active_artifacts}
+
+    def corrected_bytes(self, entry):
+        source = self.interface_directory if entry in self.interface_plan['artifacts'] else self.prepared
+        return (source / entry['output']).read_bytes()
+
+    def assert_combined_tree(self, mods):
+        self.assertEqual(len(list(mods.glob('*.jar'))), len(self.active_artifacts) + 1)
+        for entry in self.active_artifacts:
+            self.assertFalse((mods / entry['input']).exists())
+            self.assertFalse((mods / entry['manifest']).exists())
+            self.assertEqual((mods / entry['output']).read_bytes(), self.corrected_bytes(entry))
+        self.assertEqual((mods / 'unrelated.jar').read_bytes(), b'unrelated\x00payload')
+        self.assertEqual((mods / 'unrelated.pw.toml').read_bytes(), b'unrelated pin')
+
+    def assert_combined_zip(self, overrides):
+        selected_pairs = {(e['project_id'], e['file_id']) for e in self.active_artifacts}
+        removed = {f'{overrides}/mods/{e[key]}' for e in self.active_artifacts for key in ('input', 'manifest')}
+        with zipfile.ZipFile(self.archive) as archive:
+            names = archive.namelist()
+            self.assertEqual(len(names), len(set(names)))
+            self.assertEqual(archive.comment, b'keep archive comment')
+            expected = copy.deepcopy(self.manifest)
+            expected['files'] = [item for item in expected['files'] if (item['projectID'], item['fileID']) not in selected_pairs]
+            self.assertEqual(json.loads(archive.read('manifest.json')), expected)
+            for name, data in self.payloads.items():
+                if name in removed:
+                    self.assertNotIn(name, names)
+                elif name != 'manifest.json':
+                    self.assertEqual(archive.read(name), data)
+                    self.assertEqual(archive.getinfo(name).comment, b'keep entry comment')
+                    self.assertEqual(archive.getinfo(name).extra, b'\xfe\xca\x00\x00')
+            for entry in self.active_artifacts:
+                name = f'{overrides}/mods/{entry["output"]}'
+                self.assertEqual(names.count(name), 1)
+                self.assertEqual(archive.read(name), self.corrected_bytes(entry))
+
+    def test_interface_only_environment(self):
+        self.interface_selection(old_active=False)
+        mods = self.tree()
+        self.call(prepared=False)
+        self.assert_combined_tree(mods)
+
+    def test_interface_only_pointer(self):
+        self.interface_selection(old_active=False, pointer=True)
+        mods = self.tree()
+        self.call(prepared=False)
+        self.assert_combined_tree(mods)
+
+    def test_interface_only_client_zip(self):
+        self.interface_selection(old_active=False)
+        self.call('client-zip', self.client_zip(), prepared=False)
+        self.assert_combined_zip('overrides')
+
+    def test_both_selections_tree(self):
+        self.interface_selection()
+        mods = self.tree()
+        originals = self.base / 'original-inputs'
+        originals.mkdir()
+        for entry in self.active_artifacts:
+            os.link(mods / entry['input'], originals / entry['input'])
+            os.link(mods / entry['manifest'], originals / entry['manifest'])
+        self.call()
+        self.assert_combined_tree(mods)
+        for entry in self.active_artifacts:
+            self.assertEqual((originals / entry['input']).read_bytes(), b'original bytes')
+            self.assertEqual((originals / entry['manifest']).read_bytes(), b'original manifest')
+
+    def test_both_selections_stage_both_sides_resolve_once(self):
+        self.interface_selection()
+        source_mods = self.tree()
+        (self.root / 'mods').mkdir()
+        for item in source_mods.iterdir():
+            (self.root / 'mods' / item.name).write_bytes(item.read_bytes())
+        script = '''resolve_artifacts() { test -f "$1/mods/original-0.jar"; printf '%s\\n' "$2" >> "$1/resolve-calls"; }
+stage_side "$3" "$4"'''
+        for side in ('server', 'client'):
+            target = self.base / side
+            self.call(mode=side, target=target, script=script)
+            self.assert_combined_tree(target / 'mods')
+            self.assertEqual((target / 'resolve-calls').read_text(), side + '\n')
+        for entry in self.active_artifacts:
+            self.assertEqual((self.root / 'mods' / entry['input']).read_bytes(), b'original bytes')
+            self.assertEqual((self.root / 'mods' / entry['manifest']).read_bytes(), b'original manifest')
+
+    def test_both_selections_zip(self):
+        self.interface_selection()
+        self.call('client-zip', self.client_zip())
+        self.assert_combined_zip('overrides')
+
+    def test_both_selections_custom_overrides_root(self):
+        self.interface_selection(pointer=True)
+        self.call('client-zip', self.client_zip('custom/content'))
+        self.assert_combined_zip('custom/content')
+
+    def test_interface_environment_precedes_pointer(self):
+        self.interface_selection(old_active=False)
+        pointer = self.root / '.worklane/interface-overrides/current.path'
+        pointer.parent.mkdir(parents=True)
+        pointer.write_text('/missing/invalid-input\n')
+        self.tree()
+        self.call(prepared=False)
+        self.assert_combined_tree(self.target / 'mods')
+
+    def test_interface_environment_without_policy_is_noop(self):
+        self.interface_selection(old_active=False)
+        (self.root / 'config/better-content-interface-runtime-overrides.json').unlink()
+        mods = self.tree()
+        before = {p.name: p.read_bytes() for p in mods.iterdir()}
+        self.call(prepared=False)
+        self.assertEqual(before, {p.name: p.read_bytes() for p in mods.iterdir()})
+        archive = self.client_zip()
+        before_zip = archive.read_bytes()
+        self.call('client-zip', archive, prepared=False)
+        self.assertEqual(archive.read_bytes(), before_zip)
+
+    def test_unsafe_interface_selection(self):
+        self.interface_selection(old_active=False)
+        self.interface_plan['artifacts'][0]['output'] = '../escape.jar'
+        (self.interface_directory / 'selection.json').write_text(json.dumps(self.interface_plan))
+        self.tree()
+        self.call(prepared=False, success=False)
+        self.assertTrue((self.target / 'mods' / self.active_artifacts[0]['input']).exists())
+
+    def test_missing_interface_pointer(self):
+        (self.root / 'config/better-content-runtime-overrides.json').unlink()
+        (self.root / 'config/better-content-interface-runtime-overrides.json').write_text('{}')
+        self.call(prepared=False, success=False)
+
+    def test_missing_interface_selection_preserves_originals(self):
+        self.interface_selection(old_active=False)
+        mods = self.tree()
+        (self.interface_directory / 'selection.json').unlink()
+        self.call(prepared=False, success=False)
+        self.assertTrue(all((mods / entry['input']).exists() for entry in self.active_artifacts))
+
+    def test_malformed_interface_selection_rejects_zip(self):
+        self.interface_selection(old_active=False)
+        (self.interface_directory / 'selection.json').write_text('{broken')
+        archive = self.client_zip()
+        original = archive.read_bytes()
+        self.call('client-zip', archive, prepared=False, success=False)
+        self.assertEqual(archive.read_bytes(), original)
+
+    def test_missing_interface_jar_rejects_zip(self):
+        self.interface_selection(old_active=False)
+        (self.interface_directory / self.active_artifacts[-1]['output']).unlink()
+        archive = self.client_zip()
+        original = archive.read_bytes()
+        self.call('client-zip', archive, prepared=False, success=False)
+        self.assertEqual(archive.read_bytes(), original)
+
+    def test_wrapper_applies_old_then_interface_without_extra_resolution(self):
+        script = '''_apply_runtime_selection() { printf '%s:%s:%s:%s\\n' "$1" "$2" "$4" "$5"; }
+resolve_artifacts() { printf 'UNEXPECTED RESOLUTION\\n'; return 1; }
+apply_runtime_overrides "$3" "$4"'''
+        result = self.call(script=script)
+        self.assertEqual(result.stdout.splitlines(), [
+            f'config/better-content-runtime-overrides.json:.worklane/runtime-overrides/current.path:tree:{self.target}',
+            f'config/better-content-interface-runtime-overrides.json:.worklane/interface-overrides/current.path:tree:{self.target}'])
+        source = PACKAGE.read_text()
+        self.assertEqual(source.count('packwiz curseforge export -o'), 1)
+
+    def test_old_failure_does_not_silently_continue_to_interface(self):
+        self.interface_selection(old_active=False)
+        # Re-enable old policy without its prepared input: new-only bytes must not mask failure.
+        (self.root / 'config/better-content-runtime-overrides.json').write_text('{}')
+        self.tree()
+        self.call(prepared=False, success=False)
+        self.assertTrue(all((self.target / 'mods' / entry['input']).exists() for entry in self.active_artifacts))
 
     def test_resolve_command_still_does_not_apply_overrides(self):
         # Invoke actual resolve entry point on empty manifests without downloads.

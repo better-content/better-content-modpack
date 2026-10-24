@@ -136,8 +136,16 @@ PY
 # Prepared bytes are qualified by the caller, not by this input-assembly step.
 # Interface: apply_runtime_overrides tree|client-zip TARGET
 apply_runtime_overrides() {
-  [ -e "$ROOT/config/better-content-runtime-overrides.json" ] || return 0
-  python3 - "$ROOT" "$1" "$2" "${BC_PACKAGE_RUNTIME_OVERRIDES:-}" <<'PY'
+  _apply_runtime_selection config/better-content-runtime-overrides.json \
+    .worklane/runtime-overrides/current.path "${BC_PACKAGE_RUNTIME_OVERRIDES:-}" "$@" || return $?
+  _apply_runtime_selection config/better-content-interface-runtime-overrides.json \
+    .worklane/interface-overrides/current.path "${BC_PACKAGE_INTERFACE_OVERRIDES:-}" "$@"
+}
+
+# Internal interface: POLICY RELATIVE_POINTER PREPARED_ARG tree|client-zip TARGET
+_apply_runtime_selection() {
+  [ -e "$ROOT/$1" ] || return 0
+  python3 - "$ROOT" "$4" "$5" "$3" "$2" <<'PY'
 import json, os, pathlib, shutil, stat, sys, tempfile, zipfile
 
 root, mode, target, prepared = pathlib.Path(sys.argv[1]), sys.argv[2], pathlib.Path(sys.argv[3]), sys.argv[4]
@@ -173,7 +181,7 @@ def safe_path(path):
 
 try:
     if not prepared:
-        pointer = safe_path(root / '.worklane/runtime-overrides/current.path')
+        pointer = safe_path(root / sys.argv[5])
         prepared = pointer.read_text().strip()
     source = safe_path(pathlib.Path(prepared))
     selection = safe_path(source / 'selection.json')

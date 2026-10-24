@@ -114,6 +114,33 @@ class FixtureAuditLoggingTest {
         assertFalse(findings.any { it.text.contains("debug_visible") })
     }
 
+    @Test fun fixtureMixinDebugWitnessesAreAdditiveWithoutChangingProductionOrHidingErrors() {
+        val root = fixture()
+        val original = Files.readAllBytes(root.resolve("config/better-content-log4j2.xml"))
+        val launch = FixtureAuditLogging.prepare(root, "mixin-witness")
+        val output = ByteArrayOutputStream()
+        val previous = System.out
+        try {
+            System.setOut(PrintStream(output, true, Charsets.UTF_8))
+            emit(launch) { context ->
+                assertEquals(Level.INFO, context.configuration.rootLogger.level)
+                val mixin = context.getLogger("mixin")
+                mixin.debug("Mixing exactFixtureMixin from fixture.mixins.json into fixture.Target")
+                mixin.trace("mixin_trace_not_selected")
+                mixin.error("fixture mixin structural failure")
+                context.getLogger("fixture.native").info("native readiness")
+            }
+        } finally { System.setOut(previous) }
+        launch.requireNativeRecords()
+        val raw = Files.readString(launch.auditLog)
+        assertTrue(raw.contains("Mixing exactFixtureMixin"))
+        assertFalse(raw.contains("mixin_trace_not_selected"))
+        assertTrue(raw.contains("fixture mixin structural failure"))
+        assertTrue(LogPolicy.findings(listOf(launch.auditLog)).any { it.text.contains("fixture mixin structural failure") })
+        assertFalse(output.toString(Charsets.UTF_8).contains("Mixing exactFixtureMixin"))
+        assertArrayEquals(original, Files.readAllBytes(root.resolve("config/better-content-log4j2.xml")))
+    }
+
     @Test fun scopedLevelsRemainAdditiveForAllAllowedOverrides() {
         val root = fixture()
         val xml = root.resolve("config/better-content-log4j2.xml")

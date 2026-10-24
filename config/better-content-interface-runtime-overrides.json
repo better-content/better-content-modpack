@@ -1,0 +1,149 @@
+{
+  "schema": "bc.interface_runtime_archive_overrides.v1",
+  "producer": "better-compat-fixes",
+  "provider_artifact": "better-compat-fixes-0.1.9.jar",
+  "revision": "bc-interface.1",
+  "spec": {
+    "path": "src/upstreamRuntime/interface-overrides-v1.json",
+    "sha256": "e1731b598f5cc85b44bb2b0e2b37076e2a36fcb9fae9b90cfb40ea813c9ec338"
+  },
+  "builder": {
+    "path": "scripts/build_upstream_interface_overrides.py",
+    "sha256": "f6986c65c1852773ab0f186868dd885d188c07a1060f3660e6288a03aaeee4da"
+  },
+  "legacy_builder": {
+    "path": "scripts/build_upstream_runtime_overrides.py",
+    "sha256": "09669c8333ce94358b30f8c303f9885a459388ccfd02d0c867b8b77ece472ed6"
+  },
+  "artifacts": [
+    {
+      "input": "epic x parcool-forge-20.12.0.1-1.20.1.jar",
+      "output": "epic x parcool-forge-20.12.0.1-1.20.1-bc-interface.1.jar",
+      "manifest": "epic-parcool.pw.toml",
+      "project_id": 1259252,
+      "file_id": 6870242,
+      "input_sha1": "d38194b73c91e5af84ef28a7a07e0eb4340ef76d",
+      "input_sha256": "775066b30d2ce573c9230dc019b26ba42c4a21a4806d626424555962cbfbf6ca",
+      "output_sha256": "4766c547aec86133a745b0a08aadd0192c60a6ed4d53114a4dd373bde73c1b0d",
+      "resource": {
+        "path": "mixins.epicparcool.json",
+        "before_sha256": "c1980770b15805903e422f21688d41a3eef755c93832995568d7fbf036d845d7",
+        "after_sha256": "7e3ff944810f8e01e22281087039fcee310de208b1a24fc0438cc266700b6ad2",
+        "move_to_client": [
+          "ParCoolMixinAnimation"
+        ]
+      },
+      "class_patch": null
+    },
+    {
+      "input": "valkyrienskies-120-2.4.11.jar",
+      "output": "valkyrienskies-120-2.4.11-bc-interface.1.jar",
+      "manifest": "valkyrien-skies.pw.toml",
+      "project_id": 258371,
+      "file_id": 7906689,
+      "input_sha1": "bd3478fcd43d4168950dfa7e77188d7bb12fd43e",
+      "input_sha256": "f99f24de62015451a047f90484cf9d25970cac350105b581c22b2d5247ebfd53",
+      "output_sha256": "f7f32478ad10bdc00dffb7934bb10c47fd830e5a5c34b449c9dabb39d273dd2b",
+      "resource": {
+        "path": "valkyrienskies-common.mixins.json",
+        "before_sha256": "5d625e4bbcd32da1791dee967786226a217eec8b9f18e2c850547c70067d8fa3",
+        "after_sha256": "652792e8062085166564398f4924324cc9c6c3315ce28f983373d5c6cdb39f93",
+        "move_to_client": [
+          "mod_compat.create.blockentity.MixinChainConveyorInteractionHandler"
+        ]
+      },
+      "class_patch": {
+        "path": "org/valkyrienskies/mod/mixin/feature/sculk/MixinVibrationSystemTicker.class",
+        "before_sha256": "399ca37359fbbf851eb54f5e3524c59a25751998cae0c9f534bb68a45f56659f",
+        "after_sha256": "9d7f1f34ce0446107bbb58ec91bbbd03e8912dc3057b1f514954506229491359"
+      }
+    }
+  ],
+  "receipt": {
+    "schema": "bc.upstream_interface_runtime_receipt.v1",
+    "revision": "bc-interface.1",
+    "spec_sha256": "e1731b598f5cc85b44bb2b0e2b37076e2a36fcb9fae9b90cfb40ea813c9ec338",
+    "builder_sha256": "f6986c65c1852773ab0f186868dd885d188c07a1060f3660e6288a03aaeee4da",
+    "legacy_builder_sha256": "09669c8333ce94358b30f8c303f9885a459388ccfd02d0c867b8b77ece472ed6",
+    "python": "3.13.5",
+    "zlib": "1.3.1",
+    "artifacts": [
+      {
+        "input": "epic x parcool-forge-20.12.0.1-1.20.1.jar",
+        "output": "epic x parcool-forge-20.12.0.1-1.20.1-bc-interface.1.jar",
+        "input_sha256": "775066b30d2ce573c9230dc019b26ba42c4a21a4806d626424555962cbfbf6ca",
+        "output_sha256": "4766c547aec86133a745b0a08aadd0192c60a6ed4d53114a4dd373bde73c1b0d",
+        "output_sha1": "5a764c5206fb5bc50300bb429a5ee86474a41ccd",
+        "resources": [
+          {
+            "path": "mixins.epicparcool.json",
+            "before_sha256": "c1980770b15805903e422f21688d41a3eef755c93832995568d7fbf036d845d7",
+            "after_sha256": "7e3ff944810f8e01e22281087039fcee310de208b1a24fc0438cc266700b6ad2"
+          }
+        ],
+        "class_access_patches": [],
+        "class_bytes_invariant": true,
+        "class_count": 29,
+        "before_class_inventory_sha256": "7f3898d53a6c2507c8aad00ec252054a4a080b6829a0d9ff40e4a74fdbe250f0",
+        "after_class_inventory_sha256": "7f3898d53a6c2507c8aad00ec252054a4a080b6829a0d9ff40e4a74fdbe250f0",
+        "license": "All Rights Reserved",
+        "redistribution": "LOCAL_ONLY_NO_GRANT_BY_THIS_RECIPE"
+      },
+      {
+        "input": "valkyrienskies-120-2.4.11.jar",
+        "output": "valkyrienskies-120-2.4.11-bc-interface.1.jar",
+        "input_sha256": "f99f24de62015451a047f90484cf9d25970cac350105b581c22b2d5247ebfd53",
+        "output_sha256": "f7f32478ad10bdc00dffb7934bb10c47fd830e5a5c34b449c9dabb39d273dd2b",
+        "output_sha1": "fb35c6701d0efc35d16df4ebc710438f5119fae9",
+        "resources": [
+          {
+            "path": "valkyrienskies-common.mixins.json",
+            "before_sha256": "5d625e4bbcd32da1791dee967786226a217eec8b9f18e2c850547c70067d8fa3",
+            "after_sha256": "652792e8062085166564398f4924324cc9c6c3315ce28f983373d5c6cdb39f93"
+          }
+        ],
+        "class_access_patches": [
+          {
+            "path": "org/valkyrienskies/mod/mixin/feature/sculk/MixinVibrationSystemTicker.class",
+            "before_sha256": "399ca37359fbbf851eb54f5e3524c59a25751998cae0c9f534bb68a45f56659f",
+            "after_sha256": "9d7f1f34ce0446107bbb58ec91bbbd03e8912dc3057b1f514954506229491359",
+            "edits": [
+              {
+                "method": "destWorldPos",
+                "descriptor": "(Lnet/minecraft/world/level/gameevent/vibrations/VibrationInfo;Lcom/llamalad7/mixinextras/injector/wrapoperation/Operation;Lnet/minecraft/server/level/ServerLevel;)Lnet/minecraft/world/phys/Vec3;",
+                "offset": 3686,
+                "before": 10,
+                "after": 9
+              },
+              {
+                "method": "destSourcePos",
+                "descriptor": "(Lnet/minecraft/world/level/gameevent/vibrations/VibrationSystem$User;Lcom/llamalad7/mixinextras/injector/wrapoperation/Operation;Lnet/minecraft/server/level/ServerLevel;)Lnet/minecraft/world/level/gameevent/PositionSource;",
+                "offset": 3891,
+                "before": 10,
+                "after": 9
+              },
+              {
+                "method": "destReloadSourcePos",
+                "descriptor": "(Lnet/minecraft/world/level/gameevent/vibrations/VibrationSystem$User;Lcom/llamalad7/mixinextras/injector/wrapoperation/Operation;Lnet/minecraft/server/level/ServerLevel;)Lnet/minecraft/world/level/gameevent/PositionSource;",
+                "offset": 4209,
+                "before": 10,
+                "after": 9
+              }
+            ],
+            "all_other_class_bytes_invariant": true
+          }
+        ],
+        "class_bytes_invariant": false,
+        "class_count": 8033,
+        "before_class_inventory_sha256": "4d2d35742da23fb66517def45b6781400d514a840aaa3e9a314cba11cb38fa05",
+        "after_class_inventory_sha256": "f9876e4924e79e24501fe84f3bfa342802e7395cd30e8a3fd314bc912730c8c3",
+        "license": "Apache-2.0 (bundled component terms retained)",
+        "redistribution": "LOCAL_ONLY_NO_GRANT_BY_THIS_RECIPE"
+      }
+    ],
+    "runtime_acceptance": "NOT_EVALUATED",
+    "publication": "NOT_AUTHORIZED_BY_THIS_RECEIPT"
+  },
+  "publication": "LOCAL_ONLY_NOT_AUTHORIZED",
+  "runtime_acceptance": "NOT_EVALUATED"
+}
