@@ -297,7 +297,7 @@ private fun prepareRelease(args: Array<String>) {
 
     val runtimeOverrideInputs = if (skipTests) null else {
         val provider = built.single { it.definition.repository == "better-compat-fixes" }
-        UpstreamRuntimeOverrides.prepare(root, workspace.resolve("mod_source/better-compat-fixes"),
+        UpstreamRuntimeOverridesV2.prepare(root, workspace.resolve("mod_source/better-compat-fixes"),
             evidence, provider.jar, provider.supportHashes)
     }
     val interfaceOverrideInputs = if (skipTests) null else {
@@ -305,11 +305,17 @@ private fun prepareRelease(args: Array<String>) {
         UpstreamInterfaceRuntimeOverrides.prepare(root, workspace.resolve("mod_source/better-compat-fixes"),
             evidence, provider.jar, provider.supportHashes)
     }
+    val startupOverrideInputs = if (skipTests) null else {
+        val provider = built.single { it.definition.repository == "better-compat-fixes" }
+        UpstreamStartupRuntimeOverrides.prepare(root, workspace.resolve("mod_source/better-compat-fixes"),
+            evidence, provider.jar, provider.supportHashes)
+    }
     runLogged(root, listOf("packwiz", "refresh"), evidence.resolve("packwiz-refresh.log"))
     runLogged(root, listOf("git", "diff", "--check"), evidence.resolve("diff-check.log"))
     val packagingEnvironment = buildMap {
         runtimeOverrideInputs?.let { put("BC_PACKAGE_RUNTIME_OVERRIDES", it.directory.toString()) }
         interfaceOverrideInputs?.let { put("BC_PACKAGE_INTERFACE_OVERRIDES", it.directory.toString()) }
+        startupOverrideInputs?.let { put("BC_PACKAGE_STARTUP_OVERRIDES", it.directory.toString()) }
     }
     runLogged(root, listOf(root.resolve("dist.sh").toString()), evidence.resolve("dist.log"), packagingEnvironment)
     val candidates = CandidateLocator.locate(root)
@@ -329,6 +335,10 @@ private fun prepareRelease(args: Array<String>) {
         "runtime_acceptance" to "pending; historical runtime verdicts are never imported",
         "runtime_input_sha256" to com.bettercontent.tests.runtimeInputIdentity(root),
         "runtime_archive_overrides" to (runtimeOverrideInputs?.provenance ?: mapOf(
+            "qualification" to "UNTESTED_EXISTING_PREPARED_INPUTS",
+            "runtime_acceptance" to "NOT_EVALUATED",
+            "publication" to "LOCAL_ONLY_NOT_AUTHORIZED")),
+        "runtime_startup_overrides" to (startupOverrideInputs?.provenance ?: mapOf(
             "qualification" to "UNTESTED_EXISTING_PREPARED_INPUTS",
             "runtime_acceptance" to "NOT_EVALUATED",
             "publication" to "LOCAL_ONLY_NOT_AUTHORIZED")),

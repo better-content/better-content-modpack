@@ -135,14 +135,16 @@
     },
     {
       "repository": "better-compat-fixes",
-      "verificationInputs": ["mods/supplementaries.pw.toml", "mods/selene.pw.toml", "config/adpother-common.toml", "config/forgeendertech-common.toml", "config/sophisticatedcore-common.toml", "kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json", "config/incontrol/spawn.json", "src/test/kotlin/com/bettercontent/tests/GeologicalEcologyContractTest.kt", "kubejs/data/minecraft/tags/blocks/needs_diamond_tool.json", "mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/weapons-of-miracles.pw.toml", "src/test/kotlin/com/bettercontent/tests/SaulomonkSpawnContractTest.kt", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json", "mods/create.pw.toml", "mods/fruits-delight.pw.toml", "mods/forgified-fabric-api.pw.toml", "mods/emi-loot.pw.toml", "mods/yacl.pw.toml", "mods/relics-mod.pw.toml", "mods/pollution-of-the-realms.pw.toml", "config/better-content-runtime-overrides.json", "mods/epic-parcool.pw.toml", "mods/valkyrien-skies.pw.toml", "config/better-content-interface-runtime-overrides.json"],
+      "verificationInputs": ["mods/supplementaries.pw.toml", "mods/selene.pw.toml", "config/adpother-common.toml", "config/forgeendertech-common.toml", "config/sophisticatedcore-common.toml", "kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json", "config/incontrol/spawn.json", "src/test/kotlin/com/bettercontent/tests/GeologicalEcologyContractTest.kt", "kubejs/data/minecraft/tags/blocks/needs_diamond_tool.json", "mods/dynamictrees.pw.toml", "mods/configured.pw.toml", "mods/weapons-of-miracles.pw.toml", "src/test/kotlin/com/bettercontent/tests/SaulomonkSpawnContractTest.kt", "mods/starcatcher.pw.toml", "mods/kotlin-for-forge.pw.toml", "mods/chemlib.pw.toml", "kubejs/data/starcatcher/recipes/aquaculture_fillet.json", "kubejs/data/farmersrespite/recipes/filling/water_cup.json", "kubejs/data/farmersrespite/recipes/pouring/water_cup.json", "kubejs/data/farmersrespite/recipes/emptying/water_cup.json", "kubejs/data/farmersrespite/loot_tables/blocks/kettle.json", "kubejs/data/farmersrespite/advancements/main/stunt_tea_bush.json", "mods/create.pw.toml", "mods/fruits-delight.pw.toml", "mods/forgified-fabric-api.pw.toml", "mods/emi-loot.pw.toml", "mods/yacl.pw.toml", "mods/relics-mod.pw.toml", "mods/pollution-of-the-realms.pw.toml", "config/better-content-runtime-overrides-v2.json", "mods/epic-parcool.pw.toml", "mods/valkyrien-skies.pw.toml", "config/better-content-interface-runtime-overrides.json", "mods/cold-sweat.pw.toml", "mods/little-logistics.pw.toml", "mods/epic-fight-mod.pw.toml", "mods/alltheleaks.pw.toml", "mods/citadel.pw.toml", "config/better-content-startup-runtime-overrides.json"],
       "supportArtifacts": [
-        "build/upstream-runtime-overrides/receipt.json",
-        "build/upstream-runtime-overrides/fabric-api-0.92.6+1.11.14+1.20.1-bc-runtime.1.jar",
-        "build/upstream-runtime-overrides/emi_loot-0.7.9+1.20.1+forge-bc-runtime.1.jar",
-        "build/upstream-runtime-overrides/yet_another_config_lib_v3-3.6.6+1.20.1-forge-bc-runtime.1.jar",
-        "build/upstream-runtime-overrides/relics-1.20.1-0.8.0.13-bc-runtime.1.jar",
-        "build/upstream-runtime-overrides/AdPother-1.20.1-8.1.49.0-build.2294-bc-runtime.1.jar",
+        "build/upstream-runtime-overrides-v2/receipt.json",
+        "build/upstream-runtime-overrides-v2/fabric-api-0.92.6+1.11.14+1.20.1-bc-runtime.1.jar",
+        "build/upstream-runtime-overrides-v2/emi_loot-0.7.9+1.20.1+forge-bc-runtime.1.jar",
+        "build/upstream-runtime-overrides-v2/yet_another_config_lib_v3-3.6.6+1.20.1-forge-bc-runtime.1.jar",
+        "build/upstream-runtime-overrides-v2/relics-1.20.1-0.8.0.13-bc-runtime.1.jar",
+        "build/upstream-runtime-overrides-v2/AdPother-1.20.1-8.1.49.0-build.2294-bc-runtime.2.jar",
+        "build/upstream-startup-overrides/receipt.json",
+        "build/upstream-startup-overrides/alltheleaks-1.1.1+1.20.1-forge-bc-startup.1.jar",
         "build/upstream-interface-overrides/receipt.json",
         "build/upstream-interface-overrides/epic x parcool-forge-20.12.0.1-1.20.1-bc-interface.1.jar",
         "build/upstream-interface-overrides/valkyrienskies-120-2.4.11-bc-interface.1.jar"

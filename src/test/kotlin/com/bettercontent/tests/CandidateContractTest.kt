@@ -78,9 +78,11 @@ class CandidateContractTest {
     @Test
     @Order(4)
     fun localRuntimeCorrectionsBindExactQualifiedBytesAndNeverDownloadDuplicateOriginals() {
-        com.bettercontent.tests.release.UpstreamRuntimeOverrides.validateCandidates(
+        com.bettercontent.tests.release.UpstreamRuntimeOverridesV2.validateCandidates(
             TestConfig.load().root, pair.client, pair.server)
         com.bettercontent.tests.release.UpstreamInterfaceRuntimeOverrides.validateCandidates(
+            TestConfig.load().root, pair.client, pair.server)
+        com.bettercontent.tests.release.UpstreamStartupRuntimeOverrides.validateCandidates(
             TestConfig.load().root, pair.client, pair.server)
     }
 

@@ -1,13 +1,16 @@
 # Local upstream runtime corrections
 
 This is the authority for the five **local-only** resource-corrected archive identities in
-`config/better-content-runtime-overrides.json` and the separate two-artifact compatibility
-contract in `config/better-content-interface-runtime-overrides.json`. It does not replace [testing](testing.md),
+`config/better-content-runtime-overrides-v2.json`, the separate two-artifact compatibility
+contract in `config/better-content-interface-runtime-overrides.json`, and the independent
+ATL applicability correction in `config/better-content-startup-runtime-overrides.json`.
+Legacy `config/better-content-runtime-overrides.json`, its builder/specification and historical
+receipts remain unchanged; they are not the active successor qualification. This document does not replace [testing](testing.md),
 [source qualification](custom-mod-workspace.md), or [retention](policies/generated-data.md).
 
 ## Scope and original identity
 
-The independently identified `bc-runtime.1` recipe lives in the owning Compat source repository,
+The retained original `bc-runtime.1` recipe lives in the owning Compat source repository,
 `src/upstreamRuntime/overrides-v1.json`; its builder and source controls live under `scripts/` there.
 The tracked Root policy binds exact source/builder hashes, original SHA1/SHA256 and CurseForge
 identities, corrected filenames/SHA256s, resource witnesses and recursive class inventories.
@@ -29,13 +32,29 @@ archive layouts reject rather than being normalized, ignored or stripped. Change
 is bound to the recorded compressor version; another environment must reproduce the authored
 output identity or receive a separately reviewed recipe/policy revision.
 
-## Qualification and assembly
+## Reviewed resource successor and qualification
 
-Compat's `qualifyUpstreamRuntimeOverrides`, part of `verifyFast`, checks the current production
-replacement/plugin bytes and runs all 17 pure/pinned-original controls, including two identical
-builds. It retains originals and every attempt under `build/upstream-runtime-evidence/`; successful
-support snapshots are under `build/upstream-runtime-overrides/`. Root declares the six support
-artifacts in `gradle/active-custom-mods.json` and binds them to the owning source qualification.
+The separately versioned `bc-runtime.2` recipe is `src/upstreamRuntime/overrides-v2.json` in
+Compat, built by `scripts/build_upstream_runtime_overrides_v2.py`. It additionally removes only
+`coldsweat$boiler`, whose obsolete transformer cannot find its target in exact Cold Sweat 2.4.
+All four removed registrations are checked as an exact distinct population. Shared scripts,
+licenses and all 3,144 recursive upstream classes remain unchanged. The first four archive
+filenames/bytes remain `bc-runtime.1`; only AdPother becomes `bc-runtime.2`.
+
+The production Hearth injections now select exactly `drainFuel()V`. Actual Mixin 0.8.5 selection
+controls show that the old unqualified selector chose the first declared matching overload,
+which is the intended outer method in this pinned class. This is order-safety hardening, **not**
+evidence of historic double injection. The successor binds the independently compiled replacement
+class digest; the original v1 digest is not widened or rewritten.
+
+Compat's active `qualifyUpstreamRuntimeOverridesV2`, part of `verifyFast`, checks exact production
+replacement/plugin bytes and runs 19 pure/pinned-original controls, including deterministic
+repeat builds and legacy recipe/builder invariance. Originals and every attempt are retained
+under `build/upstream-runtime-v2-evidence/`; successful support snapshots are under
+`build/upstream-runtime-overrides-v2/`. Root declares six support artifacts in
+`gradle/active-custom-mods.json` and binds them to the owning source qualification.
+
+## Assembly
 
 After all required source gates, Root's release preparer independently checks declared support
 hashes, exact recipe/resource/inventory witnesses, current original pins and actual staged Compat
@@ -80,32 +99,69 @@ its server cooldown and registration behavior must not be dropped to hide a clie
 `qualifyUpstreamInterfaceOverrides` retains separate originals/attempts and publishes three
 source-qualified support files under `build/upstream-interface-overrides/`. Root seals separate
 `interface-overrides/` evidence and `.worklane/interface-overrides/current.path`; the sole packager
-applies old five then new two, with one normal Packwiz export and seven exact CF tuple exclusions.
+applies the five-resource successor, then these two, then the independent ATL correction, with
+one normal Packwiz export and eight exact CF tuple exclusions.
 The new receipt has no variable provider field or normalization. Both validators bind both exact
 ZIPs. All startup/join/heartbeat/teardown and raw-log requirements remain; source/class controls
 alone are not runtime acceptance. Fixture audit derivation additionally admits additive Mixin
 DEBUG application records while retaining the INFO root, all failure severities and unchanged
 packaged production logging. No suppression or audit exemption is added.
 
-## Remaining native blockers and frozen-contract limits
+## Independent ATL startup applicability correction
+
+`bc-startup.1` corrects only the common Citadel issue's `@Issue.versionRange` constant-pool UTF8
+operand in exact AllTheLeaks 1.1.1: `[2.5.4,)` becomes `[2.5.4,2.6.3),(2.6.3,)`. Actual Maven range
+semantics exclude the reviewed Citadel 2.6.3 ABI and equivalent version spellings, without
+inventing the earliest map-removal version or changing decisions for other versions. Exact
+Citadel 2.6.3 has no static `dataMap`; Forge reads this applicability annotation before ATL queues
+or initializes the obsolete issue. An ordinary Mixin targeting `IssueManager` is not relied on:
+ATL can load it during Mixin configuration preparation.
+
+The source contract is `src/upstreamRuntime/startup-overrides-v1.json`; separate builder,
+controls and `qualifyUpstreamStartupOverrides` retain originals/attempts and publish two support
+files under `build/upstream-startup-overrides/`. Of 880 recursive classes, only this exact
+annotation string's length/payload changes. Every method/field/Code attribute and all other
+classes, resources, ZIP metadata and notices remain unchanged. Actual Forge annotation scanning
+and Maven parser controls are source/metadata evidence, not native startup acceptance. Root
+independently verifies the full receipt without a variable provider-field normalization, seals
+`startup-overrides/` evidence and uses `.worklane/startup-overrides/current.path`.
+
+## Epic Fight and native fuel integration: acceptance pending
 
 The local Build 466 dedicated-server attempt reached readiness and recorded all three
 replacement-Mixin applications. It did **not** establish clean Dist acceptance, client join,
-fuel consumption or no-double-emission behavior. The retained native audit exposes another
-obsolete AdPother selector: the kept Boiler transformer searches `tick` for a `setFuel(int)`
-call no longer present in Cold Sweat 2.4. Its script has no config gate. The frozen v1 policy
-binds the exact final AdPother archive, so removing a fourth registration is incompatible with
-that policy even if all 3,144 class bytes remain invariant. Do not bypass the validator, add
-shadow classes or weaken logging to make this candidate pass. A successor correction contract
-requires explicit review; v1 receipts and failed archives remain retained.
+fuel consumption or no-double-emission behavior. The retained failure logs and v1 receipts stay
+intact. Internal checksum pins are reviewable identities, not an external approval barrier:
+corrections use explicit successors rather than bypassing validators or changing history.
 
-Additional native findings include Epic Fight's automatic KubeJS binding reflecting a public
-client-only method descriptor on a dedicated server, and an AllTheLeaks Citadel repair assuming
-a removed static `dataMap`. Neither has been repaired or accepted by these recipes. Moonlight's
-Fabric-API-ID diagnostic also fires for intentionally installed Forgified Fabric API; that log
-alone does not establish a broken API, and this observation is not a log-policy exemption or
-permission to remove the API. Actual consumption and multiplicity checks are still required
-for the shared Hearth fuel path; application witnesses alone do not establish their results.
+Compat now has a separate required, physical-server-only startup ABI config for Epic Fight.
+Its supported Mixin `preApply` hook removes only the unique public-static client-only
+`getLocalPlayerPatch(LocalPlayer):LocalPlayerPatch` member before automatic Rhino enumeration.
+Exact raw/mapped resources and every member are checked before mutation; the other 14 methods,
+four fields, erased Optional getter, original bindings and physical-client behavior are
+preserved. Fail-closed checks run in application, not Mixin's potentially log-only preparation
+exception path. Static controls do not establish actual cold server binding success.
+
+Four additive nonshipping native tests cover real Hearth consumption, inherited Boiler
+consumption, and Little Logistics locomotive/tug inventory consumption. They compare completed
+original AdPother dispatch and its actual integer-plus-fraction emission state with one native
+reference; a genuine doubled native reference must be rejected. Empty, cold-only, manual,
+continuing-burn and invalid-fuel operations retain their original behavior without combustion
+emissions. No original operation is cancelled/replaced. The fixture uses only a separately
+named local corrected SDK coordinate; raw originals and cached mappings are not overwritten.
+The integrated fixture compiles, and the default owning profile passed all 85 required native
+tests, including all four consumption/emission cases and their repeated/zero/doubled controls.
+The first native attempt exposed a fixture-precondition mistake: native `onFuelChanged` recalculates
+usage flags, so every repeated isolated operation must establish its own active-usage precondition.
+That setup correction retained production hooks and all assertions; the failed evidence remains.
+The remaining optional populations and full same-candidate Dist still require execution. This
+source-native proof is not pack startup, client join or overall acceptance.
+
+Moonlight's Fabric-API-ID diagnostic also fires for intentionally installed native Forgified
+Fabric API. That log alone does not establish a broken API, and this observation is not a
+log-policy exemption or permission to remove the API. A principled provider/platform correction
+needs actual native integration facts and API qualification, not a logger change or ID rename.
+Full same-artifact startup/join/heartbeat/teardown and unchanged strict raw audits remain required.
 
 ## C2ME and Registrate companions
 

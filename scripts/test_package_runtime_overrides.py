@@ -50,6 +50,9 @@ class RuntimeOverridesTest(unittest.TestCase):
         env = os.environ.copy()
         env.pop('BC_PACKAGE_RUNTIME_OVERRIDES', None)
         env.pop('BC_PACKAGE_INTERFACE_OVERRIDES', None)
+        env.pop('BC_PACKAGE_STARTUP_OVERRIDES', None)
+        if getattr(self, 'startup_env', False):
+            env['BC_PACKAGE_STARTUP_OVERRIDES'] = str(self.startup_directory)
         if getattr(self, 'interface_env', False):
             env['BC_PACKAGE_INTERFACE_OVERRIDES'] = str(self.interface_directory)
         if prepared:
@@ -330,8 +333,53 @@ stage_side "$3" "$4"'''
         self.plan = {'schema': 'bc.package_runtime_overrides.v1', 'artifacts': self.active_artifacts}
 
     def corrected_bytes(self, entry):
-        source = self.interface_directory if entry in self.interface_plan['artifacts'] else self.prepared
+        if entry in getattr(self, 'startup_plan', {}).get('artifacts', []):
+            source = self.startup_directory
+        elif entry in getattr(self, 'interface_plan', {}).get('artifacts', []):
+            source = self.interface_directory
+        else:
+            source = self.prepared
         return (source / entry['output']).read_bytes()
+
+    def v2_selection(self, pointer=False):
+        # Keep the legacy policy/pointer present: the explicit successor wins.
+        (self.root / 'config/better-content-runtime-overrides-v2.json').write_text('{}')
+        entry = self.plan['artifacts'][-1]
+        previous = self.prepared / entry['output']
+        entry['output'] = entry['output'].replace('-bc-runtime.1.jar', '-bc-runtime.2.jar')
+        previous.rename(self.prepared / entry['output'])
+        self.save_plan()
+        self.active_artifacts = self.plan['artifacts']
+        if pointer:
+            path = self.root / '.worklane/runtime-overrides-v2/current.path'
+            path.parent.mkdir(parents=True)
+            path.write_text(str(self.prepared) + '\n')
+            legacy = self.root / '.worklane/runtime-overrides/current.path'
+            legacy.parent.mkdir(parents=True)
+            legacy.write_text('/missing/legacy-input\n')
+
+    def startup_selection(self, pointer=False, only=False):
+        if only:
+            (self.root / 'config/better-content-runtime-overrides.json').unlink()
+            self.active_artifacts = []
+        (self.root / 'config/better-content-startup-runtime-overrides.json').write_text('{}')
+        self.startup_directory = self.base / 'startup-prepared'
+        self.startup_directory.mkdir()
+        self.startup_env = not pointer
+        self.startup_plan = {'schema': 'bc.package_runtime_overrides.v1', 'artifacts': [
+            {'input': 'alltheleaks-1.1.1+1.20.1-forge.jar',
+             'output': 'alltheleaks-1.1.1+1.20.1-forge-bc-startup.1.jar',
+             'manifest': 'alltheleaks.pw.toml', 'project_id': 900, 'file_id': 901}]}
+        (self.startup_directory / 'selection.json').write_text(json.dumps(self.startup_plan))
+        for entry in self.startup_plan['artifacts']:
+            with zipfile.ZipFile(self.startup_directory / entry['output'], 'w') as archive:
+                archive.writestr('startup.txt', entry['output'])
+        if pointer:
+            path = self.root / '.worklane/startup-overrides/current.path'
+            path.parent.mkdir(parents=True)
+            path.write_text(str(self.startup_directory) + '\n')
+        self.active_artifacts = self.active_artifacts + self.startup_plan['artifacts']
+        self.plan = {'schema': 'bc.package_runtime_overrides.v1', 'artifacts': self.active_artifacts}
 
     def assert_combined_tree(self, mods):
         self.assertEqual(len(list(mods.glob('*.jar'))), len(self.active_artifacts) + 1)
@@ -486,7 +534,8 @@ apply_runtime_overrides "$3" "$4"'''
         result = self.call(script=script)
         self.assertEqual(result.stdout.splitlines(), [
             f'config/better-content-runtime-overrides.json:.worklane/runtime-overrides/current.path:tree:{self.target}',
-            f'config/better-content-interface-runtime-overrides.json:.worklane/interface-overrides/current.path:tree:{self.target}'])
+            f'config/better-content-interface-runtime-overrides.json:.worklane/interface-overrides/current.path:tree:{self.target}',
+            f'config/better-content-startup-runtime-overrides.json:.worklane/startup-overrides/current.path:tree:{self.target}'])
         source = PACKAGE.read_text()
         self.assertEqual(source.count('packwiz curseforge export -o'), 1)
 
@@ -497,6 +546,96 @@ apply_runtime_overrides "$3" "$4"'''
         self.tree()
         self.call(prepared=False, success=False)
         self.assertTrue(all((self.target / 'mods' / entry['input']).exists() for entry in self.active_artifacts))
+
+    def test_v2_mixed_five_tree(self):
+        self.v2_selection()
+        mods = self.tree()
+        self.call()
+        self.assert_combined_tree(mods)
+        self.assertEqual(len(list(mods.glob('*-bc-runtime.1.jar'))), 4)
+        self.assertEqual(len(list(mods.glob('*-bc-runtime.2.jar'))), 1)
+
+    def test_v2_mixed_five_zip(self):
+        self.v2_selection()
+        self.call('client-zip', self.client_zip())
+        self.assert_combined_zip('overrides')
+
+    def test_v2_pointer_never_uses_legacy_pointer(self):
+        self.v2_selection(pointer=True)
+        self.tree()
+        self.call(prepared=False)
+        self.assert_combined_tree(self.target / 'mods')
+
+    def test_v2_missing_pointer_does_not_fall_back_to_v1(self):
+        self.v2_selection(pointer=True)
+        (self.root / '.worklane/runtime-overrides-v2/current.path').unlink()
+        (self.root / '.worklane/runtime-overrides/current.path').write_text(str(self.prepared) + '\n')
+        self.tree()
+        self.call(prepared=False, success=False)
+        self.assertTrue(all((self.target / 'mods' / entry['input']).exists() for entry in self.active_artifacts))
+
+    def test_v2_missing_output_preserves_client_zip(self):
+        self.v2_selection()
+        (self.prepared / self.plan['artifacts'][-1]['output']).unlink()
+        archive = self.client_zip()
+        before = archive.read_bytes()
+        self.call('client-zip', archive, success=False)
+        self.assertEqual(archive.read_bytes(), before)
+
+    def test_all_three_namespaces_tree(self):
+        self.v2_selection()
+        self.interface_selection()
+        self.startup_selection()
+        self.tree()
+        self.call()
+        self.assert_combined_tree(self.target / 'mods')
+        self.assertEqual(len(self.active_artifacts), 8)
+
+    def test_all_three_namespaces_zip_custom_root(self):
+        self.v2_selection()
+        self.interface_selection(pointer=True)
+        self.startup_selection(pointer=True)
+        self.call('client-zip', self.client_zip('custom/content'))
+        self.assert_combined_zip('custom/content')
+
+    def test_startup_only_environment(self):
+        self.startup_selection(only=True)
+        self.tree()
+        self.call(prepared=False)
+        self.assert_combined_tree(self.target / 'mods')
+
+    def test_startup_only_pointer_zip(self):
+        self.startup_selection(pointer=True, only=True)
+        self.call('client-zip', self.client_zip(), prepared=False)
+        self.assert_combined_zip('overrides')
+
+    def test_startup_missing_selection_preserves_zip(self):
+        self.startup_selection(only=True)
+        (self.startup_directory / 'selection.json').unlink()
+        archive = self.client_zip()
+        before = archive.read_bytes()
+        self.call('client-zip', archive, prepared=False, success=False)
+        self.assertEqual(archive.read_bytes(), before)
+
+    def test_startup_failure_does_not_masquerade_as_interface_success(self):
+        self.interface_selection(old_active=False)
+        self.startup_selection()
+        (self.startup_directory / 'selection.json').write_text('{broken')
+        self.tree()
+        self.call(prepared=False, success=False)
+        self.assertTrue((self.target / 'mods' / self.startup_plan['artifacts'][0]['input']).exists())
+
+    def test_wrapper_v2_then_interface_then_startup_without_extra_resolution(self):
+        self.v2_selection()
+        script = '''_apply_runtime_selection() { printf '%s:%s:%s:%s\\n' "$1" "$2" "$4" "$5"; }
+resolve_artifacts() { printf 'UNEXPECTED RESOLUTION\\n'; return 1; }
+apply_runtime_overrides "$3" "$4"'''
+        result = self.call(script=script)
+        self.assertEqual(result.stdout.splitlines(), [
+            f'config/better-content-runtime-overrides-v2.json:.worklane/runtime-overrides-v2/current.path:tree:{self.target}',
+            f'config/better-content-interface-runtime-overrides.json:.worklane/interface-overrides/current.path:tree:{self.target}',
+            f'config/better-content-startup-runtime-overrides.json:.worklane/startup-overrides/current.path:tree:{self.target}'])
+        self.assertEqual(PACKAGE.read_text().count('packwiz curseforge export -o'), 1)
 
     def test_resolve_command_still_does_not_apply_overrides(self):
         # Invoke actual resolve entry point on empty manifests without downloads.

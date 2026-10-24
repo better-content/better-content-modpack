@@ -136,10 +136,17 @@ PY
 # Prepared bytes are qualified by the caller, not by this input-assembly step.
 # Interface: apply_runtime_overrides tree|client-zip TARGET
 apply_runtime_overrides() {
-  _apply_runtime_selection config/better-content-runtime-overrides.json \
-    .worklane/runtime-overrides/current.path "${BC_PACKAGE_RUNTIME_OVERRIDES:-}" "$@" || return $?
+  if [ -e "$ROOT/config/better-content-runtime-overrides-v2.json" ]; then
+    _apply_runtime_selection config/better-content-runtime-overrides-v2.json \
+      .worklane/runtime-overrides-v2/current.path "${BC_PACKAGE_RUNTIME_OVERRIDES:-}" "$@" || return $?
+  else
+    _apply_runtime_selection config/better-content-runtime-overrides.json \
+      .worklane/runtime-overrides/current.path "${BC_PACKAGE_RUNTIME_OVERRIDES:-}" "$@" || return $?
+  fi
   _apply_runtime_selection config/better-content-interface-runtime-overrides.json \
-    .worklane/interface-overrides/current.path "${BC_PACKAGE_INTERFACE_OVERRIDES:-}" "$@"
+    .worklane/interface-overrides/current.path "${BC_PACKAGE_INTERFACE_OVERRIDES:-}" "$@" || return $?
+  _apply_runtime_selection config/better-content-startup-runtime-overrides.json \
+    .worklane/startup-overrides/current.path "${BC_PACKAGE_STARTUP_OVERRIDES:-}" "$@"
 }
 
 # Internal interface: POLICY RELATIVE_POINTER PREPARED_ARG tree|client-zip TARGET
