@@ -82,6 +82,10 @@ tasks.test {
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_timing_report.py") }
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_python_timing.py") }
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_prepare_dev_inputs.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_prepare_forge_installer.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_prepare_native_fml.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_probe_side_parity.py") }
+        exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_check_documentation.py") }
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_ci_boundaries.py") }
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_debug_coverage.py") }
         exec { environment(pythonTimingEnvironment); commandLine("python3", "-B", "scripts/test_workspace_coordination.py") }

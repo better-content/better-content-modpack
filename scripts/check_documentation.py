@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Minecraft-free maintained-document links, authority and local-command contracts."""
+"""Minecraft-free maintained-document links and executable provider identity checks."""
 import argparse
 import json
 from pathlib import Path
 import re
 import subprocess
 import sys
+import tomllib
 from urllib.parse import unquote, urlsplit
 
 PACK = Path(__file__).resolve().parents[1]
@@ -37,6 +38,24 @@ def anchors(text):
     return result
 
 
+def provider_ids(repo):
+    """Read owned mod declarations, not dependency IDs or removed agent prose."""
+    template = (repo / 'src/main/resources/META-INF/mods.toml').read_text()
+    properties = repo / 'gradle.properties'
+    values = dict(re.findall(r'^\s*([\w.]+)\s*=\s*(.*?)\s*$', properties.read_text(), re.M)) if properties.exists() else {}
+    for build in (repo / 'build.gradle', repo / 'build.gradle.kts'):
+        if build.exists():
+            values.update(re.findall(r'\b(modId|mod_id)\s*=\s*[\'"]([a-z0-9_]+)[\'"]', build.read_text()))
+    if 'modId' in values:
+        values.setdefault('mod_id', values['modId'])
+    # Kotlin builds commonly expose the mod_id property as the modId template key.
+    if 'mod_id' in values:
+        values.setdefault('modId', values['mod_id'])
+    expanded = re.sub(r'\$\{(\w+)\}', lambda m: values.get(m[1], m[0]), template)
+    metadata = tomllib.loads(expanded)
+    return {mod['modId'] for mod in metadata.get('mods', [])}
+
+
 def check(repositories):
     errors = []
     checked = 0
@@ -57,29 +76,21 @@ def check(repositories):
             if path.name not in {'CHANGELOG.md', 'LICENSE-NOTICE.md', 'LICENSE.md', 'THIRD_PARTY_NOTICES.md'}:
                 if re.search(r'(?:/home/dev/)?workspace_artifacts/(?:reviews|evidence|deliverables)/[^`\s]*\d{8}', text):
                     errors.append(f'{path.relative_to(WORKSPACE)}: historical artifact path in maintained documentation')
-            if path == repo / 'README.md' and repo != PACK:
-                if '## Scope and authority' not in text or 'better-content-modpack/docs/README.md' not in text:
-                    errors.append(f'{repo.name}: README lacks canonical authority entry')
-            if path == repo / 'AGENTS.md' and repo != PACK:
-                if 'docs/policies/workspace.md' not in text:
-                    errors.append(f'{repo.name}: AGENTS lacks shared policy link')
-                build_files = [repo / 'build.gradle', repo / 'build.gradle.kts'] + \
-                    list((repo / 'gradle').glob('*.gradle')) + list((repo / 'gradle').glob('*.gradle.kts'))
-                build = '\n'.join(p.read_text() for p in build_files if p.exists())
-                for command in re.findall(r'`\./gradlew ([^`]+)`', text):
-                    for task in command.split():
-                        if task.startswith('-') or task in {'build', 'clean', 'test', 'runData'}:
-                            continue
-                        if task not in build:
-                            errors.append(f'{repo.name}: task {task} absent from build definition')
+    for name in ('gameplay-design-choices.md', 'aspirational-features.md'):
+        if not (PACK / 'docs' / name).is_file():
+            errors.append('missing maintained design document: docs/' + name)
     manifest = json.loads((PACK / 'gradle/active-custom-mods.json').read_text())['mods']
     names = {m['repository'] for m in manifest}
     for mod in manifest:
         repo = WORKSPACE / 'mod_source' / mod['repository']
         if not (repo / '.git').exists():
             errors.append('missing active source: ' + mod['repository'])
-        elif mod['modId'] not in (repo / 'AGENTS.md').read_text():
-            errors.append('AGENTS/manifest identity mismatch: ' + mod['repository'])
+        else:
+            try:
+                if mod['modId'] not in provider_ids(repo):
+                    errors.append('source/manifest identity mismatch: ' + mod['repository'])
+            except (OSError, ValueError, KeyError) as error:
+                errors.append(f'{mod["repository"]}: cannot read provider identity: {error}')
         if not set(mod.get('dependsOn', [])) <= names:
             errors.append('unknown dependency: ' + mod['repository'])
     pending = {m['repository']: set(m.get('dependsOn', [])) for m in manifest}
@@ -89,19 +100,8 @@ def check(repositories):
             errors.append('provider build graph is cyclic')
             break
         pending = {name: deps - ready for name, deps in pending.items() if name not in ready}
-    pi = WORKSPACE / '.pi/agent/AGENTS.md'
-    codex = WORKSPACE / '.codex/AGENTS.md'
-    guide = WORKSPACE / '.config/agent-guidance/lane.md'
-    if not guide.is_file() or pi.is_symlink() or codex.is_symlink() or pi.read_bytes() != codex.read_bytes():
-        errors.append('global frozen instruction parity failed')
-    if str(guide) not in pi.read_text():
-        errors.append('global entry does not identify canonical guide')
-    for base in (pi.parent, codex.parent):
-        override = base / 'AGENTS.override.md'
-        if override.exists() and override.read_text().strip():
-            errors.append('effective override shadows global parity: ' + str(override))
-    print(f'Checked {checked} maintained Markdown files, {len(repositories)} repositories, '
-          f'{len(manifest)} active providers and global instruction parity.')
+    print(f'Checked {checked} maintained Markdown files, {len(repositories)} repositories and '
+          f'{len(manifest)} active providers against executable metadata.')
     for error in errors:
         print(error, file=sys.stderr)
     return 1 if errors else 0

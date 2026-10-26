@@ -1041,7 +1041,6 @@ class HoverAnnotationLearningSurfaceTest {
     fun `hand crank hover separates iron workshop from Aether power and Nether refinement`() {
         val hand = Files.readString(root.resolve("kubejs/server_scripts/progression/10_hand_workshop.js"))
         val powered = Files.readString(root.resolve("kubejs/server_scripts/progression/20_powered_works.js"))
-        val progression = Files.readString(root.resolve("docs/progression.md"))
         val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "create:hand_crank" }
         val copy = row.path("lines").map { it.asText() }.single()
 
@@ -1056,8 +1055,7 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(powered.contains("'create:windmill_bearing'"))
         assertTrue(copy.contains("16 SU") && copy.contains("ordinary iron fittings"))
         assertTrue(copy.contains("Water and wind power require Skyroot Logs"))
-        assertTrue(progression.contains("The Hand Crank uses"))
-        assertFalse(progression.contains("only positive SU source before the Nether"))
+        assertFalse(copy.contains("only positive SU source before the Nether"))
     }
 
     @Test
@@ -1092,16 +1090,12 @@ class HoverAnnotationLearningSurfaceTest {
     fun `Smeltery controller hover follows the pinned first Brass alloy route`() {
         val pin = Files.readString(root.resolve("mods/tinkers-construct.pw.toml"))
         val precision = Files.readString(root.resolve("kubejs/server_scripts/progression/30_precision_factory.js"))
-        val audit = Files.readString(root.resolve("docs/native-learning-contracts.md"))
         val row = registry.path("annotations").single { it.path("selector").path("item").asText() == "tconstruct:smeltery_controller" }
         val copy = row.path("lines").map { it.asText() }.single()
 
         assertTrue(pin.contains("TConstruct-1.20.1-3.11.2.166.jar"))
         assertTrue(pin.contains("94d07ec0ff45c49f5908beff7acb9fbec43fdde5"))
         assertTrue(precision.contains("event.remove({ type: 'create:mixing', output: 'create:brass_ingot' })"))
-        assertTrue(audit.contains("data/tconstruct/recipes/smeltery/alloys/molten_brass.json"))
-        assertTrue(audit.contains("90 mB molten copper") && audit.contains("90 mB molten zinc"))
-        assertTrue(audit.contains("605 K") && audit.contains("180 mB molten brass"))
         ZipFile(pinnedModJar("TConstruct-1.20.1-3.11.2.166.jar").toFile()).use { jar ->
             val recipe = jacksonObjectMapper().readTree(jar.getInputStream(checkNotNull(jar.getEntry(
                 "data/tconstruct/recipes/smeltery/alloys/molten_brass.json"
@@ -1258,8 +1252,6 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Serene Seasons calendar and sensor hovers match pinned season state`() {
         val pin = Files.readString(root.resolve("mods/serene-seasons.pw.toml"))
-        val auditPath = root.resolve("docs/native-learning-contracts.md")
-        val audit = Files.readString(auditPath)
         val jarPath = pinnedModJar("SereneSeasons-forge-1.20.1-9.1.0.2.jar")
         val sha1 = MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jarPath)).joinToString("") { "%02x".format(it) }
         val calendarRow = registry.path("annotations").single { it.path("selector").path("item").asText() == "sereneseasons:calendar" }
@@ -1269,10 +1261,9 @@ class HoverAnnotationLearningSurfaceTest {
         assertTrue(pin.contains("706d3eaf79ce5b33a30f3ad1aaa88a2a4483abf6"))
         assertEquals("706d3eaf79ce5b33a30f3ad1aaa88a2a4483abf6", sha1)
         assertTrue(row.path("owner").asText().contains("mods/serene-seasons.pw.toml"))
-        assertTrue(row.path("evidence").any { it.asText() == "docs/native-learning-contracts.md" })
+        assertTrue(row.path("evidence").any { it.asText() == "src/test/kotlin/com/bettercontent/tests/HoverAnnotationLearningSurfaceTest.kt" })
         assertEquals("Reads the current season; crop suitability and weather still change over the seasonal cycle.", calendarRow.path("lines").single().asText())
         assertEquals("Outputs a 0–15 redstone signal that tracks progress through the current season.", row.path("lines").single().asText())
-        assertTrue(audit.contains("CalendarItem.class") && audit.contains("getSeasonCycleTicks") && audit.contains("0–15"))
 
         ZipFile(jarPath.toFile()).use { jar ->
             val recipe = jacksonObjectMapper().readTree(jar.getInputStream(jar.getEntry("data/sereneseasons/recipes/season_sensor.json")))
@@ -1331,8 +1322,6 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `AdPother hovers follow pinned local readings and wearer protection`() {
         val pin = Files.readString(root.resolve("mods/pollution-of-the-realms.pw.toml"))
-        val auditPath = root.resolve("docs/native-learning-contracts.md")
-        val audit = Files.readString(auditPath)
         val jarPath = pinnedModJar("AdPother-1.20.1-8.1.49.0-build.2294.jar")
         val sha1 = MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jarPath)).joinToString("") { "%02x".format(it) }
         val aerometerRow = registry.path("annotations").single { it.path("selector").path("item").asText() == "adpother:aerometer" }
@@ -1345,7 +1334,6 @@ class HoverAnnotationLearningSurfaceTest {
         assertEquals("fa630492fadb60027176fd73a3a1a95c295f295d", sha1)
         assertEquals("Measures local airborne pollution; contamination still moves and must be filtered or cleaned.", aerometerRow.path("lines").single().asText())
         assertEquals("Protects the wearer from breathing pollution; it does not remove contamination from the world.", respiratorRow.path("lines").single().asText())
-        assertTrue(audit.contains("EntityPollution") && audit.contains("RespiratorEffect"))
 
         ZipFile(jarPath.toFile()).use { jar ->
             fun constants(path: String): String {
@@ -1367,8 +1355,6 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `Weather2 alerts and forecast hovers match pinned registered behavior`() {
         val pin = Files.readString(root.resolve("mods/weather-storms-tornadoes.pw.toml"))
-        val auditPath = root.resolve("docs/native-learning-contracts.md")
-        val audit = Files.readString(auditPath)
         val jarPath = pinnedModJar("weather2-1.20.1-2.8.3.jar")
         val sha1 = MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jarPath)).joinToString("") { "%02x".format(it) }
         val rows = registry.path("annotations")
@@ -1381,7 +1367,6 @@ class HoverAnnotationLearningSurfaceTest {
         assertEquals("Sounds nearby forming tornadoes and intense sand or snow storms; range is configurable.", row("weather2:tornado_siren").path("lines").single().asText())
         assertEquals("Right-click to inspect local deadly-storm odds; this is probability, not a live storm warning.", row("weather2:weather_forecast").path("lines").single().asText())
         assertTrue(rows.none { it.path("selector").path("item").asText() == "weather2:tornado_siren_manual" })
-        assertTrue(audit.contains("tornado_siren_manual") && audit.contains("no corresponding registered object"))
 
         ZipFile(jarPath.toFile()).use { jar ->
             fun constants(path: String): String {
@@ -1410,7 +1395,6 @@ class HoverAnnotationLearningSurfaceTest {
     @Test
     fun `AE2 pattern hover distinguishes blank encoding from external processing`() {
         val pin = Files.readString(root.resolve("mods/applied-energistics-2.pw.toml"))
-        val audit = Files.readString(root.resolve("docs/native-learning-contracts.md"))
         val row = registry.path("annotations").single { annotation ->
             annotation.path("selector").path("items").any { it.asText() == "ae2:blank_pattern" }
         }
@@ -1420,9 +1404,6 @@ class HoverAnnotationLearningSurfaceTest {
         assertEquals(setOf("ae2:blank_pattern", "ae2:crafting_pattern", "ae2:processing_pattern"), items)
         assertTrue(pin.contains("appliedenergistics2-forge-15.4.10.jar"))
         assertTrue(pin.contains("ac255a120499f79f8deade474da09e3c00ff9bad"))
-        assertTrue(audit.contains("`BLANK_PATTERN` is `ItemDefinition<MaterialItem>`"))
-        assertTrue(audit.contains("`CRAFTING_PATTERN` is `ItemDefinition<CraftingPatternItem>`"))
-        assertTrue(audit.contains("`PROCESSING_PATTERN` is `ItemDefinition<ProcessingPatternItem>`"))
         ZipFile(pinnedModJar("appliedenergistics2-forge-15.4.10.jar").toFile()).use { jar ->
             val signatures = mutableMapOf<String, String?>()
             val bytes = jar.getInputStream(checkNotNull(jar.getEntry("appeng/core/definitions/AEItems.class")))
@@ -1954,7 +1935,6 @@ class HoverAnnotationLearningSurfaceTest {
 
     @Test
     fun `bundled Threads exposes optional owned lessons and no obsolete dodge teaching`() {
-        val learningSurfaceGuide = Files.readString(root.resolve("docs/better_discovery_guides.md"))
         val jar = listOf(
             root.resolve("mods/better-discovery-guides-1.0.0.jar"),
             root.resolve("../mod_source/better-discovery-guides/build/libs/better-discovery-guides-1.0.0.jar").normalize(),
@@ -1969,13 +1949,11 @@ class HoverAnnotationLearningSurfaceTest {
             assertEquals("bc.better_discovery_guides.lessons.v1", lessons.path("schema").asText())
             assertEquals(18, lessons.path("briefs").size())
             assertEquals(18, lessons.path("briefs").map { it.path("art").asText() }.distinct().size)
-            assertTrue(learningSurfaceGuide.contains("rotation share ${lessons.path("briefs").size()} lessons"))
-            assertTrue(Files.readString(root.resolve("docs/threads.md")).contains("${lessons.path("briefs").size()} loading/Lessons entries"))
             val sourceLessons = jacksonObjectMapper().readTree(
                 root.resolve("../mod_source/better-discovery-guides/src/main/resources/assets/better_discovery_guides/loading_briefs/catalogue.json")
                     .normalize().toFile(),
             )
-            assertEquals(sourceLessons.path("briefs").size(), lessons.path("briefs").size())
+            assertEquals(sourceLessons, lessons, "Bundled lessons must match their executable source catalogue")
             assertEquals(18, sourceLessons.path("briefs").map { it.path("art").asText() }.distinct().size)
             val concepts = threads.path("threads").associate {
                 it.path("id").asText() to it.path("concept_id").asText()

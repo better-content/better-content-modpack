@@ -27,7 +27,8 @@ class ClientPackImportFastTest {
     private fun initialize(client: Path): Pair<Map<String, String>, List<List<String>>> {
         val candidate = candidate()
         val commands = mutableListOf<List<String>>()
-        val baseline = ClientPackImport.initialize(candidate, Hashes.sha256(candidate), client, temp.resolve("client-init.log")) { cmd, cwd, _ ->
+        val baseline = ClientPackImport.initialize(candidate, Hashes.sha256(candidate), client, temp.resolve("client-init.log")) { cmd, cwd, _, input ->
+            assertEquals(if (cmd[1] == "init") "\n" else null, input)
             commands += cmd
             if (cmd[1] == "init") {
                 cwd.resolve("index.toml").writeText("hash-format = \"sha256\"\n")
@@ -81,6 +82,8 @@ class ClientPackImportFastTest {
         )) assertThrows(IllegalArgumentException::class.java, { ClientPackImport.pins(mapper.readTree(bad)) }, bad)
         assertEquals(CandidateStateContract.COORDINATE, ClientPackImport.pins(good).coordinate)
         assertEquals("", ClientPackImport.pins(good).author) // The actual bound candidate's author is empty, not missing.
+        assertEquals("\n", ClientPackImport.pins(good).initInput)
+        assertNull(ClientPackImport.pins(mapper.readTree(manifest.replace("\"author\":\"\"", "\"author\":\"Named Author\""))).initInput)
     }
 
     @Test fun existingPackIndexOrOtherFixtureContentsNeverGetReinitialized() {
@@ -89,7 +92,7 @@ class ClientPackImportFastTest {
             client.resolve(name).writeText("invalid existing content")
             val archive = candidate()
             assertThrows(IllegalArgumentException::class.java) {
-                ClientPackImport.initialize(archive, Hashes.sha256(archive), client, temp.resolve("init.log")) { _, _, _ -> error("must not initialize existing fixture") }
+                ClientPackImport.initialize(archive, Hashes.sha256(archive), client, temp.resolve("init.log")) { _, _, _, _ -> error("must not initialize existing fixture") }
             }
             assertEquals("invalid existing content", client.resolve(name).readText())
         }
@@ -99,13 +102,13 @@ class ClientPackImportFastTest {
         val archive = candidate()
         val client = Files.createDirectory(temp.resolve("client"))
         assertThrows(IllegalArgumentException::class.java) {
-            ClientPackImport.initialize(archive, "0".repeat(64), client, temp.resolve("init.log")) { _, _, _ -> error("wrong binding") }
+            ClientPackImport.initialize(archive, "0".repeat(64), client, temp.resolve("init.log")) { _, _, _, _ -> error("wrong binding") }
         }
         assertThrows(IllegalStateException::class.java) {
-            ClientPackImport.initialize(archive, Hashes.sha256(archive), client, temp.resolve("init.log")) { _, _, _ -> error("initializer network failure") }
+            ClientPackImport.initialize(archive, Hashes.sha256(archive), client, temp.resolve("init.log")) { _, _, _, _ -> error("initializer network failure") }
         }
         assertThrows(IllegalArgumentException::class.java) {
-            ClientPackImport.initialize(archive, Hashes.sha256(archive), client, temp.resolve("init.log")) { _, cwd, _ ->
+            ClientPackImport.initialize(archive, Hashes.sha256(archive), client, temp.resolve("init.log")) { _, cwd, _, _ ->
                 cwd.resolve("pack.toml").writeText("malformed"); cwd.resolve("index.toml").writeText("")
             }
         }

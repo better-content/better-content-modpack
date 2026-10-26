@@ -47,6 +47,15 @@ class CandidateContractTest {
 
     @Test
     @Order(2)
+    fun freshClientMetadataInitializesWithInstalledPackwizWithoutInteractiveAuthorInput() {
+        val client = java.nio.file.Files.createTempDirectory(evidence.run.directory, "client-metadata-probe-")
+        val baseline = ClientPackImport.initialize(pair.client, pair.clientSha256, client,
+            evidence.run.directory.resolve("client-metadata-probe.log"))
+        assertTrue(ClientPackImport.unchanged(client, baseline))
+    }
+
+    @Test
+    @Order(2)
     fun serverArchiveHasProductionDefaults() {
         val root = ZipContracts.soleTopLevelDirectory(pair.server)
         val eula = ZipContracts.entryText(pair.server, "$root/eula.txt")
@@ -56,6 +65,10 @@ class CandidateContractTest {
         val jvm = ZipContracts.entryText(pair.server, "$root/user_jvm_args.txt")
         assertEquals("eula=false\n", eula)
         assertTrue("-Xms4G" in jvm && "-Xmx16G" in jvm)
+        for ((archive, path) in listOf(pair.client to "overrides/config/fml.toml", pair.server to "$root/config/fml.toml")) {
+            assertTrue(Regex("(?m)^\\s*versionCheck\\s*=\\s*false\\s*$")
+                .containsMatchIn(ZipContracts.entryText(archive, path)), "pinned update-news policy: $path")
+        }
     }
 
     @Test

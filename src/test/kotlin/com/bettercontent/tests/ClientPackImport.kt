@@ -11,6 +11,9 @@ import kotlin.io.path.readText
 internal object ClientPackImport {
     data class Pins(val name: String, val author: String, val version: String, val minecraft: String, val forge: String) {
         val coordinate: String get() = "$minecraft-$forge"
+        // Packwiz treats --author "" as interactive even with -y. Supply the
+        // exact empty answer, not a made-up author or a changed manifest.
+        val initInput: String? get() = if (author.isEmpty()) "\n" else null
         fun initCommand() = listOf("packwiz", "init", "--name", name, "--author", author,
             "--version", version, "--mc-version", minecraft, "--modloader", "forge", "--forge-version", forge,
             "--index-file", "index.toml", "--pack-file", "pack.toml", "-y")
@@ -42,16 +45,19 @@ internal object ClientPackImport {
     }
 
     fun initialize(candidate: Path, expectedSha256: String, client: Path, log: Path,
-                   run: (List<String>, Path, Path) -> Unit = { command, cwd, output -> Commands.run(command, cwd, output) }): Map<String, String> {
+                   run: (List<String>, Path, Path, String?) -> Unit = { command, cwd, output, input ->
+                       val status = BoundedCommand.run(cwd, command, output, java.time.Duration.ofMinutes(30), input = input)
+                       check(status == 0) { "command failed ($status): ${command.joinToString(" ")}; see $output" }
+                   }): Map<String, String> {
         require(Hashes.sha256(candidate) == expectedSha256) { "client candidate changed before initialization" }
         val pins = pins(jacksonObjectMapper().readTree(ZipContracts.entryText(candidate, "manifest.json")))
         require(Files.isDirectory(client, NOFOLLOW_LINKS) && Files.list(client).use { it.count() == 0L }) {
             "client pack initialization requires an empty fresh fixture; existing metadata is never repaired"
         }
-        run(pins.initCommand(), client, log)
+        run(pins.initCommand(), client, log, pins.initInput)
         // The installed Packwiz parser checks the actual initialized TOML/index, not a home-grown TOML parser.
         run(listOf("packwiz", "list", "--pack-file", "pack.toml", "-y"), client,
-            log.resolveSibling(log.fileName.toString().removeSuffix(".log") + "-verify.log"))
+            log.resolveSibling(log.fileName.toString().removeSuffix(".log") + "-verify.log"), null)
         validateBaseline(client, pins)
         return requireNotNull(snapshot(client)) { "initializer must create only pack.toml and index.toml" }
     }

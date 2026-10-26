@@ -16,6 +16,10 @@
     "scripts/timing_budget.py",
     "scripts/timing-python/sitecustomize.py",
     "gradle/test-timing.init.gradle",
+    "gradle/source-native-fixture.gradle",
+    "scripts/prepare_native_fml.py",
+    "config/fml.toml",
+    "server-config/config-overrides/fml.toml",
     "gradle/owned-task-deadlines.gradle",
     "gradle/native-test-timing.gradle",
     "gradle/junit-test-timing.gradle",
@@ -146,8 +150,8 @@
         "build/upstream-startup-overrides/receipt.json",
         "build/upstream-startup-overrides/alltheleaks-1.1.1+1.20.1-forge-bc-startup.1.jar",
         "build/upstream-interface-overrides/receipt.json",
-        "build/upstream-interface-overrides/epic x parcool-forge-20.12.0.1-1.20.1-bc-interface.1.jar",
-        "build/upstream-interface-overrides/valkyrienskies-120-2.4.11-bc-interface.1.jar"
+        "build/upstream-interface-overrides/epic x parcool-forge-20.12.0.1-1.20.1-bc-interface.3.jar",
+        "build/upstream-interface-overrides/valkyrienskies-120-2.4.11-bc-interface.3.jar"
       ],
       "buildInputs": [],
       "modId": "better_compat_fixes",
@@ -157,6 +161,7 @@
         {"name": "without-bees", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"colonyWithoutBees": "true"}},
         {"name": "without-heat", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"spoilageWithoutHeat": "true"}},
         {"name": "without-curios", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"backpackWithoutCurios": "true"}},
+        {"name": "without-genetic-animals", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"withoutGeneticAnimalsFixture": "true"}},
         {"name": "native-forge-api", "tasks": ["verifyFull", "stageRuntimeJar"], "properties": {"withNativeForgeApiFixture": "true"}},
         {"name": "default", "tasks": ["verifyFull", "stageRuntimeJar"]}
       ],
@@ -275,7 +280,7 @@
     },
     {
       "repository": "better-journal-inventory",
-      "verificationInputs": ["docs/inventory-parity.md"],
+      "verificationInputs": ["src/test/kotlin/com/bettercontent/tests/InteractionRuntimeTest.kt"],
       "buildInputs": [],
       "modId": "better_journal_inventory",
       "artifact": "better-journal-inventory-0.1.0.jar",

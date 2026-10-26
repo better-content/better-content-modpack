@@ -114,7 +114,12 @@ if (System.getenv('BC_TIMING_NATIVE') == 'true') {
     if (!nativeScript.isFile()) throw new GradleException('Enabled native timing adapter is missing: ' + nativeScript)
     // Apply before the owning build script: the adapter must register afterEvaluate
     // before Forge registers RunConfig -> JavaExec generation. It checks Forge itself.
-    def attachNative = { project -> project.apply(from: nativeScript) }
+    def fixtureScript = new File(hookRoot, 'gradle/source-native-fixture.gradle')
+    if (!fixtureScript.isFile()) throw new GradleException('Source-native fixture setup is missing: ' + fixtureScript)
+    def attachNative = { project ->
+        project.apply(from: nativeScript)
+        project.apply(from: fixtureScript)
+    }
     gradle.beforeProject { project -> attachNative(project) }
     if (targetProject != null) attachNative(targetProject)
 }

@@ -674,7 +674,7 @@
       "malum08Legacy": false,
       "evidence": [
         "kubejs/data/kubejs/recipes/malum/soulwood_growth_from_blighted_gunk.json",
-        "docs/malum_soulwood_acquisition.md"
+        "src/test/kotlin/com/bettercontent/tests/MalumAcquisitionGraphContractTest.kt"
       ],
       "boundary": "The checked-in tier-zero recipe uses Blighted Gunk for 2,000 LP. Gunk is reachable through native blight at rare loci and first LP through the conditional heart-fragment path; neither locus materialization nor altar execution is runtime-qualified."
     },

@@ -8,7 +8,8 @@ import java.util.zip.ZipFile
 import kotlin.io.path.createDirectories
 import kotlin.io.path.readText
 
-/** Non-cancelling diagnostic supplement: no inventory commands, recipes, actions or storage hooks. */
+/** Separate, hash-bound test supplement: read-only observers plus explicitly requested launch/UI drivers.
+ * No inventory commands, recipe actions or storage hooks; compiled driver authority is source-audited. */
 class RuntimeDiagnosticSupport(private val evidence: EvidenceRun, pair: CandidatePair, player: String) {
     private val source = evidence.config.root.parent.resolve("mod_source/better-runtime-diagnostics/build/libs/better-runtime-test-support.jar")
     private val sourceHash = Hashes.sha256(source)

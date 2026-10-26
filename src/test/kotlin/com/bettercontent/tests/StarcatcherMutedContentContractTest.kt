@@ -51,7 +51,6 @@ class StarcatcherMutedContentContractTest {
                         "minecraft:end_barrens") }
             }.keys
             assertTrue(expected.containsAll(biomeEnd), "Review additional End-biome catches: $biomeEnd")
-            val docs = Files.readString(root.resolve("docs/muted-content.md"))
             for (id in expected) {
                 val upstream = native.getValue(id)
                 val override = root.resolve("kubejs/$prefix$id.json")
@@ -63,7 +62,7 @@ class StarcatcherMutedContentContractTest {
                 assertEquals(upstream, effective, "Preserve non-habitat fields for $id")
                 assertTrue(effective["has_guide_entry"].asBoolean(), id)
                 assertTrue(effective["base_chance"].asInt() > 0, "Do not mute by zero weight")
-                assertTrue(docs.contains("`starcatcher:$id`"), "Document muted identity $id")
+                assertNotNull(jar.getEntry("${prefix}$id.json"), "Muted identity must remain present in the pinned native registry")
             }
             val void = native.getValue("voidbiter")["world_restrictions"]
             assertEquals(setOf("minecraft:is_end"), strings(void["biomes_tags"]))

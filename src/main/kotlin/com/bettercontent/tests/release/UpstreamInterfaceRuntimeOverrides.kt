@@ -25,6 +25,13 @@ object UpstreamInterfaceRuntimeOverrides {
     private const val MAX_ARCHIVE = 256 * 1024 * 1024
     private const val MAX_ENTRY = 128 * 1024 * 1024
     private const val TICKER = "org/valkyrienskies/mod/mixin/feature/sculk/MixinVibrationSystemTicker.class"
+    private const val TRANSFER_MIXIN = "feature.sculk.MixinVibrationSystemTicker"
+    private const val PROVIDER_CONFIG = "better_compat_fixes.vibration_interface.mixins.json"
+    private val providerEntries = setOf(PROVIDER_CONFIG,
+        "com/bettercontent/bettercompatfixes/compat/vibration/VibrationInterfaceMixinPlugin.class",
+        "com/bettercontent/bettercompatfixes/compat/vibration/VibrationInterfaceTransform.class",
+        "com/bettercontent/bettercompatfixes/compat/vibration/VibrationWorldCoordinates.class",
+        "com/bettercontent/bettercompatfixes/mixin/vibration/VibrationTickerMixin.class")
     private val mapper = jacksonObjectMapper().enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
     private val shaPattern = Regex("[0-9a-f]{64}")
     private val methods = linkedMapOf(
@@ -86,7 +93,7 @@ object UpstreamInterfaceRuntimeOverrides {
         require(result.isNotEmpty()) { "invalid/empty archive" }; return result
     }
 
-    /** Parse structure, never scan byte patterns. Only these three U2 words may change. */
+    /** Parse structure, never scan byte patterns. All three PRIVATE|STATIC words must remain untouched. */
     internal fun expectedInterfaceClass(original: ByteArray): ByteArray {
         class Cursor {
             var offset = 0
@@ -130,23 +137,49 @@ object UpstreamInterfaceRuntimeOverrides {
         // This pinned interface has no fields and exactly three named methods.
         require(c.u2() == 0) { "unexpected interface fields" }
         require(c.u2() == 3) { "unexpected interface method population" }
-        val offsets = mutableListOf<Int>(); val seen = mutableSetOf<String>()
+        val seen = mutableSetOf<String>()
         repeat(3) {
-            val offset = c.offset
             require(c.u2() == 0x000a) { "must preserve STATIC; expected PRIVATE|STATIC" }
             val method = requireNotNull(utf[c.u2()]); val descriptor = requireNotNull(utf[c.u2()])
             require(methods[method] == descriptor && seen.add(method)) { "unexpected/duplicate method or descriptor" }
-            offsets.add(offset); attributes()
+            attributes()
         }
         attributes(); require(c.offset == original.size && seen == methods.keys) { "class trailing bytes/method drift" }
-        return original.copyOf().also { fixed -> offsets.forEach { offset -> fixed[offset] = 0; fixed[offset + 1] = 9 } }
+        return original.copyOf()
+    }
+
+    private fun validateTransfer(transfer: JsonNode) {
+        fields(transfer, "mixin", "original_class", "original_class_sha256", "provider_artifact", "provider_entries")
+        require(text(transfer, "mixin") == TRANSFER_MIXIN && text(transfer, "original_class") == TICKER &&
+            text(transfer, "provider_artifact") == "better-compat-fixes-0.1.9.jar")
+        sha(transfer, "original_class_sha256")
+        fields(transfer["provider_entries"], *providerEntries.toTypedArray())
+        for (path in providerEntries) sha(transfer["provider_entries"], path)
+    }
+    private fun validateProvider(bytes: ByteArray, p: JsonNode) {
+        val transfer = p["artifacts"].single { !it["interface_transfer"].isNull }["interface_transfer"]
+        val entries = archive(bytes)
+        for (path in providerEntries) require(hash(requireNotNull(entries[path])) == sha(transfer["provider_entries"], path)) {
+            "source-owned interface replacement binding drift: $path"
+        }
+        val expected = json("""{"required":true,"minVersion":"0.8","package":"com.bettercontent.bettercompatfixes.mixin.vibration","compatibilityLevel":"JAVA_17","refmap":"better_compat_fixes.refmap.json","plugin":"com.bettercontent.bettercompatfixes.compat.vibration.VibrationInterfaceMixinPlugin","mixins":["VibrationTickerMixin"],"injectors":{"defaultRequire":1}}""".toByteArray())
+        require(json(entries.getValue(PROVIDER_CONFIG)) == expected) { "required dedicated replacement config drift" }
+        val logical = mutableListOf<String>()
+        for (line in requireNotNull(entries["META-INF/MANIFEST.MF"]).toString(Charsets.UTF_8).lines()) {
+            if (line.startsWith(' ')) { require(logical.isNotEmpty()); logical[logical.lastIndex] += line.substring(1) }
+            else logical.add(line)
+        }
+        val configs = logical.filter { it.startsWith("MixinConfigs: ") }.map { it.substringAfter(": ") }
+        require(configs.size == 1 && configs.single().split(',').count { it == PROVIDER_CONFIG } == 1) {
+            "replacement must actually be registered exactly once"
+        }
     }
 
     private fun policy(root: Path): JsonNode {
         val p = json(read(root.resolve(POLICY), MAX_JSON))
         fields(p, "schema", "producer", "provider_artifact", "revision", "spec", "builder", "legacy_builder", "artifacts", "receipt", "publication", "runtime_acceptance")
         require(text(p, "schema") == "bc.interface_runtime_archive_overrides.v1" && text(p, "producer") == "better-compat-fixes" &&
-            text(p, "provider_artifact") == "better-compat-fixes-0.1.9.jar" && text(p, "revision") == "bc-interface.1" &&
+            text(p, "provider_artifact") == "better-compat-fixes-0.1.9.jar" && text(p, "revision") == "bc-interface.3" &&
             text(p, "publication") == "LOCAL_ONLY_NOT_AUTHORIZED" && text(p, "runtime_acceptance") == "NOT_EVALUATED")
         for ((key, path) in mapOf("spec" to "src/upstreamRuntime/interface-overrides-v1.json", "builder" to "scripts/build_upstream_interface_overrides.py", "legacy_builder" to "scripts/build_upstream_runtime_overrides.py")) {
             fields(p[key], "path", "sha256"); require(text(p[key], "path") == path); sha(p[key], "sha256")
@@ -154,8 +187,8 @@ object UpstreamInterfaceRuntimeOverrides {
         val artifacts = p["artifacts"]; require(artifacts.isArray && artifacts.size() == 2)
         val names = mutableSetOf<String>(); val manifests = mutableSetOf<String>(); val tuples = mutableSetOf<Pair<Long, Long>>()
         for (a in artifacts) {
-            fields(a, "input", "output", "manifest", "project_id", "file_id", "input_sha1", "input_sha256", "output_sha256", "resource", "class_patch")
-            require(names.add(base(text(a, "input"), ".jar")) && names.add(base(text(a, "output"), "-bc-interface.1.jar")))
+            fields(a, "input", "output", "manifest", "project_id", "file_id", "input_sha1", "input_sha256", "output_sha256", "resource", "interface_transfer")
+            require(names.add(base(text(a, "input"), ".jar")) && names.add(base(text(a, "output"), "-bc-interface.3.jar")))
             require(manifests.add(base(text(a, "manifest"), ".pw.toml")))
             require(a["project_id"].isIntegralNumber && a["file_id"].isIntegralNumber && a["project_id"].asLong() > 0 && a["file_id"].asLong() > 0 &&
                 tuples.add(a["project_id"].asLong() to a["file_id"].asLong()))
@@ -164,12 +197,12 @@ object UpstreamInterfaceRuntimeOverrides {
             fields(resource, "path", "before_sha256", "after_sha256", "move_to_client")
             base(text(resource, "path"), ".json"); sha(resource, "before_sha256"); sha(resource, "after_sha256")
             require(resource["move_to_client"].isArray && resource["move_to_client"].size() == 1 && resource["move_to_client"][0].isTextual)
-            if (!a["class_patch"].isNull) {
-                fields(a["class_patch"], "path", "before_sha256", "after_sha256")
-                require(text(a["class_patch"], "path") == TICKER); sha(a["class_patch"], "before_sha256"); sha(a["class_patch"], "after_sha256")
-            }
+            val transfer = a["interface_transfer"]
+            require(transfer.isNull == (text(a, "input") != "valkyrienskies-120-2.4.11.jar"))
+            if (!transfer.isNull) validateTransfer(transfer)
         }
-        require(artifacts.count { !it["class_patch"].isNull } == 1)
+        require(artifacts.map { text(it, "input") }.toSet() == setOf("epic x parcool-forge-20.12.0.1-1.20.1.jar", "valkyrienskies-120-2.4.11.jar"))
+        require(artifacts.count { !it["interface_transfer"].isNull } == 1)
         receipt(mapper.writeValueAsBytes(p["receipt"]), p)
         return p
     }
@@ -254,7 +287,7 @@ object UpstreamInterfaceRuntimeOverrides {
     private fun corrected(original: ByteArray, fixed: ByteArray, a: JsonNode, row: JsonNode) {
         require(hash(fixed) == sha(a, "output_sha256") && hash(fixed, "SHA-1") == text(row, "output_sha1")) { "corrected output digest mismatch" }
         val originalClasses = classInventory(original); val fixedClasses = classInventory(fixed)
-        require(originalClasses.size == row["class_count"].asInt() && originalClasses.keys == fixedClasses.keys &&
+        require(originalClasses.size == row["class_count"].asInt() && originalClasses == fixedClasses &&
             inventoryHash(originalClasses) == sha(row, "before_class_inventory_sha256") &&
             inventoryHash(fixedClasses) == sha(row, "after_class_inventory_sha256")) { "recursive class inventory mismatch" }
         val before = archive(original); val after = archive(fixed)
@@ -267,24 +300,21 @@ object UpstreamInterfaceRuntimeOverrides {
         require(common.isArray && client.isArray)
         val moved = resource["move_to_client"][0].asText()
         require(common.count { it.isTextual && it.asText() == moved } == 1 && client.none { it.asText() == moved })
-        val newCommon = mapper.createArrayNode(); common.filter { it.asText() != moved }.forEach { newCommon.add(it) }
+        val transfer = a["interface_transfer"]
+        if (!transfer.isNull) require(common.count { it.asText() == TRANSFER_MIXIN } == 1 && client.none { it.asText() == TRANSFER_MIXIN })
+        val newCommon = mapper.createArrayNode()
+        common.filter { it.asText() != moved && (transfer.isNull || it.asText() != TRANSFER_MIXIN) }.forEach { newCommon.add(it) }
         expected.set<JsonNode>("mixins", newCommon)
         (client as com.fasterxml.jackson.databind.node.ArrayNode).add(moved)
-        require(json(newResource) == expected) { "JSON change is not the exact common-to-client move" }
-        val patch = a["class_patch"]
-        if (!patch.isNull) {
-            val path = text(patch, "path"); val originalClass = requireNotNull(before[path]); val fixedClass = requireNotNull(after[path])
-            require(hash(originalClass) == sha(patch, "before_sha256") && hash(fixedClass) == sha(patch, "after_sha256"))
-            val expectedClass = expectedInterfaceClass(originalClass)
-            require(fixedClass.contentEquals(expectedClass)) { "class changed beyond exactly three STATIC-preserving U2 access words" }
-            val derivedOffsets = originalClass.indices.filter { originalClass[it] != expectedClass[it] }.map { it - 1 }
-            require(derivedOffsets.size == 3 && row["class_access_patches"][0]["edits"].map { it["offset"].asInt() } == derivedOffsets) {
-                "receipt access offsets differ from independently parsed methods"
-            }
+        require(json(newResource) == expected) { "JSON change is not the exact side move and coupled interface transfer" }
+        if (!transfer.isNull) {
+            val originalClass = requireNotNull(before[TICKER])
+            require(hash(originalClass) == sha(transfer, "original_class_sha256"))
+            require(after.getValue(TICKER).contentEquals(expectedInterfaceClass(originalClass))) { "original interface must remain byte-identical" }
         }
         val budget = Budget()
         for ((name, body) in before) {
-            if (name == resourcePath || (!patch.isNull && name == text(patch, "path"))) continue
+            if (name == resourcePath) continue
             val bodyAfter = after.getValue(name)
             if (name.endsWith(".jar")) unchangedArchive(body, bodyAfter, 1, budget)
             else require(body.contentEquals(bodyAfter)) { "unreviewed class/resource/notice byte change: $name" }
@@ -301,28 +331,15 @@ object UpstreamInterfaceRuntimeOverrides {
         for ((index, a) in p["artifacts"].withIndex()) {
             val row = r["artifacts"][index]
             fields(row, "input", "output", "input_sha256", "output_sha256", "output_sha1", "resources", "class_access_patches",
-                "class_bytes_invariant", "class_count", "before_class_inventory_sha256", "after_class_inventory_sha256", "license", "redistribution")
+                "class_bytes_invariant", "class_count", "before_class_inventory_sha256", "after_class_inventory_sha256", "license", "redistribution", "interface_transfer")
             require(row["class_count"].isIntegralNumber && row["class_count"].asInt() > 0 && row["class_bytes_invariant"].isBoolean)
-            require(row["class_bytes_invariant"].asBoolean() == a["class_patch"].isNull)
+            require(row["class_bytes_invariant"].asBoolean() && row["before_class_inventory_sha256"] == row["after_class_inventory_sha256"])
+            require(row["interface_transfer"] == a["interface_transfer"])
             require(row["resources"].isArray && row["resources"].size() == 1)
             val resource = row["resources"][0]
             fields(resource, "path", "before_sha256", "after_sha256")
             for (key in listOf("path", "before_sha256", "after_sha256")) require(resource[key] == a["resource"][key])
-            require(row["class_access_patches"].isArray && row["class_access_patches"].size() == (if (a["class_patch"].isNull) 0 else 1))
-            if (!a["class_patch"].isNull) {
-                val access = row["class_access_patches"][0]
-                fields(access, "path", "before_sha256", "after_sha256", "edits", "all_other_class_bytes_invariant")
-                for (key in listOf("path", "before_sha256", "after_sha256")) require(access[key] == a["class_patch"][key])
-                require(access["all_other_class_bytes_invariant"].isBoolean && access["all_other_class_bytes_invariant"].asBoolean())
-                require(access["edits"].isArray && access["edits"].size() == 3)
-                val seen = mutableSetOf<String>()
-                for (edit in access["edits"]) {
-                    fields(edit, "method", "descriptor", "offset", "before", "after")
-                    require(methods[text(edit, "method")] == text(edit, "descriptor") && seen.add(text(edit, "method")))
-                    require(edit["offset"].isIntegralNumber && edit["offset"].asInt() >= 0 && edit["before"].isIntegralNumber &&
-                        edit["before"].asInt() == 10 && edit["after"].isIntegralNumber && edit["after"].asInt() == 9)
-                }
-            }
+            require(row["class_access_patches"].isArray && row["class_access_patches"].isEmpty) { "no upstream class patch is permitted" }
             for (key in listOf("input", "output", "input_sha256", "output_sha256")) require(row[key] == a[key])
         }
     }
@@ -332,7 +349,8 @@ object UpstreamInterfaceRuntimeOverrides {
         safe(root); safe(source); safe(evidence)
         val authored = read(root.resolve(POLICY), MAX_JSON); val p = policy(root); pins(root, p)
         for (field in listOf("spec", "builder", "legacy_builder")) require(hash(read(source.resolve(text(p[field], "path")), MAX_JSON)) == sha(p[field], "sha256")) { "source recipe drift" }
-        val provider = read(providerJar) // Main source gates/stamp qualify this provider; no custom replacement classes here.
+        val provider = read(providerJar) // Main source gates qualify code; independently bind the transferred operations here.
+        validateProvider(provider, p)
         val names = listOf("receipt.json") + p["artifacts"].map { text(it, "output") }
         val data = names.associateWith { name ->
             val declared = requireNotNull(supportHashes[SUPPORT + name]) { "undeclared qualified support: $name" }
@@ -394,6 +412,9 @@ object UpstreamInterfaceRuntimeOverrides {
                     require(roots.size == 1 && entries.all { '/' in it.name }); prefix = roots.single() + "/"
                 }
                 require(entry(prefix + POLICY, MAX_JSON).contentEquals(authored)) { "candidate policy drift" }
+                val providerName = text(p, "provider_artifact")
+                require(entries.count { it.name.substringAfterLast('/') == providerName } == 1) { "duplicate/missing transfer provider" }
+                validateProvider(entry(prefix + "mods/" + providerName), p)
                 for ((index, a) in p["artifacts"].withIndex()) {
                     val output = text(a, "output")
                     require(entries.count { it.name.substringAfterLast('/') == output } == 1) { "duplicate/missing corrected archive" }

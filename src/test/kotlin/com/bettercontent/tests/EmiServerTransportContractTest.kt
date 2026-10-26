@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.zip.ZipFile
 
 /** Fast packaging/pin guard only: never launches Forge or claims a successful handshake/fill. */
 @Tag("fast")
@@ -39,17 +40,23 @@ class EmiServerTransportContractTest {
         assertEquals("580555", scalar("update.curseforge", "project-id"))
     }
 
-    @Test fun supportedPackagingRequirementSeparatesNativeTransportFromBehavioralAcceptance() {
-        val proof = Files.readString(Path.of("docs/native-emi-server-transport.md"))
-            .replace(Regex("\\s+"), " ")
-        for (required in listOf(
-            "supported packaging requirement", "not fixture spoofing", "1.1.24+1.20.1+forge",
-            "8081375", "ea320200878e4a49196760234a22da763671520a",
-            "EmiForge", "PlayerLoggedInEvent", "PingS2CPacket", "EmiClient.onServer",
-            "FillRecipeC2SPacket", "EmiRecipeFiller.clientFill", "quickMoveStack",
-            "does not mutate EMI bytecode", "native menu", "not current requirements",
-            "runtime acceptance", "persistence", "strict log audit", "cleanup",
-            "inventory-parity.md", "generated-data.md"
-        )) assertTrue(proof.contains(required), "Missing supported-transport contract statement: $required")
+    private fun pinnedModJar(filename: String): Path =
+        Path.of(System.getProperty("user.home"), ".cache/bc/packwiz-downloads/mods", filename)
+
+    @Test fun pinnedNativeTransportRetainsLoginPingAndClientFill() {
+        // Native archive inspection is not proof of handshake, menu fill or persistence at runtime.
+        ZipFile(pinnedModJar("emi-1.1.24+1.20.1+forge.jar").toFile()).use { jar ->
+            mapOf(
+                "platform/forge/EmiForge" to listOf("PlayerLoggedInEvent", "PingS2CPacket"),
+                "platform/EmiClient" to listOf("onServer", "FillRecipeC2SPacket"),
+                "platform/forge/EmiPacketHandler" to listOf("FillRecipeC2SPacket", "PingS2CPacket"),
+                "registry/EmiRecipeFiller" to listOf("clientFill"),
+            ).forEach { (owner, symbols) ->
+                val entry = checkNotNull(jar.getEntry("dev/emi/emi/$owner.class"))
+                val constants = jar.getInputStream(entry).use { it.readBytes().toString(Charsets.ISO_8859_1) }
+                symbols.forEach { assertTrue(constants.contains(it), "Pinned EMI lost $owner#$it") }
+            }
+            assertTrue(jar.getEntry("dev/emi/emi/network/FillRecipeC2SPacket.class") != null)
+        }
     }
 }

@@ -43,7 +43,7 @@ class WeaponsOfMiraclesContractTest {
         val policy = mapper.readTree(root.resolve("kubejs/config/crafting_policy.json").toFile())
         assertEquals("content", policy["namespaces"]["wom"]["primary_role"].asText())
         assertEquals("full", policy["namespaces"]["wom"]["support_state"].asText())
-        val docs = Files.readString(root.resolve("docs/weapon_balance_philosophy.md"))
-        expected.forEach { assertTrue(docs.contains("`$it`"), "Document native preset $it") }
+        val pin = Files.readString(root.resolve("mods/weapons-of-miracles.pw.toml"))
+        assertTrue(pin.contains("WeaponsOfMiracles-2.0.171-mc1.20.1-forge.jar"))
     }
 }

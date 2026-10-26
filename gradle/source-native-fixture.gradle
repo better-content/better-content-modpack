@@ -1,0 +1,24 @@
+// Source GameTests only: no production classpath, test selection or verdict changes.
+// Pinned dependency resolution is mandatory; per-mod update-news HTTP is not a
+// qualified input. Keep it out of fresh fixtures using Forge's supported setting.
+if (project.extensions.extraProperties.has('bcSourceNativeFixtureInstalled')) return
+project.extensions.extraProperties.set('bcSourceNativeFixtureInstalled', true)
+def supportRoot = buildscript.sourceFile.canonicalFile.parentFile.parentFile
+gradle.projectsEvaluated {
+    def minecraft = project.extensions.findByName('minecraft')
+    if (minecraft == null) return
+    minecraft.runs.findAll { it.name.toLowerCase(Locale.ROOT).contains('gametest') }.each { run ->
+        // Forge may register its lazy Run tasks in a later projectsEvaluated callback.
+        tasks.matching { it.name == run.taskName }.configureEach {
+            doFirst {
+                def directory = project.file(run.workingDirectory).absoluteFile
+                if (directory.canonicalFile == project.projectDir.canonicalFile)
+                    throw new GradleException('Refusing source-root native fixture config')
+                project.exec {
+                    commandLine('python3', '-B', new File(supportRoot, 'scripts/prepare_native_fml.py').absolutePath,
+                                directory.absolutePath)
+                }
+            }
+        }
+    }
+}

@@ -51,20 +51,19 @@ class TechPaletteSourceContractTest {
     @Test
     fun `Blood Magic cannot repeat AE2 Sky Stone meteor generation`() {
         val removedItems = Files.readString(root.resolve("kubejs/server_scripts/policy/removed_items.js"))
-        val matrix = Files.readString(root.resolve("docs/tech01_component_acquisition.md"))
 
         assertTrue(removedItems.contains("event.remove({ id: 'bloodmagic:meteor/ae2' })"))
         assertFalse(removedItems.contains("event.remove({ type: 'bloodmagic:meteor' })"),
             "unrelated Blood Magic meteor recipes must remain available")
-        assertTrue(matrix.contains("bloodmagic:meteor/ae2"))
-        assertTrue(matrix.contains("Certus Quartz still has to come from finding an AE2 meteor"))
+        assertTrue(removedItems.contains("event.remove({ type: 'occultism:miner' })"),
+            "The other scripted Sky Stone bypass must also remain closed")
     }
 
     @Test
     fun `meteor component map distinguishes the early palette from the ME network gate`() {
         val palette = Files.readString(root.resolve("kubejs/server_scripts/progression/80_tech_palette.js"))
         val energyRoot = Files.readString(root.resolve("kubejs/server_scripts/progression/20_logistics_roots.js"))
-        val matrix = Files.readString(root.resolve("docs/tech01_component_acquisition.md"))
+        val certusComponents = Files.readString(root.resolve("kubejs/server_scripts/progression/85_certus_quartz_components.js"))
 
         assertTrue(palette.contains("type: 'pneumaticcraft:pressure_chamber', pressure: 4.0"))
         listOf(
@@ -75,13 +74,12 @@ class TechPaletteSourceContractTest {
             "create:electron_tube",
         ).forEach { ingredient ->
             assertTrue(palette.contains("'$ingredient'"), "controller palette lost $ingredient")
-            assertTrue(matrix.contains(ingredient), "component matrix omits $ingredient")
         }
-        assertTrue(matrix.contains("data/create/recipes/crafting/materials/electron_tube.json"))
-        assertTrue(matrix.contains("data/powergrid/recipes/mechanical_crafting/integrated_circuit.json"))
-        assertTrue(matrix.contains("the crafted Rose Quartz prerequisite now requires Certus"))
+        assertTrue(certusComponents.contains("'create:crafting/materials/rose_quartz'"))
+        assertTrue(certusComponents.contains("var certus = 'ae2:certus_quartz_crystal'"))
+        assertTrue(certusComponents.contains("event.replaceInput({ id: id }, 'minecraft:quartz', certus)"))
         assertTrue(energyRoot.contains("kubejs:impossible_support_matrix"))
-        assertTrue(matrix.contains("Deliberately remains the later conjunctive, Font-rooted gate"))
+        assertTrue(energyRoot.contains("aether:enchanted_gravitite"))
     }
 
     @Test

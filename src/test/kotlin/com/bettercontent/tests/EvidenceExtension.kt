@@ -93,6 +93,19 @@ class EvidenceExtension(
                 "note" to "Distinct ready-launch raw audits only, not mirrored aggregate logs. Payload/native-line growth and coalesced suppression are observations, not a gameplay-coverage or overhead verdict; existing TPS/deadline/strict-log oracles remain blocking."))
             check(report.findings.isEmpty()) { "playtest logging contract failed: ${report.findings.take(25)}" }
         }
+        finalizeStep("support_policy_diagnostics") {
+            val policies = LogPolicy.supportPolicies(collectLogs(run.directory))
+            run.event("support_policy_diagnostics", mapOf(
+                "verdict" to "support_status_only",
+                "observation_count" to policies.size,
+                "note" to "Exact contextual support/warranty notices, not failed operations. " +
+                    "Raw logs and context are retained; failed mixins, stacks and all other errors remain blocking.",
+                "observations" to policies.map { policy -> mapOf(
+                    "path" to policy.path.toString(), "line" to policy.line,
+                    "policy" to policy.policy, "records" to policy.records,
+                ) },
+            ))
+        }
         finalizeStep("startup_diagnostics") {
             val timings = LogPolicy.startupTimings(collectLogs(run.directory))
             run.event("startup_performance_diagnostics", mapOf(

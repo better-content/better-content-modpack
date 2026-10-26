@@ -1,6 +1,6 @@
 name = "The One Probe"
 filename = "theoneprobe-1.20.1-10.0.3.jar"
-side = "client"
+side = "both"
 
 [download]
 hash-format = "sha1"

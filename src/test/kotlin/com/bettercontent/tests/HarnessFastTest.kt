@@ -230,8 +230,10 @@ class HarnessFastTest {
         assertEquals(listOf("better-compat-fixes", "better-gameplay-notices"), dependencies("better-magic-chunk-anchors"))
         val compat = mods.single { it.path("repository").asText() == "better-compat-fixes" }
         val profiles = compat.path("verificationProfiles").toList()
-        assertEquals(listOf("registrate-present", "without-bees", "without-heat", "without-curios", "native-forge-api", "default"), profiles.map { it.path("name").asText() })
+        assertEquals(listOf("registrate-present", "without-bees", "without-heat", "without-curios", "without-genetic-animals", "native-forge-api", "default"), profiles.map { it.path("name").asText() })
         assertEquals("true", profiles.first().path("properties").path("withRegistrateFixture").asText())
+        assertEquals("true", profiles.single { it.path("name").asText() == "without-genetic-animals" }
+            .path("properties").path("withoutGeneticAnimalsFixture").asText())
         assertEquals("true", profiles.single { it.path("name").asText() == "native-forge-api" }
             .path("properties").path("withNativeForgeApiFixture").asText())
         assertTrue(profiles.last().path("properties").isMissingNode)

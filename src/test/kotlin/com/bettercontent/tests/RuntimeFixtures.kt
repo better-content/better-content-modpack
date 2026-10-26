@@ -349,6 +349,9 @@ class ClientFixture(
     private var launcher: ManagedProcess? = null
     private var priorJoinCount = 0
     val uuid = offlineUuid(username)
+    private val offlineClient = FixtureOfflineClientBinding(config.runId, UUID.randomUUID(), username,
+        UUID.nameUUIDFromBytes("OfflinePlayer:$username".toByteArray(Charsets.UTF_8)),
+        client.toAbsolutePath().normalize(), diagnosticSupport.bridge)
 
     init {
         evidence.event("candidate_selected", mapOf(
@@ -468,7 +471,7 @@ class ClientFixture(
         val diagnosticArgs = diagnosticSupport.properties
         val logging = prepareClientAudit("quickplay-$mode")
         val jvmArgs = normalizeFixtureProcessorBudget(
-            "$clientJvmArgs $diagnosticArgs $exitArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
+            "$clientJvmArgs $diagnosticArgs ${offlineClient.properties} $exitArgs -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false " +
                 "${logging.jvmArgument} -Dbc.pack_test.world=$mode",
             4,
         )
@@ -482,7 +485,7 @@ class ClientFixture(
         val environment = clientEnvironment()
         val logging = prepareClientAudit("client")
         val jvmArgs = normalizeFixtureProcessorBudget(
-            "$clientJvmArgs ${diagnosticSupport.properties} $extraArguments -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false ${logging.jvmArgument}",
+            "$clientJvmArgs ${diagnosticSupport.properties} ${offlineClient.properties} $extraArguments -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false ${logging.jvmArgument}",
             if (productionWorldStartup) 8 else 4,
         )
         val command = portableClientCommand(config, client, pins, jvmArgs, username, uuid, connection)
@@ -611,6 +614,25 @@ class ClientFixture(
             "fresh dedicated client join", Duration.ofMinutes(10))
         assertRunning("dedicated client join complete")
         evidence.auditReady(requireNotNull(auditLaunch))
+    }
+
+    /** Submit the same production spawn-only action as the real onboarding UI, then await
+     * the server's natural Survival response. No game-mode/flight or selected-slot commands. */
+    fun completeProductionOnboarding(timeout: Duration = Duration.ofMinutes(3)) {
+        requireNotNull(dedicated) { "dedicated onboarding requires a real network server" }
+        assertRunning("production onboarding start")
+        requireNotNull(launcher).waitForLog(offlineClient.offlineMarker, Duration.ofSeconds(30), "bound offline fixture identity")
+        require(!Files.exists(offlineClient.onboardingRequest)) { "onboarding request already exists" }
+        Files.writeString(offlineClient.onboardingRequest, offlineClient.onboardingPayload,
+            java.nio.file.StandardOpenOption.CREATE_NEW, java.nio.file.StandardOpenOption.WRITE)
+        evidence.event("production_onboarding_requested", mapOf("run_id" to config.runId,
+            "nonce" to offlineClient.nonce.toString(), "player_uuid" to offlineClient.playerId.toString(),
+            "action" to "ClientOnboardingActions.submitSpawnOnly", "request" to offlineClient.onboardingRequest.toString(),
+            "game_mode_overridden" to false, "flight_overridden" to false))
+        requireNotNull(launcher).waitForLog(offlineClient.readyMarker, timeout, "real dedicated production onboarding completed")
+        assertRunning("production onboarding complete")
+        evidence.event("production_onboarding_completed", mapOf("nonce" to offlineClient.nonce.toString(),
+            "player_uuid" to offlineClient.playerId.toString(), "native_response" to "survival/chunk-loaded/submitted"))
     }
 
     fun processAlive(): Boolean = launcher?.alive == true

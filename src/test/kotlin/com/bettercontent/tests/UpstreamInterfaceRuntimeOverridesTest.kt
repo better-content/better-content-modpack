@@ -56,9 +56,9 @@ class UpstreamInterfaceRuntimeOverridesTest {
     }
     private data class SyntheticClass(val data: ByteArray, val offsets: List<Int>, val names: List<String>, val descriptors: List<String>)
     private fun syntheticClass(): SyntheticClass {
-        val actual = mapper.readTree(Files.readAllBytes(TestConfig.load().root.resolve(policyPath)))
-        val edits = actual["receipt"]["artifacts"][1]["class_access_patches"][0]["edits"]
-        val names = edits.map { it["method"].asText() }; val descriptors = edits.map { it["descriptor"].asText() }
+        val names = listOf("destWorldPos", "destSourcePos", "destReloadSourcePos")
+        val user = "(Lnet/minecraft/world/level/gameevent/vibrations/VibrationSystem\$User;Lcom/llamalad7/mixinextras/injector/wrapoperation/Operation;Lnet/minecraft/server/level/ServerLevel;)Lnet/minecraft/world/level/gameevent/PositionSource;"
+        val descriptors = listOf("(Lnet/minecraft/world/level/gameevent/vibrations/VibrationInfo;Lcom/llamalad7/mixinextras/injector/wrapoperation/Operation;Lnet/minecraft/server/level/ServerLevel;)Lnet/minecraft/world/phys/Vec3;", user, user)
         val output = ByteArrayOutputStream(); val offsets = mutableListOf<Int>()
         DataOutputStream(output).use { out ->
             out.writeInt(0xcafebabe.toInt()); out.writeShort(0); out.writeShort(61); out.writeShort(14)
@@ -84,12 +84,23 @@ class UpstreamInterfaceRuntimeOverridesTest {
 
     private inner class Fixture {
         val base = retained(); val root = Files.createDirectory(base.resolve("root")); val source = Files.createDirectory(base.resolve("source"))
-        val cache = Files.createDirectory(base.resolve("original-cache")); val provider = write(base.resolve("qualified.jar"), zip(mapOf("fixture.class" to byteArrayOf(1))))
+        val cache = Files.createDirectory(base.resolve("original-cache")); val provider = base.resolve("qualified.jar")
         val evidence = base.resolve("evidence"); val client = base.resolve("client.zip"); val server = base.resolve("server.zip")
         val policy = mapper.readTree(Files.readAllBytes(TestConfig.load().root.resolve(policyPath))) as ObjectNode
         val supports = linkedMapOf<String, String>(); val outputs = linkedMapOf<String, ByteArray>(); val originalEntries = mutableListOf<Map<String, ByteArray>>()
         val synthetic = syntheticClass()
         init {
+            val transfer = policy["artifacts"][1]["interface_transfer"] as ObjectNode
+            val bindings = transfer["provider_entries"] as ObjectNode
+            val providerEntries = linkedMapOf<String, ByteArray>()
+            for (path in bindings.fieldNames().asSequence().toList()) {
+                val body = if (path.endsWith(".json")) """{"required":true,"minVersion":"0.8","package":"com.bettercontent.bettercompatfixes.mixin.vibration","compatibilityLevel":"JAVA_17","refmap":"better_compat_fixes.refmap.json","plugin":"com.bettercontent.bettercompatfixes.compat.vibration.VibrationInterfaceMixinPlugin","mixins":["VibrationTickerMixin"],"injectors":{"defaultRequire":1}}""".toByteArray()
+                    else "synthetic compiled provider $path".toByteArray()
+                providerEntries[path] = body; bindings.put(path, hash(body))
+            }
+            providerEntries["META-INF/MANIFEST.MF"] = "Manifest-Version: 1.0\r\nMixinConfigs: better_compat_fixes.vibration_interface.mixins.json\r\n\r\n".toByteArray()
+            write(provider, zip(providerEntries))
+            (policy["receipt"]["artifacts"][1]["interface_transfer"] as ObjectNode).set<JsonNode>("provider_entries", bindings.deepCopy())
             for (key in listOf("spec", "builder", "legacy_builder")) {
                 val bytes = "synthetic $key source".toByteArray()
                 write(source.resolve(policy[key]["path"].asText()), bytes)
@@ -101,6 +112,7 @@ class UpstreamInterfaceRuntimeOverridesTest {
                 val moved = a["resource"]["move_to_client"][0].asText()
                 val oldJson = mapper.createObjectNode().put("required", index == 1).put("plugin", "fixture.Plugin")
                 oldJson.putArray("mixins").add("OtherCommon").add(moved); oldJson.putArray("client").add("OtherClient")
+                if (index == 1) (oldJson["mixins"] as ArrayNode).add("feature.sculk.MixinVibrationSystemTicker")
                 val newJson = oldJson.deepCopy(); newJson.putArray("mixins").add("OtherCommon"); newJson.putArray("client").add("OtherClient").add(moved)
                 val oldResource = mapper.writeValueAsBytes(oldJson); val newResource = mapper.writeValueAsBytes(newJson)
                 val resourcePath = a["resource"]["path"].asText()
@@ -109,7 +121,6 @@ class UpstreamInterfaceRuntimeOverridesTest {
                 else before[ticker] = synthetic.data
                 originalEntries.add(before)
                 val after = LinkedHashMap(before); after[resourcePath] = newResource
-                if (index == 1) after[ticker] = synthetic.data.copyOf().also { fixed -> synthetic.offsets.forEach { fixed[it] = 0; fixed[it + 1] = 9 } }
                 val original = zip(before); val corrected = zip(after)
                 write(cache.resolve(a["input"].asText()), original)
                 a.put("input_sha1", hash(original, "SHA-1")).put("input_sha256", hash(original)).put("output_sha256", hash(corrected))
@@ -120,10 +131,8 @@ class UpstreamInterfaceRuntimeOverridesTest {
                     .put("class_count", inventory(original).size).put("before_class_inventory_sha256", inventoryHash(original))
                     .put("after_class_inventory_sha256", inventoryHash(corrected))
                 if (index == 1) {
-                    val patch = a["class_patch"] as ObjectNode; val access = r["class_access_patches"][0] as ObjectNode
-                    patch.put("before_sha256", hash(synthetic.data)).put("after_sha256", hash(after.getValue(ticker)))
-                    access.put("before_sha256", hash(synthetic.data)).put("after_sha256", hash(after.getValue(ticker)))
-                    (access["edits"] as ArrayNode).forEachIndexed { i, edit -> (edit as ObjectNode).put("offset", synthetic.offsets[i]) }
+                    (a["interface_transfer"] as ObjectNode).put("original_class_sha256", hash(synthetic.data))
+                    (r["interface_transfer"] as ObjectNode).put("original_class_sha256", hash(synthetic.data))
                 }
                 outputs[a["output"].asText()] = corrected
                 write(root.resolve("mods/" + a["manifest"].asText()), """
@@ -154,7 +163,8 @@ class UpstreamInterfaceRuntimeOverridesTest {
         fun prepare() = usingCache { UpstreamInterfaceRuntimeOverrides.prepare(root, source, evidence, provider, supports) }
         fun entries(clientSide: Boolean): LinkedHashMap<String, ByteArray> {
             val prefix = if (clientSide) "custom/" else "server/"
-            val result = linkedMapOf(prefix + policyPath to Files.readAllBytes(root.resolve(policyPath)))
+            val result = linkedMapOf(prefix + policyPath to Files.readAllBytes(root.resolve(policyPath)),
+                prefix + "mods/" + policy["provider_artifact"].asText() to Files.readAllBytes(provider))
             outputs.forEach { (name, body) -> result[prefix + "mods/" + name] = body }
             if (clientSide) result["manifest.json"] = """{"overrides":"custom","files":[]}""".toByteArray()
             return result
@@ -171,10 +181,6 @@ class UpstreamInterfaceRuntimeOverridesTest {
             val output = a["output"].asText(); val entries = unzip(outputs.getValue(output)); mutation(entries)
             val body = zip(entries); outputs[output] = body; a.put("output_sha256", hash(body))
             row.put("output_sha256", hash(body)).put("output_sha1", hash(body, "SHA-1")).put("after_class_inventory_sha256", inventoryHash(body))
-            if (index == 1) {
-                (a["class_patch"] as ObjectNode).put("after_sha256", hash(entries.getValue(ticker)))
-                (row["class_access_patches"][0] as ObjectNode).put("after_sha256", hash(entries.getValue(ticker)))
-            }
             val resource = a["resource"] as ObjectNode
             resource.put("after_sha256", hash(entries.getValue(resource["path"].asText())))
             (row["resources"][0] as ObjectNode).put("after_sha256", resource["after_sha256"].asText())
@@ -197,11 +203,9 @@ class UpstreamInterfaceRuntimeOverridesTest {
         assertNotEquals(next.directory, prepared.directory); assertTrue(Files.exists(prepared.directory.resolve("receipt.json")))
     }
 
-    @Test fun accessPatchIsExactlyThreeU2WordsAndPreservesStaticAndEveryOtherByte() {
+    @Test fun originalInterfaceMustRetainExactPrivateStaticFlagsAndEveryByte() {
         val input = syntheticClass(); val result = UpstreamInterfaceRuntimeOverrides.expectedInterfaceClass(input.data)
-        val expected = input.data.copyOf().also { b -> input.offsets.forEach { b[it] = 0; b[it + 1] = 9 } }
-        assertArrayEquals(expected, result)
-        assertEquals(input.offsets.map { it + 1 }, input.data.indices.filter { input.data[it] != result[it] })
+        assertArrayEquals(input.data, result)
         for (index in input.offsets.indices) for (access in listOf(1, 2, 8, 9, 0x100a)) {
             val bad = input.data.copyOf(); val offset = input.offsets[index]
             bad[offset] = (access ushr 8).toByte(); bad[offset + 1] = access.toByte()
@@ -219,8 +223,21 @@ class UpstreamInterfaceRuntimeOverridesTest {
         }
     }
 
+    @Test fun syntheticFlagsAreNotASolutionToUnsupportedInterfaceInjectors() {
+        // Native dd3a2d57 failed the third PREINJECT phase; two predicates are insufficient.
+        fun prepares(flags: Int) = flags and (0x0001 or 0x1000) != 0
+        fun applies(flags: Int) = flags and 0x0008 == 0 || flags and 0x0002 != 0
+        assertFalse(prepares(0x000a))
+        assertTrue(prepares(0x0009)); assertFalse(applies(0x0009))
+        assertTrue(prepares(0x100a)); assertTrue(applies(0x100a))
+        val interfaceInjectorsSupportedIn085 = false
+        assertFalse(prepares(0x100a) && applies(0x100a) && interfaceInjectorsSupportedIn085)
+    }
+
     @Test fun codeAnnotationDescriptorStaticBitAndUnknownClassChangesAreNotExempted() {
         val mutations: List<(Fixture) -> Unit> = listOf(
+            { f -> f.mutateCorrected(1) { e -> e[ticker] = e.getValue(ticker).copyOf().also { it[f.synthetic.offsets[0]] = 0; it[f.synthetic.offsets[0] + 1] = 9 } } },
+            { f -> f.mutateCorrected(1) { e -> e[ticker] = e.getValue(ticker).copyOf().also { it[f.synthetic.offsets[0]] = 0x10 } } },
             { f -> f.mutateCorrected(1) { e -> e[ticker] = e.getValue(ticker).copyOf().also { it[f.synthetic.offsets[0] + 22] = 0 } } },
             { f -> f.mutateCorrected(1) { e -> e[ticker] = e.getValue(ticker).copyOf().also { it[f.synthetic.offsets[0] + 37] = 12 } } },
             { f -> f.mutateCorrected(1) { e -> e[ticker] = e.getValue(ticker).copyOf().also { it[f.synthetic.offsets[0] + 5] = 8 } } },
@@ -246,7 +263,9 @@ class UpstreamInterfaceRuntimeOverridesTest {
             { f -> write(f.source.resolve(f.policy["spec"]["path"].asText()), byteArrayOf(1)) },
             { f -> write(f.cache.resolve(f.policy["artifacts"][0]["input"].asText()), byteArrayOf(1)) },
             { f -> (f.policy["receipt"] as ObjectNode).put("unexpected", true); f.save() },
-            { f -> ((f.policy["receipt"]["artifacts"][1]["class_access_patches"][0]["edits"][0]) as ObjectNode).put("offset", 1); f.save() },
+            { f -> (f.policy["receipt"]["artifacts"][1]["class_access_patches"] as ArrayNode).addObject().put("after", 4106); f.save() },
+            { f -> val e = unzip(Files.readAllBytes(f.provider)); e["com/bettercontent/bettercompatfixes/compat/vibration/VibrationWorldCoordinates.class"] = byteArrayOf(1); write(f.provider, zip(e)) },
+            { f -> val e = unzip(Files.readAllBytes(f.provider)); e["META-INF/MANIFEST.MF"] = "MixinConfigs: other.json\r\n".toByteArray(); write(f.provider, zip(e)) },
             { f -> val path = f.source.resolve(support + "receipt.json"); val r = mapper.readTree(Files.readAllBytes(path)) as ObjectNode
                 r.put("python", "wrong"); val body = mapper.writeValueAsBytes(r); write(path, body); f.supports[support + "receipt.json"] = hash(body) },
             { f -> val a = f.policy["artifacts"][0]; val path = f.root.resolve("mods/" + a["manifest"].asText())
@@ -260,8 +279,48 @@ class UpstreamInterfaceRuntimeOverridesTest {
         }
     }
 
+    @Test fun transferScopeAndProviderConfigRemainStrictEvenWithReboundProviderEntryHashes() {
+        for (kind in 0..3) {
+            val f = Fixture(); val transfer = f.policy["artifacts"][1]["interface_transfer"] as ObjectNode
+            when (kind) {
+                0 -> transfer.put("mixin", "other.Mixin")
+                1 -> (transfer["provider_entries"] as ObjectNode).remove("com/bettercontent/bettercompatfixes/compat/vibration/VibrationWorldCoordinates.class")
+                2 -> transfer.put("provider_artifact", "other.jar")
+                3 -> {
+                    val entries = unzip(Files.readAllBytes(f.provider)); val path = "better_compat_fixes.vibration_interface.mixins.json"
+                    val cfg = mapper.readTree(entries.getValue(path)) as ObjectNode; cfg.put("required", false)
+                    entries[path] = mapper.writeValueAsBytes(cfg); write(f.provider, zip(entries))
+                    (transfer["provider_entries"] as ObjectNode).put(path, hash(entries.getValue(path)))
+                }
+            }
+            (f.policy["receipt"]["artifacts"][1] as ObjectNode).set<JsonNode>("interface_transfer", transfer.deepCopy()); f.save()
+            assertThrows(Exception::class.java) { f.prepare() }
+            f.candidates(); assertThrows(Exception::class.java) { f.validate() }
+        }
+    }
+
+    @Test fun reboundOriginalAndCorrectedHashesNeverAdmitPublicOrSyntheticOriginalHandlers() {
+        for (flags in listOf(9, 0x100a, 1)) {
+            val f = Fixture(); val a = f.policy["artifacts"][1] as ObjectNode; val row = f.policy["receipt"]["artifacts"][1] as ObjectNode
+            val changed = f.synthetic.data.copyOf()
+            for (offset in f.synthetic.offsets) { changed[offset] = (flags ushr 8).toByte(); changed[offset + 1] = flags.toByte() }
+            val before = LinkedHashMap(f.originalEntries[1]); before[ticker] = changed
+            val original = zip(before); val oldSha1 = a["input_sha1"].asText()
+            write(f.cache.resolve(a["input"].asText()), original)
+            a.put("input_sha1", hash(original, "SHA-1")).put("input_sha256", hash(original))
+            row.put("input_sha256", hash(original)).put("before_class_inventory_sha256", inventoryHash(original))
+            val pin = f.root.resolve("mods/" + a["manifest"].asText())
+            Files.writeString(pin, Files.readString(pin).replace(oldSha1, a["input_sha1"].asText()))
+            (a["interface_transfer"] as ObjectNode).put("original_class_sha256", hash(changed))
+            (row["interface_transfer"] as ObjectNode).put("original_class_sha256", hash(changed))
+            f.mutateCorrected(1) { it[ticker] = changed }
+            assertThrows(Exception::class.java) { f.prepare() }
+            f.candidates(); assertThrows(Exception::class.java) { f.validate() }
+        }
+    }
+
     @Test fun bothCandidateSidesRejectMissingDuplicateOriginalTupleAndWrongPolicy() {
-        for (clientSide in listOf(true, false)) for (kind in 0..5) {
+        for (clientSide in listOf(true, false)) for (kind in 0..8) {
             val f = Fixture(); val prefix = if (clientSide) "custom/" else "server/"; val a = f.policy["artifacts"][0]
             val mutate: (LinkedHashMap<String, ByteArray>) -> Unit = { entries -> when (kind) {
                 0 -> entries.remove(prefix + "mods/" + a["output"].asText())
@@ -270,6 +329,9 @@ class UpstreamInterfaceRuntimeOverridesTest {
                 3 -> entries[prefix + "mods/" + a["manifest"].asText()] = byteArrayOf(1)
                 4 -> entries[prefix + policyPath] = "{}".toByteArray()
                 5 -> entries[prefix + "mods/" + a["output"].asText()] = byteArrayOf(1)
+                6 -> entries.remove(prefix + "mods/" + f.policy["provider_artifact"].asText())
+                7 -> entries["duplicate/" + f.policy["provider_artifact"].asText()] = Files.readAllBytes(f.provider)
+                8 -> entries[prefix + "mods/" + f.policy["provider_artifact"].asText()] = zip(mapOf("wrong.class" to byteArrayOf(1)))
             }; Unit }
             if (clientSide) f.candidates(clientMutation = mutate) else f.candidates(serverMutation = mutate)
             assertThrows(Exception::class.java, { f.validate() }, "candidate $clientSide mutation $kind")

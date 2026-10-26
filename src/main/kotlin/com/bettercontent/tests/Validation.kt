@@ -94,6 +94,7 @@ object RuntimeSnapshotValidator {
 object LogPolicy {
     data class Finding(val path: Path, val line: Int, val text: String)
     data class Record(val severity: String, val thread: String?, val logger: String?, val message: String)
+    data class SupportPolicy(val path: Path, val line: Int, val policy: String, val records: List<String>)
     data class StartupTiming(
         val path: Path, val line: Int, val text: String,
         val mod: String, val thread: String, val seconds: Double,
@@ -104,16 +105,21 @@ object LogPolicy {
     private val nativeRecord = Regex("^(?:\\[(?:[0-9]{2}:[0-9]{2}:[0-9]{2}|[0-9]{2}[A-Z][a-z]{2}[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3})] )?\\[(.+?)/(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)] \\[([^]]+)]: (.*)$")
     private val simpleRecord = Regex("^\\[(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)]\\s*(.*)$")
     private val errorEnvelope = Regex("(?:/|\\[)(?:ERROR|FATAL)]")
+    // Corruption status words may be underscore-delimited structured values,
+    // but are not substrings of valid class names such as CorruptedShieldItem.
+    private const val corruptionWord = "(?<![A-Za-z0-9])corrupt(?:ed|ion)?(?![A-Za-z0-9])"
+    // Forge redirects printStackTrace through STDOUT/STDERR with a source-site prefix.
+    private val nativePrintOrigin = Regex("^\\[[\\w.$]+:[\\w$<>]+:[0-9]+]:\\s*")
     private val failedOperation = Regex(
         "OutOfMemoryError|fatal error has been detected|crash report|ReportedException:|AssertionError|" +
             "ThreadingDetector:|Exception in server tick loop|Failed to complete lifecycle event|" +
             "Errors in currently selected datapacks|Error loading KubeJS script|KubeJS errors found \\[[1-9][0-9]*]|" +
             "(?:failed to|error (?:while|when)) (?:load|register|parse|execute|save|read|write|start|join)|" +
-            "Registry Object not present:|(?:registry|registries|script|mixin)[^\\n]*(?:failed|failure|corrupt)|" +
-            "(?:corrupt(?:ed|ion)?)[^\\n]*(?:chunk|world|save|data)|" +
-            "(?:chunk|world|save|data)[^\\n]*corrupt(?:ed|ion)?|" +
+            "Registry Object not present:|(?:registry|registries|script|mixin)[^\\n]*(?:failed|failure|$corruptionWord)|" +
+            "$corruptionWord[^\\n]*(?:chunk|world|save|data)|" +
+            "(?:chunk|world|save|data)[^\\n]*$corruptionWord|" +
             "^\\s*(?:Caused by: |Suppressed: |Exception in thread \"[^\"]+\" )?" +
-            "(?:[a-zA-Z_$][\\w$]*\\.)*(?:\\w*Exception|\\w*Error):",
+            "(?:[a-zA-Z_$][\\w$]*\\.)*(?:\\w*Exception|\\w*Error)(?::|$)",
         RegexOption.IGNORE_CASE,
     )
 
@@ -219,6 +225,39 @@ object LogPolicy {
                 "wom:valkyrie/valkyrie_idle"
     }
 
+    // Embeddium 0.3.31 MixinTaintDetector.preApply emits error(String), not
+    // error(String, Throwable), for this support/warranty status. Its default WARN
+    // enforcement continues; CRASH enforcement throws before the following Mixin
+    // DEBUG record. The pinned Oculus target must immediately confirm continuation.
+    // No arbitrary detector message, tainting mod, class, stack or severity qualifies.
+    private val embeddiumSupportRecords = listOf(
+        Record("ERROR", "Render thread", "Embeddium-MixinTaintDetector",
+            "Mod mixin into Embeddium internals detected. This instance is now tainted. " +
+                "The Embeddium team does not provide any guarantee of support for issues encountered while such mods are installed."),
+        Record("WARN", "Render thread", "Embeddium-MixinTaintDetector",
+            "Mod(s) [oculus] are modifying Embeddium class me.jellysquid.mods.sodium.client.gui.SodiumGameOptions, which may cause instability."),
+        Record("DEBUG", "Render thread", "mixin",
+            "Mixing options.MixinSodiumGameOptions from mixins.oculus.compat.sodium.json into me.jellysquid.mods.sodium.client.gui.SodiumGameOptions"),
+    )
+
+    private fun supportPolicies(path: Path, lines: List<String>): List<SupportPolicy> = buildList {
+        for (index in 0 until (lines.size - 2)) {
+            val triad = lines.subList(index, index + 3)
+            if (triad.map(::parseRecord) != embeddiumSupportRecords || !triad.all(::validProbeTimestamp)) continue
+            // Require exact native envelopes, one timestamp, and no unparsed tail
+            // (including a bare stack frame) attached to any of these records.
+            val stamp = triad.first().substringBefore("] ") + "] "
+            if (!triad.all { it.startsWith(stamp) } ||
+                triad.zip(embeddiumSupportRecords).any { (text, record) ->
+                    text != "$stamp[${record.thread}/${record.severity}] [${record.logger}]: ${record.message}"
+                } || (index + 3 < lines.size && parseRecord(lines[index + 3]) == null)) continue
+            add(SupportPolicy(path, index + 1, "embeddium_oculus_support_warranty", triad.toList()))
+        }
+    }
+
+    fun supportPolicies(paths: Collection<Path>): List<SupportPolicy> = paths.distinct()
+        .filter { Files.isRegularFile(it) }.flatMap { supportPolicies(it, Files.readAllLines(it)) }
+
     private fun operationFailed(text: String): Boolean {
         val record = parseRecord(text)
         val failedLootDecode = record?.logger?.removeSuffix("/") == "net.minecraftforge.common.loot.LootModifierManager" &&
@@ -232,14 +271,18 @@ object LogPolicy {
         val unsupportedRootySoil = record?.logger?.removeSuffix("/") ==
             "com.ferreusveritas.dynamictrees.tree.species.Species" &&
             record.message.startsWith("Rooty Dirt block NOT FOUND for soil ")
+        val message = if (record?.logger?.removeSuffix("/") in setOf("STDERR", "STDOUT", "minecraft/STDERR", "minecraft/STDOUT"))
+            nativePrintOrigin.replaceFirst(requireNotNull(record).message, "") else record?.message ?: text
         return record?.severity in setOf("ERROR", "FATAL") || failedLootDecode || failedBlockEntityLoad || unsupportedRootySoil ||
             (record == null && errorEnvelope.containsMatchIn(text)) ||
-            failedOperation.containsMatchIn(record?.message ?: text)
+            failedOperation.containsMatchIn(message)
     }
 
     fun findings(paths: Collection<Path>, oc2r: Oc2rCompatibilityEvidence? = null): List<Finding> = buildList {
         oc2r?.assertStable()
         paths.distinct().filter { Files.isRegularFile(it) }.forEach { path ->
+            val lines = Files.readAllLines(path)
+            val supportPolicyLines = supportPolicies(path, lines).map { it.line }.toSet()
             val group = mutableListOf<Pair<Int, String>>()
             val classifiedMessages = mutableSetOf<String>()
             fun flush() {
@@ -248,12 +291,12 @@ object LogPolicy {
                     val record = parseRecord(text)
                     val classified = oc2r?.classifies(path, record) == true &&
                         classifiedMessages.add(requireNotNull(record).message)
-                    if (number !in diagnostics && !ignoredWomAnimationSchemaProbe(text) &&
+                    if (number !in diagnostics && number !in supportPolicyLines && !ignoredWomAnimationSchemaProbe(text) &&
                         !classified && operationFailed(text))
                         add(Finding(path, number, text))
                 }
             }
-            Files.readAllLines(path).forEachIndexed { index, text ->
+            lines.forEachIndexed { index, text ->
                 if (parseRecord(text) != null) {
                     flush()
                     group.clear()

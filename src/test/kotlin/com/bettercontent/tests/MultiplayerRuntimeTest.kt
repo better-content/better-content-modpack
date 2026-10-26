@@ -126,6 +126,7 @@ class MultiplayerRuntimeTest {
             require(joined) { "full held-map scenario requires successful fresh lead-client join" }
             val lead = clients.first()
             requirePlayersOnline("Moonlight map roundtrip start", listOf(lead))
+            lead.completeProductionOnboarding()
             MoonlightClientObservation.observe(evidence.run, server, lead)
             requirePlayersOnline("Moonlight map roundtrip end", listOf(lead))
         }

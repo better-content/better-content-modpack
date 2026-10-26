@@ -290,7 +290,7 @@
     "mods/the-bumblezone.pw.toml": "d26035fd302a32b7edff0b9dd22c78650e82f4f4f2682ca2992c4f6ca8f7744c",
     "mods/the-deep-void.pw.toml": "e1167f93270b84ac441a87b8eefa87043ec2e050c5eb64104eb89a2ffa76efcc",
     "mods/the-flesh-that-hates.pw.toml": "4ce2c62c813e65de9b648d0ae8575067b09c69045d6154afcd6139763e1860cb",
-    "mods/the-one-probe.pw.toml": "4f5cc5b736b3133d4f24517e13033b06691801d352147cfad9b507944e4c88af",
+    "mods/the-one-probe.pw.toml": "97063e6b0b10ed95e42c1d4954ab577f8d6e94a79c0a8a93206b35475dce1460",
     "mods/the-twilight-forest.pw.toml": "d1f859de9867b7433305aef1631aa22a436a4c3924474a21c0a22ab5f2093c04",
     "mods/thirst-was-taken.pw.toml": "435e86380f442b28ab298cb300fa0f51d1772e854252c31726b17ccb1ec5041e",
     "mods/timeless-and-classics-zero.pw.toml": "733b8967d6f263e9cc7ca2f001067be6ed8e21c214d73afb4e7fb418fa3e4364",
@@ -11935,7 +11935,7 @@
   "unused_definition_review": {
     "schema": "bc.structure_loot_unused.v2",
     "scan_identity": "sorted-class-and-data-entry-sha256",
-    "scan_input_sha256": "901b6bd13fc72129be5d2651295a8fdb3caf3512ca185c712727f174650fc372",
+    "scan_input_sha256": "f78de6922d98858db5d7111199b8c59c131c835da15627299aee3da14a995be9",
     "limits": "Automatic structure-container consumers only, not arbitrary administrator /loot commands. Closed pinned source contexts only; literal search cannot prove arbitrary dynamic code impossible. Positive native selected consumers invalidate unused classification. Registry existence or absence is not a consumer verdict.",
     "definitions": [
       {

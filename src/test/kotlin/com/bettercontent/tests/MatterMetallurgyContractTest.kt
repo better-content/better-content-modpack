@@ -108,10 +108,11 @@ class MatterMetallurgyContractTest {
             )))
         }
 
-        val processingDoc = read("docs/realistic_ore_processing.md")
-        assertTrue(processingDoc.contains("no diamond ore generates"))
-        assertTrue(processingDoc.contains("## Four salient routes"))
-        assertFalse(processingDoc.contains("## Grinding media"))
+        val disabled = read("../mod_source/better-ore-geology/src/main/resources/data/better_ore_geology/disabled_placed_features/vanilla.json")
+        listOf("ore_diamond", "ore_diamond_large", "ore_diamond_buried").forEach {
+            assertTrue(disabled.contains("\"minecraft:$it\""), "Diamond worldgen must remain disabled: $it")
+        }
+        assertTrue(acidChemistry.contains("event.remove({ id: 'pneumaticcraft:pressure_chamber/coal_to_diamond' })"))
     }
 
     private fun read(relative: String): String = Files.readString(root.resolve(relative))

@@ -71,7 +71,7 @@ class EarlyThreadsContractTest {
         val doc = Files.readString(root.resolve("docs/aspirational-features.md"))
         assertTrue(doc.startsWith("# Aspirational features"))
         for (name in listOf("Water bottle", "Grappling hook", "Climbing")) assertTrue(doc.contains("**$name:**"))
-        assertTrue(doc.contains("No triggers are selected here"))
+        assertTrue(doc.contains("Exact triggers, copy and scenes remain unchosen"))
         assertFalse(Files.exists(root.resolve("docs/deferred-features.md")))
     }
 }

@@ -51,8 +51,7 @@ class NativeStartupPolicyContractTest {
             "item_cost", "registerItemCost", "getDeclaredField", "Java.loadClass", "serialize", "parallel",
             "allowAsyncStreams", "console.warn", "console.error",
         ).forEach { assertFalse(script.contains(it), "forbidden prewarm mutation/workaround: $it") }
-        val doc = read("docs/native-material-cost-prewarm.md")
-        assertTrue(doc.contains("hypothesis"))
-        assertTrue(doc.contains("not runtime-proven"))
+        assertEquals(4, Regex("event\\.forEachRecipe\\(").findAll(script).count(),
+            "Prewarm must remain limited to the four supported native decoding passes")
     }
 }

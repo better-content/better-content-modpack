@@ -20,7 +20,7 @@ resolve_artifacts() {
   python3 - "$manifest_root" "$1" "$2" "$cache_root" <<'PY'
 import fcntl, fnmatch, hashlib, os, pathlib, shutil, sys, tempfile, tomllib, urllib.request
 root, target, side, cache_root = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2]), sys.argv[3], pathlib.Path(sys.argv[4]).expanduser()
-client_only = ('ambientsounds*','bettergrassify*','configured*','controlling*','DistantHorizons*','embeddium*','entityculling*','hold-my-items*','mouse-tweaks*','no-more-popups*','no-recipe-book*','oculus*','presence-footsteps*','shoulder-surfing*','sound-physics*','the-one-probe*','true-darkness*','darkness*')
+client_only = ('ambientsounds*','bettergrassify*','configured*','controlling*','DistantHorizons*','embeddium*','entityculling*','hold-my-items*','mouse-tweaks*','no-more-popups*','no-recipe-book*','oculus*','presence-footsteps*','shoulder-surfing*','sound-physics*','true-darkness*','darkness*')
 stats = {'hits': 0, 'downloads': 0, 'uncached': 0}
 
 def new_hasher(algorithm, manifest):
@@ -319,7 +319,8 @@ stage_side() {
 install_server() {
   local server="$1" accept_eula="$2" profile="$3" port="${4:-25565}" properties
   local installer="$ROOT/forge-$FORGE_COORD-installer.jar"
-  [ -f "$installer" ] || fail "missing Forge installer: $installer"
+  python3 -B "$ROOT/scripts/prepare_forge_installer.py" || fail "could not prepare pinned Forge installer: $installer"
+  [ -f "$installer" ] || fail "missing Forge installer after preparation: $installer"
   case "$profile" in
     testing) properties="$ROOT/server-config/testing.properties" ;;
     production) properties="$ROOT/server-config/production.properties" ;;

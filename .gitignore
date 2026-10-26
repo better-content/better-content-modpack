@@ -23,6 +23,7 @@ generated/evidence/
 # Retained observer/compile proof outputs are evidence, never authored source inputs.
 /generated/timing/
 /generated/focused-provider-runtime-author-check/
+/generated/component-verification/
 /generated/runtime-dumps/
 /generated/test-evidence/
 /generated/gui-screenshots/

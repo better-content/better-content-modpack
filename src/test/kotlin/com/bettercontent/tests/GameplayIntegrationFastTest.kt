@@ -50,7 +50,12 @@ class GameplayIntegrationFastTest {
         val worldMixins = listOf("ExplosionRadiusAccess", "BuriedTrackerObservationMixin", "BuriedSpawnerObservationMixin", "NativeEngineObservationMixin", "NativeCraterObservationMixin")
         require(config.path("mixins").map { it.asText() } ==
             listOf("diagnostics.NonfiniteRotationMixin", "diagnostics.UntamedSpeciesObservationMixin") + worldMixins.map { "gameplay.$it" })
-        val registered = (config.path("mixins").map { it.asText() } + config.path("client").map { it.asText() }).map { "$reserved.$it" }
+        val offlineConfig = jacksonObjectMapper().readTree(diagnostics.resolve("src/testSupport/resources/better_runtime_offline_fixture.mixins.json").toFile())
+        require(offlineConfig.path("package").asText() == "$reserved.fixture")
+        require(offlineConfig.path("client").map { it.asText() } == listOf("OfflineUserApiMixin") && !offlineConfig.has("mixins"))
+        require(offlineConfig.path("plugin").asText() == "com.bettercontent.runtimetestsupport.fixture.OfflineClientMixinPlugin")
+        val registered = (config.path("mixins").map { it.asText() } + config.path("client").map { it.asText() }).map { "$reserved.$it" } +
+            "$reserved.fixture.OfflineUserApiMixin"
         require(registered.size == registered.toSet().size)
         require(!config.path("plugin").asText().startsWith("$reserved."))
         val actual = mutableSetOf<String>()
