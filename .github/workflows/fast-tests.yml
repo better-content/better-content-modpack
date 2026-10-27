@@ -2,6 +2,8 @@ name: Local implementation checks
 
 on:
   push:
+    branches-ignore:
+      - experimental/world-condenser
   pull_request:
   workflow_dispatch:
 
