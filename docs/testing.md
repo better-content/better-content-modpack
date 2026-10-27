@@ -1,212 +1,85 @@
-# Testing and fresh distributions
+# Smoke, Soak and fresh distributions
 
-The public test interface has three cumulative tiers. Dev needs no packaged candidate and can
-run while other developers share the workspace:
+There are exactly two pack-level runtime tiers. They share one lifecycle and consume existing packaged inputs; they do not build mods, deploy JARs, refresh Packwiz, package a release, or run repository-local verification.
 
-```sh
-./test.main.kts dev
-```
+| Tier | Acceptance |
+| --- | --- |
+| **Smoke** | Start one fresh dedicated server; connect one real full-pack client; verify current membership and a fresh message received by that client; disconnect; save and stop the server; validate the save, crash artifacts, process cleanup and unchanged ZIP hashes. |
+| **Soak** | The same lifecycle, keeping that one client connected and responsive for **N minutes after verified join**. Check connection/process continuity and fresh client receipt throughout. |
 
-Dev runs the fast Minecraft-free contracts and `git diff --check`; it does not refresh Packwiz
-hashes. Fresh-dist preparation refreshes them once after source and pack changes settle.
-Pack-level tiers run only when explicitly requested:
+No reconnect, second client, feature tour, dimension sweep, multiplayer campaign, integrated-server branch or restart campaign is part of either tier. A failed connection is a failure, not an invitation to reconnect until green. Preparation and loading time do not count toward Soak.
 
-```sh
-./test.main.kts dist
-./test.main.kts debug
-```
+## Run existing artifacts
 
-Direct full Debug requires clean active custom-mod repositories. It runs each of the 44 active
-mods' manifest-listed verification tasks and rebuilds every runtime JAR after `clean`, even when
-the bundled JAR records the same source revision. It stages the JARs in dependency order,
-deploys the validated set, refreshes Packwiz, packages once, then runs complete Dist and Debug
-on the new ZIP pair. Release evidence links the Dist and Debug run IDs and candidate hashes.
-
-After inspecting a failed run, use a targeted retry to check a fix without starting every Debug
-scenario. Each retry makes a fresh fixture and records separate `target-*` evidence; it cannot be
-mistaken for a full-tier pass. Supported targets are `server-ready` (Debug), `join` (Dist or Debug), `font:ratlantis`,
-`font:bumblezone`, `font:aether`, `font:nether`, `fonts`, `dimension:<id>` for a directly
-teleportable dimension, `dimensions`, `campaign-start` (three live encounters and platform repair),
-`campaign` (three live client encounters), `restart-compat` (saved Flesh spread
-restart and Untamed whale client spawn), `lineage-transition` (Debug lifecycle successor commit
-and archive), `cursed-pyramid` (pinned seed, saved structure record,
-and strict log audit in its surrounding chunks), and `world-save` (Debug). The `campaign-start` fixture
-uses the packaged spawn rules and removes a strip of campaign floor to verify that the
-campaign-phase repair restores pathable geometry. For example:
+Use Java 17 and the repository's Gradle wrapper. The command requires Kotlin, Python 3.11+, pipx, Xvfb and xauth. PortableMC is pinned to 4.4.1 and downloads launcher/runtime dependencies into a reusable user cache. Software OpenGL is used when running the headless client. No pointer movement or mouse clicks are synthesized.
 
 ```sh
-./test.main.kts debug --target font:aether --retry-of 20260926T070341Z-1044833
-./test.main.kts debug --target fonts
+./test.main.kts smoke
+./test.main.kts soak --minutes 30
+
+# Explicit paths avoid any ambiguity in candidate discovery:
+./test.main.kts smoke --client /path/client.zip --server /path/server.zip
+./test.main.kts soak --minutes 60 --client /path/client.zip --server /path/server.zip
 ```
 
-Targeted runs still perform fast checks and candidate validation, then start only the selected
-runtime fixture and its required setup. They check candidate hashes, process cleanup, and strict
-logs. Findings are recorded in the target evidence and fail that targeted run. If a source fix
-needs a new JAR, use `./release.main.kts --target font:aether --retry-of RUN_ID` to package once
-and test that target. Direct full Debug later rebuilds all active mods and runs complete Dist and
-Debug on its new, unchanged ZIP pair.
+Without explicit paths, `dist/` must contain exactly one matching `client/better-content.zip` and `server/better-content.zip` pair in the same release directory. Supply both explicit paths or neither. Soak requires an integer duration from 1 to 10080 minutes; Smoke has no duration option.
 
-Dist includes Dev, candidate contracts, a real full-pack client joining a fresh dedicated server,
-an online player heartbeat, strict logs, and candidate hashes. It does not run dimension travel.
-Direct full Debug uses unchanged candidate hashes from its newly packaged Dist run and adds
-dedicated-server startup/runtime snapshot, three
-fresh locations per directly teleportable dimension with strict three-sample TPS and Font-only
-direct-travel guards, one lineage transition and archive, three live client campaigns,
-server restart/client reconnect, four native Font round trips, and singleplayer startup/world
-boot/save/reopen.
+Old `dev`, `dist`, `debug`, targets, retry/handoff protocols and queue commands are removed, not supported aliases. `./gradlew test` remains an ordinary implementation-local check, not a third runtime tier and not a prerequisite of Smoke/Soak.
 
-Dist, Debug, and `release.main.kts` share one kernel-backed runner mutex. The
-supported entry points acquire it automatically and publish current ownership at
-`$HOME/.local/share/worklane/pack-tests/owner.json`; contention fails immediately with exit code
-75 and that ownership record. Dev and custom-mod repository-local checks do not use this mutex.
-Do not invoke the heavyweight Gradle tasks directly: they require the inherited lock token.
+## Exact inputs and disposable profile
 
-Only `workspace_coord` admits work to the persistent queue. It supplies an immutable-candidate
-handoff and registers it with:
+Each run hashes both ZIPs before starting and checks those hashes again after execution, including failure paths. The server is extracted into a new fixture, never into a player's installation. The client is assembled from its exported manifest, packaged overrides and the embedded `better-content-artifacts.json` lock. Downloads use the lock's exact URLs, filenames and digests. The runner does not consult current checkout configs/recipes/mod JARs, import another pack, or invoke `package.sh` as a fallback.
 
-```sh
-./pack-test-queue.main.kts request /absolute/path/to/handoff.json
-./pack-test-queue.main.kts status
-./pack-test-queue.main.kts run-next
-```
+The packager creates the client artifact lock while packaging. Older exports lacking it are not silently supplemented from live source: explicitly prepare a new distribution.
 
-Product lanes do not wait inside a runner process when the mutex is owned. They register their
-dependency with `workspace_coord`, become idle, and resume when the coordinator or `pack_tests`
-notifies the handoff callback. The `bc.pack_test_handoff.v1` document must include explicit user
-authorization, request ID and selector; producer and callback agent/pane identity; modpack HEAD
-and status; absolute client/server paths and SHA-256 hashes; repository revisions/statuses;
-producer validations; artifacts; ordered dependencies; requested scenarios; and prior evidence.
-Admission copies the document into the queue, rejects duplicate request IDs, and the harness
-revalidates the exact candidate paths and hashes before use.
-Queued full Debug runs against that pinned pair and does not rebuild sources or package another
-pair.
+Fixture-only settings are recorded in evidence: offline authentication on loopback, an ephemeral server port, reduced render/simulation distance, bounded JVM heaps, disabled scheduled backups and disabled background Distant Horizons rendering/generation for software OpenGL. The complete packaged mod set remains installed. This profile proves this local dedicated session, not authenticated public-server login or production graphics performance.
 
-The tiers run internal Gradle tasks `test`, `candidateTest`, `serverTest`, `multiplayerTest`, and
-`singleplayerTest`. Dist sequences fast checks, the candidate gate, and the multiplayer runtime
-group. Debug runs the same gates and all three runtime groups to collect diagnostic evidence.
-Each runtime group uses a fresh fixture.
+A heartbeat executes only for the named connected player and sends a fresh unpredictable marker. Acceptance requires that marker in the real client's current output, not merely the command echoed in the server console. After the connected interval, a server kick ends the network session; the client/display processes are closed before normal server `stop`, which performs Minecraft's complete save itself. A normal run must observe a fresh all-dimensions-saved acknowledgement and a zero server exit; forced teardown cannot substitute for successful shutdown. The runner does not redundantly force a full console flush while the tick watchdog is still active.
 
-Dev writes ordinary Gradle XML and HTML reports only. Dist and Debug use a run ID and write
-structured evidence beneath `generated/test-evidence/<run-id>/`: incremental JSON events, a
-`bc.modpack_test_run.v1` summary, and candidate hashes. Runtime groups add logs and timeout
-diagnostics; Debug also collects runtime data. The single-player group records the customized
-title screen without injecting input. Failed fixtures are retained. Automated tests must not synthesize mouse movement or mouse
-clicks. Threads reader development, the Quark chat emote picker, the World Condenser configuration
-screen, and the Create World menu are manual visual gates. Debug's non-pointer world probe tests
-fresh save boot and reopen, not the menu. Before rerunning, inspect the existing run and report its
-ID, hashes, failed or aborted cases, evidence path, retained fixture, and process cleanup state.
-Cleanup retains observed process descendants after their parent exits and checks termination after
-graceful and forced shutdown. Every fixture is closed even when an earlier close fails. The
-`process_cleanup` event reports `complete=false`, surviving PIDs, and an error when cleanup fails;
-the suite then fails and retains its fixture and original failure evidence. `complete=true` means
-all tracked processes have exited. Dev tests ordinary, forced, and orphaned-child
-shutdown without launching Minecraft.
+Startup, response and shutdown deadlines bound hangs. They are not TPS, FPS, memory or performance acceptance thresholds. WARN records and nonfatal ERROR messages are retained for diagnosis, not blanket-failed. Crashes, unexpected disconnects, lost responsiveness, incomplete saves, unsuccessful shutdown, surviving owned processes and candidate mutation are failures.
 
-A runtime snapshot is evidence for a target only when its snapshot ID appears in that run's server
-events and the run's `candidate_selected` hashes match the target under discussion. Completeness
-makes a snapshot usable evidence; recency alone does not make it current. Preserve unmatched
-snapshots as historical candidate evidence and do not use their volatile totals as claims about the
-tracked pack.
+## Evidence and process ownership
 
-The better-runtime-diagnostics completion schema is `bc.runtime_dump_completion.v3` and includes
-`dimensions.json` (`bc.dimensions.v1`). Debug multiplayer traversal discovers targets at run time
-from the loaded Creating Space rocket-accessible-dimension registry and enabled Dimension Drink Font
-configuration; target counts are evidence, not hard-coded assumptions. Every discovered target
-must be loaded. A single full-pack client travels as a spectator and requires both a server-side
-position check and a client-side dimension/chunk report within 90 seconds. Font-only destinations
-require a direct-travel denial guard. Debug
-visits three fresh, pairwise-distant locations per directly teleportable target and always requires three
-consecutive samples at at least 18 mean TPS. The other two clients start only for Debug's
-three-client Survival campaign check.
-For terrain dimensions, Debug counts block IDs in 3×3 already loaded chunks at each visit. A
-dimension passes when the combined samples contain at least 64 non-air blocks and 16 blocks from
-its broad expected family. Space and utility dimensions have no terrain threshold. Each of the
-Ratlantis, Bumblezone, Aether, and Nether Fonts is also activated through the same server-side
-block interaction used by right-click; the real client must arrive, pass a geometry probe, and
-return through the in-world return Font interaction. The histograms and assessments are retained
-with the run evidence. These checks show representative block content, not exact terrain shape or
-structure placement.
-When geometry fails, retain the fixture and compare its histogram with a separate fresh world
-using the same pinned mod JARs and default mod worldgen, without pack-authored datapacks or
-KubeJS content. The comparison is diagnostic; it does not waive the failing candidate result.
-Timeouts retain the command, server tail, process state, and fixture
-for diagnosis. Candidate hashes are checked again after the multiplayer scenario completes.
+Evidence is retained at `generated/test-evidence/<run-id>/<smoke|soak>/`:
 
-In Debug, the multiplayer fixture then keeps three real clients connected to that same full-pack dedicated
-server in Survival at linear Overworld checkpoints 10,000 blocks apart. The harness-only
-protection control makes each player invulnerable without changing game mode. A routed scout is
-started for each player with no injected route. A rejected terrain path triggers a retry at another
-nearby player position on the prepared platform; each rejected and accepted point is recorded.
-The test confirms that all three clients remain connected and all three encounters are active
-before continuing to restart and log audits.
-This is separate from the isolated Pillager Campaigns development harness and is evidence for the
-packaged modpack candidate.
+- terminal `run.json`, exact candidate paths/hashes and status;
+- ordered `events.jsonl`, heartbeat and diagnostic memory observations;
+- full server, client, materialization and display logs;
+- disposable extracted installations and saved world;
+- process/thread diagnostics on failure and cleanup outcome.
 
-Because the three clients share one headless software-rendered host, the fixture lowers client
-render distance/FPS and bounds Distant Horizons workers. Every candidate mod is still installed,
-loaded, and connected to the same full-pack server; these fixture-only limits prevent rendering
-work from starving the network heartbeats of already-connected clients.
-The dedicated fixture uses view distance 4 and simulation distance 6 while the three Survival
-campaign players are active. This keeps the local 48–72 block campaign approach inside the loaded
-terrain contract while limiting cold-chunk fan-out without changing the production candidate's
-server.properties.
+Run IDs cannot overwrite an existing tier result. Inspect the first useful error and retained fixture before retrying. Reruns get fresh identities/worlds; there is no automatic retry campaign. Neither success nor failure prunes old evidence, player worlds or launcher state. Manual cleanup of known disposable runs is a separate operation.
 
-Before Debug's campaign phase, the fixture lays down three bounded grass corridors at
-the 0/10,000/20,000 checkpoints and places the players above them. These pads exist only in the
-fresh extracted test world, making the routed local-approach proof deterministic while retaining
-the complete modpack, real server tick, and real campaign materialization path.
+Smoke, Soak and fresh releases share a fail-fast kernel-backed runner lock. Contention exits 75 with owner metadata. The lock is a safety primitive, not a coordinator/queue service. Do not bypass the supported facade to run heavyweight Gradle tasks.
 
-Debug's lifecycle smoke verifies one lineage transition, its committed archive, and final clean state.
-It intentionally avoids a second generation; longer persistence matrices require separate explicit
-authorization.
-
-## Evidence maintenance
-
-Inspect retention decisions without changing the workspace:
-
-```sh
-./maintenance.main.kts audit
-```
-
-After reviewing that output, explicitly apply the guarded prune with:
-
-```sh
-./maintenance.main.kts prune --apply
-```
-
-The command records repository state before pruning and refuses to continue if that state changes.
-It also refuses pack processes, unsafe paths, and candidate-hash changes. It retains the evidence matching the current ZIP pair, the newest passed
-report for a suite missing from that run, and any failure without a later passing result. Pruning
-writes a `bc.workspace_maintenance.v1` transaction manifest beneath the Worklane state directory.
-If deletion stops after validation, inspect the manifest and run
-`./maintenance.main.kts prune --resume TRANSACTION_ID` to finish deleting its quarantine.
-Successful packaging removes its expanded server staging tree after the server ZIP is complete;
-failed packaging keeps staging for diagnosis.
-
-## Fresh distributions
-
-Only an explicit fresh-dist request authorizes:
+## Fresh distribution gate
 
 ```sh
 ./release.main.kts
-./release.main.kts --jobs 4
-./release.main.kts --jobs 4 --skip-tests
+./release.main.kts --jobs 2 --soak-minutes 30
+# Package the current pack inputs without upgrading newer sibling source checkouts:
+./release.main.kts --use-bundled-mods --soak-minutes 30
 ```
 
-The release command consumes `gradle/active-custom-mods.json`, requires clean active repositories,
-compares each local source `HEAD` with the revision embedded in its currently bundled JAR, and
-records that local-only update check in release evidence. It never fetches or modifies remotes.
-It reuses unchanged bundled runtime JARs whose embedded source revision matches the clean checkout,
-and runs the documented verification only for changed repositories. It annotates and deploys all
-staged runtime JARs together, refreshes Packwiz hashes and checks the diff, runs `dist.sh`
-exactly once, and then runs the complete Dist tier. Targeted and queued Debug can test that
-unchanged ZIP pair when explicitly requested. Direct full Debug forces verification and rebuilding
-of every active mod, then packages once and runs complete Dist and Debug. Release evidence records
-each mod's `reused` or `rebuilt` mode and JAR hash.
-Legacy JARs without source metadata are replaced during this bootstrap run.
+Fresh release preparation reuses source-identical bundled custom JARs and stages changed runtime sources in dependency order. Building uses `stageRuntimeJar`, not `clean`, `verifyFull` or a blanket repository test sweep. Native staging uses the shared `$HOME/.tmp/better-content-gradle.lock` and caps each Gradle invocation at two workers; the preparation job count does not bypass Forge/MCP cache serialization. Local verification belongs to the owning repository and is deliberately separate from release acceptance.
 
-`--skip-tests` is the explicit untested-release path. It still reuses valid source-identical
-bundled JARs. Changed or unannotated sources build through `stageRuntimeJar` without the custom-mod
-verification tasks; the complete staged set is deployed, release preparation refreshes Packwiz, and packaging runs
-exactly once. It skips the full pack suite. Release evidence and provenance record that tests
-were skipped; use this only when the fresh-dist request explicitly prohibits tests.
+`--use-bundled-mods` explicitly packages the JARs already present in this pack, without inspecting or upgrading sibling source checkouts. Use it for runner/content-only work when rolling forward all newer source repositories is outside scope. It records `runtime_inputs=bundled` in provenance and still requires the same mandatory Smoke and requested Soak; it is not a test bypass.
+
+Existing bundled provider JARs seed the staging directory; updated active providers replace them before consumers build. Optional compile-only fixtures may be supplied explicitly through `BC_RELEASE_COMPILE_FIXTURE_DIR` (for example the inactive Celestial Events API required by the Fonts build). They are recorded as build inputs and are **not** activated or copied into the pack. See [custom mod workspace](custom-mod-workspace.md).
+
+The release flow refreshes Packwiz during preparation, snapshots existing release directories, invokes the shared packager **once**, selects exactly one newly created complete ZIP pair (never an older pair), records its paths/hashes, and requires a fresh successful **Smoke on that exact pair**. It checks both matching fresh evidence and unchanged hashes before writing `dist/<release>/ready.json` or reporting success. An optional Soak uses those same unchanged artifacts. No repackaging occurs between acceptance and publication. Packaging retains all previous accepted/failed release directories and partial outputs; it never prunes `dist/`. Standalone discovery remains deliberately ambiguous when multiple retained pairs exist: supply explicit paths.
+
+There is no successful-release `--skip-tests` bypass. Failed preparation, failed Smoke, missing/stale/mismatched evidence, candidate mutation or a requested failed Soak results in failure and no ready marker. `dist.sh` remains only the package-once primitive: its output alone is not an accepted release.
+
+## Local regressions
+
+```sh
+./gradlew test
+python3 .github/scripts/test_prepare_provider_jars.py
+```
+
+The small pack-local checks protect retained process cleanup, lifecycle/duration behavior, artifact materialization, provider staging and release-result identity. They do not start Minecraft and are not runtime-tier dependencies.
+
+Feature regressions live in their owning independent source repositories under `../mod_source/`, using their documented JVM/native GameTest checks. Existing local behavioral coverage replaces duplicate source-text assertions. Pack-authored recipe/configuration/teaching choices do not acquire a false mod owner; the old bulk source/prose/recipe assertions were retired rather than recreated as a legacy suite.
+
+Headless native tests do not prove real-client rendering or the full integration matrices that were deliberately removed. In particular the World Management shell supervisor stays pack-owned; pure archive/state tests do not establish its entire successor-world transaction.

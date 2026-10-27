@@ -20,6 +20,12 @@ PERK_STAGED_FILE="$CONTROL_DIR/staged-perks-v2.tsv"
 PERK_RESET_FILE="$CONTROL_DIR/reset-perks-v2.tsv"
 PERK_HEALTH_FILE="$CONTROL_DIR/perk-health-v3.tsv"
 ACTIVE_PERKS_FILE="$STATE_DIR/perks-v2.tsv"
+AXIOM_TOOL="$SCRIPT_DIR/world-axioms.py"
+AXIOM_DRAFT_FILE="$CONTROL_DIR/world-axiom-draft-v1.json"
+AXIOM_STAGED_FILE="$CONTROL_DIR/world-axiom-staged-v1.json"
+AXIOM_RESET_FILE="$CONTROL_DIR/world-axiom-reset-v1.json"
+AXIOM_HEALTH_FILE="$CONTROL_DIR/world-axiom-health-v1.json"
+AXIOM_SNAPSHOT_REL='data/better_world_management/world-axioms-v1.json'
 BIOME_CONFIG="$SCRIPT_DIR/config/better_world_management-biomes.txt"
 MAX_ATTEMPTS=8
 HEALTH_TIMEOUT_SECONDS="${PRESTIGE_HEALTH_TIMEOUT_SECONDS:-300}"
@@ -42,7 +48,7 @@ event() {
 }
 die() { event ERROR "$*"; exit 1; }
 
-for command in awk basename cat chmod cmp cp cut date df du find flock mkdir mkfifo mv od readlink rm sha256sum sleep stat sync tr xargs zip; do
+for command in awk basename cat chmod cmp cp cut date df du find flock mkdir mkfifo mv od python3 readlink rm sha256sum sleep stat sync tr xargs zip; do
   command -v "$command" >/dev/null 2>&1 || die "missing required command: $command"
 done
 [[ -x "$SCRIPT_DIR/run-forge.sh" ]] || die "missing executable Forge launcher: $SCRIPT_DIR/run-forge.sh"
@@ -69,6 +75,8 @@ if [[ "${1:-}" == verify-archive ]]; then
   event INFO "verifying archive path=$2 lineage=$3 transaction=$4"
   exec "$JAVA" -cp "$PRESTIGE_JAR" com.bettercontent.betterworldmanagement.PrestigeArchiveVerifier verify "$2" "$3" "$4"
 fi
+
+[[ -f "$AXIOM_TOOL" && ! -L "$AXIOM_TOOL" ]] || die "missing regular World Axiom lifecycle projector: $AXIOM_TOOL"
 
 [[ ! -e "$LEGACY_STATE_DIR" ]] || die "legacy .prestige state is unsupported; move or remove it before starting"
 [[ ! -L "$STATE_DIR" ]] || die ".better_world_management must not be a symlink"
@@ -406,6 +414,7 @@ health_is_valid() {
   [[ "${CONTRACT_LINES[7]}" =~ ^spawn_x$'\t'-?[0-9]+$ \
       && "${CONTRACT_LINES[8]}" =~ ^spawn_y$'\t'-?[0-9]+$ \
       && "${CONTRACT_LINES[9]}" =~ ^spawn_z$'\t'-?[0-9]+$ ]] || return 1
+  verify_successor_axioms
 }
 
 request_successor_shutdown() {
@@ -554,25 +563,75 @@ load_transaction_lineage() {
   TARGET_TOTAL=$((BASE_TOTAL+1)); TARGET_GENERATION=$((BASE_GENERATION+1))
 }
 
+axiom_cli() {
+  local command="$1"; shift
+  python3 "$AXIOM_TOOL" "$command" "$SCRIPT_DIR" "$ACTIVE_WORLD" "$@"
+}
+
+verify_frozen_axioms() {
+  [[ -f "$AXIOM_RESET_FILE" && ! -L "$AXIOM_RESET_FILE" ]] || die "missing regular committed World Axiom contract"
+  [[ -f "$FROZEN_AXIOMS" && ! -L "$FROZEN_AXIOMS" ]] || die "transaction lacks immutable World Axiom evidence"
+  cmp -s -- "$AXIOM_RESET_FILE" "$FROZEN_AXIOMS" || die "transaction World Axiom snapshot changed"
+  axiom_cli validate "$FROZEN_AXIOMS" || die "frozen World Axiom identity/checksum rejected"
+}
+
+verify_successor_axioms() {
+  [[ -f "$ACTIVE_WORLD/$AXIOM_SNAPSHOT_REL" && ! -L "$ACTIVE_WORLD/$AXIOM_SNAPSHOT_REL" ]] || return 1
+  cmp -s -- "$ACTIVE_WORLD/$AXIOM_SNAPSHOT_REL" "$FROZEN_AXIOMS" || return 1
+  axiom_cli health
+}
+
+retain_axiom_evidence() {
+  local prefix="$1" source target suffix
+  for suffix in health runtime; do
+    if [[ "$suffix" == health ]]; then source="$AXIOM_HEALTH_FILE"; else source="$SCRIPT_DIR/kubejs/config/world_axioms_runtime.json"; fi
+    [[ -e "$source" || -L "$source" ]] || continue
+    [[ -f "$source" && ! -L "$source" ]] || die "unsafe World Axiom attempt evidence: $source"
+    target="$TRANSACTION_ROOT/$prefix-world-axiom-$suffix-v1.json"
+    if [[ -e "$target" ]]; then
+      [[ -f "$target" && ! -L "$target" ]] || die "unsafe retained World Axiom evidence: $target"
+      cmp -s -- "$source" "$target" && continue
+      target="$TRANSACTION_ROOT/$prefix-world-axiom-$suffix-$(date +%s%N).json"
+    fi
+    cp -- "$source" "$target"
+    sync -f -- "$target"
+  done
+  sync -f -- "$TRANSACTION_ROOT"
+}
+
+restore_normal_axioms() {
+  axiom_cli normal || die "could not restore current-world World Axiom runtime projection"
+}
+
+cleanup_axiom_controls() {
+  rm -f -- "$AXIOM_DRAFT_FILE" "$AXIOM_DRAFT_FILE.partial" "$AXIOM_STAGED_FILE" "$AXIOM_STAGED_FILE.partial" \
+    "$AXIOM_HEALTH_FILE" "$AXIOM_HEALTH_FILE.partial"
+}
+
 cleanup_committed_transaction() {
   rm -f -- "$SUCCESSOR_FILE" "$HEALTH_FILE" "$PERK_HEALTH_FILE" "$SHUTDOWN_FILE" \
     "$STAGED_FILE" "$DRAFT_FILE" "$PERK_STAGED_FILE" "$PERK_DRAFT_FILE"
+  cleanup_axiom_controls
   if [[ -d "$ARCHIVE_INPUT/world" ]]; then rm -rf -- "$ARCHIVE_INPUT/world"; fi
   sync -f -- "$ARCHIVE_INPUT"
   sync -f -- "$CONTROL_DIR"
   [[ -d "$ACTIVE_WORLD" && ! -L "$ACTIVE_WORLD" ]] || die "committed lineage lacks canonical successor world"
   test_interrupt committed-cleanup-before-reset-release
-  rm -f -- "$RESET_FILE" "$RESET_FILE.partial" "$PERK_RESET_FILE" "$PERK_RESET_FILE.partial"
+  rm -f -- "$RESET_FILE" "$RESET_FILE.partial" "$PERK_RESET_FILE" "$PERK_RESET_FILE.partial" \
+    "$AXIOM_RESET_FILE" "$AXIOM_RESET_FILE.partial"
   sync -f -- "$CONTROL_DIR"
 }
 
 cleanup_rolled_back_transaction() {
+  restore_normal_axioms
   rm -f -- "$SUCCESSOR_FILE" "$HEALTH_FILE" "$PERK_HEALTH_FILE" "$SHUTDOWN_FILE" \
     "$STAGED_FILE" "$DRAFT_FILE" "$PERK_STAGED_FILE" "$PERK_DRAFT_FILE"
+  cleanup_axiom_controls
   sync -f -- "$CONTROL_DIR"
   [[ -d "$ACTIVE_WORLD" && ! -L "$ACTIVE_WORLD" ]] || die "rolled-back transaction lacks the restored canonical world"
   test_interrupt rolled-back-cleanup-before-reset-release
-  rm -f -- "$RESET_FILE" "$RESET_FILE.partial" "$PERK_RESET_FILE" "$PERK_RESET_FILE.partial"
+  rm -f -- "$RESET_FILE" "$RESET_FILE.partial" "$PERK_RESET_FILE" "$PERK_RESET_FILE.partial" \
+    "$AXIOM_RESET_FILE" "$AXIOM_RESET_FILE.partial"
   sync -f -- "$CONTROL_DIR"
 }
 
@@ -610,8 +669,11 @@ require_uninhabited_candidate() {
 run_successor_attempt() {
   local attempt="$1" seed="$2"; shift 2
   rm -f -- "$HEALTH_FILE" "$HEALTH_FILE.partial" "$PERK_HEALTH_FILE" "$PERK_HEALTH_FILE.partial" \
-    "$SHUTDOWN_FILE" "$SHUTDOWN_FILE.partial"
-  write_successor_request "$attempt" "$seed"; set_server_seed "$seed"; write_phase "attempt-$attempt-prepared"
+    "$SHUTDOWN_FILE" "$SHUTDOWN_FILE.partial" "$AXIOM_HEALTH_FILE" "$AXIOM_HEALTH_FILE.partial"
+  write_successor_request "$attempt" "$seed"; set_server_seed "$seed"
+  verify_frozen_axioms
+  axiom_cli prepare "$FROZEN_AXIOMS" || die "World Axiom pre-world preparation rejected"
+  write_phase "attempt-$attempt-prepared"
   event INFO "transaction=$REQUEST_TRANSACTION launching successor attempt=$attempt/$MAX_ATTEMPTS seed=$seed biomes=$REQUEST_BIOME_1,$REQUEST_BIOME_2,$REQUEST_BIOME_3"
   local fifo="$CONTROL_DIR/successor-console-$REQUEST_TRANSACTION-$attempt.fifo"
   rm -f -- "$fifo"; mkfifo -m 600 -- "$fifo"; exec 8<>"$fifo"; rm -f -- "$fifo"
@@ -646,18 +708,25 @@ run_successor_attempt() {
 }
 
 finalize_success() {
+  verify_frozen_axioms
+  verify_successor_axioms || die "World Axiom health/projection no longer validates before promotion"
   cp -- "$SUCCESSOR_FILE" "$TRANSACTION_ROOT/successor-request-v5.tsv"
   cp -- "$HEALTH_FILE" "$TRANSACTION_ROOT/health-result-v5.tsv"
   cp -- "$PERK_HEALTH_FILE" "$TRANSACTION_ROOT/perk-health-v3.tsv"
   sync -f -- "$TRANSACTION_ROOT/successor-request-v5.tsv"
   sync -f -- "$TRANSACTION_ROOT/health-result-v5.tsv"
   sync -f -- "$TRANSACTION_ROOT/perk-health-v3.tsv"
+  cp -- "$AXIOM_HEALTH_FILE" "$TRANSACTION_ROOT/world-axiom-health-v1.json"
+  sync -f -- "$TRANSACTION_ROOT/world-axiom-health-v1.json"
+  retain_axiom_evidence successful
   sync -f -- "$TRANSACTION_ROOT"
   write_phase health-verified
   verify_archive_against_world "$FINAL_ARCHIVE" "$ARCHIVE_INPUT/better-world-management-archive-manifest-v1.tsv"
   chmod 0444 -- "$FINAL_ARCHIVE"
   sync -f -- "$FINAL_ARCHIVE"
   ensure_archive_checksum "$FINAL_ARCHIVE"
+  axiom_cli promote || die "World Axiom active snapshot promotion rejected"
+  sync -f -- "$STATE_DIR/world-axioms-v1.json"
   commit_lineage
   if [[ "${PRESTIGE_TEST_INTERRUPT_AT:-}" == lineage-written ]]; then
     event WARN "transaction=$REQUEST_TRANSACTION test interruption at lineage-written"
@@ -673,6 +742,9 @@ load_allowed_biomes
 ensure_lineage
 reconcile_active_process
 if [[ ! -e "$RESET_FILE" ]]; then
+  ACTIVE_WORLD_NAME="$(server_property level-name)"; validate_world_name "$ACTIVE_WORLD_NAME"
+  ACTIVE_WORLD="$SCRIPT_DIR/$ACTIVE_WORLD_NAME"
+  restore_normal_axioms
   event INFO "launching current world under lifecycle supervision"
   set +e; "$SCRIPT_DIR/run-forge.sh" "$@"; INITIAL_EXIT=$?; set -e
   event INFO "current world Forge process exited code=$INITIAL_EXIT reset_pending=$([[ -e "$RESET_FILE" ]] && printf yes || printf no)"
@@ -686,12 +758,30 @@ ACTIVE_WORLD="$SCRIPT_DIR/$ACTIVE_WORLD_NAME"
 TRANSACTION_ROOT="$TRANSACTION_DIR/$REQUEST_TRANSACTION"
 ARCHIVE_INPUT="$TRANSACTION_ROOT/archive-input"
 PHASE_FILE="$TRANSACTION_ROOT/phase-v2.tsv"
+FROZEN_AXIOMS="$TRANSACTION_ROOT/world-axiom-reset-v1.json"
+[[ -f "$AXIOM_RESET_FILE" && ! -L "$AXIOM_RESET_FILE" ]] || die "new/resumed transaction requires committed World Axiom laws"
+axiom_cli validate "$AXIOM_RESET_FILE" || die "committed World Axiom laws rejected before world staging"
 
 if [[ ! -e "$TRANSACTION_ROOT" ]]; then
   mkdir -p -- "$ARCHIVE_INPUT"
   cp -- "$SCRIPT_DIR/server.properties" "$TRANSACTION_ROOT/server.properties.before"
   cp -- "$RESET_FILE" "$TRANSACTION_ROOT/reset-request-v5.tsv"
   cp -- "$PERK_RESET_FILE" "$TRANSACTION_ROOT/reset-perks-v2.tsv"
+  cp -- "$AXIOM_RESET_FILE" "$FROZEN_AXIOMS"
+  cmp -s -- "$AXIOM_RESET_FILE" "$FROZEN_AXIOMS" || die "World Axiom freeze copy differs"
+  sync -f -- "$FROZEN_AXIOMS"
+  for axiom_contract in "$AXIOM_DRAFT_FILE" "$AXIOM_STAGED_FILE"; do
+    [[ -e "$axiom_contract" || -L "$axiom_contract" ]] || continue
+    [[ -f "$axiom_contract" && ! -L "$axiom_contract" ]] || die "unsafe World Axiom control evidence"
+    cp -- "$axiom_contract" "$TRANSACTION_ROOT/$(basename -- "$axiom_contract")"
+    sync -f -- "$TRANSACTION_ROOT/$(basename -- "$axiom_contract")"
+  done
+  if [[ -e "$STATE_DIR/world-axioms-v1.json" || -L "$STATE_DIR/world-axioms-v1.json" ]]; then
+    [[ -f "$STATE_DIR/world-axioms-v1.json" && ! -L "$STATE_DIR/world-axioms-v1.json" ]] || die "unsafe active World Axiom evidence"
+    cp -- "$STATE_DIR/world-axioms-v1.json" "$TRANSACTION_ROOT/world-axioms-before-v1.json"
+    sync -f -- "$TRANSACTION_ROOT/world-axioms-before-v1.json"
+  fi
+  retain_axiom_evidence before-reset
   cp -- "$LINEAGE_FILE" "$TRANSACTION_ROOT/lineage-before-v5.tsv"
   sync -f -- "$TRANSACTION_ROOT"
   write_phase request-recorded
@@ -703,6 +793,7 @@ else
   [[ -f "$TRANSACTION_ROOT/lineage-before-v5.tsv" ]] || die "existing transaction lacks lineage evidence"
   cmp -s -- "$RESET_FILE" "$TRANSACTION_ROOT/reset-request-v5.tsv" || die "existing transaction reset identity changed"
   cmp -s -- "$PERK_RESET_FILE" "$TRANSACTION_ROOT/reset-perks-v2.tsv" || die "existing transaction perk identity changed"
+  verify_frozen_axioms
   read_phase
 fi
 load_transaction_lineage
@@ -724,6 +815,9 @@ if [[ "$CURRENT_PHASE" == lineage-committed ]]; then
   sync -f -- "$FINAL_ARCHIVE"
   ensure_archive_checksum "$FINAL_ARCHIVE"
   commit_active_perks
+  cmp -s -- "$ACTIVE_WORLD/$AXIOM_SNAPSHOT_REL" "$FROZEN_AXIOMS" || die "committed world law snapshot changed"
+  cmp -s -- "$STATE_DIR/world-axioms-v1.json" "$FROZEN_AXIOMS" || die "committed active world law promotion changed"
+  restore_normal_axioms
   cleanup_committed_transaction
   restart_supervisor "$@"
 fi
@@ -741,6 +835,8 @@ if [[ "$CURRENT_PHASE" == health-verified ]]; then
   cmp -s -- "$SUCCESSOR_FILE" "$TRANSACTION_ROOT/successor-request-v5.tsv" || die "persisted successor evidence changed"
   cmp -s -- "$HEALTH_FILE" "$TRANSACTION_ROOT/health-result-v5.tsv" || die "persisted health evidence changed"
   cmp -s -- "$PERK_HEALTH_FILE" "$TRANSACTION_ROOT/perk-health-v3.tsv" || die "persisted perk health evidence changed"
+  cmp -s -- "$AXIOM_HEALTH_FILE" "$TRANSACTION_ROOT/world-axiom-health-v1.json" || die "persisted World Axiom health evidence changed"
+  verify_successor_axioms || die "persisted World Axiom projection/health no longer validates"
   load_contract "$SUCCESSOR_FILE" 'BC_PRESTIGE_SUCCESSOR_V5' 10
   RECOVER_SEED="$(contract_value 5 successor_seed)"; RECOVER_ATTEMPT="$(contract_value 9 attempt)"
   health_is_valid "$RECOVER_ATTEMPT" "$RECOVER_SEED" || die "persisted health-verified phase no longer validates"
@@ -810,7 +906,9 @@ fi
 START_ATTEMPT=1
 if [[ "$CURRENT_PHASE" =~ ^attempt-([1-8])-(prepared|running)$ ]]; then
   interrupted_attempt="${BASH_REMATCH[1]}"; interrupted_state="${BASH_REMATCH[2]}"
+  retain_axiom_evidence "interrupted-attempt-$interrupted_attempt"
   stop_failed_server
+  retain_axiom_evidence "interrupted-attempt-$interrupted_attempt"
   if [[ "$interrupted_state" == running ]]; then START_ATTEMPT=$((interrupted_attempt+1)); else START_ATTEMPT="$interrupted_attempt"; fi
 fi
 if [[ -d "$ACTIVE_WORLD" ]]; then
@@ -835,7 +933,9 @@ for ((attempt=START_ATTEMPT; attempt<=MAX_ATTEMPTS; attempt++)); do
   if [[ -f "$HEALTH_FILE" ]]; then cp -- "$HEALTH_FILE" "$TRANSACTION_ROOT/failed-attempt-$attempt-health-v5.tsv"; fi
   if [[ -f "$PERK_HEALTH_FILE" ]]; then cp -- "$PERK_HEALTH_FILE" "$TRANSACTION_ROOT/failed-attempt-$attempt-perk-health-v3.tsv"; fi
   cp -- "$SUCCESSOR_FILE" "$TRANSACTION_ROOT/failed-attempt-$attempt-request-v5.tsv"
+  retain_axiom_evidence "failed-attempt-$attempt"
   stop_failed_server; stop_console_relay
+  retain_axiom_evidence "failed-attempt-$attempt"
   require_uninhabited_candidate "$ACTIVE_WORLD"
 done
 

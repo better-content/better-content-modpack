@@ -77,6 +77,5 @@ dormant scaffolding and do not establish supported pack behavior.
 Custom-mod repository, artifact, and command ownership is canonical in
 [`custom-mod-workspace.md`](custom-mod-workspace.md). A source change is complete
 only after that repository's documented validation passes. Deployment uses the
-reobfuscated runtime JAR from `build/libs/`, followed by `./test.main.kts dev`.
-An explicitly ordered fresh Dist refreshes Packwiz hashes and tests the packaged candidate;
-Debug runs against that unchanged candidate when requested.
+reobfuscated runtime JAR from `build/libs/` only when explicitly requested. Pack-local checks use `./gradlew test` separately from runtime acceptance.
+An explicitly ordered fresh distribution refreshes Packwiz hashes, packages once and requires Smoke on that exact pair; optional Soak uses the unchanged artifacts. Neither tier runs source-local verification automatically.
