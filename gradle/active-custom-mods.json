@@ -21,6 +21,10 @@
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-compat-fixes",
+        "better-gameplay-notices"
       ]
     },
     {
@@ -32,7 +36,8 @@
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-player-traces"
+        "better-player-traces",
+        "better-deaths-door"
       ]
     },
     {
@@ -59,7 +64,8 @@
       ],
       "dependsOn": [
         "better-gameplay-notices",
-        "better-survival-hud"
+        "better-survival-hud",
+        "better-industrial-heat"
       ]
     },
     {
@@ -113,6 +119,10 @@
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-compat-fixes",
+        "better-gameplay-notices"
       ]
     },
     {
@@ -145,7 +155,8 @@
         "better-compat-fixes",
         "better-deaths-door",
         "better-rpg-progression",
-        "better-survival-physiology"
+        "better-survival-physiology",
+        "better-gameplay-notices"
       ]
     },
     {
@@ -188,7 +199,8 @@
       ],
       "dependsOn": [
         "better-compat-fixes",
-        "better-deaths-door"
+        "better-deaths-door",
+        "better-gameplay-notices"
       ]
     },
     {
@@ -200,6 +212,7 @@
         "stageRuntimeJar"
       ],
       "dependsOn": [
+        "better-celestial-events",
         "better-compat-fixes",
         "better-gameplay-notices"
       ]
@@ -299,6 +312,10 @@
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-compat-fixes",
+        "better-gameplay-notices"
       ]
     },
     {
@@ -432,12 +449,25 @@
       ]
     },
     {
+      "repository": "better-spicy-farmers",
+      "modId": "better_spicy_farmers",
+      "artifact": "better-spicy-farmers-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
       "repository": "better-survival-physiology",
       "modId": "better_survival_physiology",
       "artifact": "better-survival-physiology-0.1.1.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-drinking-water",
+        "better-spicy-farmers"
       ]
     },
     {
@@ -462,6 +492,46 @@
       "repository": "better-drinking-water",
       "modId": "better_drinking_water",
       "artifact": "better-drinking-water-1.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-compat-fixes",
+        "better-gameplay-notices"
+      ]
+    },
+    {
+      "repository": "better-celestial-events",
+      "modId": "better_celestial_events",
+      "artifact": "better-celestial-events-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-wild-fruit-trees",
+      "modId": "better_wild_fruit_trees",
+      "artifact": "better-wild-fruit-trees-0.1.1.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "scalable-tnt",
+      "modId": "scalable_tnt",
+      "artifact": "scalable-tnt-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "dynamic-trees-dimension-compat",
+      "modId": "dynamic_trees_dimension_compat",
+      "artifact": "dynamic-trees-dimension-compat-0.1.1.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"

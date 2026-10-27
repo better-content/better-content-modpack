@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "AGENTS.md"
-hash = "24e3b09b43f2e381cf7f9bc2c8f8932ca6644c8fc2aad162d9fdcadf6f357fd9"
+hash = "ebb257a52b73421010ccaf2a34e8a88167b7ce93d8443e196cc1b29a58de4ac0"
 
 [[files]]
 file = "LICENSE"
@@ -14,7 +14,7 @@ hash = "40b8430f40df3bcdbf54e6ed70e372aaa8d2302675928ae1fe8a34c031552cfd"
 
 [[files]]
 file = "README.md"
-hash = "b2375c96741002cc6a661c1cb9c8edcd305fb7c4fb7e9355ab361ce2b9244628"
+hash = "1505333a8511d6fc10cb52db2df20617061650b20b9bd0bfeb27ba2a62f0c0b3"
 
 [[files]]
 file = "better-world-management-server.sh"
@@ -2346,7 +2346,7 @@ hash = "93c34d3df9c601d00503b824bc7a27d7bcf2f0108c9761eb4fa16beb39e9c2a8"
 
 [[files]]
 file = "config/curios-common.toml"
-hash = "e6abfe9073fca77a2185cee8bf2fcdb3956834e7f5021bc7ff8bde4da95be06e"
+hash = "96b8fd886be5a933cf14f2e1f52a71668a1e859e5a0488d374b090b75cff716c"
 
 [[files]]
 file = "config/dcm.json"
@@ -4753,10 +4753,6 @@ file = "defaultresources/excavated_variants/excavated_variants/variants/minecraf
 hash = "478a21324a21317fd06d10995bdf479a8f70e624f65e3336e448f9183df20684"
 
 [[files]]
-file = "dist.sh"
-hash = "f68243a1fcf03f5cd45e1defa372eeb190c9e825340265af9ce65a6d683da261"
-
-[[files]]
 file = "globalresources/better_content/excavated_variants/better_content/configs/malum_texture_blacklist.json5"
 hash = "c07165a746c38afd02bcb17ceaead4c7aa2bc1ebd3a0834fb58afd3c3553d1cd"
 
@@ -5002,19 +4998,19 @@ hash = "e4b5cce019fc5a41d76dd2a70b5ab4ee447468b92b699c211a2dc85ab5a94bce"
 
 [[files]]
 file = "kubejs/assets/applied_armorer/display/guns/moritz_gernade_gl3_display.json"
-hash = "c1ad6051f58500ca844390e3af8bafb12d8a1395df7762a06c5dc8d013a1ba12"
+hash = "c24863c688d1790addef15ebe1459678e9e12ac741d20d8ad5e4d6d5d3f82716"
 
 [[files]]
 file = "kubejs/assets/applied_armorer/display/guns/moritz_mg_emg_prototype_display.json"
-hash = "f80a0adb197e659657b35d8e8387cb27d051dc92e8f62322eedf0c2637bcb0e7"
+hash = "82f4124f5ec9a50e7996767c1ddf05a44f9d7abb707d27ef5517959a62465ca7"
 
 [[files]]
 file = "kubejs/assets/applied_armorer/display/guns/niklas_pistol_semi_pride_display.json"
-hash = "01c5f2b59b68f2e6dc941ccde6f6ab763a4587946d77d1fe968a3636b1e2c351"
+hash = "7377a7dfdfc57f216f0f7a4529251941a49c3dfc8627392e48d356616c33e48b"
 
 [[files]]
 file = "kubejs/assets/applied_armorer/display/guns/special_melee_task_manager_display.json"
-hash = "b1b0fa5e3f5e93549442e564c5de11ae3f4a277bc23cd5cd51b0c1edfc582de1"
+hash = "cbf43d8fc2ea1c4e61a1578d72a941eff0c40119ff763113654a88bec12f1698"
 
 [[files]]
 file = "kubejs/assets/applied_armorer/geo_models/gun/lod/moritz_gernade_gl3_lod.json"
@@ -5298,35 +5294,35 @@ hash = "c0fc185958e4f94a651b21477aa0777d5b3cab95ab6446a456eef17c8b59859c"
 
 [[files]]
 file = "kubejs/assets/create_armorer/display/guns/cannon_40mm_salamander_display.json"
-hash = "71b2d080bb271d326992f5a063416ab91da66431e7560c0a630d51bed078b56a"
+hash = "9a5f0822935f9ccfe7d28a260136840820909edc9b430b6d89c454fbdc9ffa94"
 
 [[files]]
 file = "kubejs/assets/create_armorer/display/guns/gl_revolver_devastator_display.json"
-hash = "882f97699dad64b2a063342f532d7af992f18d83b9d880ffecdb3ab1028c72f5"
+hash = "008b45e1c829837253d122cafc6669147a502218b481c4546e012f693ae4cebc"
 
 [[files]]
 file = "kubejs/assets/create_armorer/display/guns/pistol_auto_stress_display.json"
-hash = "bc5639d984b5593cc3fcc8d2bcddd0e1fb54f25282003d9b92a75186dc6ee733"
+hash = "083e5032be826f5ebafd9324bc6ebb4c50f883242c0144fa7be2033a0ea887fd"
 
 [[files]]
 file = "kubejs/assets/create_armorer/display/guns/rifle_assult_crane_display.json"
-hash = "3f9d529fcf55baa8a042d5026f0bb40df6025ab8012865c5021dd361d812e120"
+hash = "baf25cfd0fbbbcee625700871c80976c0f3c185e7c4f882fd8fd4cfcd497bff6"
 
 [[files]]
 file = "kubejs/assets/create_armorer/display/guns/shotgun_db_stone_display.json"
-hash = "5f7ab7b279cf838aaa69e0b813de6f6cb626ba994f908761bb26629d23dcf5fc"
+hash = "811acf625c854f062863daff2f067ca65fe2689a9eb443917a1e0ee3207fb721"
 
 [[files]]
 file = "kubejs/assets/create_armorer/display/guns/sniper_semi_clockwork_display.json"
-hash = "143f5586609a0320b5dc252875e24f3de2d0844ec007c64a2bbc93a2e0dade79"
+hash = "c967fdb2fbdeb2e756dba28611f702c5734dc2379ee2e7eea32176ea7b5d8e60"
 
 [[files]]
 file = "kubejs/assets/create_armorer/display/guns/sniper_semi_m1_display.json"
-hash = "bffa2287a905f5eccedc44ac99b02fbdacadc303ce5101beed3feb6e73defa16"
+hash = "6ee59ae4c9ec27b6e2bbeede653e4a60346c8f4ba76b82055e47ac2ac7a15959"
 
 [[files]]
 file = "kubejs/assets/create_armorer/display/guns/special_melee_wrench_display.json"
-hash = "c737835db589e50358af7764447c6650b338e23443dc22ea0bc7c275be7944a1"
+hash = "f3844254548a015652954322a81077d273f18a8051d1ea5e5cc5a637eb489b3b"
 
 [[files]]
 file = "kubejs/assets/create_armorer/geo_models/gun/lod/cannon_40mm_salamander_lod.json"
@@ -5502,11 +5498,11 @@ hash = "fe4caf29060ab9d23a44e66662f4792676f28fefda584c3e018e058a002e18d4"
 
 [[files]]
 file = "kubejs/assets/immersive_armorer/display/guns/pistol_9mm_display.json"
-hash = "be3ee6d0746c78fe51338bf68e866d66fbc9a9b81a5106421eeedd87c18e302c"
+hash = "4f0565e1489ef389d778d19edeebcb91a4af0053965addd95f6ccd84b3155e0b"
 
 [[files]]
 file = "kubejs/assets/immersive_armorer/display/guns/short_smg_display.json"
-hash = "225e78e753ba88e8ff826d5691e24e1284ebacc07789574ebf50768e7a789047"
+hash = "214e687ba12d3f819d42692aa10d110f0f0dcaae7407fbd7a56653c672cb5f6d"
 
 [[files]]
 file = "kubejs/assets/immersive_armorer/geo_models/gun/lod/pistol_9mm_lod.json"
@@ -7458,7 +7454,7 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "fec76b4b45f14f17bcc351a37a8a7c27d8c60272d03535ef20c970cec2384ea4"
+hash = "c72cb93eddae85d5b7ddeee00cabd06c6707f9d3ec863d278ff587932dfc51bb"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -7915,6 +7911,14 @@ hash = "3d20c743344f34c57ddf3223c8bdb58a557f359aa6508f1a6aba976a3a973c77"
 [[files]]
 file = "kubejs/data/better_cave_encounters/director_ecologies/undead.json"
 hash = "3d9c3d24b224e9850cf2654d8fef152f7b1019ade05f53bd65ea6f4d1871f48c"
+
+[[files]]
+file = "kubejs/data/better_celestial_events/tags/worldgen/biome/thin_veil_forest.json"
+hash = "ddb8ca5e5885ae83f3467d4baaabd97d8528354884051e824931b6b163fa3e17"
+
+[[files]]
+file = "kubejs/data/better_celestial_events/tags/worldgen/biome/thin_veil_swamp.json"
+hash = "8cdb4f81fa15d70f5b2038b06378422d3000cb893617d7e39429dc8c70de52ff"
 
 [[files]]
 file = "kubejs/data/better_chemlib_hazards/chemical_traits/helium.json"
@@ -11017,10 +11021,6 @@ file = "kubejs/startup_scripts/progression/20_transition_items.js"
 hash = "fa4a884c45848822d6f36286df9b57195fda5610d3390500b150ae1414a1c39c"
 
 [[files]]
-file = "maintenance.main.kts"
-hash = "f3df9bd9b99f4b5127d8eb825371a82ec34934108061bb5254ad1e37288677fe"
-
-[[files]]
 file = "mods/accelerated-rendering.pw.toml"
 hash = "24976f7ca7bd43a73fa4546def95312267f8d016ff836badb209f43c032cd097"
 metafile = true
@@ -11135,8 +11135,12 @@ file = "mods/better-cave-encounters-0.2.1.jar"
 hash = "9c43ba38b81a123ab21de499036a46dfb9e4e19d2d619647b667055e5d38cea4"
 
 [[files]]
+file = "mods/better-celestial-events-0.1.0.jar"
+hash = "3dea881e08ff8c3fd290e137cce78e1a6904a7ff3e3bcbb1b755d855efcfd557"
+
+[[files]]
 file = "mods/better-chemlib-hazards-0.2.0.jar"
-hash = "a70a5a37b1675feb340a6c82255903e85e2c8619657aaaacf8ecd3c48d127a8b"
+hash = "2bd14fa051f1d20b2db1bb09fbd3f4aed078acadfdad7a630a63e66da120f59c"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
@@ -11277,6 +11281,10 @@ hash = "1830bd3556467d72a03698ef950d5886f228bb64d0feaaf008822709a6ebc78e"
 [[files]]
 file = "mods/better-weathering-offline-progress-0.1.0.jar"
 hash = "eafd9b52c6e567eca8689fc7c972f2ae063085235afdd4288c921a3169e9b2e6"
+
+[[files]]
+file = "mods/better-wild-fruit-trees-0.1.1.jar"
+hash = "2f315f1981b7564642cce2d0daf441326c3a41f71d6fc43818990ede36cf22f8"
 
 [[files]]
 file = "mods/better-wildfire-0.1.0.jar"
@@ -11460,6 +11468,10 @@ metafile = true
 file = "mods/dynamic-trees-ars-nouveau.pw.toml"
 hash = "170c1a0b6fd950fb590ad3dd351feb2931d9eaa27b53d2c1fe6a765beeeef2e1"
 metafile = true
+
+[[files]]
+file = "mods/dynamic-trees-dimension-compat-0.1.1.jar"
+hash = "7f2a2c914695f0fce3c4bcc849178c80305cebb39873e2d77fddade3f797f200"
 
 [[files]]
 file = "mods/dynamic-trees-for-natures-spirit.pw.toml"
@@ -12102,6 +12114,10 @@ hash = "0dbf757962d6ddf7d212f167b5979934ff7d7b9b8d9d1e6b33f4693d55ed5b17"
 metafile = true
 
 [[files]]
+file = "mods/scalable-tnt-0.1.0.jar"
+hash = "14c0f49258b0e170ce552830b0499eb58ab5267b11c7e675186fad10c67d9c7c"
+
+[[files]]
 file = "mods/searchables.pw.toml"
 hash = "2cb8dd9a3944a6430b49916a4fe1b6cf0bd7efd907054f8e679a02717149404f"
 metafile = true
@@ -12249,6 +12265,11 @@ metafile = true
 [[files]]
 file = "mods/the-twilight-forest.pw.toml"
 hash = "d1f859de9867b7433305aef1631aa22a436a4c3924474a21c0a22ab5f2093c04"
+metafile = true
+
+[[files]]
+file = "mods/the-undergarden.pw.toml"
+hash = "4a51e5a0f11ba9b7599dcea129862829bfd028c57bf9997f9513b38defbc7e51"
 metafile = true
 
 [[files]]
@@ -12409,18 +12430,6 @@ metafile = true
 [[files]]
 file = "options.txt"
 hash = "11a0fd1a71783e0a1c1e6f20842e2b8e5b50dc4cf87b29325966c3252467f287"
-
-[[files]]
-file = "pack-test-lock.main.kts"
-hash = "12df4f25dcb02a37e4ac60e7bdd0910aa3e37f72df42b2590dc52dbf4fe7dd80"
-
-[[files]]
-file = "pack-test-queue.main.kts"
-hash = "5cf0300caff94901572ce47add3ec21b30f3296d2d39f4110e6b93a570b49b52"
-
-[[files]]
-file = "package.sh"
-hash = "2c1de53cdf545ae0a6c44edc3c59daeca32c2f7ff568e9b9e3e01a5fd54555ab"
 
 [[files]]
 file = "recipe-policies.yml"

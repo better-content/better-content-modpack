@@ -30,7 +30,7 @@ Better Content is a Forge 1.20.1 expert-pack content layer built around systems 
 
 Geological deposits, Y-band locality, processing ladders, machine casing tiers, spirit/villager markets, obelisk and dimension routes, body systems, persistent traces, and the death/respawn life-length loop are all progression surfaces through which those roots meet.
 
-The main source trees are `kubejs/`, `config/`, `defaultconfigs/`, `datapacks/`, `globalresources/`, `resourcepacks/`, `shaderpacks/`, active `mods/*.pw.toml`, and bundled custom jars in `mods/`. Root `dist.sh` is the package-once primitive, `test.main.kts` exposes Dev, Dist, and Debug tiers, and `release.main.kts` owns explicitly requested fresh Dist candidates; `package.sh` remains the internal packager.
+The main source trees are `kubejs/`, `config/`, `defaultconfigs/`, `datapacks/`, `globalresources/`, `resourcepacks/`, `shaderpacks/`, active `mods/*.pw.toml`, and bundled custom jars in `mods/`. Root `dist.sh` is the package-once primitive, `test.main.kts` exposes Smoke and Soak on existing artifacts, and `release.main.kts` requires Smoke on an explicitly prepared fresh ZIP pair before success; `package.sh` remains the internal packager.
 
 Runtime directories, raw logs, crash reports, screenshots, profiler dumps, generated runtime dumps, and local launcher state are not documentation. Keep them under `~/.cache/bc`, `server-instance/`, `server-template/`, or `generated/` unless explicitly requested otherwise.
 

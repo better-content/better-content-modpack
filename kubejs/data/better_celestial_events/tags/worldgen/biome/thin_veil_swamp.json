@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:swamp",
+    "minecraft:mangrove_swamp",
+    { "id": "natures_spirit:marsh", "required": false },
+    { "id": "natures_spirit:wisteria_forest", "required": false },
+    { "id": "natures_spirit:bamboo_wetlands", "required": false },
+    { "id": "natures_spirit:tropical_basin", "required": false }
+  ]
+}

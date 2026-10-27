@@ -8,43 +8,15 @@ Every canonical repository is hosted at `https://github.com/better-content/<repo
 
 Run the listed validation and staging command from the custom-mod repository. `stageRuntimeJar` writes the deployable reobfuscated JAR to the canonical `build/libs/` path shown below.
 
-Copy that JAR into `../../better-content-modpack/mods/`, removing any superseded version of the same custom mod. Do not deploy development-mapped or sources JARs.
+Copy that JAR into `../../better-content-modpack/mods/` only when deployment is explicitly requested, removing a superseded version of that custom mod. Do not deploy development-mapped or sources JARs. Repository-local validation alone does not authorize deployment, packaging or pack-level testing.
 
-Repository-local validation does not authorize deployment or pack-level testing. When the user
-explicitly requests deployment of one mod, copy only its staged runtime JAR and run:
+For ordinary pack implementation changes, run `./gradlew test` and `git diff --check` as relevant. Local verification is separate from Smoke, Soak and fresh-distribution acceptance; none automatically runs all source-repository suites. Packwiz refresh belongs only to explicit fresh-distribution preparation after deployment settles.
 
-```sh
-./test.main.kts dev
-```
+An explicitly requested fresh distribution uses `./release.main.kts`. It stages changed runtime sources in dependency order with `stageRuntimeJar` (not `clean` or `verifyFull`), reuses matching bundled artifacts, refreshes Packwiz, packages exactly once, and requires **Smoke on those exact ZIP hashes** before success or a ready marker. `--soak-minutes N` adds optional Soak on the same pair. There is no `--skip-tests`, forced Debug rebuild or targeted-release bypass. For pack content/runner work that must retain its currently bundled runtime inputs, explicitly use `--use-bundled-mods`; that mode does not inspect/build sibling source checkouts, and still requires Smoke plus any requested Soak.
 
-Dev checks fast contracts and the diff without changing Packwiz hashes in a shared workspace.
-Fresh-dist preparation refreshes the tracked pack index after the deployed set settles.
-Do not run Dist or Debug unless the user separately requests pack-level testing.
+The machine-readable active set is `gradle/active-custom-mods.json`. Its `dependsOn` graph orders typed providers before consumers; existing bundled providers seed release staging, and newly staged active providers replace them before consumers build. Optional compile-only fixtures can be supplied through `BC_RELEASE_COMPILE_FIXTURE_DIR`; they are recorded build inputs, never implicitly activated or deployed. Celestial Events is now an active typed provider for Fonts and is ordered before that consumer.
 
-When the user explicitly requests a fresh tested distribution, run `./release.main.kts` from the
-modpack. It requires clean active source repositories, reuses valid source-identical bundled JARs,
-runs documented verification for changed or unannotated sources, stages and validates their fresh
-JARs, deploys the staged set as a group, refreshes the pack, invokes `dist.sh` once, and runs
-the Dist tier against those exact candidates. The
-machine-readable release inventory is `gradle/active-custom-mods.json`; this table documents the
-same active set for humans. Inventory `dependsOn` edges are release-build order constraints. They
-stage typed Better Content API providers before their consumers: Dimension Drink before Economy,
-Dynamic Survival HUD before Better
-Content Fixes and Revival, WLM before Class Selector, Revival before its three consumers, every domain-event
-provider before Threads, Heat Sync before Latent Chemlib and Airtight Machinery, and Bumblezone Cultivars
-before Ratlantis Logistics so rats use the typed propagule catalogue.
-This directed build graph is intentionally acyclic; Threads is the downstream event listener and
-no provider depends on it.
-
-`--skip-tests` is reserved for an explicitly test-free fresh-dist request. It retains unchanged
-artifact reuse, stages changed sources without verification, and skips pack suites. There is no
-implicit forced-rebuild mode.
-
-Direct full `./test.main.kts debug` explicitly selects forced rebuild mode: all 44 active
-repositories must be clean, every manifest-listed verification runs, and every runtime JAR is
-rebuilt after `clean` regardless of matching source metadata. It packages one new candidate
-pair and runs complete Dist and Debug on identical ZIP hashes. Targeted and queued Debug
-continue to use an existing candidate.
+Standalone `./test.main.kts smoke` and `./test.main.kts soak --minutes N` consume existing packaged artifacts and never build, deploy, refresh or package. The old Dev/Dist/Debug selectors, queue and scenario targets are removed. See [testing](testing.md) for the lifecycle and evidence contract.
 
 ## Reproducible Build Bootstrap
 
@@ -67,12 +39,6 @@ and bundled source identities before staging anything. It does not build provide
 cache, deploy JARs, or package the modpack. Update the workflow's pinned baseline deliberately when
 a consumer requires a newer provider API; never substitute a floating branch.
 
-The pack's fast reflection-boundary check also inspects custom-mod source files. Its CI workflow
-materializes source-only checkouts at the revisions in `.github/ci-source-revisions.json`, including
-both validation-only repositories. These checkouts are not built or used as provider artifacts.
-Refresh their pins deliberately after reviewed source changes; never skip the reflection check
-merely because a fresh runner starts without `mod_source/`.
-
 Plugin selectors are pinned to the versions resolved during hygiene remediation. RPG Stats and
 Systemic Salience retain their previously resolved `1.2.0.7-dev-SNAPSHOT` Parchment plugin to avoid
 an unrequested toolchain change. Snapshot content and full transitive dependency locking/verification
@@ -87,24 +53,18 @@ they are manual-only and are not a routine consequence of a hygiene change.
 ## Reflection Boundary
 
 Custom Java and Kotlin source must use typed APIs, Forge events, or narrow mapped Mixin
-accessors/invokers. Runtime reflection is permitted only for Runtime Data Dumper's diagnostic
-adapters and direct adapter tests listed by exact repository-relative path in
-`gradle/reflection-allowlist.txt`. The fresh release preflight scans every Git repository in the
-canonical `mod_source/` workspace, and the staged-JAR gate inspects every active custom mod before
-deployment; an unlisted reflective call aborts the release.
+accessors/invokers. Runtime reflection remains a source-ownership concern for narrow diagnostic adapters and their direct tests. The pack no longer scans all sibling checkouts or bytecode as a release prerequisite; regression and API-boundary checks belong to the owning repositories.
 Optional integrations use explicit loaded-mod and supported-version guards. Missing optional mods
 remain inert, while API drift in an expected pinned integration is a visible validation failure.
 
 The fresh-dist flow also performs a local-only source revision check before building. Each bundled
 custom JAR records its repository, mod ID, and source `HEAD` in
 `META-INF/better-content-source.properties`. The release evidence reports whether each local
-checkout is unchanged, changed, or based on a legacy JAR without an identity. This check never
-fetches, pulls, merges, or contacts a remote. Source-identical annotated JARs are reused; changed or
-legacy JARs are rebuilt, and every staged release artifact retains the source metadata.
+checkout is unchanged, changed, or based on a legacy JAR without an identity. Production input fingerprints detect dirty runtime changes as well as committed revisions; test-only edits do not require a runtime rebuild. This check never fetches, pulls, merges, or contacts a remote. Source-identical annotated JARs are reused; changed or legacy JARs are staged without an implicit verification sweep, and every staged release artifact retains source metadata.
 
 ## Canonical Active Inventory
 
-The active set contains 44 custom mods.
+The active set contains 48 custom mods. Celestial Events, Wild Fruit Trees, Scalable TNT and Dynamic Trees Dimension Compat were explicitly requested for activation on 2026-10-26. Finite Water remains excluded.
 
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
@@ -152,14 +112,17 @@ The active set contains 44 custom mods.
 | [better-village-fortifications](https://github.com/better-content/better-village-fortifications) | `better_village_fortifications` | `better-village-fortifications-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-drinking-water](https://github.com/better-content/better-drinking-water) | `better_drinking_water` | `better-drinking-water-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-world-management](https://github.com/better-content/better-world-management) | `better_world_management` | `better-world-management-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-celestial-events](https://github.com/better-content/better-celestial-events) | `better_celestial_events` | `better-celestial-events-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-wild-fruit-trees](https://github.com/better-content/better-wild-fruit-trees) | `better_wild_fruit_trees` | `better-wild-fruit-trees-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [scalable-tnt](https://github.com/better-content/scalable-tnt) | `scalable_tnt` | `scalable-tnt-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [dynamic-trees-dimension-compat](https://github.com/better-content/dynamic-trees-dimension-compat) | `dynamic_trees_dimension_compat` | `dynamic-trees-dimension-compat-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 
-## Validation-Only Repositories
+## Explicit Activation Dependencies And Boundaries
 
-These Better Content repositories remain available for source validation but are not active modpack
-content. Do not copy their runtime JARs into `mods/` unless the corresponding retired features are
-explicitly activated.
+Dynamic Trees Dimension Compat requires **The Undergarden**. Its required upstream dependency is pinned to CurseForge project `379849`, file `5182632` (version `0.8.14`) in `mods/the-undergarden.pw.toml`. Its `verifyFull` task now covers deterministic tests plus a focused nonshipping native Immersive Weathering leaf-pile contract; use `verifyFull stageRuntimeJar` for qualification and runtime-JAR staging. The native contract checks six effective generated tables and 54 layer/tool drop cases, not a dimension tour or exact-pack acceptance. Its optional IW/Moonlight/Patchouli fixture pins do not become mandatory production dependencies; see the source owner's `TESTING.md` for details.
 
-| Repository | Reason | Local validation and staging |
-|---|---|---|
-| [dynamic-trees-dimension-compat](https://github.com/better-content/dynamic-trees-dimension-compat) | The addon requires The Undergarden, which the pack retired. | `./gradlew runData verifyFull` |
-| [scalable-tnt](https://github.com/better-content/scalable-tnt) | TNT-01 source prototype; validation-only until unit-only authoring is reviewed and runtime/integration/balance acceptance is authorized. | `./gradlew test` |
+Celestial Events' authored Thin Veil forest/swamp biome selections remain **pack-owned** under `kubejs/data/better_celestial_events/tags/worldgen/biome/`. They were restored byte-for-byte from pack revision `3900ac64` for this explicit activation. The source build already consumes and bundles those declared pack inputs; owner-local verification using them is not hermetic, and their ownership must not be moved into source merely to satisfy a test.
+
+This activation is not a rollout of every active source checkout. The existing 44 bundled custom JARs are retained; only the four requested additions and the necessary upstream dependency are integrated. Source verification does not establish exact-pack runtime acceptance: a new distribution still requires Smoke on its exact packaged pair, with any requested Soak. Build 366 remains a separate previously accepted bundled baseline.
+
+`better-finite-water` remains source-only and must not be deployed implicitly. Future cloned sources likewise require explicit activation; presence under `mod_source/` is not pack membership.

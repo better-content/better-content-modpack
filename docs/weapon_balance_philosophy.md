@@ -80,4 +80,4 @@ Combat Roll and Better Content Fixes' directional double-tap integration are rem
 
 Returning Blockram, Buckler, and Fuma Shuriken throws use the separate 100-tier throw target. Javelin throws stay at 105 per hit. Battlesign's charged Bonk and War Pick's charge projectile target 100. The Minotaur Axe sprint charge remains the one explicit signature exception.
 
-The repository's supported full-depth evaluation is the explicitly ordered `./test.main.kts debug` tier.
+Weapon regressions belong to their owning source-local tests and explicit manual balance reviews. Pack-level Smoke/Soak exercise only session lifecycle, not weapon balance or a scripted combat tour.

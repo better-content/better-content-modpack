@@ -7,6 +7,26 @@
     "promotion_rule": "Promote a reported category only after its recorded backlog is zero."
   },
   "namespaces": {
+    "better_celestial_events": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "better_wild_fruit_trees": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "scalable_tnt": {
+      "primary_role": "content",
+      "support_state": "full"
+    },
+    "dynamic_trees_dimension_compat": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
+    "undergarden": {
+      "primary_role": "world",
+      "support_state": "full"
+    },
     "acceleratedrendering": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"

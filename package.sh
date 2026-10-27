@@ -139,10 +139,14 @@ stage_side() {
 
 install_server() {
   local server="$1" accept_eula="$2" profile="$3" port="${4:-25565}" properties
-  local installer="$ROOT/forge-$FORGE_COORD-installer.jar"
-  [ -f "$installer" ] || fail "missing Forge installer: $installer"
+  local installer="${BC_PACKAGE_FORGE_INSTALLER:-$HOME/.cache/bc/forge/forge-$FORGE_COORD-installer.jar}"
+  if [ ! -f "$installer" ]; then
+    mkdir -p "$(dirname "$installer")"
+    curl --fail --location --retry 3 --output "$installer.part" \
+      "https://maven.minecraftforge.net/net/minecraftforge/forge/$FORGE_COORD/forge-$FORGE_COORD-installer.jar"
+    mv -- "$installer.part" "$installer"
+  fi
   case "$profile" in
-    testing) properties="$ROOT/server-config/testing.properties" ;;
     production) properties="$ROOT/server-config/production.properties" ;;
     *) fail "unknown server profile: $profile" ;;
   esac
@@ -165,15 +169,6 @@ install_server() {
   chmod 0755 "$server/run.sh" "$server/run-forge.sh" "$server/better-world-management-server.sh"
 }
 
-package_runtime() {
-  (($# == 3)) || fail 'usage: package.sh runtime SERVER_DIR CLIENT_DIR PORT'
-  command -v java >/dev/null || fail 'java is required'
-  command -v python3 >/dev/null || fail 'python3 is required'
-  stage_side server "$1"
-  stage_side client "$2"
-  install_server "$1" true testing "$3"
-}
-
 archive_server_tree() {
   local server_dir="$1" tree="$1/server-tree"
   (cd "$tree" && zip -q -r "$server_dir/better-content.zip" better-content-server)
@@ -182,7 +177,7 @@ archive_server_tree() {
 
 package_dist() {
   (($# == 0)) || fail 'distribution output is fixed at the repository dist/ directory'
-  for command in java packwiz python3 zip; do command -v "$command" >/dev/null || fail "$command is required"; done
+  for command in java packwiz python3 zip curl; do command -v "$command" >/dev/null || fail "$command is required"; done
   local out_root="$ROOT/dist"
   local current_version current_build next_build version version_dir_name release_dir client_dir server_dir stage
   current_version="$(awk -F ' *= *' '$1 == "version" { value=$2; gsub(/^"|"$/, "", value); print value; exit }' "$ROOT/pack.toml")"
@@ -191,11 +186,8 @@ package_dist() {
   next_build=$((10#$current_build + 1))
   version="$(printf '%s' "$current_version" | sed -E "s/[0-9]+$/$next_build/")"
   version_dir_name="$(printf '%s' "$version" | tr '[:upper:] ' '[:lower:]-' | tr -cd 'a-z0-9._-')"
-  if [ -e "$out_root" ]; then
-    find "$out_root" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +
-  else
-    mkdir -p "$out_root"
-  fi
+  # Previous accepted/failed candidates are evidence, not scratch space.
+  mkdir -p "$out_root"
   out_root="$(cd "$out_root" && pwd)"
   release_dir="$out_root/$version_dir_name"
   [ ! -e "$release_dir" ] || fail "version directory already exists: $release_dir"
@@ -207,6 +199,28 @@ package_dist() {
   sed -i -E "0,/^version *=/{s|^version *=.*$|version = \"$escaped_version\"|}" "$ROOT/pack.toml"
   mkdir -p "$client_dir" "$stage"
   (cd "$ROOT" && packwiz curseforge export -o "$client_dir/better-content.zip" -s client -y)
+  # Record exact filenames, URLs and digests while packaging. Standalone sessions
+  # materialize this lock instead of importing from or resolving the live checkout.
+  python3 - "$ROOT" "$client_dir/better-content.zip" <<'PY'
+import json, pathlib, sys, tomllib, zipfile
+root, output = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
+artifacts = []
+for folder in ('mods', 'resourcepacks', 'shaderpacks', 'tacz'):
+    for path in sorted((root / folder).glob('*.pw.toml')):
+        item = tomllib.loads(path.read_text())
+        if item.get('side', 'both') not in ('both', 'client'):
+            continue
+        download = item['download']
+        cf = item.get('update', {}).get('curseforge', {})
+        url = download.get('url') or f"https://www.curseforge.com/api/v1/mods/{cf['project-id']}/files/{cf['file-id']}/download"
+        record = {'path': f"{folder}/{item['filename']}", 'url': url,
+                  'hash_format': download['hash-format'], 'hash': download['hash']}
+        if cf:
+            record.update(project_id=cf['project-id'], file_id=cf['file-id'])
+        artifacts.append(record)
+with zipfile.ZipFile(output, 'a', compression=zipfile.ZIP_DEFLATED) as archive:
+    archive.writestr('better-content-artifacts.json', json.dumps({'schema': 'bc.client_artifacts.v1', 'artifacts': artifacts}, indent=2))
+PY
   stage_side server "$stage"
   install_server "$stage" false production 25565
   cat > "$stage/SERVER_README.txt" <<'TXT'
@@ -231,13 +245,12 @@ TXT
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   case "${1:-}" in
-    runtime) shift; package_runtime "$@" ;;
     resolve)
       shift
       (($# == 3)) || fail 'usage: package.sh resolve MANIFEST_ROOT TARGET SIDE'
       resolve_artifacts "$2" "$3" "$1"
       ;;
     dist) shift; package_dist "$@" ;;
-    *) fail 'usage: package.sh <runtime SERVER_DIR CLIENT_DIR PORT|resolve MANIFEST_ROOT TARGET SIDE|dist>' ;;
+    *) fail 'usage: package.sh <resolve MANIFEST_ROOT TARGET SIDE|dist>' ;;
   esac
 fi
