@@ -368,7 +368,11 @@ class FreshSourceReleaseTest {
         writeTele(path, pair, events)
         assertThrows(IllegalArgumentException::class.java) { validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH) }
         heartbeat["verified_dimension"] = "minecraft:overworld"
-        events.remove(heartbeat) // Two adjacent 12s intervals become a forbidden 24s gap.
+        events.remove(heartbeat) // A 24s gap is within the documented 30s stable-proof budget.
+        writeTele(path, pair, events)
+        assertDoesNotThrow { validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH) }
+        val nextHeartbeat = events.first { it["type"] == "heartbeat" && it["verified_dimension"] == "minecraft:overworld" }
+        events.remove(nextHeartbeat) // Two missing 12s heartbeats leave a >30s gap.
         writeTele(path, pair, events)
         assertThrows(IllegalArgumentException::class.java) { validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH) }
     }
