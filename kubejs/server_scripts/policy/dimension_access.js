@@ -31,7 +31,7 @@ ServerEvents.recipes(function (event) {
     event.remove({ id: 'bloodmagic:soulforge/simple_key' })
     event.remove({ id: 'bloodmagic:soulforge/mine_key' })
 
-    console.info('[space-dimension-access] disabled direct portal/key recipe outputs; Bumblezone and Ratlantis are Font-only')
+    console.info('[space-dimension-access] disabled direct portal/key recipe outputs; Bumblezone uses Fonts; Ratlantis player access is retired')
 })
 
 // Eyes remain a finite ritual ingredient, but cannot open the vanilla End.

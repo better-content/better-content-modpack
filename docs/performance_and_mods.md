@@ -7,10 +7,10 @@ Generated runtimes and old profiling directories are not authorities for active 
 
 ## Active integration state
 
-The Bumblezone 7.13.4 and Rats 8.1.3 are the active Font-only expedition realms replacing the
-retired Undergarden and Deeper Darker routes. `better_bumblezone_crops` owns Bumblezone food flora and
-propagation. `better_ratlantis_logistics` owns the three visible logistics components, bait-only trust,
-finite Rats work behaviors, and tube traversal repair. Nature's Spirit remains the canonical mahogany
+Bumblezone 7.13.4 remains an active Font expedition realm; Rats 8.1.3 remains installed but
+normal Ratlantis player access is retired. `better_bumblezone_crops` owns Bumblezone food flora and
+propagation. Native Rats resources and creatures now use rare Overworld coastal and cave biomes;
+Better Ratlantis Logistics, its custom components, bait restriction, abyss and vaults are removed. Nature's Spirit remains the canonical mahogany
 wood and progression authority; `better_hexerei_dynamic_trees` restores dynamic Hexerei mahogany, willow,
 and witch hazel trees. The CurseForge Dynamic Trees addons for Aether and Twilight Forest remain
 active, along with `better_malum_dynamic_trees`.
@@ -135,6 +135,8 @@ The mod remains active on its intended planet; its six Mushroom Fields structure
 `datapacks/worldgen_compat_fixes`, and `better_compat_fixes` disables its unconditional client
 proximity-music scan. Its entities, combat, evolution, and ordinary Records-channel sounds remain
 active there.
+
+A retained Tele Soak watchdog crash identified TFTH's incubator spawn-site scan as a synchronous server-tick walk of up to 251 × 41 × 251 block positions **per incubator**, with block-state reads that request unloaded chunks. `better_exploration_load_control` now bounds its Lost Cities-only incubator search to 4,096 sampled positions in **already loaded chunks**, preserving flesh-block-supported spawn candidates without disabling the planet's incubators or pre-generating Tele Soak targets. This compatibility mitigation needs real in-world incubator-spawn observation before anyone claims full TFTH gameplay parity; a successful Smoke or Tele Soak alone is not that proof.
 
 `datapacks/hyle_deep` owns the exhaustive Hyle/Unearthed deep-stone pass beginning at Y -64.
 `better_compat_fixes` moves Hyle and SGI terrain conforming to decoration tail, completes only

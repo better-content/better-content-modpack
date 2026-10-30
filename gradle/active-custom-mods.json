@@ -349,7 +349,8 @@
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-deaths-door"
+        "better-deaths-door",
+        "better-gameplay-notices"
       ]
     },
     {
@@ -371,21 +372,9 @@
       ]
     },
     {
-      "repository": "better-ratlantis-logistics",
-      "modId": "better_ratlantis_logistics",
-      "artifact": "better-ratlantis-logistics-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ],
-      "dependsOn": [
-        "better-bumblezone-crops"
-      ]
-    },
-    {
       "repository": "better-ore-geology",
       "modId": "better_ore_geology",
-      "artifact": "better-ore-geology-0.2.0.jar",
+      "artifact": "better-ore-geology-0.3.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
@@ -544,6 +533,23 @@
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-cooking",
+      "modId": "better_cooking",
+      "artifact": "better-cooking-0.1.0.jar",
+      "tasks": [
+        "verifyFast",
+        "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-survival-physiology",
+        "better-drinking-water",
+        "better-industrial-heat",
+        "better-spicy-farmers",
+        "better-spirit-commerce",
+        "better-bumblezone-crops"
       ]
     }
   ]

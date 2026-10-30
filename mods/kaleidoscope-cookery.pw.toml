@@ -1,0 +1,13 @@
+name = "Kaleidoscope Cookery"
+filename = "kaleidoscopecookery-1.6.0-forge+mc1.20.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/v17FatAc/versions/Ghp0qCKY/kaleidoscopecookery-1.6.0-forge%2Bmc1.20.1.jar"
+hash-format = "sha512"
+hash = "32928f0af7e1047f6f2b268cda947476608c49b547f094ab71d6ee1498566f68d6777d852ed3d0399d5715d202e9cc3ac03dbc85a5671ee101a99661fd8ed84f"
+
+[update]
+[update.modrinth]
+mod-id = "v17FatAc"
+version = "Ghp0qCKY"

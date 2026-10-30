@@ -26,19 +26,22 @@ internal object TeleSoakProbes {
         require(result.path("registered_dimension_registry").asText() == "minecraft:dimension" &&
             result.path("registered_dimension_registry_available").asBoolean(false) &&
             result.path("registered_dimension_count_matches_ids").asBoolean(false) &&
-            result.path("registered_loaded_dimensions_match").asBoolean(false) &&
+            result.path("registered_dimensions_loaded").asBoolean(false) &&
             registered.isArray && registered.size() == result.path("registered_dimension_count").asInt(-1) &&
             result.path("registered_not_loaded_dimensions").isArray &&
             result.path("registered_not_loaded_dimensions").size() == 0 &&
             result.path("loaded_not_registered_dimensions").isArray &&
-            result.path("loaded_not_registered_dimensions").size() == 0) {
+            result.path("dynamic_loaded_dimensions").isArray &&
+            result.path("loaded_not_registered_dimensions") == result.path("dynamic_loaded_dimensions")) {
             "actual LevelStem registered/loaded dimension roster is absent or incomplete"
         }
         val ids = values.map { it.asText() }
         val registeredIds = registered.map { it.asText() }
         require(ids.isNotEmpty() && ids.size == ids.toSet().size && "minecraft:overworld" in ids &&
+            result.path("registered_loaded_dimensions_match").asBoolean(false) == (registeredIds.toSet() == ids.toSet()) &&
             registeredIds.isNotEmpty() && registeredIds.size == registeredIds.toSet().size &&
-            registeredIds.toSet() == ids.toSet()) {
+            registeredIds.toSet().all { it in ids } &&
+            result.path("dynamic_loaded_dimensions").map { it.asText() }.toSet() == (ids.toSet() - registeredIds.toSet())) {
             "actual LevelStem and live loaded dimension IDs differ, duplicate or omit dimensions"
         }
         return ids

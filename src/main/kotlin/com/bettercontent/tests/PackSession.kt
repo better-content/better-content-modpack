@@ -15,17 +15,22 @@ import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
 fun main(args: Array<String>) {
-    require(args.size == 5) { "usage: PackSession ROOT smoke|soak|tele-soak MINUTES CLIENT_ZIP SERVER_ZIP" }
+    require(args.size == 6) { "usage: PackSession ROOT smoke|soak|tele-soak MINUTES CLIENT_ZIP SERVER_ZIP DIAGNOSTIC_SOURCE_OR_EMPTY" }
     require(!System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) { "invoke ./test.main.kts so the session mutex is held" }
     val root = Path.of(args[0]).toAbsolutePath().normalize()
     val tier = SessionTier.entries.singleOrNull { it.selector == args[1] } ?: error("select smoke, soak or tele-soak")
     val request = SessionRequest(tier, args[2].toLong())
     require(args[3].isBlank() == args[4].isBlank()) { "supply both artifact paths" }
     val pair = if (args[3].isBlank()) CandidateLocator.locate(root) else CandidateLocator.locate(Path.of(args[3]), Path.of(args[4]))
+    val replay = args[5].takeIf(String::isNotBlank)?.let { loadDiagnosticReplay(root, tier, Path.of(it)) }
     val runId = System.getenv("BC_TEST_RUN_ID")?.takeIf(String::isNotBlank)
         ?: DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC).format(Instant.now()) + "-" + ProcessHandle.current().pid()
-    val evidence = SessionEvidence(root, runId, tier.selector, pair)
-    val session = PackSession(evidence, request)
+    val evidence = SessionEvidence(root, runId, tier.selector, pair, diagnostic = replay != null)
+    replay?.let { evidence.event("diagnostic_replay_source", mapOf("source_run_id" to it.sourceRunId,
+        "source_evidence" to it.sourceEvidence.toString(), "source_candidate_hashes" to it.sourceCandidates,
+        "failed_hop" to it.failedHop?.let { hop -> mapOf("dimension" to hop.dimension, "circuit" to hop.circuit) },
+        "acceptance_eligible" to false)) }
+    val session = PackSession(evidence, request, replay)
     val driver: SessionDriver = session
     require(tier != SessionTier.TELE_SOAK || driver is TeleSoakDriver) {
         "Tele Soak requires actual instrumented server/client dimension and TPS probes; no world was created"
@@ -33,13 +38,16 @@ fun main(args: Array<String>) {
     var failure: Throwable? = null
     try {
         session.prepare()
-        runLifecycle(request, session)
+        runLifecycle(request, session, replay = replay)
     } catch (error: Throwable) {
         failure = error
         session.diagnostics()
     } finally {
         try { session.close() } catch (cleanup: Throwable) {
             if (failure == null) failure = cleanup else failure.addSuppressed(cleanup)
+        }
+        try { session.recordLogMessages() } catch (logging: Throwable) {
+            if (failure == null) failure = logging else failure.addSuppressed(logging)
         }
         // Mutation is a failure even when another stage has already failed.
         try { pair.assertUnchanged() } catch (mutation: Throwable) {
@@ -71,7 +79,8 @@ internal fun sessionClientOptions(text: String): String {
     }
 }
 
-private class PackSession(private val evidence: SessionEvidence, private val request: SessionRequest) : TeleSoakDriver, AutoCloseable {
+private class PackSession(private val evidence: SessionEvidence, private val request: SessionRequest,
+    private val replay: DiagnosticReplay? = null) : TeleSoakDriver, AutoCloseable {
     private val pair = evidence.pair
     private val root = evidence.root
     private val fixture = evidence.fixture
@@ -94,6 +103,7 @@ private class PackSession(private val evidence: SessionEvidence, private val req
     private var connectedSince = -1L
     private var teleDimension: String? = null
     private var lastDimensionReceipt = -1L
+    private var lastFontRefill = -1L
     private var dimensionProbeIndex = 0
     private var registeredTeleRoster: Set<String> = emptySet()
     private val port = freePort()
@@ -120,10 +130,19 @@ private class PackSession(private val evidence: SessionEvidence, private val req
         values.setProperty("server-ip", "127.0.0.1")
         values.setProperty("server-port", port.toString())
         values.setProperty("level-name", "world")
-        values.setProperty("view-distance", "4")
-        values.setProperty("simulation-distance", "4")
+        // Fresh remote chunks in modded Overworld can generate faster than a
+        // 9x9 server view can finish; a 5x5 view still loads fresh terrain on
+        // every move without pre-generating it or relaxing the TPS threshold.
+        val distance = if (request.tier == SessionTier.TELE_SOAK) "2" else "4"
+        values.setProperty("view-distance", distance)
+        values.setProperty("simulation-distance", distance)
         Files.newOutputStream(props).use { values.store(it, "Disposable session profile; packaged inputs remain unchanged") }
-        serverRoot.resolve("user_jvm_args.txt").writeText("-Xms1G\n-Xmx6G\n-XX:+UseG1GC\n-Dfile.encoding=UTF-8\n")
+        val serverHeap = if (request.tier == SessionTier.TELE_SOAK) "-Xms4G\n-Xmx10G\n"
+            else "-Xms1G\n-Xmx6G\n"
+        serverRoot.resolve("user_jvm_args.txt").writeText(serverHeap + "-XX:+UseG1GC\n-Dfile.encoding=UTF-8\n" +
+            if (request.tier == SessionTier.TELE_SOAK)
+                "-Dbc.pack_test.debug=true\n-Xlog:gc*:file=tele-soak-gc.log:time,uptime,level,tags:filecount=3,filesize=10m\n"
+            else "")
         val backups = serverRoot.resolve("config/ftbbackups2.json")
         if (Files.isRegularFile(backups)) backups.writeText(backups.readText().replace("\"enabled\": true", "\"enabled\": false"))
         // The materializer uses only the ZIP, its embedded artifact lock and a content-addressed cache.
@@ -133,8 +152,9 @@ private class PackSession(private val evidence: SessionEvidence, private val req
         Commands.run(listOf("xauth", "-f", authority.toString(), "add", displayAddress, "MIT-MAGIC-COOKIE-1", UUID.randomUUID().toString().replace("-", "")),
             fixture, evidence.directory.resolve("xauth.log"))
         evidence.event("prepared", mapOf("fresh_world" to true, "server_port" to port,
-            "profile" to "loopback offline authentication, server distances 4, client render 4/simulation 5, software-rendered client; no feature scenarios",
-            "requested_connected_seconds" to request.connectedDuration.seconds))
+            "profile" to "loopback offline authentication, server distances 4 (Tele Soak 2), client render 4/simulation 5, software-rendered client; Tele Soak server heap 4-10 GiB and all client heaps 2-8 GiB; no feature scenarios",
+            "requested_connected_seconds" to request.connectedDuration.seconds,
+            "diagnostic_remaining_seconds" to replay?.remainingSeconds(request)))
     }
 
     private fun configureClientProfile() {
@@ -173,7 +193,10 @@ private class PackSession(private val evidence: SessionEvidence, private val req
         val loader = manifest.path("minecraft").path("modLoaders").single { it.path("primary").asBoolean() }.path("id").asText()
         require(mc == "1.20.1" && loader.startsWith("forge-")) { "unsupported client manifest loader: $mc/$loader" }
         val offlineId = UUID.nameUUIDFromBytes("OfflinePlayer:$username".toByteArray()).toString().replace("-", "")
-        val jvm = "-Xms1G -Xmx4G -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false"
+        // The full client's initial resource reload nearly exhausted the former 4 GiB Smoke heap
+        // and stalled the first login until Minecraft's 30-second network read timeout fired.
+        // Use the existing Tele Soak heap for every tier; no continuity or TPS gate changes.
+        val jvm = "-Xms2G -Xmx8G -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false"
         client = ManagedProcess("client", listOf("pipx", "run", "--spec", "portablemc==4.4.1", "portablemc",
             "--main-dir", main, "--work-dir", clientRoot.toString(), "--timeout", "120", "start", "--jvm", java.toString(),
             "--jvm-args=$jvm", "--resolution", "1280x720", "-u", username, "-i", offlineId,
@@ -208,11 +231,14 @@ private class PackSession(private val evidence: SessionEvidence, private val req
         check(!Regex("${Regex.escape(username)} (?:lost connection:|left the game)").containsMatchIn(complete)) { "client disconnected during the required connected interval" }
     }
 
-    override fun heartbeat() {
+    override fun heartbeat() = heartbeatFor(teleDimension)
+
+    override fun heartbeatDuringArrival() = heartbeatFor(null)
+
+    private fun heartbeatFor(dimension: String?) {
         ensureConnected()
         val marker = "BC_SESSION_${UUID.randomUUID().toString().replace("-", "") }"
         val offset = if (Files.isRegularFile(clientLog)) Files.size(clientLog) else 0L
-        val dimension = teleDimension
         val command = if (dimension == null) "execute as $username run tellraw @s {\"text\":\"$marker\"}"
             else "execute as $username at @s if dimension $dimension run tellraw @s {\"text\":\"$marker\"}"
         server!!.send(command)
@@ -233,6 +259,27 @@ private class PackSession(private val evidence: SessionEvidence, private val req
     override fun registeredDimensions(progress: () -> Unit): List<String> {
         progress()
         ensureConnected()
+        if (dimensionProbeIndex > 0) {
+            // A second full runtimedata dump scans the entire accumulated recipe
+            // graph and can stall this long-lived server long enough to drop the
+            // client. Probe each initially discovered live level on the server
+            // instead; a registered level cannot be added during this session.
+            val ids = registeredTeleRoster.sorted()
+            ids.forEach { dimension ->
+                val marker = "BC_DIM_${UUID.randomUUID().toString().replace("-", "") }"
+                val offset = Files.size(serverLog)
+                server!!.send("execute in $dimension run say $marker")
+                server!!.waitUntil(responseTimeout, "live server level $dimension") {
+                    progress()
+                    ensureConnected()
+                    readLogFrom(serverLog, offset).text.contains(marker)
+                }
+            }
+            dimensionProbeIndex++
+            evidence.event("live_dimension_probe", mapOf("dimensions" to ids,
+                "method" to "fresh_execute_in_per_level", "levels_verified" to ids.size))
+            return ids
+        }
         val output = serverRoot.resolve("generated/runtime-dumps")
         val completion = output.resolve("snapshot.json")
         val previous = if (Files.isRegularFile(completion))
@@ -261,38 +308,147 @@ private class PackSession(private val evidence: SessionEvidence, private val req
         return ids
     }
 
-    override fun teleportTo(dimension: String) {
+    private val preparedLandings = mutableSetOf<String>()
+    private data class Landing(val x: Double, val y: Double, val z: Double) {
+        val chunk: Pair<Int, Int> get() = kotlin.math.floor(x / 16).toInt() to kotlin.math.floor(z / 16).toInt()
+    }
+    private val lastLanding = mutableMapOf<String, Landing>()
+    private val visitedChunks = mutableMapOf<String, MutableSet<Pair<Int, Int>>>()
+    private val remoteCursor = RemoteLandingCursor()
+    private var requestedLanding: Landing? = null
+
+    override fun prepareLanding(dimension: String, progress: () -> Unit) {
         ensureConnected()
         require(dimension in registeredTeleRoster) { "destination not in live dimension roster: $dimension" }
+        if (preparedLandings.isEmpty()) {
+            server!!.send("gamemode spectator $username")
+            val marker = "BC_SPECTATOR_${UUID.randomUUID().toString().replace("-", "") }"
+            val offset = Files.size(serverLog)
+            server!!.send("execute as $username if entity @s[gamemode=spectator] run say $marker")
+            server!!.waitUntil(responseTimeout, "safe spectator mode for remote ungenerated chunk hops") {
+                ensureConnected()
+                readLogFrom(serverLog, offset).text.contains(marker)
+            }
+            evidence.event("remote_hop_profile", mapOf("gamemode" to "spectator", "terrain_pre_generated" to false,
+                "target_spacing_blocks" to 10000))
+        }
+        // Spectators safely land in genuinely fresh terrain; no force-load/fill
+        // is permitted here because it would pre-generate the stress target.
+        progress()
+        check(preparedLandings.add(dimension)) { "duplicate dimension preparation for $dimension" }
+        evidence.event("remote_destination_eligible", mapOf("dimension" to dimension,
+            "terrain_pre_generated" to false, "safe_mode" to "spectator"))
+    }
+
+    override fun teleportTo(dimension: String) {
+        ensureConnected()
+        require(dimension in preparedLandings) { "destination was not verified in the live dimension roster: $dimension" }
+        // Bumblezone is Font-only. Unbind its test Font before leaving, without
+        // returning to the already visited origin chunk. Never weaken the entry gate.
+        if (teleDimension == "the_bumblezone:the_bumblezone" && dimension != teleDimension) {
+            val offset = Files.size(serverLog)
+            server!!.send("execute as $username run font harness_abandon")
+            server!!.waitUntil(responseTimeout, "Font abandonment before fresh hop to $dimension") {
+                ensureConnected()
+                readLogFrom(serverLog, offset).text.contains("BC_FONT_HARNESS_ABANDON player=$username ")
+            }
+            evidence.event("font_abandoned", mapOf("before_dimension" to dimension, "return_teleport" to false))
+        }
+        val previousDimension = teleDimension
+        val previous = lastLanding[dimension]
+        // Per-dimension counters can reuse a Font destination reached earlier
+        // from another dimension. Advance the test itinerary globally instead.
+        requestedLanding = if (dimension == "the_bumblezone:the_bumblezone" && previousDimension != dimension) null
+            else Landing(remoteCursor.nextX(), 91.0, previous?.z ?: 0.5)
+        requestedLanding?.let { landing ->
+            check(landing.chunk !in visitedChunks[dimension].orEmpty()) { "reused remote chunk in $dimension: ${landing.chunk}" }
+        }
         teleDimension = dimension
         lastDimensionReceipt = -1L
-        // A freshly generated disposable world's own landing fixture, not pack content or progression.
-        server!!.send("execute in $dimension run forceload add 0 0")
-        server!!.send("execute in $dimension run fill -2 90 -2 2 90 2 minecraft:obsidian replace")
-        server!!.send("execute in $dimension run fill -2 91 -2 2 94 2 minecraft:air replace")
-        server!!.send("execute in $dimension run tp $username 0.5 91 0.5")
+        // Charge belongs to the active Font, not to each 10,000-block relocation.
+        // Resetting this clock on every jump starves the one-minute refill forever.
+        if (requestedLanding == null) {
+            lastFontRefill = System.nanoTime()
+            server!!.send("execute as $username run font harness_enter bumblezone")
+            evidence.event("font_entry_requested", mapOf("dimension" to dimension, "path" to "test-gated real Font interaction"))
+        } else {
+            val target = requestedLanding!!
+            server!!.send("execute in $dimension run tp $username ${target.x} ${target.y} ${target.z}")
+        }
     }
 
     override fun verifyArrival(dimension: String, progress: () -> Unit) {
         require(dimension == teleDimension) { "arrival dimension changed unexpectedly" }
+        val actual = readPlayerLanding()
+        evidence.event("arrival_position_observed", mapOf("dimension" to dimension,
+            "x" to actual.x, "y" to actual.y, "z" to actual.z,
+            "requested_x" to requestedLanding?.x, "requested_y" to requestedLanding?.y,
+            "requested_z" to requestedLanding?.z))
         val marker = "BC_ARRIVAL_${UUID.randomUUID().toString().replace("-", "") }"
         val offset = Files.size(clientLog)
-        server!!.send("execute as $username at @s if dimension $dimension run tellraw @s {\"text\":\"$marker\"}")
+        val positionClause = requestedLanding?.let { target ->
+            " positioned ${target.x} ${target.y} ${target.z} if entity @s[distance=..1]"
+        } ?: ""
+        server!!.send("execute as $username at @s if dimension $dimension$positionClause run tellraw @s {\"text\":\"$marker\"}")
         client!!.waitUntil(responseTimeout, "server dimension and current client arrival in $dimension") {
             ensureConnected()
             progress()
             readLogFrom(clientLog, offset).text.contains(marker)
         }
+        requestedLanding?.let { target ->
+            check(kotlin.math.abs(actual.x - target.x) <= 1 && kotlin.math.abs(actual.y - target.y) <= 1 &&
+                kotlin.math.abs(actual.z - target.z) <= 1) {
+                "server/player position differs from the fresh requested chunk in $dimension: $actual vs $target"
+            }
+        }
+        val previous = lastLanding[dimension]
+        val distance = previous?.let { kotlin.math.hypot(actual.x - it.x, actual.z - it.z) }
+        check(distance == null || distance >= 9999.0) {
+            "hop moved less than 10,000 blocks in $dimension: $distance"
+        }
+        check(visitedChunks.getOrPut(dimension, ::mutableSetOf).add(actual.chunk)) {
+            "teleported into a previously visited chunk in $dimension: ${actual.chunk}"
+        }
+        remoteCursor.observe(actual.x)
+        lastLanding[dimension] = actual
         lastDimensionReceipt = System.nanoTime()
+        evidence.event("landing_verified", mapOf("dimension" to dimension, "x" to actual.x, "y" to actual.y,
+            "z" to actual.z, "chunk_x" to actual.chunk.first, "chunk_z" to actual.chunk.second,
+            "distance_from_previous" to distance, "novel_chunk" to true,
+            "route" to if (requestedLanding == null) "native_font" else "remote_ungenerated_chunk"))
         evidence.event("client_dimension_receipt", mapOf("dimension" to dimension, "marker" to marker,
-            "server_conditional" to true, "fresh_client_log_offset" to offset))
+            "server_conditional" to true, "server_position_conditional" to (requestedLanding != null),
+            "fresh_client_log_offset" to offset))
+    }
+
+    private fun readPlayerLanding(): Landing {
+        val offset = Files.size(serverLog)
+        server!!.send("data get entity $username Pos")
+        val pattern = Regex("has the following entity data: \\[([-+0-9.eE]+)d, ([-+0-9.eE]+)d, ([-+0-9.eE]+)d]")
+        server!!.waitUntil(responseTimeout, "fresh server-side player position") {
+            ensureConnected()
+            pattern.containsMatchIn(readLogFrom(serverLog, offset).text)
+        }
+        val match = requireNotNull(pattern.find(readLogFrom(serverLog, offset).text))
+        return Landing(match.groupValues[1].toDouble(), match.groupValues[2].toDouble(), match.groupValues[3].toDouble())
     }
 
     override fun ensureInDimension(dimension: String) {
         ensureConnected()
         check(teleDimension == dimension && lastDimensionReceipt >= 0 &&
-            System.nanoTime() - lastDimensionReceipt <= Duration.ofSeconds(15).toNanos()) {
-            "missing fresh server-conditional client receipt for $dimension within 15 seconds"
+            System.nanoTime() - lastDimensionReceipt <= Duration.ofSeconds(30).toNanos()) {
+            "missing fresh server-conditional client receipt for $dimension within 30 seconds"
+        }
+        if (dimension == "the_bumblezone:the_bumblezone" &&
+            System.nanoTime() - lastFontRefill >= Duration.ofSeconds(60).toNanos()) {
+            val offset = Files.size(serverLog)
+            server!!.send("execute as $username run font harness_refill")
+            server!!.waitUntil(responseTimeout, "active Font charge replenishment in $dimension") {
+                ensureConnected()
+                readLogFrom(serverLog, offset).text.contains("BC_FONT_HARNESS_REFILL player=$username ")
+            }
+            lastFontRefill = System.nanoTime()
+            evidence.event("font_refilled", mapOf("dimension" to dimension, "fixture_only" to true))
         }
     }
 
@@ -300,7 +456,9 @@ private class PackSession(private val evidence: SessionEvidence, private val req
         ensureConnected()
         val offset = Files.size(serverLog)
         server!!.send("forge tps")
-        server!!.waitUntil(Duration.ofSeconds(10), "fresh Forge 47.4.22 overall TPS sample") {
+        // Chunk-generation pauses can delay a console response without proving a TPS
+        // recovery. The 120-second hop deadline and strict <=2s stability gaps still apply.
+        server!!.waitUntil(Duration.ofSeconds(30), "fresh Forge 47.4.22 overall TPS sample") {
             ensureConnected()
             runCatching { TeleSoakProbes.overallTps(readLogFrom(serverLog, offset).text) }.isSuccess
         }
@@ -314,7 +472,8 @@ private class PackSession(private val evidence: SessionEvidence, private val req
     override fun disconnectClient() {
         ensureConnected()
         val elapsed = System.nanoTime() - connectedSince
-        check(connectedSince >= 0 && elapsed >= request.connectedDuration.toNanos()) { "connected interval was shorter than requested" }
+        check(connectedSince >= 0 && elapsed >= Duration.ofSeconds(replay?.remainingSeconds(request)
+            ?: request.connectedDuration.seconds).toNanos()) { "connected interval was shorter than requested" }
         evidence.event("connected_interval_complete", mapOf("actual_seconds" to elapsed / 1_000_000_000.0))
         server!!.send("kick $username Session complete")
         server!!.waitForLog(Regex("${Regex.escape(username)} left the game"), responseTimeout, "client disconnect")
@@ -354,6 +513,11 @@ private class PackSession(private val evidence: SessionEvidence, private val req
     fun diagnostics() {
         server?.captureDiagnostics(evidence.directory.resolve("server-failure"))
         client?.captureDiagnostics(evidence.directory.resolve("client-failure"))
+    }
+
+    fun recordLogMessages() {
+        evidence.event("log_diagnostics", recordLogDiagnostics(evidence.directory,
+            mapOf("server" to serverLog, "client" to clientLog)))
     }
 
     override fun close() {

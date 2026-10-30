@@ -8,13 +8,13 @@ ServerEvents.recipes(function (event) {
         'create_aquatic_ambitions:channeling/heart_of_the_sea'
     ].forEach(function (id) { event.remove({ id: id }) })
 
-    // The Conduit Cage is the return trip's Ratlantis logistics workshop.
     // Keep the native Conduit, alloy, rods, and fluid pipe visible in the craft.
+    // Meteor Certus supplies the control component without an ME network.
     event.remove({ id: 'create:crafting/materials/mechanical_conduit' })
     event.shaped('create_aquatic_ambitions:mechanical_conduit',
         ['IMI', 'IAI', 'PUP'], {
             I: 'create_aquatic_ambitions:prismarine_alloy_rod',
-            M: 'better_ratlantis_logistics:oratchalcum_mechanism',
+            M: 'ae2:certus_quartz_crystal',
             A: 'minecraft:conduit',
             P: 'create_aquatic_ambitions:prismarine_alloy',
             U: 'create:fluid_pipe'

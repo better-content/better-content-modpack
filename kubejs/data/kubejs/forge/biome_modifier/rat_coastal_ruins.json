@@ -1,0 +1,1 @@
+{"type":"forge:add_features","biomes":["minecraft:beach","minecraft:sparse_jungle"],"features":["kubejs:rat_small_ruins","kubejs:rat_large_ruins","kubejs:rat_marble_pile"],"step":"surface_structures"}

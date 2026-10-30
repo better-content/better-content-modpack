@@ -5,6 +5,23 @@
   },
   {
     "when": "position",
+    "mob": ["rats:neo_ratlantean", "rats:ratlantean_automaton"],
+    "dimension": "minecraft:overworld",
+    "spawntype": "natural",
+    "random": 0.95,
+    "result": "deny"
+  },
+  {
+    "when": "position",
+    "mob": ["rats:feral_ratlantean", "rats:ratlantean_spirit", "rats:ratlantean_ratbot",
+            "rats:neo_ratlantean", "rats:ratlantean_automaton"],
+    "dimension": "minecraft:overworld",
+    "minheight": 0,
+    "spawntype": "natural",
+    "result": "deny"
+  },
+  {
+    "when": "position",
     "mob": ["born_in_chaos_v1:corpse_fish", "born_in_chaos_v1:glutton_fish"],
     "dimension": "rats:ratlantis",
     "spawntype": "natural",

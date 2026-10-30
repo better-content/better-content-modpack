@@ -9,6 +9,7 @@ var BC_CONVENTIONAL_FAMILIES = [
     ['everythingcopper', ['copper']],
     ['goety', ['dark']],
     ['malum', ['soul_stained_steel']],
+    ['rats', ['ratlantis']],
     ['iceandfire', [
         'copper', 'silver', 'dragonbone', 'myrmex_desert', 'myrmex_jungle',
         'dragonsteel_fire', 'dragonsteel_ice', 'dragonsteel_lightning'

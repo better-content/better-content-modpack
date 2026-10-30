@@ -25,29 +25,42 @@ class FreshSourceReleaseTest {
     }
 
     private fun population(): Pair<ActiveModManifest, FreshSourcePlan> {
-        val mods = (0..44).map { ActiveMod("fixture-$it", "fixture_$it", "fixture-$it.jar", listOf("verifyFull", "stageRuntimeJar")) } + listOf(
+        val mods = (0..43).map { ActiveMod("fixture-$it", "fixture_$it", "fixture-$it.jar", listOf("verifyFull", "stageRuntimeJar")) } + listOf(
             ActiveMod("better-world-management", "better_world_management", "better-world-management-0.1.0.jar", listOf("verifyFull", "stageRuntimeJar")),
+            ActiveMod("better-cooking", "better_cooking", "better-cooking-0.1.0.jar", listOf("verifyFull", "stageRuntimeJar")),
             ActiveMod("better-spicy-farmers", "better_spicy_farmers", "spice.jar", listOf("verifyFull", "stageRuntimeJar")),
             ActiveMod("better-drinking-water", "better_drinking_water", "water.jar", listOf("verifyFull", "stageRuntimeJar")),
             ActiveMod("better-survival-physiology", "better_survival_physiology", "phys.jar", listOf("verifyFull", "stageRuntimeJar"),
                 listOf("better-drinking-water", "better-spicy-farmers")))
-        val sources = mods.filterNot { it.repository == "better-world-management" }.map {
+        val sources = mods.map {
             QualifiedFreshSource(it.repository, "head", "a".repeat(64), "d".repeat(64), "b".repeat(64), FreshInputSnapshot("qualification.json", "c".repeat(64)))
         }
-        return ActiveModManifest("bc.active_custom_mods.v1", mods) to FreshSourcePlan("bc.fresh_custom_sources.v1", sources, emptyMap(), "2026-01-01T00:00:00Z", "2026-01-01T00:02:00Z")
+        return ActiveModManifest("bc.active_custom_mods.v1", mods) to FreshSourcePlan("bc.fresh_custom_sources.v1", sources, emptyMap(), "2026-01-01T00:00:00Z", "2026-01-01T00:02:00Z",
+            FreshInputSnapshot("/qualified/better-world-management-server.sh", "a".repeat(64)))
     }
 
-    @Test fun exactly48FreshPlusTheSingleFrozenWlmExceptionAreRequired() {
+    @Test fun allApprovedSourcesIncludingWorldManagementMustBeFreshAndUnique() {
         val (manifest, plan) = population()
         assertDoesNotThrow { validateFreshSourcePopulation(manifest, plan) }
+        assertThrows(IllegalArgumentException::class.java) {
+            validateFreshSourcePopulation(manifest.copy(mods = manifest.mods.filterNot { it.repository == "better-cooking" }),
+                plan.copy(sources = plan.sources.filterNot { it.repository == "better-cooking" }))
+        }
         assertThrows(IllegalArgumentException::class.java) { validateFreshSourcePopulation(manifest, plan.copy(sources = plan.sources.drop(1))) }
         assertThrows(IllegalArgumentException::class.java) {
             validateFreshSourcePopulation(manifest, plan.copy(sources = plan.sources.drop(1) + plan.sources.last()))
         }
         assertThrows(IllegalArgumentException::class.java) {
             validateFreshSourcePopulation(manifest.copy(mods = manifest.mods.map {
-                if (it.repository == "better-world-management") it.copy(artifact = "new-wlm.jar") else it
+                if (it.repository == "better-world-management") it.copy(artifact = "fixture-0.jar") else it
             }), plan)
+        }
+        val added = ActiveMod("future-approved", "future_approved", "future-approved.jar", listOf("verifyFull", "stageRuntimeJar"))
+        assertDoesNotThrow { validateFreshSourcePopulation(manifest.copy(mods = manifest.mods + added),
+            plan.copy(sources = plan.sources + QualifiedFreshSource(added.repository, "head", "a".repeat(64), "d".repeat(64),
+                "b".repeat(64), FreshInputSnapshot("qualification.json", "c".repeat(64))))) }
+        assertThrows(IllegalArgumentException::class.java) {
+            validateFreshSourcePopulation(manifest.copy(mods = manifest.mods + added), plan)
         }
     }
 
@@ -231,6 +244,7 @@ class FreshSourceReleaseTest {
         var lastHeartbeat = now
         var dimensionTarget = "initial"
         var marker = 0
+        val landingCount = mutableMapOf<String, Int>()
         fun event(type: String, fields: Map<String, Any> = emptyMap()) {
             events += linkedMapOf<String, Any>("time" to now.toString(), "type" to type).apply { putAll(fields) }
         }
@@ -242,27 +256,53 @@ class FreshSourceReleaseTest {
             now = now.plusSeconds(1)
             if (java.time.Duration.between(lastHeartbeat, now).seconds >= 12) heartbeat()
         } }
-        fun hop(dimension: String, circuit: Int) {
-            dimensionTarget = dimension
-            val identity = mapOf("dimension" to dimension, "circuit" to circuit)
-            event("hop_started", identity); advance(1)
-            event("client_dimension_receipt", identity + mapOf("marker" to "arrival-${marker++}", "server_conditional" to true, "fresh_client_log_offset" to 123))
-            event("arrival_verified", identity + ("hop_seconds" to 1.0))
+        fun landing(dimension: String) {
+            val ordinal = landingCount.getOrDefault(dimension, 0)
+            landingCount[dimension] = ordinal + 1
+            val x = ordinal * 10016.0 + 0.5
+            event("landing_verified", mapOf("dimension" to dimension, "x" to x, "z" to 8.0,
+                "chunk_x" to ordinal * 626, "chunk_z" to 0, "novel_chunk" to true,
+                "route" to "remote_ungenerated_chunk", "distance_from_previous" to if (ordinal == 0) 0.0 else 10016.0))
+        }
+        fun receipt(identity: Map<String, Any>) {
+            event("client_dimension_receipt", identity + mapOf("marker" to "arrival-${marker++}",
+                "server_conditional" to true, "server_position_conditional" to true, "fresh_client_log_offset" to 123))
+        }
+        fun samples(type: String, identity: Map<String, Any>) {
             (0..30).forEach { second ->
-                event("tps_sample", identity + mapOf("elapsed_seconds" to second.toDouble(), "tps" to 20.0))
+                event(type, identity + mapOf("elapsed_seconds" to second.toDouble(), "tps" to 20.0))
                 if (second < 30) advance(1)
             }
+        }
+        fun hop(dimension: String, circuit: Int) {
+            dimensionTarget = dimension
+            val identity = mapOf<String, Any>("dimension" to dimension, "circuit" to circuit)
+            event("hop_started", identity); advance(1); landing(dimension); receipt(identity)
+            event("arrival_verified", identity + ("hop_seconds" to 1.0))
+            samples("tps_sample", identity)
             event("tps_stable", identity + ("recovery_seconds" to 30.0))
+        }
+        fun relocate(dimension: String, circuit: Int, ordinal: Int) {
+            val identity = mapOf<String, Any>("dimension" to dimension, "circuit" to circuit, "relocation" to ordinal)
+            event("relocation_started", identity); advance(1); landing(dimension); receipt(identity)
+            event("relocation_arrival_verified", identity + ("hop_seconds" to 1.0))
+            samples("relocation_tps_sample", identity)
+            event("relocation_tps_stable", identity + ("recovery_seconds" to 30.0))
         }
         event("client_joined"); heartbeat()
         event("dimension_roster", mapOf("dimensions" to dimensions))
         dimensions.forEach { dimension ->
-            hop(dimension, 0); event("dwell_started", mapOf("dimension" to dimension)); advance(300)
-            event("dwell_completed", mapOf("dimension" to dimension, "actual_seconds" to 300.0))
+            hop(dimension, 0)
+            val dwellStart = now
+            event("dwell_started", mapOf("dimension" to dimension, "required_fresh_relocations" to 10))
+            (1..10).forEach { ordinal -> advance(30); relocate(dimension, 0, ordinal) }
+            event("dwell_completed", mapOf("dimension" to dimension, "actual_seconds" to java.time.Duration.between(dwellStart, now).seconds.toDouble(),
+                "fresh_relocations" to 10))
         }
         (1..3).forEach { circuit ->
             event("circuit_started", mapOf("circuit" to circuit, "route" to dimensions))
-            dimensions.forEach { hop(it, circuit) }; event("circuit_completed", mapOf("circuit" to circuit))
+            dimensions.forEach { dimension -> hop(dimension, circuit); relocate(dimension, circuit, 1) }
+            event("circuit_completed", mapOf("circuit" to circuit))
         }
         event("tele_soak_complete", mapOf("dimension_count" to dimensions.size, "circuits" to 3))
         event("client_disconnected"); event("server_saved_and_stopped"); event("validated")
@@ -278,7 +318,8 @@ class FreshSourceReleaseTest {
         val dims = listOf("minecraft:overworld", "minecraft:the_nether")
         mapper.writeValue(path.toFile(), mapOf("run_id" to "fresh", "tier" to "tele-soak", "status" to "passed", "candidates" to pair.document(),
             "scenario_completed" to true, "dwell_seconds_per_dimension" to 300, "circuits" to 3, "registered_dimensions" to dims,
-            "dimension_results" to dims.map { mapOf("dimension" to it, "dwell_seconds" to 300.0, "completed_circuits" to listOf(1, 2, 3), "tps_verified" to true) },
+            "dimension_results" to dims.map { mapOf("dimension" to it, "dwell_seconds" to 300.0, "fresh_relocations_verified" to true,
+                "completed_circuits" to listOf(1, 2, 3), "tps_verified" to true) },
             "events_sha256" to Hashes.sha256(raw)))
     }
 

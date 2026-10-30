@@ -1,8 +1,8 @@
 // Hexerei manufactures physical Occultism components; Occultism owns ritual
 // activation, spirit fire, bindings, and summoned-servant gameplay.
 //
-// Hexerei is the preparation practice downstream of the Aether, Nether,
-// Bumblezone, and Ratlantis Fonts. Occultism still owns spirit fire,
+// Hexerei is the preparation practice downstream of the three live Fonts:
+// Aether, Nether and Bumblezone. Occultism still owns spirit fire,
 // pentacles, named bindings, and the Foliot -> Djinni -> Afrit -> Marid ladder;
 // Hexerei owns only the physical preparation of each impure chalk.
 
@@ -103,16 +103,16 @@ ServerEvents.recipes(function (event) {
         'better_ore_geology:black_shale'
     ], { heatRequirement: 'heated' })
 
-    // Every impure chalk preparation proves all four expedition Fonts equally:
-    // Aether ambrosium, Nether blaze powder, Bumblezone honey crystal, and a
-    // Ratlantis gem. There is no Overworld or End substitute.
+    // Impure chalk proves the three live expedition Fonts: Aether ambrosium,
+    // Nether blaze powder and Bumblezone honey crystal. Finite Overworld
+    // amethyst replaces the retired fourth expedition requirement.
     bcFontCauldron(event, 'occultism_chalk_white_impure', 'occultism:chalk_white_impure', 1, 'minecraft:water', [
         'occultism:burnt_otherstone',
         'occultism:otherworld_ashes',
         'aether:ambrosium_shard',
         'minecraft:blaze_powder',
         'the_bumblezone:honey_crystal_shards',
-        'rats:gem_of_ratlantis'
+        'minecraft:amethyst_shard'
     ], { heatRequirement: 'heated' })
 
     bcFontCauldron(event, 'occultism_chalk_gold_impure', 'occultism:chalk_gold_impure', 1, 'minecraft:water', [
@@ -121,7 +121,7 @@ ServerEvents.recipes(function (event) {
         'aether:ambrosium_shard',
         'minecraft:blaze_powder',
         'the_bumblezone:honey_crystal_shards',
-        'rats:gem_of_ratlantis'
+        'minecraft:amethyst_shard'
     ], { heatRequirement: 'heated' })
 
     bcFontCauldron(event, 'occultism_chalk_purple_impure', 'occultism:chalk_purple_impure', 1, 'minecraft:water', [
@@ -130,7 +130,7 @@ ServerEvents.recipes(function (event) {
         'aether:ambrosium_shard',
         'minecraft:blaze_powder',
         'the_bumblezone:honey_crystal_shards',
-        'rats:gem_of_ratlantis'
+        'minecraft:amethyst_shard'
     ], { heatRequirement: 'heated' })
 
     bcFontCauldron(event, 'occultism_chalk_red_impure', 'occultism:chalk_red_impure', 1, 'minecraft:lava', [
@@ -139,7 +139,7 @@ ServerEvents.recipes(function (event) {
         'aether:ambrosium_shard',
         'minecraft:blaze_powder',
         'the_bumblezone:honey_crystal_shards',
-        'rats:gem_of_ratlantis'
+        'minecraft:amethyst_shard'
     ], { fluidLevelsConsumed: 333, heatRequirement: 'heated' })
 
     // These are physical components/tools. Their ritual-derived ingredients
@@ -151,7 +151,7 @@ ServerEvents.recipes(function (event) {
     ].forEach(function (output) { event.remove({ output: output }) })
     bcFontCauldron(event, 'occultism_spirit_attuned_crystal', 'occultism:spirit_attuned_crystal', 1, 'minecraft:water', [
         'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem',
-        'occultism:spirit_attuned_gem', 'rats:gem_of_ratlantis'
+        'occultism:spirit_attuned_gem', 'minecraft:amethyst_shard'
     ], { heatRequirement: 'heated' })
     bcFontCauldron(event, 'occultism_spirit_attuned_pickaxe_head', 'occultism:spirit_attuned_pickaxe_head', 1, 'minecraft:water', [
         'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem', 'occultism:spirit_attuned_gem'

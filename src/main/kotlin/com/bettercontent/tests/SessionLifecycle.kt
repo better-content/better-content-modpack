@@ -37,14 +37,16 @@ object MonotonicSessionClock : SessionClock {
 }
 
 /** The only runtime campaign: one start, one connection, one disconnect, one save/stop. */
-fun runLifecycle(request: SessionRequest, driver: SessionDriver, clock: SessionClock = MonotonicSessionClock) {
+internal fun runLifecycle(request: SessionRequest, driver: SessionDriver, clock: SessionClock = MonotonicSessionClock,
+    replay: DiagnosticReplay? = null) {
     driver.startServer()
     driver.awaitServerReady()
     driver.connectClient()
     driver.awaitClientJoined()
     driver.heartbeat()
     if (request.tier == SessionTier.TELE_SOAK) {
-        runTeleSoak(driver as? TeleSoakDriver ?: error("Tele Soak requires an instrumented real-client driver"), clock)
+        runTeleSoak(driver as? TeleSoakDriver ?: error("Tele Soak requires an instrumented real-client driver"),
+            clock, replay)
         driver.disconnectClient()
         driver.saveAndStopServer()
         driver.validate()
@@ -52,7 +54,11 @@ fun runLifecycle(request: SessionRequest, driver: SessionDriver, clock: SessionC
     }
     // Loading/preparation and attempted login never count toward Soak.
     val verifiedJoin = clock.nanos()
-    val deadline = verifiedJoin + request.connectedDuration.toNanos()
+    val remaining = replay?.remainingSeconds(request) ?: request.connectedDuration.seconds
+    if (replay != null) driver.let { (it as? TeleSoakDriver)?.teleSoakEvent("diagnostic_connected_seconds",
+        mapOf("remaining" to remaining, "previously_observed" to replay.completedConnectedSeconds,
+            "acceptance_eligible" to false)) }
+    val deadline = verifiedJoin + Duration.ofSeconds(remaining).toNanos()
     var nextHeartbeat = verifiedJoin + Duration.ofSeconds(15).toNanos()
     while (clock.nanos() < deadline) {
         driver.ensureConnected()

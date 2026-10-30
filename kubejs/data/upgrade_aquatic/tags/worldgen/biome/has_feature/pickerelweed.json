@@ -2,7 +2,7 @@
   "replace": true,
   "values": [
     {
-      "id": "rats:ratlantis",
+      "id": "minecraft:mangrove_swamp",
       "required": false
     }
   ]

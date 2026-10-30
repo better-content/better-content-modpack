@@ -7,6 +7,10 @@
     "promotion_rule": "Promote a reported category only after its recorded backlog is zero."
   },
   "namespaces": {
+    "better_cooking": {
+      "primary_role": "integration",
+      "support_state": "not_applicable"
+    },
     "better_celestial_events": {
       "primary_role": "world",
       "support_state": "not_applicable"
@@ -416,6 +420,10 @@
       "support_state": "not_applicable"
     },
     "create_aquatic_ambitions": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "createhorsepower": {
       "primary_role": "content",
       "support_state": "not_applicable"
     },
@@ -947,6 +955,10 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
+    "kaleidoscope_cookery": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
     "kubejs": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
@@ -1191,10 +1203,6 @@
       "primary_role": "content",
       "support_state": "not_applicable"
     },
-    "better_ratlantis_logistics": {
-      "primary_role": "edge_provider",
-      "support_state": "not_applicable"
-    },
     "rats": {
       "primary_role": "content",
       "support_state": "not_applicable"
@@ -1350,6 +1358,10 @@
     "better_survival_physiology": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
+    },
+    "better_spicy_farmers": {
+      "primary_role": "content",
+      "support_state": "full"
     },
     "t_and_t": {
       "primary_role": "world",
@@ -1542,7 +1554,6 @@
     "technology.petroleum_splitting": "pneumaticcraft",
     "materials.mahogany": "natures_spirit",
     "survival.hand_fishing": "starcatcher",
-    "dimensions.ratlantis_entry": "better_dimension_fonts",
     "world.dragon_ecology": "iceandfire"
   },
   "families": [
@@ -2265,17 +2276,17 @@
       ]
     },
     {
-      "capability": "ratlantis.logistics",
+      "capability": "meteor.logistics",
       "required_proofs": [
-        "rats:gem_of_ratlantis",
-        "better_ratlantis_logistics:courier_lattice"
+        "ae2:certus_quartz_crystal",
+        "prettypipes:pipe"
       ]
     },
     {
       "capability": "ae2.network",
       "required_proofs": [
         "powergrid:generator_housing",
-        "better_ratlantis_logistics:arcane_logistics_core",
+        "ae2:certus_quartz_crystal",
         "oc2r:computer",
         "ae2:sky_stone_block",
         "kubejs:impossible_support_matrix",
@@ -2288,7 +2299,7 @@
         "aether:ambrosium_shard",
         "minecraft:blaze_powder",
         "the_bumblezone:honey_crystal_shards",
-        "rats:gem_of_ratlantis"
+        "minecraft:amethyst_shard"
       ]
     },
     {

@@ -97,12 +97,13 @@ object ZipContracts {
 }
 
 /** Events and a single terminal result; logs/worlds are never pruned by the runner. */
-class SessionEvidence(val root: Path, val runId: String, val tier: String, val pair: CandidatePair) {
+class SessionEvidence(val root: Path, val runId: String, val tier: String, val pair: CandidatePair,
+    val diagnostic: Boolean = false) {
     private val mapper = jacksonObjectMapper()
-    val directory = root.resolve("generated/test-evidence/$runId/$tier")
+    val directory = root.resolve("generated/test-evidence/$runId/$tier${if (diagnostic) "-diagnostic" else ""}")
     val fixture = directory.resolve("fixture")
     private val started = Instant.now()
-    private val teleSoak = if (tier == SessionTier.TELE_SOAK.selector) TeleSoakReceipt() else null
+    private val teleSoak = if (!diagnostic && tier == SessionTier.TELE_SOAK.selector) TeleSoakReceipt() else null
 
     init {
         require(runId.matches(Regex("[A-Za-z0-9][A-Za-z0-9_.-]{0,127}"))) { "unsafe run ID" }
@@ -119,15 +120,16 @@ class SessionEvidence(val root: Path, val runId: String, val tier: String, val p
         val event = linkedMapOf<String, Any?>("time" to Instant.now().toString(), "type" to type).apply { putAll(fields) }
         val line = mapper.writeValueAsString(event)
         Files.writeString(directory.resolve("events.jsonl"), "$line\n", StandardOpenOption.CREATE, StandardOpenOption.APPEND)
-        println("[$tier] $line")
+        println("[${tier}${if (diagnostic) "-diagnostic" else ""}] $line")
     }
 
     fun finish(failure: Throwable?) {
         val incomplete = if (failure == null && teleSoak?.result(true)?.get("scenario_completed") == false)
             IllegalStateException("Tele Soak did not complete every dimension and three circuits") else null
         val actualFailure = failure ?: incomplete
-        event("session_finished", mapOf("success" to (actualFailure == null), "failure" to actualFailure?.stackTraceToString()))
-        summary(if (actualFailure == null) "passed" else "failed", actualFailure?.message)
+        event("session_finished", mapOf("success" to (actualFailure == null && !diagnostic),
+            "diagnostic_complete" to (actualFailure == null && diagnostic), "failure" to actualFailure?.stackTraceToString()))
+        summary(if (actualFailure != null) "failed" else if (diagnostic) "diagnostic" else "passed", actualFailure?.message)
         println("evidence: $directory")
         if (failure == null && incomplete != null) throw incomplete
     }
@@ -138,6 +140,7 @@ class SessionEvidence(val root: Path, val runId: String, val tier: String, val p
             "schema" to "bc.session_run.v2", "run_id" to runId, "tier" to tier, "status" to status,
             "started_at" to started.toString(), "updated_at" to Instant.now().toString(),
             "candidates" to pair.document(), "failure" to failure, "fixture" to fixture.toString(),
+            "diagnostic" to diagnostic, "acceptance_eligible" to !diagnostic,
         )
         teleSoak?.let { receipt ->
             data.putAll(receipt.result(status == "passed"))
@@ -208,6 +211,12 @@ class ManagedProcess(
                 .start().waitFor(10, TimeUnit.SECONDS)
         }
         (sequenceOf(process.toHandle()) + process.descendants().toList().asSequence()).filter { it.isAlive }.forEach { handle ->
+            // A saturated Minecraft client may not service jcmd attach requests.
+            // SIGQUIT writes a JVM thread dump directly to its retained process log.
+            if (name == "client" && handle.info().command().orElse("").endsWith("/java")) {
+                runCatching { ProcessBuilder("kill", "-QUIT", handle.pid().toString()).start()
+                    .waitFor(2, TimeUnit.SECONDS) }
+            }
             runCatching {
                 val probe = ProcessBuilder("jcmd", handle.pid().toString(), "Thread.print").redirectErrorStream(true)
                     .redirectOutput(prefix.resolveSibling("${prefix.fileName}-${handle.pid()}-threads.txt").toFile()).start()

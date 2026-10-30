@@ -1,0 +1,228 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "conditions": [
+            {
+              "chance": 0.125,
+              "condition": "minecraft:random_chance"
+            },
+            {
+              "condition": "kaleidoscope_cookery:advance_block_match_tool",
+              "predicate": {
+                "tag": "kaleidoscope_cookery:straw_hat"
+              },
+              "slot": "head"
+            }
+          ],
+          "functions": [
+            {
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:uniform_bonus_count",
+              "function": "minecraft:apply_bonus",
+              "parameters": {
+                "bonusMultiplier": 2
+              }
+            }
+          ],
+          "name": "farmersdelight:tomato_seeds",
+          "type": "minecraft:item"
+        },
+        {
+          "conditions": [
+            {
+              "chance": 0.125,
+              "condition": "minecraft:random_chance"
+            },
+            {
+              "condition": "kaleidoscope_cookery:advance_block_match_tool",
+              "predicate": {
+                "tag": "kaleidoscope_cookery:straw_hat"
+              },
+              "slot": "head"
+            }
+          ],
+          "functions": [
+            {
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:uniform_bonus_count",
+              "function": "minecraft:apply_bonus",
+              "parameters": {
+                "bonusMultiplier": 2
+              }
+            }
+          ],
+          "name": "kaleidoscope_cookery:chili_seed",
+          "type": "minecraft:item"
+        },
+        {
+          "conditions": [
+            {
+              "chance": 0.125,
+              "condition": "minecraft:random_chance"
+            },
+            {
+              "condition": "kaleidoscope_cookery:advance_block_match_tool",
+              "predicate": {
+                "tag": "kaleidoscope_cookery:straw_hat"
+              },
+              "slot": "head"
+            }
+          ],
+          "functions": [
+            {
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:uniform_bonus_count",
+              "function": "minecraft:apply_bonus",
+              "parameters": {
+                "bonusMultiplier": 2
+              }
+            }
+          ],
+          "name": "farmersdelight:cabbage_seeds",
+          "type": "minecraft:item"
+        },
+        {
+          "conditions": [
+            {
+              "chance": 0.125,
+              "condition": "minecraft:random_chance"
+            },
+            {
+              "condition": "kaleidoscope_cookery:advance_block_match_tool",
+              "predicate": {
+                "tag": "kaleidoscope_cookery:straw_hat"
+              },
+              "slot": "head"
+            }
+          ],
+          "functions": [
+            {
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:uniform_bonus_count",
+              "function": "minecraft:apply_bonus",
+              "parameters": {
+                "bonusMultiplier": 2
+              }
+            }
+          ],
+          "name": "better_bumblezone_crops:farmersdelight_rice_seeds",
+          "type": "minecraft:item"
+        },
+        {
+          "conditions": [
+            {
+              "chance": 0.125,
+              "condition": "minecraft:random_chance"
+            },
+            {
+              "condition": "kaleidoscope_cookery:advance_block_match_tool",
+              "predicate": {
+                "tag": "kaleidoscope_cookery:straw_hat"
+              },
+              "slot": "head"
+            }
+          ],
+          "functions": [
+            {
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:uniform_bonus_count",
+              "function": "minecraft:apply_bonus",
+              "parameters": {
+                "bonusMultiplier": 2
+              }
+            }
+          ],
+          "name": "kaleidoscope_cookery:tea_seed",
+          "type": "minecraft:item"
+        },
+        {
+          "conditions": [
+            {
+              "chance": 0.02,
+              "condition": "minecraft:random_chance"
+            },
+            {
+              "condition": "kaleidoscope_cookery:advance_block_match_tool",
+              "predicate": {
+                "tag": "kaleidoscope_cookery:straw_hat"
+              },
+              "slot": "head"
+            }
+          ],
+          "functions": [
+            {
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:uniform_bonus_count",
+              "function": "minecraft:apply_bonus",
+              "parameters": {
+                "bonusMultiplier": 2
+              }
+            }
+          ],
+          "name": "minecraft:beetroot_seeds",
+          "type": "minecraft:item"
+        },
+        {
+          "conditions": [
+            {
+              "chance": 0.02,
+              "condition": "minecraft:random_chance"
+            },
+            {
+              "condition": "kaleidoscope_cookery:advance_block_match_tool",
+              "predicate": {
+                "tag": "kaleidoscope_cookery:straw_hat"
+              },
+              "slot": "head"
+            }
+          ],
+          "functions": [
+            {
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:uniform_bonus_count",
+              "function": "minecraft:apply_bonus",
+              "parameters": {
+                "bonusMultiplier": 2
+              }
+            }
+          ],
+          "name": "minecraft:pumpkin_seeds",
+          "type": "minecraft:item"
+        },
+        {
+          "conditions": [
+            {
+              "chance": 0.02,
+              "condition": "minecraft:random_chance"
+            },
+            {
+              "condition": "kaleidoscope_cookery:advance_block_match_tool",
+              "predicate": {
+                "tag": "kaleidoscope_cookery:straw_hat"
+              },
+              "slot": "head"
+            }
+          ],
+          "functions": [
+            {
+              "enchantment": "minecraft:fortune",
+              "formula": "minecraft:uniform_bonus_count",
+              "function": "minecraft:apply_bonus",
+              "parameters": {
+                "bonusMultiplier": 2
+              }
+            }
+          ],
+          "name": "minecraft:melon_seeds",
+          "type": "minecraft:item"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "kaleidoscope_cookery:straw_hat_seed_drop",
+  "type": "minecraft:block"
+}

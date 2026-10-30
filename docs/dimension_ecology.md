@@ -1,13 +1,12 @@
 # Dimensional Font ecology and resource links
 
-The four enabled worldgen Fonts share a radial court, a ring of fully oxidized copper, a decorative field with candles and shallow pools, and a dimension-specific block palette. Bumblezone sites additionally form three dense wax and hive clusters. Tree biome sites use stripped logs from the local tree family for their four supports and roof ring. Treeless sites omit both. The structure is selected only in new worlds; existing sites are not migrated.
+The three enabled expedition Fonts share a radial court, a ring of fully oxidized copper, a decorative field with candles and shallow pools, and a dimension-specific block palette. Bumblezone sites additionally form three dense wax and hive clusters. Tree biome sites use stripped logs from the local tree family for their four supports and roof ring. Treeless sites omit both. The structure is selected only in new worlds; existing sites are not migrated.
 
 | Font | Salience aspects | Spirit map sellers | Field vocabulary | Renewable or dimension-linked materials | Pack systems that consume them |
 | --- | --- | --- | --- | --- | --- |
 | Nether | Impact, Endurance | Infernal, Wicked | Blackstone, basalt, brick, magma, red candles | Wart, blaze powder/rod, magma cream, basalt | Heat Sync Boiler Heater, PneumaticCraft thermopneumatic plant, TCon Scorched Brick, Nether Font Libation |
 | Aether | Mobility, Renewal | Aerial, Sacred | Holystone, icestone, aerogel, pale sky stone | Blue berries, swet balls, skyroot leaves/logs, aerogel, blue aercloud | Rotational Compressor, Clockwork air compressor/propeller bearing/gas thruster, jet boots, Aether Font Libation |
 | Bumblezone | Work, Tempo, Robustness, Renewal | Earthen, Tempo, Sacred | Beeswax, ancient wax bricks and eyes, brood honeycomb, yellow candles | Pollen puffs, honeycomb, honey, carvable wax | Create mechanical harvester/plough, Airtight Upgrade, Bumblezone Font Libation, existing nursery systems |
-| Ratlantis | Control, Work, Endurance, Robustness | Arcane, Aqueous, Earthen | Marbled cheese, Ratlantis masonry, green candles | Pirat leaves, marbled cheese, oratchalcum, Gem of Ratlantis | Electrical instrumentation, AE logic package, spirit-attuned crystal and chalk, Ratlantis Font Libation, existing logistics roots |
 
 Map offers use the saved index of already discovered natural Fonts. Each seller's allowed destinations are the union of Fonts sharing an aspect with its spirit identity. Maps rotate within that set after sale. The index lookup neither loads nor generates chunks. Resident spirit villagers receive a map listing at level two; wandering spirit traders can add a map to their authored catalogues.
 
@@ -17,6 +16,11 @@ A Create basin mixes one bucket of water with three native ingredients into one 
 
 ## Recipe audit
 
-The new gates attach native, distinguishable resources to the first machine or tier that expresses each dimension's theme. Existing Ratlantis courier lattice, Oratchalcum mechanism, AE energy root, occult chalk, Aether gas thruster, and Bumblezone nursery routes remain in place. The industrial audit covered the hand workshop, precision factory, thermal/pressure, acid chemistry, electrical control, transport, aerospace, and transition component scripts; the magic and logistics audit covered occult cauldrons and Ratlantis logistics. The hand workshop remains available before dimensional expeditions. The four libations are optional fuel, while the machine ingredients are mandatory progression links.
+The three live Fonts attach native materials to themed machines: Nether thermal
+processing, Aether mobility and Bumblezone farming. The retired Ratlantis Font
+has no libation or mandatory machine ingredient. Meteor Certus Quartz replaces
+Ratlantis components for electronics and logistics, while native Rats materials
+are found in rare Overworld biomes. The hand workshop remains available before
+dimensional expeditions; three live libations are optional fuel.
 
 The pack recipe source is `kubejs/server_scripts/progression/85_dimension_font_ecology.js` plus the focused recipe scripts referenced above. Runtime validation must check registry IDs against the installed Aether, Bumblezone, Rats, Create, PneumaticCraft, Heat Sync, and Clockwork JARs. The worldgen screenshot harness is a separate minimal-mod development runtime; it is not shipped in the pack.

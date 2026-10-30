@@ -1,0 +1,14 @@
+name = "Create Horse Power"
+filename = "createhorsepower-1.20.1-1.1.0.jar"
+side = "both"
+
+[download]
+hash-format = "sha512"
+hash = "8bb9e3d2b9e327709e26e247210efc10db6ade1a13156175d39729fe8bafae5e75f7c9104b03ce7c358bad40dcee767c1181bd8340f2e5ec314a36fc2822abdb"
+mode = "url"
+url = "https://cdn.modrinth.com/data/9Qm19XSM/versions/bHSeI5kR/createhorsepower-1.20.1-1.1.0.jar"
+
+[update]
+[update.modrinth]
+mod-id = "9Qm19XSM"
+version = "bHSeI5kR"

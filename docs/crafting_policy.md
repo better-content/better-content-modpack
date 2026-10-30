@@ -37,6 +37,8 @@ loot denylist. Config, guides, trades, worldgen, and custom hooks need focused
 inspection of their owning sources; the generic runtime suite does not assert every
 acquisition edge.
 
+The partial Cooking Smoke cohort classifies `better_cooking` as a dormant integration and the newly loaded `kaleidoscope_cookery` and `createhorsepower` namespaces as content, all with `not_applicable` support state. This only closes the loaded-namespace inventory; it does not certify their recipe graphs or promote Cooking's incomplete catalogue. Unknown future namespaces still block startup.
+
 The live pack also classifies Better Content Notifications as presentation,
 Create: Aquatic Ambitions as content, and Upgrade Aquatic as world content.
 Their support state is not yet a claim that their acquisition graphs are fully integrated.
@@ -49,11 +51,11 @@ drinkable potions and every splash, lingering, and tipped-arrow variant. Plain
 water bottles, including Thirst purity metadata, remain supported. Food effects,
 status effects, and mod-owned flask systems are outside this cut.
 
-Pretty Pipes uses a visible three-tier Ratlantis ladder. The Courier Lattice recipe yields four
-lattices and each lattice-rooted pipe recipe yields eight pipes, so the first expedition supports
-a 32-pipe starter network. A blank module visibly consumes an Oratchalcum Mechanism. The seven
-high crafting, extraction, filter, high-priority, low-priority, retrieval, and speed modules each
-visibly consume one Arcane Logistics Core; their low and medium recipes retain upstream costs.
+Pretty Pipes uses a visible meteor Certus ladder. One crystal produces eight basic pipes
+without a working ME network. A blank module consumes five certus crystals in total,
+including its original four; the seven high crafting, extraction, filter, high-priority,
+low-priority, retrieval and speed modules each add one certus crystal to their native
+medium-tier prerequisites. Ordinary rat work and watercraft keep their native recipes.
 
 Selectors are family-level wherever possible: namespace, tag, ID prefix, or an
 exact ID when no stable family exists. Capability roots prove the first
@@ -76,7 +78,7 @@ not classify those planks as oak or replace their normal wood-family tags.
 - Tinkers' Construct owns conventional pickaxe/axe/shovel/hoe/sword capability.
   Unique weapons, bows, armor, creature gear, and material integrations remain.
 - The vanilla End is inaccessible. End ecology needed by the pack is routed to
-  Creating Space orbit, Ratlantis, Overworld cultivation, or Ice and Fire.
+  Creating Space orbit, Overworld cultivation and coastal fishing, or Ice and Fire.
 - Vanilla potion delivery is absent; plain water bottles and independently owned
   food, status-effect, and flask systems remain.
 

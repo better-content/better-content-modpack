@@ -61,8 +61,10 @@ Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 - `kubejs/server_scripts/policy/tnt_recipe.js` — Restricts TNT to the two vanilla sand inputs instead of broad sand tags.
 - `kubejs/server_scripts/processing/ore_sifting_and_spouting.js` — Disables Bulk Washing, migrates granular separations to waterlogged Sifting, and assigns direct water treatments to Spouting.
 - `kubejs/server_scripts/progression/00_primitive_workshop.js` — Establishes the pre-Font fiber, fired-goods, and simple-fittings recipe layer for local handling and homestead utilities.
-- `kubejs/server_scripts/progression/10_hand_workshop.js` — Authors four named Font grouts, automated and Melter-scale Andesite Alloy casting, and hand-cranked Create entry.
-- `kubejs/server_scripts/progression/20_better_ratlantis_logistics.js` — Removes direct Ratlantis access and gives Pretty Pipes, Sophisticated automation, Create requests, Rats, AE2, and Little Logistics visible Ratlantis-rooted recipes.
+- `kubejs/server_scripts/progression/10_hand_workshop.js` — Authors three live Font grouts, automated and Melter-scale Andesite Alloy casting, and hand-cranked Create entry.
+- `kubejs/server_scripts/progression/20_meteor_logistics.js` — Roots Pretty Pipes, Sophisticated automation, Create requests, the Rapid Hopper and AE2 Energy Acceptor in meteor Certus without an ME bootstrap loop; ordinary rat work and watercraft keep native routes.
+- `kubejs/server_scripts/progression/21_rat_archeology.js` — Opens the otherwise uncraftable native archaeologist hat and swaps the travel token/fixed-tool inputs for obtainable gem and workshop materials.
+- `kubejs/server_scripts/progression/23_rat_coastal_fishing.js` — Adds rare native Rats fishing rewards to warm/lukewarm Overworld ocean fishing without opening Ratlantis travel.
 - `kubejs/server_scripts/progression/21_better_bumblezone_crops.js` — Removes recipes that would create origin-controlled cultivar propagules outside nursery and harvest acquisition.
 - `kubejs/server_scripts/progression/20_powered_works.js` — Authors the Powered Works Machine Block roots and early kinetic machinery.
 - `kubejs/server_scripts/progression/30_precision_factory.js` — Authors the Precision Factory brass, deployment, and mechanical-crafting roots.
@@ -85,4 +87,4 @@ Current inventory: **77 active scripts** — 9 client, 59 server, and 9 startup.
 - `kubejs/startup_scripts/policy/hide_vanilla_tools_from_creative.js` — Removes replaced vanilla tools from creative tabs while leaving registry identities intact.
 - `kubejs/startup_scripts/policy/crafting_policy_contract.js` — Loads `bc.crafting_policy.v1` and blocks startup when a loaded namespace has no policy classification.
 - `kubejs/startup_scripts/progression/10_machine_blocks.js` — Registers the six clean-break Machine Blocks used as one-time era proofs.
-- `kubejs/startup_scripts/progression/20_transition_items.js` — Registers the four Font grouts and the remaining pack-owned cross-system intermediates.
+- `kubejs/startup_scripts/progression/20_transition_items.js` — Registers the three live Font grouts and the remaining pack-owned cross-system intermediates.

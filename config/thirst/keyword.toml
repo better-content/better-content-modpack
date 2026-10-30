@@ -4,13 +4,14 @@
 	#lists of regular expressions to select items by their id name. It divides the items into categories
 	#that have preset values for hydration and quenching
 	#If the keyword config should be taken into consideration
+	#Keep disabled: explicit finite drink catalogue and typed food-serving providers own managed intake.
 	enableKeywordConfig = false
 
 	["Keyword config"."Default Hydration values"]
 		#Default hydration for drinks selected with keywords [0-20]
-		defaultDrinkHydration = 10
+		defaultDrinkHydration = 4
 		#Default quenchness for drinks selected with keywords [0-20]
-		defaultDrinkQuenchness = 14
+		defaultDrinkQuenchness = 5
 		#Default hydration for soups selected with keywords [0-20]
 		defaultSoupHydration = 4
 		#Default quenchness for soups selected with keywords [0-20]

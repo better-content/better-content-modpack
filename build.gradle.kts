@@ -32,20 +32,33 @@ tasks.register<JavaExec>("packSession") {
         providers.gradleProperty("sessionTier").orElse("smoke").get(),
         providers.gradleProperty("sessionMinutes").orElse("0").get(),
         providers.gradleProperty("sessionClient").orElse("").get(),
-        providers.gradleProperty("sessionServer").orElse("").get())
+        providers.gradleProperty("sessionServer").orElse("").get(),
+        providers.gradleProperty("sessionDiagnoseFrom").orElse("").get())
 }
 
 tasks.register<JavaExec>("prepareFreshDist") {
     group = "distribution"
-    description = "Legacy Smoke/optional Soak or explicitly planned fresh-source Smoke plus mandatory Tele Soak."
+    description = "Fresh release with explicitly selected optional runtime tiers; unselected tiers remain not_run."
     dependsOn(tasks.classes)
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("com.bettercontent.tests.release.ReleasePipelineKt")
     args(layout.projectDirectory.asFile.absolutePath,
         providers.gradleProperty("releaseJobs").orElse("2").get(),
         providers.gradleProperty("releaseSoakMinutes").orElse("0").get(),
-        providers.gradleProperty("releaseUseBundledMods").orElse("false").get())
+        providers.gradleProperty("releaseUseBundledMods").orElse("false").get(),
+        providers.gradleProperty("releaseRuntimeTiers").orElse("none").get())
     providers.gradleProperty("releaseFreshSourcePlan").orNull?.let { args(it) }
+}
+
+tasks.register<JavaExec>("validateFreshVisualTier") {
+    group = "verification"
+    description = "Validates a separate, optional independent in-world visual review for a packaged exact pair."
+    dependsOn(tasks.classes)
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("com.bettercontent.tests.release.ReleasePipelineKt")
+    args("--visual-tier", layout.projectDirectory.asFile.absolutePath,
+        providers.gradleProperty("releaseVisualPackage").get(),
+        providers.gradleProperty("releaseVisualReview").get())
 }
 
 tasks.register<JavaExec>("finalizeFreshDist") {

@@ -9,8 +9,7 @@ ServerEvents.recipes(function (event) {
     ;[
         ['nether', 'minecraft:nether_wart', 'minecraft:blaze_powder', 'minecraft:magma_cream'],
         ['aether', 'aether:blue_berry', 'aether:swet_ball', 'aether:skyroot_leaves'],
-        ['bumblezone', 'the_bumblezone:pollen_puff', 'minecraft:honeycomb', 'minecraft:honey_bottle'],
-        ['ratlantis', 'rats:pirat_leaves', 'rats:marbled_cheese_raw', 'minecraft:redstone']
+        ['bumblezone', 'the_bumblezone:pollen_puff', 'minecraft:honeycomb', 'minecraft:honey_bottle']
     ].forEach(function (row) {
         event.custom({
             type: 'create:mixing',

@@ -26,13 +26,23 @@ class TeleSoakProbesTest {
                 "registered_dimension_registry_available" to available,
                 "registered_dimension_count_matches_ids" to (registeredCount == registered.size && registered.size == registered.toSet().size),
                 "registered_loaded_dimensions_match" to matching,
+                "registered_dimensions_loaded" to (registered.toSet().all { it in ids } && registeredCount == registered.size),
                 "registered_not_loaded_dimensions" to (registered.toSet() - ids.toSet()).sorted(),
-                "loaded_not_registered_dimensions" to (ids.toSet() - registered.toSet()).sorted())
+                "loaded_not_registered_dimensions" to (ids.toSet() - registered.toSet()).sorted(),
+                "dynamic_loaded_dimensions" to (ids.toSet() - registered.toSet()).sorted())
             output.resolve("dimensions.json").writeText(mapper.writeValueAsString(fields))
         }
         val all = listOf("minecraft:overworld", "minecraft:the_end", "custom:gated")
         fixture(all)
         assertEquals(all, TeleSoakProbes.dimensions(output))
+        val withDynamic = all + "ae2:spatial_storage"
+        fixture(withDynamic, registered = all, matching = false)
+        assertEquals(withDynamic, TeleSoakProbes.dimensions(output))
+        fixture(withDynamic, registered = all, matching = false)
+        val corrupted = mapper.readTree(output.resolve("dimensions.json").toFile()) as com.fasterxml.jackson.databind.node.ObjectNode
+        corrupted.putArray("dynamic_loaded_dimensions")
+        output.resolve("dimensions.json").writeText(mapper.writeValueAsString(corrupted))
+        assertThrows(IllegalArgumentException::class.java) { TeleSoakProbes.dimensions(output) }
         fixture(listOf("minecraft:overworld"), registered = all, matching = false)
         assertThrows(IllegalArgumentException::class.java) { TeleSoakProbes.dimensions(output) }
         fixture(all, includeRegistry = false)

@@ -30,32 +30,6 @@ ServerEvents.recipes(function (event) {
         'aether:aether_dirt', 'aether:aether_dirt'
     ]).id('kubejs:fonts/aether/quicksoil_path')
 
-    // Ratlantis planks and the four-at-a-time Courier Lattice make a canal
-    // fleet repeatable. Advanced barges still use their ordinary recipes.
-    event.shaped('4x better_ratlantis_logistics:courier_lattice', ['CPC', 'POP', 'CPC'], {
-        C: 'rats:marbled_cheese_raw', P: 'rats:pirat_planks',
-        O: 'rats:oratchalcum_ingot'
-    }).id('kubejs:fonts/ratlantis/native_courier_lattice')
-    event.remove({ output: 'littlelogistics:barge' })
-    event.shaped('2x littlelogistics:barge', ['P P', 'PCP', 'LLL'], {
-        P: 'rats:pirat_planks', C: 'minecraft:chest',
-        L: 'better_ratlantis_logistics:courier_lattice'
-    }).id('littlelogistics:barge')
-    event.remove({ output: 'littlelogistics:tug' })
-    event.shaped('littlelogistics:tug', [' L ', 'PFP', 'LLL'], {
-        L: 'better_ratlantis_logistics:courier_lattice', P: 'rats:pirat_planks',
-        F: 'minecraft:furnace'
-    }).id('littlelogistics:tug')
-    event.remove({ output: 'littlelogistics:barge_dock' })
-    event.shaped('4x littlelogistics:barge_dock', ['PPP', 'L L', 'PPP'], {
-        P: 'rats:pirat_planks', L: 'better_ratlantis_logistics:courier_lattice'
-    }).id('littlelogistics:barge_dock')
-    event.remove({ output: 'littlelogistics:tug_dock' })
-    event.shaped('4x littlelogistics:tug_dock', ['PPP', 'LFL', 'PPP'], {
-        P: 'rats:pirat_planks', L: 'better_ratlantis_logistics:courier_lattice',
-        F: 'minecraft:furnace'
-    }).id('littlelogistics:tug_dock')
-
     // Honey crystals are renewable in the Bumblezone; native honey-bucket
     // recipes then provide Beehemoth lures. A wax saddle avoids loot RNG.
     event.shapeless('2x minecraft:honey_bottle', [

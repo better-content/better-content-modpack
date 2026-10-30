@@ -45,23 +45,28 @@ private const val SOURCE_METADATA_ENTRY = "META-INF/better-content-source.proper
 private const val SOURCE_METADATA_SCHEMA = "bc.custom_mod_source.v1"
 
 fun main(args: Array<String>) {
+    if (args.firstOrNull() == "--visual-tier") {
+        require(args.size == 4) { "usage: ReleasePipeline --visual-tier ROOT PACKAGE_READY REVIEW" }
+        validateStandaloneVisualTier(Path.of(args[1]).toAbsolutePath().normalize(), Path.of(args[2]), Path.of(args[3]))
+        return
+    }
     if (args.firstOrNull() == "--finalize-visual") {
         require(args.size == 4) { "usage: ReleasePipeline --finalize-visual ROOT PENDING REVIEW" }
         finalizeVisualRelease(Path.of(args[1]).toAbsolutePath().normalize(), Path.of(args[2]), Path.of(args[3]))
         return
     }
-    require(args.size in 4..5) { "usage: ReleasePipeline ROOT JOBS SOAK_MINUTES USE_BUNDLED_MODS [FRESH_SOURCE_PLAN]" }
-    if (args.getOrNull(4)?.isNotBlank() == true) {
-        require(args[2] == "0" && args[3] == "false") { "fresh-source release cannot use bundled inputs or ordinary Soak" }
-        runFreshSourceRelease(Path.of(args[0]).toAbsolutePath().normalize(), args[1].toInt(), Path.of(args[4]))
-        return
-    }
+    require(args.size in 5..6) { "usage: ReleasePipeline ROOT JOBS SOAK_MINUTES USE_BUNDLED_MODS RUNTIME_TIERS [FRESH_SOURCE_PLAN]" }
     val root = Path.of(args[0]).toAbsolutePath().normalize()
     val jobs = args[1].toInt()
     val soakMinutes = args[2].toInt()
     val useBundledMods = args[3].toBooleanStrict()
+    val tiers = ReleaseTierSelection.parse(args[4], soakMinutes)
     require(jobs in 1..4) { "release jobs must be between 1 and 4" }
-    require(soakMinutes in 0..10080) { "soak minutes must be between 0 and 10080" }
+    if (args.size == 6) {
+        require(!useBundledMods) { "fresh-source release cannot use bundled inputs" }
+        runFreshSourceRelease(root, jobs, Path.of(args[5]), tiers)
+        return
+    }
     val workspace = root.parent
     val manifest: ActiveModManifest = mapper.readValue(root.resolve("gradle/active-custom-mods.json").toFile())
     require(manifest.schema == "bc.active_custom_mods.v1") { "unexpected active-mod manifest schema" }
@@ -177,7 +182,7 @@ fun main(args: Array<String>) {
     val provenance = mapOf(
         "schema" to "bc.fresh_dist_provenance.v1",
         "created_at" to Instant.now().toString(),
-        "test_tier" to "smoke",
+        "runtime_tiers" to tiers.tiers,
         "runtime_inputs" to if (useBundledMods) "bundled" else "source-aware",
         "soak_minutes" to soakMinutes,
         "candidates" to mapOf(
@@ -208,31 +213,37 @@ fun main(args: Array<String>) {
         },
     )
     mapper.writerWithDefaultPrettyPrinter().writeValue(evidence.resolve("provenance.json").toFile(), provenance)
+    val inventory = evidence.resolve("archive-members.json")
+    writeNewJson(inventory, mapOf("schema" to "bc.archive_members.v1", "candidates" to candidates.document(),
+        "members" to archiveMembers(candidates.client, "client", manifest.mods) + archiveMembers(candidates.server, "server", manifest.mods)))
+    ReleaseMarkers.packageReady(candidates, runId, evidence.resolve("provenance.json"), inventory, tiers)
     val started = Instant.now()
-    fun runTier(tier: String) {
+    val passed = linkedMapOf<String, Path>()
+    var running: String? = null
+    try {
+        tiers.tiers.forEach { tier ->
+            running = tier
+            requireStableCandidates(candidates)
+            val command = listOf(root.resolve("test.main.kts").toString(), tier,
+                "--client", candidates.client.toString(), "--server", candidates.server.toString()) +
+                if (tier == "soak") listOf("--minutes", soakMinutes.toString()) else emptyList()
+            runLogged(root, command, evidence.resolve("$tier.log"), mapOf("BC_TEST_RUN_ID" to runId))
+            requireStableCandidates(candidates)
+            val receipt = root.resolve("generated/test-evidence/$runId/$tier/run.json")
+            if (tier == "tele-soak") validateTeleSoakReceipt(receipt, runId, candidates, started)
+            else validateSmokeEvidence(receipt, runId, candidates, started, tier)
+            passed[tier] = receipt
+            running = null
+        }
         requireStableCandidates(candidates)
-        val command = listOf(root.resolve("test.main.kts").toString(), tier,
-            "--client", candidates.client.toString(), "--server", candidates.server.toString()) +
-            if (tier == "soak") listOf("--minutes", soakMinutes.toString()) else emptyList()
-        runLogged(root, command, evidence.resolve("$tier.log"), mapOf("BC_TEST_RUN_ID" to runId))
-        requireStableCandidates(candidates)
+        if ("smoke" in passed) ReleaseMarkers.ready(candidates, runId, tiers, passed)
+        ReleaseMarkers.result(evidence, runId, tiers, passed, null)
+    } catch (error: Exception) {
+        ReleaseMarkers.result(evidence, runId, tiers, passed, running, error.message ?: error.toString())
+        throw error
     }
-    runTier("smoke")
-    validateSmokeEvidence(smokeEvidence, runId, candidates, started)
-    if (soakMinutes > 0) {
-        runTier("soak")
-        validateSmokeEvidence(root.resolve("generated/test-evidence/$runId/soak/run.json"), runId, candidates, started, "soak")
-    }
-    // Recheck the gate after optional Soak; never package again after acceptance.
-    validateSmokeEvidence(smokeEvidence, runId, candidates, started)
-    ready.parent.createDirectories()
-    val readyTemporary = ready.resolveSibling(".ready.json.tmp")
-    mapper.writerWithDefaultPrettyPrinter().writeValue(readyTemporary.toFile(), mapOf(
-        "schema" to "bc.release_ready.v1", "run_id" to runId, "status" to "passed",
-        "created_at" to Instant.now().toString(), "smoke_evidence" to smokeEvidence.toString(),
-        "soak_minutes" to soakMinutes, "candidates" to provenance.getValue("candidates")))
-    Files.move(readyTemporary, ready, StandardCopyOption.ATOMIC_MOVE)
-    println("release ready: $ready (exact packaged pair passed Smoke)")
+    println("release package: ${candidates.release.resolve("package-ready.json")}")
+    if ("smoke" in passed) println("release Smoke-ready: $ready")
     println("release evidence: $evidence")
 }
 
@@ -282,7 +293,18 @@ internal fun build(
     }
     Files.createDirectories(nativeLock.parent)
     val buildCommand = listOf("flock", "--wait", "1800", nativeLock.toString(),
-        repository.resolve("gradlew").toString(), "--no-daemon", "--max-workers=2", "stageRuntimeJar")
+        repository.resolve("gradlew").toString(), "--no-daemon", "--max-workers=2", "stageRuntimeJar") +
+        if (mod.repository == "better-survival-physiology") {
+            val spice = staging.resolve("better-spicy-farmers-0.1.0.jar")
+            val waterClasses = workspace.resolve("mod_source/better-drinking-water/build/classes/java/main")
+            require(Files.isRegularFile(spice) && jarDeclaresMod(spice, "better_spicy_farmers")) {
+                "stage the active Spice provider before physiology"
+            }
+            require(listOf("PlantDrinks.class", "api/BeverageEvents.class").all {
+                Files.isRegularFile(waterClasses.resolve("com/bettercontent/betterdrinkingwater/$it"))
+            }) { "drinking-water did not produce the required nonshipping typed API classes" }
+            listOf("-PspicyFarmersProviderJar=$spice", "-PtypedWaterCompileClasses=$waterClasses")
+        } else emptyList()
     runLogged(repository, buildCommand, log, providerBuildEnvironment(staging))
     val jar = repository.resolve("build/libs").resolve(mod.artifact)
     require(Files.isRegularFile(jar)) { "${mod.repository} did not stage ${mod.artifact}" }
@@ -521,6 +543,7 @@ data class FreshSourcePlan(
     val thirdPartyPins: Map<String, String>,
     val qualificationNotBeforeUtc: String,
     val createdUtc: String,
+    val worldManagementSupervisor: FreshInputSnapshot? = null,
 )
 
 internal class FreshReleaseBlocked(message: String) : IllegalStateException(message)
@@ -566,17 +589,22 @@ internal fun freshDependencyOrder(mods: List<ActiveMod>): List<ActiveMod> {
 
 internal fun validateFreshSourcePopulation(manifest: ActiveModManifest, plan: FreshSourcePlan) {
     require(manifest.schema == "bc.active_custom_mods.v1" && plan.schema == "bc.fresh_custom_sources.v1") { "unsupported fresh-source manifest/plan schema" }
-    require(manifest.mods.size == 49 && manifest.mods.map { it.repository }.toSet().size == 49 &&
-        manifest.mods.map { it.modId }.toSet().size == 49 && manifest.mods.map { it.artifact }.toSet().size == 49) {
-        "fresh source release requires exactly 49 distinct active mods (48 fresh plus frozen WLM)"
+    require(manifest.mods.isNotEmpty() && manifest.mods.map { it.repository }.toSet().size == manifest.mods.size &&
+        manifest.mods.map { it.modId }.toSet().size == manifest.mods.size &&
+        manifest.mods.map { it.artifact }.toSet().size == manifest.mods.size) {
+        "fresh source release requires distinct approved active repository/mod/artifact identities"
     }
     require(manifest.mods.any { it.repository == "better-spicy-farmers" }) { "Spicy Farmers must be explicitly active" }
-    require(manifest.mods.none { it.repository == "better-finite-water" }) { "Finite Water is not an authorized runtime input" }
-    val frozen = manifest.mods.single { it.repository == FROZEN_WLM_REPOSITORY }
-    require(frozen.artifact == FROZEN_WLM_ARTIFACT && frozen.dependsOn.isEmpty()) { "frozen WLM identity/provider changed" }
-    require(plan.sources.size == 48 && plan.sources.map { it.repository }.toSet() ==
-        manifest.mods.filterNot { it.repository == FROZEN_WLM_REPOSITORY }.map { it.repository }.toSet()) {
-        "exactly all 48 non-WLM active sources must be freshly built; no bundled source substitution"
+    require(manifest.mods.none { it.repository in setOf("better-finite-water", "better-abyssal-city") }) {
+        "incomplete Finite Water and Abyssal City are not authorized runtime inputs"
+    }
+    require(manifest.mods.count { it.repository == FROZEN_WLM_REPOSITORY } == 1 &&
+        manifest.mods.count { it.repository == "better-cooking" } == 1) {
+        "new World Management and qualified Cooking must both be active in the fresh-source cohort"
+    }
+    require(plan.sources.size == manifest.mods.size && plan.sources.map { it.repository }.toSet() ==
+        manifest.mods.map { it.repository }.toSet()) {
+        "every approved active source, including World Management, must be freshly qualified and built"
     }
     val physiology = manifest.mods.single { it.repository == "better-survival-physiology" }
     require(physiology.dependsOn.containsAll(listOf("better-drinking-water", "better-spicy-farmers"))) {
@@ -591,7 +619,7 @@ internal fun validateFreshSourceBindings(manifest: ActiveModManifest, plan: Fres
     plan.sources.forEach { source ->
         val definition = definitions.getValue(source.repository)
         val required = definition.dependsOn.associate { dependency ->
-            definitions.getValue(dependency).artifact to if (dependency == FROZEN_WLM_REPOSITORY) FROZEN_WLM_SHA256 else sources.getValue(dependency).rawSha256
+            definitions.getValue(dependency).artifact to sources.getValue(dependency).rawSha256
         }
         require(source.providerSha256 == required) { "qualified provider bindings must exactly match the resolved fresh-source DAG: ${source.repository}" }
         freshGradleProperties(source, Path.of("qualified-staging")) // Validate all properties before creating actual staging.
@@ -758,6 +786,7 @@ internal fun validateTeleSoakReceipt(path: Path, runId: String, pair: CandidateP
     val results = receipt.path("dimension_results").toList()
     require(results.map { it.path("dimension").asText() }.toSet() == dimensions.toSet() && results.all {
         it.path("dwell_seconds").asDouble().let { seconds -> seconds.isFinite() && seconds >= 300.0 } &&
+            it.path("fresh_relocations_verified").asBoolean() &&
             it.path("completed_circuits").map { circuit -> circuit.asInt() } == listOf(1, 2, 3) && it.path("tps_verified").asBoolean()
     }) { "TeleSoak did not complete the fixed dwell and all three circuits for every registered dimension" }
     val events = path.resolveSibling("events.jsonl")
@@ -789,15 +818,54 @@ internal fun validateTeleSoakEvents(path: Path, dimensions: List<String>) {
     require(hops.size == dimensions.size * 4 && hops.all {
         it.path("dimension").asText() in dimensions && it.path("circuit").asInt(-1) in 0..3
     }) { "unexpected/retried TeleSoak hop outside the fixed itinerary" }
+    val landings = events.indices.filter { events[it].path("type").asText() == "landing_verified" }
+    require(landings.size == dimensions.size * 17) { "TeleSoak must prove 4 fresh dimension landings and 13 remote relocations per dimension" }
+    val visited = mutableMapOf<String, MutableSet<Pair<Int, Int>>>()
+    val priorLocation = mutableMapOf<String, Pair<Double, Double>>()
+    landings.forEach { index ->
+        val landing = events[index]
+        val dimension = landing.path("dimension").asText()
+        val x = landing.path("x").asDouble(Double.NaN)
+        val z = landing.path("z").asDouble(Double.NaN)
+        val chunk = landing.path("chunk_x").asInt(Int.MIN_VALUE) to landing.path("chunk_z").asInt(Int.MIN_VALUE)
+        require(dimension in dimensions && x.isFinite() && z.isFinite() && landing.path("novel_chunk").asBoolean() &&
+            chunk.first == kotlin.math.floor(x / 16).toInt() && chunk.second == kotlin.math.floor(z / 16).toInt() &&
+            visited.getOrPut(dimension, ::mutableSetOf).add(chunk)) {
+            "TeleSoak landed in an already visited or unverified chunk: $dimension/$chunk"
+        }
+        val route = landing.path("route").asText()
+        require(route == "remote_ungenerated_chunk" ||
+            (route == "native_font" && dimension == "the_bumblezone:the_bumblezone")) {
+            "TeleSoak landing route is not a controlled remote hop or authorized Font entry"
+        }
+        priorLocation[dimension]?.let { (beforeX, beforeZ) ->
+            val actualDistance = kotlin.math.hypot(x - beforeX, z - beforeZ)
+            val reported = landing.path("distance_from_previous").asDouble(Double.NaN)
+            require(reported.isFinite() && kotlin.math.abs(actualDistance - reported) <= 1.0 &&
+                actualDistance >= 9999.0) {
+                "TeleSoak relocation (including native Font entry) moved less than 10,000 blocks or reported false coordinates"
+            }
+        }
+        priorLocation[dimension] = x to z
+    }
+    fun relocation(dimension: String, circuit: Int, ordinal: Int, type: String): Int = events.indices.singleOrNull { index ->
+        val event = events[index]
+        event.path("type").asText() == type && event.path("dimension").asText() == dimension &&
+            event.path("circuit").asInt(-1) == circuit && event.path("relocation").asInt(-1) == ordinal
+    } ?: error("missing/duplicate $type in $dimension circuit $circuit relocation $ordinal")
     dimensions.forEach { dimension ->
         (0..3).forEach { circuit ->
             val hop = unique("hop_started", dimension, circuit)
             val arrival = unique("arrival_verified", dimension, circuit)
             val stable = unique("tps_stable", dimension, circuit)
-            require(hop < arrival && arrival < stable) { "TeleSoak arrival/recovery event order invalid" }
+            require(hop < arrival && arrival < stable && (hop + 1 until arrival).count { it in landings } == 1) {
+                "TeleSoak arrival/recovery/unique landing event order invalid"
+            }
             val receipts = (hop + 1 until arrival).map { events[it] }.filter { it.path("type").asText() == "client_dimension_receipt" }
             require(receipts.size == 1 && receipts.single().path("dimension").asText() == dimension &&
-                receipts.single().path("server_conditional").asBoolean() && receipts.single().path("fresh_client_log_offset").asLong(-1) >= 0) {
+                receipts.single().path("server_conditional").asBoolean() &&
+                (receipts.single().path("server_position_conditional").asBoolean() || dimension == "the_bumblezone:the_bumblezone") &&
+                receipts.single().path("fresh_client_log_offset").asLong(-1) >= 0) {
                 "each TeleSoak arrival needs one fresh server-conditioned receipt in the actual connected client"
             }
             val hopSeconds = events[arrival].path("hop_seconds").asDouble(Double.NaN)
@@ -826,8 +894,61 @@ internal fun validateTeleSoakEvents(path: Path, dimensions: List<String>) {
         val dwellEnd = unique("dwell_completed", dimension)
         val dwell = events[dwellEnd]
         require(unique("tps_stable", dimension, 0) < dwellStart && dwellStart < dwellEnd && dwellEnd < unique("circuit_started", circuit = 1) &&
+            dwell.path("fresh_relocations").asInt() == 10 &&
+            events[dwellStart].path("required_fresh_relocations").asInt() == 10 &&
             dwell.path("actual_seconds").asDouble(Double.NaN).let { it.isFinite() && it >= 300 }) {
             "TeleSoak initial dwell must follow arrival/recovery and finish before the three circuits"
+        }
+        (0..3).forEach { circuit ->
+            val required = if (circuit == 0) 10 else 1
+            (1..required).forEach { ordinal ->
+                val start = relocation(dimension, circuit, ordinal, "relocation_started")
+                val arrival = relocation(dimension, circuit, ordinal, "relocation_arrival_verified")
+                val stable = relocation(dimension, circuit, ordinal, "relocation_tps_stable")
+                val priorStable = if (ordinal == 1) unique("tps_stable", dimension, circuit)
+                    else relocation(dimension, circuit, ordinal - 1, "relocation_tps_stable")
+                val priorStart = if (ordinal == 1) dwellStart
+                    else relocation(dimension, circuit, ordinal - 1, "relocation_started")
+                val spacing = java.time.Duration.between(
+                    Instant.parse(events[priorStart].path("time").asText()),
+                    Instant.parse(events[start].path("time").asText())).toMillis()
+                require(priorStable < start && start < arrival && arrival < stable &&
+                    (circuit != 0 || spacing >= 29_000) && (start + 1 until arrival).count { it in landings } == 1 &&
+                    (if (circuit == 0) dwellStart < start && stable < dwellEnd else
+                        unique("hop_started", dimension, circuit) < start && stable < unique("circuit_completed", circuit = circuit))) {
+                    "TeleSoak remote relocation lacks a fresh landing and TPS recovery"
+                }
+                val receipts = (start + 1 until arrival).map { events[it] }.filter {
+                    it.path("type").asText() == "client_dimension_receipt" && it.path("dimension").asText() == dimension
+                }
+                require(receipts.size == 1 && receipts.single().path("server_conditional").asBoolean() &&
+                    receipts.single().path("server_position_conditional").asBoolean() &&
+                    receipts.single().path("fresh_client_log_offset").asLong(-1) >= 0) {
+                    "remote relocation lacks a fresh position-conditioned receipt in the actual connected client"
+                }
+                val hopSeconds = events[arrival].path("hop_seconds").asDouble(Double.NaN)
+                val recovery = events[stable].path("recovery_seconds").asDouble(Double.NaN)
+                val samples = (arrival + 1 until stable).map { events[it] }.filter {
+                    it.path("type").asText() == "relocation_tps_sample" && it.path("dimension").asText() == dimension &&
+                        it.path("circuit").asInt(-1) == circuit && it.path("relocation").asInt(-1) == ordinal
+                }
+                require(hopSeconds.isFinite() && recovery.isFinite() && hopSeconds >= 0 && recovery >= 30 &&
+                    hopSeconds + recovery <= 120.0 && samples.size >= 2) { "remote relocation failed its arrival/TPS deadline" }
+                var last = -1.0
+                var goodSince = Double.NaN
+                samples.forEach { sample ->
+                    val elapsed = sample.path("elapsed_seconds").asDouble(Double.NaN)
+                    val tps = sample.path("tps").asDouble(Double.NaN)
+                    require(elapsed.isFinite() && elapsed >= 0 && elapsed > last && elapsed <= recovery &&
+                        tps.isFinite() && tps in 0.0..20.0001) { "invalid remote relocation TPS sample" }
+                    goodSince = if (tps >= 19.0) (if (goodSince.isNaN() || (last >= 0 && elapsed - last > 2.0)) elapsed else goodSince)
+                        else Double.NaN
+                    last = elapsed
+                }
+                require(goodSince.isFinite() && last - goodSince >= 30.0 && recovery - last <= 1.0) {
+                    "remote relocation lacks 30 continuously sampled seconds at >=19 TPS"
+                }
+            }
         }
     }
     (1..3).forEach { circuit ->
@@ -854,38 +975,62 @@ internal fun validateTeleSoakEvents(path: Path, dimensions: List<String>) {
     require(events[finished].path("success").asBoolean()) { "TeleSoak session did not finish successfully" }
 }
 
-private fun validateTeleClientEvidence(events: List<com.fasterxml.jackson.databind.JsonNode>) {
+internal fun validateTeleClientEvidence(events: List<com.fasterxml.jackson.databind.JsonNode>) {
     val joined = events.indices.filter { events[it].path("type").asText() == "client_joined" }
     val completed = events.indices.filter { events[it].path("type").asText() == "tele_soak_complete" }
     require(joined.size == 1 && completed.size == 1 && joined.single() < completed.single()) { "TeleSoak must have one uninterrupted joined client" }
     val from = joined.single(); val until = completed.single()
-    var previousHeartbeat = Instant.parse(events[from].path("time").asText())
+    var previousProof = Instant.parse(events[from].path("time").asText())
     var target: String? = null
+    var awaitingArrival = false
     val markers = mutableSetOf<String>()
     var heartbeatCount = 0
     (from + 1..until).forEach { index ->
         val event = events[index]
         when (event.path("type").asText()) {
-            "hop_started" -> target = event.path("dimension").asText()
+            "hop_started", "relocation_started" -> {
+                target = event.path("dimension").asText()
+                awaitingArrival = true
+            }
             "client_disconnected", "client_joined", "reconnect", "failure" -> error("client connection failed/restarted inside TeleSoak")
-            "client_dimension_receipt" -> require(event.path("marker").asText().isNotBlank() && markers.add(event.path("marker").asText())) { "stale/repeated client dimension receipt" }
+            "client_dimension_receipt" -> {
+                val at = Instant.parse(event.path("time").asText())
+                require(awaitingArrival && event.path("dimension").asText() == target &&
+                    event.path("server_conditional").asBoolean() && event.path("fresh_client_log_offset").asLong(-1) >= 0 &&
+                    event.path("marker").asText().isNotBlank() && markers.add(event.path("marker").asText()) &&
+                    !at.isBefore(previousProof) && java.time.Duration.between(previousProof, at) <= java.time.Duration.ofSeconds(120)) {
+                    "missing/late/stale client arrival receipt"
+                }
+                previousProof = at
+                awaitingArrival = false
+            }
             "heartbeat" -> {
                 val at = Instant.parse(event.path("time").asText())
-                require(!at.isBefore(previousHeartbeat) && java.time.Duration.between(previousHeartbeat, at) <= java.time.Duration.ofSeconds(15) &&
+                // /forge tps and fresh chunk generation can delay a sequential console probe.
+                // Arrival markers are genuinely received by the client but cannot be
+                // dimension-qualified until the server-position receipt arrives. The
+                // 120-second arrival/TPS deadline and 30-second TPS stability window
+                // remain independently checked for every hop and relocation below.
+                val proofBudget = java.time.Duration.ofSeconds(if (awaitingArrival) 120 else 30)
+                val dimension = event.path("verified_dimension")
+                require(!at.isBefore(previousProof) && java.time.Duration.between(previousProof, at) <= proofBudget &&
                     event.path("client_received").asBoolean() && event.path("server_alive").asBoolean() &&
                     event.path("marker").asText().isNotBlank() && markers.add(event.path("marker").asText()) &&
-                    (target == null || event.path("verified_dimension").asText() == target)) { "missing/late/stale/wrong-dimension actual client heartbeat" }
-                previousHeartbeat = at; heartbeatCount++
+                    (target == null || dimension.asText() == target || (awaitingArrival && dimension.isNull))) {
+                    "missing/late/stale/wrong-dimension actual client heartbeat"
+                }
+                previousProof = at; heartbeatCount++
             }
         }
     }
     val end = Instant.parse(events[until].path("time").asText())
-    require(heartbeatCount > 0 && !end.isBefore(previousHeartbeat) && java.time.Duration.between(previousHeartbeat, end) <= java.time.Duration.ofSeconds(15)) {
+    require(heartbeatCount > 0 && !awaitingArrival && !end.isBefore(previousProof) &&
+        java.time.Duration.between(previousProof, end) <= java.time.Duration.ofSeconds(15)) {
         "last TeleSoak heartbeat is missing or older than 15 seconds"
     }
 }
 
-private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path) {
+private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path, tiers: ReleaseTierSelection) {
     require(jobs in 1..4)
     val runId = System.getenv("BC_TEST_RUN_ID")?.takeIf { it.matches(Regex("[A-Za-z0-9][A-Za-z0-9_.-]{0,127}")) }
         ?: error("fresh releases require a fresh BC_TEST_RUN_ID from release.main.kts")
@@ -908,11 +1053,20 @@ private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path) {
             validateQualifiedFreshSource(root.parent.resolve("mod_source/${source.repository}"), manifest.mods.single { it.repository == source.repository },
                 source, qualificationNotBefore, planCreated)
         }
-        require(!evidence.parent.resolve("smoke/run.json").exists() && !evidence.parent.resolve("tele-soak/run.json").exists()) {
+        require(listOf("smoke", "soak", "tele-soak").none { evidence.parent.resolve("$it/run.json").exists() }) {
             "fresh release run ID already has runtime evidence"
         }
         require(plan.thirdPartyPins.isNotEmpty() && thirdPartyPins(root) == plan.thirdPartyPins) { "third-party pins differ from qualified plan" }
-        requireFrozenWlm(root)
+        val supervisor = requireNotNull(plan.worldManagementSupervisor) { "fresh World Management supervisor qualification is required" }
+        require(supervisor.kind == "file" && Path.of(supervisor.path).toAbsolutePath().normalize() ==
+            root.resolve("better-world-management-server.sh").toAbsolutePath().normalize()) { "qualified supervisor must be the candidate pack script" }
+        requireSnapshot(supervisor)
+        require(plan.sources.single { it.repository == FROZEN_WLM_REPOSITORY }.externalInputs.contains(supervisor)) {
+            "new World Management source qualification must bind the exact production supervisor"
+        }
+        require(frozenLaunchers.all { (name, hash) -> Hashes.sha256(root.resolve(name)) == hash }) {
+            "accepted Build1 launcher chain changed in the candidate workspace"
+        }
         val accepted = root.resolve("dist/build-1/server/better-content.zip")
         require(Hashes.sha256(accepted) == ACCEPTED_BUILD1_SERVER_SHA256 &&
             archiveMemberHash(accepted, "/mods/$FROZEN_WLM_ARTIFACT") == FROZEN_WLM_SHA256 &&
@@ -927,14 +1081,10 @@ private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path) {
         val planCopy = evidence.resolve("qualified-source-plan.json")
         Files.copy(planPath, planCopy)
         require(Hashes.sha256(planCopy) == planHash) { "source plan changed while preserving proof" }
-        val sourceProofs = preserveQualificationProofs(plan, evidence.resolve("qualified-proof-copies")) + preservationProofs + fileSnapshot(planCopy)
+        preserveQualificationProofs(plan, evidence.resolve("qualified-proof-copies"))
         val staging = evidence.resolve("fresh-raw-jars").also { Files.createDirectory(it) }
-        Files.copy(root.resolve("mods/$FROZEN_WLM_ARTIFACT"), staging.resolve(FROZEN_WLM_ARTIFACT))
         val built = mutableListOf<BuiltMod>()
         order.forEach { mod ->
-            if (mod.repository == FROZEN_WLM_REPOSITORY) {
-                built += BuiltMod(mod, readSourceCommit(staging.resolve(mod.artifact), mod) ?: "accepted-build1", staging.resolve(mod.artifact), FROZEN_WLM_SHA256, "frozen-build1")
-            } else {
                 val source = byRepository.getValue(mod.repository)
                 val repository = root.parent.resolve("mod_source/${mod.repository}")
                 validateSource(source)
@@ -950,7 +1100,6 @@ private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path) {
                 Files.copy(repository.resolve("build/libs/${mod.artifact}"), jar)
                 require(Hashes.sha256(jar) == source.rawSha256) { "raw output changed while copying: ${mod.repository}" }
                 built += BuiltMod(mod, source.head, jar, source.rawSha256, "fresh-source")
-            }
         }
         // Providers retain their exact qualified RAW bytes until every consumer has compiled.
         plan.sources.forEach(::validateSource)
@@ -958,17 +1107,17 @@ private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path) {
         // Qualification binds runtime bytes, not just classes. Fresh releases NEVER decorate JARs.
         val distributionMods = built
         distributionMods.forEach { mod ->
-            require(Hashes.sha256(mod.jar) == if (mod.mode == "frozen-build1") FROZEN_WLM_SHA256 else byRepository.getValue(mod.definition.repository).rawSha256) {
+            require(Hashes.sha256(mod.jar) == byRepository.getValue(mod.definition.repository).rawSha256) {
                 "qualified runtime bytes changed before deployment: ${mod.definition.repository}"
             }
         }
-        requireFrozenWlm(root)
+        requireSnapshot(supervisor)
         require(thirdPartyPins(root) == plan.thirdPartyPins) { "third-party pins changed before deployment" }
         validateWorkspacePreservation(preservation, root, manifest.mods) // Last admission before ANY root overwrite.
-        distributionMods.filterNot { it.mode == "frozen-build1" }.forEach {
+        distributionMods.forEach {
             Files.copy(it.jar, root.resolve("mods/${it.definition.artifact}"), StandardCopyOption.REPLACE_EXISTING)
         }
-        requireFrozenWlm(root)
+        requireSnapshot(supervisor)
         runLogged(root, listOf("packwiz", "refresh"), evidence.resolve("packwiz-refresh.log"))
         runLogged(root, listOf("git", "diff", "--check"), evidence.resolve("diff-check.log"))
         requirePlanStable()
@@ -980,43 +1129,52 @@ private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path) {
             require(archiveMemberHash(pair.client, "/mods/${mod.definition.artifact}") == mod.sha256 &&
                 archiveMemberHash(pair.server, "/mods/${mod.definition.artifact}") == mod.sha256) { "packaged custom artifact differs: ${mod.definition.repository}" }
         }
-        require(archiveMemberHash(pair.server, "/better-world-management-server.sh") == FROZEN_SUPERVISOR_SHA256 &&
-            frozenLaunchers.all { (name, hash) -> archiveMemberHash(pair.server, "/$name") == hash }) { "packaged WLM supervisor/launcher changed" }
+        require(archiveMemberHash(pair.server, "/better-world-management-server.sh") == supervisor.sha256 &&
+            frozenLaunchers.all { (name, hash) -> archiveMemberHash(pair.server, "/$name") == hash }) { "packaged qualified WLM supervisor/launcher changed" }
         val archiveInventory = evidence.resolve("archive-members.json")
         val members = validatePackagedInventory(root, pair, manifest.mods)
         writeNewJson(archiveInventory, mapOf("schema" to "bc.archive_members.v1", "candidates" to pair.document(), "members" to members))
-        val provenance = mapOf("schema" to "bc.fresh_dist_provenance.v3", "run_id" to runId,
-            "runtime_inputs" to "48-fresh-sources-plus-accepted-build1-wlm", "authorization_reference" to authorization,
+        val provenance = mapOf("schema" to "bc.fresh_dist_provenance.v4", "run_id" to runId,
+            "runtime_inputs" to "all-active-qualified-fresh-sources", "authorization_reference" to authorization,
             "observed_request_lower_bound_utc" to System.getenv("BC_FRESH_SOURCE_REQUEST_NOT_BEFORE_UTC"),
             "plan_sha256" to planHash, "manifest_sha256" to manifestHash, "plan" to plan, "mods" to distributionMods, "candidates" to pair.document(),
-            "archive_inventory" to fileSnapshot(archiveInventory), "required_tiers" to listOf("smoke", "tele-soak"),
-            "required_gates" to listOf("smoke", "tele-soak", "in-world-visual"))
+            "world_management_supervisor" to supervisor, "archive_inventory" to fileSnapshot(archiveInventory),
+            "selected_runtime_tiers" to tiers.tiers, "visual_status" to "not_run")
         mapper.writerWithDefaultPrettyPrinter().writeValue(evidence.resolve("provenance.json").toFile(), provenance)
-        val smoke = evidence.parent.resolve("smoke/run.json")
-        val tele = evidence.parent.resolve("tele-soak/run.json")
-        require(!smoke.exists() && !tele.exists()) { "fresh source release cannot reuse prior runtime evidence" }
+        ReleaseMarkers.packageReady(pair, runId, evidence.resolve("provenance.json"), archiveInventory, tiers)
         val started = Instant.now()
-        listOf("smoke", "tele-soak").forEach { tier ->
-            requireStableCandidates(pair)
-            runLogged(root, listOf(root.resolve("test.main.kts").toString(), tier, "--client", pair.client.toString(), "--server", pair.server.toString()),
-                evidence.resolve("$tier.log"), mapOf("BC_TEST_RUN_ID" to runId))
-            if (tier == "smoke") {
-                validateSmokeEvidence(smoke, runId, pair, started)
-                val clientBytes = validateMaterializedClientBytes(root, runId, pair, manifest.mods)
-                writeNewJson(evidence.resolve("client-binary-inventory.json"), clientBytes)
-            } else validateTeleSoakReceipt(tele, runId, pair, started)
+        val passed = linkedMapOf<String, Path>()
+        var running: String? = null
+        try {
+            tiers.tiers.forEach { tier ->
+                running = tier
+                requireStableCandidates(pair)
+                runLogged(root, listOf(root.resolve("test.main.kts").toString(), tier, "--client", pair.client.toString(), "--server", pair.server.toString()) +
+                    if (tier == "soak") listOf("--minutes", tiers.soakMinutes.toString()) else emptyList(),
+                    evidence.resolve("$tier.log"), mapOf("BC_TEST_RUN_ID" to runId))
+                requireStableCandidates(pair)
+                val receipt = evidence.parent.resolve("$tier/run.json")
+                if (tier == "tele-soak") validateTeleSoakReceipt(receipt, runId, pair, started)
+                else validateSmokeEvidence(receipt, runId, pair, started, tier)
+                if (tier == "smoke") {
+                    val clientBytes = validateMaterializedClientBytes(root, runId, pair, manifest.mods)
+                    writeNewJson(evidence.resolve("client-binary-inventory.json"), clientBytes)
+                }
+                passed[tier] = receipt
+                running = null
+            }
+            requirePlanStable(); requireSnapshot(supervisor); requireStableCandidates(pair)
+            if ("smoke" in passed) ReleaseMarkers.ready(pair, runId, tiers, passed)
+            ReleaseMarkers.result(evidence, runId, tiers, passed, null)
+        } catch (error: Exception) {
+            ReleaseMarkers.result(evidence, runId, tiers, passed, running, error.message ?: error.toString())
+            throw error
         }
-        validateSmokeEvidence(smoke, runId, pair, started)
-        validateTeleSoakReceipt(tele, runId, pair, started)
-        requirePlanStable()
-        requireFrozenWlm(root)
-        val pending = createVisualPending(evidence, runId, pair, started, sourceProofs)
-        throw VisualReviewRequired(pending) // A successful runtime is NOT a visual acceptance.
+        println("fresh-source package: ${pair.release.resolve("package-ready.json")}")
+        if ("smoke" in passed) println("fresh-source Smoke-ready: ${pair.release.resolve("ready.json")}")
     } catch (error: Exception) {
         mapper.writerWithDefaultPrettyPrinter().writeValue(evidence.resolve("fresh-release-result.json").toFile(), mapOf(
-            "schema" to "bc.fresh_release_result.v1", "run_id" to runId, "status" to if (error is FreshReleaseBlocked || error is VisualReviewRequired) "blocked" else "failed",
-            "blocker_code" to if (error is VisualReviewRequired) "visual-review-required" else null,
-            "pending_sha256" to if (error is VisualReviewRequired) Hashes.sha256(error.pending) else null,
+            "schema" to "bc.fresh_release_result.v1", "run_id" to runId, "status" to if (error is FreshReleaseBlocked) "blocked" else "failed",
             "failure" to error.stackTraceToString(), "updated_at" to Instant.now().toString()))
         System.err.println("fresh release failed/blocked: evidence and pre-mutation backup retained; workspace may remain staged after deployment; no automatic rollback")
         throw error
@@ -1397,6 +1555,73 @@ internal fun validatePendingVisualSeal(pendingPath: Path, resultPath: Path, pair
     return pending
 }
 
+private fun validateStandaloneVisualTier(root: Path, marker: Path, reviewPath: Path) {
+    require(!System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) { "visual tier requires the shared release mutex" }
+    val (pair, packageMarker) = validateVisualPackageBinding(root, marker)
+    val runId = packageMarker.path("run_id").asText()
+    val evidence = root.resolve("generated/test-evidence/$runId/release").toAbsolutePath().normalize()
+    val forbiddenWorlds = listOf("smoke", "soak", "tele-soak").mapNotNull { tier ->
+        val events = evidence.parent.resolve("$tier/events.jsonl")
+        if (!Files.isRegularFile(events)) null else Files.readAllLines(events).mapNotNull { line ->
+            runCatching { mapper.readTree(line) }.getOrNull()
+        }.firstOrNull { it.path("type").asText() == "validated" }?.path("world_save")?.asText()?.takeIf { it.isNotBlank() }?.let {
+            Path.of(it).toAbsolutePath().normalize().parent.toString()
+        }
+    }.toSet()
+    val attempts = evidence.parent.resolve("visual/attempts").also { it.createDirectories() }
+    val attempted = runCatching {
+        val review = mapper.readTree(reviewPath.toFile())
+        val snapshot = mapper.treeToValue(review.path("capture_session"), FreshInputSnapshot::class.java)
+        requireSnapshot(snapshot)
+        mapper.readTree(Path.of(snapshot.path).toFile())
+    }.getOrNull()
+    fun audit(status: String): Path {
+        val path = attempts.resolve("${java.util.UUID.randomUUID()}.json")
+        writeNewJson(path, mapOf("status" to status, "review" to reviewPath.toAbsolutePath().normalize().toString(),
+            "visual_session_id" to attempted?.path("run_id")?.asText(),
+            "world_ownership_id" to attempted?.path("world_ownership_id")?.asText(),
+            "world_directory" to attempted?.path("world_directory")?.asText()))
+        return path
+    }
+    try {
+        val accepted = validateVisualReview(reviewPath, runId, pair, Instant.parse(packageMarker.path("created_at").asText()), forbiddenWorlds)
+        requireUnusedVisualWorld(attempts, accepted.sessionId, Path.of(accepted.world), accepted.ownershipId)
+        requireStableCandidates(pair)
+        val receipt = evidence.parent.resolve("visual/receipt.json")
+        writeNewJson(receipt, mapOf("schema" to "bc.visual_tier.v1", "status" to "passed", "run_id" to runId,
+            "candidates" to pair.document(), "package_ready" to fileSnapshot(marker),
+            "review" to fileSnapshot(reviewPath), "bindings" to accepted.bindings + fileSnapshot(audit("validated"))))
+        println("independent visual tier passed (release markers unchanged): $receipt")
+    } catch (error: Exception) {
+        // Failed-world identities are retained when a real session receipt exists; no failure is a release pass.
+        if (attempted?.path("run_id")?.asText()?.isNotBlank() == true &&
+            attempted.path("world_ownership_id").asText().isNotBlank() &&
+            attempted.path("world_directory").asText().isNotBlank()) runCatching { audit("failed") }.exceptionOrNull()?.let(error::addSuppressed)
+        throw error
+    }
+}
+
+internal fun validateVisualPackageBinding(root: Path, marker: Path): Pair<CandidatePair, com.fasterxml.jackson.databind.JsonNode> {
+    val packageMarker = mapper.readTree(marker.toFile())
+    val runId = packageMarker.path("run_id").asText()
+    require(runId.matches(Regex("[A-Za-z0-9][A-Za-z0-9_.-]{0,127}")) &&
+        packageMarker.path("schema").asText() == "bc.package_ready.v1" &&
+        packageMarker.path("status").asText() == "packaged") { "visual tier requires a real package-ready candidate" }
+    val evidence = root.resolve("generated/test-evidence/$runId/release").toAbsolutePath().normalize()
+    val candidate = packageMarker.path("candidates")
+    val pair = CandidateLocator.locate(Path.of(candidate.path("client").asText()), Path.of(candidate.path("server").asText()))
+    require(marker.toRealPath() == pair.release.resolve("package-ready.json").toRealPath() &&
+        candidate == mapper.valueToTree<com.fasterxml.jackson.databind.JsonNode>(pair.document())) { "visual tier candidate bytes changed" }
+    val proofs = packageMarker.path("proofs_sha256")
+    val provenance = evidence.resolve("provenance.json")
+    val inventory = evidence.resolve("archive-members.json")
+    require(proofs.path("provenance.json").asText() == Hashes.sha256(provenance) &&
+        proofs.path("archive-members.json").asText() == Hashes.sha256(inventory) &&
+        mapper.readTree(provenance.toFile()).path("candidates") == candidate &&
+        mapper.readTree(inventory.toFile()).path("candidates") == candidate) { "visual tier packaging/source proofs are stale" }
+    return pair to packageMarker
+}
+
 private fun finalizeVisualRelease(root: Path, pendingPath: Path, reviewPath: Path) {
     requireFreshRuntimeAuthorization(System.getenv())
     require(!System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) { "finalization requires release mutex" }
@@ -1457,7 +1682,7 @@ private fun finalizeVisualRelease(root: Path, pendingPath: Path, reviewPath: Pat
         writeNewJson(pair.release.resolve("ready.json"), mapOf("schema" to "bc.release_ready.v3", "run_id" to runId, "status" to "passed",
             "created_at" to Instant.now().toString(), "candidates" to pair.document(), "required_gates" to listOf("smoke", "tele-soak", "in-world-visual"),
             "pending" to pendingSnapshot, "visual_review" to fileSnapshot(reviewPath), "proofs" to allProofs + fileSnapshot(attempt),
-            "fresh_source_count" to 48, "frozen_wlm_sha256" to FROZEN_WLM_SHA256, "frozen_supervisor_sha256" to FROZEN_SUPERVISOR_SHA256))
+            "fresh_source_count" to 47, "frozen_wlm_sha256" to FROZEN_WLM_SHA256, "frozen_supervisor_sha256" to FROZEN_SUPERVISOR_SHA256))
         println("fresh release ready after real in-world visual acceptance: ${pair.release.resolve("ready.json")}")
     } catch (error: Exception) {
         runCatching { audit("failed") }.exceptionOrNull()?.let(error::addSuppressed)

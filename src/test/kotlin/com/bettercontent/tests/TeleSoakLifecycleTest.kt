@@ -20,6 +20,8 @@ class TeleSoakLifecycleTest {
         var heartbeats = 0
         var saves = 0
         var teleports = 0
+        val prepared = mutableSetOf<String>()
+        val positionIndex = mutableMapOf<String, Int>()
         var failTpsIn: String? = null
         var tpsProbeLatency = Duration.ZERO
         var rosterProbeLatency = Duration.ZERO
@@ -40,8 +42,23 @@ class TeleSoakLifecycleTest {
             }
             return dimensions.toList()
         }
-        override fun teleportTo(dimension: String) { ensureConnected(); current = dimension; teleports++ }
-        override fun verifyArrival(dimension: String, progress: () -> Unit) { check(current == dimension); progress() }
+        override fun prepareLanding(dimension: String, progress: () -> Unit) {
+            progress()
+            check(prepared.add(dimension))
+        }
+        override fun heartbeatDuringArrival() = heartbeat()
+        override fun teleportTo(dimension: String) {
+            ensureConnected(); check(dimension in prepared); current = dimension; teleports++
+        }
+        override fun verifyArrival(dimension: String, progress: () -> Unit) {
+            check(current == dimension); progress()
+            val index = (positionIndex[dimension] ?: 0) + 1
+            positionIndex[dimension] = index
+            val x = 10000.5 * index
+            teleSoakEvent("landing_verified", mapOf("dimension" to dimension, "x" to x, "z" to 0.5,
+                "chunk_x" to kotlin.math.floor(x / 16).toInt(), "chunk_z" to 0, "novel_chunk" to true,
+                "route" to "remote_ungenerated_chunk"))
+        }
         override fun ensureInDimension(dimension: String) { check(current == dimension) }
         override fun currentTps(): Double {
             clock.now += tpsProbeLatency.toNanos()
@@ -56,17 +73,63 @@ class TeleSoakLifecycleTest {
         assertEquals(1, driver.serverStarts)
         assertEquals(1, driver.clientJoins)
         assertEquals(1, driver.saves)
-        assertEquals(12, driver.teleports)
+        assertEquals(51, driver.teleports, "ten 10k-block fresh relocations per dwell and one per circuit visit")
+        assertEquals(driver.dimensions.toSet(), driver.prepared)
         assertTrue(driver.heartbeats >= 80)
         assertFalse(driver.connection)
         val dwells = driver.events.filter { it.first == "dwell_completed" }
         assertEquals(driver.dimensions.toSet(), dwells.map { it.second.getValue("dimension") }.toSet())
         assertTrue(dwells.all { (it.second.getValue("actual_seconds") as Double) >= 300.0 })
         assertEquals(12, driver.events.count { it.first == "tps_stable" })
+        assertEquals(39, driver.events.count { it.first == "relocation_tps_stable" })
         assertEquals(3, driver.events.count { it.first == "circuit_completed" })
         assertEquals(3, driver.events.filter { it.first == "circuit_started" }
             .map { it.second.getValue("route") }.toSet().size, "each complete circuit should vary its order")
         assertTrue(driver.events.filter { it.first == "tps_sample" }.all { (it.second.getValue("tps") as Double) >= 19.0 })
+    }
+
+    @Test fun slowDwellTickCrossingScheduledRelocationNeverSleepsNegativeTime() {
+        val clock = Clock(); val driver = Driver(clock)
+        val delayed = object : TeleSoakDriver by driver {
+            override fun ensureInDimension(dimension: String) {
+                driver.ensureInDimension(dimension)
+                if (driver.events.lastOrNull()?.first == "dwell_started") {
+                    clock.now += Duration.ofSeconds(31).toNanos()
+                }
+            }
+        }
+        runTeleSoak(delayed, clock)
+        assertEquals(3, driver.events.count { it.first == "dwell_completed" })
+    }
+
+    @Test fun diagnosticSoakReplaysOnlyUnobservedSecondsInFreshLifecycle() {
+        val clock = Clock(); val driver = Driver(clock)
+        val replay = DiagnosticReplay("failed-soak", java.nio.file.Path.of("failed/run.json"), emptyMap(),
+            null, null, 120, 73)
+        runLifecycle(SessionRequest(SessionTier.SOAK, 2), driver, clock, replay)
+        assertEquals(1, driver.serverStarts)
+        assertEquals(1, driver.clientJoins)
+        assertEquals(1, driver.saves)
+        assertFalse(driver.connection)
+        assertTrue(driver.events.any { it.first == "diagnostic_connected_seconds" &&
+            it.second["remaining"] == 47L && it.second["acceptance_eligible"] == false })
+    }
+
+    @Test fun diagnosticReplaySkipsPriorWorkButNeverEmitsAcceptanceCompletion() {
+        val clock = Clock(); val driver = Driver(clock)
+        val roster = driver.dimensions.sortedDescending()
+        val replay = DiagnosticReplay("failed-run", java.nio.file.Path.of("failed/run.json"), emptyMap(),
+            roster, HopCursor("minecraft:the_end", 1), 0, 0)
+        runTeleSoak(driver, clock, replay)
+        assertEquals(roster.toSet(), driver.prepared, "fresh fixture still prepares the live complete roster")
+        assertEquals(0, driver.events.count { it.first == "dwell_completed" })
+        assertEquals(16, driver.teleports, "replay failed hop and one relocation per remaining circuit visit")
+        assertEquals(0, driver.events.count { it.first == "tele_soak_complete" || it.first == "circuit_completed" })
+        assertEquals(1, driver.events.count { it.first == "diagnostic_itinerary_complete" })
+        assertEquals(3, driver.events.count { it.first == "diagnostic_circuit_segment_completed" })
+        assertThrows(IllegalArgumentException::class.java) {
+            runTeleSoak(Driver(Clock()), Clock(), replay.copy(roster = listOf("minecraft:overworld")))
+        }
     }
 
     @Test fun unstableTpsCannotBeCountedTowardDwellOrRelease() {
@@ -106,6 +169,13 @@ class TeleSoakLifecycleTest {
         val clock = Clock(); val driver = Driver(clock)
         val receipt = TeleSoakReceipt()
         val observed = object : TeleSoakDriver by driver {
+            override fun verifyArrival(dimension: String, progress: () -> Unit) {
+                val before = driver.events.size
+                driver.verifyArrival(dimension, progress)
+                driver.events.drop(before).filter { it.first == "landing_verified" }.forEach { (name, fields) ->
+                    receipt.record(name, fields)
+                }
+            }
             override fun teleSoakEvent(name: String, fields: Map<String, Any>) {
                 receipt.record(name, fields)
                 driver.teleSoakEvent(name, fields)
