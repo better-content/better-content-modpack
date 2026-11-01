@@ -12833,11 +12833,6 @@ hash = "d1f859de9867b7433305aef1631aa22a436a4c3924474a21c0a22ab5f2093c04"
 metafile = true
 
 [[files]]
-file = "mods/the-undergarden.pw.toml"
-hash = "4a51e5a0f11ba9b7599dcea129862829bfd028c57bf9997f9513b38defbc7e51"
-metafile = true
-
-[[files]]
 file = "mods/thirst-was-taken.pw.toml"
 hash = "435e86380f442b28ab298cb300fa0f51d1772e854252c31726b17ccb1ec5041e"
 metafile = true

@@ -4653,20 +4653,32 @@
       },
       "derived_properties": [
         "cutting_rate",
-        "hardness_limit"
+        "native_harvest_tier",
+        "stress_load"
       ],
       "native_recipe_ids": [
         "create:crafting/kinetics/mechanical_drill"
       ],
-      "pack_recipe_ids": [],
+      "pack_recipe_ids": [
+        "create:crafting/kinetics/mechanical_drill",
+        "better_manufacturing:retool_drill_head"
+      ],
       "asset_evidence": [
         "assets/create/models/item/mechanical_drill.json",
         "assets/create/blockstates/mechanical_drill.json"
       ],
       "adapter": "better_manufacturing:create/cutting",
-      "status": "pending",
+      "status": "implemented",
       "acquisition_audit": "pending",
       "native_reference_audit": "pending",
+      "reference_construction": {"head": "tconstruct:iron", "part": "tconstruct:pick_head", "quanta": 180},
+      "rate_caps": {"minimum": 0.75, "maximum": 1.5, "stress_multiplier": "same_as_cutting_rate"},
+      "implementation_notes": [
+        "Source adapter, conditional crafting, native lifecycle, wrench drops, safe retooling, moving-actor harvest gating and material-aware schematic accounting are implemented.",
+        "Native userdev fixtures cover operation, quantities, original wear, full inventory refund, malformed data and persistence. Optional-absence fixture passes.",
+        "Isolated real-client fixture exercises client packets and evaluator-backed EMI assembly/retooling panels. This is not full-pack gameplay acceptance.",
+        "Remaining acceptance includes pack survival acquisition, full physical contraption assembly/disassembly and data-reload scenarios, and manufacturing Ponder teaching."
+      ],
       "verification": []
     },
     {

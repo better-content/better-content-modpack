@@ -33,7 +33,7 @@ private val RECOVERY = Duration.ofSeconds(120).toNanos()
 private val STABILITY = Duration.ofSeconds(30).toNanos()
 private const val MIN_TPS = 19.0
 private val DIMENSION_ID = Regex("[a-z0-9_.-]+:[a-z0-9_./-]+")
-internal val TELE_SOAK_DIMENSION_BLACKLIST = setOf("minecraft:the_end", "rats:ratlantis")
+internal val TELE_SOAK_DIMENSION_BLACKLIST = setOf("minecraft:the_end", "rats:ratlantis", "ae2:spatial_storage")
 
 /** Every dimension has ten fresh 10k-block relocations during its responsive dwell.
  * Each relocation has its own 30s TPS stabilization within a 120s deadline; recovery

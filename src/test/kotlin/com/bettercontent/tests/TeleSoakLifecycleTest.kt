@@ -88,15 +88,15 @@ class TeleSoakLifecycleTest {
         assertTrue(driver.events.filter { it.first == "tps_sample" }.all { (it.second.getValue("tps") as Double) >= 19.0 })
     }
 
-    @Test fun endAndRatlantisAreExcludedWithoutLosingTheLiveRegistryCheck() {
+    @Test fun blacklistedDimensionsAreExcludedWithoutLosingTheLiveRegistryCheck() {
         val clock = Clock()
         val driver = Driver(clock, mutableListOf("minecraft:overworld", "minecraft:the_nether",
-            "minecraft:the_end", "rats:ratlantis"))
+            "minecraft:the_end", "rats:ratlantis", "ae2:spatial_storage"))
         runTeleSoak(driver, clock)
         assertEquals(setOf("minecraft:overworld", "minecraft:the_nether"), driver.prepared)
         assertEquals(34, driver.teleports)
         val roster = driver.events.single { it.first == "dimension_roster" }.second
-        assertEquals(setOf("minecraft:the_end", "rats:ratlantis"),
+        assertEquals(setOf("minecraft:the_end", "rats:ratlantis", "ae2:spatial_storage"),
             (roster["excluded_dimensions"] as List<*>).toSet())
         assertEquals(driver.dimensions.toSet(), (roster["registered_dimensions"] as List<*>).toSet())
         assertTrue(driver.events.none { (type, fields) ->
