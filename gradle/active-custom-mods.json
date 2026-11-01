@@ -551,6 +551,23 @@
         "better-spirit-commerce",
         "better-bumblezone-crops"
       ]
+    },
+    {
+      "repository": "better-abyssal-city",
+      "modId": "better_abyssal_city",
+      "artifact": "better-abyssal-city-0.1.0.jar",
+      "tasks": [
+        "verifyGeneration"
+      ]
+    },
+    {
+      "repository": "better-spaceflight",
+      "modId": "better_spaceflight",
+      "artifact": "better-spaceflight-0.1.0.jar",
+      "tasks": [
+        "test",
+        "stageRuntimeJar"
+      ]
     }
   ]
 }

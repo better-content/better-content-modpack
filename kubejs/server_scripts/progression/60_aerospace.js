@@ -1,4 +1,7 @@
 ServerEvents.recipes(function (event) {
+    // Legacy Creating Space machinery is no longer installed. Keep the authored
+    // recipes for historical reference, but never register missing outputs.
+    if (!Platform.isLoaded('creatingspace')) return
     // One native casing consumes four aluminum plates, which makes the four
     // casings needed for the first aerospace machines disproportionately
     // expensive before the Moon. Preserve the ingredients as a batch craft.

@@ -1,4 +1,0 @@
-#.
-#making the log register additional information WARNING console spam
-additionalLogInfo = false
-

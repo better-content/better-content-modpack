@@ -111,7 +111,7 @@ After a candidate is packaged, a **different identified reviewer** may conduct a
 python3 .github/scripts/test_prepare_provider_jars.py
 ```
 
-The small pack-local checks protect retained process cleanup, lifecycle/duration behavior, artifact materialization, provider staging and release-result identity. They do not start Minecraft and are not runtime-tier dependencies.
+The small pack-local checks protect retained process cleanup, lifecycle/duration behavior, artifact materialization, provider staging and release-result identity. Local checks also require Node.js to execute the real KubeJS culinary policy consumer against its quarantined audit policy, proving that retained historical IDs install no recipes. The Python materializer checks retain their 30-second local test-process budget. The separate supervisor transaction check has its own three-minute local test-process budget; neither changes any pack runtime acceptance deadline. They do not start Minecraft and are not runtime-tier dependencies.
 
 Feature regressions live in their owning independent source repositories under `../mod_source/`, using their documented JVM/native GameTest checks. Existing local behavioral coverage replaces duplicate source-text assertions. Pack-authored recipe/configuration/teaching choices do not acquire a false mod owner; the old bulk source/prose/recipe assertions were retired rather than recreated as a legacy suite.
 

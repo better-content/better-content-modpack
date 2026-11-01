@@ -165,8 +165,12 @@ install_server() {
   else
     printf '%s\n' '-Xms2G' '-Xmx8G' '-XX:+UseG1GC' '-Dfile.encoding=UTF-8' > "$server/user_jvm_args.txt"
   fi
-  cp "$ROOT/run.sh" "$ROOT/run-forge.sh" "$ROOT/better-world-management-server.sh" "$server/"
+  # World Axiom projection is a server supervisor input, not part of the client export.
+  [ -f "$ROOT/world-axioms.py" ] && [ ! -L "$ROOT/world-axioms.py" ] || fail 'missing regular World Axiom projector'
+  cp "$ROOT/run.sh" "$ROOT/run-forge.sh" "$ROOT/better-world-management-server.sh" "$ROOT/world-axioms.py" "$server/"
   chmod 0755 "$server/run.sh" "$server/run-forge.sh" "$server/better-world-management-server.sh"
+  chmod 0644 "$server/world-axioms.py"
+  cmp -s "$ROOT/world-axioms.py" "$server/world-axioms.py" || fail 'World Axiom server projector copy differs'
 }
 
 archive_server_tree() {

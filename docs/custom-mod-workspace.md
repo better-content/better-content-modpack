@@ -60,11 +60,11 @@ remain inert, while API drift in an expected pinned integration is a visible val
 The fresh-dist flow also performs a local-only source revision check before building. Each bundled
 custom JAR records its repository, mod ID, and source `HEAD` in
 `META-INF/better-content-source.properties`. The release evidence reports whether each local
-checkout is unchanged, changed, or based on a legacy JAR without an identity. Production input fingerprints detect dirty runtime changes as well as committed revisions; test-only edits do not require a runtime rebuild. This check never fetches, pulls, merges, or contacts a remote. Source-identical annotated JARs are reused; changed or legacy JARs are staged without an implicit verification sweep, and every staged release artifact retains source metadata.
+checkout is unchanged, changed, or based on a legacy JAR without an identity. Production input fingerprints detect dirty runtime changes as well as committed revisions; test-only edits do not require a runtime rebuild. This check never fetches, pulls, merges, or contacts a remote. Exported source trees without `.git` use an explicit `source-snapshot-sha256:<production fingerprint>` identity instead of claiming a Git commit. Their production files are enumerated directly, excluding build/cache/test/runtime-evidence trees; missing or incomplete source trees fail closed. Snapshot identities do not satisfy the strict qualified fresh-source contract. Source-identical annotated JARs are reused; changed or legacy JARs are staged without an implicit verification sweep, and every staged release artifact retains source metadata.
 
 ## Canonical Active Inventory
 
-The active set contains 48 custom mods. Celestial Events, Wild Fruit Trees, Scalable TNT and Dynamic Trees Dimension Compat were explicitly requested for activation on 2026-10-26. Finite Water remains excluded.
+The active set contains **51 custom mods** in `gradle/active-custom-mods.json`. Abyssal City and Better Spaceflight were explicitly requested for inclusion on 2026-11-01; their current builds remain **experimental and gameplay-unqualified**. Better Spaceflight's authoritative working source is in `/home/dev/feature-labs/vs-spaceflight/mod_source/better-spaceflight/`, not the default sibling `mod_source/` tree. For this composition, build it with its lab-owned wrapper, bind the copied runtime JAR as a bundled pack input, and use `--use-bundled-mods` to package/test the exact staged bytes. Abyssal City uses its isolated `verifyGeneration` build and its reobfuscated output (it has no `stageRuntimeJar` task). Neither source may be represented as strictly qualified by a Smoke pass. Finite Water remains excluded; Creating Space is removed.
 
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
@@ -99,13 +99,14 @@ The active set contains 48 custom mods. Celestial Events, Wild Fruit Trees, Scal
 | [better-player-traces](https://github.com/better-content/better-player-traces) | `better_player_traces` | `better-player-traces-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-craftable-bouquets](https://github.com/better-content/better-craftable-bouquets) | `better_craftable_bouquets` | `better-craftable-bouquets-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-rail-beetle](https://github.com/better-content/better-rail-beetle) | `better_rail_beetle` | `better-rail-beetle-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-ore-geology](https://github.com/better-content/better-ore-geology) | `better_ore_geology` | `better-ore-geology-0.2.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-ore-geology](https://github.com/better-content/better-ore-geology) | `better_ore_geology` | `better-ore-geology-0.3.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-block-placement-preview](https://github.com/better-content/better-block-placement-preview) | `better_block_placement_preview` | `better-block-placement-preview-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-regolith-farming](https://github.com/better-content/better-regolith-farming) | `better_regolith_farming` | `better-regolith-farming-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-rehooked-grappling](https://github.com/better-content/better-rehooked-grappling) | `better_rehooked_grappling` | `better-rehooked-grappling-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-rpg-progression](https://github.com/better-content/better-rpg-progression) | `better_rpg_progression` | `better-rpg-progression-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-runtime-diagnostics](https://github.com/better-content/better-runtime-diagnostics) | `better_runtime_diagnostics` | `better-runtime-diagnostics-0.1.0.jar` | `./gradlew build stageRuntimeJar` |
 | [better-settlement-roads](https://github.com/better-content/better-settlement-roads) | `better_settlement_roads` | `better-settlement-roads-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-spicy-farmers](https://github.com/better-content/better-spicy-farmers) | `better_spicy_farmers` | `better-spicy-farmers-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-survival-physiology](https://github.com/better-content/better-survival-physiology) | `better_survival_physiology` | `better-survival-physiology-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-tinkers-loot-affixes](https://github.com/better-content/better-tinkers-loot-affixes) | `better_tinkers_loot_affixes` | `better-tinkers-loot-affixes-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-village-fortifications](https://github.com/better-content/better-village-fortifications) | `better_village_fortifications` | `better-village-fortifications-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
@@ -115,6 +116,9 @@ The active set contains 48 custom mods. Celestial Events, Wild Fruit Trees, Scal
 | [better-wild-fruit-trees](https://github.com/better-content/better-wild-fruit-trees) | `better_wild_fruit_trees` | `better-wild-fruit-trees-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [scalable-tnt](https://github.com/better-content/scalable-tnt) | `scalable_tnt` | `scalable-tnt-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [dynamic-trees-dimension-compat](https://github.com/better-content/dynamic-trees-dimension-compat) | `dynamic_trees_dimension_compat` | `dynamic-trees-dimension-compat-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-cooking](https://github.com/better-content/better-cooking) | `better_cooking` | `better-cooking-0.1.0.jar` | `./gradlew verifyFast stageRuntimeJar` (incomplete catalogue; non-destructive pass-through) |
+| [better-abyssal-city](https://github.com/better-content/better-abyssal-city) | `better_abyssal_city` | `better-abyssal-city-0.1.0.jar` | isolated `scripts/verify_generation.sh` → reobfuscated output; gameplay unqualified |
+| `/home/dev/feature-labs/vs-spaceflight/mod_source/better-spaceflight/` | `better_spaceflight` | `better-spaceflight-0.1.0.jar` | `scripts/gradle-lab.sh test stageRuntimeJar`; gameplay unqualified |
 
 ## Explicit Activation Dependencies And Boundaries
 
@@ -122,6 +126,6 @@ Dynamic Trees Dimension Compat requires **The Undergarden**. Its required upstre
 
 Celestial Events' authored Thin Veil forest/swamp biome selections remain **pack-owned** under `kubejs/data/better_celestial_events/tags/worldgen/biome/`. They were restored byte-for-byte from pack revision `3900ac64` for this explicit activation. The source build already consumes and bundles those declared pack inputs; owner-local verification using them is not hermetic, and their ownership must not be moved into source merely to satisfy a test.
 
-This activation is not a rollout of every active source checkout. The existing 44 bundled custom JARs are retained; only the four requested additions and the necessary upstream dependency are integrated. Source verification does not establish exact-pack runtime acceptance: a new distribution still requires Smoke on its exact packaged pair, with any requested Soak. Build 366 remains a separate previously accepted bundled baseline.
+The 2026-10-26 four-mod activation retained its prior bundled baseline. The later 2026-11-01 composition instead adds two explicitly requested experimental runtime JARs and removes Creating Space. Other existing bundled custom JARs are retained; source verification does not establish exact-pack runtime acceptance. Smoke on a newly packaged pair tests launch, join and normal shutdown only, not either new mod's gameplay, natural city generation, piloted spacecraft travel, visual acceptance, or safe existing-world upgrade.
 
 `better-finite-water` remains source-only and must not be deployed implicitly. Future cloned sources likewise require explicit activation; presence under `mod_source/` is not pack membership.

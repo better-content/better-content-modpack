@@ -98,6 +98,36 @@ class ReleaseSourceMetadataTest {
         assertNull(readSourceCommit(artifact, mod))
     }
 
+    @Test fun exportedSourceUsesExplicitSnapshotIdentityAndStillBuildsLocalBytes() {
+        val repository = fixture()
+        Files.walk(repository.resolve(".git")).use { paths ->
+            paths.sorted(Comparator.reverseOrder()).forEach { Files.delete(it) }
+        }
+        Files.writeString(repository.resolve("gradlew"), "#!/bin/sh\nprintf '%s\\n' \"\$@\" > build/invoked-args\n")
+        repository.resolve("gradlew").toFile().setExecutable(true)
+        val pack = Files.createDirectories(root.resolve("pack"))
+        jar(repository.resolve("build/libs/fixture.jar"))
+        val update = inspectSourceUpdate(pack, root, mod)
+        assertEquals("source-snapshot-sha256:${productionFingerprint(repository)}", update.localCommit)
+        assertEquals("baseline-missing", update.status)
+        val staged = Files.createDirectories(root.resolve("staging"))
+        val evidence = Files.createDirectories(root.resolve("evidence"))
+        val built = build(pack, root, evidence, staged, mod, update, nativeLock = root.resolve("fixture.lock"))
+        assertEquals(update.localCommit, readSourceCommit(built.jar, mod))
+        Files.createDirectories(pack.resolve("mods"))
+        Files.copy(built.jar, pack.resolve("mods/fixture.jar"))
+        assertEquals("same", inspectSourceUpdate(pack, root, mod).status)
+        Files.writeString(repository.resolve("src/main/java/Runtime.java"), "class Runtime { int changed; }")
+        assertEquals("changed", inspectSourceUpdate(pack, root, mod).status)
+        assertNotEquals(update.localCommit, localSourceIdentity(repository))
+    }
+
+    @Test fun missingOrIncompleteSourceIsNotAnExportedSnapshot() {
+        assertThrows(IllegalArgumentException::class.java) { localSourceIdentity(root.resolve("absent")) }
+        val empty = Files.createDirectories(root.resolve("empty"))
+        assertThrows(IllegalArgumentException::class.java) { localSourceIdentity(empty) }
+    }
+
     @Test fun unchangedProviderReusesWithoutInvokingBuild() {
         val repository = fixture()
         val pack = Files.createDirectories(root.resolve("pack"))

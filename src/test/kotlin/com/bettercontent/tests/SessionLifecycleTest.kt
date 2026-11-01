@@ -152,7 +152,15 @@ class SessionLifecycleTest {
 
     @Test fun materializerBoundaryChecks(@TempDir root: Path) {
         val repo = Path.of(System.getProperty("bc.repo.root"))
-        Commands.run(listOf("python3", "-m", "unittest", "discover", "-s", "src/test/python", "-v"), repo, root.resolve("python.log"),
+        Commands.run(listOf("python3", "-m", "unittest", "discover", "-s", "src/test/python", "-p", "test_materialize_client.py", "-v"), repo, root.resolve("python.log"),
             mapOf("TMPDIR" to root.toString()), Duration.ofSeconds(30))
+    }
+
+    @Test fun worldAxiomSupervisorBoundaryChecks(@TempDir root: Path) {
+        val repo = Path.of(System.getProperty("bc.repo.root"))
+        // Separate local shell-transaction suite, not part of the materializer's
+        // 30-second budget and not a change to any runtime acceptance deadline.
+        Commands.run(listOf("python3", "-m", "unittest", "discover", "-s", "src/test/python", "-p", "test_world_axiom_supervisor.py", "-v"), repo, root.resolve("supervisor-python.log"),
+            mapOf("TMPDIR" to root.toString()), Duration.ofMinutes(3))
     }
 }

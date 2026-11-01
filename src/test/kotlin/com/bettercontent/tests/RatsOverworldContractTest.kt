@@ -1,9 +1,12 @@
 package com.bettercontent.tests
 
+import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.time.Duration
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -14,17 +17,72 @@ class RatsOverworldContractTest {
     private val mapper = jacksonObjectMapper()
     private fun text(path: String) = Files.readString(root.resolve(path))
     private fun json(path: String) = mapper.readTree(root.resolve(path).toFile())
+    private fun hasRetiredId(path: Path) = Files.newBufferedReader(path).useLines { lines ->
+        lines.any { it.contains("better_ratlantis_logistics") }
+    }
+    private fun assertQuarantinedPolicy(path: Path) {
+        // The retained audit catalogue is large; do not materialize it repeatedly in the test heap.
+        var policySeen = false
+        var migrationSeen = false
+        mapper.factory.createParser(path.toFile()).use { parser ->
+            assertEquals(JsonToken.START_OBJECT, parser.nextToken())
+            while (parser.nextToken() != JsonToken.END_OBJECT) {
+                val key = parser.currentName
+                parser.nextToken()
+                when (key) {
+                    "qualification" -> { assertEquals("unqualified", parser.text); policySeen = true }
+                    "migration" -> {
+                        assertEquals(JsonToken.START_OBJECT, parser.currentToken())
+                        while (parser.nextToken() != JsonToken.END_OBJECT) {
+                            val field = parser.currentName
+                            parser.nextToken()
+                            if (field == "qualification") {
+                                assertEquals("unqualified", parser.text)
+                                migrationSeen = true
+                            }
+                            parser.skipChildren()
+                        }
+                    }
+                }
+                parser.skipChildren()
+            }
+        }
+        assertTrue(policySeen && migrationSeen, "both quarantine declarations are mandatory")
+    }
 
-    @Test fun retiredModCannotBeStagedOrUsedByPackProductionSources() {
+    @Test fun retiredModCannotBeStagedOrUsedByPackProductionSources(@TempDir temp: Path) {
         assertFalse(Files.exists(root.resolve("mods/better-ratlantis-logistics-0.1.0.jar")))
         assertTrue(Files.exists(root.resolve("mods/rats.pw.toml")))
         assertFalse(text("gradle/active-custom-mods.json").contains("better-ratlantis-logistics"))
         for (area in listOf("kubejs/server_scripts", "kubejs/startup_scripts", "kubejs/config", "defaultconfigs")) {
             Files.walk(root.resolve(area)).use { files ->
                 files.filter { Files.isRegularFile(it) && (it.toString().endsWith(".js") || it.toString().endsWith(".json") || it.toString().endsWith(".toml")) }
-                    .forEach { assertFalse(Files.readString(it).contains("better_ratlantis_logistics"), "stale custom mod reference: $it") }
+                    .forEach {
+                        if (it == root.resolve("kubejs/config/culinary_policy.json") &&
+                            hasRetiredId(it)) {
+                            // Retained discovery records are audit data, not installed recipes.
+                            // Fail closed if this policy is ever qualified with the retired IDs.
+                            assertQuarantinedPolicy(it)
+                        } else assertFalse(hasRetiredId(it), "stale custom mod reference: $it")
+                    }
             }
         }
+        // Execute the real policy consumer with the real retained audit policy. Any recipe
+        // read/write would fail, so the exception above cannot hide active installation.
+        if (hasRetiredId(root.resolve("kubejs/config/culinary_policy.json"))) Commands.run(listOf("node", "-e", """
+            const fs = require('fs'), vm = require('vm');
+            const policy = JSON.parse(fs.readFileSync('kubejs/config/culinary_policy.json', 'utf8'));
+            let invoked = false, warned = false;
+            const forbidden = () => { throw new Error('unqualified policy reached recipe installation'); };
+            const event = new Proxy({}, { get: forbidden });
+            vm.runInNewContext(fs.readFileSync('kubejs/server_scripts/progression/83_culinary_policy.js', 'utf8'), {
+                Platform: { isLoaded: () => true },
+                JsonIO: { read: () => policy },
+                console: { warn: message => { if (!message.includes('UNQUALIFIED')) throw Error(message); warned = true; } },
+                ServerEvents: { recipes: handler => { invoked = true; handler(event); } }
+            });
+            if (!invoked || !warned) throw new Error('quarantine branch was not exercised');
+        """.trimIndent()), root, temp.resolve("culinary-quarantine.log"), timeout = Duration.ofSeconds(15))
         assertFalse(text("kubejs/server_scripts/progression/85_dimension_font_ecology.js").contains("ratlantis_libation"))
         assertFalse(text("kubejs/startup_scripts/progression/20_transition_items.js").contains("ratlantis_font_grout"))
     }

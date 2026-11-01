@@ -310,7 +310,8 @@ internal fun build(
     require(Files.isRegularFile(jar)) { "${mod.repository} did not stage ${mod.artifact}" }
     require(jarDeclaresMod(jar, mod.modId)) { "${mod.artifact} does not declare ${mod.modId}" }
     Files.copy(jar, staged, StandardCopyOption.REPLACE_EXISTING)
-    val commit = capture(repository, listOf("git", "rev-parse", "HEAD")).trim()
+    val commit = localSourceIdentity(repository)
+    require(commit == sourceUpdate.localCommit) { "source identity changed during build: ${mod.repository}" }
     require(productionFingerprint(repository) == fingerprint) { "production inputs changed during build: ${mod.repository}" }
     annotateJar(staged, mod, commit, fingerprint)
     return BuiltMod(mod, commit, staged, Hashes.sha256(staged), "rebuilt")
@@ -322,22 +323,32 @@ internal fun sourceUpdateStatus(localCommit: String, bundledCommit: String?): St
     else -> "changed"
 }
 
-internal fun inspectSourceUpdate(root: Path, workspace: Path, mod: ActiveMod): SourceUpdate {
-    val repository = workspace.resolve("mod_source").resolve(mod.repository)
-    val localCommit = if (repository.resolve(".git").exists()) {
+// Exported source trees have no Git revision. Keep that distinction explicit in provenance;
+// never manufacture a commit or silently substitute bundled bytes for local production inputs.
+internal fun localSourceIdentity(repository: Path): String {
+    require(repository.resolve(".git").exists() || (Files.isDirectory(repository.resolve("src/main")) &&
+        listOf("build.gradle", "build.gradle.kts").any { Files.isRegularFile(repository.resolve(it)) })) {
+        "missing or incomplete source repository: $repository"
+    }
+    return if (repository.resolve(".git").exists()) {
         capture(repository, listOf("git", "rev-parse", "HEAD")).trim()
     } else {
-        "missing"
+        "source-snapshot-sha256:${productionFingerprint(repository)}"
     }
+}
+
+internal fun inspectSourceUpdate(root: Path, workspace: Path, mod: ActiveMod): SourceUpdate {
+    val repository = workspace.resolve("mod_source").resolve(mod.repository)
+    val localCommit = localSourceIdentity(repository)
     val bundled = root.resolve("mods").resolve(mod.artifact)
     val bundledCommit = readSourceCommit(bundled, mod)
-    require(localCommit != "missing") { "missing source repository: $repository" }
     val fingerprint = productionFingerprint(repository)
     val bundledFingerprint = readSourceProperties(bundled, mod)?.getProperty("production_fingerprint")
     val status = when {
         bundledCommit == null -> "baseline-missing"
         bundledFingerprint != null -> if (bundledFingerprint == fingerprint) "same" else "changed"
-        bundledCommit == localCommit && productionInputsUnchangedSinceHead(repository) -> "same"
+        !localCommit.startsWith("source-snapshot-sha256:") &&
+            bundledCommit == localCommit && productionInputsUnchangedSinceHead(repository) -> "same"
         else -> "changed"
     }
     return SourceUpdate(mod.repository, mod.artifact, localCommit, bundledCommit, status, fingerprint)
@@ -407,7 +418,7 @@ internal fun isProductionInput(path: String): Boolean {
     val testTrees = setOf("test", "tests", "gametest", "gameTest", "testFixtures")
     // Runtime resources can themselves be Markdown or reside in a package named tests.
     if (parts.first() == "src") return parts.getOrNull(1) !in testTrees
-    if (parts.first() in setOf("build", ".gradle", ".git", "docs", "generated", "logs", "run", "runs") + testTrees) return false
+    if (parts.first() in setOf("build", ".gradle", ".git", "docs", "generated", "logs", "run", "runs", "native-evidence") + testTrees) return false
     return !path.endsWith(".md", ignoreCase = true) && !path.endsWith(".log") &&
         path !in setOf(".gitignore", ".gitattributes", "LICENSE", "LICENSE.txt")
 }
@@ -421,7 +432,19 @@ internal fun sourceVerificationFingerprint(repository: Path): String = fingerpri
 
 private fun fingerprintInputs(repository: Path, included: (String) -> Boolean, includeIgnoredSourceInputs: Boolean = false): String {
     val digest = java.security.MessageDigest.getInstance("SHA-256")
-    val listed = capture(repository, listOf("git", "ls-files", "-z", "--cached", "--others", "--exclude-standard")) +
+    val listed = if (!repository.resolve(".git").exists()) {
+        val files = mutableListOf<String>()
+        Files.walkFileTree(repository, object : java.nio.file.SimpleFileVisitor<Path>() {
+            override fun preVisitDirectory(dir: Path, attrs: java.nio.file.attribute.BasicFileAttributes): java.nio.file.FileVisitResult =
+                if (dir == repository || included(repository.relativize(dir).toString() + "/"))
+                    java.nio.file.FileVisitResult.CONTINUE else java.nio.file.FileVisitResult.SKIP_SUBTREE
+            override fun visitFile(file: Path, attrs: java.nio.file.attribute.BasicFileAttributes): java.nio.file.FileVisitResult {
+                files += repository.relativize(file).toString()
+                return java.nio.file.FileVisitResult.CONTINUE
+            }
+        })
+        files.joinToString("\u0000")
+    } else capture(repository, listOf("git", "ls-files", "-z", "--cached", "--others", "--exclude-standard")) +
         if (includeIgnoredSourceInputs) capture(repository, listOf("git", "ls-files", "-z", "--others", "--ignored", "--exclude-standard", "--",
             "src", "test", "tests", "gametest", "gameTest", "testFixtures", "AGENTS.md", "gradle", "gradlew", "gradlew.bat",
             "build.gradle", "build.gradle.kts", "settings.gradle", "settings.gradle.kts", "gradle.properties", "scripts")) else ""
@@ -595,8 +618,8 @@ internal fun validateFreshSourcePopulation(manifest: ActiveModManifest, plan: Fr
         "fresh source release requires distinct approved active repository/mod/artifact identities"
     }
     require(manifest.mods.any { it.repository == "better-spicy-farmers" }) { "Spicy Farmers must be explicitly active" }
-    require(manifest.mods.none { it.repository in setOf("better-finite-water", "better-abyssal-city") }) {
-        "incomplete Finite Water and Abyssal City are not authorized runtime inputs"
+    require(manifest.mods.none { it.repository == "better-finite-water" }) {
+        "incomplete Finite Water is not an authorized runtime input"
     }
     require(manifest.mods.count { it.repository == FROZEN_WLM_REPOSITORY } == 1 &&
         manifest.mods.count { it.repository == "better-cooking" } == 1) {
