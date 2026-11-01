@@ -832,9 +832,17 @@ internal fun validateTeleSoakEvents(path: Path, dimensions: List<String>) {
         require(indices.size == 1) { "missing/duplicate TeleSoak $type for $dimension circuit $circuit" }
         return indices.single()
     }
-    val roster = events[unique("dimension_roster")].path("dimensions").map { it.asText() }
-    require(roster.size == dimensions.size && roster.toSet() == dimensions.toSet() && "minecraft:overworld" in roster && roster.size <= 64) {
-        "TeleSoak summary differs from the complete live registered roster"
+    val rosterEvent = events[unique("dimension_roster")]
+    val roster = rosterEvent.path("dimensions").map { it.asText() }
+    val registered = rosterEvent.path("registered_dimensions").map { it.asText() }
+    val excluded = rosterEvent.path("excluded_dimensions").map { it.asText() }
+    val blacklist = com.bettercontent.tests.TELE_SOAK_DIMENSION_BLACKLIST
+    require(roster.size == dimensions.size && roster.toSet() == dimensions.toSet() && "minecraft:overworld" in roster &&
+        registered.size in 1..64 && registered.size == registered.toSet().size &&
+        registered.toSet() == roster.toSet() + excluded.toSet() &&
+        roster.toSet() == registered.toSet() - blacklist &&
+        excluded.toSet() == registered.toSet().intersect(blacklist) && excluded.size == excluded.toSet().size) {
+        "TeleSoak summary differs from the blacklisted live registered roster"
     }
     validateTeleClientEvidence(events)
     val hops = events.filter { it.path("type").asText() == "hop_started" }

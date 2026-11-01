@@ -10,7 +10,7 @@ hash = "1dd4450c1fc97cdb8598d1827630ade6ecbbca8df75e18f73b445f75e0a2e2cd"
 
 [[files]]
 file = "README.md"
-hash = "1505333a8511d6fc10cb52db2df20617061650b20b9bd0bfeb27ba2a62f0c0b3"
+hash = "31474bdd7b6db95ac2596d508682eafcac6b106546c18e1cb28769a4395418a0"
 
 [[files]]
 file = "better-world-management-server.sh"
@@ -2325,14 +2325,6 @@ file = "config/createdieselgenerators-common.toml"
 hash = "8dbd7ed422d8cd88d8ac7ca47a8308c5a0d40d4db1a6af5cf46e989c3a5a4129"
 
 [[files]]
-file = "config/creatingspace-client.toml"
-hash = "b33df8b62550f1415cfaaab98cb0792b6cd49e04a80ae70f7abdf1824c9dd70c"
-
-[[files]]
-file = "config/creatingspace-common.toml"
-hash = "dab49620ea33d33072a92e525543cd474346fcd2594b801d27468b29acda2341"
-
-[[files]]
 file = "config/cumulus_menus-client.toml"
 hash = "72588e27d2fc9f5761f5998748ea968cab098e11f136cc13deebbe2fefef143a"
 
@@ -3549,10 +3541,6 @@ file = "datapacks/better_dimension_fonts_ore_relocation/data/create/forge/biome_
 hash = "a2b34287f2945e92e839e92d89bfcf3a77374f2e867e71bd82b75809268db4f2"
 
 [[files]]
-file = "datapacks/better_dimension_fonts_ore_relocation/data/creatingspace/forge/biome_modifier/add_nickel_overworld_ore.json"
-hash = "41fc792c9d14510474b83f0200e5ce4c64fde6380c334958cbc6196ca718d825"
-
-[[files]]
 file = "datapacks/better_dimension_fonts_ore_relocation/data/goety/forge/biome_modifier/add_jade_ore.json"
 hash = "fe063ac70c4c58e7f01cc23e2d5932d4bdbb27c3a48f6d647f12f284e6582586"
 
@@ -4613,10 +4601,6 @@ file = "defaultconfigs/createdieselgenerators-server.toml"
 hash = "b3e4ca811509ea7d31f1e791129a53e7d89aeddf1a944b3c4925a087104c8a53"
 
 [[files]]
-file = "defaultconfigs/creatingspace-server.toml"
-hash = "9c83060a9df36963dffed415171613bf0366189a632efd94e4c1911a7dcbb32a"
-
-[[files]]
 file = "defaultconfigs/curios-server.toml"
 hash = "c6b3ceb80bb8fba4e7956961abc063e76eb399a098d4227061afd540c1c3a72f"
 
@@ -5135,6 +5119,422 @@ hash = "701d61ea01d30df88c4df696f5bd8c705769e5ad512c29e12cbe8d7006b28814"
 [[files]]
 file = "kubejs/assets/ars_nouveau/textures/blocks/agronomic_sourcelink.png"
 hash = "599a2771fc077f8aa75d4225243522123dbe509e3eebe6ed7cd19226d85a8802"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/flaxen_cheese_wheel/0.json"
+hash = "ec6bdd5fc00ea7badc7203eb22ccbb685a732c4052ecb93268dc5501eb6ca27f"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/flaxen_cheese_wheel/1.json"
+hash = "ec6bdd5fc00ea7badc7203eb22ccbb685a732c4052ecb93268dc5501eb6ca27f"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/flaxen_cheese_wheel/2.json"
+hash = "ec6bdd5fc00ea7badc7203eb22ccbb685a732c4052ecb93268dc5501eb6ca27f"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/flaxen_cheese_wheel/3.json"
+hash = "ec6bdd5fc00ea7badc7203eb22ccbb685a732c4052ecb93268dc5501eb6ca27f"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/pizza/0.json"
+hash = "c49f1cb516ea5d8884609977bd5246b9e73f6123385adf206bd04cfe24383bfd"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/pizza/1.json"
+hash = "c49f1cb516ea5d8884609977bd5246b9e73f6123385adf206bd04cfe24383bfd"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/pizza/2.json"
+hash = "c49f1cb516ea5d8884609977bd5246b9e73f6123385adf206bd04cfe24383bfd"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/pizza/3.json"
+hash = "c49f1cb516ea5d8884609977bd5246b9e73f6123385adf206bd04cfe24383bfd"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/quiche/0.json"
+hash = "12f3dabc58490c2c78b6d75864e78422a1ccd654159dbb4772af306d9578d1ff"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/quiche/1.json"
+hash = "12f3dabc58490c2c78b6d75864e78422a1ccd654159dbb4772af306d9578d1ff"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/quiche/2.json"
+hash = "12f3dabc58490c2c78b6d75864e78422a1ccd654159dbb4772af306d9578d1ff"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/quiche/3.json"
+hash = "12f3dabc58490c2c78b6d75864e78422a1ccd654159dbb4772af306d9578d1ff"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/scarlet_cheese_wheel/0.json"
+hash = "5a770876fe22f65ce627536ac393881676db90f35b049fc3d25a358441f7c4c1"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/scarlet_cheese_wheel/1.json"
+hash = "5a770876fe22f65ce627536ac393881676db90f35b049fc3d25a358441f7c4c1"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/scarlet_cheese_wheel/2.json"
+hash = "5a770876fe22f65ce627536ac393881676db90f35b049fc3d25a358441f7c4c1"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/brewinandchewin/cutting/scarlet_cheese_wheel/3.json"
+hash = "5a770876fe22f65ce627536ac393881676db90f35b049fc3d25a358441f7c4c1"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/apple_pie/0.json"
+hash = "9f407aedbfdf0782c540a30b77f26066685883038973f4f40a2f5f6c44322ad9"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/apple_pie/1.json"
+hash = "9f407aedbfdf0782c540a30b77f26066685883038973f4f40a2f5f6c44322ad9"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/apple_pie/2.json"
+hash = "9f407aedbfdf0782c540a30b77f26066685883038973f4f40a2f5f6c44322ad9"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/apple_pie/3.json"
+hash = "9f407aedbfdf0782c540a30b77f26066685883038973f4f40a2f5f6c44322ad9"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/cabbage/0.json"
+hash = "3289cc7fc897b0679376bf7ac00dc78f4f4defe08aaa41e7989d68f130ccd6a5"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/cabbage/1.json"
+hash = "3289cc7fc897b0679376bf7ac00dc78f4f4defe08aaa41e7989d68f130ccd6a5"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/cabbage/2.json"
+hash = "3289cc7fc897b0679376bf7ac00dc78f4f4defe08aaa41e7989d68f130ccd6a5"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/cabbage/3.json"
+hash = "3289cc7fc897b0679376bf7ac00dc78f4f4defe08aaa41e7989d68f130ccd6a5"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/cake/0.json"
+hash = "afc2b3d9ad53b3110d744c7bfeed5fffc398bba3bbc6a4389f9b9f592d830675"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/cake/1.json"
+hash = "afc2b3d9ad53b3110d744c7bfeed5fffc398bba3bbc6a4389f9b9f592d830675"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/cake/2.json"
+hash = "afc2b3d9ad53b3110d744c7bfeed5fffc398bba3bbc6a4389f9b9f592d830675"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/cake/3.json"
+hash = "afc2b3d9ad53b3110d744c7bfeed5fffc398bba3bbc6a4389f9b9f592d830675"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/chocolate_pie/0.json"
+hash = "52dcdd304a07a01754c444a58ae5db439b07584f0303fef6db8b763f4a59f2b7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/chocolate_pie/1.json"
+hash = "52dcdd304a07a01754c444a58ae5db439b07584f0303fef6db8b763f4a59f2b7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/chocolate_pie/2.json"
+hash = "52dcdd304a07a01754c444a58ae5db439b07584f0303fef6db8b763f4a59f2b7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/chocolate_pie/3.json"
+hash = "52dcdd304a07a01754c444a58ae5db439b07584f0303fef6db8b763f4a59f2b7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/ham/0.json"
+hash = "7b36a27318bf8b520a4de00f30dd9d9638ebb031f2171d2a701c9e2a53bc2ec1"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/ham/1.json"
+hash = "7b36a27318bf8b520a4de00f30dd9d9638ebb031f2171d2a701c9e2a53bc2ec1"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/ham/2.json"
+hash = "7b36a27318bf8b520a4de00f30dd9d9638ebb031f2171d2a701c9e2a53bc2ec1"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/ham/3.json"
+hash = "7b36a27318bf8b520a4de00f30dd9d9638ebb031f2171d2a701c9e2a53bc2ec1"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/kelp_roll/0.json"
+hash = "ffab19d68775f920258260c1bde764735697cfec8a410d123a9d10a490128d25"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/kelp_roll/1.json"
+hash = "ffab19d68775f920258260c1bde764735697cfec8a410d123a9d10a490128d25"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/kelp_roll/2.json"
+hash = "ffab19d68775f920258260c1bde764735697cfec8a410d123a9d10a490128d25"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/kelp_roll/3.json"
+hash = "ffab19d68775f920258260c1bde764735697cfec8a410d123a9d10a490128d25"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/melon/0.json"
+hash = "3737d8397cb38035a12c8357fa02547c0e3b8fcde0e1294ce86ed5dda4d676a5"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/melon/1.json"
+hash = "3737d8397cb38035a12c8357fa02547c0e3b8fcde0e1294ce86ed5dda4d676a5"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/melon/2.json"
+hash = "3737d8397cb38035a12c8357fa02547c0e3b8fcde0e1294ce86ed5dda4d676a5"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/melon/3.json"
+hash = "3737d8397cb38035a12c8357fa02547c0e3b8fcde0e1294ce86ed5dda4d676a5"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/pumpkin/0.json"
+hash = "de9b41ecafb57b3bceda040dda29eb4eda1403d1a9e7b8f053d20a1a47a09db7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/pumpkin/1.json"
+hash = "de9b41ecafb57b3bceda040dda29eb4eda1403d1a9e7b8f053d20a1a47a09db7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/pumpkin/2.json"
+hash = "de9b41ecafb57b3bceda040dda29eb4eda1403d1a9e7b8f053d20a1a47a09db7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/pumpkin/3.json"
+hash = "de9b41ecafb57b3bceda040dda29eb4eda1403d1a9e7b8f053d20a1a47a09db7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/pumpkin_pie/0.json"
+hash = "fdcb8ff1cb9728871f533049b1837f29a2aaac8cf2b561a4e5a83779dc61556b"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/pumpkin_pie/1.json"
+hash = "fdcb8ff1cb9728871f533049b1837f29a2aaac8cf2b561a4e5a83779dc61556b"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/pumpkin_pie/2.json"
+hash = "fdcb8ff1cb9728871f533049b1837f29a2aaac8cf2b561a4e5a83779dc61556b"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/pumpkin_pie/3.json"
+hash = "fdcb8ff1cb9728871f533049b1837f29a2aaac8cf2b561a4e5a83779dc61556b"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/smoked_ham/0.json"
+hash = "95a8a3739720e81fbb9639461794d315b1737d49637d1866b40f5691b1e45cf7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/smoked_ham/1.json"
+hash = "95a8a3739720e81fbb9639461794d315b1737d49637d1866b40f5691b1e45cf7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/smoked_ham/2.json"
+hash = "95a8a3739720e81fbb9639461794d315b1737d49637d1866b40f5691b1e45cf7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/smoked_ham/3.json"
+hash = "95a8a3739720e81fbb9639461794d315b1737d49637d1866b40f5691b1e45cf7"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/sweet_berry_cheesecake/0.json"
+hash = "abac86355eb0df0ab87ff937f6b6bb5fbe3d5accecc88ee0e190bb752eb5f3d3"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/sweet_berry_cheesecake/1.json"
+hash = "abac86355eb0df0ab87ff937f6b6bb5fbe3d5accecc88ee0e190bb752eb5f3d3"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/sweet_berry_cheesecake/2.json"
+hash = "abac86355eb0df0ab87ff937f6b6bb5fbe3d5accecc88ee0e190bb752eb5f3d3"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersdelight/cutting/sweet_berry_cheesecake/3.json"
+hash = "abac86355eb0df0ab87ff937f6b6bb5fbe3d5accecc88ee0e190bb752eb5f3d3"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersrespite/cutting/coffee_cake/0.json"
+hash = "ac841bd659ce2971117b3538c5bdc3e63461c11d4382b9d0210a51973c0fb8ab"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersrespite/cutting/coffee_cake/1.json"
+hash = "ac841bd659ce2971117b3538c5bdc3e63461c11d4382b9d0210a51973c0fb8ab"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersrespite/cutting/coffee_cake/2.json"
+hash = "ac841bd659ce2971117b3538c5bdc3e63461c11d4382b9d0210a51973c0fb8ab"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersrespite/cutting/coffee_cake/3.json"
+hash = "ac841bd659ce2971117b3538c5bdc3e63461c11d4382b9d0210a51973c0fb8ab"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersrespite/cutting/rose_hip_pie/0.json"
+hash = "4fc9029e60f62c060636a678392ff265318200f5ef1eedacf5077bda7c1ff080"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersrespite/cutting/rose_hip_pie/1.json"
+hash = "4fc9029e60f62c060636a678392ff265318200f5ef1eedacf5077bda7c1ff080"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersrespite/cutting/rose_hip_pie/2.json"
+hash = "4fc9029e60f62c060636a678392ff265318200f5ef1eedacf5077bda7c1ff080"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/farmersrespite/cutting/rose_hip_pie/3.json"
+hash = "4fc9029e60f62c060636a678392ff265318200f5ef1eedacf5077bda7c1ff080"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/fig_pudding/0.json"
+hash = "560ef6d71f63b5306f50606d507bbf1df6203cd64d6a1f46e5f11ee99951e791"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/fig_pudding/1.json"
+hash = "560ef6d71f63b5306f50606d507bbf1df6203cd64d6a1f46e5f11ee99951e791"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/fig_pudding/2.json"
+hash = "560ef6d71f63b5306f50606d507bbf1df6203cd64d6a1f46e5f11ee99951e791"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/fig_pudding/3.json"
+hash = "560ef6d71f63b5306f50606d507bbf1df6203cd64d6a1f46e5f11ee99951e791"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/hamimelon/0.json"
+hash = "bf9d207484e5ab948c43f789cc85c039d1b76ce368fc86e48f06f9ac73c0ef65"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/hamimelon/1.json"
+hash = "bf9d207484e5ab948c43f789cc85c039d1b76ce368fc86e48f06f9ac73c0ef65"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/hamimelon/2.json"
+hash = "bf9d207484e5ab948c43f789cc85c039d1b76ce368fc86e48f06f9ac73c0ef65"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/hamimelon/3.json"
+hash = "bf9d207484e5ab948c43f789cc85c039d1b76ce368fc86e48f06f9ac73c0ef65"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/lemon/0.json"
+hash = "3f951a4b808591cf82c449d3c36152b42cc1ac73df2b816089d65092b6a30e33"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/lemon/1.json"
+hash = "3f951a4b808591cf82c449d3c36152b42cc1ac73df2b816089d65092b6a30e33"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/lemon/2.json"
+hash = "3f951a4b808591cf82c449d3c36152b42cc1ac73df2b816089d65092b6a30e33"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/lemon/3.json"
+hash = "3f951a4b808591cf82c449d3c36152b42cc1ac73df2b816089d65092b6a30e33"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/orange/0.json"
+hash = "a9ab03dc70de52ab40ceb68de6cd8773b6f6aa9f51f53993d40b377412884ca8"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/orange/1.json"
+hash = "a9ab03dc70de52ab40ceb68de6cd8773b6f6aa9f51f53993d40b377412884ca8"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/orange/2.json"
+hash = "a9ab03dc70de52ab40ceb68de6cd8773b6f6aa9f51f53993d40b377412884ca8"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/fruitsdelight/cutting/orange/3.json"
+hash = "a9ab03dc70de52ab40ceb68de6cd8773b6f6aa9f51f53993d40b377412884ca8"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/garlic/0.json"
+hash = "df75f06f9066cdb6b4f1125d65338e90f0bbcdc2f76ffd0546448e11301b29a4"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/garlic/1.json"
+hash = "df75f06f9066cdb6b4f1125d65338e90f0bbcdc2f76ffd0546448e11301b29a4"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/garlic/2.json"
+hash = "df75f06f9066cdb6b4f1125d65338e90f0bbcdc2f76ffd0546448e11301b29a4"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/garlic/3.json"
+hash = "df75f06f9066cdb6b4f1125d65338e90f0bbcdc2f76ffd0546448e11301b29a4"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/ginger/0.json"
+hash = "793924d3d75e4f5d46903118687dbf7ec5d9a5c15d00fe0f01ab17575b2580a3"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/ginger/1.json"
+hash = "793924d3d75e4f5d46903118687dbf7ec5d9a5c15d00fe0f01ab17575b2580a3"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/ginger/2.json"
+hash = "793924d3d75e4f5d46903118687dbf7ec5d9a5c15d00fe0f01ab17575b2580a3"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/ginger/3.json"
+hash = "793924d3d75e4f5d46903118687dbf7ec5d9a5c15d00fe0f01ab17575b2580a3"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/halo_halo_from_halo_halo_feast_from_cutting/0.json"
+hash = "8d908d0624061b37623fc2cf48e6e70e52ca0c97fa54c9cfc057c925aeed7a79"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/halo_halo_from_halo_halo_feast_from_cutting/1.json"
+hash = "8d908d0624061b37623fc2cf48e6e70e52ca0c97fa54c9cfc057c925aeed7a79"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/halo_halo_from_halo_halo_feast_from_cutting/2.json"
+hash = "8d908d0624061b37623fc2cf48e6e70e52ca0c97fa54c9cfc057c925aeed7a79"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/halo_halo_from_halo_halo_feast_from_cutting/3.json"
+hash = "8d908d0624061b37623fc2cf48e6e70e52ca0c97fa54c9cfc057c925aeed7a79"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/leche_flan_from_leche_flan_feast_from_cutting/0.json"
+hash = "881aaca2be118b852e04f74fe6674fcc06d47f11d9e3f5df50931794078764f4"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/leche_flan_from_leche_flan_feast_from_cutting/1.json"
+hash = "881aaca2be118b852e04f74fe6674fcc06d47f11d9e3f5df50931794078764f4"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/leche_flan_from_leche_flan_feast_from_cutting/2.json"
+hash = "881aaca2be118b852e04f74fe6674fcc06d47f11d9e3f5df50931794078764f4"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/leche_flan_from_leche_flan_feast_from_cutting/3.json"
+hash = "881aaca2be118b852e04f74fe6674fcc06d47f11d9e3f5df50931794078764f4"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/ube_cake_slice_from_ube_cake_from_cutting/0.json"
+hash = "a91c29eb43cf392d01f1111e9f541bbf91842154d3303e040190e7eea1000167"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/ube_cake_slice_from_ube_cake_from_cutting/1.json"
+hash = "a91c29eb43cf392d01f1111e9f541bbf91842154d3303e040190e7eea1000167"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/ube_cake_slice_from_ube_cake_from_cutting/2.json"
+hash = "a91c29eb43cf392d01f1111e9f541bbf91842154d3303e040190e7eea1000167"
+
+[[files]]
+file = "kubejs/assets/better_cooking/models/chopping_board/ubesdelight/farmersdelight/cutting/ube_cake_slice_from_ube_cake_from_cutting/3.json"
+hash = "a91c29eb43cf392d01f1111e9f541bbf91842154d3303e040190e7eea1000167"
 
 [[files]]
 file = "kubejs/assets/better_industrial_heat/lang/en_us.json"
@@ -7441,8 +7841,12 @@ file = "kubejs/config/common.properties"
 hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
+file = "kubejs/config/cooking_recipes.json"
+hash = "3b3fac88b5acc46ec14bd11a465d55536fdf6b69f5b937ae7f8c9149428c4e06"
+
+[[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "766386dedfbd5a78e5767ec9eb49935218f7f81a33bfeed94ffdc16193331453"
+hash = "aefdde50861baff8ca8907f61171e918b10cea7b66be733e5f81bfed8709659e"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -7458,7 +7862,7 @@ hash = "43a53f08fa5a32fdc0cdf5563bbf28962aae46070ef7562b8738ee3f20b77918"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "ebc4c4038043314d666b2a2a0840d32785b512d084d7cc40308d66d899eb7f67"
+hash = "4ad16744c453cda8c9fb3768e679d1401d815eace8d5be8f7aa3328d87789f50"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -8119,22 +8523,6 @@ hash = "e0142359e2d3b1daf0c3b81a6297872853dd2b8070474ff21eb9a96e20591600"
 [[files]]
 file = "kubejs/data/create_more_additions/tags/items/repair_electrum.json"
 hash = "bef4d172fc1bfb34d342e79090726c4a0c272dd404783c3ea022b992e0e0415e"
-
-[[files]]
-file = "kubejs/data/creatingspace/creatingspace/rocket_accessible_dimension/earth_orbit.json"
-hash = "9175c358b5b53702756539ada750f72de9fbe753ca829ba0eb21d3d7824da5d9"
-
-[[files]]
-file = "kubejs/data/creatingspace/structures/crashed_rocket.nbt"
-hash = "9d5a714cea5f5d98d34b6210e8db4c54b0e128706e1c9fb6e818cdec08185080"
-
-[[files]]
-file = "kubejs/data/creatingspace/tags/blocks/moon_carver_replaceables.json"
-hash = "1092fdea5ae4b464b1fd6a774cfe78dd9a02d2d8cfd4ecea4ee3497fdaffd67d"
-
-[[files]]
-file = "kubejs/data/creatingspace/worldgen/biome/moon_plains.json"
-hash = "713b1976dc8a5a9198218f788d1ee11adbfe5a18f787cace425e9207a85fe277"
 
 [[files]]
 file = "kubejs/data/curios/tags/items/back.json"
@@ -8821,12 +9209,20 @@ file = "kubejs/data/forge/tags/items/crops/lettuce.json"
 hash = "eda602359f57ec4c4b40b8ee0f671a8a593836fecf2c98ab5a2a9496943451f4"
 
 [[files]]
+file = "kubejs/data/forge/tags/items/dough/wheat.json"
+hash = "da4a96fd00a636b3a516585b2d3ef1a2f9d97059160b8684a15bad7456432749"
+
+[[files]]
 file = "kubejs/data/forge/tags/items/eggs/dragon.json"
 hash = "a1d6689e3c1b2a781279f5ca83f8d29b476d985ade912888c25ddad27f79c9bd"
 
 [[files]]
 file = "kubejs/data/forge/tags/items/feasts.json"
 hash = "8aa2abf29475cb09032249848fe57652c51a55785a9d45db1b574aa31cda4799"
+
+[[files]]
+file = "kubejs/data/forge/tags/items/flour/wheat.json"
+hash = "092547fa270c23df74a363e56857cb72f3953150e4ed1068cc37fe421ca279c9"
 
 [[files]]
 file = "kubejs/data/forge/tags/items/gems/quartz.json"
@@ -11089,6 +11485,10 @@ file = "kubejs/server_scripts/progression/83_station_crafting.js"
 hash = "89627cad28875102f4c813579f1a20577370c995c38342457736ea41e969f24a"
 
 [[files]]
+file = "kubejs/server_scripts/progression/84_cooking_recipes.js"
+hash = "614eddd7800d872be65bfd12665d71d54845bd8342b803f12fa0e88fd3904cee"
+
+[[files]]
 file = "kubejs/server_scripts/progression/85_certus_quartz_components.js"
 hash = "5396cc7a12951bef5550869fa171c991e43d589df4764211f191e856f2b2ef54"
 
@@ -11260,199 +11660,199 @@ metafile = true
 
 [[files]]
 file = "mods/better-abyssal-city-0.1.0.jar"
-hash = "9e526d16c2faebcc05805b0bfcfc193efe0b10c4539b9f5b672e7b9c9d4c00cb"
+hash = "cbe7529dc784f319b29f090e8841499f878f66a997c8a2a7884475fd43da04a6"
 
 [[files]]
 file = "mods/better-airtight-machines-0.1.0.jar"
-hash = "ef40ca27ee8cf174ae6b373ed7e35ca6f4ff0f5bdebb204fb5c2c851c298e0ac"
+hash = "dc7ca35f8fb0094e8835b1c6507482aa2219474693456265a018b6894b003ed0"
 
 [[files]]
 file = "mods/better-arena-trials-0.1.0.jar"
-hash = "3c20daf95f711ab31fde48fff01be8774d7414fad3bf94dd8e0a41b93970edf8"
+hash = "c63e5c5f344019708643863168e0d7e253a0c8e33824f3e89c6ed4cd72b719e1"
 
 [[files]]
 file = "mods/better-block-placement-preview-0.1.0.jar"
-hash = "94b149c65d0de8dee41c404856bcbef0abd3f4fd242cb0d8c201d124c6aea39c"
+hash = "ac3a849834321edeb44feb9a74e05618eaf84dd2c2287979359bed63ec8478ea"
 
 [[files]]
 file = "mods/better-bumblezone-crops-0.1.0.jar"
-hash = "b9991d9731ebdffe68523cbc16d439a9c89c93fae2e5eba2591f8cd873d3b923"
+hash = "f674a3175f9e0d595d6342a3643dc5e1efa0577f1e5df5f91802efe320717ff0"
 
 [[files]]
 file = "mods/better-buried-encounters-0.1.0.jar"
-hash = "d59aae17c5a20a0eb9c6e18e4580b4e05fd9a2c06cc0b01bf709f68cb24508b6"
+hash = "86b77fd5367807dc8f96e79575f26d84f13564fe39dd299b26df0d38423180ac"
 
 [[files]]
 file = "mods/better-cave-encounters-0.2.1.jar"
-hash = "186aceeac8f3e4aba3c87ea36e9c2e6b7b33ed775969c4faaca93a587ba05679"
+hash = "f1a7931e53708ea0e69ff342d4b9e42bca0fbb7f902acfb7b06e65f0ac046157"
 
 [[files]]
 file = "mods/better-celestial-events-0.1.0.jar"
-hash = "ca6c09d32562f9b548826b95027ab1290866a787e1096677ca9f24bd37cd95bb"
+hash = "fd798c7918f000af81ef105bea7f1aa533014fbe19ae5c3e991872838968134d"
 
 [[files]]
 file = "mods/better-chemlib-hazards-0.2.0.jar"
-hash = "6ab909198af8403ad7a26643af786179287c952c0f3b33a085faa9d4a75165f4"
+hash = "febac493b20aab3edac0b0bf603c490bfafd676bb8bc65368a76c68c78e64b9a"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
-hash = "540c7c305fff055767733e240fcc35f730bf3635d6bb39a20483398e9d01917e"
+hash = "d459efa5afe4252b7716292620a99a8dbc5cd838daf18e5fe988922a038d9fe6"
 
 [[files]]
 file = "mods/better-cooking-0.1.0.jar"
-hash = "2caa1af395df6755c8f88290f4f207e76e9850e81276e6088ee725425460fd49"
+hash = "a36892a7908206400417cca81623cc6dd99bf166d8173b39fab9331434d1682f"
 
 [[files]]
 file = "mods/better-craftable-bouquets-0.1.0.jar"
-hash = "5b1e1a2e1fd8493fb9db1af479e97fb75310c82bdc4dd8ff5fc6d883b5dd0e44"
+hash = "a9f76488b99c0f439c6a0ee3b8ee2c4b44532c48caa966dd651b06a6818f9253"
 
 [[files]]
 file = "mods/better-create-kinetic-loss-0.1.0.jar"
-hash = "cc3342cfe828a3ec7c615804d874241c0a9c885b76fdebae28a74b4976d07c90"
+hash = "571f27d588ab54c11a4b46a0918d659492e5eebc8af4db98a891a79b2b748c19"
 
 [[files]]
 file = "mods/better-create-train-fuel-0.1.0.jar"
-hash = "4d1662d9b2043e67e4246ff3df7cb44eabd08c09cd44dd6b6534821b69ba40a0"
+hash = "75df25a6dd1cc27464c8b2b8bc9b662f480bedf663ab215cd9bcb8d7832f5e4f"
 
 [[files]]
 file = "mods/better-deaths-door-1.0.0.jar"
-hash = "239ff870aa7d82f62bd1f3830c1789eb0c2acb516ae80d68cf54b52ef5a45bf5"
+hash = "91df85826a1fb1a5f80d1ab5c9a8f34e752cd39b54dd78da1659cad3f141c8cb"
 
 [[files]]
 file = "mods/better-dimension-fonts-1.0.0.jar"
-hash = "d21055de18eae1e05652bf21283ec4768949b6c02df18e1dec06361c71bb2920"
+hash = "aba2430f06d3302baf88e022e7f7024cffce746a038f65482af8091895b27f45"
 
 [[files]]
 file = "mods/better-discovery-guides-1.0.0.jar"
-hash = "1b3edcba91e7bc762108c39f39278a534fd69464ab5705aa9def4a0476fa590f"
+hash = "7e419b46861595987e31f8199f6f7efd7f80c3e2e7b131a044518e9fa6f1176e"
 
 [[files]]
 file = "mods/better-drinking-water-1.1.0.jar"
-hash = "c5a73cd558ce045a9298f5f4463604ca1f1a698c2d551d746d4b5db735b0b123"
+hash = "6aaa8f2c2ae9ba99c4e37abfa520e7238d6ceb8997e956bf8245092fcbd1ff21"
 
 [[files]]
 file = "mods/better-exploration-load-control-0.1.0.jar"
-hash = "8fadb612ef51c258bcf4554e8168fac0b9412c5ea124691e386e3b98a60e2278"
+hash = "5466d9753814cf74741a31778c460a5b4169ed6f4d43396ebfdf73248f833a58"
 
 [[files]]
 file = "mods/better-gameplay-notices-1.0.0.jar"
-hash = "adff75ee5b12263d36cbfc5c287aa926f13981e3a9f099b51fe74eab28c1835f"
+hash = "da27c1db53ede5833fa6e5c0b48d986a9171c33070674f378cda2fdd40727e3d"
 
 [[files]]
 file = "mods/better-hexerei-dynamic-trees-1.0.1.jar"
-hash = "280ec6f926267b2dd258b9cdd9de01810dd95815a3a6355b869f051685f88341"
+hash = "30a9804ec8601f80d499986f75e799a342c8536619b8cbd090072240cf8b261f"
 
 [[files]]
 file = "mods/better-industrial-heat-0.1.0.jar"
-hash = "72fa4a9a404fdbb4724999f70737547e3d74abeb87ed05360994e6f75123acff"
+hash = "8f9f9d67c40cf00e63cf742e995ad3a6993d9c3fa3ca5acad8937f0135c5e726"
 
 [[files]]
 file = "mods/better-journal-inventory-0.1.0.jar"
-hash = "f74fbe536f289acbde572f3e5a9afc39959b973a48f5f7a0167ad81223d9523e"
+hash = "08cdbe8be56b0b4e32600097541145b0e6c40e0a1b325e1fef35736122839726"
 
 [[files]]
 file = "mods/better-magic-chunk-anchors-0.1.0.jar"
-hash = "f328e91d873618bc7c8d93bfe0f96187bf971367e54669c8685d9cdf10835021"
+hash = "a18cd3636cfb068d04101e536765b5647eaec1b966e6d212fe5f9b4e9fde6825"
 
 [[files]]
 file = "mods/better-malum-dynamic-trees-1.0.1.jar"
-hash = "0f1a11616c7ae41c5c20a081b956c1f0c3175345b3f39fa438a7fdc52a38670d"
+hash = "f02a91e625952fd1a510edeeaad9264678a4ebb4a8c57ead35f3159674ea3de5"
 
 [[files]]
 file = "mods/better-mining-lamp-0.1.0.jar"
-hash = "16d1a36dc1733320589bc69f3ce96830c654df6eb5e567ed7f9d3595d66d909a"
+hash = "8dc4df6da50bad13849dda6ac95bf78520419391a084f1dbcc822a9c3c500109"
 
 [[files]]
 file = "mods/better-oc2r-create-controls-0.1.0.jar"
-hash = "d7fdd9533527b038d3551618a9576307f9fb04c4d776d33fdb2bc45f00da5e2c"
+hash = "1174efd03490bcc7cc80844a283f60695818fd526eb229cce8208f7f37ad01b5"
 
 [[files]]
 file = "mods/better-oc2r-wireless-messaging-1.0.0.jar"
-hash = "43e141ab876321c962040a1b9895d0675693f9f71a031e90f6f1aa27b6c8c125"
+hash = "c775b4f9e73a5f2e76bfcfdd8c7318e8d289a31d3aa5e2008eb894b2835890ef"
 
 [[files]]
 file = "mods/better-ore-geology-0.3.0.jar"
-hash = "3cdd05062deb587998b45de15b0cbf9421edfff3da4eb1221937835c26df4393"
+hash = "0f072eddc05a5db90a3c182137c29f2df7a54f53db1f83e593cd36c79654ec35"
 
 [[files]]
 file = "mods/better-pillager-campaigns-0.5.4.jar"
-hash = "1898b7ee0817031f01ef78fce729c04ce4aa71f773ca876d76304c862646b76f"
+hash = "55867f475781ff54d17a0fa57ea33853b195508ac00babe4071a1f184eec8812"
 
 [[files]]
 file = "mods/better-player-traces-0.1.0.jar"
-hash = "085254fe9c70c2092e3b276e9c1dd24571f1309eff971e660af0b67f44fc18ba"
+hash = "b21dc2708d0e35113951e4e572c847b3c7d0068a0164f100542280fbb22ba986"
 
 [[files]]
 file = "mods/better-rail-beetle-0.1.0.jar"
-hash = "b3e9612fc9cc65ffeda131fa85593b3be9e37361d0d3ada00ee9d88dba40a54a"
+hash = "04469718f42369d5903309da4ed2f43f0e04975323896b3e5ea76d5454bc408d"
 
 [[files]]
 file = "mods/better-regolith-farming-0.1.0.jar"
-hash = "e15d897a26610f2d92cee108de15b8ab49335c0082a759b7176d3b70c51e3953"
+hash = "49612d3b4624a114efa65467099ca5dd0795cf328cce472799884a17b842c21f"
 
 [[files]]
 file = "mods/better-rehooked-grappling-0.1.0.jar"
-hash = "277e4f00ab41958f7a7e85d560f683f04aba34148cc1ac8847e5e9efc5069167"
+hash = "842d1684f632f6a7cee943791fbc2c8e89cec24ab1f81363f3ac58e1c1fe894a"
 
 [[files]]
 file = "mods/better-rpg-progression-1.0.1.jar"
-hash = "c2cfd05d84221eb8df3be6d781bdf1d74f5a09717493853165ea6ba98295818b"
+hash = "acb96ad6cabcf43def44e94a27d43acc8b2de08533aa7a8994668b6e895b4538"
 
 [[files]]
 file = "mods/better-runtime-diagnostics-0.1.0.jar"
-hash = "88a91060d28f2da239ea6e24b251f5a52336e254735ccf7010e1396e35faac37"
+hash = "ccc9bef29e16337da9b9fcf14e0086ef85f47d1d2bb6b3535db321226cec390e"
 
 [[files]]
 file = "mods/better-settlement-roads-0.1.0.jar"
-hash = "b9aef371608446f09333f1bfb4aac0d69988ca17a7f6c2284e42f57e79085af4"
+hash = "7234d884967e5c65e172af98fde26693650c0ba78b12d91c24685f15c197cc4c"
 
 [[files]]
 file = "mods/better-spaceflight-0.1.0.jar"
-hash = "eb8c4a0f5b8374dd9ffad5f8be289d94083ceaad30b3e11178ab8f2e6d44e023"
+hash = "98911c03ac8dfa8e29843714d0145c066611f3225782d9cd0d567f31d3dbafa7"
 
 [[files]]
 file = "mods/better-spawns-1.0.0.jar"
-hash = "0f7a581760d9fdeddf74a5c96d909c4db8c1d9311e58180dd30eb84fdddb3723"
+hash = "ccc55bf595b06cbbb16b178c105fb8061ac89389df07c7e1f0c217e1f24229a1"
 
 [[files]]
 file = "mods/better-spicy-farmers-0.1.0.jar"
-hash = "eb5b3018eb1b24b2a85c015379e4c946e9368162ec0038f9dda8c8abc4f8e4cf"
+hash = "0cd72b14fb616b5cd0faba575e67d70beb5a7186dea3b324e49099edeaf1994e"
 
 [[files]]
 file = "mods/better-spirit-commerce-1.0.1.jar"
-hash = "fce828dcea8bc5f4fc91cebd23826251b41251c36d8036b9da5d5f17580d72ca"
+hash = "cd2dd08696fc2a0bbfd148e6d7756ae53a93c2fa10ca16f67bd3b44ab4e35570"
 
 [[files]]
 file = "mods/better-survival-hud-1.0.0.jar"
-hash = "bd04c773d0e3ec83f28f7d53e0cb212e00076fc2dac1faf947ca81e6bc7c948c"
+hash = "ac5e591df690fc5199905f79ff114489228df16201322d07dc60f9878726b287"
 
 [[files]]
 file = "mods/better-survival-physiology-0.1.1.jar"
-hash = "1f9f67fa1f009844ac0b6087a6b09064bf19b8ea31a3a07090d059178873ee56"
+hash = "615291a34cf52f8e0dc3f006b8e0ff9da6278b8a49bf147b4a2fb716635989fa"
 
 [[files]]
 file = "mods/better-tinkers-loot-affixes-1.0.0.jar"
-hash = "5ad0e4ec2adb05b02957a138a835b5914b7747b0532f2b87ed9a7d43e3d154e4"
+hash = "8cb0c875ad5417e9baf49911d45a281f0b7dbe2d5b2f59e7980dd473d387fe2f"
 
 [[files]]
 file = "mods/better-village-fortifications-1.0.0.jar"
-hash = "fa6ab7fdfd9d5fe0bf6d2b37f2b7426c4903c7e61f13a7e5c62af08621831e54"
+hash = "f5d01c3b6db545cca505e135703aa801352fd91ebba9a23d8dc5a9de320e391a"
 
 [[files]]
 file = "mods/better-weathering-offline-progress-0.1.0.jar"
-hash = "0ebd92a9da3eff736185ede731bb601b245edfa3dbc4babecd7720d66d00fd8f"
+hash = "3745363027a91ac0452ba4bfcb62ddeb71e060d6731d99ddd8628d904e04fb5a"
 
 [[files]]
 file = "mods/better-wild-fruit-trees-0.1.1.jar"
-hash = "2f315f1981b7564642cce2d0daf441326c3a41f71d6fc43818990ede36cf22f8"
+hash = "6e3a447e180a5ebfe8f53be30951d97ebc11cf56c3cae9eafa8dfef2757c6d67"
 
 [[files]]
 file = "mods/better-wildfire-0.1.0.jar"
-hash = "ba64ba48bcf8518553623970bbafb2e983c2051d120b9b053c3269781e04ae6f"
+hash = "33991d9f4ed5fca54fa9d918a1c92c2f3b17513b0e43ad942a999530b49ca524"
 
 [[files]]
 file = "mods/better-world-management-0.1.0.jar"
-hash = "08c373b4257f01871e49d58ad51ec62a92840570c54da7993229856f779fda03"
+hash = "46945a51ff4127ec6e4542d4ad8385a86b26f20bbca43614fbe9ee08c03c1664"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -11631,7 +12031,7 @@ metafile = true
 
 [[files]]
 file = "mods/dynamic-trees-dimension-compat-0.1.1.jar"
-hash = "7f2a2c914695f0fce3c4bcc849178c80305cebb39873e2d77fddade3f797f200"
+hash = "416e3431b211c51404bc8378e5a036828ec510e1818cb1c9989ec68ad3ca5da4"
 
 [[files]]
 file = "mods/dynamic-trees-for-natures-spirit.pw.toml"
@@ -12280,7 +12680,7 @@ metafile = true
 
 [[files]]
 file = "mods/scalable-tnt-0.1.0.jar"
-hash = "14c0f49258b0e170ce552830b0499eb58ab5267b11c7e675186fad10c67d9c7c"
+hash = "8d1fc97755e7d3cc662ea8db84fe815e30fdbda1647a9e53176212ea696600c5"
 
 [[files]]
 file = "mods/searchables.pw.toml"

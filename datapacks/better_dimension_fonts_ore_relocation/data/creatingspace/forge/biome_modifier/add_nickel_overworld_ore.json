@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "#kubejs:no_biomes",
-  "features": "creatingspace:overworld_nickel_ore",
-  "step": "underground_ores"
-}

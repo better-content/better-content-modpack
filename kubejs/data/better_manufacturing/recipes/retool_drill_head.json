@@ -1,0 +1,7 @@
+{
+  "type": "forge:conditional",
+  "recipes": [{
+    "conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
+    "recipe": {"type": "better_manufacturing:retool_drill_head", "category": "equipment"}
+  }]
+}

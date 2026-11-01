@@ -15,7 +15,7 @@ class TeleSoakMotionGateTest {
         val time = "2026-01-01T00:00:00Z"
         val dimension = "minecraft:overworld"
         val lines = mutableListOf(
-            """{"type":"dimension_roster","time":"$time","dimensions":["$dimension"]}""",
+            """{"type":"dimension_roster","time":"$time","dimensions":["$dimension"],"registered_dimensions":["$dimension"],"excluded_dimensions":[]}""",
             """{"type":"client_joined","time":"$time"}""",
             """{"type":"heartbeat","time":"$time","marker":"live","client_received":true,"server_alive":true}""",
         )

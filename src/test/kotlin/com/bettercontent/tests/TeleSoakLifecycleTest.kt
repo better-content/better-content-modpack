@@ -12,7 +12,7 @@ class TeleSoakLifecycleTest {
     }
 
     private class Driver(val clock: Clock, val dimensions: MutableList<String> = mutableListOf(
-        "minecraft:overworld", "minecraft:the_nether", "minecraft:the_end")) : TeleSoakDriver {
+        "minecraft:overworld", "minecraft:the_nether", "test:third")) : TeleSoakDriver {
         var current = "minecraft:overworld"
         var connection = true
         var serverStarts = 0
@@ -88,6 +88,22 @@ class TeleSoakLifecycleTest {
         assertTrue(driver.events.filter { it.first == "tps_sample" }.all { (it.second.getValue("tps") as Double) >= 19.0 })
     }
 
+    @Test fun endAndRatlantisAreExcludedWithoutLosingTheLiveRegistryCheck() {
+        val clock = Clock()
+        val driver = Driver(clock, mutableListOf("minecraft:overworld", "minecraft:the_nether",
+            "minecraft:the_end", "rats:ratlantis"))
+        runTeleSoak(driver, clock)
+        assertEquals(setOf("minecraft:overworld", "minecraft:the_nether"), driver.prepared)
+        assertEquals(34, driver.teleports)
+        val roster = driver.events.single { it.first == "dimension_roster" }.second
+        assertEquals(setOf("minecraft:the_end", "rats:ratlantis"),
+            (roster["excluded_dimensions"] as List<*>).toSet())
+        assertEquals(driver.dimensions.toSet(), (roster["registered_dimensions"] as List<*>).toSet())
+        assertTrue(driver.events.none { (type, fields) ->
+            type == "landing_verified" && fields["dimension"] in TELE_SOAK_DIMENSION_BLACKLIST
+        })
+    }
+
     @Test fun slowDwellTickCrossingScheduledRelocationNeverSleepsNegativeTime() {
         val clock = Clock(); val driver = Driver(clock)
         val delayed = object : TeleSoakDriver by driver {
@@ -119,11 +135,11 @@ class TeleSoakLifecycleTest {
         val clock = Clock(); val driver = Driver(clock)
         val roster = driver.dimensions.sortedDescending()
         val replay = DiagnosticReplay("failed-run", java.nio.file.Path.of("failed/run.json"), emptyMap(),
-            roster, HopCursor("minecraft:the_end", 1), 0, 0)
+            roster, HopCursor("test:third", 1), 0, 0)
         runTeleSoak(driver, clock, replay)
         assertEquals(roster.toSet(), driver.prepared, "fresh fixture still prepares the live complete roster")
         assertEquals(0, driver.events.count { it.first == "dwell_completed" })
-        assertEquals(16, driver.teleports, "replay failed hop and one relocation per remaining circuit visit")
+        assertEquals(14, driver.teleports, "replay failed hop and one relocation per remaining circuit visit")
         assertEquals(0, driver.events.count { it.first == "tele_soak_complete" || it.first == "circuit_completed" })
         assertEquals(1, driver.events.count { it.first == "diagnostic_itinerary_complete" })
         assertEquals(3, driver.events.count { it.first == "diagnostic_circuit_segment_completed" })

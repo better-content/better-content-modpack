@@ -2,6 +2,15 @@
   "schema": "bc.active_custom_mods.v1",
   "mods": [
     {
+      "repository": "better-manufacturing",
+      "modId": "better_manufacturing",
+      "artifact": "better-manufacturing-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
+        "stageRuntimeJar"
+      ]
+    },
+    {
       "repository": "better-airtight-machines",
       "modId": "better_airtight_machines",
       "artifact": "better-airtight-machines-0.1.0.jar",

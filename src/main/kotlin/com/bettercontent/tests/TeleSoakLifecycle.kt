@@ -4,7 +4,7 @@ import java.time.Duration
 
 /** Bounded, one-client Tele Soak protocol. Runtime probes must be real server/client observations. */
 interface TeleSoakDriver : SessionDriver {
-    /** The complete live ServerLevel registry, not a curated progression whitelist. */
+    /** The complete live ServerLevel registry, before applying the Tele Soak blacklist. */
     fun registeredDimensions(progress: () -> Unit): List<String>
     /** Confirm a live destination and spectator safety without generating its remote chunk. */
     fun prepareLanding(dimension: String, progress: () -> Unit)
@@ -33,6 +33,7 @@ private val RECOVERY = Duration.ofSeconds(120).toNanos()
 private val STABILITY = Duration.ofSeconds(30).toNanos()
 private const val MIN_TPS = 19.0
 private val DIMENSION_ID = Regex("[a-z0-9_.-]+:[a-z0-9_./-]+")
+internal val TELE_SOAK_DIMENSION_BLACKLIST = setOf("minecraft:the_end", "rats:ratlantis")
 
 /** Every dimension has ten fresh 10k-block relocations during its responsive dwell.
  * Each relocation has its own 30s TPS stabilization within a 120s deadline; recovery
@@ -46,12 +47,12 @@ internal fun runTeleSoak(driver: TeleSoakDriver, clock: SessionClock, replay: Di
             nextHeartbeat = clock.nanos() + HEARTBEAT
         }
     }
-    val dimensions = driver.registeredDimensions(::maintainConnection).also { discovered ->
-        require(discovered.size in 1..64 && discovered.size == discovered.toSet().size &&
-            "minecraft:overworld" in discovered && discovered.all(DIMENSION_ID::matches)) {
-            "invalid or incomplete live dimension roster: $discovered"
-        }
-    }.sortedDescending().let { discovered ->
+    val registered = driver.registeredDimensions(::maintainConnection)
+    require(registered.size in 1..64 && registered.size == registered.toSet().size &&
+        "minecraft:overworld" in registered && registered.all(DIMENSION_ID::matches)) {
+        "invalid or incomplete live dimension roster: $registered"
+    }
+    val dimensions = registered.filterNot { it in TELE_SOAK_DIMENSION_BLACKLIST }.sortedDescending().let { discovered ->
         replay?.roster?.let { previous ->
             require(previous.size == discovered.size && previous.toSet() == discovered.toSet()) {
                 "diagnostic replay roster changed; skipped dimensions cannot be trusted"
@@ -59,7 +60,9 @@ internal fun runTeleSoak(driver: TeleSoakDriver, clock: SessionClock, replay: Di
             previous
         } ?: discovered
     }
-    driver.teleSoakEvent("dimension_roster", mapOf("dimensions" to dimensions, "count" to dimensions.size))
+    driver.teleSoakEvent("dimension_roster", mapOf("dimensions" to dimensions, "count" to dimensions.size,
+        "registered_dimensions" to registered.sorted(),
+        "excluded_dimensions" to registered.filter { it in TELE_SOAK_DIMENSION_BLACKLIST }.sorted()))
     // Register destinations without generating or pre-loading remote target chunks.
     dimensions.forEach { driver.prepareLanding(it, ::maintainConnection) }
     fun tick(dimension: String) {
@@ -159,7 +162,7 @@ internal fun runTeleSoak(driver: TeleSoakDriver, clock: SessionClock, replay: Di
         driver.teleSoakEvent(if (replay == null) "circuit_completed" else "diagnostic_circuit_segment_completed",
             mapOf("circuit" to circuitIndex, "visited" to segment))
     }
-    check(driver.registeredDimensions(::maintainConnection).toSet() == dimensions.toSet()) {
+    check(driver.registeredDimensions(::maintainConnection).toSet() == registered.toSet()) {
         "live dimension roster changed during Tele Soak"
     }
     driver.ensureConnected()

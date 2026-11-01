@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:block",
+  "pools": [{
+    "bonus_rolls": 0.0,
+    "conditions": [{"condition": "minecraft:survives_explosion"}],
+    "entries": [{
+      "type": "minecraft:item",
+      "name": "create:mechanical_drill",
+      "functions": [{
+        "function": "minecraft:copy_nbt",
+        "source": "block_entity",
+        "ops": [{"source": "\"better_manufacturing:build\"", "target": "\"better_manufacturing:build\"", "op": "replace"}]
+      }]
+    }],
+    "rolls": 1.0
+  }],
+  "random_sequence": "create:blocks/mechanical_drill"
+}
