@@ -2,18 +2,38 @@
   "type": "forge:conditional",
   "recipes": [
     {
-      "conditions": [
-        { "type": "forge:not", "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" } }
-      ],
+      "conditions": [{ "type": "forge:mod_loaded", "modid": "better_manufacturing" }],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": { "item": "create:andesite_alloy" },
+        "transitionalItem": { "item": "create:incomplete_precision_mechanism" },
+        "loops": 1,
+        "sequence": [
+          {
+            "type": "create:cutting",
+            "ingredients": [{ "item": "create:incomplete_precision_mechanism" }],
+            "processingTime": 200,
+            "results": [{ "item": "create:incomplete_precision_mechanism" }]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              { "item": "create:incomplete_precision_mechanism" },
+              { "item": "tconstruct:tool_handle" }
+            ],
+            "results": [{ "item": "create:incomplete_precision_mechanism" }]
+          }
+        ],
+        "results": [{ "count": 6, "item": "create:shaft" }]
+      }
+    },
+    {
+      "conditions": [{ "type": "forge:not", "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" } }],
       "recipe": {
         "type": "create:cutting",
-        "ingredients": [
-          { "item": "create:andesite_alloy" }
-        ],
+        "ingredients": [{ "item": "create:andesite_alloy" }],
         "processingTime": 200,
-        "results": [
-          { "count": 6, "item": "create:shaft" }
-        ]
+        "results": [{ "count": 6, "item": "create:shaft" }]
       }
     }
   ]

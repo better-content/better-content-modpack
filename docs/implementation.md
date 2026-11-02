@@ -145,9 +145,11 @@ Shared `20_powered_works.js` retains millstone stone, press iron block, and all 
 in the mechanical-pump root while adding consumed working parts where applicable. Mixer
 consumes and binds its **configured native whisk** rather than discarding whisk settings or
 adding another handle. The no-Manufacturing shapes remain pack progression but have **not**
-been loaded in the bounded native profile. Four isolated Node unit checks (4/4 on
-2026-11-02) cover these authored gates, construction-only harvester, material policy
-traits and source-order masking; they do **not** load recipes or the mod runtime. A separate actual Create/20
+been loaded in the bounded native profile. Six isolated Node unit checks (6/6 on
+2026-11-02) cover authored gates, construction-only harvester, real PLA/PP TCon
+head/handle stat assets, removed legacy rating data, source-order masking and
+both conductive-casing branches;
+they do **not** load recipes or the mod runtime. A separate actual Create/20
 native profile passed 31/31 required GameTests with real KubeJS scripts, pack wood policy,
 RecipeManager `byKey`/`matches` of selected active20 recipes and configured whisk inheritance;
 31 tests do **not** mean 31 roster outputs or every mounted JSON route was accepted.
@@ -160,26 +162,55 @@ review are pending. The later Font script's dead `jet_boots_upgrade_5` end-rod s
 was removed as a **no-op cleanup**: the earlier 5-bar pressure recipe already consumes
 upgrade4, vortex cannon, elytra and dragon breath in both branches, with no end rod to
 replace. This does **not** add an Aether gate or establish newly validated acquisition.
-The shared copper and rock material policies now explicitly define bounded
-`diesel_conversion` for eligible large plates (0.9 and 0.75 respectively), alongside
-their existing load/thermal traits; source baking previously rejected those plates.
-This is an implemented policy correction, **not** a loaded diesel recipe result.
+The temporary copper/rock `diesel_conversion` entries and all six bespoke
+machine-rating JSON files were **removed** after family readers cut over and core
+disconnected the engineering catalog reload/network path. The intended diesel and
+other machine properties derive from consumed native TCon part stats using bounded
+per-machine formulas; this source migration is not a loaded diesel result.
 Advanced/custom Sifter mesh acquisition stays closed.
 
 The coverage roster contains 462 selected IDs and five excluded IDs; original 205
-material-dependent / 257 recipe-only labels are not final dispositions. For example,
+material-dependent / 257 recipe-only labels are not final dispositions. The primary
+Create shaft/cogwheel/large-cogwheel shaped roots consume handles with Manufacturing,
+but pinned native cutting one alloy → six shafts in 200 ticks and deploying
+shaft+planks → cogwheel / cogwheel+planks → large cogwheel remain obtainable in
+both modes. The former absent-only suppressions were withdrawn. Recipes-create then saved three
+exact-ID conditional alternatives: with Manufacturing, sequenced assembly keeps the
+original cutting/deploying operation, inputs and six-shaft/200-tick yield where
+applicable, then consumes a TCon handle; without Manufacturing it retains the pinned
+native one-/two-input recipe. Create's own transitional NBT isolates each recipe ID,
+but loaded serializer/RecipeManager behavior is unverified. Native
+`create:sequenced_assembly/precision_mechanism` separately has weighted cogwheel
+(chance 5) and shaft (chance 2) byproducts. Recipes-create saved an exact-ID
+conditional adaptation adding one **consumed handle per native loop (five handles
+per five-loop batch)** while retaining the gold plate, five each of cogwheel,
+large cogwheel and iron nugget, all 15 original operations, all nine weighted
+results and the unchanged no-Manufacturing recipe. That five-handle cost is an
+explicit new gameplay tradeoff, not a one-time handle charge. Its isolated pinned
+Create-archive source unit passed 2/2; it does **not** prove Forge condition
+selection, loaded RecipeManager precedence, physical consumes or native yields.
+The shaft/cogwheel rows are source-only construction candidates, not fully
+accepted acquisitions. For example,
 `create:mechanical_harvester` is reclassified construction-only (ordinary consumed blade),
 `pneumaticcraft:pressure_chamber_valve` remains partial while its native assembly alternate
-and consumed physical blank await runtime validation, and `powergrid:conductive_casing`
-retains a two-input native alternative without a proven part route. The stationary
+and consumed physical blank await runtime validation. `powergrid:conductive_casing`
+is now a source-only construction route: the shared script still removes the cheap native
+andesite/zinc item application; with Manufacturing its existing copper casing + red-wire
+first deploying step makes an inert blank, then blank + consumed Tinkers large plate
+makes the casing. Without Manufacturing the unchanged pack one-step copper/red-wire
+route remains. This adds no saved performance setting and has no loaded acquisition
+proof. The stationary
 and vertical PowerGrid generator housings are construction-only plain Blocks, not
 rated settings/BE machines; their current electrical-block/conductive-casing root
 and two orientation conversions remain in shared script 50 until the future
-recipes-tech exact-ID handoff. No new PowerGrid acceptance is implied. Recipe-less IDs such as
+recipes-tech exact-ID handoff. `powergrid:empty_circuit` is construction-only:
+its pinned native cutting uses one wooden slab for two circuits in 50 ticks;
+no extra physical blank or material-performance rate is justified. Loaded
+acquisition remains unverified. No new PowerGrid acceptance is implied. Recipe-less IDs such as
 `create:small_bogey`, `pneumaticcraft:drone_interface`, `oc2r:internet_gateway` and
 `powergrid:transformer_small`, plus the asset-only electric compressor and heater, remain
-unavailable; no invented acquisition is authorized. `trackwork:simple_wheel` is also
-pending an owner-coordinated root reconciliation: the shared transport script currently
+unavailable; no invented acquisition is authorized. `trackwork:simple_wheel` has a
+resolved source ownership boundary: the shared transport script currently
 removes its family exact-ID recipe and substitutes a KubeJS route without the native
 `simple_wheel_part` predecessor. That part itself requires five-wide mechanical crafting,
 while Create mechanical crafters are gated at precision_factory; replacing the working
@@ -195,18 +226,38 @@ upstream and no-Manufacturing branches remain shaped. `vs_clockwork:duct` retain
 configured gas-engine component role; exhaust's new paid native-speed response hook is
 a source candidate, not a loaded result. Loaded acquisition and runtime behavior have not
 been revalidated. The Complicated Bees
-`mellarium_temp_unit` and `mellarium_hydroregulator` are construction-only **design
-handoffs**, not converted recipes: native categorical tolerance and product chance do
-not support an honest material throughput rating. Their native acquisition remains
-untouched pending future recipes-other exact-ID recipe ownership; do not change native
-fuel, chance, yields, or settings by inference. The excluded Backpack hoppers and
+`mellarium_temp_unit` and `mellarium_hydroregulator` are construction-only **source
+candidates**, not material-rate conversions: native categorical tolerance and product
+chance do not support an honest throughput rating. Recipes-other saved the exact
+Manufacturing hydro shape with one consumed TCon handle and all original prismarine,
+nautilus and base costs; the full nine-slot temperature shape now yields the registered
+inert blank, consumed with one handle for the native unit. No-Manufacturing exact-ID
+recipes retain pinned originals. Native fuel, chance, yields and settings are unchanged;
+its two isolated pinned-JAR source units passed, but neither loaded acquisition nor
+biology was revalidated. The adjacent `mellarium_base` is separately **partial**:
+its older Manufacturing shape pays six panels+log+handle+plate versus the pinned
+native eight panels+log. Latest user direction requires both all native costs and
+part consumption in every obtainable route, so preserving the nine native inputs
+*and* both existing parts in a 3×3 grid requires distinct physical preparation.
+The existing Manufacturing component budget is 12/12; no base-specific blank has
+been registered or authorized beyond that cap. Recipes-other saved a narrow conditional no-Manufacturing native eight-panel fallback
+at the same exact ID (isolated pinned-JAR source unit 3/3); this does not resolve
+the loaded Manufacturing cost mismatch or establish effective acquisition. The excluded Backpack hoppers and
 Clockwork gas tank/vent/sealer stay excluded, not converted. Per-ID candidate/source-route
 handoff is maintained with the wave-two pack owner; neither authored overrides nor an
 absent route count as accepted conversion.
 
-PLA and PP policy carries only `screen_rate` 0.80 and 0.85 respectively; no inferred
-hot-fluid, pressure, chemical or universal press/mixing rating is assigned. Source-local
-wave-two source checks include four focused shared-script/material-policy tests. The
+PLA and PP are **ordinary Tinkers materials**. Their actual TCon head/handle stats
+are distinct and must flow through the same part-in-machine formulas as other
+materials, with no extra material-to-machine rating/opt-in table, polymer-only
+permission layer or synthetic role scores. The obsolete pack engineering material JSON files (`iron`, `wood`, `rock`, `copper`,
+`pla`, `polypropylene`) and their 52 machine-trait keys/shape opt-in lists are now
+removed following core's compiled disconnect of the active engineering catalog and
+all direct recipe-reader migrations. Real TCon material definitions, native stats,
+casting and acquisition remain. Dormant historical Java codec/evaluator sources are
+not a live material rating authority; loaded behavior and EMI remain unverified.
+No new PLA/PP or other roster acceptance is implied. Source-local wave-two checks
+include six focused shared-script/native-stat-asset units. The
 historical independent Create/actual20 native run has a scoped 31/31 passing Forge userdev receipt
 (`better-manufacturing/build/gametest/856c112d-b73d-41ba-8897-654be127fbe8/execution.json`,
 `full_roster_accepted=false`). This bounds demonstrated Create/Sifter craft, settings,
@@ -217,9 +268,9 @@ harvester startup remains blocked by the pinned Bumblezone refmap/mapping proble
 independent profile explicitly excludes that branch. Full-roster acceptance, polymer chain
 qualification, pack deployment, client/full-pack launch, Packwiz refresh and packaging
 have **not** occurred. Current user direction permits production implementation and
-**isolated unit tests only**. The updated pack source/policy has passed four Node source
-unit checks, but production Java changes remain uncompiled and no new native behavior is
-verified. No integration/end-to-end/native tests, Forge GameTests, loader/client/server
+**isolated unit tests only**. The updated pack script, retired legacy data and TCon
+stat assets passed six Node source unit checks. Java native-stat migration remains in progress without
+family-wide unit coverage; no new native behavior is verified. No integration/end-to-end/native tests, Forge GameTests, loader/client/server
 launches, smoke runs or aggregate qualification are authorized by the historical receipt. Existing broader
 historical coverage gates remain unmet; no incomplete-Manufacturing packaging exception
 applies. See the source README for current native ownership and tested boundaries.

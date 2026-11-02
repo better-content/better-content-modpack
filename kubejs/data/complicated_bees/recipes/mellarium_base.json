@@ -1,27 +1,39 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "complicated_bees:mellarium_panel"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [ "HP#", "#A#", "###" ],
+        "key": {
+          "#": { "item": "complicated_bees:mellarium_panel" },
+          "A": { "tag": "minecraft:logs" },
+          "H": { "item": "tconstruct:tool_handle" },
+          "P": { "item": "tconstruct:large_plate" }
+        },
+        "result": { "item": "complicated_bees:mellarium_base" },
+        "show_notification": true
+      }
     },
-    "A": {
-      "tag": "minecraft:logs"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        { "type": "forge:not", "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" } }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": { "item": "complicated_bees:mellarium_panel" },
+          "A": { "tag": "minecraft:logs" }
+        },
+        "pattern": [ "###", "#A#", "###" ],
+        "result": { "item": "complicated_bees:mellarium_base" },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "HP#",
-    "#A#",
-    "###"
-  ],
-  "result": {
-    "item": "complicated_bees:mellarium_base"
-  },
-  "show_notification": true
+  ]
 }

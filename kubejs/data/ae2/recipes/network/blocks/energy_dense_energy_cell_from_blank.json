@@ -1,0 +1,19 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          { "item": "better_manufacturing:dense_cell_blank" },
+          { "item": "tconstruct:large_plate" }
+        ],
+        "result": { "item": "ae2:dense_energy_cell" }
+      }
+    }
+  ]
+}

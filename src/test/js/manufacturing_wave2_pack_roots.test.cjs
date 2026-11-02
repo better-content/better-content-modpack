@@ -1,4 +1,4 @@
-// Isolated Node unit checks for authored shared KubeJS roots and material policy.
+// Isolated Node unit checks for authored shared KubeJS roots and native TCon material assets.
 // Native recipe-manager acceptance requires separate authorization and is not inferred here.
 const { test } = require('node:test')
 const assert = require('node:assert/strict')
@@ -7,7 +7,7 @@ const path = require('node:path')
 const vm = require('node:vm')
 
 const scripts = path.resolve(__dirname, '../../../kubejs/server_scripts/progression')
-const materials = path.resolve(__dirname, '../../../kubejs/data/better_manufacturing/engineering/materials')
+const nativeStats = path.resolve(__dirname, '../../../kubejs/data/better_manufacturing/tinkering/materials/stats')
 function recipes(file, manufacturing) {
   const added = []
   const event = {
@@ -16,7 +16,8 @@ function recipes(file, manufacturing) {
       const recipe = { type: 'minecraft:crafting_shaped', output, pattern, key }
       return { id(id) { recipe.id = id; added.push(recipe) } }
     },
-    custom(recipe) { return { id(id) { added.push({ ...recipe, id }) } } }
+    custom(recipe) { return { id(id) { added.push({ ...recipe, id }) } } },
+    shapeless(output, inputs) { return { id(id) { added.push({ type: 'minecraft:crafting_shapeless', output, inputs, id }) } } }
   }
   const context = {
     Platform: { isLoaded(mod) { return mod === 'better_manufacturing' && manufacturing } },
@@ -87,33 +88,60 @@ test('harvester construction consumes a blade without fabricated baked settings'
   }
 })
 
-test('actual pack cheap materials support the working part shapes and traits', () => {
-  const read = id => JSON.parse(fs.readFileSync(path.join(materials, id + '.json'), 'utf8'))
-  const wood = read('wood'), rock = read('rock'), copper = read('copper'), iron = read('iron')
-  assert.equal(wood.material, 'tconstruct:wood')
-  assert.equal(rock.material, 'tconstruct:rock')
-  assert.equal(copper.material, 'tconstruct:copper')
-  assert.equal(iron.material, 'tconstruct:iron')
-  for (const trait of ['mixing_rate', 'pump_rate']) {
-    assert.ok(wood.supported_parts.includes('tconstruct:tool_handle'))
-    assert.ok(wood.traits[trait] > 0 && wood.traits[trait] < iron.traits[trait])
+test('obsolete pack machine-rating JSON is disconnected without deleting native TCon materials', () => {
+  const legacy = path.resolve(__dirname, '../../../kubejs/data/better_manufacturing/engineering/materials')
+  for (const id of ['iron', 'wood', 'rock', 'copper', 'pla', 'polypropylene']) {
+    assert.equal(fs.existsSync(path.join(legacy, id + '.json')), false, `${id} must not restore a second rating table`)
   }
-  for (const trait of ['milling_rate', 'press_rate']) {
-    assert.ok(rock.supported_parts.includes('tconstruct:large_plate'))
-    assert.ok(rock.traits[trait] > 0)
-    assert.ok(iron.traits[trait] > 0)
+  for (const id of ['pla', 'polypropylene']) {
+    assert.ok(fs.existsSync(path.join(nativeStats, id + '.json')), `${id} native TCon stats must remain`)
+    assert.ok(fs.existsSync(path.resolve(__dirname,
+      `../../../kubejs/data/better_manufacturing/recipes/polymer_${id === 'pla' ? 'pla' : 'pp'}_stock_material.json`)))
   }
-  // DieselSettings.bake requires all three rated traits on every eligible plate;
-  // policy presence does not prove a loaded recipe or physical engine response.
-  for (const policy of [copper, rock]) {
-    assert.ok(policy.supported_parts.includes('tconstruct:large_plate'))
-    for (const trait of ['diesel_conversion', 'diesel_load', 'diesel_thermal']) {
-      assert.ok(policy.traits[trait] >= 0.75 && policy.traits[trait] <= 1.5)
-      assert.ok(iron.traits[trait] > 0)
+})
+
+test('PLA and PP preserve distinct real TCon native head and handle stats', () => {
+  const read = id => JSON.parse(fs.readFileSync(path.join(nativeStats, id + '.json'), 'utf8')).stats
+  const pla = read('pla'), pp = read('polypropylene')
+  for (const stats of [pla, pp]) {
+    assert.ok(Number.isFinite(stats['tconstruct:head'].mining_speed))
+    assert.ok(stats['tconstruct:head'].mining_speed > 0)
+    assert.ok(Number.isFinite(stats['tconstruct:head'].durability))
+    assert.ok(Number.isFinite(stats['tconstruct:handle'].durability))
+    assert.ok(Number.isFinite(stats['tconstruct:handle'].mining_speed))
+  }
+  assert.notEqual(pla['tconstruct:head'].mining_speed, pp['tconstruct:head'].mining_speed)
+  assert.notEqual(pla['tconstruct:handle'].durability, pp['tconstruct:handle'].durability)
+  // Source assets only: recipe readers must use these TCon stats directly after migration.
+})
+
+test('conductive casing keeps the copper/red-wire gate and a no-Manufacturing direct route', () => {
+  for (const loaded of [false, true]) {
+    const all = recipes('50_electrical_control.js', loaded)
+    const stage = get(all, loaded ? 'kubejs:electrical_control/conductive_casing_blank'
+      : 'kubejs:electrical_control/conductive_casing')
+    assert.equal(stage.type, 'create:deploying')
+    assert.deepEqual(Array.from(stage.ingredients, ingredient => ingredient.item),
+      ['create:copper_casing', 'morered:red_alloy_wire'])
+    assert.equal(stage.results[0].item, loaded
+      ? 'better_manufacturing:conductive_casing_blank' : 'powergrid:conductive_casing')
+    assert.equal(stage.results.length, 1)
+    if (loaded) {
+      const finish = get(all, 'kubejs:electrical_control/conductive_casing')
+      assert.equal(finish.type, 'create:deploying')
+      assert.deepEqual(Array.from(finish.ingredients, ingredient => ingredient.item),
+        ['better_manufacturing:conductive_casing_blank', 'tconstruct:large_plate'])
+      assert.equal(finish.results[0].item, 'powergrid:conductive_casing')
+      assert.equal(finish.results.length, 1)
+    } else {
+      assert.ok(!all.some(recipe => recipe.results?.some(result =>
+        result.item === 'better_manufacturing:conductive_casing_blank')))
     }
+    const block = get(all, 'kubejs:electrical_control/electrical_machine_block')
+    assert.ok(block.inputs.some(input => input.item === 'powergrid:conductive_casing'))
+    assert.ok(ingredients(get(all, 'kubejs:electrical_control/direct_root/first_stationary_generator'))
+      .includes('kubejs:electrical_machine_block'))
   }
-  assert.equal(copper.traits.diesel_conversion, 0.9)
-  assert.equal(rock.traits.diesel_conversion, 0.75)
 })
 
 test('later Nether-magma PNCR root masks earlier source candidate pending native evidence', () => {

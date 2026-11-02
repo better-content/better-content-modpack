@@ -2,18 +2,39 @@
   "type": "forge:conditional",
   "recipes": [
     {
-      "conditions": [
-        { "type": "forge:not", "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" } }
-      ],
+      "conditions": [{ "type": "forge:mod_loaded", "modid": "better_manufacturing" }],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": { "item": "create:cogwheel" },
+        "transitionalItem": { "item": "create:incomplete_precision_mechanism" },
+        "loops": 1,
+        "sequence": [
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              { "item": "create:incomplete_precision_mechanism" },
+              { "tag": "minecraft:planks" }
+            ],
+            "results": [{ "item": "create:incomplete_precision_mechanism" }]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              { "item": "create:incomplete_precision_mechanism" },
+              { "item": "tconstruct:tool_handle" }
+            ],
+            "results": [{ "item": "create:incomplete_precision_mechanism" }]
+          }
+        ],
+        "results": [{ "item": "create:large_cogwheel" }]
+      }
+    },
+    {
+      "conditions": [{ "type": "forge:not", "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" } }],
       "recipe": {
         "type": "create:deploying",
-        "ingredients": [
-          { "item": "create:cogwheel" },
-          { "tag": "minecraft:planks" }
-        ],
-        "results": [
-          { "item": "create:large_cogwheel" }
-        ]
+        "ingredients": [{ "item": "create:cogwheel" }, { "tag": "minecraft:planks" }],
+        "results": [{ "item": "create:large_cogwheel" }]
       }
     }
   ]

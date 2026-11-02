@@ -1,0 +1,40 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "a": { "item": "ae2:energy_cell" },
+          "b": { "item": "ae2:calculation_processor" }
+        },
+        "pattern": ["aaa", "aba", "aaa"],
+        "result": { "item": "better_manufacturing:dense_cell_blank" },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "a": { "item": "ae2:energy_cell" },
+          "b": { "item": "ae2:calculation_processor" }
+        },
+        "pattern": ["aaa", "aba", "aaa"],
+        "result": { "item": "ae2:dense_energy_cell" },
+        "show_notification": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": { "item": "minecraft:iron_bars" },
+          "A": { "item": "complicated_bees:mellarium_base" },
+          "I": { "item": "minecraft:iron_ingot" }
+        },
+        "pattern": [ "I#I", "#A#", "I#I" ],
+        "result": { "item": "better_manufacturing:mellarium_temp_blank" },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        { "type": "forge:not", "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" } }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": { "item": "minecraft:iron_bars" },
+          "A": { "item": "complicated_bees:mellarium_base" },
+          "I": { "item": "minecraft:iron_ingot" }
+        },
+        "pattern": [ "I#I", "#A#", "I#I" ],
+        "result": { "item": "complicated_bees:mellarium_temp_unit" },
+        "show_notification": true
+      }
+    }
+  ]
+}

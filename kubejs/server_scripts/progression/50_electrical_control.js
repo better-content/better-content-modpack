@@ -1,10 +1,24 @@
 ServerEvents.recipes(function (event) {
     event.remove({ id: 'powergrid:item_application/conductive_casing' })
+    // Preserve the pack's copper casing + red-wire electrical gate. Deploying has
+    // only two inputs, so Manufacturing consumes a physical blank in a second step
+    // rather than replacing either original cost or fabricating a material rating.
+    var conductiveBlank = Platform.isLoaded('better_manufacturing')
     event.custom({
         type: 'create:deploying',
         ingredients: [{ item: 'create:copper_casing' }, { item: 'morered:red_alloy_wire' }],
-        results: [{ item: 'powergrid:conductive_casing' }]
-    }).id('kubejs:electrical_control/conductive_casing')
+        results: [{ item: conductiveBlank
+            ? 'better_manufacturing:conductive_casing_blank' : 'powergrid:conductive_casing' }]
+    }).id(conductiveBlank ? 'kubejs:electrical_control/conductive_casing_blank'
+        : 'kubejs:electrical_control/conductive_casing')
+    if (conductiveBlank) {
+        event.custom({
+            type: 'create:deploying',
+            ingredients: [{ item: 'better_manufacturing:conductive_casing_blank' },
+                { item: 'tconstruct:large_plate' }],
+            results: [{ item: 'powergrid:conductive_casing' }]
+        }).id('kubejs:electrical_control/conductive_casing')
+    }
 
     event.custom({
         type: 'pneumaticcraft:pressure_chamber', pressure: 2.0,

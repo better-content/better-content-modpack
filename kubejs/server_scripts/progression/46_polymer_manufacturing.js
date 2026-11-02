@@ -38,9 +38,11 @@ function polymerThermo(event, id, inputFluid, inputItem, outputFluid, outputItem
 }
 
 ServerEvents.recipes(function (event) {
-    // This pack has not deployed Manufacturing yet. Do not submit recipes whose
-    // fluid and culture registries are absent; old native plastic routes remain.
-    if (!Platform.isLoaded('better_manufacturing')) return
+    // Keep the two chains contiguous: a missing native serializer or culture/
+    // chemical source must not leave partially loadable polymer recipes behind.
+    // Existing native plastic routes remain untouched when any dependency is absent.
+    if (['better_manufacturing', 'pneumaticcraft', 'createdieselgenerators',
+        'create', 'chemlib', 'brewinandchewin'].some(id => !Platform.isLoaded(id))) return
     // Open, aqueous preparation. Fresh lactic culture is a separate starter, not ethanol yeast.
     event.custom({
         type: 'create:mixing',

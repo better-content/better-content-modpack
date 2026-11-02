@@ -1,0 +1,19 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          { "item": "better_manufacturing:mellarium_temp_blank" },
+          { "item": "tconstruct:tool_handle" }
+        ],
+        "result": { "item": "complicated_bees:mellarium_temp_unit" }
+      }
+    }
+  ]
+}
