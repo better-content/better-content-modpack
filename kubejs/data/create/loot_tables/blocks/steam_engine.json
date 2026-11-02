@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:block",
+  "pools": [{
+    "bonus_rolls": 0.0,
+    "conditions": [{"condition": "minecraft:survives_explosion"}],
+    "entries": [{"type": "minecraft:item", "name": "create:steam_engine",
+      "functions": [{"function": "minecraft:copy_nbt", "source": "block_entity",
+        "ops": [{"source": "better_manufacturing:settings", "target": "better_manufacturing:settings", "op": "replace"}]}]
+    }],
+    "rolls": 1.0
+  }],
+  "random_sequence": "create:blocks/steam_engine"
+}

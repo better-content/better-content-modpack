@@ -19,9 +19,11 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:primitive_workshop/backpack_from_canvas')
 
     event.remove({ id: 'create:crafting/kinetics/chute' })
-    event.shaped('4x create:chute', ['NCN', 'C C', 'NCN'], {
-        N: '#forge:nuggets/iron', C: 'farmersdelight:canvas'
-    }).id('kubejs:primitive_workshop/create_chute')
+    var chuteParts = Platform.isLoaded('better_manufacturing')
+    var chuteKey = { N: '#forge:nuggets/iron', C: 'farmersdelight:canvas' }
+    if (chuteParts) chuteKey.H = 'tconstruct:tool_handle'
+    event.shaped('4x create:chute', chuteParts ? ['NCN', 'CHC', 'NCN'] : ['NCN', 'C C', 'NCN'], chuteKey)
+        .id('kubejs:primitive_workshop/create_chute')
 
     // The conventional-tool policy removes the wooden shovel used upstream as
     // a spoon. A wooden rod keeps the utensil silhouette without reviving it.

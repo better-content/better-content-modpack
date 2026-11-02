@@ -9,7 +9,7 @@
       "functions": [{
         "function": "minecraft:copy_nbt",
         "source": "block_entity",
-        "ops": [{"source": "\"better_manufacturing:build\"", "target": "\"better_manufacturing:build\"", "op": "replace"}]
+        "ops": [{"source": "\"better_manufacturing:settings\"", "target": "\"better_manufacturing:settings\"", "op": "replace"}]
       }]
     }],
     "rolls": 1.0

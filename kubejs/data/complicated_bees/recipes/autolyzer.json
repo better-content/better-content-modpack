@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "complicated_bees:analyzer"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "W": {
+      "item": "minecraft:smooth_stone"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HPI",
+    "IAI",
+    "WWW"
+  ],
+  "result": {
+    "item": "complicated_bees:autolyzer"
+  },
+  "show_notification": true
+}

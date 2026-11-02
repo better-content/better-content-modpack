@@ -1,0 +1,88 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:trackwork_mechanical",
+        "pattern": [
+          "H BBB",
+          "BAPA ",
+          "BPCP ",
+          "BAPA ",
+          " BBB "
+        ],
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "C": {
+            "item": "create:cogwheel"
+          },
+          "B": {
+            "item": "create:belt_connector"
+          },
+          "H": [
+            {
+              "item": "tconstruct:tough_handle"
+            },
+            {
+              "item": "tconstruct:bow_limb"
+            }
+          ]
+        },
+        "result": {
+          "item": "trackwork:phys_track",
+          "count": 2
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "pattern": [
+          " BBB ",
+          "BAPA ",
+          "BPCP ",
+          "BAPA ",
+          " BBB "
+        ],
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "C": {
+            "item": "create:cogwheel"
+          },
+          "B": {
+            "item": "create:belt_connector"
+          }
+        },
+        "result": {
+          "item": "trackwork:phys_track",
+          "count": 2
+        }
+      }
+    }
+  ]
+}

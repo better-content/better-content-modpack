@@ -1,0 +1,15 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
+      "type": "better_manufacturing:part_variant", "pattern": ["IBI", "AAA", " C "],
+      "key": {"A": {"item": "create:andesite_alloy"}, "B": {"item": "tconstruct:small_axe_head"}, "I": {"tag": "forge:plates/iron"}, "C": {"item": "create:andesite_casing"}},
+      "result": {"item": "create:mechanical_plough"}, "function": "better_manufacturing:create/field_work", "parts": [{"role": "working_surface", "slot": 1}]
+    }},
+    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
+      "type": "minecraft:crafting_shaped", "pattern": ["III", "AAA", " C "],
+      "key": {"A": {"item": "create:andesite_alloy"}, "I": {"tag": "forge:plates/iron"}, "C": {"item": "create:andesite_casing"}},
+      "result": {"item": "create:mechanical_plough"}
+    }}
+  ]
+}

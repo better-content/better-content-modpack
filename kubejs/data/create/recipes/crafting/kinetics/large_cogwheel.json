@@ -1,0 +1,63 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:shaft"
+          },
+          {
+            "tag": "minecraft:planks"
+          },
+          {
+            "tag": "minecraft:planks"
+          },
+          {
+            "item": "tconstruct:tool_handle"
+          }
+        ],
+        "result": {
+          "item": "create:large_cogwheel"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:shaft"
+          },
+          {
+            "tag": "minecraft:planks"
+          },
+          {
+            "tag": "minecraft:planks"
+          }
+        ],
+        "result": {
+          "item": "create:large_cogwheel"
+        }
+      }
+    }
+  ]
+}

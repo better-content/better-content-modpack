@@ -1,0 +1,81 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "D": {
+            "item": "minecraft:dispenser"
+          },
+          "I": {
+            "item": "minecraft:iron_block"
+          },
+          "L": {
+            "tag": "minecraft:logs"
+          },
+          "S": {
+            "item": "minecraft:smooth_stone"
+          },
+          "H": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "HI ",
+          "LIL",
+          "SDS"
+        ],
+        "result": {
+          "item": "create:schematicannon"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "D": {
+            "item": "minecraft:dispenser"
+          },
+          "I": {
+            "item": "minecraft:iron_block"
+          },
+          "L": {
+            "tag": "minecraft:logs"
+          },
+          "S": {
+            "item": "minecraft:smooth_stone"
+          }
+        },
+        "pattern": [
+          " I ",
+          "LIL",
+          "SDS"
+        ],
+        "result": {
+          "item": "create:schematicannon"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

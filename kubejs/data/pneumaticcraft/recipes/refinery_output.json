@@ -1,0 +1,80 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "SSL",
+          "GDG",
+          "SSS"
+        ],
+        "key": {
+          "D": {
+            "tag": "forge:gems/diamond"
+          },
+          "G": {
+            "tag": "forge:glass"
+          },
+          "S": {
+            "item": "pneumaticcraft:reinforced_stone_slab"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "pneumaticcraft:refinery_output"
+        },
+        "function": "better_manufacturing:pneuprocess/chemistry",
+        "parts": [
+          {
+            "role": "liner",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "D": {
+            "tag": "forge:gems/diamond"
+          },
+          "G": {
+            "tag": "forge:glass"
+          },
+          "S": {
+            "item": "pneumaticcraft:reinforced_stone_slab"
+          }
+        },
+        "pattern": [
+          "SSS",
+          "GDG",
+          "SSS"
+        ],
+        "result": {
+          "item": "pneumaticcraft:refinery_output"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

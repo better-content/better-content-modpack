@@ -1,0 +1,15 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "misc",
+  "function": "better_manufacturing:createbulk/weighted_ejector",
+  "key": {
+    "A": {"tag": "forge:plates/gold"},
+    "D": {"item": "create:depot"},
+    "I": {"item": "create:cogwheel"},
+    "S": {"item": "tconstruct:bow_limb"}
+  },
+  "pattern": ["SA", " D", " I"],
+  "parts": [{"role": "spring", "slot": 0}],
+  "result": {"item": "create:weighted_ejector"},
+  "show_notification": true
+}

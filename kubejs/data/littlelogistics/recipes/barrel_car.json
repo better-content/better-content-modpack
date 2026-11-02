@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:barrel"
+    },
+    "$": {
+      "item": "littlelogistics:seater_car"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HP ",
+    " # ",
+    " $ "
+  ],
+  "result": {
+    "item": "littlelogistics:barrel_car"
+  },
+  "show_notification": true
+}

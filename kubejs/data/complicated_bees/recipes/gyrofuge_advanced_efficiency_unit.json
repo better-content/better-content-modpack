@@ -1,0 +1,47 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "complicated_bees:gyrofuge_panel"
+    },
+    "A": {
+      "item": "complicated_bees:gyrofuge_efficiency_unit"
+    },
+    "C": {
+      "item": "minecraft:chorus_flower"
+    },
+    "G": {
+      "item": "complicated_bees:exp_drop"
+    },
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "H": {
+      "item": "tconstruct:tough_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HGP",
+    "CAC",
+    "#N#"
+  ],
+  "result": {
+    "item": "complicated_bees:gyrofuge_advanced_efficiency_unit"
+  },
+  "show_notification": true,
+  "parts": [
+    {
+      "role": "rotor",
+      "slot": 0
+    },
+    {
+      "role": "plate",
+      "slot": 2
+    }
+  ],
+  "function": "better_manufacturing:bees/gyrofuge/efficiency"
+}

@@ -1,0 +1,96 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "OGO",
+          "WTL",
+          "SSS"
+        ],
+        "key": {
+          "G": {
+            "tag": "forge:glass_panes"
+          },
+          "O": {
+            "tag": "forge:obsidian"
+          },
+          "S": {
+            "item": "pneumaticcraft:reinforced_brick_slab"
+          },
+          "T": {
+            "type": "forge:nbt",
+            "count": 1,
+            "item": "pneumaticcraft:small_tank"
+          },
+          "W": {
+            "item": "pneumaticcraft:reinforced_brick_wall"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "pneumaticcraft:etching_tank"
+        },
+        "function": "better_manufacturing:pneuprocess/chemistry",
+        "parts": [
+          {
+            "role": "liner",
+            "slot": 5
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "G": {
+            "tag": "forge:glass_panes"
+          },
+          "O": {
+            "tag": "forge:obsidian"
+          },
+          "S": {
+            "item": "pneumaticcraft:reinforced_brick_slab"
+          },
+          "T": {
+            "type": "forge:nbt",
+            "count": 1,
+            "item": "pneumaticcraft:small_tank"
+          },
+          "W": {
+            "item": "pneumaticcraft:reinforced_brick_wall"
+          }
+        },
+        "pattern": [
+          "OGO",
+          "WTW",
+          "SSS"
+        ],
+        "result": {
+          "item": "pneumaticcraft:etching_tank"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

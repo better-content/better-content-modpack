@@ -34,8 +34,10 @@ ServerEvents.recipes(function (event) {
         'powergrid:vertical_generator_housing'
     ]).id('kubejs:electrical_control/generator_horizontal_conversion')
     event.remove({ id: 'morered:soldering_table' })
-    event.shaped('morered:soldering_table', ['PPP', 'WMW', ' C '], {
-        P: 'morered:stone_plate', W: 'morered:red_alloy_wire',
-        M: 'kubejs:electrical_machine_block', C: '#forge:plates/copper'
-    }).id('kubejs:electrical_control/direct_root/circuit_design_station')
+    var solderingParts = Platform.isLoaded('better_manufacturing')
+    var solderingKey = { P: 'morered:stone_plate', W: 'morered:red_alloy_wire',
+        M: 'kubejs:electrical_machine_block', C: '#forge:plates/copper' }
+    if (solderingParts) { solderingKey.H = 'tconstruct:tool_handle'; solderingKey.L = 'tconstruct:large_plate' }
+    event.shaped('morered:soldering_table', solderingParts ? ['PPP', 'WMW', 'HCL'] : ['PPP', 'WMW', ' C '], solderingKey)
+        .id('kubejs:electrical_control/direct_root/circuit_design_station')
 })

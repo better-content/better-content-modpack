@@ -1,0 +1,75 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "item": "create:cardboard_block"
+          },
+          "C": {
+            "tag": "forge:ingots/iron"
+          },
+          "R": {
+            "tag": "forge:dusts/redstone"
+          },
+          "H": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "HC ",
+          "CAC",
+          "RCR"
+        ],
+        "result": {
+          "item": "create:packager"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "item": "create:cardboard_block"
+          },
+          "C": {
+            "tag": "forge:ingots/iron"
+          },
+          "R": {
+            "tag": "forge:dusts/redstone"
+          }
+        },
+        "pattern": [
+          " C ",
+          "CAC",
+          "RCR"
+        ],
+        "result": {
+          "item": "create:packager"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

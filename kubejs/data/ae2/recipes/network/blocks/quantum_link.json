@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "ae2:quartz_glass"
+    },
+    "b": {
+      "item": "ae2:fluix_pearl"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "aba",
+    "bHb",
+    "aba"
+  ],
+  "result": {
+    "item": "ae2:quantum_link"
+  },
+  "show_notification": true
+}

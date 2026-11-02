@@ -68,7 +68,13 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:hand_workshop/casting/andesite_alloy_ingot')
 
     event.remove({ id: 'create:crafting/kinetics/hand_crank' })
-    event.shaped('create:hand_crank', ['PPP', ' A ', ' S '], {
-        P: '#minecraft:planks', A: 'create:andesite_alloy', S: 'create:shaft'
-    }).id('kubejs:hand_workshop/hand_crank')
+    var handCrankParts = Platform.isLoaded('better_manufacturing')
+    var handCrankKey = { P: '#minecraft:planks', A: 'create:andesite_alloy', S: 'create:shaft' }
+    if (handCrankParts) handCrankKey.H = 'tconstruct:tool_handle'
+    event.shaped('create:hand_crank', handCrankParts ? ['PPP', ' A ', 'HS '] : ['PPP', ' A ', ' S '], handCrankKey)
+        .id('kubejs:hand_workshop/hand_crank')
+
+    // Native cutting/deploying alternatives still exist. They cannot consume
+    // the configured parts in their present input shapes, so count those
+    // recipe-only roots as partial rather than removing acquisition routes.
 })

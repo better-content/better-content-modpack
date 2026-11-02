@@ -1,0 +1,75 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "minecraft:buttons"
+          },
+          "C": {
+            "item": "create:andesite_casing"
+          },
+          "I": {
+            "item": "create:electron_tube"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "pattern": [
+          "B ",
+          "CH",
+          "I "
+        ],
+        "result": {
+          "item": "create:contraption_controls"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "minecraft:buttons"
+          },
+          "C": {
+            "item": "create:andesite_casing"
+          },
+          "I": {
+            "item": "create:electron_tube"
+          }
+        },
+        "pattern": [
+          "B",
+          "C",
+          "I"
+        ],
+        "result": {
+          "item": "create:contraption_controls"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

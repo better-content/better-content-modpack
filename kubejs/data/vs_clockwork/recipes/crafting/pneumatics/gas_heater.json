@@ -1,0 +1,82 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "DBD",
+          "LCH",
+          "   "
+        ],
+        "key": {
+          "B": {
+            "item": "create:empty_blaze_burner"
+          },
+          "C": {
+            "item": "create:industrial_iron_block"
+          },
+          "D": {
+            "item": "vs_clockwork:duct"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:gas_heater"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "DBD",
+          " C "
+        ],
+        "key": {
+          "B": {
+            "item": "create:empty_blaze_burner"
+          },
+          "C": {
+            "item": "create:industrial_iron_block"
+          },
+          "D": {
+            "item": "vs_clockwork:duct"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:gas_heater"
+        }
+      }
+    }
+  ]
+}

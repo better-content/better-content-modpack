@@ -1,0 +1,87 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "ITH",
+          "GTG",
+          "ILI"
+        ],
+        "key": {
+          "G": {
+            "tag": "forge:ingots/copper"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "T": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "item": "pneumaticcraft:vortex_tube"
+        },
+        "function": "better_manufacturing:pneuprocess/vacuum_thermal",
+        "parts": [
+          {
+            "role": "plate",
+            "slot": 7
+          },
+          {
+            "role": "handle",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "G": {
+            "tag": "forge:ingots/copper"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "T": {
+            "item": "pneumaticcraft:pressure_tube"
+          }
+        },
+        "pattern": [
+          "ITI",
+          "GTG",
+          "III"
+        ],
+        "result": {
+          "item": "pneumaticcraft:vortex_tube"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

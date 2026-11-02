@@ -1,0 +1,79 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "PHP",
+          "PTP",
+          "PPP"
+        ],
+        "key": {
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "T": {
+            "item": "trackwork:med_suspension_track"
+          },
+          "H": [
+            {
+              "item": "tconstruct:tough_handle"
+            },
+            {
+              "item": "tconstruct:bow_limb"
+            }
+          ]
+        },
+        "result": {
+          "item": "trackwork:large_suspension_track",
+          "count": 1
+        },
+        "function": "better_manufacturing:trackwork/running_gear",
+        "parts": [
+          {
+            "role": "hub_suspension",
+            "slot": 1
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "PPP",
+          "PTP",
+          "PPP"
+        ],
+        "key": {
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "T": {
+            "item": "trackwork:med_suspension_track"
+          }
+        },
+        "result": {
+          "item": "trackwork:large_suspension_track",
+          "count": 1
+        }
+      }
+    }
+  ]
+}

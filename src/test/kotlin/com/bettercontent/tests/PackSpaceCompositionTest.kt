@@ -15,8 +15,10 @@ class PackSpaceCompositionTest {
     @Test fun newSourcesAreExplicitAndCreatingSpaceIsNotADeclaredDownload() {
         val manifest = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         val mods = manifest.path("mods")
-        assertEquals(51, mods.size())
+        assertEquals(52, mods.size())
         val rows = mods.associateBy { it.path("repository").asText() }
+        // Source inventory membership does not require deploying the unfinished Manufacturing JAR.
+        assertEquals("better_manufacturing", rows.getValue("better-manufacturing").path("modId").asText())
         for ((repository, id) in listOf(
             "better-abyssal-city" to "better_abyssal_city",
             "better-spaceflight" to "better_spaceflight"

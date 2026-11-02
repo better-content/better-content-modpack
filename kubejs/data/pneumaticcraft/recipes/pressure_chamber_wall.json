@@ -1,0 +1,72 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "key": {
+          "I": {
+            "item": "pneumaticcraft:reinforced_bricks"
+          },
+          "X": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "XII",
+          "I I",
+          "III"
+        ],
+        "result": {
+          "count": 16,
+          "item": "pneumaticcraft:pressure_chamber_wall"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneupressure/pressure",
+        "parts": [
+          {
+            "role": "body",
+            "slot": 0
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "I": {
+            "item": "pneumaticcraft:reinforced_bricks"
+          }
+        },
+        "pattern": [
+          "III",
+          "I I",
+          "III"
+        ],
+        "result": {
+          "count": 16,
+          "item": "pneumaticcraft:pressure_chamber_wall"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

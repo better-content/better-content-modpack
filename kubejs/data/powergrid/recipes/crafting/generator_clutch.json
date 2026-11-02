@@ -1,0 +1,74 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "ABC",
+          "D  "
+        ],
+        "key": {
+          "A": {
+            "item": "create:clutch"
+          },
+          "B": {
+            "item": "create:andesite_alloy"
+          },
+          "C": {
+            "item": "tconstruct:tough_handle"
+          },
+          "D": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "powergrid:generator_clutch"
+        },
+        "function": "better_manufacturing:powergrid/generation",
+        "parts": [
+          {
+            "role": "shaft",
+            "slot": 2
+          },
+          {
+            "role": "surface",
+            "slot": 3
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:clutch"
+          },
+          {
+            "item": "create:andesite_alloy"
+          }
+        ],
+        "result": {
+          "item": "powergrid:generator_clutch"
+        }
+      }
+    }
+  ]
+}

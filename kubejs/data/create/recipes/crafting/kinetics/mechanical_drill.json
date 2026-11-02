@@ -4,7 +4,7 @@
     {
       "conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
       "recipe": {
-        "type": "better_manufacturing:material_shaped",
+        "type": "better_manufacturing:part_variant",
         "category": "misc",
         "pattern": [" A ", "AIA", " C "],
         "key": {
@@ -14,7 +14,7 @@
         },
         "result": {"item": "create:mechanical_drill"},
         "function": "better_manufacturing:create/cutting",
-        "transfers": [{"role": "head", "slot": 4}]
+        "parts": [{"role": "head", "slot": 4}]
       }
     },
     {

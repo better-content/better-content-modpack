@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create:content_observer"
+    },
+    {
+      "item": "create:goggles"
+    },
+    {
+      "item": "tconstruct:tool_handle"
+    },
+    {
+      "item": "tconstruct:large_plate"
+    }
+  ],
+  "result": {
+    "item": "vs_clockwork:distance_sensor"
+  },
+  "show_notification": true
+}

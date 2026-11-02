@@ -1,0 +1,69 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "E": {
+            "item": "create:andesite_alloy"
+          },
+          "O": {
+            "tag": "forge:plates/iron"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "pattern": [
+          "  E",
+          "HO ",
+          "E  "
+        ],
+        "result": {
+          "item": "create:minecart_coupling"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "E": {
+            "item": "create:andesite_alloy"
+          },
+          "O": {
+            "tag": "forge:plates/iron"
+          }
+        },
+        "pattern": [
+          "  E",
+          " O ",
+          "E  "
+        ],
+        "result": {
+          "item": "create:minecart_coupling"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

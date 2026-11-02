@@ -1,0 +1,69 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "create:andesite_casing"
+          },
+          "C": {
+            "item": "create:cogwheel"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "pattern": [
+          "C C",
+          "HB ",
+          "C C"
+        ],
+        "result": {
+          "item": "create:vertical_gearbox"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "create:andesite_casing"
+          },
+          "C": {
+            "item": "create:cogwheel"
+          }
+        },
+        "pattern": [
+          "C C",
+          " B ",
+          "C C"
+        ],
+        "result": {
+          "item": "create:vertical_gearbox"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

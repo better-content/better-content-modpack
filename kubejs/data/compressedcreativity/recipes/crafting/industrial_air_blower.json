@@ -1,0 +1,91 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "HTB",
+          "ICI",
+          "IGI"
+        ],
+        "key": {
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "T": {
+            "item": "pneumaticcraft:reinforced_pressure_tube"
+          },
+          "B": {
+            "item": "tconstruct:broad_blade"
+          },
+          "C": {
+            "item": "compressedcreativity:compressed_iron_casing"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "G": {
+            "item": "minecraft:iron_bars"
+          }
+        },
+        "result": {
+          "item": "compressedcreativity:industrial_air_blower"
+        },
+        "function": "better_manufacturing:compressedcreativity/blower",
+        "parts": [
+          {
+            "role": "handle",
+            "slot": 0
+          },
+          {
+            "role": "blade",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "ITI",
+          "ICI",
+          "IGI"
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "T": {
+            "item": "pneumaticcraft:reinforced_pressure_tube"
+          },
+          "C": {
+            "item": "compressedcreativity:compressed_iron_casing"
+          },
+          "G": {
+            "item": "minecraft:iron_bars"
+          }
+        },
+        "result": {
+          "item": "compressedcreativity:industrial_air_blower"
+        }
+      }
+    }
+  ]
+}

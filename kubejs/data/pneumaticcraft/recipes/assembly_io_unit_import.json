@@ -1,0 +1,30 @@
+{
+  "type": "pneumaticcraft:crafting_shaped_no_mirror",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "pneumaticcraft:printed_circuit_board"
+    },
+    "C": {
+      "item": "pneumaticcraft:pneumatic_cylinder"
+    },
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "I": {
+      "tag": "forge:ingots/compressed_iron"
+    },
+    "U": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HCC",
+    " UC",
+    "IBI"
+  ],
+  "result": {
+    "item": "pneumaticcraft:assembly_io_unit_import"
+  },
+  "show_notification": true
+}

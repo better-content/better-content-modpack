@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "forge:ingots/iron"
+    },
+    "b": {
+      "tag": "forge:ingots/copper"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    }
+  },
+  "pattern": [
+    "aba",
+    "aH ",
+    "aba"
+  ],
+  "result": {
+    "item": "ae2:charger"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,23 @@
+{
+  "type": "pneumaticcraft:thermo_plant",
+  "exothermic": false,
+  "item_input": {
+    "type": "pneumaticcraft:stacked_item",
+    "item": "minecraft:copper_ingot",
+    "count": 2
+  },
+  "fluid_input": {
+    "type": "pneumaticcraft:fluid",
+    "fluid": "chemlib:oxygen_fluid",
+    "amount": 250
+  },
+  "item_output": {
+    "item": "chemlib:copper_i_oxide",
+    "count": 1
+  },
+  "pressure": 2.0,
+  "speed": 0.4,
+  "temperature": {
+    "min_temp": 523
+  }
+}

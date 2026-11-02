@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HPJ",
+    "XTX",
+    "IRI"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "P": {
+      "item": "minecraft:light_weighted_pressure_plate"
+    },
+    "T": {
+      "item": "oc2r:transistor"
+    },
+    "X": {
+      "item": "oc2r:bus_interface"
+    },
+    "R": {
+      "tag": "forge:storage_blocks/redstone"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "J": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "result": {
+    "item": "oc2r:charger"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "pneumaticcraft:turbine_blade"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "X": {
+            "item": "tconstruct:small_blade"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "pattern": [
+          "IX ",
+          " H ",
+          "B B"
+        ],
+        "result": {
+          "item": "pneumaticcraft:turbine_rotor"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneupressure/rotation",
+        "parts": [
+          {
+            "role": "body",
+            "slot": 1
+          },
+          {
+            "role": "handle",
+            "slot": 4
+          },
+          {
+            "role": "blade_south",
+            "slot": 6
+          },
+          {
+            "role": "blade_east",
+            "slot": 8
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "pneumaticcraft:turbine_blade"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          }
+        },
+        "pattern": [
+          " B ",
+          " I ",
+          "B B"
+        ],
+        "result": {
+          "item": "pneumaticcraft:turbine_rotor"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

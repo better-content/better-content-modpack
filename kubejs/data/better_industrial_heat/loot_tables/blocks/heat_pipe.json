@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:block",
+  "pools": [{"rolls": 1, "conditions": [{"condition": "minecraft:survives_explosion"}],
+    "entries": [{"type": "minecraft:item", "name": "better_industrial_heat:heat_pipe",
+      "functions": [{"function": "minecraft:copy_nbt", "source": "block_entity",
+        "ops": [{"source": "\"better_manufacturing:settings\"", "target": "\"better_manufacturing:settings\"", "op": "replace"}]}]}]}]
+}

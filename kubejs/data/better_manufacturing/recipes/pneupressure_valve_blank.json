@@ -1,0 +1,23 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" },
+        { "type": "forge:mod_loaded", "modid": "pneumaticcraft" }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": ["BX"],
+        "key": {
+          "B": { "item": "pneumaticcraft:compressed_iron_block" },
+          "X": { "item": "tconstruct:large_plate" }
+        },
+        "result": { "item": "better_manufacturing:compressed_iron_valve_blank" },
+        "function": "better_manufacturing:pneupressure/valve_blank",
+        "parts": [{ "role": "body", "slot": 1 }]
+      }
+    }
+  ]
+}

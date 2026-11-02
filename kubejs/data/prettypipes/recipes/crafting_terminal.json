@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HC ",
+    "RTR",
+    " R "
+  ],
+  "key": {
+    "T": {
+      "item": "prettypipes:item_terminal"
+    },
+    "C": {
+      "item": "minecraft:crafting_table"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "result": {
+    "item": "prettypipes:crafting_terminal"
+  }
+}

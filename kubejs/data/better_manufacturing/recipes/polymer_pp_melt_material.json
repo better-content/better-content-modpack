@@ -1,0 +1,12 @@
+{
+  "type": "forge:conditional",
+  "recipes": [{
+    "conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
+    "recipe": {
+      "type": "tconstruct:material_fluid",
+      "fluid": {"amount": 90, "fluid": "better_manufacturing:molten_pp"},
+      "output": "better_manufacturing:polypropylene",
+      "temperature": 200
+    }
+  }]
+}

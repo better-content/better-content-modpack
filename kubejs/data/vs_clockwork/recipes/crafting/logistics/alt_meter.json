@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HWP",
+    "RSR",
+    " B "
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    },
+    "S": {
+      "item": "minecraft:string"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "result": {
+    "item": "vs_clockwork:alt_meter"
+  }
+}

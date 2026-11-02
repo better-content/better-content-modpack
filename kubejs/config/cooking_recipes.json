@@ -27650,7 +27650,7 @@
     "brewinandchewin:fermenting/pickled_pickles": {
       "basefluid": {
         "count": 250,
-        "fluid": "chemlib:acetic_acid_fluid"
+        "fluid": "brewinandchewin:honey"
       },
       "experience": 1,
       "fermentingtime": 9600,
@@ -62370,7 +62370,6 @@
     }
   },
   "pending_source_ids": [
-    "brewinandchewin:fermenting/pickled_pickles",
     "kubejs:fonts/bumblezone/honey_bottles",
     "kubejs:food/drying_rack/beef",
     "kubejs:food/drying_rack/chicken",
@@ -124329,7 +124328,7 @@
         "fluids_in": [
           {
             "count": 250,
-            "id": "chemlib:acetic_acid_fluid",
+            "id": "brewinandchewin:honey",
             "kind": "fluid",
             "semantic_path": "getFluidIngredient()"
           }
@@ -124406,7 +124405,7 @@
           "time": 9600
         }
       },
-      "source_sha256": "83a54f13da26defd258ed0c4894d219a8efa56db25f3754293fd5fac944ba3d3"
+      "source_sha256": "e43bf68ebb1a80c251b302d2cf786a4ddc357e2bd87f1ff113a84196e56dffe5"
     },
     "brewinandchewin:fermenting/red_rum_from_bloody_mary": {
       "action": "retain",
@@ -332559,7 +332558,7 @@
     "brewinandchewin:fermenting/kombucha": "e75df4332bd0d9f235f6b4facdb079bfe09e69dba185814eec08210971407f48",
     "brewinandchewin:fermenting/mead_from_honey": "c99d9f37da53bde4422cb763691780411383c3b4413fef05c2f16f370743a1e1",
     "brewinandchewin:fermenting/pale_jane_from_rice_wine": "d01c36e6bebf2c2fad73179198e137f0c0ee27cf36a0018aa96901598dab88e0",
-    "brewinandchewin:fermenting/pickled_pickles": "83a54f13da26defd258ed0c4894d219a8efa56db25f3754293fd5fac944ba3d3",
+    "brewinandchewin:fermenting/pickled_pickles": "e43bf68ebb1a80c251b302d2cf786a4ddc357e2bd87f1ff113a84196e56dffe5",
     "brewinandchewin:fermenting/red_rum_from_bloody_mary": "0a3b2bc1e678af910d3b290ca34d76b33bc90444df5ee6451fc9c29746a207b8",
     "brewinandchewin:fermenting/rice_wine_from_water": "ce4a34d509be402fc5935cb7dcb1eba24fb5e0fea5e808b14e9e69fdb0880c20",
     "brewinandchewin:fermenting/saccharine_rum_from_mead": "bb4a3a18b104a680a446aef96debae63cbb21bae23b6be5a1562a769fa418952",

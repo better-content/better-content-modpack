@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "material": "tconstruct:copper",
+  "supported_parts": ["tconstruct:large_plate", "tconstruct:tool_handle", "tconstruct:small_blade"],
+  "native_stats": "base_material",
+  "traits": {
+    "screen_rate": 0.9, "mixing_rate": 0.9, "press_rate": 0.85, "milling_rate": 0.85, "airflow_rate": 0.9, "pump_rate": 0.9,
+    "rolling_rate": 0.9, "plate_crushing": 0.9,
+    "fluid_capacity": 1.15, "fluid_transfer": 1.1, "fluid_transfer_rate": 1.15,
+    "heat_transfer": 1.2, "thermal_envelope": 1.0, "transfer_rate": 0.9,
+    "pneu_process_rate": 0.9, "pneu_thermal_transfer": 1.2,
+    "compressed_air_rate": 0.9, "pressure_body": 0.9,
+    "blower_rate": 0.9, "conversion_rate": 0.9, "pressure_envelope": 0.9,
+    "diesel_conversion": 0.9, "diesel_load": 0.9, "diesel_thermal": 0.9,
+    "powergrid_thermal": 0.9, "powergrid_generator": 0.9,
+    "bees_plate_rate": 0.9,
+    "extraction_rate": 0.9, "speed_rate": 0.9,
+    "gas_flow": 1.1, "gas_rotor": 0.9, "blade_response": 0.9,
+    "rail_recuperator": 1.1, "rail_brakes": 0.9, "rail_adhesion": 0.9, "rail_drawgear": 0.9
+  },
+  "compatible_processes": []
+}

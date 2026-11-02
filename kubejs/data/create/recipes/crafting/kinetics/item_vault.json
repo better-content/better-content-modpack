@@ -1,0 +1,69 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "forge:plates/iron"
+          },
+          "C": {
+            "tag": "forge:barrels/wooden"
+          },
+          "H": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "B ",
+          "CH",
+          "B "
+        ],
+        "result": {
+          "item": "create:item_vault"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "forge:plates/iron"
+          },
+          "C": {
+            "tag": "forge:barrels/wooden"
+          }
+        },
+        "pattern": [
+          "B",
+          "C",
+          "B"
+        ],
+        "result": {
+          "item": "create:item_vault"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

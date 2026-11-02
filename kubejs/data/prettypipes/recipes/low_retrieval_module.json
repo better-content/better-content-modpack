@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HP ",
+    "RMR",
+    " E "
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "P": {
+      "item": "minecraft:sticky_piston"
+    },
+    "M": {
+      "item": "prettypipes:blank_module"
+    },
+    "E": {
+      "item": "minecraft:ender_pearl"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "result": {
+    "item": "prettypipes:low_retrieval_module"
+  }
+}

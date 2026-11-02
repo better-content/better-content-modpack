@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HC ",
+    "RMR",
+    " R "
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "C": {
+      "item": "minecraft:paper"
+    },
+    "M": {
+      "item": "prettypipes:blank_module"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    }
+  },
+  "result": {
+    "item": "prettypipes:low_high_priority_module"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "CIC",
+          "IHI",
+          "CBC"
+        ],
+        "key": {
+          "C": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "I": {
+            "tag": "forge:plates/iron"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "B": {
+            "item": "tconstruct:broad_blade"
+          }
+        },
+        "result": {
+          "item": "compressedcreativity:mesh_empty"
+        },
+        "function": "better_manufacturing:compressedcreativity/mesh",
+        "parts": [
+          {
+            "role": "handle",
+            "slot": 4
+          },
+          {
+            "role": "blade",
+            "slot": 7
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "CIC",
+          "I I",
+          "CIC"
+        ],
+        "key": {
+          "C": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "I": {
+            "tag": "forge:plates/iron"
+          }
+        },
+        "result": {
+          "item": "compressedcreativity:mesh_empty"
+        }
+      }
+    }
+  ]
+}

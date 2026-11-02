@@ -1,0 +1,43 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "complicated_bees:item_enabled",
+          "item": "complicated_bees:deadly_frame"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "minecraft:crying_obsidian"
+          },
+          "O": {
+            "item": "minecraft:obsidian"
+          },
+          "X": {
+            "item": "minecraft:skeleton_skull"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "HCP",
+          "OXO",
+          "OOO"
+        ],
+        "result": {
+          "item": "complicated_bees:deadly_frame"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

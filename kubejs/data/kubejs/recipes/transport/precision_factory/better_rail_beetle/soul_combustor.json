@@ -1,0 +1,101 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "goety"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "HOP",
+          "OCO",
+          " B "
+        ],
+        "key": {
+          "O": {
+            "item": "goety:ominous_stone"
+          },
+          "C": {
+            "item": "better_rail_beetle:engine_cradle"
+          },
+          "B": {
+            "item": "minecraft:soul_campfire"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:soul_combustor"
+        },
+        "function": "better_manufacturing:rail_beetle/drives",
+        "parts": [
+          {
+            "role": "drive_shaft",
+            "slot": 0
+          },
+          {
+            "role": "working_surface",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "goety"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " O ",
+          "OCO",
+          " B "
+        ],
+        "key": {
+          "O": {
+            "item": "goety:ominous_stone"
+          },
+          "C": {
+            "item": "better_rail_beetle:engine_cradle"
+          },
+          "B": {
+            "item": "minecraft:soul_campfire"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:soul_combustor"
+        }
+      }
+    }
+  ]
+}

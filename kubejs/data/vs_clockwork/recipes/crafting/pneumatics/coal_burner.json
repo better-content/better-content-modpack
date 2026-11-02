@@ -1,0 +1,96 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "function": "better_manufacturing:clockwork/gas_thermal",
+        "pattern": [
+          "LDH",
+          " F ",
+          " C "
+        ],
+        "key": {
+          "D": {
+            "item": "vs_clockwork:duct"
+          },
+          "C": {
+            "item": "create:industrial_iron_block"
+          },
+          "F": {
+            "item": "minecraft:furnace"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:coal_burner"
+        },
+        "parts": [
+          {
+            "role": "plate",
+            "slot": 0
+          },
+          {
+            "role": "handle",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "D",
+          "F",
+          "C"
+        ],
+        "key": {
+          "D": {
+            "item": "vs_clockwork:duct"
+          },
+          "C": {
+            "item": "create:industrial_iron_block"
+          },
+          "F": {
+            "item": "minecraft:furnace"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:coal_burner"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

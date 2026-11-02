@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_block"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "minecraft:spyglass"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HSI",
+    "PGI",
+    "BBB"
+  ],
+  "result": {
+    "item": "complicated_bees:microscope"
+  },
+  "show_notification": true
+}

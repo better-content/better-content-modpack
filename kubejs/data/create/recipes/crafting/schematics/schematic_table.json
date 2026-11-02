@@ -1,0 +1,69 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "S": {
+            "item": "minecraft:smooth_stone"
+          },
+          "W": {
+            "tag": "minecraft:wooden_slabs"
+          },
+          "H": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "WWW",
+          "HS ",
+          " S "
+        ],
+        "result": {
+          "item": "create:schematic_table"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "S": {
+            "item": "minecraft:smooth_stone"
+          },
+          "W": {
+            "tag": "minecraft:wooden_slabs"
+          }
+        },
+        "pattern": [
+          "WWW",
+          " S ",
+          " S "
+        ],
+        "result": {
+          "item": "create:schematic_table"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

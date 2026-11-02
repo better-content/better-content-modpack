@@ -1,0 +1,37 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "item": "minecraft:smooth_stone"
+    },
+    "H": {
+      "item": "tconstruct:tough_handle"
+    }
+  },
+  "pattern": [
+    "HII",
+    "ICI",
+    "SRS"
+  ],
+  "result": {
+    "item": "complicated_bees:centrifuge"
+  },
+  "show_notification": true,
+  "parts": [
+    {
+      "role": "rotor",
+      "slot": 0
+    }
+  ],
+  "function": "better_manufacturing:bees/separation"
+}

@@ -1,0 +1,105 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "ITI",
+          "WEP",
+          "SLH"
+        ],
+        "key": {
+          "E": {
+            "item": "minecraft:ender_eye"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "P": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "S": {
+            "item": "pneumaticcraft:reinforced_stone_slab"
+          },
+          "T": {
+            "item": "minecraft:iron_trapdoor"
+          },
+          "W": {
+            "item": "pneumaticcraft:reinforced_brick_wall"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "item": "pneumaticcraft:vacuum_trap"
+        },
+        "function": "better_manufacturing:pneuprocess/vacuum_thermal",
+        "parts": [
+          {
+            "role": "plate",
+            "slot": 7
+          },
+          {
+            "role": "handle",
+            "slot": 8
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "E": {
+            "item": "minecraft:ender_eye"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "P": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "S": {
+            "item": "pneumaticcraft:reinforced_stone_slab"
+          },
+          "T": {
+            "item": "minecraft:iron_trapdoor"
+          },
+          "W": {
+            "item": "pneumaticcraft:reinforced_brick_wall"
+          }
+        },
+        "pattern": [
+          "ITI",
+          "WEP",
+          "SSS"
+        ],
+        "result": {
+          "item": "pneumaticcraft:vacuum_trap"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

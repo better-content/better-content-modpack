@@ -1,0 +1,97 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "function": "better_manufacturing:clockwork/flight_actuators",
+        "pattern": [
+          " S ",
+          "CMC",
+          "HPB"
+        ],
+        "key": {
+          "S": {
+            "item": "vs_clockwork:gyroscopic_sensor"
+          },
+          "C": {
+            "item": "powergrid:integrated_circuit"
+          },
+          "M": {
+            "item": "kubejs:electrical_machine_block"
+          },
+          "P": {
+            "item": "create:precision_mechanism"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "B": {
+            "item": "tconstruct:broad_blade"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:gyro"
+        },
+        "parts": [
+          {
+            "role": "handle",
+            "slot": 6
+          },
+          {
+            "role": "blade",
+            "slot": 8
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "M",
+          "F",
+          "T"
+        ],
+        "key": {
+          "T": {
+            "item": "create:turntable"
+          },
+          "F": {
+            "item": "create:flywheel"
+          },
+          "M": {
+            "item": "vs_clockwork:wanderlite_matrix"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:gyro"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
+      "type": "better_manufacturing:part_variant", "pattern": ["CH", "P "],
+      "key": {"C": {"item": "create:cogwheel"}, "H": {"item": "tconstruct:tool_handle"}, "P": {"item": "create:fluid_pipe"}},
+      "result": {"item": "create:mechanical_pump"}, "function": "better_manufacturing:create/pumping", "parts": [{"role": "impeller", "slot": 1}]
+    }},
+    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
+      "type": "minecraft:crafting_shapeless", "ingredients": [{"item": "create:cogwheel"}, {"item": "create:fluid_pipe"}],
+      "result": {"item": "create:mechanical_pump"}
+    }}
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "complicated_bees:mellarium_panel"
+    },
+    "A": {
+      "item": "complicated_bees:mellarium_base"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "G": {
+      "item": "minecraft:glowstone"
+    },
+    "L": {
+      "item": "minecraft:redstone_lamp"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HLP",
+    "GAG",
+    "#D#"
+  ],
+  "result": {
+    "item": "complicated_bees:mellarium_skybox"
+  },
+  "show_notification": true
+}

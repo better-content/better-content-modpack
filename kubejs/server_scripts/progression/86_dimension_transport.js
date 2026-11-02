@@ -1,6 +1,7 @@
 // Each first Font trip opens a repeatable transport route from its own terrain.
 // Vanilla boats, rails, and minecarts retain their ordinary recipes.
 ServerEvents.recipes(function (event) {
+    var partConstruction = Platform.isLoaded('better_manufacturing')
     // Nether gold and brick are abundant enough to lay a useful line after one
     // trip. A rail car, cargo car, and steam engine can be built from that line.
     event.shaped('32x minecraft:rail', ['GQG', 'GBG', 'GQG'], {
@@ -8,19 +9,25 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:fonts/nether/rail_batch')
 
     event.remove({ output: 'littlelogistics:seater_car' })
-    event.shaped('littlelogistics:seater_car', ['PPP', 'G G', 'R R'], {
-        P: 'minecraft:crimson_planks', G: 'minecraft:gold_ingot', R: 'minecraft:rail'
-    }).id('littlelogistics:seater_car')
+    var seaterKey = { P: 'minecraft:crimson_planks', G: 'minecraft:gold_ingot', R: 'minecraft:rail' }
+    if (partConstruction) { seaterKey.H = 'tconstruct:tool_handle'; seaterKey.L = 'tconstruct:large_plate' }
+    event.shaped('littlelogistics:seater_car', partConstruction ? ['PPP', 'GHG', 'RLR'] : ['PPP', 'G G', 'R R'], seaterKey)
+        .id('littlelogistics:seater_car')
     event.remove({ output: 'littlelogistics:chest_car' })
-    event.shaped('littlelogistics:chest_car', [' C ', 'PGP', 'R R'], {
-        C: 'minecraft:chest', P: 'minecraft:crimson_planks',
-        G: 'minecraft:gold_ingot', R: 'minecraft:rail'
-    }).id('littlelogistics:chest_car')
-    event.remove({ output: 'littlelogistics:steam_locomotive' })
-    event.shaped('littlelogistics:steam_locomotive', [' G ', 'BFB', 'RCR'], {
-        G: 'minecraft:gold_ingot', B: 'minecraft:blaze_rod',
-        F: 'minecraft:furnace', R: 'minecraft:rail', C: 'littlelogistics:seater_car'
-    }).id('littlelogistics:steam_locomotive')
+    var chestKey = { C: 'minecraft:chest', P: 'minecraft:crimson_planks',
+        G: 'minecraft:gold_ingot', R: 'minecraft:rail' }
+    if (partConstruction) { chestKey.H = 'tconstruct:tool_handle'; chestKey.L = 'tconstruct:large_plate' }
+    event.shaped('littlelogistics:chest_car', partConstruction ? ['HCL', 'PGP', 'R R'] : [' C ', 'PGP', 'R R'], chestKey)
+        .id('littlelogistics:chest_car')
+    // Its settings-bearing datapack recipe owns the Nether gate when Manufacturing is present;
+    // without it retain the original pack root rather than falling back to upstream.
+    if (!Platform.isLoaded('better_manufacturing')) {
+        event.remove({ output: 'littlelogistics:steam_locomotive' })
+        event.shaped('littlelogistics:steam_locomotive', [' G ', 'BFB', 'RCR'], {
+            G: 'minecraft:gold_ingot', B: 'minecraft:blaze_rod',
+            F: 'minecraft:furnace', R: 'minecraft:rail', C: 'littlelogistics:seater_car'
+        }).id('littlelogistics:steam_locomotive')
+    }
 
     // Quicksoil itself is the Aether's native fast path. Swets and skyroot
     // turn a small found patch into enough blocks to expand the route.

@@ -1,0 +1,16 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
+      "type": "better_manufacturing:part_variant", "pattern": ["HA ", "SDS", "PB "],
+      "key": {"H": {"item": "tconstruct:tough_handle"}, "P": {"item": "tconstruct:large_plate"}, "A": {"item": "create:andesite_alloy"}, "D": {"item": "createdieselgenerators:diesel_engine"}, "B": {"item": "minecraft:polished_blackstone_slab"}, "S": {"tag": "forge:plates/brass"}},
+      "result": {"item": "createdieselgenerators:large_diesel_engine"},
+      "function": "better_manufacturing:createdieselgenerators/engines", "parts": [{"role": "rod", "slot": 0}, {"role": "chamber", "slot": 6}, {"role": "engine", "slot": 4}]
+    }},
+    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
+      "type": "minecraft:crafting_shaped", "pattern": [" A ", "SDS", " B "],
+      "key": {"A": {"item": "create:andesite_alloy"}, "D": {"item": "createdieselgenerators:diesel_engine"}, "B": {"item": "minecraft:polished_blackstone_slab"}, "S": {"tag": "forge:plates/brass"}},
+      "result": {"item": "createdieselgenerators:large_diesel_engine"}
+    }}
+  ]
+}

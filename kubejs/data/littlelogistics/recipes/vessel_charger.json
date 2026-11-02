@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "$": {
+      "item": "minecraft:iron_ingot"
+    },
+    ".": {
+      "item": "minecraft:gold_ingot"
+    },
+    "_": {
+      "item": "minecraft:redstone_block"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "H.P",
+    " $ ",
+    "_$_"
+  ],
+  "result": {
+    "item": "littlelogistics:vessel_charger"
+  },
+  "show_notification": true
+}

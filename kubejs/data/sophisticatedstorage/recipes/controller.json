@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedstorage:controller"
+    }
+  ],
+  "key": {
+    "B": {
+      "type": "sophisticatedstorage:base_tier_wooden_storage"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "tag": "forge:stone"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HCS",
+    "PBP",
+    "SCS"
+  ],
+  "result": {
+    "item": "sophisticatedstorage:controller"
+  }
+}

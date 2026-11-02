@@ -1,0 +1,69 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "K": {
+            "item": "minecraft:dried_kelp"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "pattern": [
+          "A ",
+          "KH"
+        ],
+        "result": {
+          "count": 2,
+          "item": "create:andesite_funnel"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "K": {
+            "item": "minecraft:dried_kelp"
+          }
+        },
+        "pattern": [
+          "A",
+          "K"
+        ],
+        "result": {
+          "count": 2,
+          "item": "create:andesite_funnel"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

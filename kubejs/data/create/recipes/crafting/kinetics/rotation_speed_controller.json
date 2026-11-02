@@ -1,0 +1,67 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "create:precision_mechanism"
+          },
+          "C": {
+            "item": "create:brass_casing"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "pattern": [
+          "B ",
+          "CH"
+        ],
+        "result": {
+          "item": "create:rotation_speed_controller"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "create:precision_mechanism"
+          },
+          "C": {
+            "item": "create:brass_casing"
+          }
+        },
+        "pattern": [
+          "B",
+          "C"
+        ],
+        "result": {
+          "item": "create:rotation_speed_controller"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

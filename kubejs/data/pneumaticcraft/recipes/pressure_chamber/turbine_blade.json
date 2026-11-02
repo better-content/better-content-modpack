@@ -1,0 +1,68 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:pressure_chamber",
+        "inputs": [
+          {
+            "tag": "forge:ingots/gold"
+          },
+          {
+            "type": "pneumaticcraft:stacked_item",
+            "count": 2,
+            "tag": "forge:dusts/redstone"
+          },
+          {
+            "item": "tconstruct:small_blade"
+          },
+          {
+            "item": "tconstruct:tough_handle"
+          }
+        ],
+        "pressure": 1.0,
+        "results": [
+          {
+            "item": "pneumaticcraft:turbine_blade"
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:pressure_chamber",
+        "inputs": [
+          {
+            "tag": "forge:ingots/gold"
+          },
+          {
+            "type": "pneumaticcraft:stacked_item",
+            "count": 2,
+            "tag": "forge:dusts/redstone"
+          }
+        ],
+        "pressure": 1.0,
+        "results": [
+          {
+            "item": "pneumaticcraft:turbine_blade"
+          }
+        ]
+      }
+    }
+  ]
+}

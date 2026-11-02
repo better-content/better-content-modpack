@@ -1,0 +1,117 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "pneumaticcraft:compressed_iron_gear"
+          },
+          "F": {
+            "tag": "forge:storage_blocks/redstone"
+          },
+          "G": {
+            "tag": "forge:dusts/redstone"
+          },
+          "P": {
+            "item": "pneumaticcraft:printed_circuit_board"
+          },
+          "Q": {
+            "item": "minecraft:blast_furnace"
+          },
+          "R": {
+            "item": "pneumaticcraft:turbine_rotor"
+          },
+          "T": {
+            "item": "pneumaticcraft:advanced_pressure_tube"
+          },
+          "X": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "pattern": [
+          "XCH",
+          "FRT",
+          "GQP"
+        ],
+        "result": {
+          "item": "pneumaticcraft:flux_compressor"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneupressure/compression",
+        "parts": [
+          {
+            "role": "body",
+            "slot": 0
+          },
+          {
+            "role": "handle",
+            "slot": 2
+          },
+          {
+            "role": "rotor",
+            "slot": 4
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "pneumaticcraft:compressed_iron_gear"
+          },
+          "F": {
+            "tag": "forge:storage_blocks/redstone"
+          },
+          "G": {
+            "tag": "forge:dusts/redstone"
+          },
+          "P": {
+            "item": "pneumaticcraft:printed_circuit_board"
+          },
+          "Q": {
+            "item": "minecraft:blast_furnace"
+          },
+          "R": {
+            "item": "pneumaticcraft:turbine_rotor"
+          },
+          "T": {
+            "item": "pneumaticcraft:advanced_pressure_tube"
+          }
+        },
+        "pattern": [
+          "GCP",
+          "FRT",
+          "GQP"
+        ],
+        "result": {
+          "item": "pneumaticcraft:flux_compressor"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

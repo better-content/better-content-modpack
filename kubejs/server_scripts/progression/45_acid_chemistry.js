@@ -136,21 +136,8 @@ ServerEvents.recipes(function (event) {
         W: 'the_bumblezone:carvable_wax'
     }).id('kubejs:chemistry/acids/airtight_upgrade')
 
-    event.remove({ id: 'brewinandchewin:fermenting/pickled_pickles' })
-    event.custom({
-        type: 'brewinandchewin:fermenting',
-        basefluid: { fluid: 'chemlib:acetic_acid_fluid', count: 250 },
-        experience: 1.0,
-        fermentingtime: 9600,
-        ingredients: [
-            { item: 'minecraft:sea_pickle' },
-            { item: 'minecraft:sea_pickle' },
-            { item: 'minecraft:glow_berries' }
-        ],
-        recipe_book_tab: 'meals',
-        result: { item: 'brewinandchewin:pickled_pickles', count: 2 },
-        temperature: 2
-    }).id('brewinandchewin:fermenting/pickled_pickles')
+    // Retain Brewin' and Chewin's native honey pickles until a food-grade
+    // vinegar route is defined. Industrial ChemLib acetic acid is not vinegar.
 
     bcAcidThermo(event, 'hydrochloric_acid_mannheim',
         { type: 'pneumaticcraft:stacked_item', item: 'chemlib:sodium_chloride', count: 2 },

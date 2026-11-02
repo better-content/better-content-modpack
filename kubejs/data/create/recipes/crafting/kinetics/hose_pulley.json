@@ -1,0 +1,78 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "B",
+          "C",
+          "L"
+        ],
+        "key": {
+          "B": {
+            "item": "create:copper_casing"
+          },
+          "C": {
+            "item": "minecraft:dried_kelp_block"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "create:hose_pulley"
+        },
+        "function": "better_manufacturing:create/fluid_transfer",
+        "parts": [
+          {
+            "role": "wetted_fitting",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "create:copper_casing"
+          },
+          "C": {
+            "item": "minecraft:dried_kelp_block"
+          },
+          "I": {
+            "tag": "forge:plates/copper"
+          }
+        },
+        "pattern": [
+          "B",
+          "C",
+          "I"
+        ],
+        "result": {
+          "item": "create:hose_pulley"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

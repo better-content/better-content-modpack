@@ -1,0 +1,15 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "misc",
+  "function": "better_manufacturing:littlelogistics/transfer",
+  "parts": [{"role": "actuator", "slot": 3}],
+  "pattern": ["GHG", "TQ ", " R "],
+  "key": {
+    "G": {"tag": "forge:ingots/gold"},
+    "H": {"item": "minecraft:hopper"},
+    "Q": {"item": "ae2:certus_quartz_crystal"},
+    "R": {"item": "minecraft:redstone_block"},
+    "T": {"item": "tconstruct:tool_handle"}
+  },
+  "result": {"item": "littlelogistics:rapid_hopper"}
+}

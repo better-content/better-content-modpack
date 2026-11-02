@@ -1,0 +1,32 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
+      "type": "better_manufacturing:part_variant",
+      "pattern": ["#T#", "iBG", "SSS"],
+      "key": {
+        "#": {"item": "minecraft:stone"},
+        "T": {"item": "tconstruct:tough_handle"},
+        "i": {"item": "minecraft:iron_ingot"},
+        "B": {"item": "minecraft:blast_furnace"},
+        "G": {"item": "minecraft:glass_pane"},
+        "S": {"item": "minecraft:smooth_stone"}
+      },
+      "result": {"item": "vs_eureka:engine"},
+      "function": "better_manufacturing:eureka/engine",
+      "parts": [{"role": "working_assembly", "slot": 1}]
+    }},
+    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
+      "type": "minecraft:crafting_shaped",
+      "pattern": ["###", "iBG", "SSS"],
+      "key": {
+        "#": {"item": "minecraft:stone"},
+        "i": {"item": "minecraft:iron_ingot"},
+        "B": {"item": "minecraft:blast_furnace"},
+        "G": {"item": "minecraft:glass_pane"},
+        "S": {"item": "minecraft:smooth_stone"}
+      },
+      "result": {"item": "vs_eureka:engine", "count": 1}
+    }}
+  ]
+}

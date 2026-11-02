@@ -1,0 +1,77 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "tag": "forge:ingots/brass"
+          },
+          "E": {
+            "item": "create:electron_tube"
+          },
+          "K": {
+            "item": "minecraft:dried_kelp"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "pattern": [
+          "E  ",
+          "AAH",
+          "KK "
+        ],
+        "result": {
+          "count": 2,
+          "item": "create:brass_tunnel"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "tag": "forge:ingots/brass"
+          },
+          "E": {
+            "item": "create:electron_tube"
+          },
+          "K": {
+            "item": "minecraft:dried_kelp"
+          }
+        },
+        "pattern": [
+          "E ",
+          "AA",
+          "KK"
+        ],
+        "result": {
+          "count": 2,
+          "item": "create:brass_tunnel"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

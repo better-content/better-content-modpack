@@ -1,0 +1,19 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
+      "type": "better_manufacturing:part_variant", "category": "misc",
+      "pattern": ["TPB", "PFP", "BPB"],
+      "key": {"T": {"item": "tconstruct:large_plate"}, "B": {"item": "create:brass_sheet"}, "F": {"item": "create:fluid_tank"}, "P": {"item": "better_industrial_heat:heat_pipe"}},
+      "result": {"item": "better_industrial_heat:coolant_exchanger", "count": 1},
+      "function": "better_manufacturing:industrialheat/thermal",
+      "parts": [{"role": "thermal_surface", "slot": 0}]
+    }},
+    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
+      "type": "minecraft:crafting_shaped", "category": "misc",
+      "pattern": ["BPB", "PFP", "BPB"],
+      "key": {"B": {"item": "create:brass_sheet"}, "F": {"item": "create:fluid_tank"}, "P": {"item": "better_industrial_heat:heat_pipe"}},
+      "result": {"item": "better_industrial_heat:coolant_exchanger", "count": 1}
+    }}
+  ]
+}

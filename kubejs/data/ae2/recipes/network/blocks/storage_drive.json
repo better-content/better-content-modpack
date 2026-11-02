@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "forge:ingots/iron"
+    },
+    "b": {
+      "item": "ae2:engineering_processor"
+    },
+    "c": {
+      "item": "ae2:fluix_glass_cable"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "aba",
+    "cHc",
+    "aba"
+  ],
+  "result": {
+    "item": "ae2:drive"
+  },
+  "show_notification": true
+}

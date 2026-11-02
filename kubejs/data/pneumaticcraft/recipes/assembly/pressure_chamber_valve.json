@@ -1,0 +1,23 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [{ "type": "forge:mod_loaded", "modid": "better_manufacturing" }],
+      "recipe": {
+        "type": "pneumaticcraft:assembly_drill",
+        "input": { "item": "better_manufacturing:compressed_iron_valve_blank" },
+        "program": "drill",
+        "result": { "count": 20, "item": "pneumaticcraft:pressure_chamber_valve" }
+      }
+    },
+    {
+      "conditions": [{ "type": "forge:not", "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" } }],
+      "recipe": {
+        "type": "pneumaticcraft:assembly_drill",
+        "input": { "item": "pneumaticcraft:compressed_iron_block" },
+        "program": "drill",
+        "result": { "count": 20, "item": "pneumaticcraft:pressure_chamber_valve" }
+      }
+    }
+  ]
+}

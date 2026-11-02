@@ -290,7 +290,8 @@ class FreshSourceReleaseTest {
             event("relocation_tps_stable", identity + ("recovery_seconds" to 30.0))
         }
         event("client_joined"); heartbeat()
-        event("dimension_roster", mapOf("dimensions" to dimensions))
+        event("dimension_roster", mapOf("dimensions" to dimensions,
+            "registered_dimensions" to dimensions + "minecraft:the_end", "excluded_dimensions" to listOf("minecraft:the_end")))
         dimensions.forEach { dimension ->
             hop(dimension, 0)
             val dwellStart = now
@@ -329,6 +330,28 @@ class FreshSourceReleaseTest {
         assertThrows(IllegalArgumentException::class.java) { validateTeleSoakReceipt(path, "old", pair, Instant.EPOCH) }
         Files.writeString(pair.client, "changed")
         assertThrows(IllegalArgumentException::class.java) { validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH) }
+    }
+
+    @Test fun rawRegisteredRosterAndExactBlacklistAreMandatory() {
+        val (path, pair, events) = teleFixture()
+        assertDoesNotThrow { validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH) }
+        val roster = events.single { it["type"] == "dimension_roster" }
+        val registered = roster.getValue("registered_dimensions")
+        val excluded = roster.getValue("excluded_dimensions")
+        roster.remove("registered_dimensions")
+        writeTele(path, pair, events)
+        assertThrows(IllegalArgumentException::class.java) { validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH) }
+        roster["registered_dimensions"] = registered
+        roster["excluded_dimensions"] = emptyList<String>()
+        writeTele(path, pair, events)
+        assertThrows(IllegalArgumentException::class.java) { validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH) }
+        roster["excluded_dimensions"] = excluded
+        roster["registered_dimensions"] = (registered as List<*>) + "test:omitted_live_dimension"
+        writeTele(path, pair, events)
+        assertThrows(IllegalArgumentException::class.java) { validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH) }
+        roster["registered_dimensions"] = registered
+        writeTele(path, pair, events)
+        assertDoesNotThrow { validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH) }
     }
 
     @Test fun booleanTpsSuccessCannotHideShortOrSlowRawRecovery() {

@@ -1,0 +1,101 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "malum"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "HSP",
+          "SCS",
+          " B "
+        ],
+        "key": {
+          "S": {
+            "item": "malum:block_of_soulstone"
+          },
+          "C": {
+            "item": "better_rail_beetle:engine_cradle"
+          },
+          "B": {
+            "item": "malum:spirit_altar"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:spirit_warping_engine"
+        },
+        "function": "better_manufacturing:rail_beetle/drives",
+        "parts": [
+          {
+            "role": "drive_shaft",
+            "slot": 0
+          },
+          {
+            "role": "working_surface",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "malum"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " S ",
+          "SCS",
+          " B "
+        ],
+        "key": {
+          "S": {
+            "item": "malum:block_of_soulstone"
+          },
+          "C": {
+            "item": "better_rail_beetle:engine_cradle"
+          },
+          "B": {
+            "item": "malum:spirit_altar"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:spirit_warping_engine"
+        }
+      }
+    }
+  ]
+}

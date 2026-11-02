@@ -1,0 +1,57 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:andesite_casing"
+          },
+          {
+            "item": "create:chute"
+          },
+          {
+            "item": "tconstruct:tool_handle"
+          }
+        ],
+        "result": {
+          "item": "create:portable_storage_interface"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:andesite_casing"
+          },
+          {
+            "item": "create:chute"
+          }
+        ],
+        "result": {
+          "item": "create:portable_storage_interface"
+        }
+      }
+    }
+  ]
+}

@@ -15,17 +15,20 @@ ServerEvents.recipes(function (event) {
         event.remove({ output: item })
     })
 
+    var partConstruction = Platform.isLoaded('better_manufacturing')
     event.remove({ output: 'prettypipes:pipe' })
-    event.shaped('8x prettypipes:pipe', ['RGR', 'IQI', 'RGR'], {
-        R: 'minecraft:redstone', G: '#forge:glass', I: 'minecraft:iron_bars',
-        Q: 'ae2:certus_quartz_crystal'
-    }).id('kubejs:meteor_logistics/pipe_batch')
+    var pipeKey = { R: 'minecraft:redstone', G: '#forge:glass', I: 'minecraft:iron_bars',
+        Q: 'ae2:certus_quartz_crystal' }
+    if (partConstruction) pipeKey.H = 'tconstruct:tool_handle'
+    event.shaped('8x prettypipes:pipe', partConstruction ? ['HGR', 'IQI', 'RGR'] : ['RGR', 'IQI', 'RGR'], pipeKey)
+        .id('kubejs:meteor_logistics/pipe_batch')
 
     event.remove({ output: 'prettypipes:blank_module' })
-    event.shaped('prettypipes:blank_module', ['QMQ', 'SPS', 'QRQ'], {
-        Q: 'ae2:certus_quartz_crystal', M: 'ae2:certus_quartz_crystal',
-        S: 'minecraft:stone_slab', P: 'prettypipes:pipe', R: 'minecraft:redstone'
-    }).id('kubejs:meteor_logistics/blank_module')
+    var blankKey = { Q: 'ae2:certus_quartz_crystal', M: 'ae2:certus_quartz_crystal',
+        S: 'minecraft:stone_slab', P: 'prettypipes:pipe', R: 'minecraft:redstone' }
+    if (partConstruction) blankKey.H = 'tconstruct:tool_handle'
+    event.shaped('prettypipes:blank_module', partConstruction ? ['QMQ', 'HPS', 'QRQ'] : ['QMQ', 'SPS', 'QRQ'], blankKey)
+        .id('kubejs:meteor_logistics/blank_module')
 
     var highModules = {
         high_crafting_module: { pattern: ['GCG', 'GMG', 'GIG'],
@@ -44,38 +47,70 @@ ServerEvents.recipes(function (event) {
             key: { G: 'minecraft:gold_ingot', B: 'minecraft:sugar', M: 'prettypipes:medium_speed_module' } }
     }
     Object.keys(highModules).forEach(function (module) {
+        // These two material-dependent native-ID recipes bake installed module settings.
+        if (partConstruction && (module === 'high_extraction_module' || module === 'high_speed_module')) return
         var recipe = highModules[module]
         recipe.key.C = 'ae2:certus_quartz_crystal'
         event.remove({ output: 'prettypipes:' + module })
-        event.shaped('prettypipes:' + module, recipe.pattern, recipe.key)
+        var outputPattern = recipe.pattern
+        if (partConstruction) {
+            recipe.key.H = 'tconstruct:large_plate'
+            // Replace one repeated structural ingredient, never Certus C or prior module M.
+            outputPattern = module === 'high_high_priority_module' || module === 'high_low_priority_module'
+                ? ['HCP', 'PMP', 'PPP']
+                : module === 'high_retrieval_module' ? ['HCR', 'GMG', 'RGR']
+                : ['HCG', 'GMG', 'GIG']
+            if (module === 'high_filter_module') outputPattern = ['HCG', 'BMB', 'GBG']
+        }
+        event.shaped('prettypipes:' + module, outputPattern, recipe.key)
             .id('kubejs:meteor_logistics/high_' + module)
     })
 
     event.remove({ output: 'sophisticatedstorage:hopper_upgrade' })
-    event.shaped('sophisticatedstorage:hopper_upgrade', ['IRI', 'HQH', ' U '], {
-        I: '#forge:ingots/iron', R: '#forge:dusts/redstone', H: 'minecraft:hopper',
-        Q: 'ae2:certus_quartz_crystal', U: 'sophisticatedstorage:upgrade_base'
-    }).id('kubejs:meteor_logistics/storage_automation')
+    if (Platform.isLoaded('better_manufacturing')) {
+        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['IRI', 'HQH', 'AU '],
+            key: {
+                I: { tag: 'forge:ingots/iron' }, R: { tag: 'forge:dusts/redstone' },
+                H: { item: 'minecraft:hopper' }, Q: { item: 'ae2:certus_quartz_crystal' },
+                A: { item: 'tconstruct:tool_handle' }, U: { item: 'sophisticatedstorage:upgrade_base' }
+            }, result: { item: 'sophisticatedstorage:hopper_upgrade' },
+            function: 'better_manufacturing:sophisticatedstorage/hopper',
+            parts: [{ role: 'actuator', slot: 6 }]
+        }).id('kubejs:meteor_logistics/storage_automation')
+    } else {
+        event.shaped('sophisticatedstorage:hopper_upgrade', ['IRI', 'HQH', ' U '], {
+            I: '#forge:ingots/iron', R: '#forge:dusts/redstone', H: 'minecraft:hopper',
+            Q: 'ae2:certus_quartz_crystal', U: 'sophisticatedstorage:upgrade_base'
+        }).id('kubejs:meteor_logistics/storage_automation')
+    }
 
     event.remove({ output: 'create:redstone_requester' })
-    event.shapeless('create:redstone_requester', [
+    var requesterInputs = [
         'create:stock_link', '#forge:dusts/redstone', '#forge:ingots/iron',
         'ae2:certus_quartz_crystal'
-    ]).id('kubejs:meteor_logistics/create_requester')
+    ]
+    if (partConstruction) requesterInputs.push('tconstruct:tool_handle')
+    event.shapeless('create:redstone_requester', requesterInputs).id('kubejs:meteor_logistics/create_requester')
 
     // Basic rat work and ordinary boats use their native recipes again.
-    event.remove({ id: 'littlelogistics:rapid_hopper' })
-    event.shaped('littlelogistics:rapid_hopper', ['GHG', ' Q ', ' R '], {
-        G: '#forge:ingots/gold', H: 'minecraft:hopper',
-        Q: 'ae2:certus_quartz_crystal', R: 'minecraft:redstone_block'
-    }).id('littlelogistics:rapid_hopper')
+    // With Manufacturing the native-ID variant preserves this Certus gate; without it
+    // keep the prior pack root, not the upstream no-Certus shortcut.
+    if (!Platform.isLoaded('better_manufacturing')) {
+        event.remove({ id: 'littlelogistics:rapid_hopper' })
+        event.shaped('littlelogistics:rapid_hopper', ['GHG', ' Q ', ' R '], {
+            G: '#forge:ingots/gold', H: 'minecraft:hopper',
+            Q: 'ae2:certus_quartz_crystal', R: 'minecraft:redstone_block'
+        }).id('littlelogistics:rapid_hopper')
+    }
 
     event.remove({ output: 'ae2:energy_acceptor' })
-    event.shapeless('ae2:energy_acceptor', [
+    var acceptorInputs = [
         'powergrid:generator_housing',
         'ae2:certus_quartz_crystal',
         'oc2r:computer',
         'ae2:sky_stone_block',
         'kubejs:impossible_support_matrix'
-    ]).id('kubejs:meteor_logistics/ae2_energy_acceptor')
+    ]
+    if (partConstruction) acceptorInputs.push('tconstruct:large_plate')
+    event.shapeless('ae2:energy_acceptor', acceptorInputs).id('kubejs:meteor_logistics/ae2_energy_acceptor')
 })

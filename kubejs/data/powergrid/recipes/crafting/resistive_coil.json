@@ -1,0 +1,93 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "ABC",
+          "DEF",
+          "G  "
+        ],
+        "key": {
+          "A": {
+            "tag": "forge:wires/iron"
+          },
+          "B": {
+            "tag": "forge:wires/iron"
+          },
+          "C": {
+            "tag": "forge:wires/iron"
+          },
+          "D": {
+            "tag": "forge:wires/iron"
+          },
+          "E": {
+            "item": "minecraft:stick"
+          },
+          "F": {
+            "item": "tconstruct:tough_handle"
+          },
+          "G": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "powergrid:resistive_coil"
+        },
+        "function": "better_manufacturing:powergrid/generation",
+        "parts": [
+          {
+            "role": "shaft",
+            "slot": 5
+          },
+          {
+            "role": "surface",
+            "slot": 6
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "tag": "forge:wires/iron"
+          },
+          {
+            "tag": "forge:wires/iron"
+          },
+          {
+            "tag": "forge:wires/iron"
+          },
+          {
+            "tag": "forge:wires/iron"
+          },
+          {
+            "item": "minecraft:stick"
+          }
+        ],
+        "result": {
+          "item": "powergrid:resistive_coil"
+        }
+      }
+    }
+  ]
+}

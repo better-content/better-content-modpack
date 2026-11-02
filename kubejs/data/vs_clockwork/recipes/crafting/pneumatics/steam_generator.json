@@ -1,0 +1,76 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "LDH",
+          "PPP",
+          "   "
+        ],
+        "key": {
+          "P": {
+            "item": "create:copper_sheet"
+          },
+          "D": {
+            "item": "vs_clockwork:duct"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:steam_generator"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " D ",
+          "PPP"
+        ],
+        "key": {
+          "P": {
+            "item": "create:copper_sheet"
+          },
+          "D": {
+            "item": "vs_clockwork:duct"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:steam_generator"
+        }
+      }
+    }
+  ]
+}

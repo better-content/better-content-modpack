@@ -1,0 +1,40 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "complicated_bees:item_enabled",
+          "item": "complicated_bees:hot_frame"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "O": {
+            "item": "minecraft:nether_brick"
+          },
+          "X": {
+            "item": "minecraft:magma_block"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "HPO",
+          "OXO",
+          "OOO"
+        ],
+        "result": {
+          "item": "complicated_bees:hot_frame"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

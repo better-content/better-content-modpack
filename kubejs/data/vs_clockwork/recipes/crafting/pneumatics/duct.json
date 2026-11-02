@@ -1,0 +1,90 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "function": "better_manufacturing:clockwork/gas_thermal",
+        "pattern": [
+          "SCS",
+          "LH ",
+          "   "
+        ],
+        "key": {
+          "C": {
+            "item": "create:industrial_iron_block"
+          },
+          "S": {
+            "item": "create:iron_sheet"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:duct",
+          "count": 4
+        },
+        "parts": [
+          {
+            "role": "plate",
+            "slot": 3
+          },
+          {
+            "role": "handle",
+            "slot": 4
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "create:industrial_iron_block"
+          },
+          "S": {
+            "item": "create:iron_sheet"
+          }
+        },
+        "pattern": [
+          "SCS"
+        ],
+        "result": {
+          "count": 4,
+          "item": "vs_clockwork:duct"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "pneumaticcraft:cannon_barrel"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "P": {
+            "tag": "pneumaticcraft:plastic_sheets"
+          },
+          "X": {
+            "item": "tconstruct:small_blade"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "pattern": [
+          "XHP",
+          "PIP",
+          "PBP"
+        ],
+        "result": {
+          "count": 2,
+          "item": "pneumaticcraft:pneumatic_cylinder"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneupressure/rotation",
+        "parts": [
+          {
+            "role": "body",
+            "slot": 0
+          },
+          {
+            "role": "handle",
+            "slot": 1
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "pneumaticcraft:cannon_barrel"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "P": {
+            "tag": "pneumaticcraft:plastic_sheets"
+          }
+        },
+        "pattern": [
+          "PIP",
+          "PIP",
+          "PBP"
+        ],
+        "result": {
+          "count": 2,
+          "item": "pneumaticcraft:pneumatic_cylinder"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

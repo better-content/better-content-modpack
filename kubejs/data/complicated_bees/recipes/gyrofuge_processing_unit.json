@@ -1,0 +1,47 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "complicated_bees:gyrofuge_panel"
+    },
+    "A": {
+      "item": "complicated_bees:gyrofuge_basic_processing_unit"
+    },
+    "C": {
+      "item": "complicated_bees:centrifuge"
+    },
+    "D": {
+      "item": "minecraft:diamond_block"
+    },
+    "G": {
+      "item": "minecraft:gold_block"
+    },
+    "H": {
+      "item": "tconstruct:tough_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HCP",
+    "GAG",
+    "#D#"
+  ],
+  "result": {
+    "item": "complicated_bees:gyrofuge_processing_unit"
+  },
+  "show_notification": true,
+  "parts": [
+    {
+      "role": "rotor",
+      "slot": 0
+    },
+    {
+      "role": "plate",
+      "slot": 2
+    }
+  ],
+  "function": "better_manufacturing:bees/gyrofuge/processing"
+}

@@ -1,0 +1,38 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [
+      {"type": "forge:mod_loaded", "modid": "better_manufacturing"},
+      {"type": "sophisticatedcore:item_enabled", "itemRegistryName": "sophisticatedstorage:advanced_hopper_upgrade"}
+    ], "recipe": {
+      "type": "better_manufacturing:part_variant",
+      "pattern": ["AD ", "GHG", "ROR"],
+      "key": {
+        "A": {"item": "tconstruct:tool_handle"},
+        "D": {"tag": "forge:gems/diamond"},
+        "G": {"tag": "forge:ingots/gold"},
+        "H": {"item": "sophisticatedstorage:hopper_upgrade"},
+        "R": {"tag": "forge:dusts/redstone"},
+        "O": {"item": "minecraft:dropper"}
+      },
+      "result": {"item": "sophisticatedstorage:advanced_hopper_upgrade"},
+      "function": "better_manufacturing:sophisticatedstorage/hopper",
+      "parts": [{"role": "actuator", "slot": 0}]
+    }},
+    {"conditions": [
+      {"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}},
+      {"type": "sophisticatedcore:item_enabled", "itemRegistryName": "sophisticatedstorage:advanced_hopper_upgrade"}
+    ], "recipe": {
+      "type": "sophisticatedcore:upgrade_next_tier",
+      "pattern": [" D ", "GHG", "ROR"],
+      "key": {
+        "D": {"tag": "forge:gems/diamond"},
+        "G": {"tag": "forge:ingots/gold"},
+        "H": {"item": "sophisticatedstorage:hopper_upgrade"},
+        "R": {"tag": "forge:dusts/redstone"},
+        "O": {"item": "minecraft:dropper"}
+      },
+      "result": {"item": "sophisticatedstorage:advanced_hopper_upgrade"}
+    }}
+  ]
+}

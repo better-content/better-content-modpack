@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": {
+      "item": "pneumaticcraft:turbine_rotor"
+    },
+    "S": {
+      "item": "minecraft:hopper"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    }
+  },
+  "pattern": [
+    "HR ",
+    "RSR",
+    " R "
+  ],
+  "result": {
+    "item": "pneumaticcraft:collector_drone"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "tag": "forge:ingots/iron"
+    },
+    "b": {
+      "tag": "forge:glass"
+    },
+    "c": {
+      "tag": "forge:dusts/fluix"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "Hba",
+    "bcb",
+    "aba"
+  ],
+  "result": {
+    "item": "ae2:condenser"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HC ",
+    "CMC",
+    " C "
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:cobblestone"
+    },
+    "M": {
+      "item": "prettypipes:low_low_priority_module"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    }
+  },
+  "result": {
+    "item": "prettypipes:medium_low_priority_module"
+  }
+}

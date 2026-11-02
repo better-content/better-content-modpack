@@ -1,0 +1,71 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "L": {
+            "tag": "minecraft:logs"
+          },
+          "P": {
+            "item": "create:andesite_alloy"
+          },
+          "H": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "HL ",
+          "PLP",
+          " L "
+        ],
+        "result": {
+          "count": 3,
+          "item": "create:radial_chassis"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "L": {
+            "tag": "minecraft:logs"
+          },
+          "P": {
+            "item": "create:andesite_alloy"
+          }
+        },
+        "pattern": [
+          " L ",
+          "PLP",
+          " L "
+        ],
+        "result": {
+          "count": 3,
+          "item": "create:radial_chassis"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

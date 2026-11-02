@@ -1,0 +1,47 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "complicated_bees:gyrofuge_panel"
+    },
+    "A": {
+      "item": "complicated_bees:gyrofuge_processing_unit"
+    },
+    "C": {
+      "item": "complicated_bees:centrifuge"
+    },
+    "N": {
+      "item": "minecraft:netherite_block"
+    },
+    "W": {
+      "item": "minecraft:nether_star"
+    },
+    "H": {
+      "item": "tconstruct:tough_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HWP",
+    "CAC",
+    "#N#"
+  ],
+  "result": {
+    "item": "complicated_bees:gyrofuge_advanced_processing_unit"
+  },
+  "show_notification": true,
+  "parts": [
+    {
+      "role": "rotor",
+      "slot": 0
+    },
+    {
+      "role": "plate",
+      "slot": 2
+    }
+  ],
+  "function": "better_manufacturing:bees/gyrofuge/processing"
+}

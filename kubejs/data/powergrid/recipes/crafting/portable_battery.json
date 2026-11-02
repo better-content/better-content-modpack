@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "powergrid:battery"
+    },
+    "C": {
+      "item": "powergrid:device_connector"
+    },
+    "D": {
+      "item": "powergrid:electrical_gizmo"
+    },
+    "Z": {
+      "tag": "forge:plates/zinc"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HC ",
+    "ZDZ",
+    "ZBZ"
+  ],
+  "result": {
+    "item": "powergrid:portable_battery"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,59 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:railway_casing"
+          },
+          {
+            "tag": "minecraft:wooden_pressure_plates"
+          },
+          {
+            "item": "tconstruct:tool_handle"
+          }
+        ],
+        "result": {
+          "count": 2,
+          "item": "create:track_observer"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:railway_casing"
+          },
+          {
+            "tag": "minecraft:wooden_pressure_plates"
+          }
+        ],
+        "result": {
+          "count": 2,
+          "item": "create:track_observer"
+        }
+      }
+    }
+  ]
+}

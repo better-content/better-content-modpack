@@ -1,0 +1,27 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "vs_clockwork" },
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "function": "better_manufacturing:clockwork/flight_actuators",
+        "pattern": ["HX", "B "],
+        "key": {
+          "H": { "item": "tconstruct:tough_handle" },
+          "X": { "item": "tconstruct:broad_blade" },
+          "B": { "item": "vs_clockwork:propeller_blade" }
+        },
+        "result": { "item": "vs_clockwork:propeller_blade" },
+        "parts": [
+          { "role": "handle", "slot": 0 },
+          { "role": "blade", "slot": 1 }
+        ]
+      }
+    }
+  ]
+}

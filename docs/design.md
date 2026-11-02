@@ -219,9 +219,7 @@ Thread illustrations show a concrete cause and visible consequence. Their etched
 
 ### Ordinary lives and persistent lineages
 
-World succession can preserve discoveries, plans and meaningful continuity without making ordinary death a world reset. Schematics are knowledge for rebuilding, not transported inventories or free construction resources. The World Condenser is the bridge to a successor, not evidence that an entropy economy or apocalypse-scale endgame already exists.
-
-The intended expansion—entropy caching, irreversible Condemnation, interacting strategic curses and mechanically grounded cross-world narrative—is preserved separately in [Aspirational features](design.md#lineage-endgame-entropy-caching-and-condemnation).
+World succession can preserve discoveries, plans and meaningful continuity without making ordinary death a world reset. Schematics are knowledge for rebuilding, not transported inventories or free construction resources. The World Condenser is the bridge to a successor; it does not implement the proposed [optional late-game threats](#optional-late-game-threats).
 
 ### Provenance
 
@@ -433,7 +431,7 @@ Solo play, continuing shared worlds and lineage succession should all be legitim
 
 **Inspected foundation:** succession perks chiefly affect successor-world setup; the inspection did not establish resets as a requirement for ordinary industrial or magical advancement.
 
-**Divergence/open work:** the inspected succession support is dedicated-server dependent and schematic publication is operator controlled, with publisher attribution not necessarily identifying the designer or contributors. Evaluate continuity, preservation and renewal among people choosing lineage play rather than treating succession as every community's required rhythm. The separate entropy/Condemnation ambition below is not already implemented by these foundations.
+**Divergence/open work:** the inspected succession support is dedicated-server dependent and schematic publication is operator controlled, with publisher attribution not necessarily identifying the designer or contributors. Evaluate continuity, preservation and renewal among people choosing lineage play rather than treating succession as every community's required rhythm. The proposed [optional late-game threats](#optional-late-game-threats) are not implemented by these foundations.
 
 #### Social-design priorities and validation
 
@@ -605,58 +603,13 @@ Completion requires, at minimum:
 
 Open design choices include the desired scope beyond first-support water, visual/physical fidelity, water-machine interfaces, acceptable simulation cost under large bodies and edit storms, and whether/how the Abyssal City hydraulic loop should use the same foundation. This aspirational worldgen/erosion expansion does **not** authorize changing the isolated project's existing qualification contract, deploying to the pack or promoting old evidence.
 
-### Lineage endgame: entropy caching and Condemnation
+### Optional late-game threats
 
-**State:** Durable endgame concept. The old documentation identified no complete entropy economy, Condemnation system, authored curse roster or curse-specific assets. World succession and the Condenser were foundations, not this finished loop. See the [recovered lineage endgame notes](../../recovered-world-condenser/lineage_endgame.md) for the longer concept and the isolated [World Condenser work-in-progress directory](../../feature-labs/world-condenser/) for current prototype status. That lab explicitly excludes entropy and Condemnation from its scope.
+**State:** Aspirational, not implemented by the current world-succession system.
 
-#### Worlds as production environments
+Players can opt into serious late-game threats capable of ending their world in exchange for powerful rewards. These should pose meaningful risks to survival, settlements and infrastructure, rather than merely increasing enemy stats. Taking on greater danger should offer greater rewards, with the stakes clear before players commit.
 
-**Entropy caching** is a persistent economy belonging to a lineage above individual worlds. Its structural inspiration is an idler economy, but its in-world substance is entropy, not antimatter. A world can become an expendable production environment.
-
-**Condemnation** lets players irreversibly curse the current world to increase danger and lineage value. This wagers a world, rather than choosing a difficulty preset. Extreme escalation can make the world unsustainable and force succession.
-
-The original shorthand was survival yield `Y = ∫ S(t) dt`: a curse is active and the world is still functioning, so meaningful survived time earns value. The accompanying intent was **convex reward versus severity**, so brief extreme risk can outvalue long safe farming; the actual severity-to-yield function remains unchosen. Fighting, retreat, repairs, evacuation and redundant infrastructure can all make survival meaningful. Banking on voluntary versus forced succession remains open.
-
-#### Curses have agendas, not just stat multipliers
-
-The model is **agenda → objectives → available actions → victory condition**.
-
-A curse can be an apocalypse-scale actor, process or altered world rule. Strategic choices may involve territory, settlements, routes, energy, production, resources, defenses, other factions, entropy infrastructure and asset survival.
-
-Ordinary pre-endgame combat remains readable and deliberately imperfect. Condemned actors can instead optimize for their own purposes: avoid losing fights, preserve assets, blockade, attack logistics, exploit absence, abandon obsolete objectives, cooperate temporarily or pursue world nonviability. Their unfairness comes from strategic agency, not arbitrary cheating or unreadable unavoidable damage.
-
-Multiple curses coexist. They need not prioritize the player or regard each other as allies. Threats can destroy, feed on, flee from or temporarily cooperate against one another. Directional invasion remains important: geographic origin, travel, routes and perceptible approach—not enemies materializing next to the player because a menu changed.
-
-#### Persistence as narrative
-
-The player's lineage need not be the only one using caches or analogous cross-world mechanisms. Other actors have independent progress, interests, failures and incomplete knowledge.
-
-A useful encounter is mutual recognition: the player enters an installation for another reason, recognizes an unexpected cache, and its owner reacts because that recognition reveals the player's capabilities. Both learn something surprising. A functioning cache conveys more than a book explaining one.
-
-Repeated names, equipment, behavior, recovered technology and consequences can carry story across generations. Defeat advances knowledge without guaranteeing victory. Destroying a world need not erase its narrative significance. Explanations can remain uncertain between convergence, inheritance, common origin, independent discovery and cross-world contact; other actors use their own concepts rather than quoting player-facing rates and tiers.
-
-#### The intended complete loop
-
-Discover/build the Condenser → establish lineage caching → choose irreversible Condemnation → survive interacting world-scale threats → evacuate or lose the world → settle value and discoveries → enter a successor with meaningful new capabilities and consequences → encounter further mechanically grounded narrative.
-
-A reset button, growing number, single boss or textual ending does not complete that loop. Existing schematic knowledge, discoveries and generation-funded perks give continuity but do not already constitute entropy-funded rewards.
-
-#### Open design choices
-
-| Question | Preserved direction or uncertainty |
-| --- | --- |
-| Shared-world consent | Who may condemn a world? Distinguish shared danger from personal lineage entitlement; account for griefing, late joiners and offline players. |
-| Entry gate | Early successor access and dangerous entropy production need not unlock together. The meteor-material Condenser recipe did not establish late-game mastery. |
-| Meaningful survival | Decide clocks, pauses, offline time, infrastructure requirements and anti-idle behavior; safe wall-clock waiting is not automatically production. |
-| Severity | Choose a bounded convex curve and composition rule reflecting actual enacted danger. No numeric balance or roster was settled. |
-| Cache ownership | Physical object versus abstract balance; capacity, destruction, theft, evacuation, spending and respec remain open. |
-| Banking | Voluntary evacuation, intended forced world loss and failed succession are different outcomes. No double banking or spending through retries. |
-| Rewards | Meaningful successor capabilities and consequences, not only larger rates; keep the existing generation-funded perk graph distinct unless deliberately redesigned. |
-| Terminal conditions | Define each curse's victory and world nonviability, with warnings and possible recovery; a crash is not an intended apocalypse. |
-| Platforms | Integrated single-player succession was disabled in the recorded foundation. Merely removing that guard is not a complete single-player design. |
-| Breadth | Choose the first curse and launch roster; a second distinct curse is important to establish actual interaction, not only independent parallel waves. |
-
-A useful development shape in the old design was one complete curse/caching/succession loop, then a second strategically different curse, then broader content and lineage rewards. The gameplay questions behind that sequence remain relevant: competing objectives, resource/territory contention, destruction of another actor's objective, retreat, cache loss, player absence and consequences that survive reloads and later generations. Permanent remote chunk loading was not intended as the hidden price of strategic simulation.
+The specific threats, rewards, activation and consent rules, and consequences of victory or world loss remain open design choices. No particular currency, reward formula, named system or cross-world persistence mechanic is prescribed.
 
 ### Better plastics and connected chemical industries
 

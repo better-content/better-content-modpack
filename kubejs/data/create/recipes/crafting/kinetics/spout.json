@@ -1,0 +1,74 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "T",
+          "L",
+          "P"
+        ],
+        "key": {
+          "T": {
+            "item": "create:copper_casing"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "P": {
+            "item": "minecraft:dried_kelp"
+          }
+        },
+        "result": {
+          "item": "create:spout"
+        },
+        "function": "better_manufacturing:create/fluid_envelope",
+        "parts": [
+          {
+            "role": "liner",
+            "slot": 1
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "P": {
+            "item": "minecraft:dried_kelp"
+          },
+          "T": {
+            "item": "create:copper_casing"
+          }
+        },
+        "pattern": [
+          "T",
+          "P"
+        ],
+        "result": {
+          "item": "create:spout"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

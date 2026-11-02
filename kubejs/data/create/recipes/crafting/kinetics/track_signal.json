@@ -1,0 +1,59 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:railway_casing"
+          },
+          {
+            "item": "create:electron_tube"
+          },
+          {
+            "item": "tconstruct:tool_handle"
+          }
+        ],
+        "result": {
+          "count": 4,
+          "item": "create:track_signal"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:railway_casing"
+          },
+          {
+            "item": "create:electron_tube"
+          }
+        ],
+        "result": {
+          "count": 4,
+          "item": "create:track_signal"
+        }
+      }
+    }
+  ]
+}

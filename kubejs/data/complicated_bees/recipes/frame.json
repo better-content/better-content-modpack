@@ -1,0 +1,40 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "complicated_bees:item_enabled",
+          "item": "complicated_bees:frame"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "O": {
+            "tag": "forge:rods/wooden"
+          },
+          "X": {
+            "tag": "forge:string"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "HPO",
+          "OXO",
+          "OOO"
+        ],
+        "result": {
+          "item": "complicated_bees:frame"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

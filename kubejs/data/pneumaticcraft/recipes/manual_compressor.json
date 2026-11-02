@@ -1,0 +1,101 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "RIR",
+          "BT ",
+          "GXH"
+        ],
+        "key": {
+          "B": {
+            "item": "pneumaticcraft:stone_base"
+          },
+          "G": {
+            "tag": "forge:gears/compressed_iron"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "R": {
+            "item": "minecraft:red_dye"
+          },
+          "T": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "X": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "item": "pneumaticcraft:manual_compressor"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneupressure/compression",
+        "parts": [
+          {
+            "role": "body",
+            "slot": 7
+          },
+          {
+            "role": "handle",
+            "slot": 8
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "pneumaticcraft:stone_base"
+          },
+          "G": {
+            "tag": "forge:gears/compressed_iron"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "R": {
+            "item": "minecraft:red_dye"
+          },
+          "T": {
+            "item": "pneumaticcraft:pressure_tube"
+          }
+        },
+        "pattern": [
+          "RIR",
+          " T ",
+          "GBG"
+        ],
+        "result": {
+          "item": "pneumaticcraft:manual_compressor"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

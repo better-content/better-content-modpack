@@ -1,0 +1,26 @@
+{
+  "type": "better_manufacturing:bulk_wheel_variant",
+  "function": "better_manufacturing:createbulk/crushing_wheel",
+  "acceptMirrored": false,
+  "key": {
+    "A": {"item": "create:andesite_alloy"},
+    "P": {"tag": "minecraft:planks"},
+    "S": {"tag": "forge:stone"},
+    "H": {"item": "tconstruct:hammer_head"},
+    "L": {"item": "tconstruct:large_plate"}
+  },
+  "pattern": [
+    "   H   ",
+    "  AAA  ",
+    " AAPAA ",
+    " APSPA ",
+    " AAPAA ",
+    "  AAA  ",
+    "   L   "
+  ],
+  "parts": [
+    {"role": "hammer", "slot": 3},
+    {"role": "plate", "slot": 45}
+  ],
+  "result": {"count": 2, "item": "create:crushing_wheel"}
+}

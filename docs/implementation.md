@@ -125,30 +125,104 @@ The active set contains **52 custom mods** in `gradle/active-custom-mods.json`. 
 
 ### Manufacturing ownership and implementation status
 
-`mod_source/better-manufacturing` owns the typed engineering/build contracts, bounded
-`better_manufacturing:build` provenance, material-aware recipe serializers and eventual
-third-party machine adapters, polymer forms, comparisons and manufacturing teaching.
-The pack owns `kubejs/data/better_manufacturing/coverage.json`, progression, recipes and
-process/material policy. The manifest currently records a **candidate selection**, not
-registry, acquisition, adapter or gameplay acceptance; all entries remain pending.
-Missing archive evidence and unexpanded recipe-only families remain visible blockers.
-Do not silently reinterpret a missing Backpacks hopper as a pump or an absent Clockwork
-block as an implemented feature.
+The active scope is part-based machine variants, replacing the broader chemistry/recovery program.
+`mod_source/better-manufacturing` owns crafting-time calculation and native behavior hooks. The pack
+owns recipes, progression and explicit role-specific ratings. Outputs store only versioned
+`better_manufacturing:settings`: calculated properties, output identity and material labels. Parts are
+consumed normally; no retained parts, wear, refunds or qualification-transfer history are used.
+Material reload changes future crafts, not existing machines. Missing/invalid settings use native baseline.
 
-Rail Beetle remains authoritative for vehicles/modules; Industrial Heat for heat and
-boiler accounting; Airtight Machines for installed containment; ChemLib Hazards for gas
-identity and escape; Compatibility Fixes for Jackhammer wear; Learning Surfaces for
-contextual teaching. Manufacturing has no reverse dependencies on these consumers.
-Consumer API wiring and dependency-order edges are still pending; adding the provider to
-the active-source inventory does not assert that consumers already use it.
+The first wave authored candidate settings-bearing recipes and native hooks for Create/Sifter,
+PNCR/Compressed, fluids/heat, Power Grid, Clockwork, vehicles and other selected families, plus
+construction-only exact-ID overrides. Candidate JSON counts do **not** establish effective
+acquisition or native performance. Wave-two owners are validating those families against actual
+optional mods and loaded recipes. The earlier isolated Create/Sifter core checkpoint passed
+21/21 native GameTests, compilation and JUnit, but did not load optional families. Polymer
+processes and casting were also authored; PLA/PP production, downstream consumers, bootstrap
+and combined Hazards propylene identity remain unverified. Generic plastic alternatives remain.
 
-Local `verifyFast` covers contract/data tests. `verifyNative` exercises Forge/Tinkers
-provenance and crafting fixtures, not machine gameplay or visual UI. `verifyFull` also
-requires full manifest acceptance and must fail while any required coverage is missing.
-Local staging is not deployment authorization. No Manufacturing JAR has been deployed,
-no generic-plastic routes have been removed, and no acquisition recipes have been exposed
-by this implementation checkpoint. There is no incomplete-Manufacturing packaging exception.
-See the source repository README for the current work boundary and fixture commands.
+Shared `20_powered_works.js` retains millstone stone, press iron block, and all four alloys
+in the mechanical-pump root while adding consumed working parts where applicable. Mixer
+consumes and binds its **configured native whisk** rather than discarding whisk settings or
+adding another handle. The no-Manufacturing shapes remain pack progression but have **not**
+been loaded in the bounded native profile. Four isolated Node unit checks (4/4 on
+2026-11-02) cover these authored gates, construction-only harvester, material policy
+traits and source-order masking; they do **not** load recipes or the mod runtime. A separate actual Create/20
+native profile passed 31/31 required GameTests with real KubeJS scripts, pack wood policy,
+RecipeManager `byKey`/`matches` of selected active20 recipes and configured whisk inheritance;
+31 tests do **not** mean 31 roster outputs or every mounted JSON route was accepted.
+Instant crop harvesting has no fabricated work rate; plough debris breaking and roller
+excavation retain native work candidates. The later Font ecology script still removes
+thermopneumatic plant output before adding its Nether-magma root; the earlier
+advanced-tube definition is authored but **not established as effective**. Do not
+reopen it based on source presence alone: loaded recipe-manager evidence and progression
+review are pending. The later Font script's dead `jet_boots_upgrade_5` end-rod substitution
+was removed as a **no-op cleanup**: the earlier 5-bar pressure recipe already consumes
+upgrade4, vortex cannon, elytra and dragon breath in both branches, with no end rod to
+replace. This does **not** add an Aether gate or establish newly validated acquisition.
+The shared copper and rock material policies now explicitly define bounded
+`diesel_conversion` for eligible large plates (0.9 and 0.75 respectively), alongside
+their existing load/thermal traits; source baking previously rejected those plates.
+This is an implemented policy correction, **not** a loaded diesel recipe result.
+Advanced/custom Sifter mesh acquisition stays closed.
+
+The coverage roster contains 462 selected IDs and five excluded IDs; original 205
+material-dependent / 257 recipe-only labels are not final dispositions. For example,
+`create:mechanical_harvester` is reclassified construction-only (ordinary consumed blade),
+`pneumaticcraft:pressure_chamber_valve` remains partial while its native assembly alternate
+and consumed physical blank await runtime validation, and `powergrid:conductive_casing`
+retains a two-input native alternative without a proven part route. The stationary
+and vertical PowerGrid generator housings are construction-only plain Blocks, not
+rated settings/BE machines; their current electrical-block/conductive-casing root
+and two orientation conversions remain in shared script 50 until the future
+recipes-tech exact-ID handoff. No new PowerGrid acceptance is implied. Recipe-less IDs such as
+`create:small_bogey`, `pneumaticcraft:drone_interface`, `oc2r:internet_gateway` and
+`powergrid:transformer_small`, plus the asset-only electric compressor and heater, remain
+unavailable; no invented acquisition is authorized. `trackwork:simple_wheel` is also
+pending an owner-coordinated root reconciliation: the shared transport script currently
+removes its family exact-ID recipe and substitutes a KubeJS route without the native
+`simple_wheel_part` predecessor. That part itself requires five-wide mechanical crafting,
+while Create mechanical crafters are gated at precision_factory; replacing the working
+powered_works wheel route with that predecessor would move wheel acquisition a full era.
+The working shared route remains unchanged. The vehicle owner aligned the shadowed
+family JSON's Manufacturing branch with the same H/kelp/copper shape and part role as
+a dormant fallback; `event.remove` still masks that exact ID, so this is **not a second
+effective route**. Neither route is newly accepted. Clockwork's `gas_heater`, `steam_generator`
+and `blade_controller` are now **construction-only** in source: their exact conditional
+Manufacturing recipes consume the prior Tinkers parts as ordinary shaped crafting,
+without saved performance settings; native heat/boiler/manual-pitch behavior remains
+upstream and no-Manufacturing branches remain shaped. `vs_clockwork:duct` retains its
+configured gas-engine component role; exhaust's new paid native-speed response hook is
+a source candidate, not a loaded result. Loaded acquisition and runtime behavior have not
+been revalidated. The Complicated Bees
+`mellarium_temp_unit` and `mellarium_hydroregulator` are construction-only **design
+handoffs**, not converted recipes: native categorical tolerance and product chance do
+not support an honest material throughput rating. Their native acquisition remains
+untouched pending future recipes-other exact-ID recipe ownership; do not change native
+fuel, chance, yields, or settings by inference. The excluded Backpack hoppers and
+Clockwork gas tank/vent/sealer stay excluded, not converted. Per-ID candidate/source-route
+handoff is maintained with the wave-two pack owner; neither authored overrides nor an
+absent route count as accepted conversion.
+
+PLA and PP policy carries only `screen_rate` 0.80 and 0.85 respectively; no inferred
+hot-fluid, pressure, chemical or universal press/mixing rating is assigned. Source-local
+wave-two source checks include four focused shared-script/material-policy tests. The
+historical independent Create/actual20 native run has a scoped 31/31 passing Forge userdev receipt
+(`better-manufacturing/build/gametest/856c112d-b73d-41ba-8897-654be127fbe8/execution.json`,
+`full_roster_accepted=false`). This bounds demonstrated Create/Sifter craft, settings,
+work/stress, Steam supplied-shaft and lifecycle cases; it does **not** prove complete
+crushing-wheel processing-tick throughput, full boiler water/heat budgets, optional
+PNCR/fluid/thermal families or every alternative acquisition route. Required Bumblezone/85
+harvester startup remains blocked by the pinned Bumblezone refmap/mapping problem; the
+independent profile explicitly excludes that branch. Full-roster acceptance, polymer chain
+qualification, pack deployment, client/full-pack launch, Packwiz refresh and packaging
+have **not** occurred. Current user direction permits production implementation and
+**isolated unit tests only**. The updated pack source/policy has passed four Node source
+unit checks, but production Java changes remain uncompiled and no new native behavior is
+verified. No integration/end-to-end/native tests, Forge GameTests, loader/client/server
+launches, smoke runs or aggregate qualification are authorized by the historical receipt. Existing broader
+historical coverage gates remain unmet; no incomplete-Manufacturing packaging exception
+applies. See the source README for current native ownership and tested boundaries.
 
 ### Recipe-only Cooking policy
 

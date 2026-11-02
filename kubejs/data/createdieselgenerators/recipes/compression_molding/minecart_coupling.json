@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
+      "recipe": {
+        "type": "createdieselgenerators:compression_molding",
+        "ingredients": [
+          {"item": "create:andesite_alloy"},
+          {"item": "tconstruct:tool_handle"}
+        ],
+        "mold": "createdieselgenerators:chain",
+        "results": [{"item": "create:minecart_coupling"}]
+      }
+    },
+    {
+      "conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}],
+      "recipe": {
+        "type": "createdieselgenerators:compression_molding",
+        "ingredients": [{"item": "create:andesite_alloy"}],
+        "mold": "createdieselgenerators:chain",
+        "results": [{"item": "create:minecart_coupling"}]
+      }
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "key": {
+          "D": {
+            "tag": "forge:gems/diamond"
+          },
+          "M": {
+            "type": "better_manufacturing:pneu_empty_tank",
+            "item": "pneumaticcraft:medium_tank"
+          },
+          "P": {
+            "tag": "pneumaticcraft:plastic_sheets"
+          },
+          "T": {
+            "item": "pneumaticcraft:advanced_pressure_tube"
+          },
+          "F": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "FMP",
+          "DTD",
+          "PMP"
+        ],
+        "result": {
+          "item": "pneumaticcraft:large_tank"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneumaticcraft/fluid_transfer",
+        "parts": [
+          {
+            "role": "wetted_fitting",
+            "slot": 0
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "D": {
+            "tag": "forge:gems/diamond"
+          },
+          "M": {
+            "type": "forge:nbt",
+            "count": 1,
+            "item": "pneumaticcraft:medium_tank"
+          },
+          "P": {
+            "tag": "pneumaticcraft:plastic_sheets"
+          },
+          "T": {
+            "item": "pneumaticcraft:advanced_pressure_tube"
+          }
+        },
+        "pattern": [
+          "PMP",
+          "DTD",
+          "PMP"
+        ],
+        "result": {
+          "item": "pneumaticcraft:large_tank"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "misc",
+  "function": "better_manufacturing:littlelogistics/propulsion",
+  "parts": [{"role": "drive", "slot": 1}],
+  "pattern": ["IH ", "PVP", "ICS"],
+  "key": {
+    "H": {"item": "tconstruct:tough_handle"},
+    "P": {"item": "minecraft:piston"},
+    "V": {"item": "littlelogistics:vessel_charger"},
+    "I": {"item": "minecraft:iron_ingot"},
+    "C": {"item": "littlelogistics:seater_car"},
+    "S": {"item": "minecraft:iron_ingot"}
+  },
+  "result": {"item": "littlelogistics:energy_locomotive"}
+}

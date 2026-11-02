@@ -1,0 +1,107 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:powergrid_mechanical_variant",
+        "acceptMirrored": true,
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "C": {
+            "item": "create:andesite_casing"
+          },
+          "G": {
+            "tag": "minecraft:coals"
+          },
+          "M": {
+            "tag": "forge:plates/copper"
+          },
+          "N": {
+            "tag": "forge:nuggets/copper"
+          },
+          "S": {
+            "item": "create:shaft"
+          },
+          "P": {
+            "item": "tconstruct:tough_handle"
+          },
+          "Q": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "NPN",
+          "GMG",
+          "ASA",
+          "QC "
+        ],
+        "result": {
+          "item": "powergrid:generator_commutator"
+        },
+        "function": "better_manufacturing:powergrid/generation",
+        "parts": [
+          {
+            "role": "shaft",
+            "slot": 1
+          },
+          {
+            "role": "surface",
+            "slot": 9
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "acceptMirrored": true,
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "C": {
+            "item": "create:andesite_casing"
+          },
+          "G": {
+            "tag": "minecraft:coals"
+          },
+          "M": {
+            "tag": "forge:plates/copper"
+          },
+          "N": {
+            "tag": "forge:nuggets/copper"
+          },
+          "S": {
+            "item": "create:shaft"
+          }
+        },
+        "pattern": [
+          "N N",
+          "GMG",
+          "ASA",
+          " C "
+        ],
+        "result": {
+          "item": "powergrid:generator_commutator"
+        }
+      }
+    }
+  ]
+}

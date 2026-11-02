@@ -1,0 +1,15 @@
+{
+  "type": "forge:conditional",
+  "recipes": [{
+    "conditions": [{"type": "forge:mod_loaded", "modid": "pneumaticcraft"}, {"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
+    "recipe": {
+      "type": "better_manufacturing:part_variant",
+      "category": "misc",
+      "pattern": ["H", "B"],
+      "key": {"H": {"item": "tconstruct:pick_head"}, "B": {"item": "pneumaticcraft:drill_bit_iron"}},
+      "result": {"item": "pneumaticcraft:drill_bit_iron"},
+      "function": "better_manufacturing:pneumaticcraft/drilling",
+      "parts": [{"role": "head", "slot": 0}]
+    }
+  }]
+}

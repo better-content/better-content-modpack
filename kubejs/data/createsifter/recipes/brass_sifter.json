@@ -1,0 +1,38 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": ["PPP", "HSH", "BRB"],
+        "key": {
+          "P": {"tag": "forge:plates/brass"},
+          "H": {"item": "tconstruct:tool_handle"},
+          "S": {"item": "createsifter:sifter"},
+          "B": {"tag": "forge:ingots/brass"},
+          "R": {"tag": "forge:dusts/redstone"}
+        },
+        "result": {"item": "createsifter:brass_sifter"},
+        "function": "better_manufacturing:sifter/machine",
+        "parts": [{"slot": 3, "role": "left"}, {"slot": 4, "role": "core"}, {"slot": 5, "role": "right"}]
+      }
+    },
+    {
+      "conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "sifter",
+        "acceptMirrored": true,
+        "pattern": ["PPP", "BSB", "BRB"],
+        "key": {
+          "P": {"tag": "forge:plates/brass"},
+          "B": {"tag": "forge:ingots/brass"},
+          "S": {"item": "createsifter:sifter"},
+          "R": {"tag": "forge:dusts/redstone"}
+        },
+        "result": {"item": "createsifter:brass_sifter"}
+      }
+    }
+  ]
+}

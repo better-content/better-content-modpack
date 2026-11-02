@@ -1,0 +1,22 @@
+{
+  "type": "create:mixing",
+  "conditions": [
+    {
+      "type": "supplementaries:flag",
+      "flag": "soap"
+    }
+  ],
+  "heatRequirement": "heated",
+  "ingredients": [
+    { "item": "supplementaries:ash" },
+    { "item": "supplementaries:ash" },
+    { "item": "supplementaries:ash" },
+    { "item": "supplementaries:ash" },
+    { "fluid": "hexerei:tallow_fluid", "amount": 250 },
+    { "fluid": "minecraft:water", "amount": 250 }
+  ],
+  "results": [
+    { "item": "supplementaries:soap", "count": 6 }
+  ],
+  "processingTime": 200
+}

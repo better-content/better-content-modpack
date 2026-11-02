@@ -1,0 +1,26 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {"item": "create:white_sail"},
+          {"item": "tconstruct:tool_binding"}
+        ],
+        "result": {"item": "create:sail_frame"}
+      }
+    },
+    {
+      "conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [{"item": "create:white_sail"}],
+        "result": {"item": "create:sail_frame"}
+      }
+    }
+  ]
+}

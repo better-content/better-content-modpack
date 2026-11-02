@@ -1,0 +1,67 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "ABC"
+        ],
+        "key": {
+          "A": {
+            "item": "powergrid:generator_vertical_commutator"
+          },
+          "B": {
+            "item": "tconstruct:tough_handle"
+          },
+          "C": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "powergrid:generator_commutator"
+        },
+        "function": "better_manufacturing:powergrid/generation",
+        "parts": [
+          {
+            "role": "shaft",
+            "slot": 1
+          },
+          {
+            "role": "surface",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "powergrid:generator_vertical_commutator"
+          }
+        ],
+        "result": {
+          "item": "powergrid:generator_commutator"
+        }
+      }
+    }
+  ]
+}

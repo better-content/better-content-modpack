@@ -1,0 +1,67 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "ALA",
+          "AAA"
+        ],
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "create:basin"
+        },
+        "function": "better_manufacturing:create/fluid_envelope",
+        "parts": [
+          {
+            "role": "liner",
+            "slot": 1
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          }
+        },
+        "pattern": [
+          "A A",
+          "AAA"
+        ],
+        "result": {
+          "item": "create:basin"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

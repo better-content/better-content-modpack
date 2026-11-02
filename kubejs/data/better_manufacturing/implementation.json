@@ -1,0 +1,2398 @@
+{
+  "schema": "better_manufacturing.implementation.v1",
+  "full_pack_accepted": false,
+  "features": {
+    "profiles": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "transfers": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "process_transactions": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pla": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pp": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "shaping": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "recovery": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "plastic_retirement": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "bootstrap": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "gas_identity": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ponder_pla": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ponder_pp": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ponder_shaping": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ponder_assembly": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ponder_compatibility": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ponder_recovery": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    }
+  },
+  "entries": {
+    "ae2:16k_crafting_storage": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:1k_crafting_storage": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:256k_crafting_storage": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:4k_crafting_storage": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:64k_crafting_storage": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:cell_workbench": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:charger": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:chest": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:condenser": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:controller": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:crafting_accelerator": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:crafting_monitor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:crafting_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:dense_energy_cell": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:drive": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:energy_acceptor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:energy_cell": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:growth_accelerator": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:inscriber": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:interface": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:io_port": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:molecular_assembler": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:pattern_provider": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:quantum_link": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:quantum_ring": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:spatial_io_port": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:spatial_pylon": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "ae2:wireless_access_point": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "alexscaves:quarry_smasher": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_industrial_heat:boiler_heater": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_industrial_heat:coolant_exchanger": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_industrial_heat:heat_pipe": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_industrial_heat:impossible_matter_transducer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_industrial_heat:thermal_firebox": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:adhesion_sanders_1": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:adhesion_sanders_2": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:better_rail_beetle": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:brake_manifold_1": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:brake_manifold_2": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:caged_searchlight": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:compact_module_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:compound_torque_clutch_1": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:compound_torque_clutch_2": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:dispatch_receiver_1": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:dispatch_receiver_2": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:dispatch_remote": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:engine_cradle": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:exhaust_recuperator_1": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:exhaust_recuperator_2": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:flux_traction_motor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:high_speed_governor_1": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:high_speed_governor_2": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:lifeforce_ram": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:pneumatic_expansion_motor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:reinforced_drawgear_1": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:reinforced_drawgear_2": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:route_beacon": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:soul_combustor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:source_impeller": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:spirit_warping_engine": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:steam_drive": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:telescopic_survey_array_1": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:telescopic_survey_array_2": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:trestle_erector_1": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "better_rail_beetle:trestle_erector_2": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:autolyzer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:bee_sorter": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:centrifuge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:cold_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:deadly_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:dry_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_advanced_efficiency_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_advanced_extraction_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_advanced_processing_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_advanced_speed_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_base": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_basic_efficiency_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_basic_extraction_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_basic_processing_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_basic_speed_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_efficiency_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_energy_cell": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_extraction_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_input_hatch": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_output_hatch": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_panel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_processing_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:gyrofuge_speed_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:honeyed_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:hot_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_base": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_energy_cell": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_frame_housing_1": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_frame_housing_2": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_frame_housing_3": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_hydroregulator": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_mutator": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_output_hatch": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_panel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_rain_shield": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_skybox": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_temp_unit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:mellarium_temporal_simulator": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:microscope": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:restrictive_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:soothing_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:twisting_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:waxed_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "complicated_bees:wet_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:air_blower": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:bracketed_advanced_pressure_tube": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:bracketed_pressure_tube": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:bracketed_reinforced_pressure_tube": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:compressed_air_engine": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:engine_rotor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:heater": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:industrial_air_blower": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:mesh_dense": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:mesh_empty": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:mesh_haunted": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:mesh_splashing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:mesh_splashing_frozen": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:mesh_woven": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "compressedcreativity:rotational_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:adjustable_chain_gearshift": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:andesite_encased_cogwheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:andesite_encased_large_cogwheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:andesite_encased_shaft": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:andesite_funnel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:andesite_tunnel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:basin": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:belt_connector": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:brass_encased_cogwheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:brass_encased_large_cogwheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:brass_encased_shaft": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:brass_funnel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:brass_hand": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:brass_tunnel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:cart_assembler": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:chain_conveyor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:chute": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:clockwork_bearing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:clutch": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:cogwheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:contraption_controls": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:controls": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:crushing_wheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:deployer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:elevator_pulley": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:encased_chain_drive": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:encased_fan": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:encased_fluid_pipe": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:factory_gauge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:fluid_pipe": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:fluid_tank": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:fluid_valve": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:gantry_carriage": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:gantry_shaft": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:gearbox": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:gearshift": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:glass_fluid_pipe": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:hand_crank": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:hose_pulley": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:item_drain": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:item_vault": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:large_bogey": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:large_cogwheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:large_water_wheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:linear_chassis": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_arm": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_bearing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_crafter": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_drill": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_harvester": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_mixer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_piston": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_plough": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_press": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_pump": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_roller": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:mechanical_saw": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:metal_girder_encased_shaft": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:millstone": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:minecart_coupling": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:package_frogport": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:packager": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:piston_extension_pole": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:portable_fluid_interface": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:portable_storage_interface": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:propeller": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:radial_chassis": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:redstone_requester": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:repackager": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:rope_pulley": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:rotation_speed_controller": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:sail_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:schematic_table": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:schematicannon": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:secondary_linear_chassis": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:sequenced_gearshift": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:shaft": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:small_bogey": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:smart_chute": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:smart_fluid_pipe": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:spout": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:steam_engine": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:sticky_mechanical_piston": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:stock_link": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:stock_ticker": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:track_observer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:track_signal": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:track_station": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:vertical_gearbox": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:water_wheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:weighted_ejector": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:whisk": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "create:windmill_bearing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createdieselgenerators:basin_lid": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createdieselgenerators:bulk_fermenter": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createdieselgenerators:diesel_engine": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createdieselgenerators:engine_piston": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createdieselgenerators:engine_turbocharger": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createdieselgenerators:huge_diesel_engine": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createdieselgenerators:large_diesel_engine": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createsifter:advanced_brass_mesh": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createsifter:andesite_mesh": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createsifter:brass_mesh": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createsifter:brass_sifter": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createsifter:sifter": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createsifter:string_mesh": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "createsifter:zinc_mesh": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:barge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:barge_dock": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:barrel_barge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:barrel_car": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:car_dock_rail": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:chest_car": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:energy_locomotive": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:energy_tug": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:fishing_barge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:fluid_barge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:fluid_car": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:locomotive_dock_rail": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:rapid_hopper": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:seater_barge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:seater_car": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:spring": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:steam_locomotive": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:tug": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:tug_dock": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:vacuum_barge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "littlelogistics:vessel_charger": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "morered:soldering_table": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:charger": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:computer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:disk_drive": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:flash_memory_flasher": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:internet_gateway": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:keyboard": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:monitor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:network_connector": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:network_hub": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:projector": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "oc2r:redstone_interface": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:advanced_air_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:advanced_liquid_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:advanced_pressure_tube": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:aerial_interface": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:air_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:assembly_controller": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:assembly_drill": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:assembly_io_unit_export": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:assembly_io_unit_import": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:assembly_laser": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:assembly_platform": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:charging_station": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:collector_drone": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:drill_bit_compressed_iron": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:drill_bit_diamond": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:drill_bit_iron": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:drill_bit_netherite": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:drone": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:drone_interface": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:electric_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:electrostatic_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:etching_tank": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:fluid_mixer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:flux_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:gas_lift": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:guard_drone": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:harvesting_drone": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:heat_pipe": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:heat_sink": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:huge_tank": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:jackhammer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:large_tank": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:liquid_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:liquid_hopper": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:logistics_core": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:logistics_drone": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:logistics_frame_active_provider": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:logistics_frame_default_storage": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:logistics_frame_passive_provider": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:logistics_frame_requester": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:logistics_frame_storage": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:logistics_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:manual_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:medium_tank": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:omnidirectional_hopper": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:pneumatic_cylinder": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:pressure_chamber_glass": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:pressure_chamber_interface": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:pressure_chamber_valve": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:pressure_chamber_wall": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:pressure_tube": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:programmable_controller": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:programmer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:refinery": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:refinery_output": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:reinforced_pressure_tube": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:security_station": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:small_tank": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:solar_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:thermal_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:thermopneumatic_processing_plant": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:tube_junction": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:turbine_blade": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:turbine_rotor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:universal_sensor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:upgrade_matrix": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:uv_light_box": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:vacuum_pump": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:vacuum_trap": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "pneumaticcraft:vortex_tube": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:andesite_encased_crt": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:basin_heater": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:battery": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:capacitor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:circuit_board": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:circuit_design_table": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:conductive_casing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:constant_speed_motor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:copper_coil": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:crt": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:current_gauge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:electric_fan": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:electric_motor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:electrical_gizmo": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:empty_circuit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:generator_clutch": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:generator_commutator": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:generator_housing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:generator_induction_rotor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:generator_vertical_commutator": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:heating_coil": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:hv_breaker": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:hv_switch": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:integrated_circuit": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:lv_button": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:lv_switch": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:mv_switch": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:plotter": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:portable_battery": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:power_gauge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:punch_card_reader": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:resistive_coil": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:servo": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:thermometer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:transformer_core": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:transformer_medium": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:transformer_small": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:variac": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:vertical_generator_housing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:voltage_gauge": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "powergrid:winding": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:blank_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:crafting_terminal": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:high_crafting_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:high_extraction_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:high_filter_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:high_high_priority_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:high_low_priority_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:high_retrieval_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:high_speed_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:item_terminal": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:low_crafting_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:low_extraction_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:low_filter_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:low_high_priority_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:low_low_priority_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:low_retrieval_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:low_speed_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:medium_crafting_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:medium_extraction_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:medium_filter_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:medium_high_priority_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:medium_low_priority_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:medium_retrieval_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:medium_speed_module": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:pipe": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:pipe_frame": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "prettypipes:pressurizer": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "quark:crafter": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "rats:rat_quarry": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "rats:rat_upgrade_quarry": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "sophisticatedbackpacks:upgrade_base": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "sophisticatedstorage:advanced_hopper_upgrade": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "sophisticatedstorage:controller": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "sophisticatedstorage:hopper_upgrade": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "sophisticatedstorage:storage_io": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "sophisticatedstorage:storage_link": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "sophisticatedstorage:upgrade_base": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:large_phys_track": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:large_simple_wheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:large_suspension_track": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:med_phys_track": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:med_simple_wheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:med_suspension_track": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:oleo_wheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:phys_track": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:simple_wheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:small_simple_wheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "trackwork:suspension_track": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:air_compressor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:alt_meter": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:andesite_flap_bearing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:blade_controller": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:brass_propeller_bearing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:brass_redstone_resistor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:coal_burner": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:combustion_engine": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:command_seat": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:copter_bearing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:distance_sensor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:duct": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:exhaust": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:gas_engine": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:gas_heater": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:gas_nozzle": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:gas_thruster": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:gyro": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:gyroscopic_sensor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:impact_sensor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:juryrigged_propeller_bearing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:propeller_blade": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:pump_duct": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:reactionwheel": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:redstone_duct": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:redstone_resistor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:smart_flap_bearing": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:steam_generator": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:valve_duct": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_clockwork:wide_propeller_blade": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_eureka:acacia_ship_helm": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_eureka:anchor": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_eureka:birch_ship_helm": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_eureka:dark_oak_ship_helm": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_eureka:engine": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_eureka:jungle_ship_helm": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_eureka:oak_ship_helm": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    },
+    "vs_eureka:spruce_ship_helm": {
+      "implementation": "pending",
+      "owner_local": "pending",
+      "pack_acceptance": "pending"
+    }
+  }
+}

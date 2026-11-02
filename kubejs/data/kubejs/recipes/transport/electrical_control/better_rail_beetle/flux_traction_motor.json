@@ -1,0 +1,107 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "powergrid"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "HCP",
+          "MFM",
+          " E "
+        ],
+        "key": {
+          "C": {
+            "item": "powergrid:integrated_circuit"
+          },
+          "M": {
+            "item": "powergrid:electric_motor"
+          },
+          "F": {
+            "item": "better_rail_beetle:engine_cradle"
+          },
+          "E": {
+            "item": "kubejs:electrical_machine_block"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:flux_traction_motor"
+        },
+        "function": "better_manufacturing:rail_beetle/drives",
+        "parts": [
+          {
+            "role": "drive_shaft",
+            "slot": 0
+          },
+          {
+            "role": "working_surface",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "powergrid"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " C ",
+          "MFM",
+          " E "
+        ],
+        "key": {
+          "C": {
+            "item": "powergrid:integrated_circuit"
+          },
+          "M": {
+            "item": "powergrid:electric_motor"
+          },
+          "F": {
+            "item": "better_rail_beetle:engine_cradle"
+          },
+          "E": {
+            "item": "kubejs:electrical_machine_block"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:flux_traction_motor"
+        }
+      }
+    }
+  ]
+}

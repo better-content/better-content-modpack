@@ -1,0 +1,19 @@
+{
+  "color": "FFE7DBBD",
+  "fallbacks": ["wood", "primitive"],
+  "generator": {
+    "supported_stats": ["tconstruct:head", "tconstruct:handle", "tconstruct:binding"],
+    "transformer": {
+      "type": "tconstruct:recolor_sprite",
+      "color_mapping": {"type": "tconstruct:grey_to_color", "palette": [
+        {"color": "FF18130B", "grey": 0},
+        {"color": "FF59503B", "grey": 63},
+        {"color": "FF8E8062", "grey": 102},
+        {"color": "FFB0A17D", "grey": 140},
+        {"color": "FFD2C39F", "grey": 178},
+        {"color": "FFE7DBBD", "grey": 216},
+        {"color": "FFFFF2D6", "grey": 255}
+      ]}
+    }
+  }
+}

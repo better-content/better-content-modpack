@@ -1,0 +1,14 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "pattern": ["AAA", "CHC", "SWS"],
+  "key": {
+    "C": { "item": "minecraft:chain" },
+    "A": { "item": "alexscaves:azure_neodymium_ingot" },
+    "S": { "item": "alexscaves:scarlet_neodymium_ingot" },
+    "W": { "item": "alexscaves:heavyweight" },
+    "H": { "item": "tconstruct:hammer_head" }
+  },
+  "result": { "item": "alexscaves:quarry_smasher", "count": 1 },
+  "function": "better_manufacturing:alexscaves/quarry_work",
+  "parts": [{ "role": "head", "slot": 4 }]
+}

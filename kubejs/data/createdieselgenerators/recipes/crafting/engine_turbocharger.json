@@ -1,0 +1,16 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
+      "type": "better_manufacturing:part_variant", "pattern": ["AZF", "SPC", "HZA"],
+      "key": {"H": {"item": "tconstruct:tough_handle"}, "C": {"item": "tconstruct:large_plate"}, "A": {"item": "create:andesite_alloy"}, "S": {"tag": "forge:plates/iron"}, "Z": {"tag": "forge:ingots/zinc"}, "P": {"item": "create:propeller"}, "F": {"item": "create:fluid_pipe"}},
+      "result": {"item": "createdieselgenerators:engine_turbocharger"},
+      "function": "better_manufacturing:createdieselgenerators/engines", "parts": [{"role": "rod", "slot": 6}, {"role": "chamber", "slot": 5}, {"role": "impeller", "slot": 4}]
+    }},
+    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
+      "type": "minecraft:crafting_shaped", "pattern": ["AZF", "SPS", "AZA"],
+      "key": {"A": {"item": "create:andesite_alloy"}, "S": {"tag": "forge:plates/iron"}, "Z": {"tag": "forge:ingots/zinc"}, "P": {"item": "create:propeller"}, "F": {"item": "create:fluid_pipe"}},
+      "result": {"item": "createdieselgenerators:engine_turbocharger"}
+    }}
+  ]
+}

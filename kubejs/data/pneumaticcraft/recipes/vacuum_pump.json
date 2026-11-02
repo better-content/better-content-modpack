@@ -1,0 +1,101 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "GRG",
+          "TRT",
+          "SLH"
+        ],
+        "key": {
+          "G": {
+            "item": "pneumaticcraft:pressure_gauge"
+          },
+          "R": {
+            "item": "pneumaticcraft:turbine_rotor"
+          },
+          "S": {
+            "item": "pneumaticcraft:reinforced_stone_slab"
+          },
+          "T": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "item": "pneumaticcraft:vacuum_pump"
+        },
+        "function": "better_manufacturing:pneuprocess/vacuum_thermal",
+        "parts": [
+          {
+            "role": "plate",
+            "slot": 7
+          },
+          {
+            "role": "handle",
+            "slot": 8
+          },
+          {
+            "role": "rotor_a",
+            "slot": 1
+          },
+          {
+            "role": "rotor_b",
+            "slot": 4
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "G": {
+            "item": "pneumaticcraft:pressure_gauge"
+          },
+          "R": {
+            "item": "pneumaticcraft:turbine_rotor"
+          },
+          "S": {
+            "item": "pneumaticcraft:reinforced_stone_slab"
+          },
+          "T": {
+            "item": "pneumaticcraft:pressure_tube"
+          }
+        },
+        "pattern": [
+          "GRG",
+          "TRT",
+          "SSS"
+        ],
+        "result": {
+          "item": "pneumaticcraft:vacuum_pump"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

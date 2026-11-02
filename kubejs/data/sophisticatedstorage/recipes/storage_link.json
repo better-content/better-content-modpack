@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "conditions": [
+    {
+      "type": "sophisticatedcore:item_enabled",
+      "itemRegistryName": "sophisticatedstorage:storage_link"
+    }
+  ],
+  "key": {
+    "E": {
+      "tag": "forge:ender_pearls"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "R": {
+      "item": "minecraft:repeater"
+    },
+    "S": {
+      "tag": "forge:stone"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    }
+  },
+  "pattern": [
+    "EP",
+    "RS",
+    " H"
+  ],
+  "result": {
+    "item": "sophisticatedstorage:storage_link"
+  }
+}

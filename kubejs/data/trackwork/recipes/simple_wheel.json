@@ -1,0 +1,82 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "HK ",
+          "KCK",
+          " K "
+        ],
+        "key": {
+          "K": {
+            "item": "minecraft:dried_kelp"
+          },
+          "C": {
+            "item": "kubejs:copper_machine_block"
+          },
+          "H": [
+            {
+              "item": "tconstruct:tough_handle"
+            },
+            {
+              "item": "tconstruct:bow_limb"
+            }
+          ]
+        },
+        "result": {
+          "item": "trackwork:simple_wheel",
+          "count": 1
+        },
+        "function": "better_manufacturing:trackwork/running_gear",
+        "parts": [
+          {
+            "role": "hub_suspension",
+            "slot": 0
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " S ",
+          "AAW",
+          " AA"
+        ],
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "W": {
+            "item": "trackwork:simple_wheel_part"
+          },
+          "S": {
+            "item": "create:mechanical_piston"
+          }
+        },
+        "result": {
+          "item": "trackwork:simple_wheel",
+          "count": 1
+        }
+      }
+    }
+  ]
+}

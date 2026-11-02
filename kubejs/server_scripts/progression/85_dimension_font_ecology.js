@@ -22,31 +22,66 @@ ServerEvents.recipes(function (event) {
         }).id('kubejs:fonts/libation/' + row[0])
     })
 
+    var partVariants = Platform.isLoaded('better_manufacturing')
     event.remove({ output: 'better_industrial_heat:boiler_heater' })
-    event.shaped('better_industrial_heat:boiler_heater', ['SCS', 'FHF', 'MTB'], {
-        S: '#forge:plates/steel', C: '#forge:plates/copper',
-        F: 'create:fluid_pipe', H: 'better_industrial_heat:heat_pipe',
-        M: 'minecraft:magma_cream', T: 'create:fluid_tank', B: 'minecraft:blaze_rod'
-    }).id('kubejs:fonts/nether/boiler_heater')
+    if (partVariants) {
+        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['PCS', 'FHF', 'MTB'],
+            key: { P: { item: 'tconstruct:large_plate' }, S: { tag: 'forge:plates/steel' },
+                C: { tag: 'forge:plates/copper' }, F: { item: 'create:fluid_pipe' },
+                H: { item: 'better_industrial_heat:heat_pipe' }, M: { item: 'minecraft:magma_cream' },
+                T: { item: 'create:fluid_tank' }, B: { item: 'minecraft:blaze_rod' } },
+            result: { item: 'better_industrial_heat:boiler_heater' },
+            function: 'better_manufacturing:industrialheat/thermal', parts: [{ role: 'thermal_surface', slot: 0 }]
+        }).id('kubejs:fonts/nether/boiler_heater')
+    } else {
+        event.shaped('better_industrial_heat:boiler_heater', ['SCS', 'FHF', 'MTB'], {
+            S: '#forge:plates/steel', C: '#forge:plates/copper',
+            F: 'create:fluid_pipe', H: 'better_industrial_heat:heat_pipe',
+            M: 'minecraft:magma_cream', T: 'create:fluid_tank', B: 'minecraft:blaze_rod'
+        }).id('kubejs:fonts/nether/boiler_heater')
+    }
 
+    // Keep the later Nether-magma progression override until loaded recipe
+    // evidence establishes whether the earlier advanced-tube root was intended
+    // to remain effective; source-only script presence is not authorization.
     event.remove({ output: 'pneumaticcraft:thermopneumatic_processing_plant' })
-    event.shaped('pneumaticcraft:thermopneumatic_processing_plant', ['SSS', 'TMT', 'SPS'], {
-        S: 'pneumaticcraft:reinforced_stone_slab', T: 'pneumaticcraft:small_tank',
-        M: 'minecraft:magma_cream', P: 'pneumaticcraft:pressure_tube'
-    }).id('kubejs:fonts/nether/thermopneumatic_plant')
-
-    event.replaceInput({ output: 'pneumaticcraft:jet_boots_upgrade_5' },
-        'minecraft:end_rod', 'aether:swet_ball')
+    if (partVariants) {
+        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['LSS', 'TMT', 'SPS'],
+            key: { L: { item: 'tconstruct:large_plate' }, S: { item: 'pneumaticcraft:reinforced_stone_slab' },
+                T: { item: 'pneumaticcraft:small_tank' }, M: { item: 'minecraft:magma_cream' },
+                P: { item: 'pneumaticcraft:pressure_tube' } },
+            result: { item: 'pneumaticcraft:thermopneumatic_processing_plant' },
+            function: 'better_manufacturing:pneuprocess/chemistry', parts: [{ role: 'liner', slot: 0 }]
+        }).id('kubejs:fonts/nether/thermopneumatic_plant')
+    } else {
+        event.shaped('pneumaticcraft:thermopneumatic_processing_plant', ['SSS', 'TMT', 'SPS'], {
+            S: 'pneumaticcraft:reinforced_stone_slab', T: 'pneumaticcraft:small_tank',
+            M: 'minecraft:magma_cream', P: 'pneumaticcraft:pressure_tube'
+        }).id('kubejs:fonts/nether/thermopneumatic_plant')
+    }
 
     event.remove({ output: 'create:mechanical_harvester' })
-    event.shaped('create:mechanical_harvester', ['APA', 'AIA', ' C '], {
-        A: 'create:andesite_alloy', P: 'the_bumblezone:pollen_puff',
-        I: '#forge:plates/iron', C: 'create:andesite_casing'
-    }).id('kubejs:fonts/bumblezone/mechanical_harvester')
+    // Crop visits are instantaneous: a consumed blade is construction, not
+    // a fictional work-rate setting. Keep the original route without Manufacturing.
+    var harvesterKey = { A: 'create:andesite_alloy', P: 'the_bumblezone:pollen_puff',
+        I: '#forge:plates/iron', C: 'create:andesite_casing' }
+    if (partVariants) harvesterKey.B = 'tconstruct:small_blade'
+    event.shaped('create:mechanical_harvester', partVariants ? ['APA', 'AIA', 'BC '] : ['APA', 'AIA', ' C '], harvesterKey)
+        .id('kubejs:fonts/bumblezone/mechanical_harvester')
 
     event.remove({ output: 'create:mechanical_plough' })
-    event.shaped('create:mechanical_plough', ['IWI', 'AAA', ' C '], {
-        I: '#forge:plates/iron', W: 'the_bumblezone:carvable_wax',
-        A: 'create:andesite_alloy', C: 'create:andesite_casing'
-    }).id('kubejs:fonts/bumblezone/mechanical_plough')
+    if (partVariants) {
+        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['IWI', 'AAA', 'HC '],
+            key: { I: { tag: 'forge:plates/iron' }, W: { item: 'the_bumblezone:carvable_wax' },
+                A: { item: 'create:andesite_alloy' }, H: { item: 'tconstruct:small_axe_head' },
+                C: { item: 'create:andesite_casing' } },
+            result: { item: 'create:mechanical_plough' }, function: 'better_manufacturing:create/field_work',
+            parts: [{ role: 'working_surface', slot: 6 }]
+        }).id('kubejs:fonts/bumblezone/mechanical_plough')
+    } else {
+        event.shaped('create:mechanical_plough', ['IWI', 'AAA', ' C '], {
+            I: '#forge:plates/iron', W: 'the_bumblezone:carvable_wax',
+            A: 'create:andesite_alloy', C: 'create:andesite_casing'
+        }).id('kubejs:fonts/bumblezone/mechanical_plough')
+    }
 })

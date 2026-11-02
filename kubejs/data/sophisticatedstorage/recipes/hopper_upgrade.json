@@ -1,0 +1,36 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [
+      {"type": "forge:mod_loaded", "modid": "better_manufacturing"},
+      {"type": "sophisticatedcore:item_enabled", "itemRegistryName": "sophisticatedstorage:hopper_upgrade"}
+    ], "recipe": {
+      "type": "better_manufacturing:part_variant",
+      "pattern": ["AH ", "IBI", "RRR"],
+      "key": {
+        "A": {"item": "tconstruct:tool_handle"},
+        "H": {"item": "minecraft:hopper"},
+        "B": {"item": "sophisticatedstorage:upgrade_base"},
+        "I": {"tag": "forge:ingots/iron"},
+        "R": {"tag": "forge:dusts/redstone"}
+      },
+      "result": {"item": "sophisticatedstorage:hopper_upgrade"},
+      "function": "better_manufacturing:sophisticatedstorage/hopper",
+      "parts": [{"role": "actuator", "slot": 0}]
+    }},
+    {"conditions": [
+      {"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}},
+      {"type": "sophisticatedcore:item_enabled", "itemRegistryName": "sophisticatedstorage:hopper_upgrade"}
+    ], "recipe": {
+      "type": "minecraft:crafting_shaped",
+      "pattern": [" H ", "IBI", "RRR"],
+      "key": {
+        "H": {"item": "minecraft:hopper"},
+        "B": {"item": "sophisticatedstorage:upgrade_base"},
+        "I": {"tag": "forge:ingots/iron"},
+        "R": {"tag": "forge:dusts/redstone"}
+      },
+      "result": {"item": "sophisticatedstorage:hopper_upgrade"}
+    }}
+  ]
+}

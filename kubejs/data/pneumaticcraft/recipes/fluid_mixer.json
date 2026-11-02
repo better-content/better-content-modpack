@@ -1,0 +1,90 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          " T ",
+          "LRW",
+          "TPT"
+        ],
+        "key": {
+          "P": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "R": {
+            "item": "pneumaticcraft:turbine_rotor"
+          },
+          "T": {
+            "item": "pneumaticcraft:small_tank"
+          },
+          "W": {
+            "item": "pneumaticcraft:reinforced_brick_wall"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "pneumaticcraft:fluid_mixer"
+        },
+        "function": "better_manufacturing:pneuprocess/chemistry",
+        "parts": [
+          {
+            "role": "liner",
+            "slot": 3
+          },
+          {
+            "role": "rotor",
+            "slot": 4
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "P": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "R": {
+            "item": "pneumaticcraft:turbine_rotor"
+          },
+          "T": {
+            "item": "pneumaticcraft:small_tank"
+          },
+          "W": {
+            "item": "pneumaticcraft:reinforced_brick_wall"
+          }
+        },
+        "pattern": [
+          " T ",
+          "WRW",
+          "TPT"
+        ],
+        "result": {
+          "item": "pneumaticcraft:fluid_mixer"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

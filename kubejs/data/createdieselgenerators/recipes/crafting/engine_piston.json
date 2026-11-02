@@ -1,0 +1,16 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
+      "type": "better_manufacturing:part_variant", "pattern": ["A H", " S ", "T Z"],
+      "key": {"A": {"item": "create:andesite_alloy"}, "S": {"item": "create:shaft"}, "Z": {"tag": "forge:nuggets/zinc"}, "H": {"item": "tconstruct:tough_handle"}, "T": {"item": "tconstruct:large_plate"}},
+      "result": {"item": "createdieselgenerators:engine_piston", "count": 2},
+      "function": "better_manufacturing:createdieselgenerators/engines", "parts": [{"role": "rod", "slot": 2}, {"role": "chamber", "slot": 6}]
+    }},
+    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
+      "type": "minecraft:crafting_shaped", "pattern": ["A  ", " S ", "  Z"],
+      "key": {"A": {"item": "create:andesite_alloy"}, "S": {"item": "create:shaft"}, "Z": {"tag": "forge:nuggets/zinc"}},
+      "result": {"item": "createdieselgenerators:engine_piston", "count": 2}
+    }}
+  ]
+}

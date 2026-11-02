@@ -1,0 +1,14 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
+      "type": "better_manufacturing:part_variant", "pattern": [" H ", "SCS", "SSS"],
+      "key": {"H": {"item": "tconstruct:tool_handle"}, "C": {"item": "create:andesite_alloy"}, "S": {"tag": "forge:plates/iron"}},
+      "result": {"item": "create:whisk"}, "function": "better_manufacturing:create/mixing", "parts": [{"role": "shaft", "slot": 1}]
+    }},
+    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
+      "type": "minecraft:crafting_shaped", "pattern": [" C ", "SCS", "SSS"],
+      "key": {"C": {"item": "create:andesite_alloy"}, "S": {"tag": "forge:plates/iron"}}, "result": {"item": "create:whisk"}
+    }}
+  ]
+}

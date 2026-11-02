@@ -1,0 +1,73 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          " F ",
+          "III",
+          " F "
+        ],
+        "key": {
+          "F": {
+            "item": "compressedcreativity:mesh_empty"
+          },
+          "I": {
+            "tag": "minecraft:wool"
+          }
+        },
+        "result": {
+          "item": "compressedcreativity:mesh_woven"
+        },
+        "function": "better_manufacturing:compressedcreativity/mesh",
+        "parts": [
+          {
+            "role": "frame",
+            "slot": 1
+          },
+          {
+            "role": "frame2",
+            "slot": 7
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " F ",
+          "III",
+          " F "
+        ],
+        "key": {
+          "F": {
+            "item": "compressedcreativity:mesh_empty"
+          },
+          "I": {
+            "tag": "minecraft:wool"
+          }
+        },
+        "result": {
+          "item": "compressedcreativity:mesh_woven"
+        }
+      }
+    }
+  ]
+}

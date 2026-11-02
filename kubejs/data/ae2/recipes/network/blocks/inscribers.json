@@ -1,0 +1,15 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "misc",
+  "pattern": ["aba", "cha", "aba"],
+  "key": {
+    "a": { "tag": "forge:ingots/iron" },
+    "b": { "item": "minecraft:sticky_piston" },
+    "c": { "tag": "forge:ingots/copper" },
+    "h": { "item": "tconstruct:hammer_head" }
+  },
+  "result": { "item": "ae2:inscriber" },
+  "function": "better_manufacturing:ae2/precision",
+  "parts": [{ "role": "tooling", "slot": 4 }],
+  "show_notification": true
+}

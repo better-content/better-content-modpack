@@ -1,0 +1,89 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "function": "better_manufacturing:clockwork/flight_actuators",
+        "pattern": [
+          "HPX",
+          " S ",
+          "   "
+        ],
+        "key": {
+          "S": {
+            "item": "minecraft:stick"
+          },
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "X": {
+            "item": "tconstruct:broad_blade"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:wide_propeller_blade"
+        },
+        "parts": [
+          {
+            "role": "handle",
+            "slot": 0
+          },
+          {
+            "role": "blade",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "S": {
+            "item": "minecraft:stick"
+          },
+          "P": {
+            "tag": "minecraft:planks"
+          }
+        },
+        "pattern": [
+          "P",
+          "S"
+        ],
+        "result": {
+          "item": "vs_clockwork:wide_propeller_blade"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

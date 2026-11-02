@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "$": {
+      "item": "minecraft:iron_nugget"
+    },
+    "_": {
+      "tag": "forge:string"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "_$_",
+    "$_$",
+    "HP "
+  ],
+  "result": {
+    "count": 6,
+    "item": "littlelogistics:spring"
+  },
+  "show_notification": true
+}

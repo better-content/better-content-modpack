@@ -1,0 +1,15 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
+      "type": "better_manufacturing:part_variant", "pattern": [" A ", "AIA", " C "],
+      "key": {"A": {"tag": "forge:plates/iron"}, "I": {"item": "tconstruct:small_blade"}, "C": {"item": "create:andesite_casing"}},
+      "result": {"item": "create:mechanical_saw"}, "function": "better_manufacturing:create/sawing", "parts": [{"role": "blade", "slot": 4}]
+    }},
+    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
+      "type": "minecraft:crafting_shaped", "pattern": [" A ", "AIA", " C "],
+      "key": {"A": {"tag": "forge:plates/iron"}, "I": {"tag": "forge:ingots/iron"}, "C": {"item": "create:andesite_casing"}},
+      "result": {"item": "create:mechanical_saw"}
+    }}
+  ]
+}

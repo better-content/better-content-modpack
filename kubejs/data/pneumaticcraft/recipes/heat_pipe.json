@@ -1,0 +1,83 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "WWH",
+          "BLB",
+          "WWW"
+        ],
+        "key": {
+          "B": {
+            "tag": "forge:storage_blocks/compressed_iron"
+          },
+          "W": {
+            "item": "pneumaticcraft:thermal_lagging"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "count": 6,
+          "item": "pneumaticcraft:heat_pipe"
+        },
+        "function": "better_manufacturing:pneuprocess/vacuum_thermal",
+        "parts": [
+          {
+            "role": "plate",
+            "slot": 4
+          },
+          {
+            "role": "handle",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "forge:storage_blocks/compressed_iron"
+          },
+          "W": {
+            "item": "pneumaticcraft:thermal_lagging"
+          }
+        },
+        "pattern": [
+          "WWW",
+          "BBB",
+          "WWW"
+        ],
+        "result": {
+          "count": 6,
+          "item": "pneumaticcraft:heat_pipe"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

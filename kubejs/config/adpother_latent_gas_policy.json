@@ -23,6 +23,7 @@
     {"id":"methane","critical_amount":192,"lower_explosive_limit":8,"hazard_profile":"fuel_asphyxiant","environment_profile":"none","filter_profile":"charcoal"},
     {"id":"ethane","critical_amount":192,"lower_explosive_limit":8,"hazard_profile":"fuel_asphyxiant","environment_profile":"none","filter_profile":"charcoal"},
     {"id":"propane","critical_amount":192,"lower_explosive_limit":8,"hazard_profile":"fuel_asphyxiant","environment_profile":"none","filter_profile":"charcoal"},
+    {"id":"propylene","critical_amount":192,"lower_explosive_limit":8,"hazard_profile":"fuel_asphyxiant","environment_profile":"none","filter_profile":"charcoal"},
     {"id":"butane","critical_amount":192,"lower_explosive_limit":8,"hazard_profile":"fuel_asphyxiant","environment_profile":"none","filter_profile":"charcoal"},
     {"id":"sulfur_dioxide","critical_amount":64,"lower_explosive_limit":0,"hazard_profile":"corrosive_irritant","environment_profile":"corrosive","filter_profile":"alkaline"},
     {"id":"nitrogen_dioxide","critical_amount":48,"lower_explosive_limit":0,"hazard_profile":"corrosive_irritant","environment_profile":"corrosive","filter_profile":"alkaline"},

@@ -1,0 +1,85 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "AHA",
+          "PTP",
+          "APA"
+        ],
+        "key": {
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "T": {
+            "item": "trackwork:phys_track"
+          },
+          "H": [
+            {
+              "item": "tconstruct:tough_handle"
+            },
+            {
+              "item": "tconstruct:bow_limb"
+            }
+          ]
+        },
+        "result": {
+          "item": "trackwork:med_phys_track",
+          "count": 1
+        },
+        "function": "better_manufacturing:trackwork/running_gear",
+        "parts": [
+          {
+            "role": "hub_suspension",
+            "slot": 1
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "APA",
+          "PTP",
+          "APA"
+        ],
+        "key": {
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "T": {
+            "item": "trackwork:phys_track"
+          }
+        },
+        "result": {
+          "item": "trackwork:med_phys_track",
+          "count": 1
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:railway_casing"
+          },
+          [
+            {
+              "item": "minecraft:stone_pressure_plate"
+            },
+            {
+              "item": "minecraft:polished_blackstone_pressure_plate"
+            },
+            {
+              "item": "minecraft:heavy_weighted_pressure_plate"
+            },
+            {
+              "item": "minecraft:light_weighted_pressure_plate"
+            }
+          ],
+          {
+            "item": "tconstruct:tool_handle"
+          }
+        ],
+        "result": {
+          "count": 2,
+          "item": "create:track_observer"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:railway_casing"
+          },
+          [
+            {
+              "item": "minecraft:stone_pressure_plate"
+            },
+            {
+              "item": "minecraft:polished_blackstone_pressure_plate"
+            },
+            {
+              "item": "minecraft:heavy_weighted_pressure_plate"
+            },
+            {
+              "item": "minecraft:light_weighted_pressure_plate"
+            }
+          ]
+        ],
+        "result": {
+          "count": 2,
+          "item": "create:track_observer"
+        }
+      }
+    }
+  ]
+}

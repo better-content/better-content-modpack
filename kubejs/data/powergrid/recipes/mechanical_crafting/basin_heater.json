@@ -1,0 +1,82 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:powergrid_mechanical_variant",
+        "acceptMirrored": true,
+        "key": {
+          "C": {
+            "tag": "forge:plates/copper"
+          },
+          "E": {
+            "item": "powergrid:conductive_casing"
+          },
+          "R": {
+            "item": "powergrid:resistive_coil"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "RRRRR",
+          "PC C ",
+          " CEC "
+        ],
+        "result": {
+          "item": "powergrid:basin_heater"
+        },
+        "function": "better_manufacturing:powergrid/heating",
+        "parts": [
+          {"role": "thermal_support", "slot": 5},
+          {"role": "coil_0", "slot": 0},
+          {"role": "coil_1", "slot": 1},
+          {"role": "coil_2", "slot": 2},
+          {"role": "coil_3", "slot": 3},
+          {"role": "coil_4", "slot": 4}
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "acceptMirrored": true,
+        "key": {
+          "C": {
+            "tag": "forge:plates/copper"
+          },
+          "E": {
+            "item": "powergrid:conductive_casing"
+          },
+          "R": {
+            "item": "powergrid:resistive_coil"
+          }
+        },
+        "pattern": [
+          "RRRRR",
+          " C C ",
+          " CEC "
+        ],
+        "result": {
+          "item": "powergrid:basin_heater"
+        }
+      }
+    }
+  ]
+}

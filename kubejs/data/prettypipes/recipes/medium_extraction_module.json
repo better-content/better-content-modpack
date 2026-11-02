@@ -1,0 +1,75 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          " I ",
+          "IMI",
+          " A "
+        ],
+        "key": {
+          "I": {
+            "item": "minecraft:iron_ingot"
+          },
+          "M": {
+            "item": "prettypipes:low_extraction_module"
+          },
+          "A": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "result": {
+          "item": "prettypipes:medium_extraction_module"
+        },
+        "function": "better_manufacturing:prettypipes/extraction",
+        "parts": [
+          {
+            "role": "actuator",
+            "slot": 7
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " I ",
+          "IMI",
+          " A "
+        ],
+        "key": {
+          "I": {
+            "item": "minecraft:iron_ingot"
+          },
+          "M": {
+            "item": "prettypipes:low_extraction_module"
+          },
+          "A": {
+            "item": "minecraft:iron_ingot"
+          }
+        },
+        "result": {
+          "item": "prettypipes:medium_extraction_module"
+        }
+      }
+    }
+  ]
+}

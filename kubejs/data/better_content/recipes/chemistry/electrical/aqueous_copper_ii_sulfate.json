@@ -1,0 +1,25 @@
+{
+  "type": "pneumaticcraft:thermo_plant",
+  "exothermic": false,
+  "item_input": {
+    "item": "chemlib:copper_i_oxide"
+  },
+  "fluid_input": {
+    "type": "pneumaticcraft:fluid",
+    "fluid": "chemlib:sulfuric_acid_fluid",
+    "amount": 250
+  },
+  "item_output": {
+    "item": "minecraft:copper_ingot",
+    "count": 1
+  },
+  "fluid_output": {
+    "fluid": "better_electrochemistry:aqueous_copper_ii_sulfate",
+    "amount": 250
+  },
+  "pressure": 2.0,
+  "speed": 0.4,
+  "temperature": {
+    "min_temp": 373
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create:content_observer"
+    },
+    {
+      "item": "vs_clockwork:duct"
+    },
+    {
+      "item": "tconstruct:tool_handle"
+    },
+    {
+      "item": "tconstruct:large_plate"
+    }
+  ],
+  "result": {
+    "item": "vs_clockwork:redstone_duct"
+  }
+}

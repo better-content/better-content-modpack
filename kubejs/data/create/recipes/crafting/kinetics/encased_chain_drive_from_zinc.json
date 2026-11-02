@@ -1,0 +1,69 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:andesite_casing"
+          },
+          {
+            "tag": "forge:nuggets/zinc"
+          },
+          {
+            "tag": "forge:nuggets/zinc"
+          },
+          {
+            "tag": "forge:nuggets/zinc"
+          },
+          {
+            "item": "tconstruct:tool_handle"
+          }
+        ],
+        "result": {
+          "item": "create:encased_chain_drive"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:andesite_casing"
+          },
+          {
+            "tag": "forge:nuggets/zinc"
+          },
+          {
+            "tag": "forge:nuggets/zinc"
+          },
+          {
+            "tag": "forge:nuggets/zinc"
+          }
+        ],
+        "result": {
+          "item": "create:encased_chain_drive"
+        }
+      }
+    }
+  ]
+}

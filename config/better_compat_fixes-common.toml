@@ -38,6 +38,9 @@
 	#Keeps Unearthed dirt replacement enabled while allowing Dynamic Trees worldgen to place forest trees on replaced forest surfaces.
 	#Disable only when diagnosing Dynamic Trees soil registration behavior.
 	unearthedRegolithSoils = true
+	#Multiplies player-triggered Dynamic Trees felling durability charges before native mitigation.
+	#Range: 1 ~ 100
+	fellingDurabilityMultiplier = 2
 
 [hyle]
 	#Guards Hyle tertiary stone selection against invalid indices.

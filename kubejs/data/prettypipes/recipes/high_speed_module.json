@@ -1,0 +1,87 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "GCG",
+          "BMB",
+          "GBA"
+        ],
+        "key": {
+          "G": {
+            "item": "minecraft:gold_ingot"
+          },
+          "C": {
+            "item": "ae2:certus_quartz_crystal"
+          },
+          "B": {
+            "item": "minecraft:sugar"
+          },
+          "M": {
+            "item": "prettypipes:medium_speed_module"
+          },
+          "A": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "result": {
+          "item": "prettypipes:high_speed_module"
+        },
+        "function": "better_manufacturing:prettypipes/speed",
+        "parts": [
+          {
+            "role": "actuator",
+            "slot": 8
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "GCG",
+          "BMB",
+          "GBA"
+        ],
+        "key": {
+          "G": {
+            "item": "minecraft:gold_ingot"
+          },
+          "C": {
+            "item": "ae2:certus_quartz_crystal"
+          },
+          "B": {
+            "item": "minecraft:sugar"
+          },
+          "M": {
+            "item": "prettypipes:medium_speed_module"
+          },
+          "A": {
+            "item": "minecraft:gold_ingot"
+          }
+        },
+        "result": {
+          "item": "prettypipes:high_speed_module"
+        }
+      }
+    }
+  ]
+}

@@ -2,36 +2,61 @@
 // upgrades. PowerGrid keeps stationary electrical generation and the acid
 // chemistry script keeps nitric-acid PCB etching intact.
 ServerEvents.recipes(function (event) {
+    var partVariants = Platform.isLoaded('better_manufacturing')
     event.remove({ output: 'pneumaticcraft:air_compressor' })
-    event.shaped('pneumaticcraft:air_compressor', ['IPI', 'CMC', 'IRI'], {
-        I: '#forge:plates/iron', P: 'pneumaticcraft:pressure_tube', C: 'pneumaticcraft:ingot_iron_compressed',
-        // Basic air starts the pressure era. Airtight Machine Blocks belong
-        // to the later thermopneumatic and electrical roots.
-        M: 'kubejs:pressure_seal', R: 'create:cogwheel'
-    }).id('kubejs:tech/pneumatic/air_compressor_pressure_root')
+    // Basic air still starts at the pressure seal; two duplicate iron plates
+    // become actual working parts only with Manufacturing present.
+    if (partVariants) {
+        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['BPH', 'CMC', 'IRI'],
+            key: { B: { item: 'tconstruct:large_plate' }, H: { item: 'tconstruct:tough_handle' },
+                P: { item: 'pneumaticcraft:pressure_tube' }, C: { item: 'pneumaticcraft:ingot_iron_compressed' },
+                M: { item: 'kubejs:pressure_seal' }, I: { tag: 'forge:plates/iron' }, R: { item: 'create:cogwheel' } },
+            result: { item: 'pneumaticcraft:air_compressor' }, function: 'better_manufacturing:pneupressure/compression',
+            parts: [{ role: 'body', slot: 0 }, { role: 'handle', slot: 2 }]
+        }).id('kubejs:tech/pneumatic/air_compressor_pressure_root')
+    } else {
+        event.shaped('pneumaticcraft:air_compressor', ['IPI', 'CMC', 'IRI'], {
+            I: '#forge:plates/iron', P: 'pneumaticcraft:pressure_tube', C: 'pneumaticcraft:ingot_iron_compressed',
+            M: 'kubejs:pressure_seal', R: 'create:cogwheel'
+        }).id('kubejs:tech/pneumatic/air_compressor_pressure_root')
+    }
 
     event.remove({ output: 'pneumaticcraft:thermopneumatic_processing_plant' })
-    event.shaped('pneumaticcraft:thermopneumatic_processing_plant', ['TAT', 'CMC', 'TAT'], {
-        T: 'pneumaticcraft:pressure_tube', A: 'pneumaticcraft:advanced_pressure_tube',
-        C: 'pneumaticcraft:compressed_iron_gear', M: 'kubejs:airtight_machine_block'
-    }).id('kubejs:tech/pneumatic/thermopneumatic_processing')
+    if (partVariants) {
+        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['LAT', 'CMC', 'TAT'],
+            key: { L: { item: 'tconstruct:large_plate' }, T: { item: 'pneumaticcraft:pressure_tube' },
+                A: { item: 'pneumaticcraft:advanced_pressure_tube' }, C: { item: 'pneumaticcraft:compressed_iron_gear' },
+                M: { item: 'kubejs:airtight_machine_block' } },
+            result: { item: 'pneumaticcraft:thermopneumatic_processing_plant' },
+            function: 'better_manufacturing:pneuprocess/chemistry', parts: [{ role: 'liner', slot: 0 }]
+        }).id('kubejs:tech/pneumatic/thermopneumatic_processing')
+    } else {
+        event.shaped('pneumaticcraft:thermopneumatic_processing_plant', ['TAT', 'CMC', 'TAT'], {
+            T: 'pneumaticcraft:pressure_tube', A: 'pneumaticcraft:advanced_pressure_tube',
+            C: 'pneumaticcraft:compressed_iron_gear', M: 'kubejs:airtight_machine_block'
+        }).id('kubejs:tech/pneumatic/thermopneumatic_processing')
+    }
 
     event.remove({ output: 'pneumaticcraft:assembly_controller' })
+    var assemblyControllerInputs = [
+        'pneumaticcraft:advanced_pressure_tube', 'pneumaticcraft:printed_circuit_board',
+        'powergrid:integrated_circuit', 'kubejs:electrical_machine_block'
+    ]
+    if (partVariants) assemblyControllerInputs.push('tconstruct:large_plate')
     global.bcPncrPressure(event, 'kubejs:tech/pneumatic/assembly_controller',
-        'pneumaticcraft:assembly_controller', 1, 5.0, [
-            'pneumaticcraft:advanced_pressure_tube', 'pneumaticcraft:printed_circuit_board',
-            'powergrid:integrated_circuit', 'kubejs:electrical_machine_block'
-        ])
+        'pneumaticcraft:assembly_controller', 1, 5.0, assemblyControllerInputs)
 
     // Plastic remains PneumaticCraft's native petroleum and heat product. The
     // assembly and PCB gates below consume it once that processing route exists.
 
     event.remove({ output: 'pneumaticcraft:drone' })
+    var droneInputs = [
+        'pneumaticcraft:printed_circuit_board', 'pneumaticcraft:plastic',
+        'powergrid:electric_motor', 'create:precision_mechanism'
+    ]
+    if (partVariants) droneInputs.push('tconstruct:tool_handle')
     global.bcPncrPressure(event, 'kubejs:tech/pneumatic/drone',
-        'pneumaticcraft:drone', 1, 5.0, [
-            'pneumaticcraft:printed_circuit_board', 'pneumaticcraft:plastic',
-            'powergrid:electric_motor', 'create:precision_mechanism'
-        ])
+        'pneumaticcraft:drone', 1, 5.0, droneInputs)
 
     event.remove({ output: 'pneumaticcraft:armor_upgrade' })
     event.shaped('pneumaticcraft:armor_upgrade', ['PSP', 'ICI', 'PSP'], {
@@ -42,19 +67,18 @@ ServerEvents.recipes(function (event) {
 
     // Assembly tooling is a pressure-era capability, with electrical
     // instrumentation replacing the native raw PCB-only shortcut.
-    event.remove({ output: 'pneumaticcraft:assembly_drill' })
-    event.shaped('pneumaticcraft:assembly_drill', ['DPP', '  P', 'IEI'], {
-        D: '#forge:gems/diamond', P: 'pneumaticcraft:pneumatic_cylinder',
-        I: '#forge:ingots/compressed_iron', E: 'kubejs:electrical_instrumentation_module'
-    }).id('kubejs:tech/pneumatic/assembly_drill_instrumented')
+    // The settings-bearing native-ID datapack root retains this instrumentation gate;
+    // remove only the upstream route, never the configured KubeJS recipe by output.
+    event.remove({ id: 'pneumaticcraft:assembly_drill' })
 
     // Universal sensing remains pneumatic, but enters through the authored
     // instrumentation family rather than a free vanilla repeater recipe.
     event.remove({ output: 'pneumaticcraft:universal_sensor' })
-    event.shaped('pneumaticcraft:universal_sensor', [' S ', 'PIP', 'PTP'], {
-        S: 'pneumaticcraft:seismic_sensor', P: 'pneumaticcraft:plastic',
-        I: 'kubejs:electrical_instrumentation_module', T: 'pneumaticcraft:pressure_tube'
-    }).id('kubejs:tech/pneumatic/universal_sensor_instrumentation')
+    var sensorKey = { S: 'pneumaticcraft:seismic_sensor', P: 'pneumaticcraft:plastic',
+        I: 'kubejs:electrical_instrumentation_module', T: 'pneumaticcraft:pressure_tube' }
+    if (partVariants) sensorKey.H = 'tconstruct:large_plate'
+    event.shaped('pneumaticcraft:universal_sensor', partVariants ? [' S ', 'HIP', 'PTP'] : [' S ', 'PIP', 'PTP'], sensorKey)
+        .id('kubejs:tech/pneumatic/universal_sensor_instrumentation')
 
 
     // High impact logistics upgrades use the authored pressure/electrical
@@ -96,18 +120,20 @@ ServerEvents.recipes(function (event) {
     // and unrelated Amadron trade data remain untouched; targeted program/blueprint
     // purchase bypasses are removed by progression/82_pneumaticcraft_acquisition.js.
     event.remove({ output: 'pneumaticcraft:programmer' })
-    event.shaped('pneumaticcraft:programmer', ['RGR', 'TBT', 'P P'], {
-        R: '#forge:dyes/red', G: '#forge:glass_panes/black',
+    var programmerKey = { R: '#forge:dyes/red', G: '#forge:glass_panes/black',
         T: 'pneumaticcraft:turbine_rotor', B: 'pneumaticcraft:printed_circuit_board',
-        P: 'kubejs:electrical_instrumentation_module'
-    }).id('kubejs:tech/pneumatic/programmer_electrical_control')
+        P: 'kubejs:electrical_instrumentation_module' }
+    if (partVariants) programmerKey.H = 'tconstruct:large_plate'
+    event.shaped('pneumaticcraft:programmer', partVariants ? ['RGR', 'TBT', 'PHP'] : ['RGR', 'TBT', 'P P'], programmerKey)
+        .id('kubejs:tech/pneumatic/programmer_electrical_control')
 
     event.remove({ output: 'pneumaticcraft:programmable_controller' })
-    event.shaped('pneumaticcraft:programmable_controller', ['IRI', 'CDP', 'INI'], {
-        I: '#forge:ingots/compressed_iron', R: 'pneumaticcraft:remote',
+    var controllerKey = { I: '#forge:ingots/compressed_iron', R: 'pneumaticcraft:remote',
         C: 'pneumaticcraft:printed_circuit_board', D: 'pneumaticcraft:drone',
-        P: 'pneumaticcraft:advanced_pressure_tube', N: 'kubejs:ae_logic_package'
-    }).id('kubejs:tech/pneumatic/programmable_controller_ae_logic')
+        P: 'pneumaticcraft:advanced_pressure_tube', N: 'kubejs:ae_logic_package' }
+    if (partVariants) controllerKey.H = 'tconstruct:large_plate'
+    event.shaped('pneumaticcraft:programmable_controller', partVariants ? ['HRI', 'CDP', 'INI'] : ['IRI', 'CDP', 'INI'], controllerKey)
+        .id('kubejs:tech/pneumatic/programmable_controller_ae_logic')
 
     event.remove({ output: 'pneumaticcraft:amadron_tablet' })
     event.shaped('pneumaticcraft:amadron_tablet', ['PPP', 'PGP', 'PCP'], {

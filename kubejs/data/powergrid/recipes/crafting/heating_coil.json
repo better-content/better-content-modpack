@@ -1,0 +1,79 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "CPC",
+          "IRI",
+          "IRI"
+        ],
+        "key": {
+          "C": {
+            "tag": "forge:nuggets/copper"
+          },
+          "I": {
+            "tag": "forge:plates/iron"
+          },
+          "R": {
+            "item": "powergrid:resistive_coil"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "powergrid:heating_coil"
+        },
+        "function": "better_manufacturing:powergrid/heating",
+        "parts": [
+          {"role": "thermal_support", "slot": 1},
+          {"role": "coil_0", "slot": 4},
+          {"role": "coil_1", "slot": 7}
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:nuggets/copper"
+          },
+          "I": {
+            "tag": "forge:plates/iron"
+          },
+          "R": {
+            "item": "powergrid:resistive_coil"
+          }
+        },
+        "pattern": [
+          "C C",
+          "IRI",
+          "IRI"
+        ],
+        "result": {
+          "item": "powergrid:heating_coil"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

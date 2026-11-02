@@ -1,0 +1,7 @@
+{
+  "type": "forge:conditional",
+  "recipes": [{
+    "conditions": [{"type": "forge:false"}],
+    "recipe": {"type": "better_manufacturing:retool_mesh_frame", "category": "equipment"}
+  }]
+}

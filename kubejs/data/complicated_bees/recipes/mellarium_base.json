@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "complicated_bees:mellarium_panel"
+    },
+    "A": {
+      "tag": "minecraft:logs"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HP#",
+    "#A#",
+    "###"
+  ],
+  "result": {
+    "item": "complicated_bees:mellarium_base"
+  },
+  "show_notification": true
+}

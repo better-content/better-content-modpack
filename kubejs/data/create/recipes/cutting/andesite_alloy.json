@@ -1,0 +1,20 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:not", "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" } }
+      ],
+      "recipe": {
+        "type": "create:cutting",
+        "ingredients": [
+          { "item": "create:andesite_alloy" }
+        ],
+        "processingTime": 200,
+        "results": [
+          { "count": 6, "item": "create:shaft" }
+        ]
+      }
+    }
+  ]
+}

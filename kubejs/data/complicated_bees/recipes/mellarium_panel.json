@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "complicated_bees:honeyed_planks"
+    },
+    "P": {
+      "item": "complicated_bees:pollen"
+    },
+    "R": {
+      "item": "complicated_bees:royal_jelly"
+    },
+    "W": {
+      "item": "complicated_bees:beeswax"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "J": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "RH#",
+    "J#W",
+    "#WP"
+  ],
+  "result": {
+    "count": 4,
+    "item": "complicated_bees:mellarium_panel"
+  },
+  "show_notification": true
+}

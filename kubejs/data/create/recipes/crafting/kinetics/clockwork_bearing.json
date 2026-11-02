@@ -1,0 +1,75 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "minecraft:wooden_slabs"
+          },
+          "C": {
+            "item": "create:brass_casing"
+          },
+          "S": {
+            "item": "create:electron_tube"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "pattern": [
+          "B ",
+          "CH",
+          "S "
+        ],
+        "result": {
+          "item": "create:clockwork_bearing"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "minecraft:wooden_slabs"
+          },
+          "C": {
+            "item": "create:brass_casing"
+          },
+          "S": {
+            "item": "create:electron_tube"
+          }
+        },
+        "pattern": [
+          "B",
+          "C",
+          "S"
+        ],
+        "result": {
+          "item": "create:clockwork_bearing"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

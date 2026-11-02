@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "pneumaticcraft:reinforced_brick_tile"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "HBB",
+    "BRB",
+    "BBB"
+  ],
+  "result": {
+    "count": 2,
+    "item": "pneumaticcraft:logistics_core"
+  },
+  "show_notification": true
+}

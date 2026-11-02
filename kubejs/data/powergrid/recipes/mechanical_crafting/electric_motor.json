@@ -1,0 +1,94 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:powergrid_mechanical_variant",
+        "acceptMirrored": true,
+        "key": {
+          "C": {
+            "tag": "forge:copper_coils"
+          },
+          "E": {
+            "item": "powergrid:conductive_casing"
+          },
+          "I": {
+            "tag": "forge:plates/iron"
+          },
+          "M": {
+            "item": "powergrid:magnet"
+          },
+          "S": {
+            "item": "create:shaft"
+          },
+          "P": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "pattern": [
+          " ICI ",
+          "CMSMC",
+          " ICI ",
+          " P E "
+        ],
+        "result": {
+          "item": "powergrid:electric_motor"
+        },
+        "function": "better_manufacturing:powergrid/motors",
+        "parts": [
+          {
+            "role": "rotor",
+            "slot": 16
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "acceptMirrored": true,
+        "key": {
+          "C": {
+            "tag": "forge:copper_coils"
+          },
+          "E": {
+            "item": "powergrid:conductive_casing"
+          },
+          "I": {
+            "tag": "forge:plates/iron"
+          },
+          "M": {
+            "item": "powergrid:magnet"
+          },
+          "S": {
+            "item": "create:shaft"
+          }
+        },
+        "pattern": [
+          " ICI ",
+          "CMSMC",
+          " ICI ",
+          "  E  "
+        ],
+        "result": {
+          "item": "powergrid:electric_motor"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "HSP",
+          "CMC",
+          " S "
+        ],
+        "key": {
+          "S": {
+            "item": "create:cogwheel"
+          },
+          "C": {
+            "item": "create:speedometer"
+          },
+          "M": {
+            "item": "better_rail_beetle:compact_module_frame"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:high_speed_governor_1"
+        },
+        "function": "better_manufacturing:rail_beetle/modules",
+        "parts": [
+          {
+            "role": "drive_shaft",
+            "slot": 0
+          },
+          {
+            "role": "working_surface",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " S ",
+          "CMC",
+          " S "
+        ],
+        "key": {
+          "S": {
+            "item": "create:cogwheel"
+          },
+          "C": {
+            "item": "create:speedometer"
+          },
+          "M": {
+            "item": "better_rail_beetle:compact_module_frame"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:high_speed_governor_1"
+        }
+      }
+    }
+  ]
+}

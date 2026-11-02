@@ -1,0 +1,15 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "building",
+  "pattern": ["BDB", "BCB", "BBH"],
+  "key": {
+    "B": { "tag": "forge:storage_blocks/blue_cheese" },
+    "C": { "tag": "forge:crafting_tables" },
+    "D": { "tag": "forge:gems/diamond" },
+    "H": { "item": "tconstruct:pick_head" }
+  },
+  "result": { "item": "rats:rat_quarry" },
+  "function": "better_manufacturing:rats/quarry_work",
+  "parts": [{ "role": "head", "slot": 8 }],
+  "show_notification": true
+}

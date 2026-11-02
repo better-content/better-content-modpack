@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "a": {
+      "item": "ae2:quartz_glass"
+    },
+    "b": {
+      "item": "ae2:fluix_glass_cable"
+    },
+    "c": {
+      "tag": "forge:dusts/fluix"
+    },
+    "d": {
+      "tag": "ae2:all_fluix"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "Hba",
+    "cdc",
+    "aba"
+  ],
+  "result": {
+    "item": "ae2:spatial_pylon"
+  },
+  "show_notification": true
+}

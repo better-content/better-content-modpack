@@ -1,0 +1,77 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "L",
+          "C",
+          "S"
+        ],
+        "key": {
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "C": {
+            "tag": "forge:ingots/copper"
+          },
+          "S": {
+            "tag": "forge:plates/copper"
+          }
+        },
+        "result": {
+          "count": 4,
+          "item": "create:fluid_pipe"
+        },
+        "function": "better_manufacturing:create/fluid_envelope",
+        "parts": [
+          {
+            "role": "liner",
+            "slot": 0
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "tag": "forge:ingots/copper"
+          },
+          "S": {
+            "tag": "forge:plates/copper"
+          }
+        },
+        "pattern": [
+          "S",
+          "C",
+          "S"
+        ],
+        "result": {
+          "count": 4,
+          "item": "create:fluid_pipe"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

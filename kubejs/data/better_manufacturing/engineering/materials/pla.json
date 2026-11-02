@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "material": "better_manufacturing:pla",
+  "supported_parts": ["tconstruct:tool_handle", "tconstruct:tough_handle", "tconstruct:tool_binding", "tconstruct:tough_binding", "tconstruct:large_plate"],
+  "native_stats": "base_material",
+  "traits": {
+    "screen_rate": 0.8
+  },
+  "compatible_processes": []
+}

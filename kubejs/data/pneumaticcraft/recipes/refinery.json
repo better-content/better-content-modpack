@@ -1,0 +1,84 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "SSL",
+          "RTR",
+          "SSS"
+        ],
+        "key": {
+          "R": {
+            "tag": "forge:dusts/redstone"
+          },
+          "S": {
+            "item": "pneumaticcraft:reinforced_stone_slab"
+          },
+          "T": {
+            "type": "forge:nbt",
+            "count": 1,
+            "item": "pneumaticcraft:small_tank"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "pneumaticcraft:refinery"
+        },
+        "function": "better_manufacturing:pneuprocess/chemistry",
+        "parts": [
+          {
+            "role": "liner",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "R": {
+            "tag": "forge:dusts/redstone"
+          },
+          "S": {
+            "item": "pneumaticcraft:reinforced_stone_slab"
+          },
+          "T": {
+            "type": "forge:nbt",
+            "count": 1,
+            "item": "pneumaticcraft:small_tank"
+          }
+        },
+        "pattern": [
+          "SSS",
+          "RTR",
+          "SSS"
+        ],
+        "result": {
+          "item": "pneumaticcraft:refinery"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

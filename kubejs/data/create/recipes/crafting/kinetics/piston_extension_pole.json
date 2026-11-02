@@ -1,0 +1,71 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "H": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "P ",
+          "AH",
+          "P "
+        ],
+        "result": {
+          "count": 8,
+          "item": "create:piston_extension_pole"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "P": {
+            "tag": "minecraft:planks"
+          }
+        },
+        "pattern": [
+          "P",
+          "A",
+          "P"
+        ],
+        "result": {
+          "count": 8,
+          "item": "create:piston_extension_pole"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

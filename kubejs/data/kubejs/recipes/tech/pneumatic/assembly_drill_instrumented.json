@@ -1,0 +1,42 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": ["HPP", "  P", "IEI"],
+        "key": {
+          "H": {"item": "tconstruct:pick_head"},
+          "P": {"item": "pneumaticcraft:pneumatic_cylinder"},
+          "I": {"tag": "forge:ingots/compressed_iron"},
+          "E": {"item": "kubejs:electrical_instrumentation_module"}
+        },
+        "result": {"item": "pneumaticcraft:assembly_drill"},
+        "function": "better_manufacturing:pneumaticcraft/drilling",
+        "parts": [
+          {"role": "head", "slot": 0},
+          {"role": "cylinder_a", "slot": 1},
+          {"role": "cylinder_b", "slot": 2},
+          {"role": "cylinder_c", "slot": 5}
+        ]
+      }
+    },
+    {
+      "conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": ["DPP", "  P", "IEI"],
+        "key": {
+          "D": {"tag": "forge:gems/diamond"},
+          "P": {"item": "pneumaticcraft:pneumatic_cylinder"},
+          "I": {"tag": "forge:ingots/compressed_iron"},
+          "E": {"item": "kubejs:electrical_instrumentation_module"}
+        },
+        "result": {"item": "pneumaticcraft:assembly_drill"}
+      }
+    }
+  ]
+}

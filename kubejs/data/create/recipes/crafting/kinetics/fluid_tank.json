@@ -1,0 +1,75 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "L",
+          "C",
+          "B"
+        ],
+        "key": {
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "C": {
+            "tag": "forge:barrels/wooden"
+          },
+          "B": {
+            "tag": "forge:plates/copper"
+          }
+        },
+        "result": {
+          "item": "create:fluid_tank"
+        },
+        "function": "better_manufacturing:create/fluid_envelope",
+        "parts": [
+          {
+            "role": "liner",
+            "slot": 0
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "tag": "forge:plates/copper"
+          },
+          "C": {
+            "tag": "forge:barrels/wooden"
+          }
+        },
+        "pattern": [
+          "B",
+          "C",
+          "B"
+        ],
+        "result": {
+          "item": "create:fluid_tank"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

@@ -8,15 +8,17 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:tech/ae2/quartz_glass_native_palette')
 
     event.remove({ output: 'ae2:controller' })
+    var controllerInputs = [
+        global.bcPncrStack('ae2:sky_stone_block', 1),
+        global.bcPncrStack('ae2:charged_certus_quartz_crystal', 1),
+        global.bcPncrStack('ae2:engineering_processor', 1),
+        global.bcPncrStack('powergrid:integrated_circuit', 1),
+        global.bcPncrStack('create:electron_tube', 2)
+    ]
+    if (Platform.isLoaded('better_manufacturing')) controllerInputs.push(global.bcPncrStack('tconstruct:large_plate', 1))
     event.custom({
         type: 'pneumaticcraft:pressure_chamber', pressure: 4.0,
-        inputs: [
-            global.bcPncrStack('ae2:sky_stone_block', 1),
-            global.bcPncrStack('ae2:charged_certus_quartz_crystal', 1),
-            global.bcPncrStack('ae2:engineering_processor', 1),
-            global.bcPncrStack('powergrid:integrated_circuit', 1),
-            global.bcPncrStack('create:electron_tube', 2)
-        ],
+        inputs: controllerInputs,
         results: [{ item: 'ae2:controller' }]
     }).id('kubejs:tech/ae2/controller_meteor_core')
 
@@ -50,10 +52,12 @@ ServerEvents.recipes(function (event) {
     }).id('kubejs:tech/ae2/engineering_processor_meteor_palette')
 
     event.remove({ output: 'ae2:cell_workbench' })
-    event.shaped('ae2:cell_workbench', ['QGQ', 'CPC', 'QGQ'], {
-        Q: 'ae2:quartz_glass', G: '#forge:glass', C: 'ae2:calculation_processor',
-        P: 'powergrid:integrated_circuit'
-    }).id('kubejs:tech/ae2/cell_workbench_native_components')
+    var workbenchParts = Platform.isLoaded('better_manufacturing')
+    var workbenchKey = { Q: 'ae2:quartz_glass', G: '#forge:glass', C: 'ae2:calculation_processor',
+        P: 'powergrid:integrated_circuit' }
+    if (workbenchParts) workbenchKey.H = 'tconstruct:large_plate'
+    event.shaped('ae2:cell_workbench', workbenchParts ? ['QHQ', 'CPC', 'QGQ'] : ['QGQ', 'CPC', 'QGQ'], workbenchKey)
+        .id('kubejs:tech/ae2/cell_workbench_native_components')
 
     // World reset authority remains in WLM's operator-gated interface. Its
     // authored recipe is replaced so that the interface itself also requires

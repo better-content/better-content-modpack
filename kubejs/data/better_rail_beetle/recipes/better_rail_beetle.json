@@ -1,0 +1,107 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "HEP",
+          " C E",
+          " BM"
+        ],
+        "key": {
+          "E": {
+            "item": "create:electron_tube"
+          },
+          "C": {
+            "item": "create:railway_casing"
+          },
+          "B": {
+            "item": "minecraft:barrel"
+          },
+          "M": {
+            "item": "minecraft:minecart"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:better_rail_beetle"
+        },
+        "function": "better_manufacturing:rail_beetle/drives",
+        "parts": [
+          {
+            "role": "drive_shaft",
+            "slot": 0
+          },
+          {
+            "role": "working_surface",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "ECE",
+          " B ",
+          " M "
+        ],
+        "key": {
+          "E": {
+            "item": "create:electron_tube"
+          },
+          "C": {
+            "item": "create:railway_casing"
+          },
+          "B": {
+            "item": "minecraft:barrel"
+          },
+          "M": {
+            "item": "minecraft:minecart"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:better_rail_beetle"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "misc",
+  "function": "better_manufacturing:littlelogistics/propulsion",
+  "parts": [{"role": "drive", "slot": 1}],
+  "pattern": ["IH ", "PFP", "III"],
+  "key": {
+    "H": {"item": "tconstruct:tough_handle"},
+    "P": {"item": "minecraft:piston"},
+    "F": {"item": "minecraft:furnace"},
+    "I": {"item": "minecraft:iron_ingot"}
+  },
+  "result": {"item": "littlelogistics:tug"}
+}

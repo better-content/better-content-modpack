@@ -1,0 +1,16 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
+      "type": "better_manufacturing:part_variant", "pattern": ["HQT", "PBP", "SFS"],
+      "key": {"H": {"item": "tconstruct:tough_handle"}, "T": {"item": "tconstruct:large_plate"}, "P": {"item": "createdieselgenerators:engine_piston"}, "Q": {"item": "minecraft:flint_and_steel"}, "B": {"tag": "forge:storage_blocks/brass"}, "S": {"item": "minecraft:polished_blackstone_slab"}, "F": {"item": "create:fluid_tank"}},
+      "result": {"item": "createdieselgenerators:diesel_engine"},
+      "function": "better_manufacturing:createdieselgenerators/engines", "parts": [{"role": "rod", "slot": 0}, {"role": "chamber", "slot": 2}, {"role": "piston_left", "slot": 3}, {"role": "piston_right", "slot": 5}]
+    }},
+    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
+      "type": "minecraft:crafting_shaped", "pattern": [" Q ", "PBP", "SFS"],
+      "key": {"P": {"item": "createdieselgenerators:engine_piston"}, "Q": {"item": "minecraft:flint_and_steel"}, "B": {"tag": "forge:storage_blocks/brass"}, "S": {"item": "minecraft:polished_blackstone_slab"}, "F": {"item": "create:fluid_tank"}},
+      "result": {"item": "createdieselgenerators:diesel_engine"}
+    }}
+  ]
+}

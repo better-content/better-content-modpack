@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "complicated_bees:gyrofuge_panel"
+    },
+    "A": {
+      "item": "complicated_bees:gyrofuge_base"
+    },
+    "B": {
+      "item": "minecraft:powered_rail"
+    },
+    "C": {
+      "tag": "forge:chests"
+    },
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "J": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "JCP",
+    "BAB",
+    "#H#"
+  ],
+  "result": {
+    "item": "complicated_bees:gyrofuge_output_hatch"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,93 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "function": "better_manufacturing:clockwork/flight_actuators",
+        "pattern": [
+          "LAL",
+          "HBX",
+          "   "
+        ],
+        "key": {
+          "L": {
+            "item": "create:transmitter"
+          },
+          "A": {
+            "item": "vs_clockwork:andesite_flap_bearing"
+          },
+          "B": {
+            "item": "create:brass_sheet"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "X": {
+            "item": "tconstruct:broad_blade"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:smart_flap_bearing"
+        },
+        "parts": [
+          {
+            "role": "handle",
+            "slot": 3
+          },
+          {
+            "role": "blade",
+            "slot": 5
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "LAL",
+          " B "
+        ],
+        "key": {
+          "L": {
+            "item": "create:transmitter"
+          },
+          "A": {
+            "item": "vs_clockwork:andesite_flap_bearing"
+          },
+          "B": {
+            "item": "create:brass_sheet"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:smart_flap_bearing"
+        }
+      }
+    }
+  ]
+}

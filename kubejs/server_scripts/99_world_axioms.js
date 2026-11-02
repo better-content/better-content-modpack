@@ -80,9 +80,11 @@ ServerEvents.recipes(function (event) {
             .id('kubejs:world_axioms/iron_law/blasting')
     }
     if (has('eternal_engine')) {
-        event.shaped('create:water_wheel', ['PPP', 'PAP', 'PPP'], {
-            P: '#minecraft:planks', A: 'create:andesite_alloy'
-        }).id('kubejs:world_axioms/eternal_engine/small_water_wheel')
+        var wheelParts = Platform.isLoaded('better_manufacturing')
+        var wheelKey = { P: '#minecraft:planks', A: 'create:andesite_alloy' }
+        if (wheelParts) wheelKey.H = 'tconstruct:tool_binding'
+        event.shaped('create:water_wheel', wheelParts ? ['PPP', 'PAP', 'PPH'] : ['PPP', 'PAP', 'PPP'], wheelKey)
+            .id('kubejs:world_axioms/eternal_engine/small_water_wheel')
     }
     if (has('alloy_testament')) {
         // Pinned casting reads one output item, not a count. Approved physical
@@ -97,9 +99,17 @@ ServerEvents.recipes(function (event) {
             .id('kubejs:world_axioms/alloy_testament/unpack_billet')
     }
     if (has('captive_hearth')) {
-        event.shaped('better_industrial_heat:thermal_firebox', ['BBB', 'BFB', 'BBB'], {
-            B: 'minecraft:brick', F: 'minecraft:furnace'
-        }).id('kubejs:world_axioms/captive_hearth/firebox')
+        if (Platform.isLoaded('better_manufacturing')) {
+            event.custom({ type: 'better_manufacturing:part_variant', pattern: ['PBB', 'BFB', 'BBB'],
+                key: { P: { item: 'tconstruct:large_plate' }, B: { item: 'minecraft:brick' }, F: { item: 'minecraft:furnace' } },
+                result: { item: 'better_industrial_heat:thermal_firebox' },
+                function: 'better_manufacturing:industrialheat/thermal', parts: [{ role: 'thermal_surface', slot: 0 }]
+            }).id('kubejs:world_axioms/captive_hearth/firebox')
+        } else {
+            event.shaped('better_industrial_heat:thermal_firebox', ['BBB', 'BFB', 'BBB'], {
+                B: 'minecraft:brick', F: 'minecraft:furnace'
+            }).id('kubejs:world_axioms/captive_hearth/firebox')
+        }
     }
     if (has('sacrificial_tradition')) {
         // Native registrar selects FIRST matching sword before checking tier.

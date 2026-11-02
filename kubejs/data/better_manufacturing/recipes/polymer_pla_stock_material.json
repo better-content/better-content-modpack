@@ -1,0 +1,13 @@
+{
+  "type": "forge:conditional",
+  "recipes": [{
+    "conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
+    "recipe": {
+      "type": "tconstruct:material",
+      "ingredient": {"item": "better_manufacturing:pla_stock"},
+      "material": "better_manufacturing:pla",
+      "needed": 1,
+      "value": 1
+    }
+  }]
+}

@@ -1,0 +1,99 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "minecraft:iron_bars"
+          },
+          "C": {
+            "item": "pneumaticcraft:advanced_air_compressor"
+          },
+          "P": {
+            "tag": "pneumaticcraft:plastic_sheets"
+          },
+          "R": {
+            "item": "pneumaticcraft:turbine_rotor"
+          },
+          "X": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "pattern": [
+          "XHB",
+          "PRP",
+          "BCB"
+        ],
+        "result": {
+          "item": "pneumaticcraft:electrostatic_compressor"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneupressure/compression",
+        "parts": [
+          {
+            "role": "body",
+            "slot": 0
+          },
+          {
+            "role": "handle",
+            "slot": 1
+          },
+          {
+            "role": "rotor",
+            "slot": 4
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "minecraft:iron_bars"
+          },
+          "C": {
+            "item": "pneumaticcraft:advanced_air_compressor"
+          },
+          "P": {
+            "tag": "pneumaticcraft:plastic_sheets"
+          },
+          "R": {
+            "item": "pneumaticcraft:turbine_rotor"
+          }
+        },
+        "pattern": [
+          "BPB",
+          "PRP",
+          "BCB"
+        ],
+        "result": {
+          "item": "pneumaticcraft:electrostatic_compressor"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "key": {
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "T": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "X": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "XII",
+          "ITI",
+          "III"
+        ],
+        "result": {
+          "count": 16,
+          "item": "pneumaticcraft:pressure_chamber_valve"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneupressure/pressure",
+        "parts": [
+          {
+            "role": "body",
+            "slot": 0
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "T": {
+            "item": "pneumaticcraft:pressure_tube"
+          }
+        },
+        "pattern": [
+          "III",
+          "ITI",
+          "III"
+        ],
+        "result": {
+          "count": 16,
+          "item": "pneumaticcraft:pressure_chamber_valve"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

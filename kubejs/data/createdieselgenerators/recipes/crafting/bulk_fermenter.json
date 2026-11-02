@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABA",
+    "HP ",
+    "   "
+  ],
+  "key": {
+    "B": {
+      "tag": "forge:barrels/wooden"
+    },
+    "A": {
+      "item": "create:andesite_alloy"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "result": {
+    "item": "createdieselgenerators:bulk_fermenter"
+  }
+}

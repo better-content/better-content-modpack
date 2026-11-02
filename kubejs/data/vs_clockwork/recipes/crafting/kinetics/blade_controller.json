@@ -1,0 +1,76 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "HAX",
+          "AEA",
+          "   "
+        ],
+        "key": {
+          "A": {
+            "item": "create:zinc_nugget"
+          },
+          "E": {
+            "item": "create:radial_chassis"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "X": {
+            "item": "tconstruct:broad_blade"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:blade_controller"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " A ",
+          "AEA"
+        ],
+        "key": {
+          "A": {
+            "item": "create:zinc_nugget"
+          },
+          "E": {
+            "item": "create:radial_chassis"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:blade_controller"
+        }
+      }
+    }
+  ]
+}

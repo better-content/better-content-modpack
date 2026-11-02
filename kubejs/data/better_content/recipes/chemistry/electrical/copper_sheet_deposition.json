@@ -1,0 +1,26 @@
+{
+  "type": "better_electrochemistry:basin_batch",
+  "consumed_anode": {
+    "item": "minecraft:copper_ingot",
+    "count": 1
+  },
+  "consumed_seed": {
+    "item": "create:copper_sheet",
+    "count": 1
+  },
+  "bath_input": {
+    "fluid": "better_electrochemistry:aqueous_copper_ii_sulfate",
+    "amount": 250,
+    "consume_mb": 0
+  },
+  "bath_return": {
+    "fluid": "better_electrochemistry:aqueous_copper_ii_sulfate",
+    "amount": 250
+  },
+  "result": {
+    "item": "create:copper_sheet",
+    "count": 2
+  },
+  "min_voltage": 8.0,
+  "work_joules": 40.0
+}

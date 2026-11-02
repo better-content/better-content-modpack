@@ -1,0 +1,82 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "minecraft:iron_bars"
+          },
+          "G": {
+            "tag": "forge:glass"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          "F": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "FIB",
+          "IGI",
+          "BIB"
+        ],
+        "result": {
+          "item": "pneumaticcraft:small_tank"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneumaticcraft/fluid_transfer",
+        "parts": [
+          {
+            "role": "wetted_fitting",
+            "slot": 0
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "minecraft:iron_bars"
+          },
+          "G": {
+            "tag": "forge:glass"
+          },
+          "I": {
+            "tag": "forge:ingots/compressed_iron"
+          }
+        },
+        "pattern": [
+          "BIB",
+          "IGI",
+          "BIB"
+        ],
+        "result": {
+          "item": "pneumaticcraft:small_tank"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "pneumaticcraft:printed_circuit_board"
+    },
+    "C": {
+      "item": "pneumaticcraft:pneumatic_cylinder"
+    },
+    "D": {
+      "tag": "forge:glass/red"
+    },
+    "I": {
+      "tag": "forge:ingots/compressed_iron"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "DCC",
+    " HC",
+    "IBI"
+  ],
+  "result": {
+    "item": "pneumaticcraft:assembly_laser"
+  },
+  "show_notification": true
+}

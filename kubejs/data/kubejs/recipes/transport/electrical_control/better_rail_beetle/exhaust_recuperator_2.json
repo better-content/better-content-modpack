@@ -1,0 +1,109 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "powergrid"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "HSP",
+          "EME",
+          " S "
+        ],
+        "key": {
+          "S": {
+            "item": "powergrid:integrated_circuit"
+          },
+          "E": {
+            "item": "kubejs:electrical_machine_block"
+          },
+          "M": {
+            "item": "better_rail_beetle:exhaust_recuperator_1"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:exhaust_recuperator_2"
+        },
+        "function": "better_manufacturing:rail_beetle/modules",
+        "parts": [
+          {
+            "role": "drive_shaft",
+            "slot": 0
+          },
+          {
+            "role": "working_surface",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_rail_beetle"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "powergrid"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " S ",
+          "EME",
+          " S "
+        ],
+        "key": {
+          "S": {
+            "item": "powergrid:integrated_circuit"
+          },
+          "E": {
+            "item": "kubejs:electrical_machine_block"
+          },
+          "M": {
+            "item": "better_rail_beetle:exhaust_recuperator_1"
+          }
+        },
+        "result": {
+          "item": "better_rail_beetle:exhaust_recuperator_2"
+        }
+      }
+    }
+  ]
+}

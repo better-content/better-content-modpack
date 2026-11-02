@@ -1,0 +1,73 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "create:andesite_alloy"
+          },
+          "L": {
+            "tag": "minecraft:logs"
+          },
+          "R": {
+            "tag": "forge:dusts/redstone"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "pattern": [
+          "CRC",
+          "LHL"
+        ],
+        "result": {
+          "item": "create:cart_assembler"
+        },
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "create:andesite_alloy"
+          },
+          "L": {
+            "tag": "minecraft:logs"
+          },
+          "R": {
+            "tag": "forge:dusts/redstone"
+          }
+        },
+        "pattern": [
+          "CRC",
+          "L L"
+        ],
+        "result": {
+          "item": "create:cart_assembler"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

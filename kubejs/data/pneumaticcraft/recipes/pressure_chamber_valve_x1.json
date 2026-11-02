@@ -1,0 +1,68 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "TW",
+          "X "
+        ],
+        "key": {
+          "T": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "W": {
+            "item": "pneumaticcraft:pressure_chamber_wall"
+          },
+          "X": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "pneumaticcraft:pressure_chamber_valve"
+        },
+        "function": "better_manufacturing:pneupressure/pressure",
+        "parts": [
+          {
+            "role": "body",
+            "slot": 2
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          {
+            "item": "pneumaticcraft:pressure_chamber_wall"
+          }
+        ],
+        "result": {
+          "item": "pneumaticcraft:pressure_chamber_valve"
+        }
+      }
+    }
+  ]
+}

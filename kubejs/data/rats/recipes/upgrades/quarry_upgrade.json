@@ -1,0 +1,16 @@
+{
+  "type": "better_manufacturing:part_variant",
+  "category": "misc",
+  "pattern": ["PFP", "HUF", "CCC"],
+  "key": {
+    "C": { "tag": "forge:storage_blocks/blue_cheese" },
+    "F": { "item": "rats:filth" },
+    "P": { "item": "rats:rat_paw" },
+    "U": { "item": "rats:rat_upgrade_basic" },
+    "H": { "item": "tconstruct:pick_head" }
+  },
+  "result": { "count": 3, "item": "rats:rat_upgrade_quarry" },
+  "function": "better_manufacturing:rats/quarry_work",
+  "parts": [{ "role": "head", "slot": 3 }],
+  "show_notification": true
+}

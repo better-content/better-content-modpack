@@ -1,0 +1,65 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "L",
+          "P"
+        ],
+        "key": {
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "P": {
+            "item": "create:fluid_pipe"
+          }
+        },
+        "result": {
+          "item": "create:fluid_valve"
+        },
+        "function": "better_manufacturing:create/fluid_envelope",
+        "parts": [
+          {
+            "role": "liner",
+            "slot": 0
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "tag": "forge:plates/iron"
+          },
+          {
+            "item": "create:fluid_pipe"
+          }
+        ],
+        "result": {
+          "item": "create:fluid_valve"
+        }
+      }
+    }
+  ]
+}

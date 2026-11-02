@@ -1,0 +1,100 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "function": "better_manufacturing:clockwork/flight_actuators",
+        "pattern": [
+          "LPL",
+          "BMB",
+          "HSX"
+        ],
+        "key": {
+          "L": {
+            "item": "aether:stripped_skyroot_log"
+          },
+          "P": {
+            "item": "create:precision_mechanism"
+          },
+          "B": {
+            "tag": "forge:plates/brass"
+          },
+          "M": {
+            "item": "kubejs:brass_machine_block"
+          },
+          "S": {
+            "item": "create:shaft"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "X": {
+            "item": "tconstruct:broad_blade"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:brass_propeller_bearing"
+        },
+        "parts": [
+          {
+            "role": "handle",
+            "slot": 6
+          },
+          {
+            "role": "blade",
+            "slot": 8
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "vs_clockwork"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "W",
+          "A",
+          "E"
+        ],
+        "key": {
+          "W": {
+            "tag": "minecraft:wooden_slabs"
+          },
+          "A": {
+            "item": "create:cogwheel"
+          },
+          "E": {
+            "item": "create:clockwork_bearing"
+          }
+        },
+        "result": {
+          "item": "vs_clockwork:brass_propeller_bearing"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:brass_casing"
+          },
+          {
+            "item": "create:cogwheel"
+          },
+          {
+            "item": "create:electron_tube"
+          },
+          {
+            "item": "tconstruct:tool_handle"
+          }
+        ],
+        "result": {
+          "item": "create:sequenced_gearshift"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:brass_casing"
+          },
+          {
+            "item": "create:cogwheel"
+          },
+          {
+            "item": "create:electron_tube"
+          }
+        ],
+        "result": {
+          "item": "create:sequenced_gearshift"
+        }
+      }
+    }
+  ]
+}

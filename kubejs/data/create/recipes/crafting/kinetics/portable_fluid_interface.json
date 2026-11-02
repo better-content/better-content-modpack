@@ -1,0 +1,69 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "B",
+          "L",
+          "C"
+        ],
+        "key": {
+          "B": {
+            "item": "create:copper_casing"
+          },
+          "L": {
+            "item": "tconstruct:large_plate"
+          },
+          "C": {
+            "item": "create:chute"
+          }
+        },
+        "result": {
+          "item": "create:portable_fluid_interface"
+        },
+        "function": "better_manufacturing:create/fluid_transfer",
+        "parts": [
+          {
+            "role": "wetted_fitting",
+            "slot": 1
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "create:copper_casing"
+          },
+          {
+            "item": "create:chute"
+          }
+        ],
+        "result": {
+          "item": "create:portable_fluid_interface"
+        }
+      }
+    }
+  ]
+}

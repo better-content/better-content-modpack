@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HIG",
+    "IMI",
+    "GIG"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "M": {
+      "item": "prettypipes:low_crafting_module"
+    },
+    "H": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "result": {
+    "item": "prettypipes:medium_crafting_module"
+  }
+}

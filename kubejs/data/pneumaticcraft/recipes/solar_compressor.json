@@ -1,0 +1,101 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "pneumaticcraft:compressed_iron_block"
+          },
+          "G": {
+            "item": "pneumaticcraft:compressed_iron_gear"
+          },
+          "P": {
+            "item": "pneumaticcraft:printed_circuit_board"
+          },
+          "T": {
+            "item": "pneumaticcraft:advanced_pressure_tube"
+          },
+          "W": {
+            "item": "pneumaticcraft:solar_cell"
+          },
+          "X": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "pattern": [
+          "WWW",
+          "HGP",
+          "XBT"
+        ],
+        "result": {
+          "item": "pneumaticcraft:solar_compressor"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneupressure/compression",
+        "parts": [
+          {
+            "role": "body",
+            "slot": 6
+          },
+          {
+            "role": "handle",
+            "slot": 3
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "item": "pneumaticcraft:compressed_iron_block"
+          },
+          "G": {
+            "item": "pneumaticcraft:compressed_iron_gear"
+          },
+          "P": {
+            "item": "pneumaticcraft:printed_circuit_board"
+          },
+          "T": {
+            "item": "pneumaticcraft:advanced_pressure_tube"
+          },
+          "W": {
+            "item": "pneumaticcraft:solar_cell"
+          }
+        },
+        "pattern": [
+          "WWW",
+          "PGP",
+          "TBT"
+        ],
+        "result": {
+          "item": "pneumaticcraft:solar_compressor"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}

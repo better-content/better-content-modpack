@@ -1,0 +1,81 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          " S ",
+          "RMR",
+          " A "
+        ],
+        "key": {
+          "S": {
+            "item": "minecraft:sugar"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          },
+          "M": {
+            "item": "prettypipes:blank_module"
+          },
+          "A": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "result": {
+          "item": "prettypipes:low_speed_module"
+        },
+        "function": "better_manufacturing:prettypipes/speed",
+        "parts": [
+          {
+            "role": "actuator",
+            "slot": 7
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " S ",
+          "RMR",
+          " A "
+        ],
+        "key": {
+          "S": {
+            "item": "minecraft:sugar"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          },
+          "M": {
+            "item": "prettypipes:blank_module"
+          },
+          "A": {
+            "item": "minecraft:redstone"
+          }
+        },
+        "result": {
+          "item": "prettypipes:low_speed_module"
+        }
+      }
+    }
+  ]
+}

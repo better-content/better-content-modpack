@@ -1,0 +1,73 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          "ABC",
+          "D  "
+        ],
+        "key": {
+          "A": {
+            "item": "powergrid:electric_motor"
+          },
+          "B": {
+            "item": "powergrid:electrical_gizmo"
+          },
+          "C": {
+            "item": "create:precision_mechanism"
+          },
+          "D": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "item": "powergrid:servo"
+        },
+        "function": "better_manufacturing:powergrid/motors",
+        "parts": [
+          {
+            "role": "rotor",
+            "slot": 3
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "powergrid:electric_motor"
+          },
+          {
+            "item": "powergrid:electrical_gizmo"
+          },
+          {
+            "item": "create:precision_mechanism"
+          }
+        ],
+        "result": {
+          "item": "powergrid:servo"
+        }
+      }
+    }
+  ]
+}

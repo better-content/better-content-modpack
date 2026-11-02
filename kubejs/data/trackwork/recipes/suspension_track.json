@@ -1,0 +1,86 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:trackwork_mechanical",
+        "pattern": [
+          "H S  ",
+          " PCP ",
+          " BBB "
+        ],
+        "key": {
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "C": {
+            "item": "create:cogwheel"
+          },
+          "B": {
+            "item": "create:belt_connector"
+          },
+          "S": {
+            "item": "create:mechanical_piston"
+          },
+          "H": [
+            {
+              "item": "tconstruct:tough_handle"
+            },
+            {
+              "item": "tconstruct:bow_limb"
+            }
+          ]
+        },
+        "result": {
+          "item": "trackwork:suspension_track",
+          "count": 2
+        },
+        "acceptMirrored": false
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "pattern": [
+          "  S  ",
+          " PCP ",
+          " BBB "
+        ],
+        "key": {
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "C": {
+            "item": "create:cogwheel"
+          },
+          "B": {
+            "item": "create:belt_connector"
+          },
+          "S": {
+            "item": "create:mechanical_piston"
+          }
+        },
+        "result": {
+          "item": "trackwork:suspension_track",
+          "count": 2
+        },
+        "acceptMirrored": false
+      }
+    }
+  ]
+}

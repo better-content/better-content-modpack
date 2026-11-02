@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "HCJ",
+    "IRI",
+    " P "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "I": {
+      "item": "minecraft:copper_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone_torch"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "J": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "result": {
+    "item": "better_rail_beetle:route_beacon"
+  }
+}

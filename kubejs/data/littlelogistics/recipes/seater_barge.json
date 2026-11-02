@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "tag": "minecraft:signs"
+    },
+    "$": {
+      "item": "minecraft:iron_ingot"
+    },
+    "_": {
+      "tag": "minecraft:wooden_stairs"
+    },
+    "H": {
+      "item": "tconstruct:tool_handle"
+    },
+    "P": {
+      "item": "tconstruct:large_plate"
+    }
+  },
+  "pattern": [
+    "#_#",
+    "$$$",
+    "HP "
+  ],
+  "result": {
+    "item": "littlelogistics:seater_barge"
+  },
+  "show_notification": true
+}

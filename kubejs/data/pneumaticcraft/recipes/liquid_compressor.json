@@ -1,0 +1,97 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "XBP",
+          "HCL"
+        ],
+        "key": {
+          "B": {
+            "type": "forge:nbt",
+            "count": 1,
+            "item": "pneumaticcraft:small_tank"
+          },
+          "C": {
+            "item": "pneumaticcraft:air_compressor"
+          },
+          "L": {
+            "tag": "forge:leather"
+          },
+          "P": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "X": {
+            "item": "tconstruct:large_plate"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          }
+        },
+        "result": {
+          "item": "pneumaticcraft:liquid_compressor"
+        },
+        "show_notification": true,
+        "function": "better_manufacturing:pneupressure/compression",
+        "parts": [
+          {
+            "role": "body",
+            "slot": 0
+          },
+          {
+            "role": "handle",
+            "slot": 3
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "B": {
+            "type": "forge:nbt",
+            "count": 1,
+            "item": "pneumaticcraft:small_tank"
+          },
+          "C": {
+            "item": "pneumaticcraft:air_compressor"
+          },
+          "L": {
+            "tag": "forge:leather"
+          },
+          "P": {
+            "item": "pneumaticcraft:pressure_tube"
+          }
+        },
+        "pattern": [
+          "PBP",
+          "LCL"
+        ],
+        "result": {
+          "item": "pneumaticcraft:liquid_compressor"
+        },
+        "show_notification": true
+      }
+    }
+  ]
+}
