@@ -66,9 +66,9 @@ function polymerData(relative) {
     return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'kubejs', 'data',
         'better_manufacturing', relative), 'utf8'))
 }
-for (const [stock, material, melt, screenRate, headDurability] of [
-    ['pla', 'pla', 'molten_pla', 0.80, 85],
-    ['pp', 'polypropylene', 'molten_pp', 0.85, 140]
+for (const [stock, material, melt, headDurability, headMiningSpeed, handleDurability, handleMiningSpeed] of [
+    ['pla', 'pla', 'molten_pla', 85, 2.5, -0.15, -0.10],
+    ['pp', 'polypropylene', 'molten_pp', 140, 3.0, 0.05, -0.05]
 ]) {
     const stockId = `better_manufacturing:${stock}_stock`
     const materialId = `better_manufacturing:${material}`
@@ -81,16 +81,19 @@ for (const [stock, material, melt, screenRate, headDurability] of [
     assert.equal(fluidRecipe.recipes[0].recipe.fluid.amount, 90)
     assert.equal(fluidRecipe.recipes[0].recipe.output, materialId)
     assert.equal(polymerData(`tinkering/materials/definition/${material}.json`).tier, 1)
-    const engineering = polymerData(`engineering/materials/${material}.json`)
-    assert.ok(engineering.supported_parts.includes('tconstruct:tool_handle'),
-        `${material} must use the ordinary TCon handle in existing Sifter frame recipes`)
-    assert.equal(engineering.native_stats, 'base_material')
-    assert.deepEqual(engineering.traits, {screen_rate: screenRate},
-        'preserve established polymer screen rates without inventing other machine ratings')
-    assert.equal(polymerData(`tinkering/materials/stats/${material}.json`)
-        .stats['tconstruct:head'].durability, headDurability,
-        'retain the distinct native TCon head properties for ordinary compatible cutter parts')
-    assert.equal(engineering.compatible_processes.length, 0,
-        'ordinary machine crafting does not use this separate wetted-process list')
+    // Machine rates now derive from native TCon part stats, not a second
+    // material opt-in/screen-rate table. Do not restore the obsolete policy.
+    assert.equal(fs.existsSync(path.join(__dirname, '..', 'kubejs', 'data',
+        'better_manufacturing', 'engineering', 'materials', `${material}.json`)), false,
+        `${material} must not restore a separate machine-rating table`)
+    const stats = polymerData(`tinkering/materials/stats/${material}.json`).stats
+    assert.equal(stats['tconstruct:head'].durability, headDurability,
+        `${material} must retain its native TCon cutter durability`)
+    assert.equal(stats['tconstruct:head'].mining_speed, headMiningSpeed,
+        `${material} must retain its native TCon head mining speed`)
+    assert.equal(stats['tconstruct:handle'].durability, handleDurability,
+        `${material} must retain its ordinary TCon handle durability modifier`)
+    assert.equal(stats['tconstruct:handle'].mining_speed, handleMiningSpeed,
+        `${material} must retain its ordinary TCon handle mining-speed modifier`)
 }
-console.log(`PASS polymer authored-contract: ${dependencies.length} missing-mod guards; ${recipes.size} distinct recipes; reusable culture bucket, distinct PLA/PP TCon stats/screen rates and four 90-mB material links`)
+console.log(`PASS polymer authored-contract: ${dependencies.length} missing-mod guards; ${recipes.size} distinct recipes; reusable culture bucket, distinct PLA/PP native TCon head/handle stats, no legacy machine-rating tables and four 90-mB material links`)
