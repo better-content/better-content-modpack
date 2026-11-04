@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Path
+import java.security.MessageDigest
 
 /** Requested pack membership; source presence alone does not qualify runtime behavior. */
 @Tag("fast")
@@ -17,6 +18,7 @@ class PackSpaceCompositionTest {
         val mods = manifest.path("mods")
         assertEquals(54, mods.size())
         val rows = mods.associateBy { it.path("repository").asText() }
+        val indexed = Files.readString(root.resolve("index.toml"))
         for ((repository, id) in listOf(
             "better-abyssal-city" to "better_abyssal_city",
             "better-spaceflight" to "better_spaceflight",
@@ -27,7 +29,18 @@ class PackSpaceCompositionTest {
         )) {
             val row = rows.getValue(repository)
             assertEquals(id, row.path("modId").asText())
-            assertTrue(Files.isRegularFile(root.resolve("mods/${row.path("artifact").asText()}")), repository)
+            val relative = "mods/${row.path("artifact").asText()}"
+            val entry = Regex("(?m)^file = \"${Regex.escape(relative)}\"\\r?\\nhash = \"([a-f0-9]{64})\"$").find(indexed)
+            assertNotNull(entry, "indexed local-cache SHA-256 is required: $repository")
+            // A Git clone contains metadata, not JAR bytes. Validate cached bytes when
+            // present; the packager separately requires every selected JAR to exist.
+            val cached = root.resolve(relative)
+            if (Files.exists(cached)) {
+                assertTrue(Files.isRegularFile(cached), repository)
+                val sha = MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(cached))
+                    .joinToString("") { "%02x".format(it) }
+                assertEquals(entry!!.groupValues[1], sha, repository)
+            }
         }
         assertFalse(rows.containsKey("dynamic-trees-dimension-compat"))
         assertFalse(Files.exists(root.resolve("mods/dynamic-trees-dimension-compat-0.1.1.jar")))
