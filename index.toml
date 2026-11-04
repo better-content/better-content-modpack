@@ -10,7 +10,7 @@ hash = "3b8b74e82bc5f88f279a6a623f06b195953619dbe7dc283a3e42060a9a7d6b98"
 
 [[files]]
 file = "README.md"
-hash = "db94ae73104ef234a1a926e740fdcba6dcb6d75fafccbbbb9b3db7c3c9951a8d"
+hash = "9e56fbb7145c942719643ffff94f3cca4e58920ea484a8a365e83cf983a5286f"
 
 [[files]]
 file = "better-world-management-server.sh"
