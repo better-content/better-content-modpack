@@ -2,7 +2,8 @@
 <!--
   Better Content's production log policy. The regex denies only fixed-version, enumerated
   compatibility chatter that has been reviewed under the full pack smoke. New warning/error
-  families remain visible, and the explicit runtime suites reject every WARN or ERROR record that reaches output.
+  families remain visible. Runtime suites independently audit unfiltered native failures;
+  advisory warning counts alone are not correctness verdicts.
 -->
 <Configuration status="ERROR">
     <Properties>
@@ -25,6 +26,8 @@
     <Appenders>
         <Console name="SysOut" target="SYSTEM_OUT">
             <Filters>
+                <!-- Additive child DEBUG must not flood the human console. Audit is independent. -->
+                <ThresholdFilter level="INFO" onMatch="NEUTRAL" onMismatch="DENY"/>
                 <RegexFilter regex="${noise1}" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <RegexFilter regex="${noise2}" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <RegexFilter regex="${noise3}" onMatch="DENY" onMismatch="NEUTRAL"/>
@@ -61,10 +64,15 @@
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <OnStartupTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="32 MB"/>
             </Policies>
+            <!-- Keep every archive; retention/purge is a separate explicit operation. -->
+            <DefaultRolloverStrategy fileIndex="nomax"/>
         </RollingRandomAccessFile>
     </Appenders>
     <Loggers>
+        <!-- No private appenders/filters: every accepted record propagates to native audit. -->
+        <Logger name="bc.playtest" level="${sys:bc.playtest.level:-DEBUG}" additivity="true"/>
         <Root level="info">
             <Filters>
                 <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL"/>

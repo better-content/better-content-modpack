@@ -20,6 +20,7 @@ StartupEvents.registry('item', function (event) {
     })
 
     ;[
+        ['refractory_compound', 'Refractory Compound'],
         ['sky_steel_ingot', 'Sky Steel Ingot'],
         ['sky_steel_sheet', 'Sky Steel Sheet'],
         ['pressure_seal', 'Pressure Seal'],

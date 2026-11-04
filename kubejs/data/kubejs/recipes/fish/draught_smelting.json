@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.35,
+  "ingredient": {
+    "tag": "kubejs:fish/draught_cookable"
+  },
+  "result": {
+    "item": "kubejs:uncanny_cooked_fish"
+  }
+}

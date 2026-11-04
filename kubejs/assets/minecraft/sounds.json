@@ -1,1 +1,1 @@
-{"item.goat_horn.play":{"replace":true,"sounds":[{"name":"minecraft:item.goat_horn.sound.0","type":"event"}]},"entity.goat.screaming.horn_break":{"replace":true,"sounds":[{"name":"minecraft:entity.goat.horn_break","type":"event"}]}}
+{"item.goat_horn.play":{"replace":true,"sounds":[{"name":"minecraft:item.goat_horn.sound.0","type":"event"}]},"entity.goat.screaming.horn_break":{"replace":true,"sounds":[{"name":"minecraft:entity.goat.horn_break","type":"event"}]},"ui.button.click":{"replace":true,"sounds":[{"name":"minecraft:ui/better_button_click","volume":0.7}]}}

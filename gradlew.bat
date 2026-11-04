@@ -70,6 +70,15 @@ goto fail
 
 set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
 
+@rem Restore only the exact distribution-pinned, locally ignored wrapper bytes.
+where py >NUL 2>&1
+if %ERRORLEVEL% equ 0 (
+    py -3 "%APP_HOME%\gradle\bootstrap-wrapper.py"
+) else (
+    python "%APP_HOME%\gradle\bootstrap-wrapper.py"
+)
+if %ERRORLEVEL% neq 0 goto fail
+
 
 @rem Execute Gradle
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %*

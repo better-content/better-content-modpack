@@ -2,7 +2,7 @@
 
 ## Content ownership
 
-The modpack owns cross-mod progression policy, six Machine Blocks, genuinely
+The modpack owns cross-mod progression policy, five active Machine Blocks, genuinely
 cross-mod transition items, exact era-root recipes, optional transport gates,
 learning surfaces, and player documentation. Owning mods keep lifecycle and
 runtime logic.
@@ -23,7 +23,7 @@ runtime logic.
 | Acid and gas chemistry | ChemLib, PneumaticCraft, Create, Better Content Fixes | Pack authors canonical acid routes and renewable acetic uses; airtight machine upgrades retain gas-state ChemLib contents |
 | Electrical components and stationary generation | PowerGrid and MoreRed | Electrical Block starts PowerGrid's first generator/design roots; competing stationary generators are cut |
 | Dragon ecology and materials | Ice and Fire | Replaces vanilla dragon-boss products; rare Overworld ecology supplies tagged products and equal-stat Dragonsteel TCon materials |
-| Aerospace components | Creating Space | Space Block starts three aerospace roots |
+| Spaceflight feasibility | Better Spaceflight | Experimental feasibility-only source; no survival flight, oxygen or destination route is claimed |
 
 ### Stable pack IDs
 
@@ -32,11 +32,12 @@ runtime logic.
 - `kubejs:brass_machine_block`
 - `kubejs:airtight_machine_block`
 - `kubejs:electrical_machine_block`
-- `kubejs:space_machine_block`
+
+`kubejs:space_machine_block` is retired with Creating Space; the five IDs above remain active.
 
 These are clean-break identities. Old `*_machine_casing`, seared/scorched,
 circuited, Raw Impossible, and Impossible casing IDs are not part of the public
-six-era graph and receive no aliases.
+five-era graph and receive no aliases.
 
 ### KubeJS layout
 
@@ -128,6 +129,16 @@ before updating an existing world. New worlds are the supported baseline because
 deposit identities, placed small chunks, disturbed radioactivity, and Machine
 Block identities all participate in saved state.
 
+The candidate adds Electrochemistry and Seasonal Trees for fresh worlds. Seasonal
+Daylight replaces Simple Day Length Extender atomically as the sole sky-clock owner;
+the old clock configuration is retained only for rollback. Its nominal full
+sunrise-to-sunrise cycle is 50,000 server ticks, while Minecraft and Serene
+Seasons still use a 24,000 logical day baseline. The daylight curve changes
+the day/night share through the year without changing `gameTime`, TPS or machine
+simulation. Seasonal Trees' new-world spring initialization does not reset old
+saved calendars or reconstruct damaged old trees. None of these candidate
+behaviors has exact-pack runtime acceptance or an established-world migration.
+
 ## Dimensional Font ecology and resource links
 
 The three enabled expedition Fonts share a radial court, a ring of fully oxidized copper, a decorative field with candles and shallow pools, and a dimension-specific block palette. Bumblezone sites additionally form three dense wax and hive clusters. Tree biome sites use stripped logs from the local tree family for their four supports and roof ring. Treeless sites omit both. The structure is selected only in new worlds; existing sites are not migrated.
@@ -155,15 +166,13 @@ dimensional expeditions; three live libations are optional fuel.
 
 The pack recipe source is `kubejs/server_scripts/progression/85_dimension_font_ecology.js` plus the focused recipe scripts referenced above. Runtime validation must check registry IDs against the installed Aether, Bumblezone, Rats, Create, PneumaticCraft, Heat Sync, and Clockwork JARs. The worldgen screenshot harness is a separate minimal-mod development runtime; it is not shipped in the pack.
 
-## Rats in accessible Overworld biomes
+## Ordinary Rats and retired Ratlantis rehoming
 
-Normal players cannot enter Ratlantis. The Rats 8.1.3 bundled datapack stays enabled for native item, recipe, structure and loot definitions, but the retired Font is not restored and both token and portal outputs remain closed. Better Ratlantis Logistics and its custom abyss, sunken vaults, bait rule and three custom components are removed. Native cheese and rat taming follow Rats' own behavior. There are no existing player worlds to migrate.
+Normal players cannot enter Ratlantis. The Rats 8.1.3 bundled datapack stays enabled for native item, recipe, structure and loot definitions, but the retired Font is not restored and both token and portal outputs remain closed. Better Ratlantis Logistics and its custom abyss, sunken vaults, bait rule and three custom components are removed. Native cheese and rat taming follow Rats' own behavior. Existing player worlds are preserved; this candidate supplies no automated Ratlantis migration.
 
-Pirat trees and ratglove occur infrequently in jungles, sparse jungles and mangrove swamps. Native small/large marble ruins and piles occur rarely on beaches and sparse jungle terrain. Dutchrat ships use warm or lukewarm ocean structure biomes; Baron runways use beaches or sparse jungles. The structures retain their original native templates, ship loot and encounter behavior. An additional bounded native encounter route for each structure-exclusive creature is configured in In Control.
+The earlier Ratlantis rehoming into Overworld coastal and cave biomes is retired. Pack-authored Ratlantis ores, plants, structures, special spawns and fishing injections are removed; ordinary Rats remains installed with its native non-Ratlantis gameplay. Saved structures and entities are not deleted. The exact runtime recipe, loot and visibility surface still needs candidate-matched verification.
 
-Ratlantean gem ore appears below Y=0 in lush caves; oratchalcum ore appears below Y=0 in dripstone caves. Both use the original Rats ore blocks and processing; pack-owned feature definitions additionally target deepslate replacement, at roughly one placement attempt per 32 qualifying chunks. Pirate and ordinary rat natural spawn weights are 2 and 1 in coastal/jungle biomes; rarer feral, spirit, ratbot, Neo-Ratlantean and automaton spawns belong to cave biomes below Y=0. Ratfish have low weight in warm/lukewarm oceans and mangrove swamps. Structure-only elite encounters use a one-entity cap in In Control. These biomes, probabilities and Y bands require native generated-world verification; source configuration is not proof of a spawn or structure.
-
-Starcatcher chorus crab, end glow and voidbiter now use warm/lukewarm Overworld oceans instead of Ratlantis. The native Rats fishing-table items have rare supplementary entries in those biomes' vanilla fishing table; whether Starcatcher rods route through that table still needs native verification. Aquatic Ambitions' mechanical conduit retains marine alloys and the native conduit, substituting one meteor Certus Quartz crystal for the removed custom mechanism. Native Ratlantis archaeology now uses a Gem of Ratlantis instead of a forbidden travel token. The upstream archaeologist hat has no JSON acquisition route, so a gem/leather/brush hat recipe prevents the archaeology-upgrade prerequisite from closing on itself. Conventional fixed Rats tools remain closed by the Tinkers policy; unique weapons, bows, armour and rat upgrades remain native.
+Starcatcher chorus crab, end glow and voidbiter have separately authored warm/lukewarm Overworld ocean routes. The retired Ratlantis fishing injection is not a route for ordinary Rats items. Aquatic Ambitions' mechanical conduit retains marine alloys and the native conduit, substituting one meteor Certus Quartz crystal for the removed custom mechanism. Retained Rat archaeology uses obtainable amethyst and ordinary Rats cheese in place of inaccessible Ratlantis inputs; the hat and upgrade remain available by their authored recipes. Conventional fixed Rats tools remain closed by the Tinkers policy; unique weapons, bows, armour and rat upgrades remain native. Exact recipe and fishing behavior still needs candidate-matched verification.
 
 The former Ratlantis-depths design is retired. Historical distribution ZIPs and evidence preserve their own content and are not rewritten.
 
@@ -189,6 +198,9 @@ The Dev suite checks file contracts without launching the pack. The targeted joi
 
 This pack integrates L_Ender's Cataclysm 3.31 for Forge 1.20.1 with Lionfish API 3.0. The pack owns the placements through biome-tag data and In Control rules; it does not use a Cataclysm dimension add-on. Cataclysm's arena structures remain intact so each boss keeps its native arena mechanics, including its respawner and activation altar.
 
+The table separates retained placement intent from deferred destinations. It is
+not proof that every arena is reachable or generated in the candidate.
+
 ### Arena destinations
 
 | Cataclysm boss | Arena | Pack destination |
@@ -196,13 +208,13 @@ This pack integrates L_Ender's Cataclysm 3.31 for Forge 1.20.1 with Lionfish API
 | Leviathan | Sunken City | Overworld deep oceans |
 | Netherite Monstrosity | Soul Blacksmith | Nether Wastes |
 | Ignis | Burning Arena | Crimson Forest, Nether |
-| Ender Guardian | Ruined Citadel | Creating Space Earth orbit, elevated to Y=128 |
-| Harbinger | Ancient Factory | Fallout Wastelands |
-| Ancient Remnant | Cursed Pyramid | Fallout Wastelands |
+| Ender Guardian | Ruined Citadel | Deferred; no active destination or replacement travel route |
+| Harbinger | Ancient Factory | Deferred with rocket-only Fallout Wastelands access |
+| Ancient Remnant | Cursed Pyramid | Deferred with rocket-only Fallout Wastelands access |
 | Scylla | Acropolis | Aether skyroot biomes |
 | Maledictus | Frosted Prison | The Deep Void |
 
-The Cursed Pyramid and Ancient Factory share the Fallout destination but use their own structure spacing and biome tags. The Ruined Citadel needs a fixed elevated start because Earth orbit is void terrain; its custom structure lays its pieces relative to the start point. Acropolis was previously globally disabled in Structurify; that suppression is removed so its Aether biome placement can take effect. All eight arenas are explicitly denied in Lost Cities. Existing generated chunks are unchanged; arenas relocate in newly generated terrain.
+The Fallout and Ruined Citadel rows describe deferred encounters, not reachable candidate destinations. Retained arenas keep their native activation and placement rules where their target dimensions remain available. Existing generated chunks are unchanged; no world migration is claimed.
 
 ### Depth Director miniboss roster
 
@@ -219,7 +231,7 @@ Each selected miniboss is a one-at-a-time heavy encounter, gated to deep ecology
 
 These rewards stay in Cataclysm's native loot tables, so boss preparation materials are found by engaging the corresponding Depth Director encounter. The pack does not add a second reward path or replace Cataclysm drops.
 
-Natural spawning is denied for all nine Cataclysm minibosses: the six in the roster and Wadjet, Amethyst Crab, and Clawdian. This keeps the selected six in Depth Director encounters while retaining Cataclysm's ambient Deeplings, Koboletons, and other non-miniboss ecology. The DD profiles remain dimension-eligible under Depth Director's normal rules, including Lost Cities; Flesh That Hates remains exclusive to its Lost Cities planet and is not part of these profiles.
+Natural spawning is denied for all nine Cataclysm minibosses: the six in the roster and Wadjet, Amethyst Crab, and Clawdian. This keeps the selected six in Depth Director encounters while retaining Cataclysm's ambient Deeplings, Koboletons, and other non-miniboss ecology. The DD profiles remain subject to Depth Director's retained dimension rules; Flesh That Hates is exclusive to the Deep Void and is not part of these profiles.
 
 ### Change boundary
 
@@ -504,7 +516,6 @@ damage, or death-dependent side effects worth checking against the accepted-deat
 boundary. [Enhanced AI](../mods/enhanced-ai.pw.toml),
 [Farsighted Mobs](../mods/farsighted-mobs-forge.pw.toml),
 [In Control](../mods/in-control.pw.toml), [The Deep Void](../mods/the-deep-void.pw.toml),
-[Lost Cities](../mods/the-lost-cities.pw.toml), and
 [Cataclysm](../mods/cataclysm.pw.toml) affect where and how dangerous encounters
 occur. World Lifecycle Manager selects the initial shared spawn in fresh worlds.
 [Tectonic](../mods/tectonic.pw.toml), [Nature's Spirit](../mods/natures-spirit.pw.toml),
@@ -606,8 +617,10 @@ remain different systems.
 
 Main-menu tips are stable per application launch. Esc tips use actual conditions and
 remain stable while open. Final-death advice uses the committed final cause and shares
-measured space with the native injury/treatment recap. Detailed behavior and provenance
-are documented in the [source teaching guide](../../mod_source/better-discovery-guides/authoring/teaching-surfaces.md).
+measured space with the native injury/treatment recap. The previously cited source
+teaching guide is absent from the selected Learning Surfaces tree; the
+[learning-surfaces contract](#learning-surfaces) and its linked authoring roster record
+the available teaching definitions. The missing guide supplies no qualification claim.
 
 ### Review
 
@@ -790,14 +803,14 @@ they do not require a whole-image tint or the retired four-suit composition rule
 
 The 53 card scenes and teaching definitions are maintained in
 [`authoring/discoveries.json`](../../mod_source/better-discovery-guides/authoring/discoveries.json).
-[`art-grammar.txt`](../../mod_source/better-discovery-guides/authoring/art-grammar.txt)
-contains the shared generation prompt. Exact prompts, original image-generation paths,
-reviewed masters, contact sheets, and hashes are retained in
-`/home/dev/workspace_artifacts/reviews/journal-art-20260927/`.
+The previously cited `authoring/art-grammar.txt` is absent from the selected source;
+the [art direction above](#thread-art-direction) records the available visual rules.
+Exact prompts, original image-generation paths, reviewed masters, contact sheets, and
+hashes were cited in a historical review bundle recorded in the operation handoff;
+that citation alone does not establish current visual qualification.
 
 `authoring/prepare_art.py REVIEW_BUNDLE` creates deterministic runtime derivatives and
 facsimile model overrides. It does not generate new artwork. Visually inspect every
 master for forbidden figures, subject accuracy, text artifacts, and small-scale clarity,
 then review the actual compact/wide reader and loading surfaces. Preserve earlier
 review bundles as superseded evidence rather than mixing them into the shipped roster.
-

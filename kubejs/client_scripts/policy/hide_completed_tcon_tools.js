@@ -1,8 +1,10 @@
-// Completed TConstruct gear is assembled and inspected through the tool
-// stations. Hide those generated stacks from recipe viewers while retaining
-// wearable armor, tool parts, materials, modifiers, and recipes.
+// Hide multipart tools assembled at a Tinker Station/Anvil, not everything
+// that accepts modifiers. Single-part tools/shields and wearable armor are
+// crafted/cast elsewhere; keep those, direct crafts (e.g. Flint and Brick
+// and slime staffs), parts, materials, modifiers, and recipes visible.
 function bcCompletedTconTools() {
-    return Ingredient.of('#tconstruct:modifiable')
+    return Ingredient.of('#tconstruct:modifiable/multipart')
+        .subtract(Ingredient.of('#tconstruct:modifiable/multipart/single'))
         .subtract(Ingredient.of('#tconstruct:modifiable/armor/worn'))
 }
 

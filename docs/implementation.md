@@ -4,7 +4,7 @@
 
 Custom mod sources are independent repositories under a dedicated source directory in the common workspace. Worklane uses `/home/dev`, so the modpack is checked out at `/home/dev/better-content-modpack` and each custom mod is checked out at `/home/dev/mod_source/<repository>`. Other environments may use a different workspace root, but must preserve the `mod_source/<repository>` layout beside the modpack. Never recreate custom-mod source trees inside the modpack or at the workspace top level.
 
-Every canonical repository is hosted at `https://github.com/better-content/<repository>.git`. Runtime IDs are a clean break from earlier development identifiers; no legacy world or config migration is supported.
+Every canonical repository is hosted at `https://github.com/better-content/<repository>.git`. Runtime IDs are a clean break from earlier development identifiers. No automatic legacy world or config migration is supplied; preserve existing worlds and backups.
 
 ### Build And Deploy
 
@@ -12,13 +12,13 @@ Run the listed validation and staging command from the custom-mod repository. `s
 
 Copy that JAR into `../../better-content-modpack/mods/` only when deployment is explicitly requested, removing a superseded version of that custom mod. Do not deploy development-mapped or sources JARs. Repository-local validation alone does not authorize deployment, packaging or pack-level testing.
 
-For ordinary pack implementation changes, run `./gradlew test` and `git diff --check` as relevant. Local verification is separate from Smoke, Soak and fresh-distribution acceptance; none automatically runs all source-repository suites. Packwiz refresh belongs only to explicit fresh-distribution preparation after deployment settles.
+For ordinary pack implementation changes, run `./gradlew test` and `git diff --check` as relevant. Local verification is separate from Smoke, Overworld Tele Soak, full Tele Soak and fresh-distribution acceptance; none automatically runs all source-repository suites. Packwiz refresh belongs only to explicit fresh-distribution preparation after deployment settles.
 
-An explicitly requested fresh distribution uses `./release.main.kts`. The ordinary source-aware route stages changed active runtime sources in dependency order with `stageRuntimeJar` (not `clean` or `verifyFull`), reuses matching bundled artifacts, refreshes Packwiz and packages exactly once. By default it runs **no** runtime tier and writes `package-ready.json` for the unchanged ZIP pair. Select `--runtime-tiers smoke` for Smoke-certified `ready.json`; `--runtime-tiers soak --soak-minutes N` and/or `tele-soak` opt into other complete tests on the same pair. A ready marker requires selected Smoke to pass, and never implies unrun tiers. The stricter `--fresh-source-plan` route requires a fresh qualified source and raw JAR for **every** approved active mod, including separately qualified World Management/supervisor bytes, even for a package-only candidate. The user has specifically permitted an **incomplete Cooking JAR** in a Smoke candidate: it loads in pass-through mode with unresolved catalogue data, preserving native food/recipe/crop behavior and making **no Cooking gameplay acceptance claim**. This exception does not qualify Cooking's full migration or World Condenser, and does not apply to the strict all-sources-qualified fresh-source-plan route. There is no `--skip-tests`, forced Debug rebuild or targeted-release bypass. `--use-bundled-mods` explicitly retains existing JARs and never inspects/builds sibling source checkouts; it is not a fresh-source qualification route. Independent visual review is a separate optional tier; see [testing](testing.md#smoke-soak-tele-soak-and-fresh-distributions).
+An explicitly requested fresh distribution uses `./release.main.kts`. The ordinary source-aware route stages changed active runtime sources in dependency order with `stageRuntimeJar` (not `clean` or `verifyFull`), reuses matching bundled artifacts, refreshes Packwiz and packages exactly once. By default it runs **no** runtime tier and writes `package-ready.json` for the unchanged ZIP pair. Select `--runtime-tiers smoke` for Smoke-certified `ready.json`; `--runtime-tiers overworld-tele-soak` and/or `tele-soak` opt into other complete tests on the same pair. A ready marker requires selected Smoke to pass, and never implies unrun tiers. The stricter `--fresh-source-plan` route requires a fresh qualified source and raw JAR for **every** approved active mod, including separately qualified World Management/supervisor bytes, even for a package-only candidate. The user has specifically permitted an **incomplete Cooking JAR** in a Smoke candidate: it loads in pass-through mode with unresolved catalogue data, preserving native food/recipe/crop behavior and making **no Cooking gameplay acceptance claim**. This exception does not qualify Cooking's full migration or World Condenser, and does not apply to the strict all-sources-qualified fresh-source-plan route. There is no `--skip-tests`, forced Debug rebuild or targeted-release bypass. `--use-bundled-mods` explicitly retains existing JARs and never inspects/builds sibling source checkouts; it is not a fresh-source qualification route. Independent visual review is a separate optional tier; see [testing](testing.md#smoke-overworld-tele-soak-tele-soak-and-fresh-distributions).
 
 The machine-readable active set is `gradle/active-custom-mods.json`. Its `dependsOn` graph orders typed providers before consumers; existing bundled providers seed release staging, and newly staged active providers replace them before consumers build. Optional compile-only fixtures can be supplied through `BC_RELEASE_COMPILE_FIXTURE_DIR`; they are recorded build inputs, never implicitly activated or deployed. Celestial Events is now an active typed provider for Fonts and is ordered before that consumer.
 
-Standalone `./test.main.kts smoke` and `./test.main.kts soak --minutes N` consume existing packaged artifacts and never build, deploy, refresh or package. The old Dev/Dist/Debug selectors, queue and scenario targets are removed. See [testing](testing.md#smoke-soak-tele-soak-and-fresh-distributions) for the lifecycle and evidence contract.
+Standalone `./test.main.kts smoke` and `./test.main.kts overworld-tele-soak` consume existing packaged artifacts and never build, deploy, refresh or package. The old Dev/Dist/Debug selectors, queue and scenario targets are removed. See [testing](testing.md#smoke-overworld-tele-soak-tele-soak-and-fresh-distributions) for the lifecycle and evidence contract.
 
 ### Reproducible Build Bootstrap
 
@@ -66,7 +66,7 @@ checkout is unchanged, changed, or based on a legacy JAR without an identity. Pr
 
 ### Canonical Active Inventory
 
-The active set contains **52 custom mods** in `gradle/active-custom-mods.json`. Abyssal City and Better Spaceflight were explicitly requested for inclusion on 2026-11-01; their current builds remain **experimental and gameplay-unqualified**. Better Spaceflight's authoritative working source is in `/home/dev/feature-labs/vs-spaceflight/mod_source/better-spaceflight/`, not the default sibling `mod_source/` tree. For this composition, build it with its lab-owned wrapper, bind the copied runtime JAR as a bundled pack input, and use `--use-bundled-mods` to package/test the exact staged bytes. Abyssal City uses its isolated `verifyGeneration` build and its reobfuscated output (it has no `stageRuntimeJar` task). Neither source may be represented as strictly qualified by a Smoke pass. Finite Water remains excluded; Creating Space is removed.
+The candidate manifest has **54 custom mods** in `gradle/active-custom-mods.json`; this is a target inventory, not a built or Smoke-accepted distribution. It removes Dynamic Trees Dimension Compat, adds Electrochemistry, Seasonal Daylight and Seasonal Trees, and retains experimental Abyssal City and Better Spaceflight. Spaceflight uses the available `e3591959d2c614b71ca96d478ada43f8ac597f81` feasibility source; its unrecovered survival-preview flight, oxygen and destination code is retired. Abyssal City uses `verifyGeneration` and a controlled reobfuscated output. All included source-owned JARs, including unchanged providers, require a fresh isolated rebuild with source/provider/artifact provenance for this consolidation. Finite Water remains excluded; Creating Space and Undergarden are removed. No gameplay qualification, world migration or source-test result follows from manifest membership.
 
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
@@ -118,10 +118,12 @@ The active set contains **52 custom mods** in `gradle/active-custom-mods.json`. 
 | [better-celestial-events](https://github.com/better-content/better-celestial-events) | `better_celestial_events` | `better-celestial-events-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-wild-fruit-trees](https://github.com/better-content/better-wild-fruit-trees) | `better_wild_fruit_trees` | `better-wild-fruit-trees-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [scalable-tnt](https://github.com/better-content/scalable-tnt) | `scalable_tnt` | `scalable-tnt-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [dynamic-trees-dimension-compat](https://github.com/better-content/dynamic-trees-dimension-compat) | `dynamic_trees_dimension_compat` | `dynamic-trees-dimension-compat-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-cooking](https://github.com/better-content/better-cooking) | `better_cooking` | `better-cooking-0.1.0.jar` | `./gradlew verifyFast stageRuntimeJar`; legacy gameplay policy remains quarantined; separate recipe-only pack policy |
 | [better-abyssal-city](https://github.com/better-content/better-abyssal-city) | `better_abyssal_city` | `better-abyssal-city-0.1.0.jar` | isolated `scripts/verify_generation.sh` → reobfuscated output; gameplay unqualified |
-| `/home/dev/feature-labs/vs-spaceflight/mod_source/better-spaceflight/` | `better_spaceflight` | `better-spaceflight-0.1.0.jar` | `scripts/gradle-lab.sh test stageRuntimeJar`; gameplay unqualified |
+| [better-spaceflight](https://github.com/better-content/better-spaceflight) | `better_spaceflight` | `better-spaceflight-0.1.0.jar` | `./gradlew test stageRuntimeJar`; feasibility source only; gameplay unqualified |
+| [better-electrochemistry](https://github.com/better-content/better-electrochemistry) | `better_electrochemistry` | `better-electrochemistry-0.1.0.jar` | `./gradlew test stageRuntimeJar`; new-world activation pending gates |
+| [better-seasonal-daylight](https://github.com/better-content/better-seasonal-daylight) | `better_seasonal_daylight` | `better-seasonal-daylight-0.1.0.jar` | `./gradlew test stageRuntimeJar`; sole clock owner in new worlds, pending gates |
+| [better-seasonal-trees](https://github.com/better-content/better-seasonal-trees) | `better_seasonal_trees` | `better-seasonal-trees-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar`; new-world activation pending gates |
 
 ### Manufacturing ownership and implementation status
 
@@ -247,6 +249,9 @@ Clockwork gas tank/vent/sealer stay excluded, not converted. Per-ID candidate/so
 handoff is maintained with the wave-two pack owner; neither authored overrides nor an
 absent route count as accepted conversion.
 
+`mellarium_base` remains explicitly held. Do not add a thirteenth blank or claim the
+full Manufacturing roster complete while its native cost and consumed-part route conflict.
+
 PLA and PP are **ordinary Tinkers materials**. Their actual TCon head/handle stats
 are distinct and must flow through the same part-in-machine formulas as other
 materials, with no extra material-to-machine rating/opt-in table, polymer-only
@@ -287,11 +292,11 @@ Flour/dough producers use Kaleidoscope items with old-stock alternatives and add
 
 ### Explicit Activation Dependencies And Boundaries
 
-Dynamic Trees Dimension Compat requires **The Undergarden**. Its required upstream dependency is pinned to CurseForge project `379849`, file `5182632` (version `0.8.14`) in `mods/the-undergarden.pw.toml`. Its `verifyFull` task now covers deterministic tests plus a focused nonshipping native Immersive Weathering leaf-pile contract; use `verifyFull stageRuntimeJar` for qualification and runtime-JAR staging. The native contract checks six effective generated tables and 54 layer/tool drop cases, not a dimension tour or exact-pack acceptance. Its optional IW/Moonlight/Patchouli fixture pins do not become mandatory production dependencies; see the source owner's `TESTING.md` for details.
+Dynamic Trees Dimension Compat and its required Undergarden dependency are excluded from the candidate. Independent Dynamic Trees integrations remain. Their old source and evidence are retained outside the active manifest.
 
 Celestial Events' authored Thin Veil forest/swamp biome selections remain **pack-owned** under `kubejs/data/better_celestial_events/tags/worldgen/biome/`. They were restored byte-for-byte from pack revision `3900ac64` for this explicit activation. The source build already consumes and bundles those declared pack inputs; owner-local verification using them is not hermetic, and their ownership must not be moved into source merely to satisfy a test.
 
-The 2026-10-26 four-mod activation retained its prior bundled baseline. The later 2026-11-01 composition instead adds two explicitly requested experimental runtime JARs and removes Creating Space. Other existing bundled custom JARs are retained; source verification does not establish exact-pack runtime acceptance. Smoke on a newly packaged pair tests launch, join and normal shutdown only, not either new mod's gameplay, natural city generation, piloted spacecraft travel, visual acceptance, or safe existing-world upgrade.
+This consolidation requires fresh isolated outputs for every included source-owned JAR and the existing source/unit checks, followed by one exact-artifact Smoke on a non-strict experimental candidate. Historical bundled bytes cannot satisfy that fresh rebuild. Smoke proves its recorded startup, client join, save and shutdown lifecycle only; it does not qualify Abyssal City, Spaceflight gameplay, seasonal behavior, combat, visual quality or an existing-world upgrade.
 
 `better-finite-water` remains source-only and must not be deployed implicitly. Future cloned sources likewise require explicit activation; presence under `mod_source/` is not pack membership.
 
@@ -304,15 +309,13 @@ the closest living design document in the same change.
 
 ### Executable KubeJS surface
 
-KubeJS executes JavaScript recursively under all three active roots. The current
-tree contains 72 active scripts: 6 client, 58 server, and 8 startup. The exact
-path and responsibility index is maintained in [`../kjs-script-summaries.md`](../kjs-script-summaries.md).
-
-| Root | Active areas | Count |
-| --- | --- | ---: |
-| `kubejs/client_scripts` | compatibility 4, guidance 1, policy 1 | 6 |
-| `kubejs/server_scripts` | compatibility 37, policy 6, progression 11, transport 1, utility 2, root policy report 1 | 58 |
-| `kubejs/startup_scripts` | compatibility 3, policy 3, progression 2 | 8 |
+KubeJS executes JavaScript recursively under `kubejs/client_scripts`,
+`kubejs/server_scripts` and `kubejs/startup_scripts`. The current candidate has
+**114 executable-root JavaScript files**: 11 client, 91 server and 12 startup.
+[`../kjs-script-summaries.md`](../kjs-script-summaries.md) lists each exact path
+once. This is a file inventory, not a claim that every loaded script installs a
+live recipe: the retired aerospace file and duplicate logistics path are inert,
+and other scripts may be conditional.
 
 The `compat/retained` and `compat/reviewed` names classify ownership history;
 they do not disable execution. `kubejs/inactive_review` is outside every active
@@ -323,7 +326,7 @@ a staging area inside an active root.
 
 | Surface | Runtime authority | Pack-owned boundary |
 | --- | --- | --- |
-| Six technology eras and Machine Blocks | Pack KubeJS | Exact cross-mod root recipes, transition items, optional transport gates |
+| Five active technology eras and Machine Blocks | Pack KubeJS | Exact cross-mod root recipes, transition items, optional transport gates; aerospace deferred |
 | Geological deposits and processing | Realistic Ores | Era inputs only; see [`progression.md#realistic-ore-processing`](progression.md#realistic-ore-processing) |
 | Radiation and contained chemistry | Latent ChemLib | Cross-mod gates; no duplicate physical simulation |
 | Industrial heat | Heat Sync | Era placement and integrations; Heat Sync owns storage, transfer, ambient mapping, and Create boiler heat |
@@ -335,14 +338,15 @@ a staging area inside an active root.
 | World reset lifecycle | World Lifecycle Manager | Pack supplies runtime configuration and deploys its independent JAR |
 | Persistent footprints and notes | Player Traces | Pack supplies runtime configuration and deploys its independent JAR |
 
-The six stable pack IDs are:
+The five active Machine Block IDs are:
 
 - `kubejs:andesite_machine_block`
 - `kubejs:copper_machine_block`
 - `kubejs:brass_machine_block`
 - `kubejs:airtight_machine_block`
 - `kubejs:electrical_machine_block`
-- `kubejs:space_machine_block`
+
+The former `kubejs:space_machine_block` is retired with Creating Space.
 
 Old Machine Casing identities, generic washed/tailings forms, duplicate ore
 catalogues, and universal recipe-introspection scripts have no active owner.
@@ -375,7 +379,7 @@ Custom-mod repository, artifact, and command ownership is canonical in
 [`implementation.md#custom-mod-workspace`](implementation.md#custom-mod-workspace). A source change is complete
 only after that repository's documented validation passes. Deployment uses the
 reobfuscated runtime JAR from `build/libs/` only when explicitly requested. Pack-local checks use `./gradlew test` separately from runtime acceptance.
-An explicitly ordered fresh distribution refreshes Packwiz hashes, packages once and requires Smoke on that exact pair; optional Soak uses the unchanged artifacts. Neither tier runs source-local verification automatically.
+An explicitly ordered fresh distribution refreshes Packwiz hashes, packages once and requires Smoke on that exact pair; optional Overworld Tele Soak uses the unchanged artifacts. Neither tier runs source-local verification automatically.
 
 ## Performance And Mods
 
@@ -388,7 +392,7 @@ Generated runtimes and old profiling directories are not authorities for active 
 
 Bumblezone 7.13.4 remains an active Font expedition realm; Rats 8.1.3 remains installed but
 normal Ratlantis player access is retired. `better_bumblezone_crops` owns Bumblezone food flora and
-propagation. Native Rats resources and creatures now use rare Overworld coastal and cave biomes;
+propagation. Ordinary Rats resources and creatures remain; Ratlantis rehoming into Overworld coastal or cave biomes is removed.
 Better Ratlantis Logistics, its custom components, bait restriction, abyss and vaults are removed. Nature's Spirit remains the canonical mahogany
 wood and progression authority; `better_hexerei_dynamic_trees` restores dynamic Hexerei mahogany, willow,
 and witch hazel trees. The CurseForge Dynamic Trees addons for Aether and Twilight Forest remain
@@ -402,10 +406,12 @@ mod, while candidate validation checks that the three packaged ZIPs match their 
 
 The pinned Valkyrien Skies transport family is active on both sides:
 
-- Valkyrien Skies `valkyrienskies-120-2.4.11.jar`;
+- Valkyrien Skies `valkyrienskies-120-2.4.11.jar` (original pinned upstream artifact);
 - Eureka `eureka-1201-1.6.3.jar`;
 - VS: Clockwork `clockwork-0.5.6.jar`;
 - Trackwork `trackwork-1.20.1-1.2.4.jar`.
+
+Epic ParCool and Valkyrien Skies now both resolve their original JARs on client and server. Better Compat Fixes supplies narrowly bound MixinSquared cancellations for the server-only client references and the unsupported VS interface injector, plus its source-owned vibration bridge. This is an **unqualified candidate**: cancellation occurs at Mixin target pre-apply, and neither earlier configuration errors nor Epic ParCool's server entrypoint have been cleared by a native run. Earlier locally modified JARs remain only in historical builds/commits and recovery, not the new Packwiz index.
 
 Eureka owns primitive post-Part-Builder wooden watercraft, Trackwork is a peer of Create trains,
 and powered Eureka/Clockwork flight progresses through Aether, Airtight lift, PneumaticCraft gas
@@ -422,12 +428,20 @@ set. The Journal inventory owns Sort, Quick Stack, and Trash with Undo; the prev
 inventory utility mods are removed. The maintained `config/adchimneys/` definitions cover active furnace,
 burner, smeltery, and generator emitters.
 
+Weapons of Miracles is added as a pinned candidate input. Its Epic Fight and tooltip
+ownership must be reconciled against the exact installed version; manifest
+presence does not qualify broad combat behavior. Electrochemistry supplies a
+fresh-world chemistry branch alongside retained PneumaticCraft/ChemLib/Manufacturing
+ownership, not a restoration of Creating Space flight processing. Seasonal Daylight
+and Seasonal Trees are fresh-world candidate additions; keep one sky-clock owner
+and preserve existing saved calendar state.
+
 Create Sifting 1.8.6 is active with Create 6.0.8. String-mesh hand sifting is the
 pre-power ore separation path; standard and Brass Sifters automate the same recipe
 language. Advanced and custom meshes are hidden and unobtainable. Create fan-based
 Bulk Washing has no recipes; water treatment belongs to Spouting.
 
-Claustrophobic Dungeons, Dungeon Crawl, Create Big Cannons, Reliquary, Undergarden, Deeper Darker,
+Claustrophobic Dungeons, Dungeon Crawl, Create Big Cannons, Reliquary, Undergarden, Lost Cities, Deeper Darker,
 Temperature Bands, the standalone coolant mod, the redundant fission-reactor mod, and Create New Age remain retired.
 Forbidden and Arcanus, Roots Classic, Mahoutsukai, Eidolon, Theurgy, Psi, and Hex Casting have no
 active Packwiz manifests and are inactive unless deliberately reintroduced.
@@ -506,16 +520,7 @@ profiles, measurements, and sorted SHA-256 manifest under
 `workspace_artifacts/evidence/performance-fonts/<UTC>/`; do not treat paused time, maintenance
 commands, or the pre-event-driven Heat Sync profile as a gameplay baseline.
 
-Lost Cities, Twilight Forest, and Fallout Wastelands are Creating Space destinations declared under
-`kubejs/data/*/creatingspace/rocket_accessible_dimension/`. The Flesh That Hates belongs exclusively
-to the Lost Cities planet. Its mobs and ecology are planet-scoped: do not add them to the Overworld,
-Depth Director regions or encounters, or any other dimension, including as repurposed minibosses.
-The mod remains active on its intended planet; its six Mushroom Fields structures are disabled by
-`datapacks/worldgen_compat_fixes`, and `better_compat_fixes` disables its unconditional client
-proximity-music scan. Its entities, combat, evolution, and ordinary Records-channel sounds remain
-active there.
-
-A retained Tele Soak watchdog crash identified TFTH's incubator spawn-site scan as a synchronous server-tick walk of up to 251 × 41 × 251 block positions **per incubator**, with block-state reads that request unloaded chunks. `better_exploration_load_control` now bounds its Lost Cities-only incubator search to 4,096 sampled positions in **already loaded chunks**, preserving flesh-block-supported spawn candidates without disabling the planet's incubators or pre-generating Tele Soak targets. This compatibility mitigation needs real in-world incubator-spawn observation before anyone claims full TFTH gameplay parity; a successful Smoke or Tele Soak alone is not that proof.
+Creating Space destinations are retired. Twilight Forest and Fallout Wastelands rocket-only access and the Ruined Citadel encounter are deferred; no new portal or Font route is added. The Flesh That Hates is retained only in `the_deep_void:deep_void`. Six pack structure overrides target the Deep Void flesh-biome tag, and `better_exploration_load_control` gates the pinned native incubator and servant paths to that dimension. Its ordinary site search samples at most 4,096 positions in loaded chunks; its servant column walk is capped at 32 block-state reads per attempt. The native callers handle missing sites. Exact-artifact runtime verification still must prove mixin application, structure placement and exclusive habitat; no existing saved entities are removed.
 
 `datapacks/hyle_deep` owns the exhaustive Hyle/Unearthed deep-stone pass beginning at Y -64.
 `better_compat_fixes` moves Hyle and SGI terrain conforming to decoration tail, completes only
@@ -582,7 +587,7 @@ PneumaticCraft retains native pressure and thermo-plant behavior, with explicit 
 chemical-service ledgers at the Latent boundary.
 
 Rebuild and deploy custom JARs through [Custom Mod Workspace](implementation.md#custom-mod-workspace). Run pack
-suites only when explicitly ordered, following [Testing and fresh distributions](testing.md#smoke-soak-tele-soak-and-fresh-distributions).
+suites only when explicitly ordered, following [Testing and fresh distributions](testing.md#smoke-overworld-tele-soak-tele-soak-and-fresh-distributions).
 
 ## Distant Horizons 2.4.5 render geometry audit
 
@@ -622,4 +627,3 @@ separate candidate/runtime visual review.
 `config/DistantHorizons.toml` keeps LOD transparency `DISABLED`; the pack performance guide
 documents this as the compatibility setting for DH/Oculus/shader depth composition. DH
 remains enabled. This setting is independent of the transform finding above.
-

@@ -2,7 +2,7 @@
 
 Better Content is an expert Forge 1.20.1 modpack and its supporting content layer. Its enforceable acquisition rules are described by the [crafting graph policy](docs/progression.md#crafting-graph-policy) and [balance register](docs/progression.md#balance-policy-register). Custom mod source, ownership, build, and deployment metadata is maintained in the [custom mod workspace guide](docs/implementation.md#custom-mod-workspace). Every custom mod lives in an independent repository under the workspace's `mod_source/` directory (`/home/dev/mod_source` in Worklane), never inside this repository.
 
-Pack-level testing and fresh distributions are explicit operations. See [Testing and fresh distributions](docs/testing.md#smoke-soak-tele-soak-and-fresh-distributions) for Smoke/Soak, durable session evidence, and the mandatory exact-artifact Smoke release gate.
+Pack-level testing and fresh distributions are explicit operations. See [Testing and fresh distributions](docs/testing.md#smoke-overworld-tele-soak-tele-soak-and-fresh-distributions) for Smoke and both Tele Soak tiers, durable session evidence, and the mandatory exact-artifact Smoke release gate.
 
 ## Community and support
 
@@ -12,11 +12,11 @@ For modpack and mod discussion, playtest feedback, and bug reports, join the [Be
 
 These are living documents: they state current intent and operating boundaries, not blanket proof of gameplay or runtime acceptance. Keep detailed contracts in their owning section and retain raw evidence outside the tracked docs.
 
-- [Design and future directions](docs/design.md): established principles, proposals and candidate inventories.
+- [Design and future directions](docs/design.md): established principles and clearly labeled future proposals, including recovered aspirations.
 - [Progression, acquisition and balance](docs/progression.md): era gates, canonical crafting and balance rules, food, geology, combat and component acquisition.
 - [World systems and player experience](docs/world-and-player.md): dimensions, ecology, physiological and death systems, discovery and learning surfaces.
 - [Implementation, ownership and performance](docs/implementation.md): mod ownership, script manifests, validation boundaries and runtime policy.
-- [Testing and fresh distributions](docs/testing.md): exact-artifact Smoke/Soak/Tele Soak and release evidence.
+- [Testing and fresh distributions](docs/testing.md): exact-artifact Smoke, Overworld Tele Soak and full Tele Soak evidence.
 
 `LICENSE-NOTICE.md` remains a packaged legal notice, `config/explosionoverhaul/README.md` stays with its configuration, and `kjs-script-summaries.md` remains the generated script inventory. Historical fixtures in `generated/` and the separate `feature-labs/` checkout are not living documentation.
 
@@ -28,7 +28,7 @@ Better Content is a Forge 1.20.1 expert-pack content layer built around systems 
 
 Geological deposits, Y-band locality, processing ladders, machine casing tiers, spirit/villager markets, obelisk and dimension routes, body systems, persistent traces, and the death/respawn life-length loop are all progression surfaces through which those roots meet.
 
-The main source trees are `kubejs/`, `config/`, `defaultconfigs/`, `datapacks/`, `globalresources/`, `resourcepacks/`, `shaderpacks/`, active `mods/*.pw.toml`, and bundled custom jars in `mods/`. Root `dist.sh` is the package-once primitive, `test.main.kts` exposes Smoke and Soak on existing artifacts, and `release.main.kts` requires Smoke on an explicitly prepared fresh ZIP pair before success; `package.sh` remains the internal packager.
+The main source trees are `kubejs/`, `config/`, `defaultconfigs/`, `datapacks/`, `globalresources/`, `resourcepacks/`, `shaderpacks/`, active `mods/*.pw.toml`, and bundled custom jars in `mods/`. Root `dist.sh` is the package-once primitive, `test.main.kts` exposes Smoke and both Tele Soak tiers on existing artifacts, and `release.main.kts` requires Smoke on an explicitly prepared fresh ZIP pair before success; `package.sh` remains the internal packager.
 
 Runtime directories, raw logs, crash reports, screenshots, profiler dumps, generated runtime dumps, and local launcher state are not documentation. Keep them under `~/.cache/bc`, `server-instance/`, `server-template/`, or `generated/` unless explicitly requested otherwise.
 
@@ -36,9 +36,9 @@ Runtime directories, raw logs, crash reports, screenshots, profiler dumps, gener
 
 Do not add new one-off audits, pass reports, JSON summaries, raw logs, RAM dumps, or diagnostics under `docs/`. Fold durable conclusions into the closest living doc and leave raw evidence in the run root.
 
-When progression behavior changes, update `progression.md#progression` and/or `world-and-player.md#content-ownership`. When crafting-graph scope, mod categorization, item-support policy, exception families, or durable integration findings change, update `progression.md#crafting-graph-policy` and the affected `progression.md#balance-policy-register` row. When player-facing teaching or authoring policy changes, update `world-and-player.md#learning-surfaces`. When the Realistic Ores processing model, yields, assays, media, solvents, or extension rules change, update `progression.md#realistic-ore-processing`. When executable script inventory or cross-repository ownership changes, update `implementation.md#current-implementation-manifests` and the root `kjs-script-summaries.md`. When Systemic Salience mappings or presentation change, update `world-and-player.md#systemic-salience`. When weapon references, normalized bands, compensation rules, generic-effect valuation, animation coverage, alternate modes, or signature exceptions change, update `progression.md#weapon-balance-philosophy`. When custom-mod ownership, identity, validation, or deployment changes, update `implementation.md#custom-mod-workspace`. When mod composition, performance, or runtime compatibility changes, update `implementation.md#performance-and-mods`. Pack-level suites are run only on explicit user instruction through `test.main.kts`, as defined in the root `AGENTS.md` and summarized in `testing.md#smoke-soak-tele-soak-and-fresh-distributions`.
+When progression behavior changes, update `progression.md#progression` and/or `world-and-player.md#content-ownership`. When crafting-graph scope, mod categorization, item-support policy, exception families, or durable integration findings change, update `progression.md#crafting-graph-policy` and the affected `progression.md#balance-policy-register` row. When player-facing teaching or authoring policy changes, update `world-and-player.md#learning-surfaces`. When the Realistic Ores processing model, yields, assays, media, solvents, or extension rules change, update `progression.md#realistic-ore-processing`. When executable script inventory or cross-repository ownership changes, update `implementation.md#current-implementation-manifests` and the root `kjs-script-summaries.md`. When Systemic Salience mappings or presentation change, update `world-and-player.md#systemic-salience`. When weapon references, normalized bands, compensation rules, generic-effect valuation, animation coverage, alternate modes, or signature exceptions change, update `progression.md#weapon-balance-philosophy`. When custom-mod ownership, identity, validation, or deployment changes, update `implementation.md#custom-mod-workspace`. When mod composition, performance, or runtime compatibility changes, update `implementation.md#performance-and-mods`. Pack-level suites use `test.main.kts` only when authorized for the operation, as summarized in `testing.md#smoke-overworld-tele-soak-tele-soak-and-fresh-distributions`. This checkout has no root `AGENTS.md`; do not rely on one for approval or commands.
 
-Claims in these docs must be checked against their current implementation or evidence authority.
+The current consolidation target uses fresh source-owned JARs, existing source/unit checks and one exact-artifact Smoke on the non-strict experimental route. This is an intended gate, not a passed result or a claim of world migration. Claims in these docs must be checked against their current implementation or evidence authority.
 The tracked pack, including its Packwiz manifests, bundled custom JARs, config, data, and scripts,
 defines the current target; owning custom-mod source defines the mechanics represented by those
 JARs. Complete generated snapshots and named test evidence establish observed runtime state only for

@@ -19,7 +19,6 @@
         'create:crushed_raw_iron': true,
         'create:crushed_raw_zinc': true,
         'create:crushed_raw_silver': true,
-        'creatingspace:moon_regolith': true,
         'malum:copper_node': true,
         'malum:gold_node': true,
         'malum:iron_node': true,

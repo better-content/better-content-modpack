@@ -1,5 +1,5 @@
-// Direct dimension portals are not pack routes. Player dimension travel should
-// come from Dimensional Font routes or Creating Space rocket graph entries only.
+// Direct dimension portals are not pack routes. Only approved Dimensional Font
+// destinations remain available; retired dimensions have no player route.
 
 var BC_DIRECT_DIMENSION_ROUTE_ITEMS = [
     'fallout_wastelands_:portal_frame',

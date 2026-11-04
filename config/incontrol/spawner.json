@@ -704,50 +704,5 @@
       "maxlocal": 2,
       "inwater": true
     }
-  },
-  {
-    "mob": "rats:rat_baron",
-    "persecond": 0.002,
-    "attempts": 20,
-    "amount": { "minimum": 1, "maximum": 1 },
-    "conditions": {
-      "dimension": "minecraft:overworld",
-      "and": { "structuretags": "kubejs:rat_baron_site" },
-      "mindist": 24,
-      "maxdist": 80,
-      "maxthis": 1,
-      "maxlocal": 1,
-      "norestrictions": true
-    }
-  },
-  {
-    "mob": "rats:dutchrat",
-    "persecond": 0.002,
-    "attempts": 20,
-    "amount": { "minimum": 1, "maximum": 1 },
-    "conditions": {
-      "dimension": "minecraft:overworld",
-      "and": { "structuretags": "kubejs:rat_dutchrat_site" },
-      "mindist": 24,
-      "maxdist": 80,
-      "maxthis": 1,
-      "maxlocal": 1,
-      "norestrictions": true
-    }
-  },
-  {
-    "mob": "rats:ghost_pirat",
-    "persecond": 0.001,
-    "attempts": 20,
-    "amount": { "minimum": 1, "maximum": 1 },
-    "conditions": {
-      "dimension": "minecraft:overworld",
-      "and": { "structuretags": "kubejs:rat_dutchrat_site" },
-      "mindist": 24,
-      "maxdist": 80,
-      "maxthis": 2,
-      "maxlocal": 1,
-      "norestrictions": true
-    }
   }
 ]

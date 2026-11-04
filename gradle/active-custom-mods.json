@@ -8,6 +8,10 @@
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-industrial-heat",
+        "better-rail-beetle"
       ]
     },
     {
@@ -60,7 +64,8 @@
       "dependsOn": [
         "better-compat-fixes",
         "better-gameplay-notices",
-        "better-dimension-fonts"
+        "better-dimension-fonts",
+        "better-celestial-events"
       ]
     },
     {
@@ -466,7 +471,9 @@
       ],
       "dependsOn": [
         "better-drinking-water",
-        "better-spicy-farmers"
+        "better-spicy-farmers",
+        "better-compat-fixes",
+        "better-gameplay-notices"
       ]
     },
     {
@@ -528,21 +535,20 @@
       ]
     },
     {
-      "repository": "dynamic-trees-dimension-compat",
-      "modId": "dynamic_trees_dimension_compat",
-      "artifact": "dynamic-trees-dimension-compat-0.1.1.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ]
-    },
-    {
       "repository": "better-world-management",
       "modId": "better_world_management",
       "artifact": "better-world-management-0.1.0.jar",
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-dimension-fonts",
+        "better-ore-geology",
+        "better-bumblezone-crops",
+        "better-celestial-events",
+        "better-spirit-commerce",
+        "better-chemlib-hazards"
       ]
     },
     {
@@ -576,6 +582,33 @@
       "artifact": "better-spaceflight-0.1.0.jar",
       "tasks": [
         "test",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-electrochemistry",
+      "modId": "better_electrochemistry",
+      "artifact": "better-electrochemistry-0.1.0.jar",
+      "tasks": [
+        "test",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-seasonal-daylight",
+      "modId": "better_seasonal_daylight",
+      "artifact": "better-seasonal-daylight-0.1.0.jar",
+      "tasks": [
+        "test",
+        "stageRuntimeJar"
+      ]
+    },
+    {
+      "repository": "better-seasonal-trees",
+      "modId": "better_seasonal_trees",
+      "artifact": "better-seasonal-trees-0.1.0.jar",
+      "tasks": [
+        "verifyFull",
         "stageRuntimeJar"
       ]
     }

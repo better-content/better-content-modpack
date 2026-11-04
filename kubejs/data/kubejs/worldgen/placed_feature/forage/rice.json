@@ -1,0 +1,22 @@
+{
+  "feature": "kubejs:forage/rice",
+  "placement": [
+    {
+      "type": "better_bumblezone_crops:overworld_forage"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
+    },
+    {
+      "type": "minecraft:biome"
+    },
+    {
+      "type": "farmersdelight:biome_tag",
+      "tag": "kubejs:forage_rice"
+    }
+  ]
+}

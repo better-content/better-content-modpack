@@ -1,5 +1,5 @@
-// Foraged fruit and animal foods are the first complete meal. Rice and garden
-// crops appear after Bumblezone seeds; the cooking pot then joins more groups.
+// Foraged fruit, finite wild vegetables/rice and animal foods feed exploration.
+// Renewable garden crops require Bumblezone seeds; the cooking pot joins more groups.
 ServerEvents.recipes(function (event) {
     event.shapeless('farmersdelight:fruit_salad', [
         'minecraft:bowl', 'fruitsdelight:blueberry', 'minecraft:apple', 'minecraft:honey_bottle'

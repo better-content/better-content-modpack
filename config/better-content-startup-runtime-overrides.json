@@ -1,0 +1,97 @@
+{
+  "schema": "bc.startup_archive_overrides.v1",
+  "producer": "better-compat-fixes",
+  "provider_artifact": "better-compat-fixes-0.1.9.jar",
+  "revision": "bc-startup.1",
+  "spec": {
+    "path": "src/upstreamRuntime/startup-overrides-v1.json",
+    "sha256": "7cc0560d9300713b88bc8e4dba476fa1149e2931776e530ef48832b2ff3fcbd6"
+  },
+  "builder": {
+    "path": "scripts/build_upstream_startup_overrides.py",
+    "sha256": "4e7d7c02b3aece198a05c62c52381779ef12835844d5bfe7b935c2365ce0fb62"
+  },
+  "legacy_builder": {
+    "path": "scripts/build_upstream_runtime_overrides.py",
+    "sha256": "09669c8333ce94358b30f8c303f9885a459388ccfd02d0c867b8b77ece472ed6"
+  },
+  "citadel": {
+    "input": "citadel-2.6.3-1.20.1.jar",
+    "manifest": "citadel.pw.toml",
+    "project_id": 331936,
+    "file_id": 7476570,
+    "class": "com/github/alexthe666/citadel/server/world/CitadelServerData.class",
+    "class_sha256": "2c936c4639e7fe5e23f5a8075d658e779fcca3540eca6b59f91a108820c37048",
+    "input_sha1": "fb0b1fa96ce28e4be77b38ad95d83c3da7ec8316",
+    "input_sha256": "56c7ab87348a5292583aac787b6cf11b5193e77f02af1d17ea75a96f8640b3ce"
+  },
+  "patch": {
+    "path": "dev/uncandango/alltheleaks/leaks/common/mods/citadel/UntrackedIssue001.class",
+    "before_sha256": "16a640ec027ac79f45761828e310af3e65166334bed9489977dc40e1d7b1fbc5",
+    "annotation": "Ldev/uncandango/alltheleaks/annotation/Issue;",
+    "mod_id": "citadel",
+    "element": "versionRange",
+    "before": "[2.5.4,)",
+    "after": "[2.5.4,2.6.3),(2.6.3,)"
+  },
+  "artifacts": [
+    {
+      "input": "alltheleaks-1.1.1+1.20.1-forge.jar",
+      "output": "alltheleaks-1.1.1+1.20.1-forge-bc-startup.1.jar",
+      "manifest": "alltheleaks.pw.toml",
+      "project_id": 1091339,
+      "file_id": 7235989,
+      "input_sha1": "3c43c2e76093dc7ef5ad6e456d20da9674c653aa",
+      "input_sha256": "7b8e945da294b745e6aed9f88f28e232a767e032d7c2b8137a8ef36421d9fb33",
+      "output_sha256": "14d6aecc0b3ab54f4f44a12f9df9700ccac9433858a44a338a9eba3ec412e774"
+    }
+  ],
+  "receipt": {
+    "schema": "bc.upstream_startup_runtime_receipt.v1",
+    "revision": "bc-startup.1",
+    "spec_sha256": "7cc0560d9300713b88bc8e4dba476fa1149e2931776e530ef48832b2ff3fcbd6",
+    "builder_sha256": "4e7d7c02b3aece198a05c62c52381779ef12835844d5bfe7b935c2365ce0fb62",
+    "legacy_builder_sha256": "09669c8333ce94358b30f8c303f9885a459388ccfd02d0c867b8b77ece472ed6",
+    "python": "3.13.5",
+    "zlib": "1.3.1",
+    "citadel_abi": {
+      "input": "citadel-2.6.3-1.20.1.jar",
+      "sha256": "56c7ab87348a5292583aac787b6cf11b5193e77f02af1d17ea75a96f8640b3ce",
+      "class_sha256": "2c936c4639e7fe5e23f5a8075d658e779fcca3540eca6b59f91a108820c37048",
+      "field_names": [
+        "IDENTIFIER",
+        "server",
+        "tickRateTracker"
+      ],
+      "dataMap_present": false
+    },
+    "artifacts": [
+      {
+        "input": "alltheleaks-1.1.1+1.20.1-forge.jar",
+        "output": "alltheleaks-1.1.1+1.20.1-forge-bc-startup.1.jar",
+        "input_sha256": "7b8e945da294b745e6aed9f88f28e232a767e032d7c2b8137a8ef36421d9fb33",
+        "output_sha256": "14d6aecc0b3ab54f4f44a12f9df9700ccac9433858a44a338a9eba3ec412e774",
+        "output_sha1": "2137d5ce50468552ee1871ad79584a258515ea3f",
+        "annotation_patch": {
+          "path": "dev/uncandango/alltheleaks/leaks/common/mods/citadel/UntrackedIssue001.class",
+          "before_sha256": "16a640ec027ac79f45761828e310af3e65166334bed9489977dc40e1d7b1fbc5",
+          "after_sha256": "5a62485e8aa149a950cfe3f3ea4ac58c918ff03550096cedfebaffaa68806a58",
+          "constant_pool_index": 10,
+          "utf8_length_offset": 215,
+          "before": "[2.5.4,)",
+          "after": "[2.5.4,2.6.3),(2.6.3,)",
+          "all_other_class_bytes_invariant": true
+        },
+        "class_count": 880,
+        "before_class_inventory_sha256": "6d208bbc9f079ab8a63c28a93136f34cc0dd69b5f03e9d274f6d206e38c5f8b1",
+        "after_class_inventory_sha256": "5f67ce526286b1304a810f0aa2d3b9ded7d8e8aab6a463c9af2fd8489c4b70b9",
+        "license": "MIT declared by META-INF/mods.toml; all original notices and bundled components retained unchanged",
+        "redistribution": "LOCAL_ONLY_NOT_AUTHORIZED"
+      }
+    ],
+    "runtime_acceptance": "NOT_EVALUATED",
+    "publication": "NOT_AUTHORIZED_BY_THIS_RECEIPT"
+  },
+  "publication": "LOCAL_ONLY_NOT_AUTHORIZED",
+  "runtime_acceptance": "NOT_EVALUATED"
+}

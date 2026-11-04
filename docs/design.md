@@ -22,15 +22,15 @@ The world should reward understanding and preparation rather than collecting abs
 - Conventional modular tools belong to Tinkers' Construct. Unique weapons, bows, armor, creature gear and material integrations can retain separate identities. Wood is useful for handles, bindings and other fittings, not tool heads.
 - PowerGrid provides stationary electrical generation. Kinetic power, pressure, heat, gas networks, storage, electrical consumers and computation remain distinct engineering systems.
 - Vanilla potion delivery is removed as a redundant family. Plain water, food effects, status effects and independently owned flask systems remain meaningful.
-- The vanilla End is inaccessible. Needed End-like materials and ecology can have specifically chosen alternatives in orbit, cultivation or dragon ecology; that does not imply relocating every End-exclusive item.
+- The vanilla End is inaccessible. Needed End-like materials and ecology need specifically chosen accessible alternatives in cultivation or dragon ecology; no orbit route is active in this candidate.
 
 The old design explicitly acknowledged incomplete closure of finite matter: vanilla water/lava renewal and renewable stone loops remained exceptions. A strict finite-fluid replacement was deferred, not already achieved.
 
-“Muted” content can fit the pack while lacking ordinary survival acquisition. The four End-only Starcatcher catches—Charfish, Chorus Crab, End Glow and Voidbiter—were deliberately left End-bound. Existing specimens and their uses were not removed. Muting is neither deletion nor a promise of a future unlock.
+“Muted” content can fit the pack while lacking ordinary survival acquisition. Historical End-only fishing examples do not define the current acquisition rules; consult the active progression and recipe sources. Muting is neither deletion nor a promise of a future unlock.
 
 ### Progression through manufacturing and place
 
-Six manufacturing eras provide a broad spine, but each capability follows its own material and manufacturing requirements. Opening one category does not impose every other category's gate.
+Five active technology eras and a primitive prelude provide a broad spine, but each capability follows its own material and manufacturing requirements. Opening one category does not impose every other category's gate. The older sixth aerospace era is deferred.
 
 | Stage | Intended capability and character |
 | --- | --- |
@@ -40,7 +40,7 @@ Six manufacturing eras provide a broad spine, but each capability follows its ow
 | 3. Create precision and steam | Brass composition, precision mechanisms, steam, rail systems and high-throughput separation |
 | 4. PneumaticCraft and Heat Sync | Pressure, sealed chemistry, process heat, maximum geological recovery and petroleum capabilities |
 | 5. PowerGrid and More Red | Electrical generation, conductive casings, wiring, motors, sensors and circuits |
-| 6. Aerospace | Rocket structures, thermal materials, guidance, propellants, life support and space processing |
+| Deferred aerospace proposal | Rocket structures, thermal materials, guidance, propellants, life support and space processing are not an active survival progression route |
 
 The primitive workshop should be useful before dimensional expeditions: shelter, cooking, temperature preparation, rustic storage, boats, minecarts, ziplines, gliders and simple wooden ships. Local chutes and hoppers are not a requesting network. Cave starts should be able to gather primitive materials without a guaranteed onboarding cache.
 
@@ -299,7 +299,7 @@ The market exposes and coordinates demand; it cannot manufacture genuine demand.
 
 **Direction:** normalise sophisticated finished dishes around Kaleidoscope Cookery's active cooking model, rather than letting every food mod offer a separate shortcut to equivalent premium meals. The aim is good food that takes meaningful preparation, human labour and time, and remains worth eating, sharing and buying. This complements simple gathering work; it is not a compulsory chef profession or heavy industrial progression.
 
-**Cooking recipe scope (later user decision):** The remaining task is to reconcile the edible list, make explicit equivalent-recipe decisions and finish/check the recipe migration as specified in [Better Cooking's current contract](../../mod_source/better-cooking/IMPLEMENTATION.md). The older work/quality/hydration, observation-backend, guidance/acquisition and gameplay-validation proposals below are historical design context, **not requirements or acceptance gates for this recipe task**. This decision does not change the pack's independent packaging/Smoke requirements or activate the incomplete Cooking policy. Kaleidoscope Cookery `1.6.0-forge+mc1.20.1` is a pack input; Extra Delight is not. New preservation/canning/drying remains [deferred](#deferred-preservation-selective-drying-and-industrial-provisions); existing drying recipes, food properties, aging clocks and storage rates stay unchanged.
+**Cooking recipe scope (later user decision):** The remaining task is to reconcile the edible list, make explicit equivalent-recipe decisions and finish/check the recipe migration under the [pack's recipe-only Cooking policy](implementation.md#recipe-only-cooking-policy). The previously cited Better Cooking `IMPLEMENTATION.md` is absent from the selected source tree; the pack policy records the current migration routes and checks. The older work/quality/hydration, observation-backend, guidance/acquisition and gameplay-validation proposals below are historical design context, **not requirements or acceptance gates for this recipe task**. This decision does not change the pack's independent packaging/Smoke requirements or activate the incomplete Cooking policy. Kaleidoscope Cookery `1.6.0-forge+mc1.20.1` is a pack input; Extra Delight is not. New preservation/canning/drying remains [deferred](#deferred-preservation-selective-drying-and-industrial-provisions); existing drying recipes, food properties, aging clocks and storage rates stay unchanged.
 
 The proposed kitchen structure is **growing/gathering → prepared ingredients and intermediates → an appropriate final culinary process → finished food for consumption or trade**. Basic Create and Tinkers remain common workshop literacy, not compulsory advanced industrial specialisation. Bulk ingredient handling, fermentation, baking, drying and fluid/container work can complement active cooking where their function is genuinely distinct. Use the existing apparatus inventory before considering another mod: Extra Delight is an investigated option, not a prerequisite or a commitment to add its workstations. Exact roles depend on the consolidation pass below; this is not a commitment to keep parallel cutting boards, equivalent pots or every overlapping food catalogue.
 
@@ -547,9 +547,327 @@ The interesting outcome is a network of trade-offs: raw-material availability, p
 
 Open choices include which part forms and machines to support first, which properties merit inheritance, how material stats translate to non-tool products, how casts and assembly integrate with other mods, how equivalent parts are tagged, and how quality, costs and throughput are balanced. Broad support is the direction; an indiscriminate recipe for literally every item is not required. The [machine/material candidate index](design.md#machinematerial-candidate-index) groups inspected pack apparatus and existing upgrade systems for these decisions; it is a design inventory, not a verified acquisition graph or implementation commitment.
 
+### Chilli and a saturation-backed health economy
+
+**State:** Early discussion; core mechanics and numerical balance remain unsettled.
+
+Spicy food should have a distinct dietary identity. Filling meals should fuel heightened performance and the recovery it costs, rather than merely leaving the player unable to eat for a long time.
+
+#### Direction
+
+- **Chilli is broader than peppers.** Culinary heat, pungency and tingling/numbing spice can include Sichuan pepper. Garlic, onion and clove contribute much less than chilli peppers. This is a food identity, not a capsaicin measurement; aroma alone need not qualify.
+- **Seasoning applies broadly.** Adding spice to ordinary meals would add Chilli alongside their existing food groups. Application, item representation and division among servings remain open.
+- **Trade actual HP for boosts.** Strong spice causes substantial direct damage, rather than reserving maximum HP. Mild pungency implies smaller exposure. The meal's stored food energy can fund recovery.
+- **Saturation becomes the fuel for HP recovery.** Healing spends saturation, not merely checks that some is present. Time controls conversion speed, not unlimited free restoration. The zero-saturation, hunger-only natural-healing fallback would need reconsideration.
+- **Other healing enters the same economy.** One discussed example converted Instant Health into roughly ten seconds of saturation delivery rather than direct HP. Ten seconds was illustrative: total yield and delivery rate both need limits. Regeneration, magic, lifesteal and other sources cannot silently remain free bypasses.
+- **Nourishment and modifiers need distinct roles.** Conserving activity expenditure while still paying healing expenditure was one proposal. Faster recovery and more efficient recovery are different advantages. Stored saturation and the Saturation status effect are separate balance surfaces.
+
+The desired loop is **seasoned meal → Chilli damage and boosts → spend food energy recovering → need food sooner**. A substantial meal can pay its own spice cost more effectively than a raw pepper. Separate restorative food can also support deliberate spice use. Healing counteracting the damage is intentional; maximum spice being free and always optimal is not.
+
+#### Open choices
+
+- Which boosts justify mild versus extreme seasoning? What are damage timing, scaling, duration, lethality and the role of a lasting group versus temporary load?
+- What are saturation capacity, hunger requirements, conversion rate/cost, overflow and waste? Can the player eat when hunger is full but saturation is depleted? Damage alone does not guarantee the ability to eat.
+- How do renewable/non-food healing, absorption, damage mitigation and damage-triggered effects interact without free loops?
+- How are arbitrary seasoning, food-group inheritance and bodily recovery divided among the existing systems?
+
+### Plant drinks: plain juices, teas and botanical brews
+
+**State:** The old record described an owner-approved expansion with source implementation in progress. Later food documentation already described an authored catalogue and production rules. The matrices below preserve the design conversation; they are not a claim that every proposed name, effect or preparation is available.
+
+One coherent plant-drink system should cover fruit, berries, leaves, herbs, flowers, vegetables, roots, grains, coffee, cocoa, sap and suitable otherworldly botanicals. Every fruit gets a plain juice and a brewed specialty. Existing teas, milkshakes, cocktails and specialist benefits retain distinct identities rather than being erased by normalization.
+
+#### Drink roles
+
+| Role | Meaning |
+| --- | --- |
+| Hydration | Untreated/dirty water, with its penalties |
+| Hydration+ | Purified water and plain plant drinks whose extra value is nutrition, calories or sugar |
+| Buff | A distinct functional effect: healing, cleansing, protection, an ability or a specialist action |
+
+Contents determine role, not vessel, workstation or the fact that a drink came from a keg. Nectar amplification alone does not turn a juice into a Buff drink. Milk and honey remain Buff drinks through cleansing, even though they are outside this plant-led expansion.
+
+Safe plain juices do not inherit healing, cleansing, potion effects or chorus teleportation. Those benefits belong in separately named brewed specialties. Not every leaf or seed needs an artificial “juice,” but unpleasant is not unjuiceable: onion, garlic, potato and kelp juice are deliberate inclusions. Milk and honey can remain ingredients; plant-led does not mean every mixed drink is vegan.
+
+#### Production model
+
+| Preparation | Intended process and yield | Remaining distinction |
+| --- | --- | --- |
+| Hand juice | One standardized edible portion and a bottle → one 250 mB plain juice | Ordinary juicy fruit needs no mandatory water, sugar, starter or cooking |
+| Create juice | Same portion, mechanical press over a basin → 250 mB | Automation rather than a yield multiplier |
+| Bottling/emptying | One serving ↔ 250 mB and the appropriate vessel | Conserve volume and return vessels once |
+| Fresh tea/infusion | Water and leaves/herbs/flowers, heated steeping | Kettle or cooking-pot identity, not everything in a keg |
+| Primary fruit brew | 1,000 mB juice and a common safe starter flower → 1,000 mB named brew | Eight minutes at temperature band 3 was the selected direction in later source descriptions |
+| Developed tea | Prepared tea and further brewing inputs | A reason for the extra stage; retain kombucha's identity |
+| Specialist brew | Named base and exceptional agent | Explicit unusual/cursed preparation, not a silent common-recipe substitution |
+| Secondary brew | Existing specialty, extra agent and keg time | Four additional minutes was the starting direction, not an automatic upgrade for every drink |
+
+Whole fruits, small berries and slices need comparable edible portions, not blindly identical item counts. Grain/seed milks and starch-based alcohol retain appropriate processing rather than being renamed raw juices. “Brew” includes steeping, infusions, cordials and developed preparations; it is not proof of alcohol or literal yeast fermentation. Booze is explicit per drink.
+
+#### Agents
+
+- Ordinary non-harmful flowers form an interchangeable common starter pool; the fruit determines the result.
+- Wither rose belongs in explicit death-themed specialties such as Grimberry Rush, not the common pool.
+- Chorus flower belongs to the chorus specialty.
+- Nether wart and crimson/warped fungi can have selected secondary or unusual preparations, not universal advanced-brewing requirements.
+- A few magical/dimensional recipes can justify specific magical flowers.
+- A flower used as someone else's starter does **not** grant its own infusion's effect.
+- No mandatory new yeast, mushroom or sugar input is needed for ordinary fruit brewing. The flower convention replaced an earlier brown-mushroom idea.
+
+#### Plant / preparation / effect matrices
+
+**Retained benefit** means a benefit the old discussion intended to preserve from an existing drink, not proof that the proposed new recipe/name exists. Other effects and new names are proposals. Repeated effects are acceptable: every fruit needs a specialty, not a unique new mechanic.
+
+##### Fruit trees
+
+| Plant | Plain preparation | Brewed specialty | Effect direction |
+| --- | --- | --- | --- |
+| Apple | Apple Juice | Apple Cider | Retained benefit: Absorption |
+| Pear | Plain Pear Juice | Orchard Soother | Retained benefit: pear juice's Lozenge |
+| Orange | Plain Orange Juice | Suncrest Tonic | Retained benefit: orange juice's recovery/cleansing |
+| Kiwi | Kiwi Juice | Greenbound Fizz | Jump Boost |
+| Mango | Mango Juice | Mango Tea / Mango Milkshake | Retained benefits: Strength and Rage Aura |
+| Lychee | Lychee Juice | Lychee Cherry Tea | Retained benefit: Strength |
+| Peach | Peach Juice | Peach Tea / Bellini Cocktail | Retained benefit: Heal Aura; Bellini also causes Nausea |
+| Mangosteen | Mangosteen Juice | Mangosteen Tea | Retained benefit: Sliding |
+| Hawberry | Hawberry Juice | Hawberry Tea | Retained benefit: Appetizing |
+| Bayberry | Bayberry Juice | Duskberry Cordial | Night Vision |
+| Fig | Fig Juice | Featherfall Nectar | Slow Falling |
+| Persimmon | Persimmon Juice | Embergold Tonic | Fire Resistance |
+| Durian | Durian Juice | Thornhide Brew | Resistance with brief Nausea |
+
+##### Berries and other fruit
+
+| Plant | Plain preparation | Brewed specialty | Effect direction |
+| --- | --- | --- | --- |
+| Fruits Delight blueberry | Blueberry Juice | Bluehour Cordial | Night Vision |
+| Cranberry | Cranberry Juice | Bogclear Tonic | Poison removal on completion |
+| Sweet berry | Sweet Berry Juice | Bramblefoot Fizz | Speed |
+| Glow berry | Glow Berry Juice | Glittering Grenadine | Retained benefits: Glowing, Night Vision and alcohol effects |
+| Mulberry | Mulberry Juice | Blackbough Cordial | Strength |
+| Sourceberry | Sourceberry Juice | Spellbloom Tonic | Mana recovery; a distinct Ars interaction |
+| Aether blue berry | Skyberry Juice | Cloudbreak Cordial | Slow Falling |
+| Grimberry | Plain Grimberry Juice | Grimberry Rush, with wither rose | Retained benefit: Haste |
+| Lemon | Plain Lemon Juice | Bittergold Tonic | Retained benefit: lemon juice's protection/cleansing |
+| Pineapple | Pineapple Juice | Goldrush Fizz | Haste |
+| Melon | Plain Melon Juice | Summerheart Cordial | Retained benefit: 2 HP per full serving |
+| Hamimelon | Hamimelon Juice | Dawnheart Cordial | Absorption |
+| Chorus fruit | Chorus Juice | Voidstep Elixir, with chorus flower | Slow Falling and a completion-gated random blink |
+
+##### Tea, coffee and cocoa
+
+| Plant/base | Plain preparation where appropriate | Specialty | Effect direction |
+| --- | --- | --- | --- |
+| Green tea leaves | — | Green Tea | Retained benefit: Haste |
+| Developed green tea | — | Kombucha | Retained benefits: Haste and alcohol effects |
+| Yellow tea leaves | — | Yellow Tea | Retained benefit: Resistance |
+| Black tea leaves | — | Black Tea | Retained benefit: Caffeinated |
+| Tea with milk | — | Builder's Tea | Retained benefit: Haste |
+| Coffee berries/beans | Coffee Cherry Juice | Coffee / Cascara Tonic | Coffee's Caffeinated retained; Cascara using it proposed |
+| Cocoa | — | Hot Cocoa | Retained benefit: one random harmful, curable effect removed on completion |
+| Rose bush/hips | Rose Hip Juice | Rose Hip Tea | Retained benefit: Regeneration |
+| Dandelion | — | Dandelion Tea | Retained benefit: Comfort |
+| Lemongrass | — | Lemongrass Infusion | Comfort |
+| Ginger | Ginger Pressing | Hearthfire Ginger Tea | Nausea removal on completion |
+| Ube | Ube Milk, not raw juice | Ube Milk Tea | Retained benefit: Night Vision |
+
+Long/Strong variants remain within their families. Coffee cherries and processed beans can justify different preparations. The former source notes identified rose hips for Rose Hip Tea and coffee berries plus glow berries for Gambler's Tea; drink names alone do not establish ingredient availability.
+
+##### Vegetables, roots and grains
+
+| Plant | Plain preparation | Brewed specialty | Effect direction |
+| --- | --- | --- | --- |
+| Carrot | Carrot Juice | Goldeneye Tonic | Night Vision |
+| Beetroot | Beetroot Juice | Strongroot Ale / Steel Toe Stout | Retained benefits: Resistance and alcohol effects |
+| Tomato | Tomato Juice | Bloody Mary / Red Rum | Retained benefits: Raging and alcohol effects |
+| Cabbage | Cabbage Juice | Greenward Kvass | Comfort |
+| Onion | Onion Juice | Hearthroot Infusion | One harmful, curable effect removed on completion |
+| Garlic | Garlic Juice | Whiteclove Tonic | Poison removal on completion |
+| Potato | Potato Juice | Vodka | Retained Booze protection/impairment and alcohol effects |
+| Wheat | Wheat Milk | Beer | Retained Booze protection/impairment and alcohol effects |
+| Rice | Rice Milk | Rice Wine / Pale Jane | Retained alcohol effects; Pale Jane also gives Comfort |
+| Pumpkin | Pumpkin Juice / Pumpkin Seed Milk | Harvestgold Brew | Absorption |
+| Sugar cane | Cane Juice | Canefire Brew | Speed, with sugar consequences |
+| Kelp | Kelp Juice | Tideward Infusion | Water Breathing |
+
+Cooked or steeped vegetable preparations can coexist with raw juices. Plant milks should follow available ingredients, not invent almond, oat, soy or coconut stock just to fill a category. Multi-base alcoholic drinks such as Salty Folly and Saccharine Rum retain a place even without a single-plant row. Brief Nausea for unpleasant juice remained a possible drawback, not a settled effect.
+
+##### Ordinary flower infusions
+
+These effects belong to the flower as principal ingredient, not its interchangeable starter role. Dandelion and rose hips appear above. Overlap avoids making every decorative flower mandatory progression.
+
+| Plant | Infusion | Effect direction |
+| --- | --- | --- |
+| Poppy | Redpetal Tea | Comfort |
+| Blue orchid | Marshlight Infusion | Water Breathing |
+| Allium | Violetguard Tea | Poison removal on completion |
+| Azure bluet | Clearbrook Infusion | Brief Night Vision |
+| Red tulip | Emberpetal Tea | Brief Strength |
+| Orange tulip | Copperpetal Tea | Brief Haste |
+| White tulip | Ivorypetal Tea | Brief Resistance |
+| Pink tulip | Blushpetal Tea | Brief Regeneration |
+| Oxeye daisy | Meadowrest Tea | Regeneration |
+| Cornflower | Bluewind Infusion | Speed |
+| Sunflower | Sunward Tea | Brief Fire Resistance |
+| Lilac | Evening Lilac Tea | Comfort |
+| Peony | Peony Heartcordial | Absorption |
+| Flowering lily pad | Stillwater Infusion | Water Breathing |
+
+##### Witch herbs and unusual botanicals
+
+Fantasy preparations, not real-world safety advice. Unsafe extracts are not implicitly safe Hydration+ drinks; their risks and presentation remain explicit.
+
+| Plant/base | Plain preparation where appropriate | Specialty | Effect direction |
+| --- | --- | --- | --- |
+| Yellow dock | — | Dockside Bitter | Harmful-effect cleansing on completion |
+| Mugwort | — | Dreamwalker Tea | Night Vision with brief Nausea |
+| Mandrake | — | Mandrake Fortifier | Resistance with brief Slowness |
+| Belladonna | Belladonna Juice, unsafe | Nightshade Veil | Invisibility with Poison risk |
+| Lily of the valley | — | Widow's Whisper | Invisibility with Weakness |
+| Wither rose | — | Gravebloom Draught | Strength with brief Wither |
+| Wither roots | — | Unresolved | Not a native Purulent Tea ingredient; later notes found no obtainable inventory stock |
+| Nether wart and fermented spider eye | — | Purulent Tea | Retained benefit: extend a random existing milk-curable effect |
+| Coffee berries and glow berries | Their respective juices | Gambler's Tea | Retained beneficial/harmful gamble |
+| Warped fungus | — | Unresolved warped specialty | Not a native Gambler's Tea ingredient |
+| Cursed sap | Sap, not juice | Cursed Sap | Retained benefits: Strength and Resistance |
+
+##### Stronger preparations
+
+| Base | Specialty | Effect direction |
+| --- | --- | --- |
+| Melon | Summerheart Reserve, secondary brew with nether wart | Retained stronger healing: 4 HP per full serving |
+| Apple | Long / Strong Apple Cider | Retained duration/potency variants |
+| Grimberry | Blackwake Reserve, secondary brew with crimson fungus | Stronger Haste with brief Weakness |
+
+#### Appearance
+
+The preferred direction was to reuse suitable juice bottle artwork and retint liquids strongly while preserving bottle shape, glass, outlines and pixel detail—not replace every drink with a newly drawn universal bottle. Donor licensing/attribution still matters to that choice.
+
+| Family | Color direction |
+| --- | --- |
+| Apple / pear / kiwi | Bright amber / chartreuse / saturated green |
+| Orange / mango / persimmon | Vivid orange / deep golden orange / burnt orange |
+| Lychee / peach / mangosteen | Rosy ivory / coral / violet |
+| Hawberry / bayberry / fig | Scarlet / dark wine red / dusty magenta |
+| Durian / pineapple / lemon | Acid yellow-green / strong gold / electric yellow |
+| Melon / hamimelon | Watermelon pink / apricot orange |
+| Fruits Delight blueberry / Aether blue berry | Indigo / electric blue |
+| Cranberry / sweet berry / mulberry | Bright crimson / raspberry red / near-black purple |
+| Glow berry / sourceberry / grimberry / chorus | Luminous-looking amber / arcane purple / deep teal / hot lavender |
+
+“Luminous-looking” does not imply emissive rendering or an additional drink effect.
+
+#### Remaining design questions
+
+- Complete ingredient coverage and aliases, including borderline produce, torchberries, magical plants and mixed drinks.
+- Final names, serving sizes, nutrition/Nectar doses, hydration, quenching, drawbacks and intentional alcohol. A repeated specialist effect is preferable to a forced new mechanic.
+- Cleansing, mana and blink behavior under fractional sipping: one completion action, not a full action per sip. Short effects need to remain useful at real drinking cadence.
+- Safe passive handling of existing orange/lemon cleansing and other bespoke actions. Appearing in a matrix does not itself make a drink slot-compatible.
+- How old specialist juices become distinct plain/brewed preparations without duplicate effect shortcuts. The later source direction chose a fresh-world catalogue rather than promising legacy identity compatibility; existing inventories and paid reserves were not to be bulk-rewritten.
+- Reconcile direct-healing specialties with the proposed saturation economy if that separate idea is adopted. The matrix preserves the older healing intent; it does not decide that conflict.
+
+### Loot: worthwhile, table-owned exploration rewards
+
+**State:** The old notes described selected table-owned overrides as authored/in progress. Comprehensive physical-container and personal-loot behavior remained unresolved. The former global chest normalizer had already been removed.
+
+Exploration rewards should be worthwhile and appropriately sized without flattening every location into the same supplies or manufacturing compensation for every empty roll.
+
+- Tune explicit table/pool rolls, weights and quantities rather than score and reconstruct generated item stacks.
+- Give chosen containers supply, encounter or treasure roles through deliberate authoring, not folder-name inference.
+- Reusable supply pools are an opt-in, not an automatic response to a filtered reward.
+- Preserve special pools, item data, stack behavior, intentional failure rewards and scarcity unless a particular balance decision changes them.
+- Mob-carried rewards, packages and helper tables keep their distinct purposes. A chest-like loot context is not proof of a physical chest.
+- Existing progression cuts and geological replacements remain independent. Balancing does not restore prohibited acquisition routes.
+- A narrowly selected cap could address a demonstrated injection problem; it is not a reason to revive a blanket normalizer or filler generation.
+
+Open choices are the initial problem tables, desired quantities, special rewards, treatment of intentional emptiness, shared-pool consumers and Lootr personal rolls. Existing rolled/prefilled inventories are not silently rewritten. No universal treasure-value score or bundle target was settled.
+
+### Reach-based melee recalibration
+
+**State:** Previously chosen direction, not activated balance. The old catalogue described missing complete measurements and unresolved coupling to alternate attacks. This is a Tinkers' melee proposal, not a balance pass for every native Epic Fight or Weapons of Miracles weapon.
+
+Use actual damage-weighted reach in ordinary grounded mainhand combos to select relative melee output, with Sword at 100 and a continuous 80–120 range. Shorter-reach chassis receive higher output; longer reach trades some output for safety. Slow swings keep their per-hit compensation through speed normalization, not a second speed-derived tier adjustment.
+
+For strike reaches `r_i` and frozen pre-retuning damage weights `d_i`, effective reach is:
+
+`R = sum(r_i × d_i) / sum(d_i)`
+
+With Sword reach `S` and roster endpoints `Rmin`, `Rmax`:
+
+- Below Sword: `100 + 20 × (S − R) / (S − Rmin)`.
+- Above Sword: `100 − 20 × (R − S) / (Rmax − S)`.
+- Equal reach gives equal tiers; all-equal reach gives 100 throughout.
+
+The intended melee reference would return to the former same-material Sword scale, rather than the legacy 0.9 scale. Ranged budgets remain separate. Throws, charged Bonks and other coupled alternate attacks should not accidentally gain or lose their own established damage budgets; compensation must not alter projectile velocity merely to change damage. Native Pierce/Estoc armor interactions need their actual models rather than the older approximate coefficients. The Minotaur Axe sprint signature stays an explicit exception.
+
+The unresolved design inputs are actual connecting reach across the roster, special-model integration and item-scoped alternate-damage separation. Weapon names, model size or an old tier are not measured reach. Dash, air, mount, skills, charges, casts, throws and optional dual variants are outside the proposed neutral-melee comparison.
+
+### Fixed-location forage extensions
+
+**State:** Source drafts existed for saguaro cactus, coconut and ancient trees; these were explicitly outside the established thirteen-species fruit-tree baseline.
+
+Extend fixed-location food-resource treatment to `dynamictreesplus:saguaro_cactus`, `dtnatures_spirit:coconut` and `dtquark:ancient`, while preserving their native useful products. Placing a whole coconut for food processing is not the same as germinating a new tree. Saguaro-to-mega provenance should distinguish actual protected origins from unrelated mega cacti.
+
+The intended growth references and the definition of an adult cactus were unresolved. This does not extend protection to ordinary cacti, cocoa, archwood pods or Aether trees by implication.
+
+A separate unresolved yield choice was whether mature off-origin source-marked crops should occasionally return a second propagule. Older prose mentioned a ten-percent chance, while the recorded implementation returned exactly one. Neither historical sentence settles the desired rule here.
+
+### Lineage endgame: entropy caching and Condemnation
+
+**State:** Durable endgame concept. The old documentation identified no complete entropy economy, Condemnation system, authored curse roster or curse-specific assets. World succession and the Condenser were foundations, not this finished loop.
+
+#### Worlds as production environments
+
+**Entropy caching** is a persistent economy belonging to a lineage above individual worlds. Its structural inspiration is an idler economy, but its in-world substance is entropy, not antimatter. A world can become an expendable production environment.
+
+**Condemnation** lets players irreversibly curse the current world to increase danger and lineage value. This wagers a world, rather than choosing a difficulty preset. Extreme escalation can make the world unsustainable and force succession.
+
+The original shorthand was survival yield `Y = ∫ S(t) dt`: a curse is active and the world is still functioning, so meaningful survived time earns value. The accompanying intent was **convex reward versus severity**, so brief extreme risk can outvalue long safe farming; the actual severity-to-yield function remains unchosen. Fighting, retreat, repairs, evacuation and redundant infrastructure can all make survival meaningful. Banking on voluntary versus forced succession remains open.
+
+#### Curses have agendas, not just stat multipliers
+
+The model is **agenda → objectives → available actions → victory condition**.
+
+A curse can be an apocalypse-scale actor, process or altered world rule. Strategic choices may involve territory, settlements, routes, energy, production, resources, defenses, other factions, entropy infrastructure and asset survival.
+
+Ordinary pre-endgame combat remains readable and deliberately imperfect. Condemned actors can instead optimize for their own purposes: avoid losing fights, preserve assets, blockade, attack logistics, exploit absence, abandon obsolete objectives, cooperate temporarily or pursue world nonviability. Their unfairness comes from strategic agency, not arbitrary cheating or unreadable unavoidable damage.
+
+Multiple curses coexist. They need not prioritize the player or regard each other as allies. Threats can destroy, feed on, flee from or temporarily cooperate against one another. Directional invasion remains important: geographic origin, travel, routes and perceptible approach—not enemies materializing next to the player because a menu changed.
+
+#### Persistence as narrative
+
+The player's lineage need not be the only one using caches or analogous cross-world mechanisms. Other actors have independent progress, interests, failures and incomplete knowledge.
+
+A useful encounter is mutual recognition: the player enters an installation for another reason, recognizes an unexpected cache, and its owner reacts because that recognition reveals the player's capabilities. Both learn something surprising. A functioning cache conveys more than a book explaining one.
+
+Repeated names, equipment, behavior, recovered technology and consequences can carry story across generations. Defeat advances knowledge without guaranteeing victory. Destroying a world need not erase its narrative significance. Explanations can remain uncertain between convergence, inheritance, common origin, independent discovery and cross-world contact; other actors use their own concepts rather than quoting player-facing rates and tiers.
+
+#### The intended complete loop
+
+Discover/build the Condenser → establish lineage caching → choose irreversible Condemnation → survive interacting world-scale threats → evacuate or lose the world → settle value and discoveries → enter a successor with meaningful new capabilities and consequences → encounter further mechanically grounded narrative.
+
+A reset button, growing number, single boss or textual ending does not complete that loop. Existing schematic knowledge, discoveries and generation-funded perks give continuity but do not already constitute entropy-funded rewards.
+
+#### Open design choices
+
+| Question | Preserved direction or uncertainty |
+| --- | --- |
+| Shared-world consent | Who may condemn a world? Distinguish shared danger from personal lineage entitlement; account for griefing, late joiners and offline players. |
+| Entry gate | Early successor access and dangerous entropy production need not unlock together. The meteor-material Condenser recipe did not establish late-game mastery. |
+| Meaningful survival | Decide clocks, pauses, offline time, infrastructure requirements and anti-idle behavior; safe wall-clock waiting is not automatically production. |
+| Severity | Choose a bounded convex curve and composition rule reflecting actual enacted danger. No numeric balance or roster was settled. |
+| Cache ownership | Physical object versus abstract balance; capacity, destruction, theft, evacuation, spending and respec remain open. |
+| Banking | Voluntary evacuation, intended forced world loss and failed succession are different outcomes. No double banking or spending through retries. |
+| Rewards | Meaningful successor capabilities and consequences, not only larger rates; keep the existing generation-funded perk graph distinct unless deliberately redesigned. |
+| Terminal conditions | Define each curse's victory and world nonviability, with warnings and possible recovery; a crash is not an intended apocalypse. |
+| Platforms | Integrated single-player succession was disabled in the recorded foundation. Merely removing that guard is not a complete single-player design. |
+| Breadth | Choose the first curse and launch roster; a second distinct curse is important to establish actual interaction, not only independent parallel waves. |
+
+A useful development shape in the old design was one complete curse/caching/succession loop, then a second strategically different curse, then broader content and lineage rewards. The gameplay questions behind that sequence remain relevant: competing objectives, resource/territory contention, destruction of another actor's objective, retreat, cache loss, player absence and consequences that survive reloads and later generations. Permanent remote chunk loading was not intended as the hidden price of strategic simulation.
+
 ### Valkyrien Skies: physical motion and spacecraft
 
-**State:** Wanted and deferred; this is a replacement ambition, not a completed physics model. The isolated [VS spaceflight work-in-progress directory](../../feature-labs/vs-spaceflight/) contains the current prototype, evidence and status; its scope does not by itself fulfill the broader physics ambition below.
+**State:** Wanted and deferred; this is a replacement ambition, not a completed physics model. The selected [Better Spaceflight feasibility source](../../mod_source/better-spaceflight/README.md) owns the available adapter and nonshipping probe. Its source documents unresolved coast motion and other qualification limits; it does not fulfill the broader physics ambition below or establish survival gameplay. The older VS lab directory is unavailable in this candidate.
 
 Vehicles and moving contraptions should have understandable sources of motion and Newtonian responses, including equal-and-opposite reactions. Player-built spacecraft would use that same physical model, replacing Creating Space's spacecraft rather than maintaining a disconnected second flight system.
 
@@ -559,6 +877,8 @@ Vehicles and moving contraptions should have understandable sources of motion an
 - Craft coast without unexplained stopping, drag or reactionless steering. Vacuum propulsion uses appropriate finite propellant/reaction mass; atmospheric propellers and aerodynamic control surfaces do not work in vacuum without a separately justified mechanism.
 
 Open choices include simulation limits, controls, explicit supernatural exceptions, construction, atmosphere/space transitions, gravity, travel scale, persistence and multiplayer behavior. **Orbital simulation is unresolved**, not assumed. Replacing Creating Space spacecraft also leaves a separate decision about its non-spacecraft content and existing progression dependencies.
+The current candidate uses only available Better Spaceflight feasibility source; its
+unrecovered survival-preview flight and destination implementation is retired.
 
 ### Contextual Threads still wanted
 
@@ -572,7 +892,7 @@ Exact triggers, copy and scenes remain unchosen. These cards should explain an a
 
 ### Abyssal City: hydraulic reclamation and finite ecology
 
-**State:** An isolated source prototype, not installed in the pack or a completed gameplay-ready experience. See the [Better Abyssal City work-in-progress repository](../../mod_source/better-abyssal-city/) for its current scope, generation work and status; the hydraulic and ecological loop below is not yet implemented there.
+**State:** An experimental source-owned candidate included in the 54-entry target manifest, not a gameplay-ready or Smoke-accepted experience. See the [Better Abyssal City work-in-progress repository](../../mod_source/better-abyssal-city/) for its source scope; the hydraulic and ecological loop below remains aspirational.
 
 An explorable layered underwater city would combine dangerous mystery fluid, sealing and pumping, player reclamation, finite local Gatherer/Warden ecology and persistent travel between cities.
 
@@ -584,7 +904,7 @@ Open choices include how reclamation changes access and danger, finite actor/res
 
 ### Hydrology: complete and integrate finite water
 
-**State (2026-10-28):** The isolated [Better Finite Water source repository](../../mod_source/better-finite-water/) resumed its previously stopped qualification work under a separate explicit user request. It remains disabled by default and is not an active pack input. Its [completion audit](../../mod_source/better-finite-water/docs/COMPLETENESS.md) records bounded functional qualification, **not a complete or release-ready hydrology system**; that dated audit may lag resumed work. The earlier [water-simulation research](../../water-simulation-research/) is a screening experiment, not a deployed mod. The new world-generation and erosion ideas below are **additional aspirations beyond the source project's frozen first-support scope**, not new requirements imposed on its current qualification run.
+**Historical state (2026-10-28):** The available [Better Finite Water source repository](../../mod_source/better-finite-water/) had resumed previously stopped qualification work under a separate explicit user request. It remains disabled by default and is not an active pack input. Its cited `docs/COMPLETENESS.md` audit is unavailable in this candidate; that dated audit reported bounded functional qualification, **not a complete or release-ready hydrology system**, and cannot establish current qualification. Earlier water-simulation research was a screening experiment, not a deployed mod; that research directory is unavailable here. The new world-generation and erosion ideas below are **additional aspirations beyond the source project's first-support scope**, not new requirements imposed on a qualification run.
 
 The intended water system should make finite bodies behave as accounted-for volumes: downhill flow, connected-level and pressure equalisation, real damming and drainage, and meaningful interaction with excavations and future pumps. The ordinary vanilla water view should follow a server-owned volume ledger; one block equals 65,536 integer quanta internally, while rendered/block fluid levels remain coarser. Only **proven natural ocean connections** may act as unquantified sources or sinks at sea-level head. Unknown terrain must remain unresolved rather than silently supplying or swallowing water, and simulation must not generate distant chunks merely to discover an answer.
 
@@ -635,7 +955,7 @@ Open choices include the first useful polymer roster; real versus simplified rea
 
 ### Provenance
 
-The Valkyrien Skies, Threads, Abyssal City and lineage aspirations were recovered from modpack history, including commit `6004642691c0`. The plastics and chemical-industry direction above was added later. The social-goals section records the 2026-10-28 discussion, its clarified shared Create/Tinkers foundation, the proposed asynchronous player market and a dated implementation comparison; it is not a report of observed social outcomes. Links above point to separate work-in-progress directories and notes, not to accepted pack features.
+The Valkyrien Skies, Threads, Abyssal City, plant drinks, Chilli, loot, melee reach, fixed-location forage and lineage aspirations were recovered from modpack history, including commit `6004642691c0`. The plastics and chemical-industry direction above was added later. The social-goals section records the 2026-10-28 discussion, its clarified shared Create/Tinkers foundation, the proposed asynchronous player market and a dated implementation comparison; it is not a report of observed social outcomes. Links above point to separate work-in-progress directories and notes, not to accepted pack features.
 
 ## Machine/material candidate index
 
@@ -712,11 +1032,11 @@ Read with [Aspirational features](design.md#tinkers-parts-as-widely-usable-manuf
 
 | Machine family | Existing surface / suggested part decision | Disposition |
 | --- | --- | --- |
-| Pretty Pipes pipe/pressurizer and low/medium/high speed and extraction modules | Explicit module grades and high Ratlantis gates; material transport insert could set speed or rate while retaining module families. | R/H |
-| Pretty Pipes low/medium/high crafting, filtering, priority, retrieval modules, terminals | Filters, crafting and routing choices are *functions*, not better alloys. Material may affect capacity within a function; preserve request logistics and Ratlantis roots. | R/H |
+| Pretty Pipes pipe/pressurizer and low/medium/high speed and extraction modules | Explicit module grades and meteor Certus gates; material transport insert could set speed or rate while retaining module families. | R/H |
+| Pretty Pipes low/medium/high crafting, filtering, priority, retrieval modules, terminals | Filters, crafting and routing choices are *functions*, not better alloys. Material may affect capacity within a function; preserve request logistics and current meteor Certus roots. | R/H |
 | Sophisticated Storage barrels/chests/shulkers, copper/iron/gold/diamond/netherite grades and Limited Barrel I–IV | Explicit storage capacity/slot-size ladder; material-bearing frames could alter capacity if migration, NBT and portable-storage compatibility are solved. Not a first chemical-machine pilot. | R/H |
 | Sophisticated Storage controller, Storage I/O/link and portable backpack tiers/upgrade modules | Functional upgrades and inventory safety dominate. Material effects only where a concrete mechanical role exists; do not break existing stocked containers. | L/H |
-| Little Logistics Fluid Hopper/Rapid Hopper, Vehicle Charger and docks | Hopper throughput is a good candidate; existing Rapid Hopper is Ratlantis-rooted, so retain its meaningful logistics boundary. Docks/charger are mostly infrastructure. | R/H |
+| Little Logistics Fluid Hopper/Rapid Hopper, Vehicle Charger and docks | Hopper throughput is a good candidate; the Rapid Hopper's current meteor Certus root is a meaningful logistics boundary. Docks/charger are mostly infrastructure. | R/H |
 | Little Logistics tugs, barges, locomotives and train cars | Hull/propulsion/load materials could matter; assess vessel physics, cargo persistence and existing coupling before inheriting properties. | E |
 | Rail Beetle engine cradle and fuel/steam/flux/air/magic drives | Distinct source-of-power capabilities share a cradle; a material drive part might change service limits **within** an engine, not make different energy domains interchangeable. | H |
 | Rail Beetle I/II governor, recuperator, brake, adhesion, torque, drawgear, survey, dispatch and trestle modules | Source profile has fixed tiers and measurable caps. **Top explicit replacement candidate:** material-bearing working parts for governor/brakes/torque/drawgear, preserving six bays, one-per-family rules and baseline utility. Survey/remote/trestle require separate functional decisions. | R/H |
@@ -739,8 +1059,8 @@ Read with [Aspirational features](design.md#tinkers-parts-as-widely-usable-manuf
 | Blood Magic Altar and reinforced rune families; alchemy table/reaction chamber, Hellfire Forge | **Explicit rune modifiers**, but they are magical multiblock progression, not generic metal-grade upgrades. Only sensible material roles on containment/physical tooling; keep LP/rune mechanics. | L/H |
 | Ars Imbuement Chamber, Enchanting Apparatus, potion melder, spell turrets and Source relays | Source/ritual/spell functions remain Ars; selected physical apparatus could consume parts without material-inheriting magical potency. | L/H |
 | Hexerei Mixing Cauldron, Occultism bowls/ritual/mineshaft and Malum spirit apparatus | Independent specialist paths; do not force Create/TCon metallurgy across their progression. Occultism remote storage/mining and stabilizer ladder are closed by pack policy. | L/H (closed routes X) |
-| Creating Space Mechanical Electrolyzer, Air Liquefier, chemical apparatus, cryogenic tank | Relevant cross-industry gas/cold production and containment; could use a working component/liner. Keep aerospace gates and verify active recipes. | E/H |
-| Creating Space rocket-engine blueprint and multiple named engine-wall/pipe materials, small/big engines | **Already material-flavoured component family**; strong candidate for part-property comparison, but aspirational VS spacecraft would replace Creating Space spacecraft. Do not deepen a soon-to-be-replaced flight system without a decision. | R/H (?) |
+| Retired Creating Space chemical apparatus | Historical gas/cold production ideas can be adapted only through retained machinery and chemistry owners; this row is not an active recipe or machine inventory. | E/H |
+| Future spacecraft parts | Materials and propulsion remain design questions for later Spaceflight work; the available source baseline is feasibility-only and supplies no survival flight route. | H |
 | Vanilla furnace/blast furnace/smoker, crafting grid and hopper/dispenser | Furnace process and hand/basic automation are accessible baselines. A refractory lining or hopper rate is conceivable, but don't material-gate staples or treat ordinary crafting as a machine tier. | L/H |
 | Quark deepslate/blackstone furnaces, copper/encased pipes; Supplementaries bellows/faucets/pulleys/cannon | Functional or material-looking variants with limited early utility; manufacturing parts could influence rate/handling where real, but verify survival acquisition and avoid duplicating Create's fluid/kinetic roles. | L/E |
 | Alex's Caves magnetic quarry, nuclear furnace and confection oven; Fallout Wasteland mixer/oven | Registered specialist machinery; candidate only if acquisition, safety, power and pack policy support actual use. Cave/story machines are not automatically factory infrastructure. | L/E (?) |
@@ -758,4 +1078,3 @@ Read with [Aspirational features](design.md#tinkers-parts-as-widely-usable-manuf
 5. **Pre-implementation evidence per row:** check exact registry ID and obtainable acquisition routes (recipes, loot, world finds, trades), owner/source/config, actual current tier behavior, safe part roles and stat base-versus-modifier mapping, save/placement/multiblock persistence, drop/recovery, existing upgrade coexistence/migration, EMI explanation and runtime effect. Map a polymer's qualitative fit to **existing TCon material stats or traits**; if heat/chemical resistance is desired, author and explain that additional role explicitly rather than pretending it is `mining_tier`.
 
 Inspection sources: `mods/*.pw.toml`; cached upstream JARs under `/home/dev/.cache/bc/packwiz-downloads/mods/` (localized block/item names only); `docs/{progression,balance_policy,content_systems,crafting_policy,aspirational-features}.md`; `kubejs/server_scripts/progression/{20_powered_works,30_precision_factory,40_thermal_pressure,45_acid_chemistry,50_electrical_control,60_aerospace,81_pneumaticcraft_progression}.js`; `kubejs/server_scripts/transport/10_optional_engineering_roots.js`; `config/pneumaticcraft-common.toml`; local `better-rail-beetle/.../upgrade/BeetleProfile.java`, `better-industrial-heat/.../HeatPipeBlockEntity.kt`, and `better-ore-geology/.../recipes/compat/createsifter/`. Exact snapshot provenance belongs to these files and the current checkout; this index is not an acceptance artifact.
-

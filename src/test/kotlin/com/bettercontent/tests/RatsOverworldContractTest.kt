@@ -87,43 +87,75 @@ class RatsOverworldContractTest {
         assertFalse(text("kubejs/startup_scripts/progression/20_transition_items.js").contains("ratlantis_font_grout"))
     }
 
-    @Test fun meteorRecipeGateHasNoRemovedComponentOrExtraSkyStone() {
+    @Test fun meteorRecipeGateHasNoRemovedComponentOrExtraSkyStone(@TempDir temp: Path) {
         val recipe = text("kubejs/server_scripts/progression/20_meteor_logistics.js")
         assertTrue(recipe.contains("8x prettypipes:pipe"))
         assertTrue(recipe.contains("ae2:certus_quartz_crystal"))
         assertTrue(recipe.contains("ae2:sky_stone_block"))
         assertFalse(recipe.contains("rats:oratchalcum_ingot"))
         assertFalse(recipe.contains("rats:gem_of_ratlantis"))
-        assertEquals(1, Regex("'ae2:sky_stone_block'").findAll(recipe).count())
+        // Three durable devices consume one Sky Stone each; first pipes consume none.
+        // Exercise both the Manufacturing and fallback registrations, not raw text counts.
+        Commands.run(listOf("node", "-e", """
+            const fs = require('fs'), vm = require('vm');
+            for (const manufacturing of [false, true]) {
+                const recipes = new Map();
+                const record = data => ({ id: id => {
+                    if (recipes.has(id)) throw Error('duplicate recipe: ' + id);
+                    recipes.set(id, data);
+                }});
+                const event = {
+                    remove: () => {},
+                    shaped: (result, pattern, key) => record({result, pattern, key}),
+                    shapeless: (result, ingredients) => record({result, ingredients}),
+                    custom: data => record(data)
+                };
+                vm.runInNewContext(fs.readFileSync('kubejs/server_scripts/progression/20_meteor_logistics.js', 'utf8'), {
+                    Platform: {isLoaded: id => id === 'better_manufacturing' && manufacturing},
+                    ServerEvents: {recipes: callback => callback(event)}
+                });
+                const item = value => typeof value === 'string' ? value : value && value.item;
+                const count = data => data.ingredients
+                    ? data.ingredients.filter(value => item(value) === 'ae2:sky_stone_block').length
+                    : data.pattern.join('').split('').filter(symbol => item(data.key[symbol]) === 'ae2:sky_stone_block').length;
+                for (const id of ['prettypipes:item_terminal', 'prettypipes:pressurizer', 'kubejs:meteor_logistics/ae2_energy_acceptor']) {
+                    if (!recipes.has(id) || count(recipes.get(id)) !== 1) throw Error('one finite Sky Stone required: ' + id);
+                }
+                if (count(recipes.get('kubejs:meteor_logistics/pipe_batch')) !== 0) throw Error('first pipes gained a Sky Stone gate');
+            }
+        """.trimIndent()), root, temp.resolve("meteor-recipes.log"), timeout = Duration.ofSeconds(15))
         assertFalse(text("kubejs/server_scripts/progression/70_transition_components.js").contains("rats:oratchalcum_ingot"))
         assertFalse(text("kubejs/server_scripts/compat/retained/refactor__balance__63_fonts_hexerei_occultism_chalk.js").contains("rats:gem_of_ratlantis"))
         assertTrue(text("kubejs/server_scripts/policy/dimension_access.js").contains("player access is retired"))
     }
 
-    @Test fun nativeRatsDatapackAndOverworldAcquisitionAreNotConfusedWithTravel() {
-        assertTrue(text("config/rats-common.toml").contains("\"Ratlantis Datapack Enabled by Default\" = true"))
+    @Test fun ordinaryRatsRemainWhileRatlantisRehomingIsRetired() {
+        assertTrue(text("config/rats-common.toml").contains("\"Ratlantis Datapack Enabled by Default\" = false"))
         assertTrue(text("kubejs/server_scripts/policy/dimension_access.js").contains("event.remove({ output: 'rats:chunky_cheese_token' })"))
         val archaeology = text("kubejs/server_scripts/progression/21_rat_archeology.js")
-        assertTrue(archaeology.contains("rats:gem_of_ratlantis"))
+        assertTrue(archaeology.contains("minecraft:amethyst_shard"))
+        assertTrue(archaeology.contains("rats:cheese"))
+        assertFalse(archaeology.contains("rats:gem_of_ratlantis"))
+        assertFalse(archaeology.contains("rats:marbled_cheese"))
         assertTrue(archaeology.contains("kubejs:rat_archeology/archeologist_hat"))
         assertFalse(archaeology.contains("minecraft:iron_pickaxe"))
         assertFalse(archaeology.contains("minecraft:iron_shovel"))
-        val fishing = text("kubejs/server_scripts/progression/23_rat_coastal_fishing.js")
-        assertTrue(fishing.contains("minecraft:gameplay/fishing"))
-        assertTrue(fishing.contains("rats:ratfish"))
-        assertTrue(fishing.contains("rats:ghost_pirat_ectoplasm"))
-        val ore = json("kubejs/data/kubejs/worldgen/placed_feature/rat_oratchalcum_ore.json")
-        assertEquals("kubejs:rat_oratchalcum_deep", ore.path("feature").asText())
-        assertEquals(-1, ore.path("placement").first { it.path("type").asText() == "minecraft:height_range" }
-            .path("height").path("max_inclusive").path("absolute").asInt())
+        assertFalse(Files.exists(root.resolve("kubejs/server_scripts/progression/23_rat_coastal_fishing.js")))
+        assertFalse(Files.exists(root.resolve("kubejs/data/kubejs/worldgen/placed_feature/rat_oratchalcum_ore.json")))
         for (id in listOf("rat_oratchalcum_deep", "rat_gem_deep")) {
-            val targets = json("kubejs/data/kubejs/worldgen/configured_feature/$id.json").path("config").path("targets")
-            assertTrue(targets.any { it.path("target").path("tag").asText() == "minecraft:deepslate_ore_replaceables" })
+            assertFalse(Files.exists(root.resolve("kubejs/data/kubejs/worldgen/configured_feature/$id.json")))
         }
         for (id in listOf("dutchrat_ship", "baron_runway")) {
-            val biomes = json("kubejs/data/rats/tags/worldgen/biome/has_structure/$id.json")
-            assertTrue(biomes.path("values").any { it.asText().startsWith("minecraft:") })
+            assertFalse(Files.exists(root.resolve("kubejs/data/rats/tags/worldgen/biome/has_structure/$id.json")))
         }
+        val quarry = json("kubejs/data/rats/recipes/rat_quarry.json")
+        assertEquals("rats:rat_quarry", quarry.path("result").path("item").asText())
+        assertEquals("better_manufacturing:part_variant", quarry.path("type").asText())
+        assertEquals("tconstruct:pick_head", quarry.path("key").path("H").path("item").asText())
+        assertEquals("forge:storage_blocks/blue_cheese", quarry.path("key").path("B").path("tag").asText())
+        assertEquals("forge:crafting_tables", quarry.path("key").path("C").path("tag").asText())
+        assertEquals("forge:gems/diamond", quarry.path("key").path("D").path("tag").asText())
+        assertEquals(8, quarry.path("parts")[0].path("slot").asInt())
         for (fish in listOf("chorus_crab", "end_glow", "voidbiter")) {
             val restrictions = json("kubejs/data/starcatcher/starcatcher/fish/$fish.json").path("world_restrictions")
             assertEquals("minecraft:overworld", restrictions.path("dimensions")[0].asText())

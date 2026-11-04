@@ -2,12 +2,11 @@
 
 ## Progression
 
-This pack uses six technology eras. Machine Blocks primarily prove capability
-at explicitly named root machines. Downstream recipes normally return to each
-mod's native manufactured parts; Rail Beetle Tier-II modules are an explicit
-exception described below. Their proof recipes
-produce batches of four Andesite, four Copper, four Brass, two Airtight, two
-Electrical, and one Space Machine Block.
+This pack uses five active technology eras. Machine Blocks prove capability at
+explicitly named roots; fitted native Tinkers' Construct parts carry configured
+Manufacturing behavior. The retained Andesite, Copper, Brass, Airtight, and
+Electrical block recipes produce batches of four, four, four, two, and two.
+Creating Space and its Space Machine Block are retired from this candidate.
 
 Progression is communicated by executable recipes, apparatus, native guides,
 item-hover annotations, loading lessons, contextual Threads, and event or world
@@ -50,13 +49,18 @@ on a geological chunk to recover one canonical primary unit. Heat remains a
 four-nugget emergency exit for metal chunks, but nonmetals emerge directly from
 separation and never require ceremonial smelting.
 
-Build native Tinkers' Construct tools and reach the Nether, Aether, or
-Bumblezone Dimension Font. Each live Font origin makes its own named grout;
-all three grouts smelt to the same Seared Brick. Seared metallurgy owns alloy
-composition: the automated path alloys molten stone with molten iron or zinc,
-then casts molten Andesite Alloy. A Melter can instead consume one andesite with
-10 mB of either molten metal to cast one native Create Andesite Alloy. The Hand
-Crank is the only positive SU source before the Nether.
+Build native Tinkers' Construct tools and acquire two different underground
+rock families among Gabbro, Slate, Phyllite, Quartzite, and Schist. One stone
+from each family makes two Refractory Compound; smelting one makes a Seared
+Brick. Named Font grouts remain registered for saved stacks but have no recipes.
+Seared metallurgy owns alloy composition: the automated path alloys molten
+stone with molten iron or zinc, then casts molten Andesite Alloy. A Melter can
+instead consume one andesite with 10 mB of either molten metal to cast one
+native Create Andesite Alloy. Iron-fitted shaft, cogwheel, casing, press and
+Hand Crank routes make the basic Create workshop available before Seared entry.
+Native TCon Patterns and the Part Builder turn ordinary wood into handles,
+bindings, small blades and large plates at one, one, two and four material units;
+no metal casting is needed for those first consumed parts.
 
 Font obelisks are powered only by internal charge. An unmodified Font stores
 15,000 charge, costs 600 charge to start, regenerates 1.25 each inactive tick,
@@ -71,8 +75,9 @@ Players configure the Condenser's successor choices there; an operator commits t
 permanent reset on a supervised dedicated server.
 
 Bumblezone is expedition-only: upstream hive teleportation is disabled.
-Ratlantis player access is retired; its native Rats resources instead occur
-rarely in Overworld coastal and cave biomes. Token and portal outputs stay closed. Ordinary vegetable patches generate naturally in the
+Ratlantis player access is retired. Ordinary Rats remain, while unavailable
+Ratlantis-only inputs are replaced with obtainable materials. Token and portal
+outputs stay closed. Ordinary vegetable patches generate naturally in the
 Overworld, but Bumblezone nurseries remain the origin of non-space food seed stock
 and yield two to four propagules from mature plants. Outside an authored origin,
 uprooting preserves one propagule with a ten-percent chance for a second; edible
@@ -82,6 +87,14 @@ modifier runs after the pack's other global loot modifiers so grass cannot leak
 wheat or sage seed into the Overworld.
 
 ### Era 2 — Create Powered Works
+
+Exact terrain recovery profiles cover 205 inputs and 27 profiles. Their 500-tick
+Crushing or waterlogged Brass Sifting routes cap physical return at 25 percent,
+exclude ore and gem assays, and remove two recycling inputs that would amplify
+returns. The catalogue names every input and replaces only nine exact recipes;
+it does not classify arbitrary stone by tag. Exact-ID recipe-clash fixes preserve
+material identity and leave stateful Manufacturing and electrochemistry routes
+under their own serializers.
 
 The standard Sifter automates the same recipe language used by hand sifting.
 Milling a chunk into two feeds improves primary recovery; Crushing Wheels later
@@ -94,18 +107,20 @@ high modules, Create requests, Sophisticated hopper upgrades and the Rapid
 Hopper consume finite certus. Basic rat work and ordinary Little Logistics
 watercraft retain native recipes. AE2's Energy Acceptor requires PowerGrid
 generation, one certus crystal, OC2R computation, one sky stone block, and
-Impossible Matter. Ratlantis's native pirat wood, ores, gems and creatures
-instead occur in selected Overworld biomes; they no longer gate electronics.
+Impossible Matter. Ratlantis remains inaccessible and does not gate
+electronics; ordinary Rats retain obtainable local materials.
 
-Craft `kubejs:andesite_machine_block` from one Seared Brick block, four
-Andesite Alloy, and four iron plates. It directly unlocks only the Millstone and
-Mechanical Press. Press-made plates and a whisk unlock the Mixer without a
-second Machine Block.
+Craft `kubejs:andesite_machine_block` from common iron, stone and stripped
+wood. The iron workshop supplies its own transmission and first Press; its
+Whisk carries configured Manufacturing parts into the Mixer. The Millstone
+requires Nether brick in its own recipe. Sifters and Crushing Wheels pay the
+same Nether entry separately, including for non-ore processing.
 
-After reaching the Nether, compact the Andesite block, Copper Casing, four
-copper plates, one Nether brick, and two Andesite Alloy into
-`kubejs:copper_machine_block`. It directly roots water wheels, the Windmill
-Bearing, the Mechanical Pump, and the first optional primitive transport roots.
+Compact the Andesite block, Copper Casing, copper and iron plates into four
+`kubejs:copper_machine_block`. Renewable water and wind generation instead
+uses Skyroot logs. The Mechanical Pump, funnels and tunnels remain local
+workshop utilities without a dimensional gate. Native part-bearing shaft,
+cogwheel, propeller and pump alternatives remain available where applicable.
 
 ### Era 3 — Create Precision and Steam
 
@@ -117,9 +132,10 @@ to Bulk Washing.
 
 TCon alloying is the only brass composition route. Compact the Copper block,
 Brass Casing, four brass plates, two electron tubes, and polished rose quartz
-into `kubejs:brass_machine_block`. It directly unlocks the Deployer, Mechanical
-Crafter, the first steam engine, and precision transport controls. Precision Mechanisms and native
-components carry all later recipes. Quark's automatic Crafter is downstream of
+into `kubejs:brass_machine_block`. The Deployer and Mechanical Crafter use Brass Casing and retain consumed
+native parts when Manufacturing is installed. Precision Mechanisms, native
+parts, and the existing batch yield carry the Steam Engine and transport
+controls without a second full-block casing. Quark's automatic Crafter is downstream of
 the Create Mechanical Crafter rather than an independent iron-and-redstone bypass.
 
 ### Era 4 — PneumaticCraft and Heat Sync
@@ -134,8 +150,10 @@ Bricks, making the geological, kinetic, and TConstruct systems meet at one
 visible boundary. Primitive compressed iron and dried-kelp/iron-plate pressure
 seals keep the pressure entry reachable. Mechanically craft
 `kubejs:airtight_machine_block` from the Brass block, four compressed iron
-ingots, two pressure tubes, and two seals. It directly roots the Rotational
-Compressor and the first Pressure Chamber interface.
+ingots, two pressure tubes, and two seals. The open Rotational Compressor and
+Pressure Chamber Interface consume pressure seals and configured native parts
+rather than an intact block. The Thermopneumatic Plant has one Nether-magma
+root with a configured liner part.
 
 Sugar fermentation supplies renewable ethanol, and an open Create Basin oxidizes
 it into canonical ChemLib acetic acid. Acetic acid preserves Pickled Pickles and,
@@ -162,29 +180,24 @@ Heat Sync stores and moves process heat; its Boiler Heater consumes exactly
 Mechanically apply insulation/red-alloy wiring to Copper Casing for the first
 PowerGrid conductive casing. Pressure-craft `kubejs:electrical_machine_block`
 from Airtight proof, that casing, four copper plates, two primitive MoreRed
-wires, and an electron tube. It directly roots PowerGrid's first stationary
-generator housing and the circuit-design station. PowerGrid is the sole
+wires, and an electron tube. Pressure-made wiring and fittings root PowerGrid's first stationary generator
+housing. A printed PCB starts the circuit-design station, which also consumes
+configured native parts when Manufacturing is present. PowerGrid is the sole
 stationary electrical-generation authority; PneumaticCraft remains the pressure
 and petroleum authority. Iron-and-coal steel composite smelts into canonical
 TCon steel for that machinery and later transition parts. PowerGrid parts, sensors, motors,
 and circuits carry later recipes.
 
-### Era 6 — Creating Space
+### Deferred destinations and spaceflight
 
-Pressure-assemble `kubejs:space_machine_block` from Electrical proof, two
-rocket casings, two Inconel sheets, two Hastelloy ingots, and two titanium
-thermal plates. Rocket casings retain their aluminum-and-cobalt composition but
-craft in batches of four for the initial machine set. The Space Machine Block
-directly roots the Rocket Engineer Table, Mechanical Electrolyzer, and Air
-Liquefier. Native frames, tanks, engines, guidance, propellants, and life-support
-parts carry the rest of the rocket graph.
+Creating Space is retired from this candidate. Better Spaceflight is included from the available feasibility-only source at `e3591959d2c614b71ca96d478ada43f8ac597f81`; the unrecovered survival-preview flight, oxygen and destination implementation is explicitly retired. It adds no new rocket route, Font portal or space production graph. Rocket-only Fallout Wastelands and Twilight Forest access, Ruined Citadel and Ender Guardian are deferred.
 
 ### Optional transport
 
 Eureka/VS, Clockwork, Trackwork, and Create trains are engineering branches,
 not prerequisites for the ordinary factory spine. Primitive wooden ships begin
 in the Hand Workshop; rough mechanical experiments begin in Powered Works;
-precision trains and controls in Precision Factory; pressure-driven flight in
+precision trains and controls in Precision Factory; pressure-driven machinery in
 Thermal & Pressure; sensors and gyros in Electrical Control. Aether materials
 gate stable high-performance flight, never primitive ships, basic Trackwork, or
 low-performance aircraft. The Rail Beetle joins the Precision Factory branch by
@@ -290,8 +303,9 @@ not classify those planks as oak or replace their normal wood-family tags.
   storage, pressure, gas, SU, and OC2R remain supported.
 - Tinkers' Construct owns conventional pickaxe/axe/shovel/hoe/sword capability.
   Unique weapons, bows, armor, creature gear, and material integrations remain.
-- The vanilla End is inaccessible. End ecology needed by the pack is routed to
-  Creating Space orbit, Overworld cultivation and coastal fishing, or Ice and Fire.
+- The vanilla End is inaccessible. End-only encounters and rocket destinations
+  remain deferred; retained Overworld cultivation, coastal fishing and Ice and Fire
+  provide the currently available alternatives.
 - Vanilla potion delivery is absent; plain water bottles and independently owned
   food, status-effect, and flask systems remain.
 
@@ -314,16 +328,16 @@ visual acceptance require separately authorized, candidate-matched evidence.
 
 | Domain | Upstream behavior | Pack behavior | Owner | Rationale | Channels | Verification |
 |---|---|---|---|---|---|---|
-| Technology eras | Parallel roots | Hand/TCon → Create Powered Works → Create precision/steam → PneumaticCraft + Heat Sync → PowerGrid + More Red → Creating Space | pack progression | Legible capability sequence | recipes, guides | recipe/config source inspection |
+| Technology eras | Parallel roots | Hand/TCon → Create Powered Works → Create precision/steam → PneumaticCraft + Heat Sync → PowerGrid + More Red; spaceflight deferred | pack progression | Legible capability sequence | recipes, guides | recipe/config source inspection |
 | Primitive workshop | Generic rustic utilities inherit crop and machine-mod defaults | Straw, rope, canvas, fired goods, and simple metal fittings supply pre-Font local handling, homesteading, clothing, lighting, construction, and transport; plates, redstone, alloys, casings, and scalable automation remain later | pack progression | Useful handmade play before dimensional industry | recipes, guides | recipe source inspection |
 | Ore separation | Create Bulk Washing and source-specific output ladders | String-mesh hand Sifting → powered dry/waterlogged Sifting → Spout-prepared pressure assay; Blood, Hexerei, Ars, and Occultism converge on the same canonical resources with distinct costs | Realistic Ores / Create Sifting | One resource economy with early access and meaningful recovery depth | recipes, items, guides | generated processing-contract tests and recipe inspection |
 | Create steam | Native low-cost engine | Brass Machine Block required | Create | Precision proof | recipe | recipe/config source inspection |
-| Electrical generation | Dynamo, bee, weather, AE2, and Ars conversion peers | PowerGrid alone owns stationary electrical generation; OC2R remains a consumer/peer; Creating Space's rocket generator is SU and Clockwork's steam generator is gas-network machinery | PowerGrid | One electrical authority | recipes, loot, guides | recipe/config source inspection |
+| Electrical generation | Dynamo, bee, weather, AE2, and Ars conversion peers | PowerGrid alone owns stationary electrical generation; OC2R remains a consumer/peer and Clockwork's steam generator is gas-network machinery | PowerGrid | One electrical authority | recipes, loot, guides | recipe/config source inspection |
 | Conventional tools | Many fixed tools | Ordinary fixed tools close; unique weapons and gear remain | Tinkers' Construct | Material-system coherence | recipes, loot, trades | crafting-policy selectors and source inspection |
 | Mahogany | Hexerei and Nature's Spirit plus Dynamic Trees | Nature's Spirit owns the canonical mahogany wood set and progression; Dynamic Trees Hexerei supplies dynamic Hexerei tree structures | Nature's Spirit | One material authority | recipes, worldgen, loot | crafting-policy selectors and source inspection |
 | Hand fishing | Vanilla/TCon rods | Only Starcatcher rods remain | Starcatcher | One fishing system | recipes, loot | crafting-policy selectors and source inspection |
 | Petroleum | Create Diesel extraction/distillation | PneumaticCraft splitting supplies retained fuel consumers; Create Diesel extraction, scanning, pumping, and crude-oil distillation close | PneumaticCraft | Finite process ownership | recipes, machines | recipe/config source inspection |
-| Ratlantis | Token/portal/Font alternatives | Player travel retired; Rats native datapack remains registered; native resources and encounters move to rare existing Overworld coast/cave biomes | Rats / pack worldgen | Preserve Rats gameplay without dimension access | loot, recipes, world | recipe/registry + native-worldgen tests |
+| Ratlantis | Token/portal/Font alternatives | Player travel retired; ordinary Rats remain, while unavailable recipe inputs are replaced with obtainable materials | Rats / pack worldgen | Preserve Rats gameplay without dimension access | loot, recipes, world | recipe/registry + native-worldgen tests |
 | Logistics | Ratlantis component ladder | Chutes, hoppers and ordinary rat work stay local; one meteor certus crystal makes eight Pretty Pipes pipes, five craft a blank module, and one adds to each high module, request network, Sophisticated automation and Rapid Hopper; native Little Logistics watercraft return | meteor Certus / pack recipes | Visible finite smart inputs without an ME bootstrap loop | recipes, guides | recipe registry + meteor acquisition tests |
 | AE2 | Independent start and generators | Energy Acceptor requires PowerGrid, OC2R, one meteor certus crystal, one sky stone block and Impossible Matter; AE generators close | AE2 with PowerGrid supply | Conjunctive late root without inaccessible materials | recipes | registry/meteor source inspection |
 | Occultism parenting | Independent/End-oriented | Hexerei cauldron preparations require Aether, Nether and Bumblezone trophies plus finite amethyst; spirit-attuned crystal uses amethyst | Hexerei | Three live Font parent | cauldron, rituals, guides | recipe registry inspection |
@@ -337,8 +351,8 @@ visual acceptance require separately authorized, candidate-matched evidence.
 | Dragon ecology | Vanilla dragon boss products | Vanilla head, egg, and breath close; legitimate custom-serializer consumers use generic Ice and Fire tags | Ice and Fire | Closed-End replacement | worldgen, drops, recipes, loot | recipe/tag consumer inspection |
 | Ice and Fire world | Common defaults | Complete Overworld ecology at least-frequent nonzero settings; wild griefing full, tamed griefing off | Ice and Fire | Rare but complete ecology | config, worldgen | config/spec and material-data inspection |
 | Dragonsteel | Native fixed equipment | Native config sets base armor 8, toughness 3, base armor durability 2500, tool durability 2500, and sword base attack 9; actual armor durability is slot-derived; equal TCon materials use 1500, 8.0, 3.0, netherite tier | Tinkers' Construct | Controlled top material | config, recipes, TCon data | config/spec and material-data inspection |
-| Closed End | Vanilla portal and city ecosystem | End is inaccessible; orbit biome is `minecraft:is_end`; compatible ecology and rituals move there; End City loot injections are disabled | Creating Space | Preserve content without End access | dimensions, tags, worldgen | dimension/tag/worldgen source inspection |
-| The Flesh That Hates ecology | Mod entities available for general encounter design | Lost Cities planet only; exclude its mobs from the Overworld, Depth Director regions/encounters, and every other dimension, including repurposed minibosses | Creating Space / pack integration | Keep its ecology tied to its authored planet | spawns, dimensions | dimension/spawn source inspection |
+| Closed End | Vanilla portal and city ecosystem | End remains inaccessible; rocket-only encounters and destinations are deferred | pack progression | Avoid inaccessible active routes | dimensions, recipes, worldgen | source and recipe inspection |
+| The Flesh That Hates ecology | Mod entities available for general encounter design | Deep Void only; pack structures use flesh biomes and source gates independent incubator/servant paths with loaded-chunk, 4,096-probe and 32-read bounds | pack integration | Keep its ecology in one retained habitat | spawns, dimensions | source and exact-artifact runtime inspection |
 | End resources | End-only catches, bees, trims, and Elytra | Catches move to warm/lukewarm Overworld ocean; bee lineage uses Overworld chorus; trims use rituals; Elytra uses mechanical Ice and Fire inputs | Ice and Fire / magic owners | Finite replacements | fishing, mutations, rituals, recipes | recipe/config source inspection |
 | Guide onboarding | Complicated Bees and ParCool grant manuals on first tick | No automatic manuals; both existing survival recipes remain available through recipe discovery | pack content | Keep first-join inventory quiet without hiding optional documentation | advancements, guides, recipes | advancement and guide-recipe inspection |
 | Wood ladders | Only named Quark plank families have matching ladder recipes | Dedicated families retain their own ladders; every other `#minecraft:planks` member crafts the oak ladder | Quark with pack compatibility | Make all supported planks useful without inventing new ladder blocks | tags, recipes | config/recipe source inspection |
@@ -506,8 +520,8 @@ Systemic Salience does not turn ores into neon aspect tokens.
 | Rock salt, sodium chloride, saltpeter | cooking/preservation first; chemical and nitrate depth later |
 | Soul sand, sulfur, vanadium | immediate Black Shale/soul utility; sulfur and vanadium supply the supported contact-process acid chain |
 | Aluminum, cobalt, osmium, silver | live TConstruct materials and pack metallurgy/electrum routes |
-| Nickel | Creating Space alloy routes and molten material |
-| Titanium | Space Machine Block, aerospace recipes, and molten material |
+| Nickel | Retained molten material and historical source; no active space gate |
+| Titanium | Retained molten material and thermal plate; no active space gate |
 | Uranium | Hotstone fissile assay, Necronium, nuclear simulation, and Protection Pixel recipes |
 | Thorium | Hotstone fissile assay, nuclear decay chain, and Protection Pixel recipes |
 | Lead, cadmium | Hotstone/Brassroot assay depth and real placeable-block absorber behavior in Latent's nuclear environment scan |
@@ -525,6 +539,11 @@ block-ID environment scan.
 This is the living design authority for weapon balance in Better Content. It records the reasoning that survives individual tuning passes: what a weapon owes the player, which advantages may alter its damage budget, and which exceptions must be explicit.
 
 The document currently contains only the Tinkers' Construct family philosophy. Other weapon systems need their own named pass; they do not inherit TCon values automatically.
+
+Weapons of Miracles is a pinned candidate mod input. Its presence adds combat
+content; it does not grant a blanket balance, animation, tooltip, compatibility
+or in-game qualification. The proposed reach-based melee recalibration remains
+future work in [Design](design.md#reach-based-melee-recalibration).
 
 ### Shared principles
 
@@ -618,7 +637,7 @@ This source map records the authored and pinned routes used by the early technol
 | Polished Rose Quartz | Pinned Create 6.0.8 `data/create/recipes/sandpaper_polishing/rose_quartz.json`: sandpaper polish one Rose Quartz. | Intermediate for the Electron Tube. |
 | Electron Tube | Pinned Create 6.0.8 `data/create/recipes/crafting/materials/electron_tube.json`: one Polished Rose Quartz and one `forge:plates/iron`. | Used by the Brass Machine Block, Deployer, Mechanical Crafter, and the authored AE2 controller recipe. Its native recipe remains; the crafted Rose Quartz prerequisite now requires Certus. |
 | Power Grid Integrated Circuit | Pinned Power Grid 0.5.4 `data/powergrid/recipes/mechanical_crafting/integrated_circuit.json`: Rose Quartz, redstone, gold nuggets, and lapis. | Part of the authored controller and the separate electrical branch. This exact recipe does not use Certus or Sky Stone. |
-| Electrical Machine Block / Generator Housing | Pack source builds Conductive Casing from Create Copper Casing plus More Red Alloy Wire; the Electrical Machine Block then requires the Airtight Machine Block, casing, copper plates, wire, and one Electron Tube. The first Generator Housing requires iron/copper plates, Conductive Casing, and the Electrical Machine Block. | Power Grid's stationary electrical root is available through the authored electrical machine chain, without an AE2 Energy Acceptor. |
+| Electrical Machine Block / Generator Housing | Pack source builds Conductive Casing from Create Copper Casing plus More Red Alloy Wire; the Electrical Machine Block then requires the Airtight Machine Block, casing, copper plates, wire, and one Electron Tube. The first Generator Housing uses 2-bar pressure, iron/copper plates, Conductive Casing, red wire, and an Electron Tube. The printed PCB opens the Soldering Table. | Power Grid's stationary electrical root is available through the authored electrical machine chain, without an AE2 Energy Acceptor. |
 | AE2 Controller | `80_tech_palette.js` replaces the output recipe with a PneumaticCraft Pressure Chamber recipe at pressure 4.0 using `ae2:sky_stone_block`, `ae2:charged_certus_quartz_crystal`, `ae2:engineering_processor`, `powergrid:integrated_circuit`, and two `create:electron_tube`. | A pressure-built AE2 control root using meteor material and non-ME prerequisites. |
 | AE2 Energy Acceptor | `20_meteor_logistics.js` requires Power Grid Generator Housing, one accessible meteor Certus crystal, OC2R Computer, one Sky Stone block and Impossible Support Matrix. | Later conjunctive gate without an inaccessible Ratlantis component or operating ME-network prerequisite. |
 

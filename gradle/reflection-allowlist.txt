@@ -1,0 +1,35 @@
+# Reflection is permitted only in exact diagnostic adapters and their direct tests.
+# Format: repository<TAB>repository-relative source path
+better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnostics/ReflectiveFabricBiomeModifierAdapter.java
+better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnostics/ReflectiveEmiReadinessAdapter.java
+better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnostics/ReflectivePneumaticRecipeAdapter.java
+better-runtime-diagnostics	src/main/java/com/bettercontent/betterruntimediagnostics/ReflectiveRecipeFamilyAdapter.java
+better-runtime-diagnostics	src/test/java/com/bettercontent/betterruntimediagnostics/RecipeGraphExporterTest.java
+# Isolated native heart diagnostics inspect synchronized fixture state and optional Mantle config.
+better-deaths-door	src/injuryVisual/java/com/bettercontent/betterdeathsdoor/heartreview/HeartVisualReview.java
+# Isolated, non-pack native test reporter resolves registered GameTest witness identities only.
+better-abyssal-city	src/main/java/com/bettercontent/abyssal/HarnessTestReporter.java
+# Nonshipping Debug adapter seeds fixed authored campaign presence through exact public APIs only.
+better-runtime-diagnostics	src/testSupport/java/com/bettercontent/runtimetestsupport/CampaignPresenceFixture.java
+# Nonshipping elapsed-time observer reads exact public campaign data/BlockPoint APIs only; never seeds history.
+better-runtime-diagnostics	src/testSupport/java/com/bettercontent/runtimetestsupport/ObservedCampaignPresenceProbe.java
+# Nonshipping native dodge adapter invokes generated public guard/animation test methods with deterministic doubles.
+better-compat-fixes	src/test/java/com/bettercontent/bettercompatfixes/EpicParCoolDodgeKeyConflictTest.java
+# Direct compatibility test denies client class loading during early/server plugin initialization.
+better-deaths-door	src/test/java/com/bettercontent/betterdeathsdoor/client/MantleRendererContractTest.java
+# Isolated nonshipping geological world GameTest: pinned Dread setCommanderId(UUID)
+# fixture setup and Corrodent isDigging() observation. Optional actors remain runtime-only;
+# missing/drifted public methods fail, and this file is excluded from production artifacts.
+better-cave-encounters	src/worldGameTest/java/com/bettercontent/bettercaveencounters/GeologicalWorldGameTests.java
+# Nonshipping audit negative control deliberately compiles Class.forName to prove both runtime-role
+# bytecode guards reject it. Test outputs are never production/native runtime source roots or archives.
+better-magic-chunk-anchors	src/test/java/com/bettercontent/bettermagicchunkanchors/ReflectionBoundaryTest.java
+# Nonshipping direct diagnostic-hook control invokes the private warning wrapper and a refusing
+# Logger proxy to prove exact-once original forwarding/exception identity despite observer failure.
+# This admits only the test; the capture/wrapper/shutdown observer retain the runtime reflection ban.
+better-rail-beetle	src/nativeFixtureTest/java/com/bettercontent/betterrailbeetle/nativefixture/PromotionWarningHookTest.java
+# Nonshipping producer-diagnostic direct controls only: inspect declared scalar record schemas and
+# execute the ACTUAL private wrappers in an inert child ABI realm to check original forwarding.
+# These do not admit reflection in production, native capture, readiness or shutdown paths.
+better-rail-beetle	src/nativeFixtureTest/java/com/bettercontent/betterrailbeetle/nativefixture/ProducerAbiTest.java
+better-rail-beetle	src/nativeFixtureTest/java/com/bettercontent/betterrailbeetle/nativefixture/ProducerForwardingTest.java

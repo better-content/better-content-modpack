@@ -137,6 +137,56 @@ stage_side() {
   resolve_artifacts "$target" "$side"
 }
 
+# The original Epic ParCool and VS binaries must be resolved on BOTH sides.
+# Better Compat Fixes owns the Mixin cancellation, never a third-party JAR edit.
+verify_upstream_interfaces() {
+  python3 -B - "$ROOT" "$1" "$2" <<'PY'
+import hashlib, json, pathlib, sys, tomllib, zipfile
+root, client, server = map(pathlib.Path, sys.argv[1:])
+def require(condition, reason):
+    if not condition:
+        raise SystemExit('original interface mods contract: ' + reason)
+rows = (
+    ('epic-parcool.pw.toml', 'epic x parcool-forge-20.12.0.1-1.20.1.jar',
+     'd38194b73c91e5af84ef28a7a07e0eb4340ef76d',
+     '775066b30d2ce573c9230dc019b26ba42c4a21a4806d626424555962cbfbf6ca', 1259252, 6870242),
+    ('valkyrien-skies.pw.toml', 'valkyrienskies-120-2.4.11.jar',
+     'bd3478fcd43d4168950dfa7e77188d7bb12fd43e',
+     'f99f24de62015451a047f90484cf9d25970cac350105b581c22b2d5247ebfd53', 258371, 7906689),
+)
+require(not list((root / 'mods').glob('*-bc-interface.*.jar')), 'derived upstream JAR remains in source mods')
+require(not list((server / 'mods').glob('*-bc-interface.*.jar')), 'derived upstream JAR remains on server')
+provider = root / 'mods/better-compat-fixes-0.1.9.jar'
+require(provider.is_file(), 'source-owned compatibility provider missing')
+with zipfile.ZipFile(provider) as archive:
+    service = 'META-INF/services/com.bawnorton.mixinsquared.api.MixinCanceller'
+    require(service in archive.namelist(), 'provider lacks upstream Mixin canceller service')
+    require(b'UpstreamMixinCanceller' in archive.read(service), 'provider lacks registered canceller')
+    require(any('mixinsquared-forge' in name and name.endswith('.jar') for name in archive.namelist()),
+            'provider lacks the MixinSquared Forge JarJar dependency')
+with zipfile.ZipFile(client) as archive:
+    manifest = json.loads(archive.read('manifest.json'))
+    lock = json.loads(archive.read('better-content-artifacts.json'))
+    for descriptor, name, sha1, sha256, project, file in rows:
+        original = tomllib.loads((root / 'mods' / descriptor).read_text())
+        require(original['side'] == 'both' and original['filename'] == name, f'not both sides: {name}')
+        require(original['download']['hash-format'] == 'sha1' and original['download']['hash'] == sha1,
+                f'changed upstream pin: {name}')
+        require(original['update']['curseforge'] == {'file-id': file, 'project-id': project},
+                f'changed upstream file: {name}')
+        upstream = server / 'mods' / name
+        require(upstream.is_file() and hashlib.sha256(upstream.read_bytes()).hexdigest() == sha256,
+                f'server does not contain the original upstream JAR: {name}')
+        require(sum((entry.get('projectID'), entry.get('fileID')) == (project, file)
+                    for entry in manifest['files']) == 1, f'client manifest lost upstream file: {name}')
+        require(sum(entry.get('path') == 'mods/' + name and entry.get('hash') == sha1
+                    for entry in lock['artifacts']) == 1, f'client lock lost upstream digest: {name}')
+        require(not any(pathlib.PurePosixPath(item.filename).name == name or
+                        (item.filename.endswith('.jar') and '-bc-interface.' in item.filename)
+                        for item in archive.infolist()), 'client must resolve original JARs without bundled derivatives')
+PY
+}
+
 install_server() {
   local server="$1" accept_eula="$2" profile="$3" port="${4:-25565}" properties
   local installer="${BC_PACKAGE_FORGE_INSTALLER:-$HOME/.cache/bc/forge/forge-$FORGE_COORD-installer.jar}"
@@ -200,8 +250,8 @@ package_dist() {
   stage="$server_dir/server-tree/better-content-server"
   local escaped_version
   escaped_version="$(printf '%s' "$version" | sed 's/[&|\\]/\\&/g')"
-  sed -i -E "0,/^version *=/{s|^version *=.*$|version = \"$escaped_version\"|}" "$ROOT/pack.toml"
   mkdir -p "$client_dir" "$stage"
+  sed -i -E "0,/^version *=/{s|^version *=.*$|version = \"$escaped_version\"|}" "$ROOT/pack.toml"
   (cd "$ROOT" && packwiz curseforge export -o "$client_dir/better-content.zip" -s client -y)
   # Record exact filenames, URLs and digests while packaging. Standalone sessions
   # materialize this lock instead of importing from or resolving the live checkout.
@@ -226,6 +276,7 @@ with zipfile.ZipFile(output, 'a', compression=zipfile.ZIP_DEFLATED) as archive:
     archive.writestr('better-content-artifacts.json', json.dumps({'schema': 'bc.client_artifacts.v1', 'artifacts': artifacts}, indent=2))
 PY
   stage_side server "$stage"
+  verify_upstream_interfaces "$client_dir/better-content.zip" "$stage" || fail 'original Epic ParCool / VS compatibility contract failed'
   install_server "$stage" false production 25565
   cat > "$stage/SERVER_README.txt" <<'TXT'
 Better Content server distribution

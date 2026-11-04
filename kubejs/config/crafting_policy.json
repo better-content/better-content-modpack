@@ -19,6 +19,22 @@
       "primary_role": "integration",
       "support_state": "not_applicable"
     },
+    "better_manufacturing": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "better_electrochemistry": {
+      "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "better_seasonal_daylight": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "better_seasonal_trees": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
+    },
     "better_celestial_events": {
       "primary_role": "world",
       "support_state": "not_applicable"
@@ -29,14 +45,6 @@
     },
     "scalable_tnt": {
       "primary_role": "content",
-      "support_state": "full"
-    },
-    "dynamic_trees_dimension_compat": {
-      "primary_role": "world",
-      "support_state": "not_applicable"
-    },
-    "undergarden": {
-      "primary_role": "world",
       "support_state": "full"
     },
     "acceleratedrendering": {
@@ -1031,10 +1039,6 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
-    "lostcities": {
-      "primary_role": "world",
-      "support_state": "not_applicable"
-    },
     "malum": {
       "primary_role": "content",
       "support_state": "not_applicable"
@@ -1061,6 +1065,10 @@
     },
     "better_mining_lamp": {
       "primary_role": "content",
+      "support_state": "not_applicable"
+    },
+    "mixinextras": {
+      "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
     "mixinsquared": {
@@ -1265,6 +1273,10 @@
     },
     "better_runtime_diagnostics": {
       "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
+    "scalable_tnt": {
+      "primary_role": "content",
       "support_state": "not_applicable"
     },
     "satako": {
@@ -1533,6 +1545,10 @@
     },
     "better_world_management": {
       "primary_role": "world",
+      "support_state": "full"
+    },
+    "wom": {
+      "primary_role": "content",
       "support_state": "full"
     },
     "xlpackets": {
@@ -2266,16 +2282,33 @@
   ],
   "capability_roots": [
     {
+      "capability": "tconstruct.seared_metallurgy",
+      "required_proofs": ["kubejs:refractory_compound", "tconstruct:seared_brick"]
+    },
+    {
+      "capability": "create.workshop",
+      "required_proofs": ["create:hand_crank", "create:mechanical_press", "create:mechanical_mixer"]
+    },
+    {
+      "capability": "create.water_wind",
+      "required_proofs": ["aether:skyroot_log"]
+    },
+    {
+      "capability": "create.powered_refinement",
+      "required_proofs": ["minecraft:nether_brick"]
+    },
+    {
       "capability": "create.steam",
       "required_proofs": [
-        "kubejs:brass_machine_block",
+        "create:precision_mechanism",
         "create:steam_engine"
       ]
     },
     {
       "capability": "powergrid.generation",
       "required_proofs": [
-        "kubejs:electrical_machine_block",
+        "powergrid:conductive_casing",
+        "morered:red_alloy_wire",
         "powergrid:generator_housing"
       ]
     },
@@ -2291,6 +2324,7 @@
       "required_proofs": [
         "powergrid:generator_housing",
         "ae2:certus_quartz_crystal",
+        "aether:enchanted_gravitite",
         "oc2r:computer",
         "ae2:sky_stone_block",
         "kubejs:impossible_support_matrix",

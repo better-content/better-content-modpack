@@ -228,7 +228,7 @@ function bcHoverCompileCombatGroup(rows, workFirst) {
         }
         var line = 'Combat handling: ' + label
         if (row.alternate && row.alternate.mode) line += ' · alternate: ' + bcCombatAlternate(row.alternate.mode)
-        line += workFirst ? '. Primarily a gathering tool.' : '.'
+        line += workFirst ? '. Also suited to gathering.' : '.'
         if (!bcHoverValidLines([line], 'combat item ' + itemId)) continue
         BC_HOVER_EXACT_TARGETS[itemId] = true
         BC_HOVER_COMBAT.push({ target: itemId, line: line })

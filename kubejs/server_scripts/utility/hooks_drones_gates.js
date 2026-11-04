@@ -22,7 +22,16 @@ ServerEvents.recipes(function (event) {
         C: 'tconstruct:seared_bricks'
     }, 'kubejs:rehooked/wood_chain_post_seared')
 
-     if (bcMobilityExists('rehooked:wood_hook')) event.remove({ output: 'rehooked:wood_hook' })
+     bcMobilityMechanical(event, 'rehooked:wood_hook', [
+        'RRC',
+        ' WH',
+        'W H'
+    ], {
+        R: 'farmersdelight:rope',
+        C: 'tconstruct:seared_bricks',
+        W: 'rehooked:wood_chain',
+        H: '#forge:rods/wooden'
+    }, 'kubejs:rehooked/wood_hook_post_seared')
 
      bcMobilityMechanical(event, 'rehooked:iron_hook', [
         'IIC',
@@ -74,8 +83,8 @@ ServerEvents.recipes(function (event) {
     ], {
         E: 'minecraft:ender_pearl',
         H: 'rehooked:blaze_hook',
-        S: 'creatingspace:rocket_casing'
-    }, 'kubejs:rehooked/ender_hook_post_space')
+        S: 'ae2:sky_stone_block'
+    }, 'kubejs:rehooked/ender_hook_post_meteor')
 
      bcMobilityMechanical(event, 'rehooked:red_hook', [
         'QAQ',

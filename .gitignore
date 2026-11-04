@@ -60,3 +60,6 @@ dist/
 /fresh-dist/
 /*-dist/
 /dist-*/
+# Runtime JAR bytes are locally cached; keep Packwiz index entries and hashes.
+/mods/*.jar
+/gradle/wrapper/gradle-wrapper.jar

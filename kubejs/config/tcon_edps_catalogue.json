@@ -7,6 +7,24 @@
     "global_scale": 0.9,
     "tiers": {"90": 0.81, "95": 0.855, "100": 0.9, "105": 0.945, "110": 0.99}
   },
+  "reach_normalization": {
+    "status": "awaiting_complete_measurements",
+    "scope": "neutral grounded Epic Fight mainhand melee; native required two-handed style; no optional dual variants",
+    "frozen_melee_roster_sha256": "1977e99c7fd72ee33500ad0e8883bcfff0144575aa4003acd0ec008a6b0075a2",
+    "roster_digest_format": "SHA-256 of sorted non-ranged item IDs, one per UTF-8 line, including final newline",
+    "metric": "sum(strike reach * frozen pre-retuning pre-mitigation damage contribution) / sum(damage contribution)",
+    "tier_min": 80.0,
+    "tier_reference": 100.0,
+    "tier_max": 120.0,
+    "shorter_than_sword": "100 + 20 * (S - R) / (S - Rmin)",
+    "longer_than_sword": "100 - 20 * (R - S) / (Rmax - S)",
+    "equal_to_sword": 100.0,
+    "rounding": "six decimals, half up; clamp tiers to [80, 120]",
+    "requested_melee_scale": 1.0,
+    "retained_ranged_scale": 0.9,
+    "activation": "Blocked until exact-roster candidate-matched measurements, native special-model solving and alternate-budget preservation are complete; current reference.global_scale and authored damage remain active",
+    "measurements": []
+  },
   "armor_canon": {
     "source": "docs/tcon_combat_profile.json",
     "weights": {"trash": 0.6, "elite": 0.3, "boss": 0.1},

@@ -9,11 +9,14 @@
   "key": {
     "P": {
       "tag": "minecraft:planks"
+    },
+    "L": {
+      "item": "minecraft:lever"
     }
   },
   "pattern": [
     "PPP",
-    "P P",
+    "PLP",
     "PPP"
   ],
   "result": {

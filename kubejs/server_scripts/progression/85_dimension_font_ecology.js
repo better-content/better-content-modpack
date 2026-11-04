@@ -41,9 +41,8 @@ ServerEvents.recipes(function (event) {
         }).id('kubejs:fonts/nether/boiler_heater')
     }
 
-    // Keep the later Nether-magma progression override until loaded recipe
-    // evidence establishes whether the earlier advanced-tube root was intended
-    // to remain effective; source-only script presence is not authorization.
+    // The sole thermopneumatic plant root pays Nether magma and consumes a
+    // configured liner part; duplicate earlier roots would bypass this gate.
     event.remove({ output: 'pneumaticcraft:thermopneumatic_processing_plant' })
     if (partVariants) {
         event.custom({ type: 'better_manufacturing:part_variant', pattern: ['LSS', 'TMT', 'SPS'],

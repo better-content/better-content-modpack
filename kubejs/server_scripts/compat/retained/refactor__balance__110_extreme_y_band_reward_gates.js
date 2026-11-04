@@ -25,7 +25,6 @@ var BC_EXTREME = {
         brass: 'create:brass_casing',
         power: 'powergrid:conductive_casing',
         oc2r: 'powergrid:conductive_casing',
-        space: 'creatingspace:rocket_casing',
         ae2: 'ae2:engineering_processor',
         etherealSlate: 'bloodmagic:etherealslate'
     }
@@ -109,7 +108,7 @@ ServerEvents.recipes(function (event) {
     ], {
         R: BC_EXTREME.deepslate.rhodium,
         P: BC_EXTREME.deepslate.platinum,
-        S: BC_EXTREME.gate.space,
+        S: BC_EXTREME.gate.power,
         B: 'buildinggadgets2:gadget_building',
         U: BC_EXTREME.deepslate.ruthenium,
         T: BC_EXTREME.deepslate.palladium
@@ -136,7 +135,7 @@ ServerEvents.recipes(function (event) {
         I: BC_EXTREME.lava.iridium,
         O: BC_EXTREME.lava.osmium,
         S: 'minecraft:obsidian',
-        B: BC_EXTREME.gate.space
+        B: BC_EXTREME.gate.power
     }, 'kubejs:extreme_y_rewards/lava_depths/obsidian_skull')
 
      bcExtremeRecipe(event, 'artifacts:fire_gauntlet', [
@@ -146,7 +145,7 @@ ServerEvents.recipes(function (event) {
     ], {
         O: BC_EXTREME.lava.osmium,
         I: BC_EXTREME.lava.iridium,
-        B: BC_EXTREME.gate.space,
+        B: BC_EXTREME.gate.power,
         S: 'bloodmagic:demonslate'
     }, 'kubejs:extreme_y_rewards/lava_depths/fire_gauntlet')
 

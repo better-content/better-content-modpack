@@ -19,7 +19,7 @@ slots = [
   "id=brooch;size=0;operation=SET",
   "id=bundle;size=0;operation=SET",
   "id=curio;size=0;operation=SET",
-  "id=empty_bottle;size=0;operation=SET",
+  "id=empty_bottle;size=1;operation=SET;order=91;add_cosmetic=false",
   "id=living_armour_socket;size=0;operation=SET",
   "id=rings;size=0;operation=SET",
   "id=rune;size=0;operation=SET",

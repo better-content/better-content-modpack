@@ -1,10 +1,11 @@
-// TECH-05: the first TConstruct station is a direct workshop upgrade. The
-// native table exchange is removed so a later table cannot silently bypass the
-// ordinary material step, and no pattern item is consumed by the station.
+// Crafting tables and TConstruct stations exchange freely, one item each way.
+// Keep native alternative station crafts closed; no iron or pattern is consumed.
 ServerEvents.recipes(function (event) {
     event.remove({ id: 'tconstruct:tables/crafting_station' })
     event.remove({ id: 'tconstruct:tables/crafting_station_from_tables' })
-    event.shaped('tconstruct:crafting_station', [' I ', ' W '], {
-        I: '#forge:plates/iron', W: 'minecraft:crafting_table'
-    }).id('kubejs:tech/stations/tconstruct_crafting_station_hand_route')
+    event.remove({ id: 'tconstruct:tables/crafting_station_from_logs' })
+    event.shapeless('tconstruct:crafting_station', ['minecraft:crafting_table'])
+        .id('kubejs:tech/stations/crafting_station_from_crafting_table')
+    event.shapeless('minecraft:crafting_table', ['tconstruct:crafting_station'])
+        .id('kubejs:tech/stations/crafting_table_from_crafting_station')
 })

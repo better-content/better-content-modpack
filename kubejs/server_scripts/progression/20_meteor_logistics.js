@@ -11,6 +11,8 @@ var BC_DISABLED_INPUTLESS_RAT_OUTPUTS = [
 
 ServerEvents.recipes(function (event) {
     event.remove({ id: 'prettypipes:module_clearing' })
+    event.remove({ output: 'rats:chunky_cheese_token' })
+    event.remove({ output: 'rats:ratlantis_portal' })
     BC_DISABLED_INPUTLESS_RAT_OUTPUTS.forEach(function (item) {
         event.remove({ output: item })
     })
@@ -103,10 +105,43 @@ ServerEvents.recipes(function (event) {
         }).id('littlelogistics:rapid_hopper')
     }
 
+    // Durable network devices each consume one finite Sky Stone block. The
+    // item terminal retains its plate and other named components.
+    event.remove({ id: 'prettypipes:item_terminal' })
+    event.shaped('prettypipes:item_terminal', ['HPS', 'RCE', 'IPD'], {
+        H: 'tconstruct:large_plate', P: 'minecraft:ender_pearl', S: 'ae2:sky_stone_block',
+        R: 'prettypipes:high_retrieval_module', C: '#forge:chests',
+        E: 'prettypipes:high_extraction_module', I: 'minecraft:iron_block',
+        D: 'minecraft:diamond'
+    }).id('prettypipes:item_terminal')
+    event.remove({ id: 'prettypipes:pressurizer' })
+    if (partConstruction) {
+        event.custom({ type: 'better_manufacturing:part_variant',
+            pattern: ['TST', 'SBS', 'TSA'],
+            key: { T: { item: 'minecraft:iron_ingot' }, S: { item: 'prettypipes:high_speed_module' },
+                B: { item: 'ae2:sky_stone_block' }, A: { item: 'tconstruct:tough_handle' } },
+            result: { item: 'prettypipes:pressurizer' },
+            function: 'better_manufacturing:prettypipes/pressurizer',
+            parts: [{ role: 'working_assembly', slot: 8 }]
+        }).id('prettypipes:pressurizer')
+    } else {
+        event.shaped('prettypipes:pressurizer', ['TST', 'SBS', 'TSA'], {
+            T: 'minecraft:iron_ingot', S: 'prettypipes:high_speed_module',
+            B: 'ae2:sky_stone_block', A: 'minecraft:iron_ingot'
+        }).id('prettypipes:pressurizer')
+    }
+
+    event.remove({ output: 'rats:rat_upgrade_basic' })
+    event.shaped('rats:rat_upgrade_basic', ['CCC', 'QLQ', 'CCC'], {
+        C: '#forge:cheese', L: 'the_bumblezone:honey_crystal_shards',
+        Q: 'ae2:certus_quartz_crystal'
+    }).id('kubejs:meteor_logistics/rat_work_orders')
+
     event.remove({ output: 'ae2:energy_acceptor' })
     var acceptorInputs = [
         'powergrid:generator_housing',
         'ae2:certus_quartz_crystal',
+        'aether:enchanted_gravitite',
         'oc2r:computer',
         'ae2:sky_stone_block',
         'kubejs:impossible_support_matrix'

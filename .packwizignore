@@ -1,7 +1,10 @@
 .codex
 /.gradle/
 /.github/
+/.worklane/
 docs
+# Retained inactive mod manifests and integration customizations; never export.
+/disabled/
 /.kjs-script-summaries.md.kate-swp
 /kjs-script-summaries.md
 /build.gradle.kts
@@ -10,6 +13,20 @@ docs
 /gradlew
 /gradlew.bat
 /release.main.kts
+# Agent guidance, maintenance/control entry points and authored work plans are not runtime content.
+/AGENTS.md
+/.pi/
+/.kotlin/
+/maintenance.main.kts
+/pack-test-lock.main.kts
+/pack-test-queue.main.kts
+/test-control.main.kts
+/plans/
+/review/
+# Retained development proposals/evidence are not pack runtime inputs.
+/workspace_artifacts/
+/dist.sh
+/package.sh
 /settings.gradle.kts
 /src/
 /test.main.kts

@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "raw_rock_tag": "better_cave_encounters:geology/karst_nests",
+  "ordinary_admission": 1.0,
+  "ordinary": [
+    {
+      "entity": "minecraft:silverfish",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12,
+      "weight": 8
+    },
+    {
+      "entity": "minecraft:spider",
+      "role": "common",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12,
+      "weight": 8
+    },
+    {
+      "entity": "twilightforest:pinch_beetle",
+      "role": "line",
+      "minimum_depth": 0.35,
+      "weight": 1,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 4
+    },
+    {
+      "entity": "twilightforest:slime_beetle",
+      "role": "common",
+      "minimum_depth": 0.15,
+      "weight": 3,
+      "cost": 2,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 6
+    }
+  ],
+  "director": [
+    {
+      "entity": "minecraft:silverfish",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "minecraft:spider",
+      "role": "common",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "twilightforest:pinch_beetle",
+      "role": "line",
+      "minimum_depth": 0.35,
+      "weight": 2,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 4
+    },
+    {
+      "entity": "twilightforest:slime_beetle",
+      "role": "common",
+      "minimum_depth": 0.15,
+      "weight": 3,
+      "cost": 2,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 6
+    },
+    {
+      "entity": "minecraft:cave_spider",
+      "role": "line",
+      "minimum_depth": 0.25,
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8
+    },
+    {
+      "entity": "goety:web_spider",
+      "role": "common",
+      "minimum_depth": 0.2,
+      "cost": 2,
+      "maximum_per_packet": 3,
+      "maximum_per_encounter": 8
+    },
+    {
+      "entity": "minecraft:drowned",
+      "role": "heavy",
+      "minimum_depth": 0.75,
+      "cost": 7,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 2,
+      "condition": "water_nearby"
+    },
+    {
+      "entity": "cataclysm:coralssus",
+      "role": "heavy",
+      "minimum_depth": 0.82,
+      "cost": 12,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 1
+    }
+  ]
+}

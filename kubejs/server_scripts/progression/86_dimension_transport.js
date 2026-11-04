@@ -37,6 +37,11 @@ ServerEvents.recipes(function (event) {
         'aether:aether_dirt', 'aether:aether_dirt'
     ]).id('kubejs:fonts/aether/quicksoil_path')
 
+    // Little Logistics watercraft keep their upstream recipes. Starcatcher
+    // owns fishing rods, so the fishing barge borrows the humble rod.
+    event.replaceInput({ output: 'littlelogistics:fishing_barge' },
+        'minecraft:fishing_rod', 'starcatcher:humble_rod')
+
     // Honey crystals are renewable in the Bumblezone; native honey-bucket
     // recipes then provide Beehemoth lures. A wax saddle avoids loot RNG.
     event.shapeless('2x minecraft:honey_bottle', [

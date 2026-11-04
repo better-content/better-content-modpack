@@ -1,5 +1,5 @@
-// Optional engineering branches consume one era proof at their first capability
-// root. Native components carry every downstream recipe.
+// Optional engineering uses fitted era-made parts. Bearings, wheels, gyros
+// and compact Beetle modules cannot contain intact full-block assemblies.
 ServerEvents.recipes(function (event) {
     var manufacturing = Platform.isLoaded('better_manufacturing')
     if (Platform.isLoaded('vs_eureka')) {
@@ -38,27 +38,27 @@ ServerEvents.recipes(function (event) {
         if (!manufacturing) {
         event.remove({ id: 'vs_clockwork:crafting/kinetics/andesite_flap_bearing' })
         event.shaped('vs_clockwork:andesite_flap_bearing', [' A ', 'CMC', ' S '], {
-            A: 'create:andesite_alloy', C: 'create:cogwheel',
-            M: 'kubejs:copper_machine_block', S: 'create:shaft'
+            A: '#forge:ingots/iron', C: 'create:cogwheel',
+            M: 'create:copper_casing', S: 'create:shaft'
         }).id('kubejs:transport/powered_works/clockwork/andesite_flap_bearing')
 
         event.remove({ id: 'vs_clockwork:crafting/kinetics/brass_propeller_bearing' })
         event.shaped('vs_clockwork:brass_propeller_bearing', ['LPL', 'BMB', ' S '], {
             P: 'create:precision_mechanism', B: '#forge:plates/brass',
-            M: 'kubejs:brass_machine_block', S: 'create:shaft', L: 'aether:stripped_skyroot_log'
+            M: 'create:brass_casing', S: 'create:shaft', L: 'aether:stripped_skyroot_log'
         }).id('kubejs:transport/precision_factory/clockwork/brass_propeller_bearing')
 
         event.remove({ id: 'vs_clockwork:crafting/pneumatics/air_compressor' })
         event.shaped('vs_clockwork:air_compressor', ['PBP', 'GAG', ' C '], {
             P: 'pneumaticcraft:pressure_tube',
-            G: 'pneumaticcraft:compressed_iron_gear', A: 'kubejs:airtight_machine_block',
+            G: 'pneumaticcraft:compressed_iron_gear', A: 'pneumaticcraft:pneumatic_cylinder',
             C: 'create:brass_casing', B: 'aether:blue_aercloud'
         }).id('kubejs:transport/thermal_pressure/clockwork/air_compressor')
 
         event.remove({ id: 'vs_clockwork:crafting/physics/gyro' })
         event.shaped('vs_clockwork:gyro', [' S ', 'CMC', ' P '], {
             S: 'vs_clockwork:gyroscopic_sensor', C: 'powergrid:integrated_circuit',
-            M: 'kubejs:electrical_machine_block', P: 'create:precision_mechanism'
+            M: 'powergrid:electric_motor', P: 'create:precision_mechanism'
         }).id('kubejs:transport/electrical_control/clockwork/gyro')
         }
 
@@ -79,19 +79,19 @@ ServerEvents.recipes(function (event) {
         if (manufacturing) {
             event.custom({ type: 'better_manufacturing:part_variant', pattern: ['HK ', 'KCK', ' K '],
                 key: { H: [{ item: 'tconstruct:tough_handle' }, { item: 'tconstruct:bow_limb' }],
-                    K: { item: 'minecraft:dried_kelp' }, C: { item: 'kubejs:copper_machine_block' } },
+                    K: { item: 'minecraft:dried_kelp' }, C: { tag: 'forge:plates/copper' } },
                 result: { item: 'trackwork:simple_wheel' }, function: 'better_manufacturing:trackwork/running_gear',
                 parts: [{ role: 'hub_suspension', slot: 0 }]
             }).id('kubejs:transport/powered_works/trackwork/simple_wheel')
         } else {
             event.shaped('trackwork:simple_wheel', [' K ', 'KCK', ' K '], {
-                K: 'minecraft:dried_kelp', C: 'kubejs:copper_machine_block'
+                K: 'minecraft:dried_kelp', C: '#forge:plates/copper'
             }).id('kubejs:transport/powered_works/trackwork/simple_wheel')
         }
         event.remove({ id: 'trackwork:track_level_controller' })
         event.shaped('trackwork:track_level_controller', [' E ', 'MBM', ' R '], {
             E: 'create:electron_tube', M: 'create:precision_mechanism',
-            B: 'kubejs:brass_machine_block', R: 'create:railway_casing'
+            B: 'create:brass_casing', R: 'create:railway_casing'
         }).id('kubejs:transport/precision_factory/trackwork/level_controller')
     }
 
@@ -175,7 +175,7 @@ ServerEvents.recipes(function (event) {
         if (!manufacturing && Platform.isLoaded('powergrid')) {
             event.shaped('better_rail_beetle:flux_traction_motor', [' C ', 'MFM', ' E '], {
                 C: 'powergrid:integrated_circuit', M: 'powergrid:electric_motor',
-                F: 'better_rail_beetle:engine_cradle', E: 'kubejs:electrical_machine_block'
+                F: 'better_rail_beetle:engine_cradle', E: 'powergrid:conductive_casing'
             }).id('kubejs:transport/electrical_control/better_rail_beetle/flux_traction_motor')
         }
         if (!manufacturing && Platform.isLoaded('ars_nouveau')) {
@@ -191,7 +191,7 @@ ServerEvents.recipes(function (event) {
         if (!manufacturing && Platform.isLoaded('pneumaticcraft')) {
             event.shaped('better_rail_beetle:pneumatic_expansion_motor', [' T ', 'GCG', ' A '], {
                 T: 'pneumaticcraft:pressure_tube', G: 'pneumaticcraft:compressed_iron_gear',
-                C: 'better_rail_beetle:engine_cradle', A: 'kubejs:airtight_machine_block'
+                C: 'better_rail_beetle:engine_cradle', A: 'pneumaticcraft:pneumatic_cylinder'
             }).id('kubejs:transport/thermal_pressure/better_rail_beetle/pneumatic_expansion_motor')
         }
         if (!manufacturing && Platform.isLoaded('goety')) {

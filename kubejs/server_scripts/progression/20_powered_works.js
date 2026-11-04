@@ -1,10 +1,9 @@
-// Machine Blocks prove an era only at its direct roots; downstream Create parts
-// return immediately to native components.
+// Category roots are material-specific. Structural blocks never carry a
+// dimension requirement shared by unrelated categories. Small native machines
+// use fitted parts, not intact full-block structural assemblies.
 ServerEvents.recipes(function (event) {
-    // Direct roots consume Machine Blocks. Batch them so proving the era does not
-    // recursively multiply every lower-tier casing for the rest of the Works spine.
-    event.shaped('4x kubejs:andesite_machine_block', ['PAP', 'ASA', 'PAP'], {
-        P: '#forge:plates/iron', A: 'create:andesite_alloy', S: 'tconstruct:seared_bricks'
+    event.shaped('4x kubejs:andesite_machine_block', ['ISI', 'SLS', 'ISI'], {
+        I: '#forge:ingots/iron', S: '#forge:stone', L: '#forge:stripped_logs'
     }).id('kubejs:powered_works/andesite_machine_block')
 
     var partVariants = Platform.isLoaded('better_manufacturing')
@@ -19,13 +18,48 @@ ServerEvents.recipes(function (event) {
             result: { item: output }, function: 'better_manufacturing:create/' + operation,
             parts: [{ role: role, slot: slot }] }).id(id)
     }
+    // Iron workshop transmission is available before Seared metallurgy. Keep
+    // the existing alloy and Manufacturing part-consuming native IDs as later
+    // alternatives; removing every recipe by output would erase those routes.
+    event.shaped('8x create:shaft', ['I', 'I'], { I: '#forge:ingots/iron' })
+        .id('kubejs:powered_works/workshop/iron_shaft')
+    event.shapeless('create:cogwheel', ['create:shaft', '#minecraft:planks'])
+        .id('kubejs:powered_works/workshop/iron_cogwheel')
+    event.shapeless('create:large_cogwheel', ['create:shaft', '#minecraft:planks', '#minecraft:planks'])
+        .id('kubejs:powered_works/workshop/iron_large_cogwheel')
+    event.remove({ id: 'create:crafting/kinetics/andesite_casing' })
+    event.shaped('2x create:andesite_casing', ['N N', 'LAL', 'N N'], {
+        N: '#forge:nuggets/iron', L: '#forge:stripped_logs', A: 'minecraft:andesite'
+    }).id('kubejs:powered_works/workshop/andesite_casing')
+    event.remove({ id: 'create:crafting/kinetics/mechanical_bearing' })
+    event.shaped('create:mechanical_bearing', ['P', 'C', 'S'], {
+        P: '#minecraft:wooden_slabs', C: 'create:andesite_casing', S: 'create:shaft'
+    }).id('kubejs:powered_works/workshop/mechanical_bearing')
+    event.remove({ id: 'create:crafting/kinetics/depot' })
+    event.shapeless('create:depot', ['create:andesite_casing', '#forge:ingots/iron'])
+        .id('kubejs:powered_works/workshop/depot')
+    event.remove({ id: 'create:crafting/kinetics/basin' })
+    event.shaped('create:basin', ['I I', 'III'], { I: '#forge:ingots/iron' })
+        .id('kubejs:powered_works/workshop/basin')
+    event.remove({ id: 'create:crafting/kinetics/whisk' })
+    if (partVariants) {
+        event.custom({ type: 'better_manufacturing:part_variant', pattern: [' H ', 'SCS', 'SSS'],
+            key: { H: { item: 'tconstruct:tool_handle' }, C: { tag: 'forge:ingots/iron' },
+                S: { tag: 'forge:plates/iron' } }, result: { item: 'create:whisk' },
+            function: 'better_manufacturing:create/mixing', parts: [{ role: 'shaft', slot: 1 }]
+        }).id('kubejs:powered_works/workshop/whisk')
+    } else {
+        event.shaped('create:whisk', [' C ', 'SCS', 'SSS'], {
+            C: '#forge:ingots/iron', S: '#forge:plates/iron'
+        }).id('kubejs:powered_works/workshop/whisk')
+    }
     event.remove({ id: 'create:crafting/kinetics/millstone' })
     // Preserve the stone and iron block gates. The native whisk already carries
     // its configured material properties: consume and bind it directly.
     var millstoneKey = { C: 'create:cogwheel', A: 'minecraft:andesite',
-        M: 'kubejs:andesite_machine_block', S: 'minecraft:stone' }
+        M: 'kubejs:andesite_machine_block', S: 'minecraft:stone', N: 'minecraft:nether_brick' }
     if (partVariants) millstoneKey.H = 'tconstruct:large_plate'
-    variant('create:millstone', partVariants ? [' C ', 'AMA', 'HS '] : [' C ', 'AMA', ' S '],
+    variant('create:millstone', partVariants ? ['NC ', 'AMA', 'HS '] : ['NC ', 'AMA', ' S '],
         millstoneKey, 'working_surface', 6, 'milling', 'kubejs:powered_works/direct_root/millstone')
     event.remove({ id: 'create:crafting/kinetics/mechanical_press' })
     var pressKey = { S: 'create:shaft', M: 'kubejs:andesite_machine_block', I: 'minecraft:iron_block' }
@@ -50,34 +84,100 @@ ServerEvents.recipes(function (event) {
             { item: 'kubejs:andesite_machine_block' }, { item: 'create:copper_casing' },
             { tag: 'forge:plates/copper' }, { tag: 'forge:plates/copper' },
             { tag: 'forge:plates/copper' }, { tag: 'forge:plates/copper' },
-            { item: 'minecraft:nether_brick' }, { item: 'create:andesite_alloy' }, { item: 'create:andesite_alloy' }
+            { tag: 'forge:plates/iron' }, { tag: 'forge:nuggets/iron' }, { tag: 'forge:nuggets/iron' }
         ],
         results: [{ item: 'kubejs:copper_machine_block', count: 4 }]
     }).id('kubejs:powered_works/copper_machine_block')
 
-    ;[
-        ['create:crafting/kinetics/water_wheel', 'create:water_wheel'],
-        ['create:crafting/kinetics/large_water_wheel', 'create:large_water_wheel'],
-        ['create:crafting/kinetics/windmill_bearing', 'create:windmill_bearing']
-    ].forEach(function (root) {
-        event.remove({ id: root[0] })
-        var key = { A: 'create:andesite_alloy', M: 'kubejs:copper_machine_block' }
-        if (partVariants) key.H = root[1] === 'create:windmill_bearing' ? 'tconstruct:tool_binding' : 'tconstruct:tool_handle'
-        event.shaped(root[1], partVariants ? ['HA ', 'AMA', ' A '] : [' A ', 'AMA', ' A '], key)
-            .id('kubejs:powered_works/direct_root/' + root[1].substring('create:'.length))
-    })
-    event.remove({ id: 'create:crafting/kinetics/mechanical_pump' })
-    // Without Manufacturing, preserve the original four-alloy copper Machine Block root.
-    if (!partVariants) {
-        event.shaped('create:mechanical_pump', [' A ', 'AMA', ' A '], {
-            A: 'create:andesite_alloy', M: 'kubejs:copper_machine_block'
-        }).id('kubejs:powered_works/direct_root/mechanical_pump')
+    // Ordinary fabricated propellers and sail fittings must not restore a
+    // hidden alloy prerequisite for fans or the Aether wind-power branch.
+    event.remove({ id: 'create:crafting/kinetics/propeller' })
+    if (partVariants) {
+        event.custom({ type: 'better_manufacturing:part_variant', pattern: [' B ', 'BSB', ' B '],
+            key: { B: { item: 'tconstruct:small_blade' }, S: { item: 'create:shaft' } },
+            result: { item: 'create:propeller' }, function: 'better_manufacturing:create/airflow',
+            parts: [{ role: 'north', slot: 1 }, { role: 'west', slot: 3 },
+                { role: 'east', slot: 5 }, { role: 'south', slot: 7 }]
+        }).id('kubejs:powered_works/workshop/propeller')
     } else {
-        // Add the impeller and native fluid pipe in free corners; keep all
-        // four original andesite alloys and the copper Machine Block.
-        variant('create:mechanical_pump', ['HA ', 'AMA', ' AP'], {
-            A: 'create:andesite_alloy', H: 'tconstruct:tool_handle',
-            M: 'kubejs:copper_machine_block', P: 'create:fluid_pipe'
-        }, 'impeller', 0, 'pumping', 'kubejs:powered_works/direct_root/mechanical_pump')
+        event.shaped('create:propeller', [' P ', 'PSP', ' P '], {
+            P: '#forge:plates/iron', S: 'create:shaft'
+        }).id('kubejs:powered_works/workshop/propeller')
+    }
+    event.remove({ id: 'create:crafting/kinetics/white_sail' })
+    event.shaped('2x create:white_sail', ['WS', 'SI'], {
+        W: '#minecraft:wool', S: '#forge:rods/wooden', I: '#forge:nuggets/iron'
+    }).id('kubejs:powered_works/workshop/white_sail')
+
+    // Skyroot proves renewable water/wind generation. The consumed native
+    // handle/binding remains part of each built machine with Manufacturing.
+    ;[
+        ['create:water_wheel', ['LIL', 'ISI', 'LHL'], ['LIL', 'ISI', 'LIL'], 'tconstruct:tool_handle'],
+        ['create:large_water_wheel', ['LIL', 'IWI', 'LHL'], ['LIL', 'IWI', 'LIL'], 'tconstruct:tool_handle'],
+        ['create:windmill_bearing', [' L ', 'HCS', '   '], [' L ', 'LCS', '   '], 'tconstruct:tool_binding']
+    ].forEach(function (root) {
+        var output = root[0]
+        var key = output === 'create:large_water_wheel'
+            ? { L: 'aether:skyroot_log', I: '#forge:ingots/iron', W: 'create:water_wheel' }
+            : output === 'create:windmill_bearing'
+                ? { L: 'aether:skyroot_log', C: 'create:andesite_casing', S: 'create:shaft' }
+                : { L: 'aether:skyroot_log', I: '#forge:ingots/iron', S: 'create:shaft' }
+        if (partVariants) key.H = root[3]
+        event.remove({ output: output })
+        var pattern = partVariants ? root[1] : root[2]
+        event.shaped(output, pattern, key)
+            .id('kubejs:powered_works/direct_root/' + output.substring('create:'.length))
+    })
+
+    event.remove({ output: 'create:andesite_funnel' })
+    event.shaped('2x create:andesite_funnel', [' K ', 'ICI'], {
+        K: 'minecraft:dried_kelp', I: '#forge:nuggets/iron', C: 'create:andesite_casing'
+    }).id('kubejs:powered_works/workshop/andesite_funnel')
+    event.remove({ output: 'create:andesite_tunnel' })
+    event.shaped('2x create:andesite_tunnel', ['KKK', 'ICI'], {
+        K: 'minecraft:dried_kelp', I: '#forge:nuggets/iron', C: 'create:andesite_casing'
+    }).id('kubejs:powered_works/workshop/andesite_tunnel')
+
+    // The native pump datapack already provides a local, part-consuming route.
+
+    // Nether brick is paid by each separator, including non-ore uses.
+    if (Platform.isLoaded('createsifter')) {
+        event.remove({ id: 'createsifter:sifter' })
+        if (partVariants) {
+            event.custom({ type: 'better_manufacturing:part_variant',
+                pattern: ['WAW', 'HCH', ' N '],
+                key: { W: { tag: 'minecraft:planks' }, A: { item: 'create:andesite_casing' },
+                    H: { item: 'tconstruct:tool_handle' }, C: { item: 'create:cogwheel' },
+                    N: { item: 'minecraft:nether_brick' } },
+                result: { item: 'createsifter:sifter' }, function: 'better_manufacturing:sifter/machine',
+                parts: [{ role: 'left', slot: 3 }, { role: 'right', slot: 5 }]
+            }).id('kubejs:powered_works/refinement/sifter')
+        } else {
+            event.shaped('createsifter:sifter', ['WAW', 'SCS', ' N '], {
+                W: '#minecraft:planks', A: 'create:andesite_casing', S: 'minecraft:stick',
+                C: 'create:cogwheel', N: 'minecraft:nether_brick'
+            }).id('kubejs:powered_works/refinement/sifter')
+        }
+        // The brass upgrade consumes the gated Sifter and keeps its native
+        // three-part configuration, brass/redstone cost, and exact recipe ID.
+    }
+    event.remove({ id: 'create:mechanical_crafting/crushing_wheel' })
+    if (partVariants) {
+        event.custom({ type: 'better_manufacturing:bulk_wheel_variant',
+            function: 'better_manufacturing:createbulk/crushing_wheel', acceptMirrored: false,
+            pattern: ['   H   ', '  AAA  ', ' AAPAA ', ' APNPA ', ' AAPAA ', '  AAA  ', '   L   '],
+            key: { A: { item: 'create:andesite_alloy' }, P: { tag: 'minecraft:planks' },
+                N: { item: 'minecraft:nether_brick' }, H: { item: 'tconstruct:hammer_head' },
+                L: { item: 'tconstruct:large_plate' } },
+            parts: [{ role: 'hammer', slot: 3 }, { role: 'plate', slot: 45 }],
+            result: { item: 'create:crushing_wheel', count: 2 }
+        }).id('kubejs:powered_works/refinement/crushing_wheels')
+    } else {
+        event.custom({ type: 'create:mechanical_crafting', acceptMirrored: false,
+            pattern: [' AAA ', 'AAPAA', 'APNPA', 'AAPAA', ' AAA '],
+            key: { A: { item: 'create:andesite_alloy' }, P: { tag: 'minecraft:planks' },
+                N: { item: 'minecraft:nether_brick' } },
+            result: { item: 'create:crushing_wheel', count: 2 }
+        }).id('kubejs:powered_works/refinement/crushing_wheels')
     }
 })

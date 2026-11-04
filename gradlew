@@ -114,6 +114,10 @@ esac
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
+# Rehydrate only the exact distribution-pinned, locally ignored wrapper bytes.
+command -v python3 >/dev/null 2>&1 || die "Python 3 is required to bootstrap the Gradle wrapper"
+python3 "$APP_HOME/gradle/bootstrap-wrapper.py" || exit 1
+
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then

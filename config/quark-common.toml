@@ -1140,7 +1140,7 @@
 
 		[world.big_stone_clusters.myalite]
 			"Generate In Air" = true
-			Enabled = true
+			Enabled = false
 			#Allowed values: [0,)
 			Rarity = 100
 			"Min Y Level" = 58
@@ -1156,7 +1156,7 @@
 
 			[world.big_stone_clusters.myalite.dimensions]
 				"Is Blacklist" = false
-				Dimensions = ["creatingspace:earth_orbit"]
+				Dimensions = []
 
 			[world.big_stone_clusters.myalite.biomes]
 
@@ -1167,7 +1167,7 @@
 
 				#Biome names this should spawn in. Must match both this and 'types' to spawn.
 				[world.big_stone_clusters.myalite.biomes.biomes]
-					Biomes = ["creatingspace:space"]
+					Biomes = []
 					"Is Blacklist" = false
 
 	[world.blossom_trees]
@@ -1380,7 +1380,7 @@
 		"Enable Limestone" = true
 		"Enable Jasper" = true
 		"Enable Shale" = true
-		"Enable Myalite" = true
+		"Enable Myalite" = false
 		"Add New Stones To Mason Trades" = true
 
 		[world.new_stone_types.limestone]
@@ -1471,7 +1471,7 @@
 
 			[world.new_stone_types.myalite.dimensions]
 				"Is Blacklist" = false
-				Dimensions = ["creatingspace:earth_orbit"]
+				Dimensions = []
 
 			[world.new_stone_types.myalite.oregen_lower]
 				#Allowed values: [-64,320]
@@ -1608,7 +1608,7 @@
 
 	[client.improved_tooltips]
 		"Attribute Tooltips" = true
-		"Food Tooltips" = true
+		"Food Tooltips" = false
 		"Shulker Tooltips" = true
 		"Map Tooltips" = true
 		"Enchanting Tooltips" = true

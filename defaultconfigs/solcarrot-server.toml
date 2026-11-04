@@ -7,7 +7,7 @@
 	#Range: 0 ~ 1000
 	heartsPerMilestone = 1
 	#A list of numbers of unique foods you need to eat to unlock each milestone, in ascending order. Naturally, adding more milestones lets you earn more hearts.
-	milestones = [30, 60, 90, 119, 149, 179, 209, 238, 268, 298, 328, 357, 387, 417, 446]
+	milestones = [30, 60, 89, 119, 149, 178, 208, 238, 267, 297, 327, 356, 386, 416, 445]
 
 [filtering]
 	#Foods in this list won't affect the player's health nor show up in the food book.
@@ -212,7 +212,6 @@
 		"create:chocolate_glazed_berries",
 		"create:honeyed_apple",
 		"create:sweet_roll",
-		"creatingspace:space_food",
 		"dynamictreesplus:saguaro_cactus_seed",
 		"eanimod:cookedchicken_dark",
 		"eanimod:cookedchicken_darkbig",

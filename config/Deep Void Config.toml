@@ -1,5 +1,5 @@
 ["Generation&World"]
-	# The origin Cult Temple is the pack's single central entrance; distributed native holes and fall/Abductor routes remain enabled.
+	# Registered scattered Deep Void entrances replace the native one-time origin temple.
 	PlaceCultTemple = false
 
 [Misc]

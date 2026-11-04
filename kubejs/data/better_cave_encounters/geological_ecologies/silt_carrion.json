@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "raw_rock_tag": "better_cave_encounters:geology/silt_carrion",
+  "ordinary_admission": 1.0,
+  "ordinary": [
+    {
+      "entity": "born_in_chaos_v1:corpse_fly",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12,
+      "weight": 8,
+      "spawn_gamerule": "corpseFlySpawn"
+    },
+    {
+      "entity": "born_in_chaos_v1:baby_spider",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12,
+      "weight": 8,
+      "spawn_gamerule": "babySpiderSpawn"
+    },
+    {
+      "entity": "goety:crypt_slime",
+      "role": "line",
+      "minimum_depth": 0.35,
+      "weight": 1,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 4,
+      "offspring": {
+        "credits": 20,
+        "maximum_slime_size": 4,
+        "children": {
+          "goety:crypt_slime": 20
+        }
+      }
+    }
+  ],
+  "director": [
+    {
+      "entity": "born_in_chaos_v1:corpse_fly",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "born_in_chaos_v1:baby_spider",
+      "role": "swarm",
+      "cost": 1,
+      "maximum_per_packet": 4,
+      "maximum_per_encounter": 12
+    },
+    {
+      "entity": "goety:crypt_slime",
+      "role": "line",
+      "minimum_depth": 0.35,
+      "weight": 2,
+      "cost": 4,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 4,
+      "offspring": {
+        "credits": 20,
+        "maximum_slime_size": 4,
+        "children": {
+          "goety:crypt_slime": 20
+        }
+      }
+    },
+    {
+      "entity": "born_in_chaos_v1:bloody_gadfly",
+      "role": "line",
+      "minimum_depth": 0.38,
+      "cost": 3,
+      "maximum_per_packet": 2,
+      "maximum_per_encounter": 5
+    },
+    {
+      "entity": "born_in_chaos_v1:zombie_bruiser",
+      "role": "heavy",
+      "minimum_depth": 0.72,
+      "cost": 8,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 2,
+      "offspring": {
+        "credits": 4,
+        "children": {
+          "born_in_chaos_v1:maggot": 4
+        }
+      }
+    },
+    {
+      "entity": "minecraft:drowned",
+      "role": "heavy",
+      "minimum_depth": 0.75,
+      "cost": 7,
+      "maximum_per_packet": 1,
+      "maximum_per_encounter": 2,
+      "condition": "water_nearby"
+    }
+  ]
+}

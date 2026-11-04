@@ -21,21 +21,7 @@ ServerEvents.recipes(function (event) {
         }).id('kubejs:tech/pneumatic/air_compressor_pressure_root')
     }
 
-    event.remove({ output: 'pneumaticcraft:thermopneumatic_processing_plant' })
-    if (partVariants) {
-        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['LAT', 'CMC', 'TAT'],
-            key: { L: { item: 'tconstruct:large_plate' }, T: { item: 'pneumaticcraft:pressure_tube' },
-                A: { item: 'pneumaticcraft:advanced_pressure_tube' }, C: { item: 'pneumaticcraft:compressed_iron_gear' },
-                M: { item: 'kubejs:airtight_machine_block' } },
-            result: { item: 'pneumaticcraft:thermopneumatic_processing_plant' },
-            function: 'better_manufacturing:pneuprocess/chemistry', parts: [{ role: 'liner', slot: 0 }]
-        }).id('kubejs:tech/pneumatic/thermopneumatic_processing')
-    } else {
-        event.shaped('pneumaticcraft:thermopneumatic_processing_plant', ['TAT', 'CMC', 'TAT'], {
-            T: 'pneumaticcraft:pressure_tube', A: 'pneumaticcraft:advanced_pressure_tube',
-            C: 'pneumaticcraft:compressed_iron_gear', M: 'kubejs:airtight_machine_block'
-        }).id('kubejs:tech/pneumatic/thermopneumatic_processing')
-    }
+    // The sole thermopneumatic plant root is in 85_dimension_font_ecology.js.
 
     event.remove({ output: 'pneumaticcraft:assembly_controller' })
     var assemblyControllerInputs = [

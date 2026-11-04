@@ -19,11 +19,11 @@ ServerEvents.recipes(function (event) {
 
     event.remove({ output: 'compressedcreativity:rotational_compressor' })
     if (Platform.isLoaded('better_manufacturing')) {
-        // Replace one duplicate gear and casing, retaining every distinct era gate.
+        // Replace one duplicate gear and casing with consumed parts; the open frame uses a seal.
         event.custom({ type: 'better_manufacturing:part_variant', pattern: ['XSP', 'GAL', 'CHB'],
             key: { X: { item: 'aether:aerogel' }, S: { item: 'create:shaft' },
                 P: { item: 'create:propeller' }, G: { item: 'pneumaticcraft:compressed_iron_gear' },
-                A: { item: 'kubejs:airtight_machine_block' }, C: { item: 'create:brass_casing' },
+                A: { item: 'kubejs:pressure_seal' }, C: { item: 'create:brass_casing' },
                 B: { item: 'pneumaticcraft:pressure_tube' }, L: { item: 'tconstruct:large_plate' },
                 H: { item: 'tconstruct:tough_handle' } },
             result: { item: 'compressedcreativity:rotational_compressor' },
@@ -33,7 +33,7 @@ ServerEvents.recipes(function (event) {
     } else {
         event.shaped('compressedcreativity:rotational_compressor', ['XSP', 'GAG', 'CBC'], {
             P: 'create:propeller', S: 'create:shaft', G: 'pneumaticcraft:compressed_iron_gear',
-            A: 'kubejs:airtight_machine_block', C: 'create:brass_casing', B: 'pneumaticcraft:pressure_tube',
+            A: 'kubejs:pressure_seal', C: 'create:brass_casing', B: 'pneumaticcraft:pressure_tube',
             X: 'aether:aerogel'
         }).id('kubejs:thermal_pressure/direct_root/rotational_compressor')
     }
@@ -42,13 +42,13 @@ ServerEvents.recipes(function (event) {
     if (Platform.isLoaded('better_manufacturing')) {
         event.custom({ type: 'better_manufacturing:part_variant', pattern: ['HWX', 'AW '],
             key: { H: { item: 'minecraft:hopper' }, W: { item: 'pneumaticcraft:pressure_chamber_wall' },
-                A: { item: 'kubejs:airtight_machine_block' }, X: { item: 'tconstruct:large_plate' } },
+                A: { item: 'kubejs:pressure_seal' }, X: { item: 'tconstruct:large_plate' } },
             result: { item: 'pneumaticcraft:pressure_chamber_interface', count: 2 },
             function: 'better_manufacturing:pneupressure/pressure', parts: [{ role: 'body', slot: 2 }]
         }).id('kubejs:thermal_pressure/direct_root/pressure_chamber_interface')
     } else {
         event.shaped('2x pneumaticcraft:pressure_chamber_interface', ['HW', 'AW'], {
-            H: 'minecraft:hopper', A: 'kubejs:airtight_machine_block', W: 'pneumaticcraft:pressure_chamber_wall'
+            H: 'minecraft:hopper', A: 'kubejs:pressure_seal', W: 'pneumaticcraft:pressure_chamber_wall'
         }).id('kubejs:thermal_pressure/direct_root/pressure_chamber_interface')
     }
 
