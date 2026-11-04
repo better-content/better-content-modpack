@@ -93,6 +93,70 @@ file = "config/adchimneys-common.toml"
 hash = "99dcd142c860e869e55909e41619622668a6549235458441b419c8134cfa25da"
 
 [[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$aerial_campfire.cfg"
+hash = "591dfcd13a06b21a202aea7dec9a60250e0a39ed5564355a302c81c35c91d3b8"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$aerial_campfire_signal.cfg"
+hash = "e96f1fbde693afc0b013f386e067eee808398183b2b7824d302c69f9c18a0770"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$aqueous_campfire.cfg"
+hash = "ac8be4a048a94c1099f73cb5910b58ea55f8144fba78759f66196348864e24b8"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$aqueous_campfire_signal.cfg"
+hash = "4325c6bd1ddc04035b3589873bf411bceaed1570de880bedf0d8c5e4e134662f"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$arcane_campfire.cfg"
+hash = "5b1988f0536b3b1e1a09ee528cf7780ae877e0a6e902bf32f7a31d7979c5caa1"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$arcane_campfire_signal.cfg"
+hash = "23b109412a7b420aaade149d3503f7f88f57aea8ad95140f2e649c2752163bcc"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$earthen_campfire.cfg"
+hash = "c6643a017173105ba2de3a07672313c528174dd10bd3fd6e9a2b743677d30ee7"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$earthen_campfire_signal.cfg"
+hash = "b6d2b14d153a9e7d6e08bf3d0098f0a4f47503ca4a8d82a279714542f98b9988"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$infernal_campfire.cfg"
+hash = "5d4ba555b1e71a1906c0b14e9afec9742ff6d463be9c34f95b74f73b6ef46e8a"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$infernal_campfire_signal.cfg"
+hash = "092371291e52f24e285f74d303d85a0d11fed63499648fa7cbfbf7becd6a11dc"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$sacred_campfire.cfg"
+hash = "1d2865f1ae9d83d3f042c5eac2ca18f0b5a4f8d8373bf15a7e2635cf96bc46b3"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$sacred_campfire_signal.cfg"
+hash = "fc6a88623c4b1ee36bf8bcfd665269ccad4a007dec024eada96ebe385e3d6ad8"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$tempo_campfire.cfg"
+hash = "aa3b51fe4259881f9f3d0701f282e04e3a510273afc2d4683e30e20462eaa379"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$tempo_campfire_signal.cfg"
+hash = "80c43ab778cccc60af7149a43ba4bab17244f8d375d147171295d3581ee28ec2"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$wicked_campfire.cfg"
+hash = "92e48ce63eb1dede1e441289e5b93745c4c09386b28d6d5a3433babd600288c7"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$wicked_campfire_signal.cfg"
+hash = "45a12ea890d273e0e2ccddae2feb60bdc8d3f3beab2a4fa329e4b43bd0574879"
+
+[[files]]
 file = "config/adchimneys/Emitters/create$blaze_burner.cfg"
 hash = "0553021e66f73d3bf1632f7efe561ffb9d648bada3ede05b904464136ec4a6e1"
 
