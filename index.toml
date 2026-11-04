@@ -82,7 +82,7 @@ hash = "d6c493146b8e461ddfebfc60c91241a85bab6565117c7f609e33671c8b04a911"
 
 [[files]]
 file = "config/acceleratedrendering-client.toml"
-hash = "ffe53bc2b30147c7ef638132c096e953ed55b88fcf6a2306ee4f5c4a097ca78a"
+hash = "08aea895ab81e439d2d9d507a2aefb03196fc20595af5282a45111ae9a263cd4"
 
 [[files]]
 file = "config/adchimneys-client.toml"
@@ -7962,7 +7962,7 @@ hash = "5fecb85c0830794ea4004eb041897b08938ebb5383670ada06a3647727ddcf36"
 
 [[files]]
 file = "kubejs/data/additionalweaponry/tinkering/tool_definitions/butcher_knife.json"
-hash = "7a4a2043e4fb94f59c4ffb95a66b9acea315cf9291ebde779eec0ace8f6333d5"
+hash = "eb802604ee4d09d8d3cc8f940db049fc00565725d02ae5ff516d25323212d314"
 
 [[files]]
 file = "kubejs/data/additionalweaponry/tinkering/tool_definitions/cutlass.json"
@@ -11696,11 +11696,11 @@ hash = "febac493b20aab3edac0b0bf603c490bfafd676bb8bc65368a76c68c78e64b9a"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
-hash = "9fff26a67437e5e7a37a844b420a0f7e665269abbaf08c96842ebcfa11c733ec"
+hash = "8dc5f024770a6f8cb338fbca627a90b69f5225fe1221df9a6e67b019c337fc79"
 
 [[files]]
 file = "mods/better-cooking-0.1.0.jar"
-hash = "a36892a7908206400417cca81623cc6dd99bf166d8173b39fab9331434d1682f"
+hash = "d48242ec3ea4967e90890c6c4928340ff6ae80e6dc96e2ccf718343f9495cab1"
 
 [[files]]
 file = "mods/better-craftable-bouquets-0.1.0.jar"
@@ -11728,15 +11728,15 @@ hash = "7e419b46861595987e31f8199f6f7efd7f80c3e2e7b131a044518e9fa6f1176e"
 
 [[files]]
 file = "mods/better-drinking-water-1.1.0.jar"
-hash = "6aaa8f2c2ae9ba99c4e37abfa520e7238d6ceb8997e956bf8245092fcbd1ff21"
+hash = "9c298bb99dec33dc6e03cc69e1bd82ac0d976acabdd00d3bea2020b4a207f0ce"
 
 [[files]]
 file = "mods/better-exploration-load-control-0.1.0.jar"
 hash = "5466d9753814cf74741a31778c460a5b4169ed6f4d43396ebfdf73248f833a58"
 
 [[files]]
-file = "mods/better-gameplay-notices-1.0.0.jar"
-hash = "da27c1db53ede5833fa6e5c0b48d986a9171c33070674f378cda2fdd40727e3d"
+file = "mods/better-gameplay-notices-1.0.1.jar"
+hash = "ee695492c32cfc0e23125d0adbc3f33e328a8829ba50e7f747e961df1d00f8aa"
 
 [[files]]
 file = "mods/better-hexerei-dynamic-trees-1.0.1.jar"
@@ -11748,7 +11748,7 @@ hash = "8f9f9d67c40cf00e63cf742e995ad3a6993d9c3fa3ca5acad8937f0135c5e726"
 
 [[files]]
 file = "mods/better-journal-inventory-0.1.0.jar"
-hash = "08cdbe8be56b0b4e32600097541145b0e6c40e0a1b325e1fef35736122839726"
+hash = "6d7f163737adc295d60863f7a520c813ba94ce3167f90212ee310bc1a6c89cfc"
 
 [[files]]
 file = "mods/better-magic-chunk-anchors-0.1.0.jar"
@@ -11796,7 +11796,7 @@ hash = "842d1684f632f6a7cee943791fbc2c8e89cec24ab1f81363f3ac58e1c1fe894a"
 
 [[files]]
 file = "mods/better-rpg-progression-1.0.1.jar"
-hash = "acb96ad6cabcf43def44e94a27d43acc8b2de08533aa7a8994668b6e895b4538"
+hash = "d0cdba6a892f5398a7dc57752c2eb37e15cd32adbeaba48330382cbb0d17332b"
 
 [[files]]
 file = "mods/better-runtime-diagnostics-0.1.0.jar"
@@ -11812,7 +11812,7 @@ hash = "98911c03ac8dfa8e29843714d0145c066611f3225782d9cd0d567f31d3dbafa7"
 
 [[files]]
 file = "mods/better-spawns-1.0.0.jar"
-hash = "ccc55bf595b06cbbb16b178c105fb8061ac89389df07c7e1f0c217e1f24229a1"
+hash = "9916e377bc3318ca4b3da904a386f9c03104992e645c6115280c0195ccfb0f75"
 
 [[files]]
 file = "mods/better-spicy-farmers-0.1.0.jar"
@@ -11828,7 +11828,7 @@ hash = "ac5e591df690fc5199905f79ff114489228df16201322d07dc60f9878726b287"
 
 [[files]]
 file = "mods/better-survival-physiology-0.1.1.jar"
-hash = "615291a34cf52f8e0dc3f006b8e0ff9da6278b8a49bf147b4a2fb716635989fa"
+hash = "a0089f3071922dbf4771558f7127ba68293ccecde695d66c49f910d5fce6bee9"
 
 [[files]]
 file = "mods/better-tinkers-loot-affixes-1.0.0.jar"

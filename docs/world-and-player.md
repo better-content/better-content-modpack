@@ -247,8 +247,8 @@ Every row has exactly one representative in each authority. Aspect words appear 
 | Tempo | » | `#00A985` | Hands | Sugar | Copper Bloom |
 | Work | ⚒ | `#F0E2C5` | Fingers | Grains | Tin Quartz |
 | Mobility | ➜ | `#E0B01F` | Lungs | Fruits | Brassroot |
-| Endurance | ∞ | `#52606A` | Blood | Fats | Coal Measures |
-| Robustness | ◆ | `#AF6A2F` | Skin | Vegetables | Ironstone |
+| Endurance | ∞ | `#52606A` | Blood | Vegetables | Coal Measures |
+| Robustness | ◆ | `#D85C32` | Skin | Spice | Ironstone |
 | Renewal | ✚ | `#6CCAF0` | Liver | Dairy | Evaporite Beds |
 | Control | ⊕ | `#8E5BB7` | Eyes | Alcohol | Black Shale |
 
@@ -276,7 +276,7 @@ Systemic Salience and Realistic Ores share canonical byte-identical 18×18 aspec
 
 ### Teaching surfaces
 
-There is deliberately no explicit comparison screen. Discovery is reinforced through the RPG allocation screen, Diet's native nutrition screen, food and ore tooltips, nutrition activation feedback, ore blocks in the world, and EMI's ordinary tooltip/recipe surfaces. Natural names lead; the aspect badge, glyph, colour, and name appear when the player interacts closely enough to need the formal identity.
+There is deliberately no explicit comparison screen. Discovery is reinforced through the RPG allocation screen, the Journal's Diet-derived nutrition panel, food and ore tooltips, nutrition activation feedback, ore blocks in the world, and EMI's ordinary tooltip/recipe surfaces. Natural names lead; the aspect badge, glyph, colour, and name appear when the player interacts closely enough to need the formal identity.
 
 RPG point increments provide a quiet preview pulse and motif. A successful server-confirmed allocation produces a short recap. Nutrition threshold crossings and discrete abilities use the corresponding motion and motif, while the meal recap explains which bodily state changed and for approximately how long. Recap labels wrap within the viewport and use bright neutral text beside the aspect badge. Four to ten seconds of display time scale with the number of changed states; menus and a hidden HUD pause that timer. Ore tooltips formally name the identity and preserve Shift for the assay summary; ore discovery never interrupts play with a toast or action-bar message.
 
@@ -310,18 +310,17 @@ Slice of Life: Carrot remains the sole owner of maximum-health progression.
 
 ### Nutrition
 
-Diet displays exactly eight groups, matching the eight aspect identities and colours. Proteins, Grains, Fruits, Fats, Vegetables, and Dairy are ordinary nutrition; Sugar and Alcohol are differently behaving loads, never required for dietary completeness. Ordinary thresholds are `50%` supported, `75%` prepared, and `90%` feast. The powerful band loses three percentage points per minute while active: `90%` falls below `75%` in about five idle minutes, sooner during hunger-linked Diet decay or Sugar Tempo.
+Diet is the authority for the eight active groups, classification, gains and stored values: Protein, Sugar, Grains, Fruit, Vegetables, Spice, Dairy, and Alcohol. Sugar and Alcohol are physiology-owned timed loads mirrored into Diet; Spice is awarded only from real paid doses. The Journal reads Diet's synced suite and values as the sole nutrition GUI. Better Survival Physiology exclusively owns effects driven by those values; Diet's native suite has no effects.
 
-- Proteins grant `+75%` melee damage above `75%`, with a charged `+200%` Heavy Blow above `90%` after briefly withholding attacks.
-- Grains grant `+100%` mining speed above `75%`; correct-tool Work Rhythm reaches `+200%` above `90%`.
-- Fruits grant `+50%` movement and swimming above `75%`, with a sprint surge reaching `+100%` above `90%`.
-- Fats reduce hunger, thirst, and stamina costs by `70%` above `75%`, reaching `85%` above `90%` and funding one ten-second zero-cost emergency reserve.
-- Vegetables resist `80%` of temperature drift and half of knockback above `75%`; at `90%` they can cancel one extreme exposure or knockback every 30 seconds.
-- Dairy clears harmful effects four times as fast and preserves benefits through milk above `75%`; at `90%` it cleanses one harmful effect every 20 seconds.
-- Sugar grants `+50%` or `+100%` attack and item-use cadence at its own `25%` and `60%` load thresholds; it burns the powerful nutrition band two or five times faster and builds metabolic debt.
-- Alcohol improves handling only in its moderate `35–65%` window; high load degrades handling and can cause stumbles. Maximum alcohol is unambiguously bad.
+- Protein increases melee damage and unlocks charged hits.
+- Grains increase correct-tool work speed and unlock mining sequences.
+- Fruit increases movement and swimming speed and unlocks travel perks.
+- Vegetables reduce hunger, thirst, and stamina costs and fund the existing emergency reserve. This replaces Tallow/Fats, not the removed historical temperature and knockback proposal.
+- Spice adds bounded work/movement benefits and charges a real seasoning cost on consumption.
+- Dairy accelerates the expiry of harmful effects and grants meal recovery and cleansing.
+- Sugar amplifies benefits while raising hunger and nutrient costs; Alcohol reduces incoming damage at the cost of increasing impairment, up to blackout.
 
-Diet's native screen remains the authoritative nutrition display and shows each group's actual benefit, load, and estimated upper-tier time. Food tooltips and meal recaps name the effect at the moment it matters. Generic Diet-wide bonuses stay disabled so they cannot duplicate the aspect abilities.
+Food tooltips show Diet-derived gains; the Journal explains group-specific effects and estimates without exposing Diet's separate screen. The group's value is never inferred from a missing badge or an alternate UI roster.
 
 ### Ores
 

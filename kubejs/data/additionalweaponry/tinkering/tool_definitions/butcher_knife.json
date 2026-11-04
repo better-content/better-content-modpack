@@ -70,6 +70,16 @@
           "level": 1
         }
       ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:set",
+      "blocks": [
+        "minecraft:grass",
+        "minecraft:tall_grass",
+        "minecraft:fern",
+        "minecraft:large_fern"
+      ]
     }
   ]
 }

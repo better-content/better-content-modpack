@@ -229,6 +229,10 @@ Consolidated from the pre-removal documentation at modpack commit `6004642691c0`
 
 These are historical ambitions, newly discussed aspirations and unresolved design questions, not a current implementation or acceptance report. Dated comparisons below distinguish inspected implementation from intended outcomes; they are not live status inventories. The linked work-in-progress directories have their own scope and status; do not treat them as completed features or active pack inputs. Established principles are collected in [Gameplay design choices](design.md#gameplay-design-choices).
 
+### Death stats screen color overhaul
+
+**Deferred — not approved for implementation.** Revisit the death stats screen's color palette so the recap is easier to read and its visual emphasis better supports the transition from final death to a new life. Keep the smallest useful scope to screen colors and contrast; do not change death mechanics, tracked statistics or save data. Defer while the friends' playtest prioritizes continuity and blockers. Reconsider if players report that the screen's colors obscure important information or detract from the death/respawn experience, or when visual polish is explicitly prioritized after stabilization.
+
 ### Social goals: different ways to contribute and belong
 
 **State:** Design direction clarified in discussion on 2026-10-28, not an implemented social contract or evidence of player outcomes. The comparison below reflects that discussion's read-only inspection of the local workspace and selected Build 10 artifacts. Source, recipes and technical acceptance can establish capabilities, not enjoyment, sustained participation, actual division of labour or cultural adoption. The comparison is intentionally dated rather than a claim about every subsequent pack revision.

@@ -202,7 +202,7 @@
 	#- DISABLED: Block entity filter will be disabled and all block entities will be accelerated.
 	#- ENABLED: Block entity filter will test if the block entities should be accelerated when rendering based on the filter values and the filter type.
 	#Allowed Values: DISABLED, ENABLED
-	block_entity_filter = "DISABLED"
+	block_entity_filter = "ENABLED"
 	#- DISABLED: Item filter will be disabled and all items will be accelerated.
 	#- ENABLED: Item filter will test if the items should be accelerated when rendering based on the filter values and the filter type.
 	#Allowed Values: DISABLED, ENABLED
@@ -222,7 +222,7 @@
 	#- BLACKLIST: Block entities that are not in the filter values can pass the filter and be accelerated when rendering.
 	#- WHITELIST: Block entities that are in the filter values can pass the filter and be accelerated when rendering.
 	#Allowed Values: BLACKLIST, WHITELIST
-	block_entity_filter_type = "BLACKLIST"
+	block_entity_filter_type = "WHITELIST"
 	#- BLACKLIST: Items that are not in the filter values can pass the filter and be accelerated when rendering.
 	#- WHITELIST: Items that are in the filter values can pass the filter and be accelerated when rendering.
 	#Allowed Values: BLACKLIST, WHITELIST
@@ -239,6 +239,7 @@
 	entity_filter_values = []
 	#You can configure the block entity filter by this list.
 	#Block entity filter will use this list and the filter type to determine if a block entity can pass the filter.
+	# Temporarily use vanilla rendering for every block entity while checking hovered-outline transparency.
 	block_entity_filter_values = []
 	#You can configure the item filter by this list.
 	#Item filter will use this list and the filter type to determine if an item can pass the filter.

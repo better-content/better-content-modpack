@@ -76,7 +76,7 @@ The active set contains **52 custom mods** in `gradle/active-custom-mods.json`. 
 | [better-arena-trials](https://github.com/better-content/better-arena-trials) | `better_arena_trials` | `better-arena-trials-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-spirit-commerce](https://github.com/better-content/better-spirit-commerce) | `better_spirit_commerce` | `better-spirit-commerce-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-compat-fixes](https://github.com/better-content/better-compat-fixes) | `better_compat_fixes` | `better-compat-fixes-0.1.9.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-gameplay-notices](https://github.com/better-content/better-gameplay-notices) | `better_gameplay_notices` | `better-gameplay-notices-1.0.0.jar` | `./gradlew verifyFast stageRuntimeJar` |
+| [better-gameplay-notices](https://github.com/better-content/better-gameplay-notices) | `better_gameplay_notices` | `better-gameplay-notices-1.0.1.jar` | `./gradlew verifyFast stageRuntimeJar` |
 | [better-discovery-guides](https://github.com/better-content/better-discovery-guides) | `better_discovery_guides` | `better-discovery-guides-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-bumblezone-crops](https://github.com/better-content/better-bumblezone-crops) | `better_bumblezone_crops` | `better-bumblezone-crops-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-buried-encounters](https://github.com/better-content/better-buried-encounters) | `better_buried_encounters` | `better-buried-encounters-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |

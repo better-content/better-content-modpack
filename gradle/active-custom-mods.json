@@ -80,7 +80,7 @@
     {
       "repository": "better-gameplay-notices",
       "modId": "better_gameplay_notices",
-      "artifact": "better-gameplay-notices-1.0.0.jar",
+      "artifact": "better-gameplay-notices-1.0.1.jar",
       "tasks": [
         "verifyFast",
         "stageRuntimeJar"
@@ -177,7 +177,8 @@
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-world-management"
+        "better-world-management",
+        "better-gameplay-notices"
       ]
     },
     {
