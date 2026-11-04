@@ -24,6 +24,7 @@ docs
 /plans/
 /review/
 # Retained development proposals/evidence are not pack runtime inputs.
+/build-smoke-errors.md
 /workspace_artifacts/
 /dist.sh
 /package.sh

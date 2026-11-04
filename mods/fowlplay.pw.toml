@@ -1,13 +1,13 @@
 name = "Fowl Play"
-filename = "fowlplay-1.2.1+1.20.1-forge.jar"
+filename = "fowlplay-1.2.3+1.20.1-forge.jar"
 side = "both"
 
 [download]
 hash-format = "sha1"
-hash = "de67f508f5585e8e5d08cdc72d7a72645c5bb4bf"
+hash = "dcafd69f5199b73078213fff06786b08c5307a43"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 8344219
+file-id = 8578733
 project-id = 1246320

@@ -943,6 +943,10 @@
       "primary_role": "presentation",
       "support_state": "not_applicable"
     },
+    "mezz_config": {
+      "primary_role": "infrastructure",
+      "support_state": "not_applicable"
+    },
     "jsonthings": {
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
@@ -1496,6 +1500,10 @@
       "support_state": "full"
     },
     "unloaded_activity": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
+    "unloadedactivity": {
       "primary_role": "gameplay_system",
       "support_state": "not_applicable"
     },

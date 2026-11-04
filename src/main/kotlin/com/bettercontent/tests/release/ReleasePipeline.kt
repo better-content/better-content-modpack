@@ -86,6 +86,8 @@ fun main(args: Array<String>) {
     val staging = evidence.resolve("staged-jars").also { it.createDirectories() }
     val smokeEvidence = root.resolve("generated/test-evidence/$runId/smoke/run.json")
     require(!smokeEvidence.exists()) { "refusing pre-existing Smoke evidence: $smokeEvidence" }
+    val forceRebuildAll = System.getenv("BC_RELEASE_FORCE_REBUILD_ALL") == "1"
+    require(!forceRebuildAll || !useBundledMods) { "force-rebuild requires source-aware release" }
     val compileFixtures = if (useBundledMods) null else System.getenv("BC_RELEASE_COMPILE_FIXTURE_DIR")?.let {
         require(it.isNotBlank()) { "BC_RELEASE_COMPILE_FIXTURE_DIR must not be blank" }
         Path.of(it).toAbsolutePath().normalize()
@@ -97,7 +99,9 @@ fun main(args: Array<String>) {
     val sourceUpdates = manifest.mods.map { mod ->
         if (useBundledMods) SourceUpdate(mod.repository, mod.artifact, "not-inspected",
             readSourceCommit(root.resolve("mods").resolve(mod.artifact), mod), "bundled-input")
-        else inspectSourceUpdate(root, workspace, mod)
+        else inspectSourceUpdate(root, workspace, mod).let { update ->
+            if (forceRebuildAll && update.status == "same") update.copy(status = "forced-rebuild") else update
+        }
     }
     val sourceUpdatesByRepository = sourceUpdates.associateBy { it.repository }
     Files.writeString(
@@ -293,7 +297,11 @@ internal fun build(
     }
     Files.createDirectories(nativeLock.parent)
     val buildCommand = listOf("flock", "--wait", "1800", nativeLock.toString(),
-        repository.resolve("gradlew").toString(), "--no-daemon", "--max-workers=2", "stageRuntimeJar") +
+        repository.resolve("gradlew").toString(), "--no-daemon", "--max-workers=2") +
+        (if (mod.repository == "better-spaceflight") {
+            val tmp = evidence.resolve("spaceflight-gradle-tmp").also { Files.createDirectories(it) }
+            listOf("-Dorg.gradle.jvmargs=-Xmx2G -XX:ActiveProcessorCount=2 -Djava.io.tmpdir=$tmp")
+        } else emptyList()) + listOf(if (mod.repository == "better-abyssal-city") "jar" else "stageRuntimeJar") +
         if (mod.repository == "better-survival-physiology") {
             val spice = staging.resolve("better-spicy-farmers-0.1.0.jar")
             val waterClasses = workspace.resolve("mod_source/better-drinking-water/build/classes/java/main")
@@ -303,9 +311,36 @@ internal fun build(
             require(listOf("PlantDrinks.class", "api/BeverageEvents.class").all {
                 Files.isRegularFile(waterClasses.resolve("com/bettercontent/betterdrinkingwater/$it"))
             }) { "drinking-water did not produce the required nonshipping typed API classes" }
-            listOf("-PspicyFarmersProviderJar=$spice", "-PtypedWaterCompileClasses=$waterClasses")
+            listOf("-PspicyFarmersProviderJar=$spice", "-PtypedWaterCompileClasses=$waterClasses",
+                "-PgameplayNoticesRuntimeJar=${staging.resolve("better-gameplay-notices-1.0.1.jar")}")
+        } else if (mod.repository == "better-drinking-water") {
+            listOf("-PgameplayNoticesRuntimeJar=${staging.resolve("better-gameplay-notices-1.0.1.jar")}")
+        } else if (mod.repository == "better-cooking") {
+            val cache = Path.of(System.getProperty("user.home"), ".cache/bc/packwiz-downloads/mods")
+            val ponder = Path.of(System.getProperty("user.home"), ".gradle/caches/modules-2/files-2.1/net.createmod.ponder/Ponder-Forge-1.20.1/1.0.91/f110340ad6af13a09c1f8b91e0a71ba9ae737bcd/Ponder-Forge-1.20.1-1.0.91.jar")
+            require(Hashes.sha256(ponder) == "86e6b64372aba6d9c56f2c35725ea26d8febf2c75eed9950566e7f2849443b34") {
+                "Cooking Ponder compile input is missing or has changed"
+            }
+            listOf("-PkaleidoscopeJar=${cache.resolve("kaleidoscopecookery-1.6.0-forge+mc1.20.1.jar")}",
+                "-PfarmersDelightJar=${cache.resolve("FarmersDelight-1.20.1-1.3.1.jar")}",
+                "-PubesDelightJar=${cache.resolve("ubesdelight-forge-1.20.1-0.4.11.jar")}",
+                "-PponderJar=$ponder")
         } else emptyList()
-    runLogged(repository, buildCommand, log, providerBuildEnvironment(staging))
+    val buildEnvironment = providerBuildEnvironment(staging) + when (mod.repository) {
+        "better-abyssal-city" -> mapOf("ABYSSAL_WORK_ROOT" to evidence.resolve("abyssal-runtime").toString())
+        "better-world-management" -> {
+            val fixture = evidence.resolve("world-axiom-compile-only").also { Files.createDirectories(it) }
+            val names = listOf("better-dimension-fonts-1.0.0.jar", "better-ore-geology-0.3.0.jar",
+                "better-bumblezone-crops-0.1.0.jar", "better-celestial-events-0.1.0.jar",
+                "better-spirit-commerce-1.0.1.jar", "better-chemlib-hazards-0.2.0.jar")
+            names.forEach { name -> Files.copy(staging.resolve(name), fixture.resolve(name)) }
+            val lodestone = Path.of(System.getProperty("user.home"), ".cache/bc/packwiz-downloads/mods/lodestone-1.20.1-1.6.4.1.jar")
+            Files.copy(lodestone, fixture.resolve(lodestone.fileName))
+            mapOf("BC_WORLD_AXIOM_COMPILE_JAR_DIR" to fixture.toString())
+        }
+        else -> emptyMap()
+    }
+    runLogged(repository, buildCommand, log, buildEnvironment)
     val jar = repository.resolve("build/libs").resolve(mod.artifact)
     require(Files.isRegularFile(jar)) { "${mod.repository} did not stage ${mod.artifact}" }
     require(jarDeclaresMod(jar, mod.modId)) { "${mod.artifact} does not declare ${mod.modId}" }

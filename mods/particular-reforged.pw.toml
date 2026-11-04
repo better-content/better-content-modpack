@@ -1,13 +1,13 @@
 name = "Particular ✨ Reforged"
-filename = "particular-1.20.1-Forge-1.2.7.jar"
+filename = "particular-1.20.1-Forge-1.5.7.jar"
 side = "both"
 
 [download]
 hash-format = "sha1"
-hash = "db04a6b14b7fb219701c50907986384bca363298"
+hash = "735ad052616e135e45a8c9195f1c22f11274f180"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 6916904
+file-id = 8662689
 project-id = 1219053

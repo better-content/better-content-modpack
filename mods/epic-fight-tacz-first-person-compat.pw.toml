@@ -1,13 +1,13 @@
 name = "Epic Fight × TacZ First-Person Compat"
-filename = "epictaczcompat_1.20.1_1201-0.5.2.jar"
+filename = "epictaczcompat_1.20.1_1201-0.6.0.jar"
 side = "client"
 
 [download]
 hash-format = "sha1"
-hash = "af30822e62f7546c220795de4303938304abc601"
+hash = "ee027e478bb48d81c12544ba6cbced7f4890f67c"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 8686368
+file-id = 8759233
 project-id = 1544620

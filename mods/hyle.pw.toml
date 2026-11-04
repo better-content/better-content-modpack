@@ -1,13 +1,13 @@
 name = "Hyle"
-filename = "Hyle-2.0.0-1.20.1-forge-all.jar"
+filename = "Hyle-3.0.0-1.20.1-forge-all.jar"
 side = "both"
 
 [download]
 hash-format = "sha1"
-hash = "f53454f2636d3aebb62d8b322cf2ad5cb1a96faa"
+hash = "712a3194d683b86563de0fa65e1408f31de83761"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 7736352
+file-id = 8126631
 project-id = 609850

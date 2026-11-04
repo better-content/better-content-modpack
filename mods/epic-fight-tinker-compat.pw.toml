@@ -1,13 +1,13 @@
 name = "Epic Fight: Tinkers Integration"
-filename = "epicfighttinkercompat-20.2.8-forge-1.20.1.jar"
+filename = "epicfighttinkercompat-20.2.10.jar"
 side = "both"
 
 [download]
 hash-format = "sha1"
-hash = "5e006ede4f441e0f4a094ac43790a12bb54650e7"
+hash = "b9e6662fd1e70c0b1460b4a288a970986077b55b"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 8684759
+file-id = 9112111
 project-id = 1491531

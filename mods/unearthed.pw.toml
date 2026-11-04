@@ -1,13 +1,13 @@
 name = "Unearthed"
-filename = "UnEarthed-2.3.0-1.20.1-forge-all.jar"
+filename = "UnEarthed-3.1.0-1.20.1-forge-all.jar"
 side = "both"
 
 [download]
 hash-format = "sha1"
-hash = "5cf92a5a4fef9166501b43609b38d24f56c76dba"
+hash = "4c663b4379a3a773f6f96cb8f3dbfbc32da4f765"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 7742307
+file-id = 8135710
 project-id = 406825
