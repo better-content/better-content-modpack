@@ -70,11 +70,6 @@
       ]
     },
     {
-      "type": "tconstruct:is_effective",
-      "predicate_type": "mantle:tag",
-      "tag": "tconstruct:mineable/hand_axe"
-    },
-    {
       "type": "tconstruct:box_aoe",
       "bonus": {
         "height": 5

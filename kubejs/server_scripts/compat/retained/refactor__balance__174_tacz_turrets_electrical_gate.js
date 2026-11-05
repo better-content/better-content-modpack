@@ -1,10 +1,10 @@
-// TaCZ Turrets is a late electrical defense system. Replace its early vanilla
-// iron recipe with the pack's electrical instrumentation and AE control parts.
+// Gate the TaCZ Turrets workbench, not a nonexistent turret item. The upstream
+// recipe produces an NBT-marked TaCZ workbench; retain that BlockId on our result.
 ServerEvents.recipes(function (event) {
     if (!Platform.isLoaded('tacz_turrets')) return
 
-    event.remove({ id: 'tacz_turrets:turret' })
-    global.bcFactoryCrafting(event, 'kubejs:tacz_turrets/electrical_turret', 'tacz_turrets:turret', 1, [
+    event.remove({ id: 'tacz_turrets:turret_workbench' })
+    event.shaped(Item.of('tacz:workbench_b', '{BlockId:"tacz_turrets:turret_workbench"}'), [
         'ICI',
         'RMR',
         'CSC'
@@ -14,5 +14,5 @@ ServerEvents.recipes(function (event) {
         R: 'powergrid:redstone_relay',
         M: 'powergrid:electric_motor',
         S: 'kubejs:ae_logic_package'
-    })
+    }).id('kubejs:tacz_turrets/electrical_turret')
 })

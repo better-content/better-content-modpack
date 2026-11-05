@@ -12,6 +12,47 @@ Progression is communicated by executable recipes, apparatus, native guides,
 item-hover annotations, loading lessons, contextual Threads, and event or world
 feedback. Learning surfaces do not impose an objective graph or grant quest rewards.
 
+### Life attributes — source candidate, not active pack gameplay
+
+The separately owned RPG mod now has an **unreleased candidate** for eight per-life
+builds. This is not evidence of pinned-mod combat/thermal behavior or a claim that
+the currently installed pack JAR contains them. Each new experience-level peak
+still awards one Life point; committed points are lost on final death. Old
+body-part IDs and auto-plans are **not** migrated: keep existing worlds untouched,
+and use a freshly created world for the eventual friends' playtest. The existing
+allocation screen previews drafted, committed, next-point, and 20-point values.
+
+Steady bonuses follow `F(p)=p/(p+10)` and milestones follow
+`B(p)=min(p,20)/20`. At 20 points, `F=2/3` and `B=1`:
+
+- **Vanguard:** Epic Fight armor negation `+6F` percentage points and attack
+  knockback `+0.20F`; impact `+0.60B` modifies the hit, not a guaranteed stagger.
+- **Sharpshooter:** bow spread and TaCZ gun dispersion each `−18F%`, gun recoil
+  `−12F%`; bow launch velocity `+8B%`. Gun and bow effects are separate.
+- **Artisan:** mining speed `+12F%`, Tinkers' item-use speed `+0.09F` native
+  units; block reach `+B` blocks.
+- **Trailblazer:** safe fall `+3F` blocks, swim speed `+15F%`, step height
+  `+0.40B` blocks; a full one-block step still needs 0.60 baseline height.
+- **Survivalist:** independently slow outward heat/cold drift `15F%`; Cold
+  Sweat's resolved safe interval expands by `−0.5B` freezing and `+0.5B`
+  burning native units. Neither benefit replaces temperature equipment or food.
+- **Spellcaster:** Ars max mana `+60F` and regeneration `+1.2F` per second;
+  Goety soul-cost reduction `6F%`, casting-time reduction `8F%`, and additive
+  range `+B`. Goety's actual range is integer-valued; a fraction alone does
+  not extend a zero-baseline spell. Mana and souls are not interchangeable.
+- **Skirmisher:** independent ParCool and Epic Fight stamina capacity `+12F%`
+  and recovery `+10F%` on **each** pool. Pools and action costs stay separate;
+  no fixed extra-dodge count is promised.
+- **Aerialist:** Tinkers' jump boost `+0.09F` native units, Epic Fight basic
+  air-attack stamina cost `−12F%` (2 → 1.84 at 20 without other modifiers),
+  and existing Air Slash damage modifier `1.5+0.30B` (1.8× at 20). No vanilla
+  crit, grounded-hit, or fall-protection bonus.
+
+These are bonuses on top of equipped/modded values, not replacements. The new
+Cold Sweat and Epic Fight hooks need disposable in-world verification before
+pack installation; source tests or server startup alone do not establish the
+promised outcomes. The one-pool stamina merger remains deferred.
+
 ### Prelude — Primitive Workshop
 
 Before the first Dimension Font, crafting follows three material steps. Handworked

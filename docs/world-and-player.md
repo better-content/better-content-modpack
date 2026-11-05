@@ -251,7 +251,7 @@ Systemic Salience is an exact identity language shared by three separate authori
 
 ### Canonical identity matrix
 
-Every row has exactly one representative in each authority. Aspect words appear in tooltips and supporting cues, not in the ordinary stat, food-group, or deposit names.
+The table describes the **currently installed pack JAR**. A separate RPG source candidate renames the Life categories, while Diet and ore identities stay unchanged; see [Life attributes — source candidate](progression.md#life-attributes--source-candidate-not-active-pack-gameplay). Aspect words appear in tooltips and supporting cues, not in the ordinary stat, food-group, or deposit names.
 
 | Aspect | Glyph | sRGB | RPG development | Diet identity | Ore identity |
 | --- | --- | --- | --- | --- | --- |
@@ -307,7 +307,7 @@ These owners already implement meaningful pauses at their own scopes. Keep ordin
 
 ### RPG development
 
-RPG allocations use `cap × points / (points + 20)`: twenty committed points reach half the cap, allocation cannot be refunded during the life, and death wipes the ledger. Each visible category is singular and mechanically coherent:
+**Installed-pack behavior, not the unreleased eight-build candidate:** RPG allocations use `cap × points / (points + 20)`: twenty committed points reach half the cap, allocation cannot be refunded during the life, and death wipes the ledger. Each visible category is singular and mechanically coherent:
 
 - Arms increases damaging impact and knockback.
 - Hands increases attack and item-use cadence.
@@ -317,6 +317,8 @@ RPG allocations use `cap × points / (points + 20)`: twenty committed points rea
 - Skin resists temperature and knockback.
 - Liver shortens harmful effects and preserves beneficial effects; it never grants health, healing, or combat recovery.
 - Eyes narrow arrow spread and gently increase arrow speed and effective range from the start; later guns gain recoil and dispersion control, while Goety spells gain range.
+
+The [approved source candidate](progression.md#life-attributes--source-candidate-not-active-pack-gameplay) replaces those eight IDs with eight builds and `p/(p+10)` steady scaling, but does **not** migrate allocations or change an installed pack/world merely by changing its source. Keep old worlds intact while the new native integrations await disposable in-world acceptance.
 
 Slice of Life: Carrot remains the sole owner of maximum-health progression.
 
