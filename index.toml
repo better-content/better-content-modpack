@@ -8174,7 +8174,7 @@ hash = "5fecb85c0830794ea4004eb041897b08938ebb5383670ada06a3647727ddcf36"
 
 [[files]]
 file = "kubejs/data/additionalweaponry/tinkering/tool_definitions/butcher_knife.json"
-hash = "eb802604ee4d09d8d3cc8f940db049fc00565725d02ae5ff516d25323212d314"
+hash = "bdf2ed76ae3f91861e69c0c7496d004c6473370e7f393c63feac8746d2183324"
 
 [[files]]
 file = "kubejs/data/additionalweaponry/tinkering/tool_definitions/cutlass.json"
@@ -13030,7 +13030,7 @@ hash = "6afebe5f88ee070b20522270ea1e390c691f06b09b1a004b322470d30c48bfe8"
 
 [[files]]
 file = "kubejs/data/tconstruct/tinkering/tool_definitions/cleaver.json"
-hash = "935d489f48e7a36951779ee37f26895cd686ad00278c1c58416855edf080298e"
+hash = "f141755c6fada52e89aa779a9a4dc6fd6ae398cc01c823f5385886746b060880"
 
 [[files]]
 file = "kubejs/data/tconstruct/tinkering/tool_definitions/crossbow.json"
@@ -13038,7 +13038,7 @@ hash = "944678422cc5155c416883614c283abd01916f7afa6543bee89c878f9850913e"
 
 [[files]]
 file = "kubejs/data/tconstruct/tinkering/tool_definitions/dagger.json"
-hash = "70cc1429f551c95b9d7ee920c182cc6fcaf6d175af2b2f22cc37456e289e7eec"
+hash = "1ea73a6a96b24958c52240463738faf383cda2dc5a5e21c6330636474a0d7330"
 
 [[files]]
 file = "kubejs/data/tconstruct/tinkering/tool_definitions/excavator.json"
@@ -13066,7 +13066,7 @@ hash = "6e0c0cb40ddd82b043ad2e6662b373065fc7c33ef18f83d9e7582d470f7dab8a"
 
 [[files]]
 file = "kubejs/data/tconstruct/tinkering/tool_definitions/minotaur_axe.json"
-hash = "ccb61ed1439259ad52fac152594bf9fa6cd08451b5841a213817911f9d6febaa"
+hash = "1895ac540b6139fe0a44df0f627019ba6673f38e58e8e15e704b93184100e007"
 
 [[files]]
 file = "kubejs/data/tconstruct/tinkering/tool_definitions/pickadze.json"
@@ -13090,7 +13090,7 @@ hash = "f89e132964b68435d80a5527e8be70b58390415917ed8a830b7e7c5a5444258f"
 
 [[files]]
 file = "kubejs/data/tconstruct/tinkering/tool_definitions/sword.json"
-hash = "d8e27b984d8ac73fb1618f4d6707fcfa710569a1586ecae675714f7dca1d4736"
+hash = "5ea8f4fb61b084b30de33abe1d63c00d8f14da4693a808fddf750cc910ff3954"
 
 [[files]]
 file = "kubejs/data/tconstruct/tinkering/tool_definitions/vein_hammer.json"
@@ -13218,7 +13218,7 @@ hash = "6423d1337f2709a95b351f6c6e0213e5ad857577eaf41a5d29a51aedc2b184a0"
 
 [[files]]
 file = "kubejs/data/tinkers_katanas/tinkering/tool_definitions/katana.json"
-hash = "08d111c16fd05b250bfb11d950d2e227b73c3a8705d826213ce9111b2b84e8f7"
+hash = "deeb95beb6b3f94270997cae4825e11900105ad363aa1c4d23bb0249aada3625"
 
 [[files]]
 file = "kubejs/data/tinkers_things/capabilities/weapons/amethyst_staff.json"
@@ -13290,15 +13290,15 @@ hash = "923761c9d70df31fc61e72bfb9058240134352d0e2f0cca762baaa9ab57a4e82"
 
 [[files]]
 file = "kubejs/data/tinkersweaponry/tinkering/tool_definitions/greatsword.json"
-hash = "5fbbd9892e625737d3cf6cf6a68bf8e2b0d0d36f16b0690c0e712c94ef1103aa"
+hash = "dce26d2d7c96e20990a8e8602f2cceb7db1b5340df329531b243d1bf112ba24e"
 
 [[files]]
 file = "kubejs/data/tinkersweaponry/tinkering/tool_definitions/lance.json"
-hash = "60db047bb8e9456312a1171871aec33c1514557c1e67d81759d655adf9ca33c8"
+hash = "3f4854e8bddd585526408e5acb3cc9484dc16bdebd848b62f0dfda18f1a0465a"
 
 [[files]]
 file = "kubejs/data/tinkersweaponry/tinkering/tool_definitions/pike.json"
-hash = "8f7a263bb835676a6ad8cdedb462ae87871332ebc45d46b17105dccc8ab4fee0"
+hash = "fce9ab3967f9ce617a31a16ff23b6caa4457d8ed9e197593edecf2d9b9cc5658"
 
 [[files]]
 file = "kubejs/data/trackwork/loot_tables/blocks/large_phys_track.json"
@@ -13415,6 +13415,14 @@ hash = "ef0a3b92f8a9ade25654fa92954123ec38a70ace6f8d75428cb2d5af0822d330"
 [[files]]
 file = "kubejs/data/unearthed/tags/blocks/regolith.json"
 hash = "84f8ef25744ab6338e8a756d0f945d109943358baf4fc9622d02833138afc39d"
+
+[[files]]
+file = "kubejs/data/unearthed/tags/items/gold_ores.json"
+hash = "d1d9748d33e25aa45cbfa920636af4ee54f450126bad4b3a8ef6c8e0eeb3c1db"
+
+[[files]]
+file = "kubejs/data/unearthed/tags/items/iron_ores.json"
+hash = "9769ff3f11b086dc329c504fa1327fbc4da6e9ddc51ffb2bc100321359c34076"
 
 [[files]]
 file = "kubejs/data/unearthed/tags/items/regolith_usable.json"
@@ -13942,7 +13950,7 @@ hash = "9f53c735e39cd1b3d089b5fb721ccc61a6a6c0627cb6ed1a4cda35d1cf3765fa"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__174_tacz_turrets_electrical_gate.js"
-hash = "84d18acb4dd13b24693be72e91c716bc05c0a9c45fcc79f962a5db26efc1b398"
+hash = "b9a7a6d58de232769582015a881e52ca53fe9e368eb71ee4bd5853369effdc22"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__63_fonts_hexerei_occultism_chalk.js"
@@ -14504,7 +14512,7 @@ hash = "52f61ef87c3baf78217f3997dc0bcae2766471430dfedeeb9d6f57ccd8d50b1a"
 
 [[files]]
 file = "mods/better-rpg-progression-1.0.1.jar"
-hash = "28f89cfc60666e832b62011abc05e9bd4ae4c661dfa9a79564c6d929a2edf4c2"
+hash = "206c49d52c749e979f4a52befe089a8b22ecbcc8b80c36929a29716db37754c5"
 
 [[files]]
 file = "mods/better-runtime-diagnostics-0.1.0.jar"
@@ -15696,7 +15704,7 @@ metafile = true
 
 [[files]]
 file = "options.txt"
-hash = "2e33476f7b8d446743f18781b474c032c74854d7365443055601e192c13d9bc9"
+hash = "9761ad89ed2f4c4285e24c86ec1662cf089d709216088d093e76300dac0ea1b5"
 
 [[files]]
 file = "recipe-policies.yml"

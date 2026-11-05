@@ -247,27 +247,28 @@ The recipe is authored at `kubejs/data/kubejs/recipes/malum/soulwood_growth_from
 
 ## Systemic Salience
 
-Systemic Salience is an exact identity language shared by three separate authorities: RPG Stats owns permanent Life development, Diet plus `better_survival_physiology` own temporary bodily state, and Realistic Ores owns geological deposits. The systems share meaning and presentation but never share state. TConstruct is intentionally outside this identity matrix; its materials keep their native behavior.
+Systemic Salience historically connected three separate authorities: RPG Stats owns permanent Life development, Diet plus `better_survival_physiology` own temporary bodily state, and Realistic Ores owns geological deposits. The staged RPG builds retain legacy aspect badge slots but have their own accents and mechanics; a shared slot no longer promises identical meaning or colour across systems. They never share state. TConstruct is outside this matrix; its materials keep their native behavior.
 
 ### Canonical identity matrix
 
-The table describes the **currently installed pack JAR**. A separate RPG source candidate renames the Life categories, while Diet and ore identities stay unchanged; see [Life attributes — source candidate](progression.md#life-attributes--source-candidate-not-active-pack-gameplay). Aspect words appear in tooltips and supporting cues, not in the ordinary stat, food-group, or deposit names.
+The table describes the **staged Build 51 candidate**, not a friends-world or gameplay-accepted release. RPG Life categories were renamed; Diet and ore identities are unchanged. See [Life attributes — staged candidate](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted). Aspect words appear in tooltips and supporting cues, not in the ordinary stat, food-group, or deposit names.
 
-| Aspect | Glyph | sRGB | RPG development | Diet identity | Ore identity |
+| Legacy aspect slot | Glyph | Diet/ore sRGB | Staged RPG build (accent sRGB) | Diet identity | Ore identity |
 | --- | --- | --- | --- | --- | --- |
-| Impact | ✦ | `#FF4055` | Arms | Proteins | Hotstone |
-| Tempo | » | `#00A985` | Hands | Sugar | Copper Bloom |
-| Work | ⚒ | `#F0E2C5` | Fingers | Grains | Tin Quartz |
-| Mobility | ➜ | `#E0B01F` | Lungs | Fruits | Brassroot |
-| Endurance | ∞ | `#52606A` | Blood | Vegetables | Coal Measures |
-| Robustness | ◆ | `#D85C32` | Skin | Spice | Ironstone |
-| Renewal | ✚ | `#6CCAF0` | Liver | Dairy | Evaporite Beds |
-| Control | ⊕ | `#8E5BB7` | Eyes | Alcohol | Black Shale |
+| Impact | ✦ | `#FF4055` | Vanguard (`#FF4055`) | Proteins | Hotstone |
+| Tempo | » | `#00A985` | Sharpshooter (`#8E5BB7`) | Sugar | Copper Bloom |
+| Work | ⚒ | `#F0E2C5` | Artisan (`#F0E2C5`) | Grains | Tin Quartz |
+| Mobility | ➜ | `#E0B01F` | Trailblazer (`#E0B01F`) | Fruits | Brassroot |
+| Endurance | ∞ | `#52606A` | Survivalist (`#AF6A2F`) | Vegetables | Coal Measures |
+| Robustness | ◆ | `#D85C32` | Spellcaster (`#6CCAF0`) | Spice | Ironstone |
+| Renewal | ✚ | `#6CCAF0` | Skirmisher (`#52606A`) | Dairy | Evaporite Beds |
+| Control | ⊕ | `#8E5BB7` | Aerialist (`#00A985`) | Alcohol | Black Shale |
 
-The shipped ore identity palette is authoritative and is shared by the RPG, bodily-state,
-and Threads aspect definitions. Glyph, name, value structure, morphology, and actual
-behavior remain mandatory parallel cues; hue is never authoritative alone. Ore morphology
-and existing artwork are preserved rather than recolored to a separate documentation palette.
+The shipped ore and Diet aspect palette is unchanged; RPG build accents are independent.
+The retained glyph and badge slot describe asset continuity, **not** an equivalence of
+bonuses or an automatic alignment of RPG build colour to the adjacent Diet/ore identity.
+Glyph, name, morphology, and actual behavior remain mandatory cues; hue alone is not
+authoritative. Ore morphology and existing artwork are preserved.
 
 ### Sensory grammar
 
@@ -284,7 +285,7 @@ Every identity has one recurring motion and sound phrase. These cues play only a
 | Renewal | rising spiral and bloom | ascending chimes | Evaporite crystal bloom |
 | Control | converging points | ticks resolving to a ping | Black Shale convergence |
 
-Systemic Salience and Realistic Ores share canonical byte-identical 18×18 aspect badges. RPG Stats uses distinct 18×18 body-part badges in the same palette and keeps the matching aspect cues. Audio is a semantic family rather than a shared file: each aspect keeps the phrase in the table while RPG allocation UI, nutrition and systemic bodily cues, and Realistic Ores discovery use context-specific mixes. Tempo may add an event-specific broken-cadence variant without becoming a ninth identity. Realistic Ores reuses the badge strip while its world identity remains morphology-first dirty geology rather than an aspect-colour wash.
+Systemic Salience and Realistic Ores share canonical byte-identical 18×18 aspect badges. RPG Stats retains its distinct 18×18 legacy badge-art slots for binary/asset compatibility, now mapped to the eight build names; its new colours and mechanics are independent of the adjacent Diet/ore column. Audio is a semantic family rather than a shared file: each aspect keeps the historical phrase in the table while RPG allocation UI, nutrition and systemic bodily cues, and Realistic Ores discovery use context-specific mixes. Tempo may add an event-specific broken-cadence variant without becoming a ninth identity. Realistic Ores reuses the badge strip while its world identity remains morphology-first dirty geology rather than an aspect-colour wash.
 
 ### Teaching surfaces
 
@@ -307,18 +308,7 @@ These owners already implement meaningful pauses at their own scopes. Keep ordin
 
 ### RPG development
 
-**Installed-pack behavior, not the unreleased eight-build candidate:** RPG allocations use `cap × points / (points + 20)`: twenty committed points reach half the cap, allocation cannot be refunded during the life, and death wipes the ledger. Each visible category is singular and mechanically coherent:
-
-- Arms increases damaging impact and knockback.
-- Hands increases attack and item-use cadence.
-- Fingers increases productive mining speed and reach.
-- Lungs increases movement, swimming, step capability, and underwater air capacity; 20 points extend the base 15-second reserve to 22.5 seconds.
-- Blood conserves hunger, thirst, and stamina.
-- Skin resists temperature and knockback.
-- Liver shortens harmful effects and preserves beneficial effects; it never grants health, healing, or combat recovery.
-- Eyes narrow arrow spread and gently increase arrow speed and effective range from the start; later guns gain recoil and dispersion control, while Goety spells gain range.
-
-The [approved source candidate](progression.md#life-attributes--source-candidate-not-active-pack-gameplay) replaces those eight IDs with eight builds and `p/(p+10)` steady scaling, but does **not** migrate allocations or change an installed pack/world merely by changing its source. Keep old worlds intact while the new native integrations await disposable in-world acceptance.
+**Staged Build 51 candidate, not gameplay-accepted:** RPG allocations use `cap × p/(p+10)` for steady bonuses and capped 20-point landmarks. Allocations cannot be refunded during the life, and death wipes the ledger. The eight new IDs are Vanguard, Sharpshooter, Artisan, Trailblazer, Survivalist, Spellcaster, Skirmisher and Aerialist. See the [exact proposed effects and separate resource pools](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted). Old body-part allocations and auto-plans do **not** migrate; preserve existing worlds and test only a disposable fresh world. Build 51 Smoke establishes a real client joined and the world saved, not that the new combat or climate effects work.
 
 Slice of Life: Carrot remains the sole owner of maximum-health progression.
 

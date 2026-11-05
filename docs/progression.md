@@ -12,11 +12,13 @@ Progression is communicated by executable recipes, apparatus, native guides,
 item-hover annotations, loading lessons, contextual Threads, and event or world
 feedback. Learning surfaces do not impose an objective graph or grant quest rewards.
 
-### Life attributes — source candidate, not active pack gameplay
+### Life attributes — staged pack candidate, not gameplay-accepted
 
-The separately owned RPG mod now has an **unreleased candidate** for eight per-life
-builds. This is not evidence of pinned-mod combat/thermal behavior or a claim that
-the currently installed pack JAR contains them. Each new experience-level peak
+The separately owned RPG mod now has a **staged, unreleased candidate** for eight per-life
+builds. The exact RPG JAR is in the local pack inputs and in Build 51's packaged
+client/server pair; its fresh-world real-client Smoke passed, but Smoke did not
+exercise pinned-mod combat, temperature or screen interactions. Do not mistake
+this for friends' playtesting or gameplay acceptance. Each new experience-level peak
 still awards one Life point; committed points are lost on final death. Old
 body-part IDs and auto-plans are **not** migrated: keep existing worlds untouched,
 and use a freshly created world for the eventual friends' playtest. The existing
@@ -49,9 +51,10 @@ Steady bonuses follow `F(p)=p/(p+10)` and milestones follow
   crit, grounded-hit, or fall-protection bonus.
 
 These are bonuses on top of equipped/modded values, not replacements. The new
-Cold Sweat and Epic Fight hooks need disposable in-world verification before
-pack installation; source tests or server startup alone do not establish the
-promised outcomes. The one-pool stamina merger remains deferred.
+Cold Sweat and Epic Fight hooks still need disposable in-world verification before
+friends-world deployment or a gameplay-accepted release; native GameTests and
+Build 51 Smoke do not establish the promised outcomes. The one-pool stamina
+merger remains deferred.
 
 ### Prelude — Primitive Workshop
 
