@@ -15,9 +15,11 @@ feedback. Learning surfaces do not impose an objective graph or grant quest rewa
 ### Life attributes — staged pack candidate, not gameplay-accepted
 
 The separately owned RPG mod now has a **staged, unreleased candidate** for eight per-life
-builds. The exact RPG JAR is in the local pack inputs and in Build 51's packaged
-client/server pair; its fresh-world real-client Smoke passed, but Smoke did not
-exercise pinned-mod combat, temperature or screen interactions. Do not mistake
+builds. The exact RPG JAR is in the local pack inputs and Build 54's packaged
+client/server pair. All 54 active custom mods were freshly built from local source
+for Build 52; the changed cave source was rebuilt for Build 53, and Build 54 reused
+those unchanged staged JARs. Its fresh-world real-client Smoke passed, but Smoke
+did not exercise pinned-mod combat, temperature or screen interactions. Do not mistake
 this for friends' playtesting or gameplay acceptance. Each new experience-level peak
 still awards one Life point; committed points are lost on final death. Old
 body-part IDs and auto-plans are **not** migrated: keep existing worlds untouched,
@@ -53,7 +55,7 @@ Steady bonuses follow `F(p)=p/(p+10)` and milestones follow
 These are bonuses on top of equipped/modded values, not replacements. The new
 Cold Sweat and Epic Fight hooks still need disposable in-world verification before
 friends-world deployment or a gameplay-accepted release; native GameTests and
-Build 51 Smoke do not establish the promised outcomes. The one-pool stamina
+Build 54 Smoke do not establish the promised outcomes. The one-pool stamina
 merger remains deferred.
 
 ### Prelude — Primitive Workshop

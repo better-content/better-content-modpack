@@ -251,7 +251,7 @@ Systemic Salience historically connected three separate authorities: RPG Stats o
 
 ### Canonical identity matrix
 
-The table describes the **staged Build 51 candidate**, not a friends-world or gameplay-accepted release. RPG Life categories were renamed; Diet and ore identities are unchanged. See [Life attributes — staged candidate](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted). Aspect words appear in tooltips and supporting cues, not in the ordinary stat, food-group, or deposit names.
+The table describes the **staged Build 54 candidate**, not a friends-world or gameplay-accepted release. RPG Life categories were renamed; Diet and ore identities are unchanged. See [Life attributes — staged candidate](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted). Aspect words appear in tooltips and supporting cues, not in the ordinary stat, food-group, or deposit names.
 
 | Legacy aspect slot | Glyph | Diet/ore sRGB | Staged RPG build (accent sRGB) | Diet identity | Ore identity |
 | --- | --- | --- | --- | --- | --- |
@@ -308,7 +308,7 @@ These owners already implement meaningful pauses at their own scopes. Keep ordin
 
 ### RPG development
 
-**Staged Build 51 candidate, not gameplay-accepted:** RPG allocations use `cap × p/(p+10)` for steady bonuses and capped 20-point landmarks. Allocations cannot be refunded during the life, and death wipes the ledger. The eight new IDs are Vanguard, Sharpshooter, Artisan, Trailblazer, Survivalist, Spellcaster, Skirmisher and Aerialist. See the [exact proposed effects and separate resource pools](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted). Old body-part allocations and auto-plans do **not** migrate; preserve existing worlds and test only a disposable fresh world. Build 51 Smoke establishes a real client joined and the world saved, not that the new combat or climate effects work.
+**Staged Build 54 candidate, not gameplay-accepted:** RPG allocations use `cap × p/(p+10)` for steady bonuses and capped 20-point landmarks. Allocations cannot be refunded during the life, and death wipes the ledger. The eight new IDs are Vanguard, Sharpshooter, Artisan, Trailblazer, Survivalist, Spellcaster, Skirmisher and Aerialist. See the [exact proposed effects and separate resource pools](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted). Old body-part allocations and auto-plans do **not** migrate; preserve existing worlds and test only a disposable fresh world. Build 54 Smoke establishes a real client joined and the world saved, not that the new combat or climate effects work.
 
 Slice of Life: Carrot remains the sole owner of maximum-health progression.
 
