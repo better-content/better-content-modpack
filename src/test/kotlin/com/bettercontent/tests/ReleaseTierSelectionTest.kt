@@ -14,17 +14,17 @@ class ReleaseTierSelectionTest {
     @TempDir lateinit var directory: Path
     private val mapper = jacksonObjectMapper()
 
-    @Test fun defaultAndEachOrderedCombinationAreExplicitAndSoakNeedsDuration() {
+    @Test fun defaultAndEachOrderedCombinationAreExplicitAndObsoleteSoakIsRejected() {
         assertEquals(emptyList<String>(), ReleaseTierSelection.parse("none", 0).tiers)
         assertEquals(listOf("smoke"), ReleaseTierSelection.parse("smoke", 0).tiers)
-        assertEquals(listOf("soak", "tele-soak"), ReleaseTierSelection.parse("soak,tele-soak", 30).tiers)
-        assertEquals(listOf("smoke", "soak", "tele-soak"), ReleaseTierSelection.parse("smoke,soak,tele-soak", 60).tiers)
+        assertEquals(listOf("overworld-tele-soak", "tele-soak"), ReleaseTierSelection.parse("overworld-tele-soak,tele-soak", 0).tiers)
+        assertEquals(listOf("smoke", "overworld-tele-soak", "tele-soak"), ReleaseTierSelection.parse("smoke,overworld-tele-soak,tele-soak", 0).tiers)
         listOf("", "none,smoke", "smoke,smoke", "tele-soak,smoke", "skip", "soak,").forEach {
             assertThrows(IllegalArgumentException::class.java) { ReleaseTierSelection.parse(it, 0) }
         }
         assertThrows(IllegalArgumentException::class.java) { ReleaseTierSelection.parse("soak", 0) }
         assertThrows(IllegalArgumentException::class.java) { ReleaseTierSelection.parse("smoke", 30) }
-        assertThrows(IllegalArgumentException::class.java) { ReleaseTierSelection.parse("soak", 10081) }
+        assertThrows(IllegalArgumentException::class.java) { ReleaseTierSelection.parse("overworld-tele-soak", 60) }
     }
 
     private fun pair(): CandidatePair {
@@ -57,7 +57,7 @@ class ReleaseTierSelectionTest {
         ReleaseMarkers.ready(pair, "new-run", smoke, mapOf("smoke" to receipt))
         val ready = mapper.readTree(directory.resolve("ready.json").toFile())
         assertEquals(Hashes.sha256(receipt), ready.path("tiers").path("smoke").path("receipt").path("sha256").asText())
-        assertEquals("not_run", ready.path("tiers").path("soak").path("status").asText())
+        assertEquals("not_run", ready.path("tiers").path("overworld-tele-soak").path("status").asText())
         assertEquals("not_run", ready.path("tiers").path("tele-soak").path("status").asText())
         assertEquals("not_run", ready.path("tiers").path("visual").path("status").asText())
         assertThrows(IllegalArgumentException::class.java) { ReleaseMarkers.ready(pair, "new-run", smoke, mapOf("smoke" to receipt)) }
@@ -84,23 +84,23 @@ class ReleaseTierSelectionTest {
         val pair = pair()
         val source = Files.writeString(directory.resolve("provenance.json"), "qualified")
         val inventory = Files.writeString(directory.resolve("archive-members.json"), "inventory")
-        val selected = ReleaseTierSelection.parse("smoke,soak", 30)
+        val selected = ReleaseTierSelection.parse("smoke,overworld-tele-soak", 0)
         ReleaseMarkers.packageReady(pair, "new-run", source, inventory, selected)
         val smoke = Files.writeString(directory.resolve("smoke.json"), "passed")
         Files.writeString(source, "mutated provenance")
         assertThrows(IllegalArgumentException::class.java) {
-            ReleaseMarkers.ready(pair, "new-run", selected, mapOf("smoke" to smoke, "soak" to
-                Files.writeString(directory.resolve("soak.json"), "passed")))
+            ReleaseMarkers.ready(pair, "new-run", selected, mapOf("smoke" to smoke, "overworld-tele-soak" to
+                Files.writeString(directory.resolve("overworld-tele-soak.json"), "passed")))
         }
         Files.writeString(source, "qualified")
         assertThrows(IllegalArgumentException::class.java) {
             ReleaseMarkers.ready(pair, "new-run", selected, mapOf("smoke" to smoke))
         }
         assertFalse(Files.exists(directory.resolve("ready.json")))
-        val soak = Files.writeString(directory.resolve("soak.json"), "passed")
+        val overworld = Files.writeString(directory.resolve("overworld-tele-soak.json"), "passed")
         Files.writeString(pair.client, "mutated")
         assertThrows(IllegalArgumentException::class.java) {
-            ReleaseMarkers.ready(pair, "new-run", selected, mapOf("smoke" to smoke, "soak" to soak))
+            ReleaseMarkers.ready(pair, "new-run", selected, mapOf("smoke" to smoke, "overworld-tele-soak" to overworld))
         }
         assertFalse(Files.exists(directory.resolve("ready.json")))
     }

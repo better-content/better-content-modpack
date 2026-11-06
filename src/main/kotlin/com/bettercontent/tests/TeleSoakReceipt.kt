@@ -1,7 +1,7 @@
 package com.bettercontent.tests
 
 /** A projection of the append-only Tele Soak log; release must independently verify the raw events. */
-internal class TeleSoakReceipt {
+internal class TeleSoakReceipt(private val overworldOnly: Boolean = false) {
     private var dimensions: List<String> = emptyList()
     private val dwell = linkedMapOf<String, Double>()
     private val recovered = linkedMapOf<String, MutableSet<Int>>()
@@ -59,12 +59,22 @@ internal class TeleSoakReceipt {
                 val circuit = (fields["circuit"] as? Number)?.toInt() ?: error("circuit lacks index")
                 check(completedCircuits.add(circuit)) { "duplicate circuit $circuit" }
             }
-            "tele_soak_complete" -> { check(!complete) { "duplicate Tele Soak completion" }; complete = true }
+            "tele_soak_complete", "overworld_tele_soak_complete" -> {
+                check(!complete && (type == "overworld_tele_soak_complete") == overworldOnly) {
+                    "duplicate or wrong-profile Tele Soak completion"
+                }
+                complete = true
+            }
         }
     }
 
     fun result(success: Boolean): Map<String, Any> {
-        val scenarioCompleted = success && complete && dimensions.isNotEmpty() &&
+        val scenarioCompleted = if (overworldOnly) success && complete && dimensions == listOf("minecraft:overworld") &&
+            dwell["minecraft:overworld"]?.let { it.isFinite() && it >= 3600.0 } == true &&
+            recovered["minecraft:overworld"] == setOf(0) &&
+            relocations["minecraft:overworld"] == (1..10).map { 0 to it }.toSet() &&
+            landedChunks["minecraft:overworld"]?.size == 11 && completedCircuits.isEmpty()
+        else success && complete && dimensions.isNotEmpty() &&
             dimensions.size == dimensions.toSet().size && dimensions.toSet() == dwell.keys &&
             dwell.values.all { it.isFinite() && it >= 300.0 } && completedCircuits == setOf(1, 2, 3) &&
             recovered.keys == dimensions.toSet() && recovered.values.all { it == setOf(0, 1, 2, 3) } &&
@@ -74,12 +84,15 @@ internal class TeleSoakReceipt {
         val results = dimensions.map { dimension ->
             mapOf("dimension" to dimension, "dwell_seconds" to (dwell[dimension] ?: 0.0),
                 "completed_circuits" to (1..3).filter { it in (recovered[dimension] ?: emptySet()) && it in completedCircuits },
-                "tps_verified" to (recovered[dimension] == setOf(0, 1, 2, 3)),
+                "tps_verified" to (recovered[dimension] == if (overworldOnly) setOf(0) else setOf(0, 1, 2, 3)),
                 "fresh_relocations_verified" to (relocations[dimension] ==
-                    ((1..10).map { 0 to it } + (1..3).map { it to 1 }).toSet() &&
-                    landedChunks[dimension]?.size == 17))
+                    (if (overworldOnly) (1..10).map { 0 to it }.toSet()
+                    else ((1..10).map { 0 to it } + (1..3).map { it to 1 }).toSet()) &&
+                    landedChunks[dimension]?.size == if (overworldOnly) 11 else 17))
         }
-        return mapOf("scenario_completed" to scenarioCompleted, "dwell_seconds_per_dimension" to 300,
-            "circuits" to 3, "registered_dimensions" to dimensions, "dimension_results" to results)
+        return mapOf("scenario_completed" to scenarioCompleted,
+            "dwell_seconds_per_dimension" to if (overworldOnly) 3600 else 300,
+            "circuits" to if (overworldOnly) 0 else 3, "registered_dimensions" to dimensions,
+            "dimension_results" to results)
     }
 }

@@ -15,13 +15,16 @@ import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
 fun main(args: Array<String>) {
-    require(args.size == 6) { "usage: PackSession ROOT smoke|soak|tele-soak MINUTES CLIENT_ZIP SERVER_ZIP DIAGNOSTIC_SOURCE_OR_EMPTY" }
+    require(args.size == 6) { "usage: PackSession ROOT smoke|overworld-tele-soak|tele-soak MINUTES CLIENT_ZIP SERVER_ZIP DIAGNOSTIC_SOURCE_OR_EMPTY" }
     require(!System.getenv("BC_PACK_TEST_LOCK_TOKEN").isNullOrBlank()) { "invoke ./test.main.kts so the session mutex is held" }
     val root = Path.of(args[0]).toAbsolutePath().normalize()
-    val tier = SessionTier.entries.singleOrNull { it.selector == args[1] } ?: error("select smoke, soak or tele-soak")
+    val tier = SessionTier.entries.singleOrNull { it.selector == args[1] } ?: error("select smoke, overworld-tele-soak or tele-soak")
     val request = SessionRequest(tier, args[2].toLong())
     require(args[3].isBlank() == args[4].isBlank()) { "supply both artifact paths" }
     val pair = if (args[3].isBlank()) CandidateLocator.locate(root) else CandidateLocator.locate(Path.of(args[3]), Path.of(args[4]))
+    require(tier != SessionTier.OVERWORLD_TELE_SOAK || args[5].isBlank()) {
+        "one-hour Overworld Tele Soak must start from the beginning; diagnostic replay is unsupported"
+    }
     val replay = args[5].takeIf(String::isNotBlank)?.let { loadDiagnosticReplay(root, tier, Path.of(it)) }
     val runId = System.getenv("BC_TEST_RUN_ID")?.takeIf(String::isNotBlank)
         ?: DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").withZone(ZoneOffset.UTC).format(Instant.now()) + "-" + ProcessHandle.current().pid()
@@ -32,7 +35,7 @@ fun main(args: Array<String>) {
         "acceptance_eligible" to false)) }
     val session = PackSession(evidence, request, replay)
     val driver: SessionDriver = session
-    require(tier != SessionTier.TELE_SOAK || driver is TeleSoakDriver) {
+    require(tier == SessionTier.SMOKE || driver is TeleSoakDriver) {
         "Tele Soak requires actual instrumented server/client dimension and TPS probes; no world was created"
     }
     var failure: Throwable? = null
@@ -133,14 +136,14 @@ private class PackSession(private val evidence: SessionEvidence, private val req
         // Fresh remote chunks in modded Overworld can generate faster than a
         // 9x9 server view can finish; a 5x5 view still loads fresh terrain on
         // every move without pre-generating it or relaxing the TPS threshold.
-        val distance = if (request.tier == SessionTier.TELE_SOAK) "2" else "4"
+        val distance = if (request.tier != SessionTier.SMOKE) "2" else "4"
         values.setProperty("view-distance", distance)
         values.setProperty("simulation-distance", distance)
         Files.newOutputStream(props).use { values.store(it, "Disposable session profile; packaged inputs remain unchanged") }
-        val serverHeap = if (request.tier == SessionTier.TELE_SOAK) "-Xms4G\n-Xmx10G\n"
+        val serverHeap = if (request.tier != SessionTier.SMOKE) "-Xms4G\n-Xmx10G\n"
             else "-Xms1G\n-Xmx6G\n"
         serverRoot.resolve("user_jvm_args.txt").writeText(serverHeap + "-XX:+UseG1GC\n-Dfile.encoding=UTF-8\n" +
-            if (request.tier == SessionTier.TELE_SOAK)
+            if (request.tier != SessionTier.SMOKE)
                 "-Dbc.pack_test.debug=true\n-Xlog:gc*:file=tele-soak-gc.log:time,uptime,level,tags:filecount=3,filesize=10m\n"
             else "")
         val backups = serverRoot.resolve("config/ftbbackups2.json")
@@ -152,7 +155,7 @@ private class PackSession(private val evidence: SessionEvidence, private val req
         Commands.run(listOf("xauth", "-f", authority.toString(), "add", displayAddress, "MIT-MAGIC-COOKIE-1", UUID.randomUUID().toString().replace("-", "")),
             fixture, evidence.directory.resolve("xauth.log"))
         evidence.event("prepared", mapOf("fresh_world" to true, "server_port" to port,
-            "profile" to "loopback offline authentication, server distances 4 (Tele Soak 2), client render 4/simulation 5, software-rendered client; Tele Soak server heap 4-10 GiB and all client heaps 2-8 GiB; no feature scenarios",
+            "profile" to "loopback offline authentication, server distances 4 (both Tele Soaks 2), client render 4/simulation 5, software-rendered client; Tele Soak server heap 4-10 GiB and all client heaps 2-8 GiB; no feature scenarios",
             "requested_connected_seconds" to request.connectedDuration.seconds,
             "diagnostic_remaining_seconds" to replay?.remainingSeconds(request)))
     }

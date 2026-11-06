@@ -32,5 +32,9 @@ class TeleSoakMotionGateTest {
             validateTeleSoakEvents(events, listOf(dimension))
         }
         assertTrue(failure.message!!.contains("fresh dimension landings") && failure.message!!.contains("remote relocations"))
+        val overworld = root.resolve("overworld-stationary-events.jsonl")
+        Files.writeString(overworld, lines.filterNot { it.contains("tele_soak_complete") }.joinToString("\n", postfix = "\n") +
+            """{"type":"overworld_tele_soak_complete","time":"$time","dimension_count":1,"dwell_seconds":3600,"fresh_relocations":10}""" + "\n")
+        assertThrows(RuntimeException::class.java) { validateOverworldTeleSoakEvents(overworld) }
     }
 }

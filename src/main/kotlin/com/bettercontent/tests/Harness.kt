@@ -103,7 +103,9 @@ class SessionEvidence(val root: Path, val runId: String, val tier: String, val p
     val directory = root.resolve("generated/test-evidence/$runId/$tier${if (diagnostic) "-diagnostic" else ""}")
     val fixture = directory.resolve("fixture")
     private val started = Instant.now()
-    private val teleSoak = if (!diagnostic && tier == SessionTier.TELE_SOAK.selector) TeleSoakReceipt() else null
+    private val teleSoak = if (!diagnostic && tier in setOf(SessionTier.TELE_SOAK.selector,
+            SessionTier.OVERWORLD_TELE_SOAK.selector))
+        TeleSoakReceipt(overworldOnly = tier == SessionTier.OVERWORLD_TELE_SOAK.selector) else null
 
     init {
         require(runId.matches(Regex("[A-Za-z0-9][A-Za-z0-9_.-]{0,127}"))) { "unsafe run ID" }
@@ -125,7 +127,7 @@ class SessionEvidence(val root: Path, val runId: String, val tier: String, val p
 
     fun finish(failure: Throwable?) {
         val incomplete = if (failure == null && teleSoak?.result(true)?.get("scenario_completed") == false)
-            IllegalStateException("Tele Soak did not complete every dimension and three circuits") else null
+            IllegalStateException("Tele Soak did not complete its required itinerary") else null
         val actualFailure = failure ?: incomplete
         event("session_finished", mapOf("success" to (actualFailure == null && !diagnostic),
             "diagnostic_complete" to (actualFailure == null && diagnostic), "failure" to actualFailure?.stackTraceToString()))

@@ -38,7 +38,9 @@ internal val TELE_SOAK_DIMENSION_BLACKLIST = setOf("minecraft:the_end", "rats:ra
 /** Every dimension has ten fresh 10k-block relocations during its responsive dwell.
  * Each relocation has its own 30s TPS stabilization within a 120s deadline; recovery
  * can extend the dwell, but no completed relocation can be omitted to shorten it. */
-internal fun runTeleSoak(driver: TeleSoakDriver, clock: SessionClock, replay: DiagnosticReplay? = null) {
+internal fun runTeleSoak(driver: TeleSoakDriver, clock: SessionClock, replay: DiagnosticReplay? = null,
+    overworldOnly: Boolean = false) {
+    require(!overworldOnly || replay == null) { "one-hour Overworld Tele Soak cannot replay a partial hour" }
     var nextHeartbeat = clock.nanos() + HEARTBEAT
     fun maintainConnection() {
         driver.ensureConnected()
@@ -52,7 +54,8 @@ internal fun runTeleSoak(driver: TeleSoakDriver, clock: SessionClock, replay: Di
         "minecraft:overworld" in registered && registered.all(DIMENSION_ID::matches)) {
         "invalid or incomplete live dimension roster: $registered"
     }
-    val dimensions = registered.filterNot { it in TELE_SOAK_DIMENSION_BLACKLIST }.sortedDescending().let { discovered ->
+    val dimensions = (if (overworldOnly) listOf("minecraft:overworld")
+        else registered.filterNot { it in TELE_SOAK_DIMENSION_BLACKLIST }.sortedDescending()).let { discovered ->
         replay?.roster?.let { previous ->
             require(previous.size == discovered.size && previous.toSet() == discovered.toSet()) {
                 "diagnostic replay roster changed; skipped dimensions cannot be trusted"
@@ -62,7 +65,7 @@ internal fun runTeleSoak(driver: TeleSoakDriver, clock: SessionClock, replay: Di
     }
     driver.teleSoakEvent("dimension_roster", mapOf("dimensions" to dimensions, "count" to dimensions.size,
         "registered_dimensions" to registered.sorted(),
-        "excluded_dimensions" to registered.filter { it in TELE_SOAK_DIMENSION_BLACKLIST }.sorted()))
+        "excluded_dimensions" to registered.filter { it !in dimensions }.sorted()))
     // Register destinations without generating or pre-loading remote target chunks.
     dimensions.forEach { driver.prepareLanding(it, ::maintainConnection) }
     fun tick(dimension: String) {
@@ -120,10 +123,12 @@ internal fun runTeleSoak(driver: TeleSoakDriver, clock: SessionClock, replay: Di
     fun dwell(dimension: String) {
         visit(dimension, circuit = 0)
         val from = clock.nanos()
-        driver.teleSoakEvent("dwell_started", mapOf("dimension" to dimension, "required_seconds" to 300,
+        val duration = if (overworldOnly) Duration.ofHours(1).toNanos() else DWELL
+        val interval = if (overworldOnly) Duration.ofMinutes(6).toNanos() else RELOCATION_INTERVAL
+        driver.teleSoakEvent("dwell_started", mapOf("dimension" to dimension, "required_seconds" to duration / SECOND,
             "required_fresh_relocations" to DWELL_RELOCATIONS))
         (1..DWELL_RELOCATIONS).forEach { relocation ->
-            val next = from + relocation * RELOCATION_INTERVAL
+            val next = from + relocation * interval
             while (clock.nanos() < next) {
                 tick(dimension)
                 val remaining = next - clock.nanos()
@@ -132,7 +137,7 @@ internal fun runTeleSoak(driver: TeleSoakDriver, clock: SessionClock, replay: Di
             visit(dimension, circuit = 0, relocation = relocation)
         }
         tick(dimension)
-        check(clock.nanos() - from >= DWELL) { "ten relocations did not cover the five-minute dwell" }
+        check(clock.nanos() - from >= duration) { "ten relocations did not cover the required dwell" }
         driver.teleSoakEvent("dwell_completed", mapOf("dimension" to dimension,
             "actual_seconds" to (clock.nanos() - from) / 1e9, "fresh_relocations" to DWELL_RELOCATIONS))
     }
@@ -144,6 +149,19 @@ internal fun runTeleSoak(driver: TeleSoakDriver, clock: SessionClock, replay: Di
         cursor?.let { dimensions.dropWhile { dimension -> dimension != it.dimension } } ?: dimensions
     check(cursor == null || cursor.circuit > 0 || dwellRoute.isNotEmpty()) { "missing diagnostic dwell checkpoint" }
     dwellRoute.forEach(::dwell)
+    if (overworldOnly) {
+        check(dimensions == listOf("minecraft:overworld")) {
+            "Overworld-only Tele Soak must complete its own fresh one-hour itinerary"
+        }
+        check(driver.registeredDimensions(::maintainConnection).toSet() == registered.toSet()) {
+            "live dimension roster changed during Overworld Tele Soak"
+        }
+        driver.ensureConnected()
+        driver.heartbeat()
+        driver.teleSoakEvent("overworld_tele_soak_complete", mapOf("dimension_count" to 1,
+            "dwell_seconds" to 3600, "fresh_relocations" to DWELL_RELOCATIONS))
+        return
+    }
     // Distinct orders for three or more destinations; every circuit visits the complete roster.
     val routes = listOf(dimensions.asReversed(), dimensions.drop(1) + dimensions.first(),
         dimensions.asReversed().drop(1) + dimensions.last())

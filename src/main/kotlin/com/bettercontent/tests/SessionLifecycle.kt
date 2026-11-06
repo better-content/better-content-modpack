@@ -2,15 +2,15 @@ package com.bettercontent.tests
 
 import java.time.Duration
 
-enum class SessionTier(val selector: String) { SMOKE("smoke"), SOAK("soak"), TELE_SOAK("tele-soak") }
+enum class SessionTier(val selector: String) {
+    SMOKE("smoke"), OVERWORLD_TELE_SOAK("overworld-tele-soak"), TELE_SOAK("tele-soak")
+}
 
 data class SessionRequest(val tier: SessionTier, val minutes: Long = 0) {
     init {
-        require((tier != SessionTier.SOAK && minutes == 0L) || (tier == SessionTier.SOAK && minutes in 1..10080)) {
-            "Smoke/Tele Soak take no --minutes; Soak requires --minutes 1..10080"
-        }
+        require(minutes == 0L) { "runtime tiers have fixed durations; --minutes is unsupported" }
     }
-    val connectedDuration: Duration get() = Duration.ofMinutes(minutes)
+    val connectedDuration: Duration get() = if (tier == SessionTier.OVERWORLD_TELE_SOAK) Duration.ofHours(1) else Duration.ZERO
 }
 
 interface SessionDriver {
@@ -44,32 +44,15 @@ internal fun runLifecycle(request: SessionRequest, driver: SessionDriver, clock:
     driver.connectClient()
     driver.awaitClientJoined()
     driver.heartbeat()
-    if (request.tier == SessionTier.TELE_SOAK) {
+    if (request.tier != SessionTier.SMOKE) {
         runTeleSoak(driver as? TeleSoakDriver ?: error("Tele Soak requires an instrumented real-client driver"),
-            clock, replay)
+            clock, replay, overworldOnly = request.tier == SessionTier.OVERWORLD_TELE_SOAK)
         driver.disconnectClient()
         driver.saveAndStopServer()
         driver.validate()
         return
     }
-    // Loading/preparation and attempted login never count toward Soak.
-    val verifiedJoin = clock.nanos()
-    val remaining = replay?.remainingSeconds(request) ?: request.connectedDuration.seconds
-    if (replay != null) driver.let { (it as? TeleSoakDriver)?.teleSoakEvent("diagnostic_connected_seconds",
-        mapOf("remaining" to remaining, "previously_observed" to replay.completedConnectedSeconds,
-            "acceptance_eligible" to false)) }
-    val deadline = verifiedJoin + Duration.ofSeconds(remaining).toNanos()
-    var nextHeartbeat = verifiedJoin + Duration.ofSeconds(15).toNanos()
-    while (clock.nanos() < deadline) {
-        driver.ensureConnected()
-        val remaining = deadline - clock.nanos()
-        if (remaining > 0) clock.sleep(Duration.ofNanos(minOf(remaining, Duration.ofSeconds(1).toNanos())))
-        driver.ensureConnected()
-        if (clock.nanos() >= nextHeartbeat || clock.nanos() >= deadline) {
-            driver.heartbeat()
-            nextHeartbeat = clock.nanos() + Duration.ofSeconds(15).toNanos()
-        }
-    }
+    // Smoke has no dwell. A diagnostic Smoke still starts a fresh lifecycle.
     driver.ensureConnected()
     driver.disconnectClient()
     driver.saveAndStopServer()

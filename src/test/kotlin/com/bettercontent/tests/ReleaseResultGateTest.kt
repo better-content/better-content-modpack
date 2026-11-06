@@ -1,6 +1,7 @@
 package com.bettercontent.tests
 
 import com.bettercontent.tests.release.validateSmokeEvidence
+import com.bettercontent.tests.release.validateOverworldTeleSoakReceipt
 import com.bettercontent.tests.release.releaseDirectories
 import com.bettercontent.tests.release.locateNewRelease
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -99,20 +100,22 @@ class ReleaseResultGateTest {
             validateSmokeEvidence(root.resolve("missing.json"), "fresh", pair, started)
         }
         listOf(Triple("fresh", "failed", "smoke"), Triple("old", "passed", "smoke"),
-            Triple("fresh", "passed", "soak")).forEach { (run, status, tier) ->
+            Triple("fresh", "passed", "overworld-tele-soak")).forEach { (run, status, tier) ->
             assertThrows(IllegalArgumentException::class.java) {
                 validateSmokeEvidence(evidence(pair, run, status, tier), "fresh", pair, started)
             }
         }
     }
 
-    @Test fun optionalSoakRequiresItsOwnMatchingFreshResult() {
+    @Test fun overworldTeleSoakCannotBorrowSmokeEvidence() {
         val pair = pair()
         val started = Instant.now().minusSeconds(1)
         assertThrows(IllegalArgumentException::class.java) {
-            validateSmokeEvidence(evidence(pair), "fresh", pair, started, "soak")
+            validateOverworldTeleSoakReceipt(evidence(pair), "fresh", pair, started)
         }
-        assertDoesNotThrow { validateSmokeEvidence(evidence(pair, tier = "soak"), "fresh", pair, started, "soak") }
+        assertThrows(IllegalArgumentException::class.java) {
+            validateSmokeEvidence(evidence(pair, tier = "overworld-tele-soak"), "fresh", pair, started, "overworld-tele-soak")
+        }
     }
 
     @Test fun staleEvidenceCannotAuthorize() {

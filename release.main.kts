@@ -6,9 +6,8 @@ import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
 
 val root = __FILE__.canonicalFile.parentFile
-val usage = "usage: ./release.main.kts [--jobs 1..4] [--runtime-tiers none|smoke|smoke,soak|smoke,tele-soak|...] [--soak-minutes N] [--use-bundled-mods]\n       ./release.main.kts [--jobs 1..4] --fresh-source-plan FILE [--runtime-tiers none|smoke|...] [--soak-minutes N]\n       ./release.main.kts --visual-tier PACKAGE_READY_JSON --visual-review REVIEW_JSON\n       ./release.main.kts --finalize-visual PENDING_JSON --visual-review REVIEW_JSON"
+val usage = "usage: ./release.main.kts [--jobs 1..4] [--runtime-tiers none|smoke|smoke,overworld-tele-soak|smoke,tele-soak|...] [--use-bundled-mods]\n       ./release.main.kts [--jobs 1..4] --fresh-source-plan FILE [--runtime-tiers none|smoke|...]\n       ./release.main.kts --visual-tier PACKAGE_READY_JSON --visual-review REVIEW_JSON\n       ./release.main.kts --finalize-visual PENDING_JSON --visual-review REVIEW_JSON"
 var jobs = 2
-var soakMinutes = 0
 var runtimeTiers = "none"
 var useBundledMods = false
 var freshSourcePlan: String? = null
@@ -19,7 +18,7 @@ val seen = mutableSetOf<String>()
 var index = 0
 while (index < args.size) {
     val option = args[index]
-    if (option !in setOf("--jobs", "--soak-minutes", "--runtime-tiers", "--use-bundled-mods", "--fresh-source-plan", "--finalize-visual", "--visual-tier", "--visual-review") || !seen.add(option)) {
+    if (option !in setOf("--jobs", "--runtime-tiers", "--use-bundled-mods", "--fresh-source-plan", "--finalize-visual", "--visual-tier", "--visual-review") || !seen.add(option)) {
         System.err.println(usage)
         exitProcess(2)
     }
@@ -47,12 +46,11 @@ while (index < args.size) {
         continue
     }
     val value = args.getOrNull(index + 1)?.toIntOrNull()
-    if (value == null || (option == "--jobs" && value !in 1..4) ||
-        (option == "--soak-minutes" && value !in 1..10080)) {
+    if (value == null || (option == "--jobs" && value !in 1..4)) {
         System.err.println(usage)
         exitProcess(2)
     }
-    if (option == "--jobs") jobs = value else soakMinutes = value
+    jobs = value
     index += 2
 }
 
@@ -65,9 +63,8 @@ if ((pendingVisual != null || visualPackage != null || visualReview != null) &&
 }
 
 val selectedTiers = if (runtimeTiers == "none") emptyList() else runtimeTiers.split(',')
-val allowedTiers = listOf("smoke", "soak", "tele-soak")
+val allowedTiers = listOf("smoke", "overworld-tele-soak", "tele-soak")
 if ((freshSourcePlan != null && useBundledMods) ||
-    ("soak" in selectedTiers) != ("--soak-minutes" in seen) ||
     (runtimeTiers != "none" && (selectedTiers.distinct() != selectedTiers || selectedTiers != allowedTiers.filter { it in selectedTiers }))) {
     System.err.println("invalid release runtime tier selection or incompatible bundled fresh-source inputs\n$usage")
     exitProcess(2)
@@ -99,9 +96,9 @@ val evidence = root.resolve("generated/test-evidence/$runId")
 check(evidence.parentFile.mkdirs() || evidence.parentFile.isDirectory) { "cannot create evidence root" }
 check(evidence.mkdir()) { "release evidence already exists or cannot be created: $evidence" }
 evidence.resolve("release-request.txt").writeText(
-    "run_id=$runId\njobs=$jobs\nsoak_minutes=$soakMinutes\nruntime_tiers=$runtimeTiers\nuse_bundled_mods=$useBundledMods\nfresh_source_plan=${freshSourcePlan ?: ""}\nstarted_at=${Instant.now()}\n")
+    "run_id=$runId\njobs=$jobs\nruntime_tiers=$runtimeTiers\nuse_bundled_mods=$useBundledMods\nfresh_source_plan=${freshSourcePlan ?: ""}\nstarted_at=${Instant.now()}\n")
 val command = mutableListOf(root.resolve("gradlew").absolutePath, "--no-daemon", "prepareFreshDist",
-    "-PreleaseJobs=$jobs", "-PreleaseSoakMinutes=$soakMinutes", "-PreleaseRuntimeTiers=$runtimeTiers", "-PreleaseUseBundledMods=$useBundledMods")
+    "-PreleaseJobs=$jobs", "-PreleaseSoakMinutes=0", "-PreleaseRuntimeTiers=$runtimeTiers", "-PreleaseUseBundledMods=$useBundledMods")
 freshSourcePlan?.let { command += "-PreleaseFreshSourcePlan=$it" }
 val status = ProcessBuilder(command)
     .directory(root).inheritIO().apply { environment()["BC_TEST_RUN_ID"] = runId }.start().waitFor()

@@ -12,7 +12,7 @@ import java.time.Instant
 /** Immutable, candidate-bound claims. A packaged artifact is not a runtime pass. */
 internal object ReleaseMarkers {
     private val mapper = jacksonObjectMapper()
-    private val allTiers = listOf("smoke", "soak", "tele-soak", "visual")
+    private val allTiers = listOf("smoke", "overworld-tele-soak", "tele-soak", "visual")
 
     fun packageReady(pair: CandidatePair, runId: String, provenance: Path, inventory: Path, selected: ReleaseTierSelection) {
         requireStableCandidates(pair)

@@ -48,11 +48,9 @@ class DiagnosticReplayTest {
         assertEquals("tele-soak-diagnostic", evidence.directory.fileName.toString())
     }
 
-    @Test fun diagnosticSoakNeverBorrowsCompletedTimeAsAcceptance() {
+    @Test fun diagnosticSmokeCannotBorrowCompletedHistoricalSoakTime() {
         val replay = DiagnosticReplay("old", Path.of("old/run.json"), emptyMap(), null, null, 120, 73)
-        assertEquals(47, replay.remainingSeconds(SessionRequest(SessionTier.SOAK, 2)))
-        assertThrows(IllegalStateException::class.java) {
-            replay.remainingSeconds(SessionRequest(SessionTier.SOAK, 3))
-        }
+        assertEquals(0, replay.remainingSeconds(SessionRequest(SessionTier.SMOKE)))
+        assertThrows(IllegalArgumentException::class.java) { SessionRequest(SessionTier.OVERWORLD_TELE_SOAK, 60) }
     }
 }

@@ -58,9 +58,9 @@ fun main(args: Array<String>) {
     require(args.size in 5..6) { "usage: ReleasePipeline ROOT JOBS SOAK_MINUTES USE_BUNDLED_MODS RUNTIME_TIERS [FRESH_SOURCE_PLAN]" }
     val root = Path.of(args[0]).toAbsolutePath().normalize()
     val jobs = args[1].toInt()
-    val soakMinutes = args[2].toInt()
+    val obsoleteSoakMinutes = args[2].toInt()
     val useBundledMods = args[3].toBooleanStrict()
-    val tiers = ReleaseTierSelection.parse(args[4], soakMinutes)
+    val tiers = ReleaseTierSelection.parse(args[4], obsoleteSoakMinutes)
     require(jobs in 1..4) { "release jobs must be between 1 and 4" }
     if (args.size == 6) {
         require(!useBundledMods) { "fresh-source release cannot use bundled inputs" }
@@ -188,7 +188,7 @@ fun main(args: Array<String>) {
         "created_at" to Instant.now().toString(),
         "runtime_tiers" to tiers.tiers,
         "runtime_inputs" to if (useBundledMods) "bundled" else "source-aware",
-        "soak_minutes" to soakMinutes,
+        "obsolete_soak_minutes" to obsoleteSoakMinutes,
         "candidates" to mapOf(
             "client" to candidates.client.toString(),
             "client_sha256" to candidates.clientSha256,
@@ -229,13 +229,15 @@ fun main(args: Array<String>) {
             running = tier
             requireStableCandidates(candidates)
             val command = listOf(root.resolve("test.main.kts").toString(), tier,
-                "--client", candidates.client.toString(), "--server", candidates.server.toString()) +
-                if (tier == "soak") listOf("--minutes", soakMinutes.toString()) else emptyList()
+                "--client", candidates.client.toString(), "--server", candidates.server.toString())
             runLogged(root, command, evidence.resolve("$tier.log"), mapOf("BC_TEST_RUN_ID" to runId))
             requireStableCandidates(candidates)
             val receipt = root.resolve("generated/test-evidence/$runId/$tier/run.json")
-            if (tier == "tele-soak") validateTeleSoakReceipt(receipt, runId, candidates, started)
-            else validateSmokeEvidence(receipt, runId, candidates, started, tier)
+            when (tier) {
+                "tele-soak" -> validateTeleSoakReceipt(receipt, runId, candidates, started)
+                "overworld-tele-soak" -> validateOverworldTeleSoakReceipt(receipt, runId, candidates, started)
+                else -> validateSmokeEvidence(receipt, runId, candidates, started, tier)
+            }
             passed[tier] = receipt
             running = null
         }
@@ -518,7 +520,7 @@ internal fun requireStableCandidates(candidates: CandidatePair) {
 }
 
 internal fun validateSmokeEvidence(path: Path, runId: String, candidates: CandidatePair, started: Instant, tier: String = "smoke") {
-    require(tier in setOf("smoke", "soak")) { "unknown runtime tier" }
+    require(tier == "smoke") { "unknown runtime tier" }
     require(Files.isRegularFile(path)) { "missing successful $tier evidence: $path" }
     require(!Files.getLastModifiedTime(path).toInstant().isBefore(started.truncatedTo(java.time.temporal.ChronoUnit.SECONDS))) {
         "stale $tier evidence: $path"
@@ -1041,9 +1043,10 @@ internal fun validateTeleSoakEvents(path: Path, dimensions: List<String>) {
     require(events[finished].path("success").asBoolean()) { "TeleSoak session did not finish successfully" }
 }
 
-internal fun validateTeleClientEvidence(events: List<com.fasterxml.jackson.databind.JsonNode>) {
+internal fun validateTeleClientEvidence(events: List<com.fasterxml.jackson.databind.JsonNode>,
+    completionType: String = "tele_soak_complete") {
     val joined = events.indices.filter { events[it].path("type").asText() == "client_joined" }
-    val completed = events.indices.filter { events[it].path("type").asText() == "tele_soak_complete" }
+    val completed = events.indices.filter { events[it].path("type").asText() == completionType }
     require(joined.size == 1 && completed.size == 1 && joined.single() < completed.single()) { "TeleSoak must have one uninterrupted joined client" }
     val from = joined.single(); val until = completed.single()
     var previousProof = Instant.parse(events[from].path("time").asText())
@@ -1119,7 +1122,7 @@ private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path, tiers: 
             validateQualifiedFreshSource(root.parent.resolve("mod_source/${source.repository}"), manifest.mods.single { it.repository == source.repository },
                 source, qualificationNotBefore, planCreated)
         }
-        require(listOf("smoke", "soak", "tele-soak").none { evidence.parent.resolve("$it/run.json").exists() }) {
+        require(listOf("smoke", "overworld-tele-soak", "tele-soak").none { evidence.parent.resolve("$it/run.json").exists() }) {
             "fresh release run ID already has runtime evidence"
         }
         require(plan.thirdPartyPins.isNotEmpty() && thirdPartyPins(root) == plan.thirdPartyPins) { "third-party pins differ from qualified plan" }
@@ -1215,13 +1218,15 @@ private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path, tiers: 
             tiers.tiers.forEach { tier ->
                 running = tier
                 requireStableCandidates(pair)
-                runLogged(root, listOf(root.resolve("test.main.kts").toString(), tier, "--client", pair.client.toString(), "--server", pair.server.toString()) +
-                    if (tier == "soak") listOf("--minutes", tiers.soakMinutes.toString()) else emptyList(),
+                runLogged(root, listOf(root.resolve("test.main.kts").toString(), tier, "--client", pair.client.toString(), "--server", pair.server.toString()),
                     evidence.resolve("$tier.log"), mapOf("BC_TEST_RUN_ID" to runId))
                 requireStableCandidates(pair)
                 val receipt = evidence.parent.resolve("$tier/run.json")
-                if (tier == "tele-soak") validateTeleSoakReceipt(receipt, runId, pair, started)
-                else validateSmokeEvidence(receipt, runId, pair, started, tier)
+                when (tier) {
+                    "tele-soak" -> validateTeleSoakReceipt(receipt, runId, pair, started)
+                    "overworld-tele-soak" -> validateOverworldTeleSoakReceipt(receipt, runId, pair, started)
+                    else -> validateSmokeEvidence(receipt, runId, pair, started, tier)
+                }
                 if (tier == "smoke") {
                     val clientBytes = validateMaterializedClientBytes(root, runId, pair, manifest.mods)
                     writeNewJson(evidence.resolve("client-binary-inventory.json"), clientBytes)
@@ -1626,7 +1631,7 @@ private fun validateStandaloneVisualTier(root: Path, marker: Path, reviewPath: P
     val (pair, packageMarker) = validateVisualPackageBinding(root, marker)
     val runId = packageMarker.path("run_id").asText()
     val evidence = root.resolve("generated/test-evidence/$runId/release").toAbsolutePath().normalize()
-    val forbiddenWorlds = listOf("smoke", "soak", "tele-soak").mapNotNull { tier ->
+    val forbiddenWorlds = listOf("smoke", "overworld-tele-soak", "tele-soak").mapNotNull { tier ->
         val events = evidence.parent.resolve("$tier/events.jsonl")
         if (!Files.isRegularFile(events)) null else Files.readAllLines(events).mapNotNull { line ->
             runCatching { mapper.readTree(line) }.getOrNull()

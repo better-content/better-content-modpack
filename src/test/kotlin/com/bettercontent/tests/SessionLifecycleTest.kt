@@ -38,20 +38,18 @@ class SessionLifecycleTest {
         assertEquals(driver.verifiedAt, driver.disconnectedAt)
     }
 
-    @Test fun soakMeasuresOnlyTheVerifiedConnectedInterval() {
+    @Test fun longRunRequiresInstrumentedWorldDriver() {
         val clock = Clock(); val driver = Driver(clock)
-        runLifecycle(SessionRequest(SessionTier.SOAK, 2), driver, clock)
-        assertEquals(Duration.ofMinutes(2).toNanos(), driver.disconnectedAt - driver.verifiedAt)
-        assertEquals(Duration.ofMinutes(7).toNanos(), clock.now)
+        assertThrows(IllegalStateException::class.java) {
+            runLifecycle(SessionRequest(SessionTier.OVERWORLD_TELE_SOAK), driver, clock)
+        }
         assertEquals(1, driver.calls.count { it == "connect" })
-        assertEquals(1, driver.calls.count { it == "start" })
-        assertEquals(9, driver.calls.count { it == "heartbeat" })
-        assertTrue(driver.calls.count { it == "connected" } >= 120)
+        assertFalse("save-stop" in driver.calls)
     }
 
     @Test fun lostConnectionFailsInsteadOfReconnectingOrPassing() {
         val clock = Clock(); val driver = Driver(clock, "connected")
-        assertThrows(IllegalStateException::class.java) { runLifecycle(SessionRequest(SessionTier.SOAK, 1), driver, clock) }
+        assertThrows(IllegalStateException::class.java) { runLifecycle(SessionRequest(SessionTier.SMOKE), driver, clock) }
         assertEquals(1, driver.calls.count { it == "connect" })
         assertFalse("validate" in driver.calls)
     }
@@ -64,9 +62,10 @@ class SessionLifecycleTest {
         }
     }
 
-    @Test fun durationIsRequiredOnlyForSoak() {
-        for (minutes in listOf(-1L, 0L, 10081L)) assertThrows(IllegalArgumentException::class.java) { SessionRequest(SessionTier.SOAK, minutes) }
-        assertThrows(IllegalArgumentException::class.java) { SessionRequest(SessionTier.SMOKE, 1) }
+    @Test fun runtimeDurationsAreFixed() {
+        for (tier in SessionTier.entries) for (minutes in listOf(-1L, 1L, 60L))
+            assertThrows(IllegalArgumentException::class.java) { SessionRequest(tier, minutes) }
+        assertEquals(0L, SessionRequest(SessionTier.OVERWORLD_TELE_SOAK).minutes)
     }
 
     private fun zip(path: Path, entry: String = "file.txt"): Path {
@@ -136,8 +135,12 @@ class SessionLifecycleTest {
         val repo = Path.of(System.getProperty("bc.repo.root"))
         val badRequests = listOf(
             listOf("test.main.kts", "dev"), listOf("test.main.kts", "smoke", "--minutes", "1"),
-            listOf("test.main.kts", "soak", "--minutes", "0"), listOf("test.main.kts", "smoke", "--client", "one.zip"),
+            listOf("test.main.kts", "soak", "--minutes", "0"),
+            listOf("test.main.kts", "overworld-tele-soak", "--minutes", "60"),
+            listOf("test.main.kts", "overworld-tele-soak", "--diagnose-from", "old/run.json"),
+            listOf("test.main.kts", "smoke", "--client", "one.zip"),
             listOf("release.main.kts", "--skip-tests"), listOf("release.main.kts", "--soak-minutes", "10081"),
+            listOf("release.main.kts", "--runtime-tiers", "soak"),
             listOf("release.main.kts", "--use-bundled-mods", "--skip-tests"),
         )
         badRequests.forEachIndexed { index, args ->

@@ -118,17 +118,20 @@ class TeleSoakLifecycleTest {
         assertEquals(3, driver.events.count { it.first == "dwell_completed" })
     }
 
-    @Test fun diagnosticSoakReplaysOnlyUnobservedSecondsInFreshLifecycle() {
+    @Test fun overworldOneHourIsIndependentOfFullDimensionCircuits() {
         val clock = Clock(); val driver = Driver(clock)
-        val replay = DiagnosticReplay("failed-soak", java.nio.file.Path.of("failed/run.json"), emptyMap(),
-            null, null, 120, 73)
-        runLifecycle(SessionRequest(SessionTier.SOAK, 2), driver, clock, replay)
+        runLifecycle(SessionRequest(SessionTier.OVERWORLD_TELE_SOAK), driver, clock)
         assertEquals(1, driver.serverStarts)
         assertEquals(1, driver.clientJoins)
         assertEquals(1, driver.saves)
         assertFalse(driver.connection)
-        assertTrue(driver.events.any { it.first == "diagnostic_connected_seconds" &&
-            it.second["remaining"] == 47L && it.second["acceptance_eligible"] == false })
+        assertEquals(setOf("minecraft:overworld"), driver.prepared)
+        assertEquals(11, driver.teleports)
+        assertEquals(0, driver.events.count { it.first == "circuit_completed" })
+        assertEquals(3600L, driver.events.single { it.first == "dwell_started" }.second["required_seconds"])
+        assertTrue((driver.events.single { it.first == "dwell_completed" }.second["actual_seconds"] as Double) >= 3600.0)
+        assertEquals(10, driver.events.count { it.first == "relocation_tps_stable" })
+        assertEquals(1, driver.events.count { it.first == "overworld_tele_soak_complete" })
     }
 
     @Test fun diagnosticReplaySkipsPriorWorkButNeverEmitsAcceptanceCompletion() {
@@ -202,6 +205,32 @@ class TeleSoakLifecycleTest {
         assertEquals(false, receipt.result(false)["scenario_completed"])
         assertEquals(3, (receipt.result(true)["dimension_results"] as List<*>).size)
         assertEquals(false, TeleSoakReceipt().result(true)["scenario_completed"])
+        val hourClock = Clock(); val hourDriver = Driver(hourClock)
+        val hourReceipt = TeleSoakReceipt(overworldOnly = true)
+        val observedHour = object : TeleSoakDriver by hourDriver {
+            override fun verifyArrival(dimension: String, progress: () -> Unit) {
+                val before = hourDriver.events.size
+                hourDriver.verifyArrival(dimension, progress)
+                hourDriver.events.drop(before).filter { it.first == "landing_verified" }.forEach { (name, fields) ->
+                    hourReceipt.record(name, fields)
+                }
+            }
+            override fun teleSoakEvent(name: String, fields: Map<String, Any>) {
+                hourReceipt.record(name, fields)
+                hourDriver.teleSoakEvent(name, fields)
+            }
+        }
+        runTeleSoak(observedHour, hourClock, overworldOnly = true)
+        assertEquals(true, hourReceipt.result(true)["scenario_completed"])
+        assertEquals(false, hourReceipt.result(false)["scenario_completed"])
+        assertEquals(3600, hourReceipt.result(true)["dwell_seconds_per_dimension"])
+        assertEquals(0, hourReceipt.result(true)["circuits"])
+        val incomplete = TeleSoakReceipt(overworldOnly = true)
+        hourDriver.events.filterNot { (name, fields) ->
+            name == "relocation_tps_stable" && fields["relocation"] == 10
+        }.forEach { (name, fields) -> incomplete.record(name, fields) }
+        assertEquals(false, incomplete.result(true)["scenario_completed"],
+            "nine of ten successful recoveries cannot promote an hour-long receipt")
     }
 
     @Test fun lostPlayerDuringCircuitCannotPassOrReconnect() {

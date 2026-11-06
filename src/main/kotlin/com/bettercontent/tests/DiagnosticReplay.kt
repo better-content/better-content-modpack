@@ -15,13 +15,7 @@ internal data class DiagnosticReplay(
     val requestedSeconds: Long?,
     val completedConnectedSeconds: Long,
 ) {
-    fun remainingSeconds(request: SessionRequest): Long {
-        if (request.tier != SessionTier.SOAK) return request.connectedDuration.seconds
-        check(requestedSeconds == request.connectedDuration.seconds) {
-            "diagnostic Soak minutes must match the failed run's requested interval"
-        }
-        return (request.connectedDuration.seconds - completedConnectedSeconds).coerceAtLeast(1)
-    }
+    fun remainingSeconds(request: SessionRequest): Long = request.connectedDuration.seconds
 }
 
 internal data class HopCursor(val dimension: String, val circuit: Int)
@@ -52,8 +46,9 @@ internal fun loadDiagnosticReplay(root: Path, tier: SessionTier, source: Path): 
     val hop = events.lastOrNull { it.path("type").asText() == "hop_started" }?.let {
         HopCursor(it.path("dimension").asText(), it.path("circuit").asInt(-1))
     }
-    if (tier == SessionTier.TELE_SOAK) {
-        require(hop == null || (roster != null && hop.dimension in roster && hop.circuit in 0..3)) {
+    if (tier == SessionTier.TELE_SOAK || tier == SessionTier.OVERWORLD_TELE_SOAK) {
+        require(hop == null || (roster != null && hop.dimension in roster &&
+            hop.circuit in (if (tier == SessionTier.OVERWORLD_TELE_SOAK) 0..0 else 0..3))) {
             "failed Tele Soak checkpoint has no valid dimension/circuit"
         }
     }
