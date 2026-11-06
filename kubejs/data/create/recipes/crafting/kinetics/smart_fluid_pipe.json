@@ -1,0 +1,36 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": ["I ", "SL", "P "],
+        "key": {
+          "I": {"tag": "forge:plates/brass"},
+          "S": {"item": "create:fluid_pipe"},
+          "P": {"item": "create:electron_tube"},
+          "L": {"item": "tconstruct:large_plate"}
+        },
+        "result": {"item": "create:smart_fluid_pipe"},
+        "show_notification": true
+      }
+    },
+    {
+      "conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": ["I", "S", "P"],
+        "key": {
+          "I": {"tag": "forge:plates/brass"},
+          "S": {"item": "create:fluid_pipe"},
+          "P": {"item": "create:electron_tube"}
+        },
+        "result": {"item": "create:smart_fluid_pipe"},
+        "show_notification": true
+      }
+    }
+  ]
+}

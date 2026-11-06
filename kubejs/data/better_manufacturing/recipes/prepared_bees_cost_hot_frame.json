@@ -1,0 +1,42 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "complicated_bees:item_enabled",
+          "item": "complicated_bees:hot_frame"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "OOO",
+          "OXO",
+          "OOO"
+        ],
+        "key": {
+          "O": {
+            "item": "minecraft:nether_brick"
+          },
+          "X": {
+            "item": "minecraft:magma_block"
+          }
+        },
+        "result": {
+          "item": "minecraft:nether_brick",
+          "nbt": "{better_manufacturing:{bees_cost_hot_frame:1}}"
+        }
+      }
+    }
+  ]
+}

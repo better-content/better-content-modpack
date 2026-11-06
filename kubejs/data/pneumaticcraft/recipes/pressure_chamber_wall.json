@@ -17,10 +17,17 @@
           },
           "X": {
             "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "item": "pneumaticcraft:reinforced_bricks"
+            },
+            "marker": "pneumaticcraft:pressure_chamber_wall"
           }
         },
         "pattern": [
-          "XII",
+          "XAI",
           "I I",
           "III"
         ],

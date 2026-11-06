@@ -1,0 +1,23 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" },
+        { "type": "forge:mod_loaded", "modid": "aether" }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          { "item": "aether:skyroot_log" },
+          { "item": "tconstruct:tool_handle" }
+        ],
+        "result": {
+          "item": "aether:skyroot_log",
+          "nbt": "{better_manufacturing:{skyroot_wheel_log:1}}"
+        }
+      }
+    }
+  ]
+}

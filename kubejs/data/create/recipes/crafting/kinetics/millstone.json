@@ -2,9 +2,9 @@
   "type": "forge:conditional",
   "recipes": [
     {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
-      "type": "better_manufacturing:part_variant", "pattern": ["C", "S", "I"],
-      "key": {"C": {"item": "create:cogwheel"}, "S": {"item": "create:andesite_casing"}, "I": {"item": "tconstruct:large_plate"}},
-      "result": {"item": "create:millstone"}, "function": "better_manufacturing:create/milling", "parts": [{"role": "working_surface", "slot": 2}]
+      "type": "better_manufacturing:part_variant", "pattern": ["C ", "S ", "IP"],
+      "key": {"C": {"item": "create:cogwheel"}, "S": {"item": "create:andesite_casing"}, "I": {"tag": "forge:stone"}, "P": {"item": "tconstruct:large_plate"}},
+      "result": {"item": "create:millstone"}, "function": "better_manufacturing:create/milling", "parts": [{"role": "working_surface", "slot": 5}]
     }},
     {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
       "type": "minecraft:crafting_shaped", "pattern": ["C", "S", "I"],

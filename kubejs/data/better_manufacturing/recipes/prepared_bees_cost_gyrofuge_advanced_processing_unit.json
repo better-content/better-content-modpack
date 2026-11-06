@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "#W#",
+          "C C",
+          "#N#"
+        ],
+        "key": {
+          "#": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "C": {
+            "item": "complicated_bees:centrifuge"
+          },
+          "N": {
+            "item": "minecraft:netherite_block"
+          },
+          "W": {
+            "item": "minecraft:nether_star"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:gyrofuge_panel",
+          "nbt": "{better_manufacturing:{bees_cost_gyrofuge_advanced_processing_unit:1}}"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "pneumaticcraft"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:pneu_native_cost_bundle",
+        "marker": "pneumaticcraft:etching_tank",
+        "anchor": {
+          "item": "pneumaticcraft:reinforced_brick_wall"
+        },
+        "costs": [
+          {
+            "item": "pneumaticcraft:reinforced_brick_wall"
+          }
+        ]
+      }
+    }
+  ]
+}

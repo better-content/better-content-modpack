@@ -9,11 +9,13 @@
         }
       ],
       "recipe": {
-        "type": "better_manufacturing:part_variant",
+        "type": "better_manufacturing:prettypipes_mechanical",
+        "acceptMirrored": false,
         "pattern": [
           "ISI",
           "SMS",
-          "ISA"
+          "ISI",
+          "A  "
         ],
         "key": {
           "S": {
@@ -33,12 +35,8 @@
           "item": "prettypipes:medium_speed_module"
         },
         "function": "better_manufacturing:prettypipes/speed",
-        "parts": [
-          {
-            "role": "actuator",
-            "slot": 8
-          }
-        ]
+        "handle_slot": 9,
+        "predecessor_slot": 4
       }
     },
     {

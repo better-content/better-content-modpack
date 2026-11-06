@@ -38,15 +38,21 @@ ServerEvents.recipes(function (event) {
     event.remove({ output: 'pneumaticcraft:pneumatic_dynamo' })
     event.remove({ output: 'powergrid:generator_housing' })
     event.remove({ output: 'powergrid:vertical_generator_housing' })
+    var generatorHousingInputs = [
+        { type: 'pneumaticcraft:stacked_item', tag: 'forge:plates/iron', count: 4 },
+        { type: 'pneumaticcraft:stacked_item', tag: 'forge:plates/copper', count: 2 },
+        { type: 'pneumaticcraft:stacked_item', item: 'powergrid:conductive_casing', count: 2 },
+        { type: 'pneumaticcraft:stacked_item', item: 'morered:red_alloy_wire', count: 2 },
+        { type: 'pneumaticcraft:stacked_item', item: 'create:electron_tube', count: 1 }
+    ]
+    // This is the only new housing; reversible orientation swaps reuse its built frame.
+    // Keep the no-Manufacturing recipe playable without requiring an unavailable TCon part.
+    if (conductiveBlank) generatorHousingInputs.push({
+        type: 'pneumaticcraft:stacked_item', item: 'tconstruct:large_plate', count: 1
+    })
     event.custom({
         type: 'pneumaticcraft:pressure_chamber', pressure: 2.0,
-        inputs: [
-            { type: 'pneumaticcraft:stacked_item', tag: 'forge:plates/iron', count: 4 },
-            { type: 'pneumaticcraft:stacked_item', tag: 'forge:plates/copper', count: 2 },
-            { type: 'pneumaticcraft:stacked_item', item: 'powergrid:conductive_casing', count: 2 },
-            { type: 'pneumaticcraft:stacked_item', item: 'morered:red_alloy_wire', count: 2 },
-            { type: 'pneumaticcraft:stacked_item', item: 'create:electron_tube', count: 1 }
-        ],
+        inputs: generatorHousingInputs,
         results: [{ item: 'powergrid:generator_housing' }]
     }).id('kubejs:electrical_control/direct_root/first_stationary_generator')
     event.shapeless('powergrid:vertical_generator_housing', [

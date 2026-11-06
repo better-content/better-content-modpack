@@ -54,18 +54,25 @@ ServerEvents.recipes(function (event) {
         var recipe = highModules[module]
         recipe.key.C = 'ae2:certus_quartz_crystal'
         event.remove({ output: 'prettypipes:' + module })
-        var outputPattern = recipe.pattern
         if (partConstruction) {
+            // The nine original slots are all occupied. Keep every native/Certus
+            // ingredient and the medium predecessor; an extra mechanical-crafter
+            // row physically consumes the plate without replacing a paid input.
             recipe.key.H = 'tconstruct:large_plate'
-            // Replace one repeated structural ingredient, never Certus C or prior module M.
-            outputPattern = module === 'high_high_priority_module' || module === 'high_low_priority_module'
-                ? ['HCP', 'PMP', 'PPP']
-                : module === 'high_retrieval_module' ? ['HCR', 'GMG', 'RGR']
-                : ['HCG', 'GMG', 'GIG']
-            if (module === 'high_filter_module') outputPattern = ['HCG', 'BMB', 'GBG']
+            var mechanicalKey = {}
+            Object.keys(recipe.key).forEach(function (symbol) {
+                var ingredient = recipe.key[symbol]
+                mechanicalKey[symbol] = ingredient[0] === '#'
+                    ? { tag: ingredient.substring(1) } : { item: ingredient }
+            })
+            event.custom({ type: 'create:mechanical_crafting', acceptMirrored: false,
+                pattern: recipe.pattern.concat(['H  ']), key: mechanicalKey,
+                result: { item: 'prettypipes:' + module }
+            }).id('kubejs:meteor_logistics/high_' + module)
+        } else {
+            event.shaped('prettypipes:' + module, recipe.pattern, recipe.key)
+                .id('kubejs:meteor_logistics/high_' + module)
         }
-        event.shaped('prettypipes:' + module, outputPattern, recipe.key)
-            .id('kubejs:meteor_logistics/high_' + module)
     })
 
     event.remove({ output: 'sophisticatedstorage:hopper_upgrade' })
@@ -116,13 +123,13 @@ ServerEvents.recipes(function (event) {
     }).id('prettypipes:item_terminal')
     event.remove({ id: 'prettypipes:pressurizer' })
     if (partConstruction) {
-        event.custom({ type: 'better_manufacturing:part_variant',
-            pattern: ['TST', 'SBS', 'TSA'],
+        event.custom({ type: 'better_manufacturing:prettypipes_mechanical',
+            pattern: ['TST', 'SBS', 'TSA', 'H  '],
             key: { T: { item: 'minecraft:iron_ingot' }, S: { item: 'prettypipes:high_speed_module' },
-                B: { item: 'ae2:sky_stone_block' }, A: { item: 'tconstruct:tough_handle' } },
-            result: { item: 'prettypipes:pressurizer' },
-            function: 'better_manufacturing:prettypipes/pressurizer',
-            parts: [{ role: 'working_assembly', slot: 8 }]
+                B: { item: 'ae2:sky_stone_block' }, A: { item: 'minecraft:iron_ingot' },
+                H: { item: 'tconstruct:tough_handle' } },
+            result: { item: 'prettypipes:pressurizer' }, acceptMirrored: false,
+            function: 'better_manufacturing:prettypipes/pressurizer', handle_slot: 9
         }).id('prettypipes:pressurizer')
     } else {
         event.shaped('prettypipes:pressurizer', ['TST', 'SBS', 'TSA'], {

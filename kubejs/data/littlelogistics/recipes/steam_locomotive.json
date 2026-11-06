@@ -1,16 +1,93 @@
 {
-  "type": "better_manufacturing:part_variant",
-  "category": "misc",
-  "function": "better_manufacturing:littlelogistics/propulsion",
-  "parts": [{"role": "drive", "slot": 2}],
-  "pattern": [" GH", "BFB", "RCR"],
-  "key": {
-    "G": {"item": "minecraft:gold_ingot"},
-    "H": {"item": "tconstruct:tough_handle"},
-    "B": {"item": "minecraft:blaze_rod"},
-    "F": {"item": "minecraft:furnace"},
-    "R": {"item": "minecraft:rail"},
-    "C": {"item": "littlelogistics:seater_car"}
-  },
-  "result": {"item": "littlelogistics:steam_locomotive"}
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "function": "better_manufacturing:littlelogistics/propulsion",
+        "parts": [
+          {
+            "role": "drive",
+            "slot": 2
+          }
+        ],
+        "pattern": [
+          " GH",
+          "BFB",
+          "RCR"
+        ],
+        "key": {
+          "G": {
+            "item": "minecraft:gold_ingot"
+          },
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "B": {
+            "item": "minecraft:blaze_rod"
+          },
+          "F": {
+            "item": "minecraft:furnace"
+          },
+          "R": {
+            "item": "minecraft:rail"
+          },
+          "C": {
+            "item": "littlelogistics:seater_car"
+          }
+        },
+        "result": {
+          "item": "littlelogistics:steam_locomotive"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          " G ",
+          "BFB",
+          "RCR"
+        ],
+        "key": {
+          "G": {
+            "item": "minecraft:gold_ingot"
+          },
+          "B": {
+            "item": "minecraft:blaze_rod"
+          },
+          "F": {
+            "item": "minecraft:furnace"
+          },
+          "R": {
+            "item": "minecraft:rail"
+          },
+          "C": {
+            "item": "littlelogistics:seater_car"
+          }
+        },
+        "result": {
+          "item": "littlelogistics:steam_locomotive",
+          "count": 1
+        }
+      }
+    }
+  ]
 }

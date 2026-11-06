@@ -29,12 +29,19 @@
           },
           "H": {
             "item": "tconstruct:tough_handle"
+          },
+          "B": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "tag": "forge:ingots/compressed_iron"
+            },
+            "marker": "pneumaticcraft:thermal_compressor"
           }
         },
         "pattern": [
           "XTH",
           "PAP",
-          "ITI"
+          "BTI"
         ],
         "result": {
           "item": "pneumaticcraft:thermal_compressor"

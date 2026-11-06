@@ -1,36 +1,81 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "complicated_bees:gyrofuge_panel"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "HMP",
+          " A "
+        ],
+        "key": {
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "M": {
+            "type": "forge:partial_nbt",
+            "item": "complicated_bees:gyrofuge_panel",
+            "nbt": "{better_manufacturing:{bees_cost_gyrofuge_input_hatch:1}}"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "item": "complicated_bees:gyrofuge_base"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:gyrofuge_input_hatch"
+        }
+      }
     },
-    "A": {
-      "item": "complicated_bees:gyrofuge_base"
-    },
-    "B": {
-      "item": "minecraft:powered_rail"
-    },
-    "C": {
-      "tag": "forge:chests"
-    },
-    "H": {
-      "item": "minecraft:hopper"
-    },
-    "J": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "A": {
+            "item": "complicated_bees:gyrofuge_base"
+          },
+          "B": {
+            "item": "minecraft:powered_rail"
+          },
+          "C": {
+            "tag": "forge:chests"
+          },
+          "H": {
+            "item": "minecraft:hopper"
+          }
+        },
+        "pattern": [
+          "#H#",
+          "BAB",
+          "#C#"
+        ],
+        "result": {
+          "item": "complicated_bees:gyrofuge_input_hatch"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "JHP",
-    "BAB",
-    "#C#"
-  ],
-  "result": {
-    "item": "complicated_bees:gyrofuge_input_hatch"
-  },
-  "show_notification": true
+  ]
 }

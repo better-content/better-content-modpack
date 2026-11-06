@@ -205,13 +205,16 @@ proof. The stationary
 and vertical PowerGrid generator housings are construction-only plain Blocks, not
 rated settings/BE machines; their current electrical-block/conductive-casing root
 and two orientation conversions remain in shared script 50 until the future
-recipes-tech exact-ID handoff. `powergrid:empty_circuit` is construction-only:
-its pinned native cutting uses one wooden slab for two circuits in 50 ticks;
-no extra physical blank or material-performance rate is justified. Loaded
-acquisition remains unverified. No new PowerGrid acceptance is implied. Recipe-less IDs such as
-`create:small_bogey`, `pneumaticcraft:drone_interface`, `oc2r:internet_gateway` and
-`powergrid:transformer_small`, plus the asset-only electric compressor and heater, remain
-unavailable; no invented acquisition is authorized. `trackwork:simple_wheel` has a
+recipes-tech exact-ID handoff. `powergrid:empty_circuit` is construction-only: its pinned native cutting
+uses one wooden slab for two circuits in 50 ticks; the Manufacturing-only
+same-species prepared-slab route pays a physical part while retaining that
+cutting yield and work. No material-performance rate is invented. Loaded
+acquisition remains unverified. No new PowerGrid acceptance is implied. A
+missing direct recipe does not prove unavailability: `powergrid:transformer_small`
+is assembled in-world from a paid plated core; `create:small_bogey`,
+`pneumaticcraft:drone_interface`, OC2R gateway and the electric compressor/heater
+still require acquisition evidence before any exclusion. No invented acquisition
+is authorized. `trackwork:simple_wheel` has a
 resolved source ownership boundary: the shared transport script currently
 removes its family exact-ID recipe and substitutes a KubeJS route without the native
 `simple_wheel_part` predecessor. That part itself requires five-wide mechanical crafting,
@@ -236,21 +239,193 @@ nautilus and base costs; the full nine-slot temperature shape now yields the reg
 inert blank, consumed with one handle for the native unit. No-Manufacturing exact-ID
 recipes retain pinned originals. Native fuel, chance, yields and settings are unchanged;
 its two isolated pinned-JAR source units passed, but neither loaded acquisition nor
-biology was revalidated. The adjacent `mellarium_base` is separately **partial**:
-its older Manufacturing shape pays six panels+log+handle+plate versus the pinned
-native eight panels+log. Latest user direction requires both all native costs and
-part consumption in every obtainable route, so preserving the nine native inputs
-*and* both existing parts in a 3×3 grid requires distinct physical preparation.
-The existing Manufacturing component budget is 12/12; no base-specific blank has
-been registered or authorized beyond that cap. Recipes-other saved a narrow conditional no-Manufacturing native eight-panel fallback
-at the same exact ID (isolated pinned-JAR source unit 3/3); this does not resolve
-the loaded Manufacturing cost mismatch or establish effective acquisition. The excluded Backpack hoppers and
-Clockwork gas tank/vent/sealer stay excluded, not converted. Per-ID candidate/source-route
+biology was revalidated. The adjacent `mellarium_base` has a new **source-only**
+Manufacturing recipe using a 4×3 Create mechanical-crafting grid: its eight native
+panels and log remain, with one consumed handle and one large plate. This avoids
+adding a thirteenth component or silently reducing the native panel cost, but
+changes the Manufacturing route from hand crafting to powered mechanical crafting;
+review its progression position before acceptance. The conditional no-Manufacturing
+branch retains the native eight-panel 3×3 craft. No loaded recipe selection,
+mechanical-crafter operation, other output route or multiplayer acquisition has
+been checked after this change; do not mark the base verified. The excluded Backpack
+hoppers and Clockwork gas tank/vent/sealer stay excluded, not converted. Per-ID candidate/source-route
 handoff is maintained with the wave-two pack owner; neither authored overrides nor an
 absent route count as accepted conversion.
 
-`mellarium_base` remains explicitly held. Do not add a thirteenth blank or claim the
-full Manufacturing roster complete while its native cost and consumed-part route conflict.
+`mellarium_base` remains explicitly held from acceptance: its cost-preserving
+mechanical route is authored, but progression/alternate acquisition and loaded
+behavior have not been checked. Do not add a thirteenth
+blank or claim the full Manufacturing roster complete from source authoring alone.
+
+Pretty Pipes speed/extraction and high-module construction have source-only
+cost-preserving revisions. All seven high modules now have Manufacturing branches
+using a 3×4 Create mechanical craft: each keeps its full previous Certus-gated
+3×3 ingredient grid and pays one physical part in the extra row. The five
+construction-only modules consume a large plate; high speed/extraction consume
+a handle and use a bounded native-ID serializer that bakes new settings while
+retaining the medium predecessor's unrelated native NBT. Medium speed likewise
+uses that serializer to keep its full-grid native iron/sugar cost and consume a
+handle; the partly empty low speed/extraction and medium extraction grids retain
+their native redstone/iron counts by moving the displaced ingredient into a free
+slot. Medium extraction also copies the low predecessor's native NBT. The
+without-Manufacturing hand crafts are unchanged. The mechanical-crafter
+dependency, compiled serializer, metadata preservation and all alternate module
+routes require progression and loaded-recipe review before any ID is promoted.
+
+Source-only Create recipe cost repairs also keep the native iron/stone/copper inputs
+alongside consumed parts for drill, saw, millstone, press, whisk, harvester,
+fluid tank, both fluid-pipe orientations, hose pulley, fluid valve, plough and
+propeller. The actual powered-works whisk override also retains its second
+original iron ingot beside the handle. In the four-blade
+propeller grid the native four iron plates occupy the cardinal positions and
+four blades occupy the corners. All changed part-slot bindings and extra-cost
+routes remain uncompiled and unloaded; do not infer effective acquisition,
+network behavior or accepted progression from these JSON edits.
+
+The source-only full-grid repair uses a bounded Create mechanical part-variant
+serializer for 3×4 or 3×5 late-stage crafts: it preserves every original
+3×3 ingredient and consumes physical working parts in an extra row while
+baking the owner-specific settings. Candidates now include the Eureka engine,
+Trackwork medium/large track upgrades, Industrial Heat heat pipe/exchanger and
+boiler heater, diesel huge engine/turbocharger, Compressed Creativity empty
+mesh/industrial blower/engine rotor, and the Clockwork air compressor. The
+actual Font-of-the-Nether boiler heater and thermopneumatic plant script
+overrides were repaired too: the Manufacturing plant retains six native slabs,
+two strict-empty tanks, a pressure tube, magma and its liner part. The
+pre-existing no-Manufacturing Font route deliberately stays at its pack cost;
+it was not rewritten to match the native recipe. Clockwork's existing 5×5 gas
+thruster mechanical branch now retains both the native D/B/S/C/P bill and its
+previous Aether/circuit/pressure gates alongside the working parts. All new
+mechanical-crafter dependencies are source-only progression decisions, not
+loaded availability proofs.
+
+Earlier powered-works constructs are not silently moved to precision_factory:
+the actual propeller override now consumes its four native iron plates in
+addition to four real blades and the shaft; water-wheel and large-water-wheel
+roots consume all five Skyroot logs, four iron ingots and their shaft or wheel,
+with one of those logs first marked by a physically consumed tool handle. The
+windmill bearing retains both native Skyroot logs and puts its tool binding in
+a vacant row. The no-Manufacturing shapes and yields remain unchanged. The
+marked log is tied to the wheel route, not a new registry component; its
+source-only crafting/ingredient behavior remains unverified. In the optional
+eternal_engine world axiom, any plank species can pay the eighth original plank
+and the binding before the marked plank enters the original full grid. The
+optional captive_hearth route similarly prepares an eight-brick/furnace bill,
+then attaches a consumed large plate to a rated thermal firebox at the early
+crafting station. No-Manufacturing world-axiom branches are unchanged.
+
+The early Sifter now pays both native sticks and its Nether-brick gate in a
+marked existing-identity brick before its two real tool handles are installed.
+Four tier-specific meshes pay the full eight-stick/center-material bill in a
+marked existing-identity stick before a mandatory four-handle configuration;
+the original BM stock-output alternatives have been removed. The brass Sifter
+pays all original brass plates/ingots/redstone in a marked redstone precursor,
+then consumes its predecessor and two real handles so the predecessor rating
+can be retained. These marks do not add registry components or claim tested
+KubeJS/Forge ingredient behavior; no-Manufacturing forms remain unchanged.
+
+The three PNCR drill-bit thermo exact-ID branches now require their original
+ingot/block tag paid together with a pick head, retaining original lubricant,
+pressure, temperature, speed and air multiplier. The diamond→netherite path
+keeps the native netherite ingot and assembly-drill program; PNCR-specific
+source hooks carry bounded configuration across the native outputs rather than
+paying a second head or allowing stock input to create a configured bit.
+Twenty-seven further PNCR source recipes use route-specific, same-item cost
+bundles for native ingredients displaced by parts, while the effective Font
+thermopneumatic plant is covered by the six-slab mechanical recipe described
+above. These are authored source routes, not executed native-accounting
+receipts; any other loaded alternate acquisition remains unreviewed.
+
+AE2 source-only exact-ID alternatives now cover both native energy-acceptor
+roots and the cable-to-interface/pattern-provider conversions with consumed
+plates while keeping their original input costs. Pretty Pipes' effective
+Certus/Sky-Stone pressurizer override and its native-ID fallback now pay the
+original fourth iron ingot along with the rated tough handle in a 3×4 craft;
+the high-speed-module predecessor remains an input. Quark's precision_factory
+crafter already requires a Create mechanical crafter: its Manufacturing branch
+now uses that available station for all five original iron ingots plus two
+construction parts, without adding a material-performance setting. The
+iron-workshop shaft batch keeps two iron ingots and eight outputs while paying
+one tool handle; workshop cogwheel and large-cogwheel alternatives pay their
+native shaft/planks and an additional handle. The effective workshop
+mechanical-bearing branch now keeps its slab, casing and shaft while consuming
+an additional handle. No-Manufacturing workshop roots
+remain unchanged. The extra handle requirement does not establish the loaded
+TConstruct-part bootstrap and must be reviewed before pack use.
+
+Clockwork source-only fixes retain pinned native inputs and previous pack gates
+for the gas thruster, air compressor and several bearings/gyro. A narrow
+pre-consumption Deployer recipe filter rejects only part-free gas-engine and
+reactionwheel item applications while the configured duct/flywheel path keeps
+native work and settings inheritance. A Clockwork-only marked-plank source
+craft now consumes one same-species native-tag plank plus three/two real broad
+blade and tough-handle pairs; the exact native Create cutting IDs retain their
+100-tick work and three/two outputs. The saw hook rejects malformed or unmarked
+inputs before consuming them and transfers each pair's bounded rating to one
+blade, with the native initial BladeLength of one. The finishing route retains
+native blade NBT and rejects malformed explicit lengths; legacy stock blades
+retain their safe native fallback. Saw-hook composition, source tag expansion
+and subsequent self-cutting remain **unverified**, not acceptance evidence.
+Four WIP IDs (heater, copter bearing, OC2R gateway and monitor)
+remain active and unresolved without an invented route or unsupported exclusion.
+In the pinned OC2R 2.2.12 JAR, gateway and monitor are registered blocks
+with implementation classes and assets, but neither occurs in the complete
+native recipe or block-loot-table sets; the effective pack has no identified
+recipe or removal for either. That static absence does not prove a negative
+about every in-world/dynamic acquisition, so both remain selected pending
+source/loaded resolution. The pinned Compressed Creativity heater is registered
+and has a block-drop loot table but no established direct native recipe; a drop
+from an already-placed block does not establish first survival acquisition. The
+pinned Clockwork copter bearing has a registered block/item and models but no
+found native or pack recipe/loot route; its owner bearing class shows no
+item-producing interaction. Neither static observation proves exclusion.
+PowerGrid source-only gauge conversion variants now pay a part while retaining
+the native one-gauge input; source review found winding placement from a paid
+copper coil, transformers assembled from paid plated cores, and CRT encasing
+of a paid CRT as in-world predecessor-dependent outputs. Create encasing of
+six shafts/cogwheels also starts from part-paid predecessor crafts; its
+encased-fluid-pipe route carries the precursor's rating through the existing
+`FluidPipeConversionsMixin` and `FluidVariantBehaviour`. Legacy unrated world
+blocks may still be encased via native fallback, and none of these interactions
+has been loaded or verified. Its `circuit_board` lacks a demonstrated initial direct source
+route and is not silently made available. Rail Beetle's chassis now uses 3×4
+mechanical crafting to retain native compass/rails/furnace/minecart, the pack's
+electron tubes/casing/barrel and two rated working parts. The electrical and
+pneumatic motor branches retain their existing pack progression predecessor
+alongside their machine-block gates; no no-Manufacturing script was changed.
+Little Logistics' conditional source routes keep native outputs and costs;
+both docks pay displaced stone through a marked existing spring before their
+original two-output crafts. Native-item NBT and full-pack route behavior are
+not asserted from these source edits. OC2R's nine available recipe-only roots
+now use BM-only 3×4 Create crafts containing their full pinned owner bills,
+two construction parts, and the computer's original flash-memory NBT; the
+no-Manufacturing recipe bodies remain unchanged. Four early Sophisticated
+Storage/Backpacks roots use route-marked same-identity material bundles to pay
+one missing native ingredient and both parts without changing the final
+crafting-table station; the native controller-to-three-links alternative also
+consumes parts alongside its original controller and ender pearl. Source-only
+serializer, conditional loading, item-enabled settings and predecessor
+configuration still require later validation.
+
+Complicated Bees' source pass now supplies marked, native-cost ingredient
+preparations for its early full-grid gyrofuge/frame/analysis routes, preserving
+the original crafting-table station. Seven later Mellarium-dependent recipes
+retain their full native bills and predecessor blocks in 3×4 Create crafts;
+the gyrofuge panel's native smithing template/base/addition still apply, with a
+part-paid marked redstone torch. A tiered gyrofuge consumes its physical
+predecessor and keeps unrelated native NBT, while fresh working parts replace
+the prior Manufacturing rating. These are source-authored, not loaded or
+accepted; the 45 selected Bees no-Manufacturing branches were source-compared with
+pinned native recipe bodies, including the formerly leaking Manufacturing-only
+serializer in tiered units; runtime loading and acquisition remain unverified. Compressed Creativity and diesel source review
+found the existing eight-step mesh filling still retains its native water work
+and NBT-transfer hook; the additional basin lid and bulk fermenter recipes pay
+parts without dropping their native inputs. The effective thermal-pressure
+rotational-compressor override now uses a marked aerogel bill that pays its
+previously displaced second compressed-iron gear and brass casing, retaining
+the prior pack progression, pressure tube, seal and both physical parts; the
+no-Manufacturing route is unchanged. Native bracketed pressure-tube world
+applications and frozen mesh swaps are not asserted loaded or verified.
 
 PLA and PP are **ordinary Tinkers materials**. Their actual TCon head/handle stats
 are distinct and must flow through the same part-in-machine formulas as other

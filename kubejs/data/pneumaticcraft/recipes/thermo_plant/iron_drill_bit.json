@@ -1,0 +1,62 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:thermo_plant",
+        "air_use_multiplier": 2.0,
+        "exothermic": false,
+        "fluid_input": {
+          "type": "pneumaticcraft:fluid",
+          "amount": 2000,
+          "tag": "forge:lubricant"
+        },
+        "item_output": {
+          "item": "pneumaticcraft:drill_bit_iron"
+        },
+        "pressure": 3.0,
+        "speed": 0.5,
+        "item_input": {
+          "type": "better_manufacturing:pneu_prepared_drill_bit",
+          "output": "pneumaticcraft:drill_bit_iron",
+          "tag": "forge:ingots/iron"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:thermo_plant",
+        "air_use_multiplier": 2.0,
+        "exothermic": false,
+        "fluid_input": {
+          "type": "pneumaticcraft:fluid",
+          "amount": 2000,
+          "tag": "forge:lubricant"
+        },
+        "item_output": {
+          "item": "pneumaticcraft:drill_bit_iron"
+        },
+        "pressure": 3.0,
+        "speed": 0.5,
+        "item_input": {
+          "tag": "forge:ingots/iron"
+        }
+      }
+    }
+  ]
+}

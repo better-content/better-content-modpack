@@ -27,10 +27,17 @@
           },
           "F": {
             "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "tag": "pneumaticcraft:plastic_sheets"
+            },
+            "marker": "pneumaticcraft:medium_tank"
           }
         },
         "pattern": [
-          "FSP",
+          "FSA",
           "ITI",
           "PSP"
         ],

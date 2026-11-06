@@ -11,7 +11,7 @@
       "recipe": {
         "type": "better_manufacturing:part_variant",
         "pattern": [
-          "BBH",
+          "ABH",
           "LGI"
         ],
         "key": {
@@ -29,6 +29,13 @@
           },
           "H": {
             "item": "tconstruct:tough_handle"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "item": "minecraft:iron_bars"
+            },
+            "marker": "pneumaticcraft:heat_sink"
           }
         },
         "result": {

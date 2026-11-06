@@ -1,0 +1,45 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:thermo_plant",
+        "exothermic": false,
+        "fluid_input": {
+          "type": "pneumaticcraft:fluid",
+          "amount": 1000,
+          "fluid": "minecraft:water"
+        },
+        "item_input": {
+          "type": "forge:partial_nbt",
+          "item": "minecraft:lapis_lazuli",
+          "nbt": { "better_manufacturing": { "upgrade_matrix_lapis": 1 } }
+        },
+        "item_output": { "count": 4, "item": "pneumaticcraft:upgrade_matrix" },
+        "pressure": 2.0,
+        "temperature": { "min_temp": 273 }
+      }
+    },
+    {
+      "conditions": [
+        { "type": "forge:not", "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" } }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:thermo_plant",
+        "exothermic": false,
+        "fluid_input": {
+          "type": "pneumaticcraft:fluid",
+          "amount": 1000,
+          "fluid": "minecraft:water"
+        },
+        "item_input": { "item": "minecraft:lapis_lazuli" },
+        "item_output": { "count": 4, "item": "pneumaticcraft:upgrade_matrix" },
+        "pressure": 2.0,
+        "temperature": { "min_temp": 273 }
+      }
+    }
+  ]
+}

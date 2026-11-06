@@ -1,28 +1,74 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "minecraft:rail"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "minecraft:rail"
+          },
+          "$": {
+            "item": "littlelogistics:spring"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "H#P",
+          "$#$",
+          " # "
+        ],
+        "result": {
+          "count": 3,
+          "item": "littlelogistics:car_dock_rail"
+        },
+        "show_notification": true
+      }
     },
-    "$": {
-      "item": "littlelogistics:spring"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "minecraft:rail"
+          },
+          "$": {
+            "item": "littlelogistics:spring"
+          }
+        },
+        "pattern": [
+          " # ",
+          "$#$",
+          " # "
+        ],
+        "result": {
+          "count": 3,
+          "item": "littlelogistics:car_dock_rail"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "H#P",
-    "$#$",
-    " # "
-  ],
-  "result": {
-    "count": 3,
-    "item": "littlelogistics:car_dock_rail"
-  },
-  "show_notification": true
+  ]
 }

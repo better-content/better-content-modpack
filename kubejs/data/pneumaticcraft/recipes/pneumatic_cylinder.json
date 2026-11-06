@@ -26,10 +26,17 @@
           },
           "H": {
             "item": "tconstruct:tough_handle"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "tag": "pneumaticcraft:plastic_sheets"
+            },
+            "marker": "pneumaticcraft:pneumatic_cylinder"
           }
         },
         "pattern": [
-          "XHP",
+          "XHA",
           "PIP",
           "PBP"
         ],

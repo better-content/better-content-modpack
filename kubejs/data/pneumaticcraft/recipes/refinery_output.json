@@ -11,7 +11,7 @@
       "recipe": {
         "type": "better_manufacturing:part_variant",
         "pattern": [
-          "SSL",
+          "ASL",
           "GDG",
           "SSS"
         ],
@@ -27,6 +27,13 @@
           },
           "L": {
             "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "item": "pneumaticcraft:reinforced_stone_slab"
+            },
+            "marker": "pneumaticcraft:refinery_output"
           }
         },
         "result": {

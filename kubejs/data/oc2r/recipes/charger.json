@@ -1,34 +1,144 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "HPJ",
-    "XTX",
-    "IRI"
-  ],
-  "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "acceptMirrored": true,
+        "pattern": [
+          "IPI",
+          "XTX",
+          "IRI",
+          "HP "
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          },
+          "T": {
+            "item": "oc2r:transistor"
+          },
+          "X": {
+            "item": "oc2r:bus_interface"
+          },
+          "R": {
+            "tag": "forge:storage_blocks/redstone"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          }
+        },
+        "result": {
+          "item": "oc2r:charger"
+        }
+      }
     },
-    "P": {
-      "item": "minecraft:light_weighted_pressure_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "HPJ",
+          "XTX",
+          "IRI"
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "P": {
+            "item": "minecraft:light_weighted_pressure_plate"
+          },
+          "T": {
+            "item": "oc2r:transistor"
+          },
+          "X": {
+            "item": "oc2r:bus_interface"
+          },
+          "R": {
+            "tag": "forge:storage_blocks/redstone"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "J": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "oc2r:charger"
+        }
+      }
     },
-    "T": {
-      "item": "oc2r:transistor"
-    },
-    "X": {
-      "item": "oc2r:bus_interface"
-    },
-    "R": {
-      "tag": "forge:storage_blocks/redstone"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "J": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "create"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "HPJ",
+          "XTX",
+          "IRI"
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "P": {
+            "item": "minecraft:light_weighted_pressure_plate"
+          },
+          "T": {
+            "item": "oc2r:transistor"
+          },
+          "X": {
+            "item": "oc2r:bus_interface"
+          },
+          "R": {
+            "tag": "forge:storage_blocks/redstone"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "J": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "oc2r:charger"
+        }
+      }
     }
-  },
-  "result": {
-    "item": "oc2r:charger"
-  }
+  ]
 }

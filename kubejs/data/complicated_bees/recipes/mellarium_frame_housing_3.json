@@ -1,30 +1,82 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "complicated_bees:mellarium_panel"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "acceptMirrored": false,
+        "pattern": [
+          "#N#",
+          "#A#",
+          "###",
+          "J P"
+        ],
+        "key": {
+          "#": {
+            "item": "complicated_bees:mellarium_panel"
+          },
+          "A": {
+            "item": "complicated_bees:mellarium_frame_housing_2"
+          },
+          "N": {
+            "item": "minecraft:netherite_ingot"
+          },
+          "J": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:mellarium_frame_housing_3"
+        }
+      }
     },
-    "A": {
-      "item": "complicated_bees:mellarium_frame_housing_2"
-    },
-    "N": {
-      "item": "minecraft:netherite_ingot"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "complicated_bees:mellarium_panel"
+          },
+          "A": {
+            "item": "complicated_bees:mellarium_frame_housing_2"
+          },
+          "N": {
+            "item": "minecraft:netherite_ingot"
+          }
+        },
+        "pattern": [
+          "#N#",
+          "#A#",
+          "###"
+        ],
+        "result": {
+          "item": "complicated_bees:mellarium_frame_housing_3"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "HNP",
-    "#A#",
-    "###"
-  ],
-  "result": {
-    "item": "complicated_bees:mellarium_frame_housing_3"
-  },
-  "show_notification": true
+  ]
 }

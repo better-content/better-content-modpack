@@ -1,0 +1,42 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "complicated_bees:item_enabled",
+          "item": "complicated_bees:frame"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "OOO",
+          "OXO",
+          "OOO"
+        ],
+        "key": {
+          "O": {
+            "tag": "forge:rods/wooden"
+          },
+          "X": {
+            "tag": "forge:string"
+          }
+        },
+        "result": {
+          "item": "minecraft:stick",
+          "nbt": "{better_manufacturing:{bees_cost_frame:1}}"
+        }
+      }
+    }
+  ]
+}

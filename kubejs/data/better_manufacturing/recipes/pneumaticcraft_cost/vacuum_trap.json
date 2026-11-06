@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "pneumaticcraft"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:pneu_native_cost_bundle",
+        "marker": "pneumaticcraft:vacuum_trap",
+        "anchor": {
+          "item": "pneumaticcraft:reinforced_stone_slab"
+        },
+        "costs": [
+          {
+            "item": "pneumaticcraft:reinforced_stone_slab"
+          },
+          {
+            "item": "pneumaticcraft:reinforced_stone_slab"
+          }
+        ]
+      }
+    }
+  ]
+}

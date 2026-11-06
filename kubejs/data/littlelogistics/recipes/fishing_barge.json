@@ -1,27 +1,71 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "minecraft:fishing_rod"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "minecraft:fishing_rod"
+          },
+          "$": {
+            "item": "minecraft:iron_ingot"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "###",
+          "$$$",
+          "HP "
+        ],
+        "result": {
+          "item": "littlelogistics:fishing_barge"
+        },
+        "show_notification": true
+      }
     },
-    "$": {
-      "item": "minecraft:iron_ingot"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "minecraft:fishing_rod"
+          },
+          "$": {
+            "item": "minecraft:iron_ingot"
+          }
+        },
+        "pattern": [
+          "###",
+          "$$$"
+        ],
+        "result": {
+          "item": "littlelogistics:fishing_barge"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "###",
-    "$$$",
-    "HP "
-  ],
-  "result": {
-    "item": "littlelogistics:fishing_barge"
-  },
-  "show_notification": true
+  ]
 }

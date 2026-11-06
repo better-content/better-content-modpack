@@ -12,7 +12,7 @@
         "type": "better_manufacturing:part_variant",
         "pattern": [
           "OGO",
-          "WTL",
+          "ATL",
           "SSS"
         ],
         "key": {
@@ -35,6 +35,13 @@
           },
           "L": {
             "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "item": "pneumaticcraft:reinforced_brick_wall"
+            },
+            "marker": "pneumaticcraft:etching_tank"
           }
         },
         "result": {

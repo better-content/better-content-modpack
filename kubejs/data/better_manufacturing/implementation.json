@@ -1209,11 +1209,6 @@
       "owner_local": "pending",
       "pack_acceptance": "pending"
     },
-    "createsifter:advanced_brass_mesh": {
-      "implementation": "pending",
-      "owner_local": "pending",
-      "pack_acceptance": "pending"
-    },
     "createsifter:andesite_mesh": {
       "implementation": "pending",
       "owner_local": "pending",
@@ -1500,11 +1495,6 @@
       "pack_acceptance": "pending"
     },
     "pneumaticcraft:drone_interface": {
-      "implementation": "pending",
-      "owner_local": "pending",
-      "pack_acceptance": "pending"
-    },
-    "pneumaticcraft:electric_compressor": {
       "implementation": "pending",
       "owner_local": "pending",
       "pack_acceptance": "pending"
@@ -2229,17 +2219,7 @@
       "owner_local": "pending",
       "pack_acceptance": "pending"
     },
-    "vs_clockwork:brass_redstone_resistor": {
-      "implementation": "pending",
-      "owner_local": "pending",
-      "pack_acceptance": "pending"
-    },
     "vs_clockwork:coal_burner": {
-      "implementation": "pending",
-      "owner_local": "pending",
-      "pack_acceptance": "pending"
-    },
-    "vs_clockwork:combustion_engine": {
       "implementation": "pending",
       "owner_local": "pending",
       "pack_acceptance": "pending"

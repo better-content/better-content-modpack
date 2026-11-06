@@ -1,0 +1,33 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "littlelogistics:spring"
+          },
+          {
+            "tag": "forge:stone"
+          },
+          {
+            "tag": "forge:stone"
+          }
+        ],
+        "result": {
+          "item": "littlelogistics:spring",
+          "count": 1,
+          "nbt": "{better_manufacturing:{dock_stone_paid:1}}"
+        }
+      }
+    }
+  ]
+}

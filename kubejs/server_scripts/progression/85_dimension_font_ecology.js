@@ -25,13 +25,14 @@ ServerEvents.recipes(function (event) {
     var partVariants = Platform.isLoaded('better_manufacturing')
     event.remove({ output: 'better_industrial_heat:boiler_heater' })
     if (partVariants) {
-        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['PCS', 'FHF', 'MTB'],
+        event.custom({ type: 'better_manufacturing:mechanical_part_variant',
+            pattern: ['SCS', 'FHF', 'MTB', 'P  '], acceptMirrored: false,
             key: { P: { item: 'tconstruct:large_plate' }, S: { tag: 'forge:plates/steel' },
                 C: { tag: 'forge:plates/copper' }, F: { item: 'create:fluid_pipe' },
                 H: { item: 'better_industrial_heat:heat_pipe' }, M: { item: 'minecraft:magma_cream' },
                 T: { item: 'create:fluid_tank' }, B: { item: 'minecraft:blaze_rod' } },
             result: { item: 'better_industrial_heat:boiler_heater' },
-            function: 'better_manufacturing:industrialheat/thermal', parts: [{ role: 'thermal_surface', slot: 0 }]
+            function: 'better_manufacturing:industrialheat/thermal', parts: [{ role: 'thermal_surface', slot: 9 }]
         }).id('kubejs:fonts/nether/boiler_heater')
     } else {
         event.shaped('better_industrial_heat:boiler_heater', ['SCS', 'FHF', 'MTB'], {
@@ -45,12 +46,13 @@ ServerEvents.recipes(function (event) {
     // configured liner part; duplicate earlier roots would bypass this gate.
     event.remove({ output: 'pneumaticcraft:thermopneumatic_processing_plant' })
     if (partVariants) {
-        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['LSS', 'TMT', 'SPS'],
+        event.custom({ type: 'better_manufacturing:mechanical_part_variant',
+            pattern: ['SSS', 'TPT', 'SSS', 'ML '], acceptMirrored: false,
             key: { L: { item: 'tconstruct:large_plate' }, S: { item: 'pneumaticcraft:reinforced_stone_slab' },
-                T: { item: 'pneumaticcraft:small_tank' }, M: { item: 'minecraft:magma_cream' },
-                P: { item: 'pneumaticcraft:pressure_tube' } },
+                T: { type: 'better_manufacturing:pneu_empty_tank', item: 'pneumaticcraft:small_tank' },
+                M: { item: 'minecraft:magma_cream' }, P: { item: 'pneumaticcraft:pressure_tube' } },
             result: { item: 'pneumaticcraft:thermopneumatic_processing_plant' },
-            function: 'better_manufacturing:pneuprocess/chemistry', parts: [{ role: 'liner', slot: 0 }]
+            function: 'better_manufacturing:pneuprocess/chemistry', parts: [{ role: 'liner', slot: 10 }]
         }).id('kubejs:fonts/nether/thermopneumatic_plant')
     } else {
         event.shaped('pneumaticcraft:thermopneumatic_processing_plant', ['SSS', 'TMT', 'SPS'], {

@@ -2,10 +2,10 @@
   "type": "forge:conditional",
   "recipes": [
     {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
-      "type": "better_manufacturing:part_variant", "pattern": [" S ", "SCS", " S "],
-      "key": {"C": {"item": "create:andesite_alloy"}, "S": {"item": "tconstruct:small_blade"}},
+      "type": "better_manufacturing:part_variant", "pattern": ["SIS", "ICI", "SIS"],
+      "key": {"C": {"item": "create:andesite_alloy"}, "S": {"item": "tconstruct:small_blade"}, "I": {"tag": "forge:plates/iron"}},
       "result": {"item": "create:propeller"}, "function": "better_manufacturing:create/airflow",
-      "parts": [{"role": "north", "slot": 1}, {"role": "west", "slot": 3}, {"role": "east", "slot": 5}, {"role": "south", "slot": 7}]
+      "parts": [{"role": "north", "slot": 0}, {"role": "west", "slot": 6}, {"role": "east", "slot": 2}, {"role": "south", "slot": 8}]
     }},
     {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
       "type": "minecraft:crafting_shaped", "pattern": [" S ", "SCS", " S "],

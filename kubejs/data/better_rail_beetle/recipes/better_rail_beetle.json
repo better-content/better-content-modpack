@@ -17,11 +17,13 @@
         }
       ],
       "recipe": {
-        "type": "better_manufacturing:part_variant",
+        "type": "better_manufacturing:mechanical_part_variant",
+        "acceptMirrored": false,
         "pattern": [
-          "HEP",
-          " C E",
-          " BM"
+          "ECE",
+          "RFR",
+          "BMQ",
+          "H P"
         ],
         "key": {
           "E": {
@@ -35,6 +37,15 @@
           },
           "M": {
             "item": "minecraft:minecart"
+          },
+          "R": {
+            "item": "minecraft:rail"
+          },
+          "F": {
+            "item": "minecraft:furnace"
+          },
+          "Q": {
+            "item": "minecraft:compass"
           },
           "H": {
             "item": "tconstruct:tough_handle"
@@ -50,11 +61,11 @@
         "parts": [
           {
             "role": "drive_shaft",
-            "slot": 0
+            "slot": 9
           },
           {
             "role": "working_surface",
-            "slot": 2
+            "slot": 11
           }
         ]
       }

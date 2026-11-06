@@ -19,9 +19,15 @@ ServerEvents.recipes(function (event) {
 
     event.remove({ output: 'compressedcreativity:rotational_compressor' })
     if (Platform.isLoaded('better_manufacturing')) {
-        // Replace one duplicate gear and casing with consumed parts; the open frame uses a seal.
+        // Restore the second native gear and brass casing without erasing the
+        // aerogel, shaft, pressure tube, seal, propeller or materialized parts.
+        event.shapeless(Item.of('aether:aerogel',
+            '{better_manufacturing:{rotational_compressor_bill:1}}'),
+            ['aether:aerogel', 'pneumaticcraft:compressed_iron_gear', 'create:brass_casing'])
+            .id('kubejs:thermal_pressure/rotational_compressor_bill')
         event.custom({ type: 'better_manufacturing:part_variant', pattern: ['XSP', 'GAL', 'CHB'],
-            key: { X: { item: 'aether:aerogel' }, S: { item: 'create:shaft' },
+            key: { X: { type: 'forge:partial_nbt', item: 'aether:aerogel',
+                nbt: '{better_manufacturing:{rotational_compressor_bill:1}}' }, S: { item: 'create:shaft' },
                 P: { item: 'create:propeller' }, G: { item: 'pneumaticcraft:compressed_iron_gear' },
                 A: { item: 'kubejs:pressure_seal' }, C: { item: 'create:brass_casing' },
                 B: { item: 'pneumaticcraft:pressure_tube' }, L: { item: 'tconstruct:large_plate' },

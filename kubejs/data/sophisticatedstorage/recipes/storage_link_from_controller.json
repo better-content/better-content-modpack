@@ -1,0 +1,68 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "sophisticatedcore:item_enabled",
+          "itemRegistryName": "sophisticatedstorage:storage_link"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [
+          {
+            "item": "sophisticatedstorage:controller"
+          },
+          {
+            "tag": "forge:ender_pearls"
+          },
+          {
+            "item": "tconstruct:tool_handle"
+          },
+          {
+            "item": "tconstruct:large_plate"
+          }
+        ],
+        "result": {
+          "count": 3,
+          "item": "sophisticatedstorage:storage_link"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        },
+        {
+          "type": "sophisticatedcore:item_enabled",
+          "itemRegistryName": "sophisticatedstorage:storage_link"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [
+          {
+            "item": "sophisticatedstorage:controller"
+          },
+          {
+            "tag": "forge:ender_pearls"
+          }
+        ],
+        "result": {
+          "count": 3,
+          "item": "sophisticatedstorage:storage_link"
+        }
+      }
+    }
+  ]
+}

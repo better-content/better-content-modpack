@@ -1,0 +1,68 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:thermo_plant",
+        "air_use_multiplier": 5.0,
+        "exothermic": false,
+        "fluid_input": {
+          "type": "pneumaticcraft:fluid",
+          "amount": 4000,
+          "tag": "forge:lubricant"
+        },
+        "item_output": {
+          "item": "pneumaticcraft:drill_bit_compressed_iron"
+        },
+        "pressure": 4.0,
+        "speed": 0.25,
+        "temperature": {
+          "min_temp": 573
+        },
+        "item_input": {
+          "type": "better_manufacturing:pneu_prepared_drill_bit",
+          "output": "pneumaticcraft:drill_bit_compressed_iron",
+          "tag": "forge:ingots/compressed_iron"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:thermo_plant",
+        "air_use_multiplier": 5.0,
+        "exothermic": false,
+        "fluid_input": {
+          "type": "pneumaticcraft:fluid",
+          "amount": 4000,
+          "tag": "forge:lubricant"
+        },
+        "item_output": {
+          "item": "pneumaticcraft:drill_bit_compressed_iron"
+        },
+        "pressure": 4.0,
+        "speed": 0.25,
+        "temperature": {
+          "min_temp": 573
+        },
+        "item_input": {
+          "tag": "forge:ingots/compressed_iron"
+        }
+      }
+    }
+  ]
+}

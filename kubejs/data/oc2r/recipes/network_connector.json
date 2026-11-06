@@ -1,29 +1,131 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "IGI",
-    "ITI",
-    "HP "
-  ],
-  "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "acceptMirrored": true,
+        "pattern": [
+          "IGI",
+          "ITI",
+          "HP "
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "G": {
+            "tag": "forge:glass"
+          },
+          "T": {
+            "item": "oc2r:transistor"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "oc2r:network_connector",
+          "count": 4
+        }
+      }
     },
-    "G": {
-      "tag": "forge:glass"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "IGI",
+          "ITI",
+          "HP "
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "G": {
+            "tag": "forge:glass"
+          },
+          "T": {
+            "item": "oc2r:transistor"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "oc2r:network_connector",
+          "count": 4
+        }
+      }
     },
-    "T": {
-      "item": "oc2r:transistor"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "create"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "IGI",
+          "ITI",
+          "HP "
+        ],
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "G": {
+            "tag": "forge:glass"
+          },
+          "T": {
+            "item": "oc2r:transistor"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "oc2r:network_connector",
+          "count": 4
+        }
+      }
     }
-  },
-  "result": {
-    "item": "oc2r:network_connector",
-    "count": 4
-  }
+  ]
 }

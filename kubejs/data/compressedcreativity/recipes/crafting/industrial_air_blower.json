@@ -9,11 +9,12 @@
         }
       ],
       "recipe": {
-        "type": "better_manufacturing:part_variant",
+        "type": "better_manufacturing:mechanical_part_variant",
         "pattern": [
-          "HTB",
+          "ITI",
           "ICI",
-          "IGI"
+          "IGI",
+          "HB "
         ],
         "key": {
           "H": {
@@ -42,11 +43,11 @@
         "parts": [
           {
             "role": "handle",
-            "slot": 0
+            "slot": 9
           },
           {
             "role": "blade",
-            "slot": 2
+            "slot": 10
           }
         ]
       }

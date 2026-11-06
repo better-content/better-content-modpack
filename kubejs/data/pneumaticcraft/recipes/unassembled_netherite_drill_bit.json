@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:pneu_drill_bit_source",
+        "output": "pneumaticcraft:drill_bit_netherite",
+        "material_tag": "forge:ingots/netherite"
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "pneumaticcraft:drill_bit_diamond"
+          },
+          {
+            "tag": "forge:ingots/netherite"
+          }
+        ],
+        "result": {
+          "item": "pneumaticcraft:unassembled_netherite_drill_bit"
+        }
+      }
+    }
+  ]
+}

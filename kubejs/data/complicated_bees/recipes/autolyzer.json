@@ -1,30 +1,75 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "A": {
-      "item": "complicated_bees:analyzer"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "HMP",
+          " A "
+        ],
+        "key": {
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "M": {
+            "type": "forge:partial_nbt",
+            "item": "minecraft:iron_ingot",
+            "nbt": "{better_manufacturing:{bees_cost_autolyzer:1}}"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "item": "complicated_bees:analyzer"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:autolyzer"
+        }
+      }
     },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "W": {
-      "item": "minecraft:smooth_stone"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "A": {
+            "item": "complicated_bees:analyzer"
+          },
+          "I": {
+            "item": "minecraft:iron_ingot"
+          },
+          "W": {
+            "item": "minecraft:smooth_stone"
+          }
+        },
+        "pattern": [
+          "III",
+          "IAI",
+          "WWW"
+        ],
+        "result": {
+          "item": "complicated_bees:autolyzer"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "HPI",
-    "IAI",
-    "WWW"
-  ],
-  "result": {
-    "item": "complicated_bees:autolyzer"
-  },
-  "show_notification": true
+  ]
 }

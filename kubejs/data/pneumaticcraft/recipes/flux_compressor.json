@@ -38,12 +38,19 @@
           },
           "H": {
             "item": "tconstruct:tough_handle"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "tag": "forge:dusts/redstone"
+            },
+            "marker": "pneumaticcraft:flux_compressor"
           }
         },
         "pattern": [
           "XCH",
           "FRT",
-          "GQP"
+          "AQP"
         ],
         "result": {
           "item": "pneumaticcraft:flux_compressor"

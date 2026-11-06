@@ -6,6 +6,48 @@
         {
           "type": "complicated_bees:item_enabled",
           "item": "complicated_bees:honeyed_frame"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "HMP"
+        ],
+        "key": {
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "M": {
+            "type": "forge:partial_nbt",
+            "item": "complicated_bees:honeyed_stick",
+            "nbt": "{better_manufacturing:{bees_cost_honeyed_frame:1}}"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:honeyed_frame"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "complicated_bees:item_enabled",
+          "item": "complicated_bees:honeyed_frame"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
         }
       ],
       "recipe": {
@@ -17,16 +59,10 @@
           },
           "X": {
             "tag": "forge:string"
-          },
-          "H": {
-            "item": "tconstruct:tool_handle"
-          },
-          "P": {
-            "item": "tconstruct:large_plate"
           }
         },
         "pattern": [
-          "HPO",
+          "OOO",
           "OXO",
           "OOO"
         ],

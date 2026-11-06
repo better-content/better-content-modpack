@@ -9,11 +9,12 @@
         }
       ],
       "recipe": {
-        "type": "better_manufacturing:part_variant",
+        "type": "better_manufacturing:prettypipes_mechanical",
         "pattern": [
           "TST",
           "SRS",
-          "TSA"
+          "TSA",
+          "H  "
         ],
         "key": {
           "T": {
@@ -26,6 +27,9 @@
             "item": "minecraft:redstone_block"
           },
           "A": {
+            "item": "minecraft:iron_ingot"
+          },
+          "H": {
             "item": "tconstruct:tough_handle"
           }
         },
@@ -33,12 +37,7 @@
           "item": "prettypipes:pressurizer"
         },
         "function": "better_manufacturing:prettypipes/pressurizer",
-        "parts": [
-          {
-            "role": "working_assembly",
-            "slot": 8
-          }
-        ]
+        "handle_slot": 9
       }
     },
     {

@@ -1,15 +1,85 @@
 {
   "type": "forge:conditional",
   "recipes": [
-    {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
-      "type": "better_manufacturing:part_variant", "pattern": [" H ", "HMH", " H "],
-      "key": {"H": {"item": "tconstruct:tool_handle"}, "M": {"item": "create:zinc_ingot"}},
-      "result": {"item": "createsifter:zinc_mesh"}, "function": "better_manufacturing:sifter/frame",
-      "parts": [{"slot": 1, "role": "north"}, {"slot": 3, "role": "west"}, {"slot": 5, "role": "east"}, {"slot": 7, "role": "south"}]
-    }},
-    {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
-      "type": "minecraft:crafting_shaped", "pattern": ["SSS", "SMS", "SSS"],
-      "key": {"S": {"item": "minecraft:stick"}, "M": {"item": "create:zinc_ingot"}}, "result": {"item": "createsifter:zinc_mesh"}
-    }}
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "pattern": [
+          " H ",
+          "HMH",
+          " H "
+        ],
+        "key": {
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "M": {
+            "type": "forge:partial_nbt",
+            "item": "minecraft:stick",
+            "nbt": "{better_manufacturing:{zinc_mesh_paid:1}}"
+          }
+        },
+        "result": {
+          "item": "createsifter:zinc_mesh",
+          "count": 1
+        },
+        "function": "better_manufacturing:sifter/frame",
+        "parts": [
+          {
+            "slot": 1,
+            "role": "north"
+          },
+          {
+            "slot": 3,
+            "role": "west"
+          },
+          {
+            "slot": 5,
+            "role": "east"
+          },
+          {
+            "slot": 7,
+            "role": "south"
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "SSS",
+          "SMS",
+          "SSS"
+        ],
+        "key": {
+          "S": {
+            "item": "minecraft:stick"
+          },
+          "M": {
+            "item": "create:zinc_ingot"
+          }
+        },
+        "result": {
+          "item": "createsifter:zinc_mesh",
+          "count": 1
+        }
+      }
+    }
   ]
 }

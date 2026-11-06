@@ -9,11 +9,12 @@
         }
       ],
       "recipe": {
-        "type": "better_manufacturing:part_variant",
+        "type": "better_manufacturing:mechanical_part_variant",
         "pattern": [
           "BBB",
           "BSB",
-          "BLU"
+          "BBB",
+          "LU "
         ],
         "key": {
           "B": {
@@ -36,11 +37,11 @@
         "parts": [
           {
             "role": "plate",
-            "slot": 7
+            "slot": 9
           },
           {
             "role": "handle",
-            "slot": 8
+            "slot": 10
           }
         ]
       }

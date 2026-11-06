@@ -13,7 +13,7 @@
         "pattern": [
           "GRG",
           "TRT",
-          "SLH"
+          "ALH"
         ],
         "key": {
           "G": {
@@ -33,6 +33,13 @@
           },
           "H": {
             "item": "tconstruct:tough_handle"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "item": "pneumaticcraft:reinforced_stone_slab"
+            },
+            "marker": "pneumaticcraft:vacuum_pump"
           }
         },
         "result": {

@@ -9,11 +9,12 @@
         }
       ],
       "recipe": {
-        "type": "better_manufacturing:part_variant",
+        "type": "better_manufacturing:mechanical_part_variant",
         "pattern": [
-          "AHA",
+          "APA",
           "PTP",
-          "APA"
+          "APA",
+          "H  "
         ],
         "key": {
           "P": {
@@ -42,7 +43,7 @@
         "parts": [
           {
             "role": "hub_suspension",
-            "slot": 1
+            "slot": 9
           }
         ]
       }

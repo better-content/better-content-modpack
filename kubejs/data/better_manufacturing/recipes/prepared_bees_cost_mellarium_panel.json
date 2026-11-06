@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "RW#",
+          "W#W",
+          "#WP"
+        ],
+        "key": {
+          "#": {
+            "item": "complicated_bees:honeyed_planks"
+          },
+          "P": {
+            "item": "complicated_bees:pollen"
+          },
+          "R": {
+            "item": "complicated_bees:royal_jelly"
+          },
+          "W": {
+            "item": "complicated_bees:beeswax"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:beeswax",
+          "nbt": "{better_manufacturing:{bees_cost_mellarium_panel:1}}"
+        }
+      }
+    }
+  ]
+}

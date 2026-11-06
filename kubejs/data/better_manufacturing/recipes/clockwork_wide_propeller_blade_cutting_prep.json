@@ -1,0 +1,15 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "vs_clockwork" },
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:clockwork_blade_cutting_prep",
+        "output": "vs_clockwork:wide_propeller_blade"
+      }
+    }
+  ]
+}

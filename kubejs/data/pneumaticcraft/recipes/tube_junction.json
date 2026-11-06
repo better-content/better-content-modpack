@@ -20,10 +20,17 @@
           },
           "X": {
             "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "item": "pneumaticcraft:reinforced_brick_wall"
+            },
+            "marker": "pneumaticcraft:tube_junction"
           }
         },
         "pattern": [
-          "XPI",
+          "XPA",
           "PPP",
           "IPI"
         ],

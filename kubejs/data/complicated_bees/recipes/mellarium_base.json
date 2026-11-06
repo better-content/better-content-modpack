@@ -6,17 +6,16 @@
         { "type": "forge:mod_loaded", "modid": "better_manufacturing" }
       ],
       "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "category": "misc",
-        "pattern": [ "HP#", "#A#", "###" ],
+        "type": "create:mechanical_crafting",
+        "acceptMirrored": false,
+        "pattern": [ "### ", "#A#H", "###P" ],
         "key": {
           "#": { "item": "complicated_bees:mellarium_panel" },
           "A": { "tag": "minecraft:logs" },
           "H": { "item": "tconstruct:tool_handle" },
           "P": { "item": "tconstruct:large_plate" }
         },
-        "result": { "item": "complicated_bees:mellarium_base" },
-        "show_notification": true
+        "result": { "item": "complicated_bees:mellarium_base" }
       }
     },
     {

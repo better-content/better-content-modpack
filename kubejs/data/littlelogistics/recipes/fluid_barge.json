@@ -1,27 +1,72 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "minecraft:glass"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "minecraft:glass"
+          },
+          "$": {
+            "item": "minecraft:iron_ingot"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "#H#",
+          "P# ",
+          "$$$"
+        ],
+        "result": {
+          "item": "littlelogistics:fluid_barge"
+        },
+        "show_notification": true
+      }
     },
-    "$": {
-      "item": "minecraft:iron_ingot"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "minecraft:glass"
+          },
+          "$": {
+            "item": "minecraft:iron_ingot"
+          }
+        },
+        "pattern": [
+          "# #",
+          " # ",
+          "$$$"
+        ],
+        "result": {
+          "item": "littlelogistics:fluid_barge"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "#H#",
-    "P# ",
-    "$$$"
-  ],
-  "result": {
-    "item": "littlelogistics:fluid_barge"
-  },
-  "show_notification": true
+  ]
 }

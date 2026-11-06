@@ -9,11 +9,12 @@
         }
       ],
       "recipe": {
-        "type": "better_manufacturing:part_variant",
+        "type": "better_manufacturing:mechanical_part_variant",
         "pattern": [
           "CIC",
-          "IHI",
-          "CBC"
+          "I I",
+          "CIC",
+          "HB "
         ],
         "key": {
           "C": {
@@ -36,11 +37,11 @@
         "parts": [
           {
             "role": "handle",
-            "slot": 4
+            "slot": 9
           },
           {
             "role": "blade",
-            "slot": 7
+            "slot": 10
           }
         ]
       }

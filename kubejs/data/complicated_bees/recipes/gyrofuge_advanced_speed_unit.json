@@ -1,47 +1,92 @@
 {
-  "type": "better_manufacturing:part_variant",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "complicated_bees:gyrofuge_panel"
-    },
-    "A": {
-      "item": "complicated_bees:gyrofuge_speed_unit"
-    },
-    "C": {
-      "item": "minecraft:redstone_lamp"
-    },
-    "G": {
-      "item": "minecraft:golden_apple"
-    },
-    "N": {
-      "item": "minecraft:netherite_ingot"
-    },
-    "H": {
-      "item": "tconstruct:tough_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
-    }
-  },
-  "pattern": [
-    "HGP",
-    "CAC",
-    "#N#"
-  ],
-  "result": {
-    "item": "complicated_bees:gyrofuge_advanced_speed_unit"
-  },
-  "show_notification": true,
-  "parts": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "role": "rotor",
-      "slot": 0
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "HMP",
+          " A "
+        ],
+        "key": {
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "M": {
+            "type": "forge:partial_nbt",
+            "item": "complicated_bees:gyrofuge_panel",
+            "nbt": "{better_manufacturing:{bees_cost_gyrofuge_advanced_speed_unit:1}}"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "item": "complicated_bees:gyrofuge_speed_unit"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:gyrofuge_advanced_speed_unit"
+        },
+        "function": "better_manufacturing:bees/gyrofuge/speed",
+        "parts": [
+          {
+            "role": "rotor",
+            "slot": 0
+          },
+          {
+            "role": "plate",
+            "slot": 2
+          }
+        ]
+      }
     },
     {
-      "role": "plate",
-      "slot": 2
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "A": {
+            "item": "complicated_bees:gyrofuge_speed_unit"
+          },
+          "C": {
+            "item": "minecraft:redstone_lamp"
+          },
+          "G": {
+            "item": "minecraft:golden_apple"
+          },
+          "N": {
+            "item": "minecraft:netherite_ingot"
+          }
+        },
+        "pattern": [
+          "#G#",
+          "CAC",
+          "#N#"
+        ],
+        "result": {
+          "item": "complicated_bees:gyrofuge_advanced_speed_unit"
+        },
+        "show_notification": true
+      }
     }
-  ],
-  "function": "better_manufacturing:bees/gyrofuge/speed"
+  ]
 }

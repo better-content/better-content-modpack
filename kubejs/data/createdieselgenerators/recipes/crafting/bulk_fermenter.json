@@ -1,25 +1,66 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "ABA",
-    "HP ",
-    "   "
-  ],
-  "key": {
-    "B": {
-      "tag": "forge:barrels/wooden"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "ABA",
+          "HP ",
+          "   "
+        ],
+        "key": {
+          "B": {
+            "tag": "forge:barrels/wooden"
+          },
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "createdieselgenerators:bulk_fermenter"
+        }
+      }
     },
-    "A": {
-      "item": "create:andesite_alloy"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "ABA"
+        ],
+        "key": {
+          "B": {
+            "tag": "forge:barrels/wooden"
+          },
+          "A": {
+            "item": "create:andesite_alloy"
+          }
+        },
+        "result": {
+          "item": "createdieselgenerators:bulk_fermenter"
+        }
+      }
     }
-  },
-  "result": {
-    "item": "createdieselgenerators:bulk_fermenter"
-  }
+  ]
 }

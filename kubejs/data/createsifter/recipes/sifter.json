@@ -2,35 +2,93 @@
   "type": "forge:conditional",
   "recipes": [
     {
-      "conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}],
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
       "recipe": {
         "type": "better_manufacturing:part_variant",
-        "pattern": ["WAW", "HCH", " P "],
+        "pattern": [
+          "WAW",
+          "HCH",
+          " N "
+        ],
         "key": {
-          "W": {"tag": "minecraft:planks"},
-          "A": {"item": "create:andesite_casing"},
-          "C": {"item": "create:cogwheel"},
-          "P": {"tag": "forge:stone"},
-          "H": {"item": "tconstruct:tool_handle"}
+          "W": {
+            "tag": "minecraft:planks"
+          },
+          "A": {
+            "item": "create:andesite_casing"
+          },
+          "C": {
+            "item": "create:cogwheel"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "N": {
+            "type": "forge:partial_nbt",
+            "item": "minecraft:nether_brick",
+            "nbt": "{better_manufacturing:{sifter_paid_sticks:1}}"
+          }
         },
-        "result": {"item": "createsifter:sifter", "count": 1},
+        "result": {
+          "item": "createsifter:sifter",
+          "count": 1
+        },
         "function": "better_manufacturing:sifter/machine",
-        "parts": [{"slot": 3, "role": "left"}, {"slot": 5, "role": "right"}]
+        "parts": [
+          {
+            "slot": 3,
+            "role": "left"
+          },
+          {
+            "slot": 5,
+            "role": "right"
+          }
+        ]
       }
     },
     {
-      "conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}],
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
-        "pattern": ["WAW", "SCS", " P "],
+        "pattern": [
+          "WAW",
+          "SCS",
+          " P "
+        ],
         "key": {
-          "W": {"tag": "minecraft:planks"},
-          "A": {"item": "create:andesite_casing"},
-          "C": {"item": "create:cogwheel"},
-          "P": {"tag": "forge:stone"},
-          "S": {"item": "minecraft:stick"}
+          "W": {
+            "tag": "minecraft:planks"
+          },
+          "A": {
+            "item": "create:andesite_casing"
+          },
+          "C": {
+            "item": "create:cogwheel"
+          },
+          "P": {
+            "tag": "forge:stone"
+          },
+          "S": {
+            "item": "minecraft:stick"
+          }
         },
-        "result": {"item": "createsifter:sifter", "count": 1}
+        "result": {
+          "item": "createsifter:sifter",
+          "count": 1
+        }
       }
     }
   ]

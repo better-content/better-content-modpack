@@ -32,11 +32,18 @@
           },
           "H": {
             "item": "tconstruct:tough_handle"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "item": "pneumaticcraft:printed_circuit_board"
+            },
+            "marker": "pneumaticcraft:solar_compressor"
           }
         },
         "pattern": [
           "WWW",
-          "HGP",
+          "HGA",
           "XBT"
         ],
         "result": {

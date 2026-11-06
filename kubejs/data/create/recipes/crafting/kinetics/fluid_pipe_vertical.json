@@ -12,9 +12,9 @@
         "type": "better_manufacturing:part_variant",
         "category": "misc",
         "pattern": [
-          "L",
-          "C",
-          "S"
+          "SL",
+          "C ",
+          "S "
         ],
         "key": {
           "L": {
@@ -35,7 +35,7 @@
         "parts": [
           {
             "role": "liner",
-            "slot": 0
+            "slot": 1
           }
         ]
       }

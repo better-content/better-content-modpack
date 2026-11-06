@@ -17,11 +17,26 @@
         "category": "misc",
         "function": "better_manufacturing:clockwork/flight_actuators",
         "pattern": [
-          "LPL",
-          "BMB",
-          "HSX"
+          "LWP",
+          "BMG",
+          "HEX"
         ],
         "key": {
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "X": {
+            "item": "tconstruct:broad_blade"
+          },
+          "W": {
+            "tag": "minecraft:wooden_slabs"
+          },
+          "G": {
+            "item": "create:cogwheel"
+          },
+          "E": {
+            "item": "create:clockwork_bearing"
+          },
           "L": {
             "item": "aether:stripped_skyroot_log"
           },
@@ -33,15 +48,6 @@
           },
           "M": {
             "item": "kubejs:brass_machine_block"
-          },
-          "S": {
-            "item": "create:shaft"
-          },
-          "H": {
-            "item": "tconstruct:tough_handle"
-          },
-          "X": {
-            "item": "tconstruct:broad_blade"
           }
         },
         "result": {

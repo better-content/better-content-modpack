@@ -13,36 +13,29 @@
         }
       ],
       "recipe": {
-        "type": "better_manufacturing:part_variant",
+        "type": "better_manufacturing:mechanical_part_variant",
         "category": "misc",
+        "acceptMirrored": false,
         "function": "better_manufacturing:clockwork/gas_thermal",
         "pattern": [
-          "PBP",
-          "GAG",
-          "LCH"
+          "PGP",
+          "KCK",
+          "DSD",
+          "TNA",
+          "LH "
         ],
         "key": {
-          "P": {
-            "item": "pneumaticcraft:pressure_tube"
-          },
-          "G": {
-            "item": "pneumaticcraft:compressed_iron_gear"
-          },
-          "A": {
-            "item": "kubejs:airtight_machine_block"
-          },
-          "C": {
-            "item": "create:brass_casing"
-          },
-          "B": {
-            "item": "aether:blue_aercloud"
-          },
-          "L": {
-            "item": "tconstruct:large_plate"
-          },
-          "H": {
-            "item": "tconstruct:tough_handle"
-          }
+          "P": { "item": "create:iron_sheet" },
+          "G": { "item": "minecraft:iron_bars" },
+          "K": { "item": "minecraft:dried_kelp" },
+          "C": { "item": "create:industrial_iron_block" },
+          "D": { "item": "vs_clockwork:duct" },
+          "S": { "item": "create:shaft" },
+          "T": { "item": "pneumaticcraft:pressure_tube" },
+          "N": { "item": "pneumaticcraft:pneumatic_cylinder" },
+          "A": { "item": "aether:blue_aercloud" },
+          "L": { "item": "tconstruct:large_plate" },
+          "H": { "item": "tconstruct:tough_handle" }
         },
         "result": {
           "item": "vs_clockwork:air_compressor"
@@ -50,11 +43,11 @@
         "parts": [
           {
             "role": "plate",
-            "slot": 6
+            "slot": 12
           },
           {
             "role": "handle",
-            "slot": 8
+            "slot": 13
           }
         ]
       }

@@ -1,37 +1,98 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "sophisticatedcore:item_enabled",
-      "itemRegistryName": "sophisticatedstorage:storage_io"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "sophisticatedcore:item_enabled",
+          "itemRegistryName": "sophisticatedstorage:storage_io"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "key": {
+          "B": {
+            "type": "sophisticatedstorage:base_tier_wooden_storage"
+          },
+          "G": {
+            "tag": "forge:ingots/gold"
+          },
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "R": {
+            "item": "minecraft:repeater"
+          },
+          "S": {
+            "tag": "forge:stone"
+          },
+          "H": {
+            "type": "better_manufacturing:sophisticated_cost_bundle",
+            "marker": "sophisticatedstorage:storage_io",
+            "anchor": {
+              "tag": "forge:stone"
+            }
+          }
+        },
+        "pattern": [
+          "HPS",
+          "RBG",
+          "SPS"
+        ],
+        "result": {
+          "item": "sophisticatedstorage:storage_io"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        },
+        {
+          "type": "sophisticatedcore:item_enabled",
+          "itemRegistryName": "sophisticatedstorage:storage_io"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "key": {
+          "B": {
+            "type": "sophisticatedstorage:base_tier_wooden_storage"
+          },
+          "G": {
+            "tag": "forge:ingots/gold"
+          },
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "R": {
+            "item": "minecraft:repeater"
+          },
+          "S": {
+            "tag": "forge:stone"
+          },
+          "H": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "HPS",
+          "RBG",
+          "SPS"
+        ],
+        "result": {
+          "item": "sophisticatedstorage:storage_io"
+        }
+      }
     }
-  ],
-  "key": {
-    "B": {
-      "type": "sophisticatedstorage:base_tier_wooden_storage"
-    },
-    "G": {
-      "tag": "forge:ingots/gold"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    },
-    "R": {
-      "item": "minecraft:repeater"
-    },
-    "S": {
-      "tag": "forge:stone"
-    },
-    "H": {
-      "item": "tconstruct:large_plate"
-    }
-  },
-  "pattern": [
-    "HPS",
-    "RBG",
-    "SPS"
-  ],
-  "result": {
-    "item": "sophisticatedstorage:storage_io"
-  }
+  ]
 }

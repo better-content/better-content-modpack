@@ -2,10 +2,10 @@
   "type": "forge:conditional",
   "recipes": [
     {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
-      "type": "better_manufacturing:part_variant", "pattern": ["HFA", "SEC", "PBP"],
+      "type": "better_manufacturing:mechanical_part_variant", "pattern": ["AFA", "SES", "PBP", "HC "],
       "key": {"H": {"item": "tconstruct:tough_handle"}, "C": {"item": "tconstruct:large_plate"}, "E": {"item": "create:steam_engine"}, "B": {"tag": "forge:storage_blocks/brass"}, "S": {"tag": "forge:plates/brass"}, "F": {"item": "minecraft:flint_and_steel"}, "A": {"item": "create:andesite_alloy"}, "P": {"item": "create:fluid_pipe"}},
       "result": {"item": "createdieselgenerators:huge_diesel_engine"},
-      "function": "better_manufacturing:createdieselgenerators/engines", "parts": [{"role": "rod", "slot": 0}, {"role": "chamber", "slot": 5}]
+      "function": "better_manufacturing:createdieselgenerators/engines", "parts": [{"role": "rod", "slot": 9}, {"role": "chamber", "slot": 10}]
     }},
     {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
       "type": "minecraft:crafting_shaped", "pattern": ["AFA", "SES", "PBP"],

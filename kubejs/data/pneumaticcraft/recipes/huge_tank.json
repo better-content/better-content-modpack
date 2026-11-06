@@ -24,10 +24,17 @@
           },
           "F": {
             "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "tag": "forge:ingots/netherite"
+            },
+            "marker": "pneumaticcraft:huge_tank"
           }
         },
         "pattern": [
-          "FTN",
+          "FTA",
           "TRT",
           "NTN"
         ],

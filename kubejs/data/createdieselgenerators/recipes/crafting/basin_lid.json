@@ -1,25 +1,67 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "HCP",
-    "AAA",
-    "   "
-  ],
-  "key": {
-    "A": {
-      "item": "create:andesite_alloy"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "HCP",
+          "AAA",
+          "   "
+        ],
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "C": {
+            "item": "minecraft:clock"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "createdieselgenerators:basin_lid"
+        }
+      }
     },
-    "C": {
-      "item": "minecraft:clock"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          " C ",
+          "AAA"
+        ],
+        "key": {
+          "A": {
+            "item": "create:andesite_alloy"
+          },
+          "C": {
+            "item": "minecraft:clock"
+          }
+        },
+        "result": {
+          "item": "createdieselgenerators:basin_lid"
+        }
+      }
     }
-  },
-  "result": {
-    "item": "createdieselgenerators:basin_lid"
-  }
+  ]
 }

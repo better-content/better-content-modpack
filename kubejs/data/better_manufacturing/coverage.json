@@ -13,6 +13,40 @@
       ],
       "status": "user_deferred",
       "note": "User explicitly deferred these five unconfirmed IDs and requested completion of the remaining roster. They are not implemented, verified, or replaced with other machines."
+    },
+    {
+      "kind": "user_deferred_unconfirmed_identity",
+      "ids": [
+        "vs_clockwork:brass_redstone_resistor",
+        "vs_clockwork:combustion_engine",
+        "pneumaticcraft:electric_compressor"
+      ],
+      "status": "user_deferred",
+      "note": "User explicitly said these three need not be done after source/JAR inspection found only assets or rendering references, not a demonstrated native machine registration. Loaded-registry absence remains unverified. They are excluded, not implemented or replaced; the original 462-ID roster retains them for traceability."
+    },
+    {
+      "kind": "user_deferred_closed_acquisition",
+      "ids": ["createsifter:advanced_brass_mesh"],
+      "status": "user_deferred",
+      "note": "Pack scripts remove this mesh output without a replacement. User explicitly excluded this closed-acquisition item from the active conversion scope. Its recipe remains closed; no craft, implementation, or owner-local acceptance is claimed."
+    },
+    {
+      "kind": "unresolved_registered_without_survival_acquisition",
+      "ids": ["compressedcreativity:heater", "vs_clockwork:copter_bearing"],
+      "status": "unresolved",
+      "note": "Both remain in the user's 458-ID target. Pinned JAR/pack recipe and literal-output inspection found registered items but no survival acquisition: heater is upstream-labeled WIP, and copter bearing is a powered native bearing. A loaded full-pack registry/loot audit remains outstanding. Do not invent acquisition, claim part consumption, silently exclude either ID, or accept the roster without an evidence-backed resolution and any required playtest feature exception."
+    },
+    {
+      "kind": "unresolved_native_single_input_partless_output",
+      "ids": ["pneumaticcraft:upgrade_matrix"],
+      "status": "unresolved",
+      "note": "Pinned pneumaticcraft:thermo_plant/upgrade_matrix originally yielded four matrices from one part-free lapis item plus 1000 mB water at 2 bar and at least 273 K. A BM-conditional native-ID overlay now requires lapis prepared from one lapis and one eligible TCon plate; an explicitly approved owner-local Pneu46 fixture now passes a real thermo-plant cycle, rejecting raw lapis after cache priming and consuming the paid item, water and air for four outputs. Alternate output routes, a loaded no-BM fallback, client/full-pack behavior and the per-ID ledger remain unverified; this finding stays unresolved until those gates pass."
+    },
+    {
+      "kind": "unresolved_registered_without_survival_acquisition",
+      "ids": ["oc2r:internet_gateway", "oc2r:monitor"],
+      "status": "unresolved",
+      "note": "Both remain active among 458 selected IDs. Pinned OC2R 2.2.12 JAR/source registers the items but has no recipes, loot grants, or native transformations for them; current pack JSON/JS literal scan found no acquisition. The monitor is creative-inventory visible. Do not enable formerly unavailable devices without a separately justified playtest exception or mark them verified from static inspection; loaded-world registry and routes are unverified."
     }
   ],
   "new_component_ceiling": 12,
@@ -28,7 +62,7 @@
   "sources": {
     "better_rail_beetle": {
       "artifact": "better-rail-beetle-0.1.0.jar",
-      "sha256": "04469718f42369d5903309da4ed2f43f0e04975323896b3e5ea76d5454bc408d",
+      "sha256": "796e8eb740ff5f5556332816c1464a81acf149af27c9891197e19ad38a84cead",
       "evidence": "archive_assets_and_base_recipes_only"
     },
     "sophisticatedstorage": {
@@ -68,7 +102,7 @@
     },
     "better_industrial_heat": {
       "artifact": "better-industrial-heat-0.1.0.jar",
-      "sha256": "8f9f9d67c40cf00e63cf742e995ad3a6993d9c3fa3ca5acad8937f0135c5e726",
+      "sha256": "2be9ab0ca40ce881ea93c8ecfe5666c3c0146d34f3fe2e47b4668043a8dd1b8e",
       "evidence": "archive_assets_and_base_recipes_only"
     },
     "alexscaves": {
@@ -2621,17 +2655,14 @@
     {
       "id": "complicated_bees:mellarium_hydroregulator",
       "family": "complicated_bees/environment_control",
-      "disposition": "material_dependent",
+      "disposition": "recipe_only",
       "milestone": 5,
       "roles": {
-        "working_assembly": [
-          "tconstruct:large_plate"
+        "construction": [
+          "tconstruct:tool_handle"
         ]
       },
-      "derived_properties": [
-        "control_rate",
-        "energy_rate"
-      ],
+      "derived_properties": [],
       "native_recipe_ids": [
         "complicated_bees:mellarium_hydroregulator"
       ],
@@ -2640,7 +2671,7 @@
         "assets/complicated_bees/models/item/mellarium_hydroregulator.json",
         "assets/complicated_bees/blockstates/mellarium_hydroregulator.json"
       ],
-      "adapter": "better_manufacturing:complicated_bees/environment_control",
+      "adapter": null,
       "status": "pending",
       "acquisition_audit": "pending",
       "native_reference_audit": "pending",
@@ -2778,17 +2809,14 @@
     {
       "id": "complicated_bees:mellarium_temp_unit",
       "family": "complicated_bees/environment_control",
-      "disposition": "material_dependent",
+      "disposition": "recipe_only",
       "milestone": 5,
       "roles": {
-        "working_assembly": [
-          "tconstruct:large_plate"
+        "construction": [
+          "tconstruct:tool_handle"
         ]
       },
-      "derived_properties": [
-        "control_rate",
-        "energy_rate"
-      ],
+      "derived_properties": [],
       "native_recipe_ids": [
         "complicated_bees:mellarium_temp_unit"
       ],
@@ -2797,7 +2825,7 @@
         "assets/complicated_bees/models/item/mellarium_temp_unit.json",
         "assets/complicated_bees/blockstates/mellarium_temp_unit.json"
       ],
-      "adapter": "better_manufacturing:complicated_bees/environment_control",
+      "adapter": null,
       "status": "pending",
       "acquisition_audit": "pending",
       "native_reference_audit": "pending",
@@ -3544,13 +3572,14 @@
         ]
       },
       "derived_properties": [
-        "chemical_compatibility",
-        "thermal_envelope"
+        "fluid_capacity"
       ],
       "native_recipe_ids": [
         "create:crafting/kinetics/basin"
       ],
-      "pack_recipe_ids": [],
+      "pack_recipe_ids": [
+        "kubejs:powered_works/workshop/basin"
+      ],
       "asset_evidence": [
         "assets/create/models/item/basin.json",
         "assets/create/blockstates/basin.json"
@@ -4095,8 +4124,7 @@
         ]
       },
       "derived_properties": [
-        "chemical_compatibility",
-        "thermal_envelope"
+        "fluid_rate"
       ],
       "native_recipe_ids": [],
       "pack_recipe_ids": [],
@@ -4147,8 +4175,7 @@
         ]
       },
       "derived_properties": [
-        "chemical_compatibility",
-        "thermal_envelope"
+        "fluid_rate"
       ],
       "native_recipe_ids": [
         "create:crafting/kinetics/fluid_pipe",
@@ -4176,8 +4203,7 @@
         ]
       },
       "derived_properties": [
-        "chemical_compatibility",
-        "thermal_envelope"
+        "fluid_capacity"
       ],
       "native_recipe_ids": [
         "create:crafting/kinetics/fluid_tank"
@@ -4337,8 +4363,7 @@
         ]
       },
       "derived_properties": [
-        "chemical_compatibility",
-        "thermal_envelope"
+        "fluid_rate"
       ],
       "native_recipe_ids": [],
       "pack_recipe_ids": [],
@@ -4684,17 +4709,14 @@
     {
       "id": "create:mechanical_harvester",
       "family": "create/field_work",
-      "disposition": "material_dependent",
+      "disposition": "recipe_only",
       "milestone": 4,
       "roles": {
-        "working_surface": [
-          "tconstruct:small_blade",
-          "tconstruct:small_axe_head"
+        "construction": [
+          "tconstruct:small_blade"
         ]
       },
-      "derived_properties": [
-        "work_rate"
-      ],
+      "derived_properties": [],
       "native_recipe_ids": [
         "create:crafting/kinetics/mechanical_harvester"
       ],
@@ -4703,7 +4725,7 @@
         "assets/create/models/item/mechanical_harvester.json",
         "assets/create/blockstates/mechanical_harvester.json"
       ],
-      "adapter": "better_manufacturing:create/field_work",
+      "adapter": null,
       "status": "pending",
       "acquisition_audit": "pending",
       "native_reference_audit": "pending",
@@ -5488,17 +5510,14 @@
     {
       "id": "create:smart_fluid_pipe",
       "family": "create/fluid_envelope",
-      "disposition": "material_dependent",
+      "disposition": "recipe_only",
       "milestone": 2,
       "roles": {
-        "liner": [
+        "construction": [
           "tconstruct:large_plate"
         ]
       },
-      "derived_properties": [
-        "chemical_compatibility",
-        "thermal_envelope"
-      ],
+      "derived_properties": [],
       "native_recipe_ids": [
         "create:crafting/kinetics/smart_fluid_pipe"
       ],
@@ -5507,7 +5526,7 @@
         "assets/create/models/item/smart_fluid_pipe.json",
         "assets/create/blockstates/smart_fluid_pipe.json"
       ],
-      "adapter": "better_manufacturing:create/fluid_envelope",
+      "adapter": null,
       "status": "pending",
       "acquisition_audit": "pending",
       "native_reference_audit": "pending",
@@ -6066,7 +6085,8 @@
     {
       "id": "createsifter:advanced_brass_mesh",
       "family": "createsifter/sifting",
-      "disposition": "material_dependent",
+      "disposition": "excluded",
+      "exclusion_reason": "user_deferred_closed_acquisition",
       "milestone": 2,
       "roles": {
         "screen_frame": [
@@ -7610,7 +7630,8 @@
     {
       "id": "pneumaticcraft:electric_compressor",
       "family": "pneumaticcraft/compressors",
-      "disposition": "material_dependent",
+      "disposition": "excluded",
+      "exclusion_reason": "user_deferred_unconfirmed_identity",
       "milestone": 4,
       "roles": {
         "working_assembly": [
@@ -8884,7 +8905,9 @@
         ]
       },
       "derived_properties": [],
-      "native_recipe_ids": [],
+      "native_recipe_ids": [
+        "pneumaticcraft:thermo_plant/upgrade_matrix"
+      ],
       "pack_recipe_ids": [],
       "asset_evidence": [
         "assets/pneumaticcraft/models/item/upgrade_matrix.json"
@@ -9466,19 +9489,14 @@
     {
       "id": "powergrid:generator_housing",
       "family": "powergrid/generation",
-      "disposition": "material_dependent",
+      "disposition": "recipe_only",
       "milestone": 4,
       "roles": {
-        "working_assembly": [
-          "tconstruct:tough_handle",
+        "construction": [
           "tconstruct:large_plate"
         ]
       },
-      "derived_properties": [
-        "conversion",
-        "load",
-        "thermal_envelope"
-      ],
+      "derived_properties": [],
       "native_recipe_ids": [
         "powergrid:crafting/generator_housing",
         "powergrid:crafting/generator_housing_from_conversion"
@@ -9488,7 +9506,7 @@
         "assets/powergrid/models/item/generator_housing.json",
         "assets/powergrid/blockstates/generator_housing.json"
       ],
-      "adapter": "better_manufacturing:powergrid/generation",
+      "adapter": null,
       "status": "pending",
       "acquisition_audit": "pending",
       "native_reference_audit": "pending",
@@ -10025,19 +10043,14 @@
     {
       "id": "powergrid:vertical_generator_housing",
       "family": "powergrid/generation",
-      "disposition": "material_dependent",
+      "disposition": "recipe_only",
       "milestone": 4,
       "roles": {
-        "working_assembly": [
-          "tconstruct:tough_handle",
+        "construction": [
           "tconstruct:large_plate"
         ]
       },
-      "derived_properties": [
-        "conversion",
-        "load",
-        "thermal_envelope"
-      ],
+      "derived_properties": [],
       "native_recipe_ids": [
         "powergrid:crafting/vertical_generator_housing_from_conversion"
       ],
@@ -10046,7 +10059,7 @@
         "assets/powergrid/models/item/vertical_generator_housing.json",
         "assets/powergrid/blockstates/vertical_generator_housing.json"
       ],
-      "adapter": "better_manufacturing:powergrid/generation",
+      "adapter": null,
       "status": "pending",
       "acquisition_audit": "pending",
       "native_reference_audit": "pending",
@@ -11507,18 +11520,15 @@
     {
       "id": "vs_clockwork:blade_controller",
       "family": "vs_clockwork/flight_actuators",
-      "disposition": "material_dependent",
+      "disposition": "recipe_only",
       "milestone": 6,
       "roles": {
-        "working_assembly": [
+        "construction": [
           "tconstruct:tough_handle",
           "tconstruct:broad_blade"
         ]
       },
-      "derived_properties": [
-        "mechanical_limit",
-        "actuator_response"
-      ],
+      "derived_properties": [],
       "native_recipe_ids": [
         "vs_clockwork:crafting/kinetics/blade_controller"
       ],
@@ -11527,7 +11537,7 @@
         "assets/vs_clockwork/models/item/blade_controller.json",
         "assets/vs_clockwork/blockstates/blade_controller.json"
       ],
-      "adapter": "better_manufacturing:vs_clockwork/flight_actuators",
+      "adapter": null,
       "status": "pending",
       "acquisition_audit": "pending",
       "native_reference_audit": "pending",
@@ -11565,7 +11575,8 @@
     {
       "id": "vs_clockwork:brass_redstone_resistor",
       "family": "vs_clockwork/control",
-      "disposition": "recipe_only",
+      "disposition": "excluded",
+      "exclusion_reason": "user_deferred_unconfirmed_identity",
       "milestone": 6,
       "roles": {
         "construction": [
@@ -11618,7 +11629,8 @@
     {
       "id": "vs_clockwork:combustion_engine",
       "family": "vs_clockwork/gas_thermal",
-      "disposition": "material_dependent",
+      "disposition": "excluded",
+      "exclusion_reason": "user_deferred_unconfirmed_identity",
       "milestone": 6,
       "roles": {
         "working_assembly": [
@@ -11818,19 +11830,15 @@
     {
       "id": "vs_clockwork:gas_heater",
       "family": "vs_clockwork/gas_thermal",
-      "disposition": "material_dependent",
+      "disposition": "recipe_only",
       "milestone": 6,
       "roles": {
-        "working_assembly": [
+        "construction": [
           "tconstruct:large_plate",
           "tconstruct:tough_handle"
         ]
       },
-      "derived_properties": [
-        "transfer_rate",
-        "conversion",
-        "thermal_envelope"
-      ],
+      "derived_properties": [],
       "native_recipe_ids": [
         "vs_clockwork:crafting/pneumatics/gas_heater"
       ],
@@ -11839,7 +11847,7 @@
         "assets/vs_clockwork/models/item/gas_heater.json",
         "assets/vs_clockwork/blockstates/gas_heater.json"
       ],
-      "adapter": "better_manufacturing:vs_clockwork/gas_thermal",
+      "adapter": null,
       "status": "pending",
       "acquisition_audit": "pending",
       "native_reference_audit": "pending",
@@ -12266,19 +12274,15 @@
     {
       "id": "vs_clockwork:steam_generator",
       "family": "vs_clockwork/gas_thermal",
-      "disposition": "material_dependent",
+      "disposition": "recipe_only",
       "milestone": 6,
       "roles": {
-        "working_assembly": [
+        "construction": [
           "tconstruct:large_plate",
           "tconstruct:tough_handle"
         ]
       },
-      "derived_properties": [
-        "transfer_rate",
-        "conversion",
-        "thermal_envelope"
-      ],
+      "derived_properties": [],
       "native_recipe_ids": [
         "vs_clockwork:crafting/pneumatics/steam_generator"
       ],
@@ -12287,7 +12291,7 @@
         "assets/vs_clockwork/models/item/steam_generator.json",
         "assets/vs_clockwork/blockstates/steam_generator.json"
       ],
-      "adapter": "better_manufacturing:vs_clockwork/gas_thermal",
+      "adapter": null,
       "status": "pending",
       "acquisition_audit": "pending",
       "native_reference_audit": "pending",

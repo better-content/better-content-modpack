@@ -1,0 +1,38 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "III",
+          "I I",
+          "WWW"
+        ],
+        "key": {
+          "I": {
+            "item": "minecraft:iron_ingot"
+          },
+          "W": {
+            "item": "minecraft:smooth_stone"
+          }
+        },
+        "result": {
+          "item": "minecraft:iron_ingot",
+          "nbt": "{better_manufacturing:{bees_cost_autolyzer:1}}"
+        }
+      }
+    }
+  ]
+}

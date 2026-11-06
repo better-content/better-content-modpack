@@ -1,0 +1,51 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "powergrid:current_gauge"
+          },
+          {
+            "item": "tconstruct:tool_handle"
+          }
+        ],
+        "result": {
+          "item": "powergrid:voltage_gauge"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          {
+            "item": "powergrid:current_gauge"
+          }
+        ],
+        "result": {
+          "item": "powergrid:voltage_gauge"
+        }
+      }
+    }
+  ]
+}

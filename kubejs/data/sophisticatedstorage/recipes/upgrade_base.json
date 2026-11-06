@@ -1,28 +1,80 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "sophisticatedcore:item_enabled",
-      "itemRegistryName": "sophisticatedstorage:upgrade_base"
-    }
-  ],
-  "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "sophisticatedcore:item_enabled",
+          "itemRegistryName": "sophisticatedstorage:upgrade_base"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "H": {
+            "type": "better_manufacturing:sophisticated_cost_bundle",
+            "marker": "sophisticatedstorage:upgrade_base",
+            "anchor": {
+              "tag": "minecraft:planks"
+            }
+          }
+        },
+        "pattern": [
+          "HIP",
+          "IPI",
+          "PIP"
+        ],
+        "result": {
+          "item": "sophisticatedstorage:upgrade_base"
+        }
+      }
     },
-    "P": {
-      "tag": "minecraft:planks"
-    },
-    "H": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        },
+        {
+          "type": "sophisticatedcore:item_enabled",
+          "itemRegistryName": "sophisticatedstorage:upgrade_base"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "P": {
+            "tag": "minecraft:planks"
+          },
+          "H": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "HIP",
+          "IPI",
+          "PIP"
+        ],
+        "result": {
+          "item": "sophisticatedstorage:upgrade_base"
+        }
+      }
     }
-  },
-  "pattern": [
-    "HIP",
-    "IPI",
-    "PIP"
-  ],
-  "result": {
-    "item": "sophisticatedstorage:upgrade_base"
-  }
+  ]
 }

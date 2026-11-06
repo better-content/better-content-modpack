@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "pneumaticcraft"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:pneu_native_cost_bundle",
+        "marker": "pneumaticcraft:liquid_compressor",
+        "anchor": {
+          "item": "pneumaticcraft:pressure_tube"
+        },
+        "costs": [
+          {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          {
+            "tag": "forge:leather"
+          }
+        ]
+      }
+    }
+  ]
+}

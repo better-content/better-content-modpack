@@ -2,12 +2,12 @@
   "type": "forge:conditional",
   "recipes": [
     {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
-      "type": "better_manufacturing:part_variant", "category": "misc",
-      "pattern": ["PCS", "FHF", "STS"],
+      "type": "better_manufacturing:mechanical_part_variant", "category": "misc",
+      "pattern": ["SCS", "FHF", "STS", "P  "],
       "key": {"P": {"item": "tconstruct:large_plate"}, "S": {"tag": "forge:plates/steel"}, "C": {"tag": "forge:plates/copper"}, "F": {"item": "create:fluid_pipe"}, "H": {"item": "better_industrial_heat:heat_pipe"}, "T": {"item": "create:fluid_tank"}},
       "result": {"item": "better_industrial_heat:boiler_heater", "count": 1},
       "function": "better_manufacturing:industrialheat/thermal",
-      "parts": [{"role": "thermal_surface", "slot": 0}]
+      "parts": [{"role": "thermal_surface", "slot": 9}]
     }},
     {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
       "type": "minecraft:crafting_shaped", "category": "misc",

@@ -1,31 +1,86 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "sophisticatedcore:item_enabled",
-      "itemRegistryName": "sophisticatedbackpacks:upgrade_base"
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "sophisticatedcore:item_enabled",
+          "itemRegistryName": "sophisticatedbackpacks:upgrade_base"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "L": {
+            "tag": "forge:leather"
+          },
+          "S": {
+            "tag": "forge:string"
+          },
+          "H": {
+            "type": "better_manufacturing:sophisticated_cost_bundle",
+            "marker": "sophisticatedbackpacks:upgrade_base",
+            "anchor": {
+              "tag": "forge:string"
+            }
+          }
+        },
+        "pattern": [
+          "HIS",
+          "ILI",
+          "SIS"
+        ],
+        "result": {
+          "item": "sophisticatedbackpacks:upgrade_base"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        },
+        {
+          "type": "sophisticatedcore:item_enabled",
+          "itemRegistryName": "sophisticatedbackpacks:upgrade_base"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "key": {
+          "I": {
+            "tag": "forge:ingots/iron"
+          },
+          "L": {
+            "tag": "forge:leather"
+          },
+          "S": {
+            "tag": "forge:string"
+          },
+          "H": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "HIS",
+          "ILI",
+          "SIS"
+        ],
+        "result": {
+          "item": "sophisticatedbackpacks:upgrade_base"
+        }
+      }
     }
-  ],
-  "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
-    },
-    "L": {
-      "tag": "forge:leather"
-    },
-    "S": {
-      "tag": "forge:string"
-    },
-    "H": {
-      "item": "tconstruct:large_plate"
-    }
-  },
-  "pattern": [
-    "HIS",
-    "ILI",
-    "SIS"
-  ],
-  "result": {
-    "item": "sophisticatedbackpacks:upgrade_base"
-  }
+  ]
 }

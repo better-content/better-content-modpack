@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:assembly_drill",
+        "input": {
+          "type": "better_manufacturing:pneu_prepared_assembly"
+        },
+        "program": "drill",
+        "result": {
+          "item": "pneumaticcraft:drill_bit_netherite"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "pneumaticcraft:assembly_drill",
+        "input": {
+          "item": "pneumaticcraft:unassembled_netherite_drill_bit"
+        },
+        "program": "drill",
+        "result": {
+          "item": "pneumaticcraft:drill_bit_netherite"
+        }
+      }
+    }
+  ]
+}

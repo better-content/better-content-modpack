@@ -34,8 +34,21 @@ ServerEvents.recipes(function (event) {
     var quarkCrafterKey = { I: '#forge:ingots/iron', C: 'minecraft:crafting_table',
         R: '#forge:dusts/redstone', M: 'create:mechanical_crafter' }
     if (partConstruction) { quarkCrafterKey.H = 'tconstruct:tool_handle'; quarkCrafterKey.L = 'tconstruct:large_plate' }
-    event.shaped('quark:crafter', partConstruction ? ['HLI', 'ICI', 'RMR'] : ['III', 'ICI', 'RMR'], quarkCrafterKey)
-        .id('kubejs:precision_factory/quark_crafter')
+    if (partConstruction) {
+        // Quark's crafter already consumes a Create mechanical crafter. Keep
+        // all five original iron ingots and the full redstone/crafter bill;
+        // the two consumed construction parts belong in an additional row.
+        event.custom({ type: 'create:mechanical_crafting', acceptMirrored: false,
+            pattern: ['III', 'ICI', 'RMR', 'HL '],
+            key: { I: { tag: 'forge:ingots/iron' }, C: { item: 'minecraft:crafting_table' },
+                R: { tag: 'forge:dusts/redstone' }, M: { item: 'create:mechanical_crafter' },
+                H: { item: 'tconstruct:tool_handle' }, L: { item: 'tconstruct:large_plate' } },
+            result: { item: 'quark:crafter' }
+        }).id('kubejs:precision_factory/quark_crafter')
+    } else {
+        event.shaped('quark:crafter', ['III', 'ICI', 'RMR'], quarkCrafterKey)
+            .id('kubejs:precision_factory/quark_crafter')
+    }
     event.remove({ id: 'create:crafting/kinetics/track_station' })
     var stationKey = { R: 'create:railway_casing', B: 'create:precision_mechanism', S: 'create:sturdy_sheet' }
     if (partConstruction) stationKey.H = 'tconstruct:tool_handle'

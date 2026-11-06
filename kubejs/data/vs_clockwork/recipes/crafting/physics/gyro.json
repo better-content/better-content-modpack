@@ -17,28 +17,37 @@
         "category": "misc",
         "function": "better_manufacturing:clockwork/flight_actuators",
         "pattern": [
-          " S ",
-          "CMC",
-          "HPB"
+          "HMS",
+          "CEF",
+          "PTB"
         ],
         "key": {
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "B": {
+            "item": "tconstruct:broad_blade"
+          },
+          "M": {
+            "item": "vs_clockwork:wanderlite_matrix"
+          },
+          "F": {
+            "item": "create:flywheel"
+          },
+          "T": {
+            "item": "create:turntable"
+          },
           "S": {
             "item": "vs_clockwork:gyroscopic_sensor"
           },
           "C": {
             "item": "powergrid:integrated_circuit"
           },
-          "M": {
+          "E": {
             "item": "kubejs:electrical_machine_block"
           },
           "P": {
             "item": "create:precision_mechanism"
-          },
-          "H": {
-            "item": "tconstruct:tough_handle"
-          },
-          "B": {
-            "item": "tconstruct:broad_blade"
           }
         },
         "result": {
@@ -47,7 +56,7 @@
         "parts": [
           {
             "role": "handle",
-            "slot": 6
+            "slot": 0
           },
           {
             "role": "blade",

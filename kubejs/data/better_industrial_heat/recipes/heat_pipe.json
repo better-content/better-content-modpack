@@ -2,12 +2,12 @@
   "type": "forge:conditional",
   "recipes": [
     {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
-      "type": "better_manufacturing:part_variant",
-      "pattern": ["CCC", "LRI", "CCC"],
+      "type": "better_manufacturing:mechanical_part_variant",
+      "pattern": ["CCC", "IRI", "CCC", "L  "],
       "key": {"C": {"tag": "forge:plates/copper"}, "L": {"item": "tconstruct:large_plate"}, "I": {"tag": "forge:plates/iron"}, "R": {"item": "create:fluid_pipe"}},
       "result": {"item": "better_industrial_heat:heat_pipe", "count": 4},
       "function": "better_manufacturing:industrialheat/thermal",
-      "parts": [{"role": "thermal_surface", "slot": 3}]
+      "parts": [{"role": "thermal_surface", "slot": 9}]
     }},
     {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
       "type": "minecraft:crafting_shaped",

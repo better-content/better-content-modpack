@@ -1,0 +1,238 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "create:shaft"
+        },
+        "loops": 5,
+        "results": [
+          {
+            "chance": 120.0,
+            "item": "vs_clockwork:universal_shaft_item"
+          },
+          {
+            "chance": 8.0,
+            "item": "minecraft:dried_kelp_block"
+          },
+          {
+            "chance": 5.0,
+            "item": "create:iron_sheet"
+          },
+          {
+            "chance": 3.0,
+            "item": "minecraft:iron_block"
+          },
+          {
+            "chance": 2.0,
+            "item": "create:shaft"
+          },
+          {
+            "chance": 2.0,
+            "item": "create:chute"
+          },
+          {
+            "item": "minecraft:iron_ingot"
+          },
+          {
+            "item": "create:industrial_iron_block"
+          }
+        ],
+        "sequence": [
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              },
+              {
+                "item": "minecraft:dried_kelp"
+              }
+            ],
+            "results": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              },
+              {
+                "item": "minecraft:dried_kelp"
+              }
+            ],
+            "results": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              },
+              {
+                "item": "create:iron_sheet"
+              }
+            ],
+            "results": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              }
+            ]
+          },
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              }
+            ],
+            "results": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              }
+            ]
+          }
+        ],
+        "transitionalItem": {
+          "item": "vs_clockwork:incomplete_telescoping_mechanism"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "create:sequenced_assembly",
+        "ingredient": {
+          "item": "create:shaft"
+        },
+        "loops": 5,
+        "results": [
+          {
+            "chance": 120.0,
+            "item": "vs_clockwork:universal_shaft_item"
+          },
+          {
+            "chance": 8.0,
+            "item": "vs_clockwork:duct"
+          },
+          {
+            "chance": 8.0,
+            "item": "minecraft:dried_kelp_block"
+          },
+          {
+            "chance": 5.0,
+            "item": "create:iron_sheet"
+          },
+          {
+            "chance": 3.0,
+            "item": "minecraft:iron_block"
+          },
+          {
+            "chance": 2.0,
+            "item": "create:shaft"
+          },
+          {
+            "chance": 2.0,
+            "item": "create:chute"
+          },
+          {
+            "item": "minecraft:iron_ingot"
+          },
+          {
+            "item": "create:industrial_iron_block"
+          }
+        ],
+        "sequence": [
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              },
+              {
+                "item": "minecraft:dried_kelp"
+              }
+            ],
+            "results": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              },
+              {
+                "item": "minecraft:dried_kelp"
+              }
+            ],
+            "results": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              }
+            ]
+          },
+          {
+            "type": "create:deploying",
+            "ingredients": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              },
+              {
+                "item": "create:iron_sheet"
+              }
+            ],
+            "results": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              }
+            ]
+          },
+          {
+            "type": "create:cutting",
+            "ingredients": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              }
+            ],
+            "results": [
+              {
+                "item": "vs_clockwork:incomplete_telescoping_mechanism"
+              }
+            ]
+          }
+        ],
+        "transitionalItem": {
+          "item": "vs_clockwork:incomplete_telescoping_mechanism"
+        }
+      }
+    }
+  ]
+}

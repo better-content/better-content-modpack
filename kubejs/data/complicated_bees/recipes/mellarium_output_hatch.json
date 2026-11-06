@@ -1,36 +1,94 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "complicated_bees:mellarium_panel"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "acceptMirrored": false,
+        "pattern": [
+          "#C#",
+          "BAB",
+          "#H#",
+          "J P"
+        ],
+        "key": {
+          "#": {
+            "item": "complicated_bees:mellarium_panel"
+          },
+          "A": {
+            "item": "complicated_bees:mellarium_base"
+          },
+          "B": {
+            "item": "minecraft:powered_rail"
+          },
+          "C": {
+            "tag": "forge:chests"
+          },
+          "H": {
+            "item": "minecraft:hopper"
+          },
+          "J": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:mellarium_output_hatch"
+        }
+      }
     },
-    "A": {
-      "item": "complicated_bees:mellarium_base"
-    },
-    "B": {
-      "item": "minecraft:powered_rail"
-    },
-    "C": {
-      "tag": "forge:chests"
-    },
-    "H": {
-      "item": "minecraft:hopper"
-    },
-    "J": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "complicated_bees:mellarium_panel"
+          },
+          "A": {
+            "item": "complicated_bees:mellarium_base"
+          },
+          "B": {
+            "item": "minecraft:powered_rail"
+          },
+          "C": {
+            "tag": "forge:chests"
+          },
+          "H": {
+            "item": "minecraft:hopper"
+          }
+        },
+        "pattern": [
+          "#C#",
+          "BAB",
+          "#H#"
+        ],
+        "result": {
+          "item": "complicated_bees:mellarium_output_hatch"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "JCP",
-    "BAB",
-    "#H#"
-  ],
-  "result": {
-    "item": "complicated_bees:mellarium_output_hatch"
-  },
-  "show_notification": true
+  ]
 }

@@ -1,16 +1,90 @@
 {
-  "type": "better_manufacturing:part_variant",
-  "category": "misc",
-  "function": "better_manufacturing:littlelogistics/propulsion",
-  "parts": [{"role": "drive", "slot": 1}],
-  "pattern": ["IH ", "PVP", "ICS"],
-  "key": {
-    "H": {"item": "tconstruct:tough_handle"},
-    "P": {"item": "minecraft:piston"},
-    "V": {"item": "littlelogistics:vessel_charger"},
-    "I": {"item": "minecraft:iron_ingot"},
-    "C": {"item": "littlelogistics:seater_car"},
-    "S": {"item": "minecraft:iron_ingot"}
-  },
-  "result": {"item": "littlelogistics:energy_locomotive"}
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "function": "better_manufacturing:littlelogistics/propulsion",
+        "parts": [
+          {
+            "role": "drive",
+            "slot": 1
+          }
+        ],
+        "pattern": [
+          "IH ",
+          "PVP",
+          "ICS"
+        ],
+        "key": {
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "P": {
+            "item": "minecraft:piston"
+          },
+          "V": {
+            "item": "littlelogistics:vessel_charger"
+          },
+          "I": {
+            "item": "minecraft:iron_ingot"
+          },
+          "C": {
+            "item": "littlelogistics:seater_car"
+          },
+          "S": {
+            "item": "minecraft:iron_ingot"
+          }
+        },
+        "result": {
+          "item": "littlelogistics:energy_locomotive"
+        }
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "minecraft:iron_ingot"
+          },
+          "$": {
+            "item": "littlelogistics:seater_car"
+          },
+          ".": {
+            "item": "littlelogistics:vessel_charger"
+          },
+          "_": {
+            "item": "minecraft:piston"
+          }
+        },
+        "pattern": [
+          " # ",
+          "_._",
+          "#$#"
+        ],
+        "result": {
+          "item": "littlelogistics:energy_locomotive"
+        },
+        "show_notification": true
+      }
+    }
+  ]
 }

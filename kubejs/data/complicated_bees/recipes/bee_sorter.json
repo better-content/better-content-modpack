@@ -1,36 +1,77 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "C": {
-      "item": "minecraft:comparator"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "HMP"
+        ],
+        "key": {
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "M": {
+            "type": "forge:partial_nbt",
+            "item": "complicated_bees:honeyed_planks",
+            "nbt": "{better_manufacturing:{bees_cost_bee_sorter:1}}"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:bee_sorter"
+        }
+      }
     },
-    "D": {
-      "item": "minecraft:diamond"
-    },
-    "I": {
-      "item": "minecraft:hopper"
-    },
-    "P": {
-      "item": "complicated_bees:propolis"
-    },
-    "W": {
-      "item": "complicated_bees:honeyed_planks"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "J": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "minecraft:comparator"
+          },
+          "D": {
+            "item": "minecraft:diamond"
+          },
+          "I": {
+            "item": "minecraft:hopper"
+          },
+          "P": {
+            "item": "complicated_bees:propolis"
+          },
+          "W": {
+            "item": "complicated_bees:honeyed_planks"
+          }
+        },
+        "pattern": [
+          "WIW",
+          "PCP",
+          "WDW"
+        ],
+        "result": {
+          "item": "complicated_bees:bee_sorter"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "HIJ",
-    "PCP",
-    "WDW"
-  ],
-  "result": {
-    "item": "complicated_bees:bee_sorter"
-  },
-  "show_notification": true
+  ]
 }

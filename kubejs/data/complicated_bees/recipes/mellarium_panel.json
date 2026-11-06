@@ -1,34 +1,76 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "complicated_bees:honeyed_planks"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "HMP"
+        ],
+        "key": {
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "M": {
+            "type": "forge:partial_nbt",
+            "item": "complicated_bees:beeswax",
+            "nbt": "{better_manufacturing:{bees_cost_mellarium_panel:1}}"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "count": 4,
+          "item": "complicated_bees:mellarium_panel"
+        }
+      }
     },
-    "P": {
-      "item": "complicated_bees:pollen"
-    },
-    "R": {
-      "item": "complicated_bees:royal_jelly"
-    },
-    "W": {
-      "item": "complicated_bees:beeswax"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "J": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "complicated_bees:honeyed_planks"
+          },
+          "P": {
+            "item": "complicated_bees:pollen"
+          },
+          "R": {
+            "item": "complicated_bees:royal_jelly"
+          },
+          "W": {
+            "item": "complicated_bees:beeswax"
+          }
+        },
+        "pattern": [
+          "RW#",
+          "W#W",
+          "#WP"
+        ],
+        "result": {
+          "count": 4,
+          "item": "complicated_bees:mellarium_panel"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "RH#",
-    "J#W",
-    "#WP"
-  ],
-  "result": {
-    "count": 4,
-    "item": "complicated_bees:mellarium_panel"
-  },
-  "show_notification": true
+  ]
 }

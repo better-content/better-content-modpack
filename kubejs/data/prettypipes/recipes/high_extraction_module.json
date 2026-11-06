@@ -9,11 +9,13 @@
         }
       ],
       "recipe": {
-        "type": "better_manufacturing:part_variant",
+        "type": "better_manufacturing:prettypipes_mechanical",
+        "acceptMirrored": false,
         "pattern": [
           "GCG",
           "GMG",
-          "GGA"
+          "GGG",
+          "A  "
         ],
         "key": {
           "G": {
@@ -33,12 +35,8 @@
           "item": "prettypipes:high_extraction_module"
         },
         "function": "better_manufacturing:prettypipes/extraction",
-        "parts": [
-          {
-            "role": "actuator",
-            "slot": 8
-          }
-        ]
+        "handle_slot": 9,
+        "predecessor_slot": 4
       }
     },
     {

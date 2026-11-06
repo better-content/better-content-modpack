@@ -1,0 +1,25 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "pneumaticcraft"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:pneu_native_cost_bundle",
+        "marker": "pneumaticcraft:pressure_chamber_wall",
+        "anchor": {
+          "item": "pneumaticcraft:reinforced_bricks"
+        },
+        "costs": [
+          {
+            "item": "pneumaticcraft:reinforced_bricks"
+          }
+        ]
+      }
+    }
+  ]
+}

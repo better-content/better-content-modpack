@@ -2,8 +2,8 @@
   "type": "forge:conditional",
   "recipes": [
     {"conditions": [{"type": "forge:mod_loaded", "modid": "better_manufacturing"}], "recipe": {
-      "type": "better_manufacturing:part_variant",
-      "pattern": ["#T#", "iBG", "SSS"],
+      "type": "better_manufacturing:mechanical_part_variant",
+      "pattern": ["###", "iBG", "SSS", "T  "],
       "key": {
         "#": {"item": "minecraft:stone"},
         "T": {"item": "tconstruct:tough_handle"},
@@ -14,7 +14,7 @@
       },
       "result": {"item": "vs_eureka:engine"},
       "function": "better_manufacturing:eureka/engine",
-      "parts": [{"role": "working_assembly", "slot": 1}]
+      "parts": [{"role": "working_assembly", "slot": 9}]
     }},
     {"conditions": [{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "better_manufacturing"}}], "recipe": {
       "type": "minecraft:crafting_shaped",

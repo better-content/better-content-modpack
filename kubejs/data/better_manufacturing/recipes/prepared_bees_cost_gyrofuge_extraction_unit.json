@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "#C#",
+          "G G",
+          "#D#"
+        ],
+        "key": {
+          "#": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "C": {
+            "item": "minecraft:anvil"
+          },
+          "D": {
+            "item": "minecraft:netherite_ingot"
+          },
+          "G": {
+            "item": "minecraft:piston"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:gyrofuge_panel",
+          "nbt": "{better_manufacturing:{bees_cost_gyrofuge_extraction_unit:1}}"
+        }
+      }
+    }
+  ]
+}

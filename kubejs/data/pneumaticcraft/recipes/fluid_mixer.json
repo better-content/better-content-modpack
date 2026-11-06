@@ -12,7 +12,7 @@
         "type": "better_manufacturing:part_variant",
         "pattern": [
           " T ",
-          "LRW",
+          "LRA",
           "TPT"
         ],
         "key": {
@@ -30,6 +30,13 @@
           },
           "L": {
             "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "item": "pneumaticcraft:reinforced_brick_wall"
+            },
+            "marker": "pneumaticcraft:fluid_mixer"
           }
         },
         "result": {

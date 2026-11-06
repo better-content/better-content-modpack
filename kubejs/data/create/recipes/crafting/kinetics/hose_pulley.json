@@ -12,11 +12,12 @@
         "type": "better_manufacturing:part_variant",
         "category": "misc",
         "pattern": [
-          "B",
-          "C",
-          "L"
+          "B ",
+          "C ",
+          "IL"
         ],
         "key": {
+          "I": { "tag": "forge:plates/copper" },
           "B": {
             "item": "create:copper_casing"
           },
@@ -34,7 +35,7 @@
         "parts": [
           {
             "role": "wetted_fitting",
-            "slot": 2
+            "slot": 5
           }
         ]
       }

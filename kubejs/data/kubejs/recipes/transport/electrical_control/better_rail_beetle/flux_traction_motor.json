@@ -21,7 +21,7 @@
         "pattern": [
           "HCP",
           "MFM",
-          " E "
+          "NE "
         ],
         "key": {
           "C": {
@@ -35,6 +35,9 @@
           },
           "E": {
             "item": "kubejs:electrical_machine_block"
+          },
+          "N": {
+            "item": "powergrid:conductive_casing"
           },
           "H": {
             "item": "tconstruct:tough_handle"

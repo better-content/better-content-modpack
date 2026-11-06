@@ -1,37 +1,78 @@
 {
-  "type": "better_manufacturing:part_variant",
-  "category": "misc",
-  "key": {
-    "C": {
-      "item": "minecraft:chest"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "S": {
-      "item": "minecraft:smooth_stone"
-    },
-    "H": {
-      "item": "tconstruct:tough_handle"
-    }
-  },
-  "pattern": [
-    "HII",
-    "ICI",
-    "SRS"
-  ],
-  "result": {
-    "item": "complicated_bees:centrifuge"
-  },
-  "show_notification": true,
-  "parts": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "role": "rotor",
-      "slot": 0
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:part_variant",
+        "category": "misc",
+        "pattern": [
+          "HM"
+        ],
+        "key": {
+          "H": {
+            "item": "tconstruct:tough_handle"
+          },
+          "M": {
+            "type": "forge:partial_nbt",
+            "item": "minecraft:iron_ingot",
+            "nbt": "{better_manufacturing:{bees_cost_centrifuge:1}}"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:centrifuge"
+        },
+        "function": "better_manufacturing:bees/separation",
+        "parts": [
+          {
+            "role": "rotor",
+            "slot": 0
+          }
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "C": {
+            "item": "minecraft:chest"
+          },
+          "I": {
+            "item": "minecraft:iron_ingot"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          },
+          "S": {
+            "item": "minecraft:smooth_stone"
+          }
+        },
+        "pattern": [
+          "III",
+          "ICI",
+          "SRS"
+        ],
+        "result": {
+          "item": "complicated_bees:centrifuge"
+        },
+        "show_notification": true
+      }
     }
-  ],
-  "function": "better_manufacturing:bees/separation"
+  ]
 }

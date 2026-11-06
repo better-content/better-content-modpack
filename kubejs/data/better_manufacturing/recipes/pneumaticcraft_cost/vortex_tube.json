@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "pneumaticcraft"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:pneu_native_cost_bundle",
+        "marker": "pneumaticcraft:vortex_tube",
+        "anchor": {
+          "tag": "forge:ingots/compressed_iron"
+        },
+        "costs": [
+          {
+            "tag": "forge:ingots/compressed_iron"
+          },
+          {
+            "tag": "forge:ingots/compressed_iron"
+          }
+        ]
+      }
+    }
+  ]
+}

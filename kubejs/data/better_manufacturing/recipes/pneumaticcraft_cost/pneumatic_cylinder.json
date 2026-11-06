@@ -1,0 +1,28 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "pneumaticcraft"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:pneu_native_cost_bundle",
+        "marker": "pneumaticcraft:pneumatic_cylinder",
+        "anchor": {
+          "tag": "pneumaticcraft:plastic_sheets"
+        },
+        "costs": [
+          {
+            "tag": "pneumaticcraft:plastic_sheets"
+          },
+          {
+            "tag": "forge:ingots/compressed_iron"
+          }
+        ]
+      }
+    }
+  ]
+}

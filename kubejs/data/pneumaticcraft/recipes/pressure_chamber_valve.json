@@ -20,10 +20,17 @@
           },
           "X": {
             "item": "tconstruct:large_plate"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "tag": "forge:ingots/compressed_iron"
+            },
+            "marker": "pneumaticcraft:pressure_chamber_valve"
           }
         },
         "pattern": [
-          "XII",
+          "XAI",
           "ITI",
           "III"
         ],

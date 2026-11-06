@@ -1,0 +1,41 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "#C#",
+          "R R",
+          "#R#"
+        ],
+        "key": {
+          "#": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "C": {
+            "item": "minecraft:copper_ingot"
+          },
+          "R": {
+            "item": "minecraft:redstone_block"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:gyrofuge_panel",
+          "nbt": "{better_manufacturing:{bees_cost_gyrofuge_energy_cell:1}}"
+        }
+      }
+    }
+  ]
+}

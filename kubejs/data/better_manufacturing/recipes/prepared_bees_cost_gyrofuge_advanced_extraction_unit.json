@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "#G#",
+          "C C",
+          "#N#"
+        ],
+        "key": {
+          "#": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "C": {
+            "item": "minecraft:dragon_breath"
+          },
+          "G": {
+            "item": "complicated_bees:ambrosia"
+          },
+          "N": {
+            "item": "minecraft:end_crystal"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:gyrofuge_panel",
+          "nbt": "{better_manufacturing:{bees_cost_gyrofuge_advanced_extraction_unit:1}}"
+        }
+      }
+    }
+  ]
+}

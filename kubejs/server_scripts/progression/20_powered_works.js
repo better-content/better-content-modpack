@@ -21,29 +21,42 @@ ServerEvents.recipes(function (event) {
     // Iron workshop transmission is available before Seared metallurgy. Keep
     // the existing alloy and Manufacturing part-consuming native IDs as later
     // alternatives; removing every recipe by output would erase those routes.
-    event.shaped('8x create:shaft', ['I', 'I'], { I: '#forge:ingots/iron' })
+    var ironShaftKey = { I: '#forge:ingots/iron' }
+    if (partVariants) ironShaftKey.H = 'tconstruct:tool_handle'
+    event.shaped('8x create:shaft', partVariants ? ['I', 'I', 'H'] : ['I', 'I'], ironShaftKey)
         .id('kubejs:powered_works/workshop/iron_shaft')
-    event.shapeless('create:cogwheel', ['create:shaft', '#minecraft:planks'])
+    var workshopCogInputs = ['create:shaft', '#minecraft:planks']
+    var workshopLargeCogInputs = ['create:shaft', '#minecraft:planks', '#minecraft:planks']
+    if (partVariants) {
+        workshopCogInputs.push('tconstruct:tool_handle')
+        workshopLargeCogInputs.push('tconstruct:tool_handle')
+    }
+    event.shapeless('create:cogwheel', workshopCogInputs)
         .id('kubejs:powered_works/workshop/iron_cogwheel')
-    event.shapeless('create:large_cogwheel', ['create:shaft', '#minecraft:planks', '#minecraft:planks'])
+    event.shapeless('create:large_cogwheel', workshopLargeCogInputs)
         .id('kubejs:powered_works/workshop/iron_large_cogwheel')
     event.remove({ id: 'create:crafting/kinetics/andesite_casing' })
     event.shaped('2x create:andesite_casing', ['N N', 'LAL', 'N N'], {
         N: '#forge:nuggets/iron', L: '#forge:stripped_logs', A: 'minecraft:andesite'
     }).id('kubejs:powered_works/workshop/andesite_casing')
     event.remove({ id: 'create:crafting/kinetics/mechanical_bearing' })
-    event.shaped('create:mechanical_bearing', ['P', 'C', 'S'], {
-        P: '#minecraft:wooden_slabs', C: 'create:andesite_casing', S: 'create:shaft'
-    }).id('kubejs:powered_works/workshop/mechanical_bearing')
+    var bearingKey = { P: '#minecraft:wooden_slabs', C: 'create:andesite_casing', S: 'create:shaft' }
+    if (partVariants) bearingKey.H = 'tconstruct:tool_handle'
+    event.shaped('create:mechanical_bearing', partVariants ? [' P', 'HC', ' S'] : ['P', 'C', 'S'], bearingKey)
+        .id('kubejs:powered_works/workshop/mechanical_bearing')
     event.remove({ id: 'create:crafting/kinetics/depot' })
     event.shapeless('create:depot', ['create:andesite_casing', '#forge:ingots/iron'])
         .id('kubejs:powered_works/workshop/depot')
     event.remove({ id: 'create:crafting/kinetics/basin' })
-    event.shaped('create:basin', ['I I', 'III'], { I: '#forge:ingots/iron' })
-        .id('kubejs:powered_works/workshop/basin')
+    // Keep all five workshop iron ingots; the Manufacturing branch fills the
+    // existing empty top-center slot with a real TCon vessel liner.
+    variant('create:basin', partVariants ? ['ILI', 'III'] : ['I I', 'III'],
+        partVariants ? { I: '#forge:ingots/iron', L: 'tconstruct:large_plate' }
+            : { I: '#forge:ingots/iron' },
+        'liner', 1, 'fluid_envelope', 'kubejs:powered_works/workshop/basin')
     event.remove({ id: 'create:crafting/kinetics/whisk' })
     if (partVariants) {
-        event.custom({ type: 'better_manufacturing:part_variant', pattern: [' H ', 'SCS', 'SSS'],
+        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['CH ', 'SCS', 'SSS'],
             key: { H: { item: 'tconstruct:tool_handle' }, C: { tag: 'forge:ingots/iron' },
                 S: { tag: 'forge:plates/iron' } }, result: { item: 'create:whisk' },
             function: 'better_manufacturing:create/mixing', parts: [{ role: 'shaft', slot: 1 }]
@@ -93,8 +106,9 @@ ServerEvents.recipes(function (event) {
     // hidden alloy prerequisite for fans or the Aether wind-power branch.
     event.remove({ id: 'create:crafting/kinetics/propeller' })
     if (partVariants) {
-        event.custom({ type: 'better_manufacturing:part_variant', pattern: [' B ', 'BSB', ' B '],
-            key: { B: { item: 'tconstruct:small_blade' }, S: { item: 'create:shaft' } },
+        event.custom({ type: 'better_manufacturing:part_variant', pattern: ['PBP', 'BSB', 'PBP'],
+            key: { B: { item: 'tconstruct:small_blade' }, P: { tag: 'forge:plates/iron' },
+                S: { item: 'create:shaft' } },
             result: { item: 'create:propeller' }, function: 'better_manufacturing:create/airflow',
             parts: [{ role: 'north', slot: 1 }, { role: 'west', slot: 3 },
                 { role: 'east', slot: 5 }, { role: 'south', slot: 7 }]
@@ -112,9 +126,9 @@ ServerEvents.recipes(function (event) {
     // Skyroot proves renewable water/wind generation. The consumed native
     // handle/binding remains part of each built machine with Manufacturing.
     ;[
-        ['create:water_wheel', ['LIL', 'ISI', 'LHL'], ['LIL', 'ISI', 'LIL'], 'tconstruct:tool_handle'],
-        ['create:large_water_wheel', ['LIL', 'IWI', 'LHL'], ['LIL', 'IWI', 'LIL'], 'tconstruct:tool_handle'],
-        ['create:windmill_bearing', [' L ', 'HCS', '   '], [' L ', 'LCS', '   '], 'tconstruct:tool_binding']
+        ['create:water_wheel', ['LIL', 'ISI', 'LPL'], ['LIL', 'ISI', 'LIL'], 'tconstruct:tool_handle'],
+        ['create:large_water_wheel', ['LIL', 'IWI', 'LPL'], ['LIL', 'IWI', 'LIL'], 'tconstruct:tool_handle'],
+        ['create:windmill_bearing', [' L ', 'LCS', 'H  '], [' L ', 'LCS', '   '], 'tconstruct:tool_binding']
     ].forEach(function (root) {
         var output = root[0]
         var key = output === 'create:large_water_wheel'
@@ -122,11 +136,22 @@ ServerEvents.recipes(function (event) {
             : output === 'create:windmill_bearing'
                 ? { L: 'aether:skyroot_log', C: 'create:andesite_casing', S: 'create:shaft' }
                 : { L: 'aether:skyroot_log', I: '#forge:ingots/iron', S: 'create:shaft' }
-        if (partVariants) key.H = root[3]
+        if (partVariants && output === 'create:windmill_bearing') key.H = root[3]
         event.remove({ output: output })
-        var pattern = partVariants ? root[1] : root[2]
-        event.shaped(output, pattern, key)
-            .id('kubejs:powered_works/direct_root/' + output.substring('create:'.length))
+        var id = 'kubejs:powered_works/direct_root/' + output.substring('create:'.length)
+        if (partVariants && output !== 'create:windmill_bearing') {
+            // Water wheels are needed before mechanical crafters. Mark a real
+            // Skyroot log with one consumed handle; keep all five native logs.
+            var paidKey = { L: { item: 'aether:skyroot_log' }, I: { tag: 'forge:ingots/iron' },
+                P: { type: 'forge:partial_nbt', item: 'aether:skyroot_log',
+                    nbt: '{better_manufacturing:{skyroot_wheel_log:1}}' } }
+            paidKey[output === 'create:large_water_wheel' ? 'W' : 'S'] =
+                { item: output === 'create:large_water_wheel' ? 'create:water_wheel' : 'create:shaft' }
+            event.custom({ type: 'minecraft:crafting_shaped', pattern: root[1], key: paidKey,
+                result: { item: output } }).id(id)
+        } else {
+            event.shaped(output, partVariants ? root[1] : root[2], key).id(id)
+        }
     })
 
     event.remove({ output: 'create:andesite_funnel' })
@@ -144,11 +169,35 @@ ServerEvents.recipes(function (event) {
     if (Platform.isLoaded('createsifter')) {
         event.remove({ id: 'createsifter:sifter' })
         if (partVariants) {
+            // Pay all eight native sticks and the tier-specific center before
+            // the four physical handle parts become a configured mesh.
+            ;[
+                ['string', 'minecraft:string'], ['andesite', 'create:andesite_alloy'],
+                ['zinc', 'create:zinc_ingot'], ['brass', 'create:brass_ingot']
+            ].forEach(function (row) {
+                event.shaped(Item.of('minecraft:stick',
+                    '{better_manufacturing:{' + row[0] + '_mesh_paid:1}}'),
+                    row[0] === 'string' ? ['SMS', 'SSS', 'SSS'] : ['SSS', 'SMS', 'SSS'],
+                    { S: 'minecraft:stick', M: row[1] })
+                    .id('kubejs:powered_works/refinement/prepare_' + row[0] + '_mesh')
+            })
+            // Preserve both native sticks and the Nether-brick gate without
+            // moving this early machine behind the mechanical crafter.
+            event.shaped(Item.of('minecraft:nether_brick', '{better_manufacturing:{sifter_paid_sticks:1}}'),
+                [' S ', ' N ', ' S '], { S: 'minecraft:stick', N: 'minecraft:nether_brick' })
+                .id('kubejs:powered_works/refinement/paid_sifter_brick')
+            // Bundle the complete native brass-upgrade bill, leaving the
+            // predecessor Sifter intact so its saved rating can be inherited.
+            event.shaped(Item.of('minecraft:redstone', '{better_manufacturing:{brass_sifter_paid_materials:1}}'),
+                ['PPP', 'B B', 'BRB'], { P: '#forge:plates/brass', B: '#forge:ingots/brass',
+                    R: '#forge:dusts/redstone' })
+                .id('kubejs:powered_works/refinement/brass_sifter_paid_materials')
             event.custom({ type: 'better_manufacturing:part_variant',
                 pattern: ['WAW', 'HCH', ' N '],
                 key: { W: { tag: 'minecraft:planks' }, A: { item: 'create:andesite_casing' },
                     H: { item: 'tconstruct:tool_handle' }, C: { item: 'create:cogwheel' },
-                    N: { item: 'minecraft:nether_brick' } },
+                    N: { type: 'forge:partial_nbt', item: 'minecraft:nether_brick',
+                        nbt: '{better_manufacturing:{sifter_paid_sticks:1}}' } },
                 result: { item: 'createsifter:sifter' }, function: 'better_manufacturing:sifter/machine',
                 parts: [{ role: 'left', slot: 3 }, { role: 'right', slot: 5 }]
             }).id('kubejs:powered_works/refinement/sifter')

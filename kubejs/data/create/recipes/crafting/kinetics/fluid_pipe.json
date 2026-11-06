@@ -12,7 +12,8 @@
         "type": "better_manufacturing:part_variant",
         "category": "misc",
         "pattern": [
-          "LCS"
+          "SCS",
+          "L  "
         ],
         "key": {
           "L": {
@@ -33,7 +34,7 @@
         "parts": [
           {
             "role": "liner",
-            "slot": 0
+            "slot": 3
           }
         ]
       }

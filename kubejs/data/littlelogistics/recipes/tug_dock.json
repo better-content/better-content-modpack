@@ -1,31 +1,85 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "littlelogistics:spring"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "littlelogistics:spring"
+          },
+          "$": {
+            "item": "minecraft:iron_ingot"
+          },
+          "_": {
+            "tag": "forge:stone"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          },
+          "K": {
+            "type": "forge:partial_nbt",
+            "item": "littlelogistics:spring",
+            "nbt": "{better_manufacturing:{dock_stone_paid:1}}"
+          }
+        },
+        "pattern": [
+          "HP_",
+          "K_#",
+          "$$$"
+        ],
+        "result": {
+          "count": 2,
+          "item": "littlelogistics:tug_dock"
+        },
+        "show_notification": true
+      }
     },
-    "$": {
-      "item": "minecraft:iron_ingot"
-    },
-    "_": {
-      "tag": "forge:stone"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "littlelogistics:spring"
+          },
+          "$": {
+            "item": "minecraft:iron_ingot"
+          },
+          "_": {
+            "tag": "forge:stone"
+          }
+        },
+        "pattern": [
+          "___",
+          "#_#",
+          "$$$"
+        ],
+        "result": {
+          "count": 2,
+          "item": "littlelogistics:tug_dock"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "HP_",
-    "#_#",
-    "$$$"
-  ],
-  "result": {
-    "count": 2,
-    "item": "littlelogistics:tug_dock"
-  },
-  "show_notification": true
+  ]
 }

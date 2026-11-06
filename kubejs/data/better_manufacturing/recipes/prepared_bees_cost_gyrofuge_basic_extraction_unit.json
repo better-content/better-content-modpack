@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "#S#",
+          "R R",
+          "#D#"
+        ],
+        "key": {
+          "#": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "D": {
+            "item": "minecraft:diamond"
+          },
+          "R": {
+            "item": "minecraft:piston"
+          },
+          "S": {
+            "item": "minecraft:amethyst_shard"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:gyrofuge_panel",
+          "nbt": "{better_manufacturing:{bees_cost_gyrofuge_basic_extraction_unit:1}}"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" },
+        { "type": "forge:mod_loaded", "modid": "complicated_bees" }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "category": "misc",
+        "ingredients": [
+          { "item": "minecraft:redstone_torch" },
+          { "item": "tconstruct:tool_handle" }
+        ],
+        "result": {
+          "item": "minecraft:redstone_torch",
+          "nbt": "{better_manufacturing:{gyrofuge_panel_torch:1}}"
+        }
+      }
+    }
+  ]
+}

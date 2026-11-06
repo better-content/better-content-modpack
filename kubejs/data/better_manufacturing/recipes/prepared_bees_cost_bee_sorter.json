@@ -1,0 +1,47 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "WIW",
+          "PCP",
+          "WDW"
+        ],
+        "key": {
+          "C": {
+            "item": "minecraft:comparator"
+          },
+          "D": {
+            "item": "minecraft:diamond"
+          },
+          "I": {
+            "item": "minecraft:hopper"
+          },
+          "P": {
+            "item": "complicated_bees:propolis"
+          },
+          "W": {
+            "item": "complicated_bees:honeyed_planks"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:honeyed_planks",
+          "nbt": "{better_manufacturing:{bees_cost_bee_sorter:1}}"
+        }
+      }
+    }
+  ]
+}

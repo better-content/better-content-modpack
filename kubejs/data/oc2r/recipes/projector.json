@@ -1,37 +1,156 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "HLP",
-    "XTD",
-    "GBG"
-  ],
-  "key": {
-    "G": {
-      "tag": "forge:ingots/gold"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "create:mechanical_crafting",
+        "acceptMirrored": true,
+        "pattern": [
+          "GLG",
+          "XTD",
+          "GBG",
+          "HP "
+        ],
+        "key": {
+          "G": {
+            "tag": "forge:ingots/gold"
+          },
+          "L": {
+            "item": "minecraft:redstone_lamp"
+          },
+          "D": {
+            "tag": "forge:gems/diamond"
+          },
+          "T": {
+            "item": "oc2r:transistor"
+          },
+          "X": {
+            "item": "oc2r:bus_interface"
+          },
+          "B": {
+            "item": "oc2r:circuit_board"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "oc2r:projector"
+        }
+      }
     },
-    "L": {
-      "item": "minecraft:redstone_lamp"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "HLP",
+          "XTD",
+          "GBG"
+        ],
+        "key": {
+          "G": {
+            "tag": "forge:ingots/gold"
+          },
+          "L": {
+            "item": "minecraft:redstone_lamp"
+          },
+          "D": {
+            "tag": "forge:gems/diamond"
+          },
+          "T": {
+            "item": "oc2r:transistor"
+          },
+          "X": {
+            "item": "oc2r:bus_interface"
+          },
+          "B": {
+            "item": "oc2r:circuit_board"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "oc2r:projector"
+        }
+      }
     },
-    "D": {
-      "tag": "forge:gems/diamond"
-    },
-    "T": {
-      "item": "oc2r:transistor"
-    },
-    "X": {
-      "item": "oc2r:bus_interface"
-    },
-    "B": {
-      "item": "oc2r:circuit_board"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "create"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "HLP",
+          "XTD",
+          "GBG"
+        ],
+        "key": {
+          "G": {
+            "tag": "forge:ingots/gold"
+          },
+          "L": {
+            "item": "minecraft:redstone_lamp"
+          },
+          "D": {
+            "tag": "forge:gems/diamond"
+          },
+          "T": {
+            "item": "oc2r:transistor"
+          },
+          "X": {
+            "item": "oc2r:bus_interface"
+          },
+          "B": {
+            "item": "oc2r:circuit_board"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "result": {
+          "item": "oc2r:projector"
+        }
+      }
     }
-  },
-  "result": {
-    "item": "oc2r:projector"
-  }
+  ]
 }

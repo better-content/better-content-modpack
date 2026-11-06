@@ -1,0 +1,42 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "complicated_bees:item_enabled",
+          "item": "complicated_bees:dry_frame"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "OOO",
+          "OXO",
+          "OOO"
+        ],
+        "key": {
+          "O": {
+            "item": "complicated_bees:waxed_stick"
+          },
+          "X": {
+            "tag": "minecraft:sand"
+          }
+        },
+        "result": {
+          "item": "complicated_bees:waxed_stick",
+          "nbt": "{better_manufacturing:{bees_cost_dry_frame:1}}"
+        }
+      }
+    }
+  ]
+}

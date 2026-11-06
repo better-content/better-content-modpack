@@ -21,7 +21,7 @@
         "pattern": [
           "HTP",
           "GCG",
-          " A "
+          "NA "
         ],
         "key": {
           "T": {
@@ -35,6 +35,9 @@
           },
           "A": {
             "item": "kubejs:airtight_machine_block"
+          },
+          "N": {
+            "item": "pneumaticcraft:pneumatic_cylinder"
           },
           "H": {
             "item": "tconstruct:tough_handle"

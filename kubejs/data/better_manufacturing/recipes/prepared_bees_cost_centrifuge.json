@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "III",
+          "ICI",
+          "SRS"
+        ],
+        "key": {
+          "C": {
+            "item": "minecraft:chest"
+          },
+          "I": {
+            "item": "minecraft:iron_ingot"
+          },
+          "R": {
+            "item": "minecraft:redstone"
+          },
+          "S": {
+            "item": "minecraft:smooth_stone"
+          }
+        },
+        "result": {
+          "item": "minecraft:iron_ingot",
+          "nbt": "{better_manufacturing:{bees_cost_centrifuge:1}}"
+        }
+      }
+    }
+  ]
+}

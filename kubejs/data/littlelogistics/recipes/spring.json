@@ -1,28 +1,73 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "$": {
-      "item": "minecraft:iron_nugget"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "$": {
+            "item": "minecraft:iron_nugget"
+          },
+          "_": {
+            "tag": "forge:string"
+          },
+          "H": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "_$_",
+          "$_$",
+          "HP "
+        ],
+        "result": {
+          "count": 6,
+          "item": "littlelogistics:spring"
+        },
+        "show_notification": true
+      }
     },
-    "_": {
-      "tag": "forge:string"
-    },
-    "H": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "$": {
+            "item": "minecraft:iron_nugget"
+          },
+          "_": {
+            "tag": "forge:string"
+          }
+        },
+        "pattern": [
+          "_$_",
+          "$_$"
+        ],
+        "result": {
+          "count": 6,
+          "item": "littlelogistics:spring"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "_$_",
-    "$_$",
-    "HP "
-  ],
-  "result": {
-    "count": 6,
-    "item": "littlelogistics:spring"
-  },
-  "show_notification": true
+  ]
 }

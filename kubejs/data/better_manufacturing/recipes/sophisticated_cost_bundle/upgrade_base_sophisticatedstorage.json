@@ -1,0 +1,39 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "sophisticatedstorage"
+        },
+        {
+          "type": "sophisticatedcore:item_enabled",
+          "itemRegistryName": "sophisticatedstorage:upgrade_base"
+        }
+      ],
+      "recipe": {
+        "type": "better_manufacturing:sophisticated_cost_bundle",
+        "marker": "sophisticatedstorage:upgrade_base",
+        "anchor": {
+          "tag": "minecraft:planks"
+        },
+        "costs": [
+          {
+            "tag": "minecraft:planks"
+          },
+          {
+            "item": "tconstruct:large_plate"
+          },
+          {
+            "item": "tconstruct:tool_handle"
+          }
+        ]
+      }
+    }
+  ]
+}

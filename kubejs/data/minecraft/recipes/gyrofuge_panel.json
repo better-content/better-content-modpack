@@ -1,0 +1,35 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        { "type": "forge:mod_loaded", "modid": "better_manufacturing" },
+        { "type": "forge:mod_loaded", "modid": "complicated_bees" }
+      ],
+      "recipe": {
+        "type": "minecraft:smithing_transform",
+        "addition": {
+          "type": "forge:partial_nbt",
+          "item": "minecraft:redstone_torch",
+          "nbt": "{better_manufacturing:{gyrofuge_panel_torch:1}}"
+        },
+        "base": { "item": "complicated_bees:mellarium_panel" },
+        "result": { "item": "complicated_bees:gyrofuge_panel" },
+        "template": { "item": "minecraft:iron_ingot" }
+      }
+    },
+    {
+      "conditions": [
+        { "type": "forge:not", "value": { "type": "forge:mod_loaded", "modid": "better_manufacturing" } },
+        { "type": "forge:mod_loaded", "modid": "complicated_bees" }
+      ],
+      "recipe": {
+        "type": "minecraft:smithing_transform",
+        "addition": { "item": "minecraft:redstone_torch" },
+        "base": { "item": "complicated_bees:mellarium_panel" },
+        "result": { "item": "complicated_bees:gyrofuge_panel" },
+        "template": { "item": "minecraft:iron_ingot" }
+      }
+    }
+  ]
+}

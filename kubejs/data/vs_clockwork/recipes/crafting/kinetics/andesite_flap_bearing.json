@@ -17,28 +17,37 @@
         "category": "misc",
         "function": "better_manufacturing:clockwork/flight_actuators",
         "pattern": [
-          " A ",
-          "CMC",
-          "LSB"
+          "HIX",
+          "AMG",
+          "VSO"
         ],
         "key": {
-          "A": {
-            "item": "create:andesite_alloy"
+          "H": {
+            "item": "tconstruct:tough_handle"
           },
-          "C": {
-            "item": "create:cogwheel"
+          "X": {
+            "item": "tconstruct:broad_blade"
+          },
+          "I": {
+            "item": "create:iron_sheet"
+          },
+          "A": {
+            "item": "create:andesite_casing"
+          },
+          "V": {
+            "item": "create:copper_valve_handle"
           },
           "M": {
             "item": "kubejs:copper_machine_block"
           },
+          "G": {
+            "item": "create:cogwheel"
+          },
           "S": {
             "item": "create:shaft"
           },
-          "L": {
-            "item": "tconstruct:tough_handle"
-          },
-          "B": {
-            "item": "tconstruct:broad_blade"
+          "O": {
+            "item": "create:andesite_alloy"
           }
         },
         "result": {
@@ -47,11 +56,11 @@
         "parts": [
           {
             "role": "handle",
-            "slot": 6
+            "slot": 0
           },
           {
             "role": "blade",
-            "slot": 8
+            "slot": 2
           }
         ]
       }

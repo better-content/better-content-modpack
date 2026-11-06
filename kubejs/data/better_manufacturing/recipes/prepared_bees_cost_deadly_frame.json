@@ -1,0 +1,45 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "complicated_bees:item_enabled",
+          "item": "complicated_bees:deadly_frame"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "complicated_bees"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "pattern": [
+          "OCO",
+          "OXO",
+          "OOO"
+        ],
+        "key": {
+          "C": {
+            "item": "minecraft:crying_obsidian"
+          },
+          "O": {
+            "item": "minecraft:obsidian"
+          },
+          "X": {
+            "item": "minecraft:skeleton_skull"
+          }
+        },
+        "result": {
+          "item": "minecraft:obsidian",
+          "nbt": "{better_manufacturing:{bees_cost_deadly_frame:1}}"
+        }
+      }
+    }
+  ]
+}

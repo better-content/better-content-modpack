@@ -102,7 +102,6 @@ ServerEvents.recipes(function (event) {
     event.shaped('create:hand_crank', handCrankParts ? ['PPP', ' A ', 'HS '] : ['PPP', ' A ', ' S '], handCrankKey)
         .id('kubejs:hand_workshop/hand_crank')
 
-    // Native cutting/deploying alternatives still exist. They cannot consume
-    // the configured parts in their present input shapes, so count those
-    // recipe-only roots as partial rather than removing acquisition routes.
+    // Pinned Create 6.0.8 has only the removed shaped hand-crank recipe;
+    // no native cutting or deploying output needs a separate part-paid route.
 })

@@ -12,7 +12,7 @@
         "type": "better_manufacturing:part_variant",
         "category": "misc",
         "pattern": [
-          "XBP",
+          "XBA",
           "HCL"
         ],
         "key": {
@@ -35,6 +35,13 @@
           },
           "H": {
             "item": "tconstruct:tough_handle"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "item": "pneumaticcraft:pressure_tube"
+            },
+            "marker": "pneumaticcraft:liquid_compressor"
           }
         },
         "result": {

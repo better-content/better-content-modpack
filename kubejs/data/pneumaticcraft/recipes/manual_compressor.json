@@ -14,7 +14,7 @@
         "pattern": [
           "RIR",
           "BT ",
-          "GXH"
+          "AXH"
         ],
         "key": {
           "B": {
@@ -37,6 +37,13 @@
           },
           "H": {
             "item": "tconstruct:tough_handle"
+          },
+          "A": {
+            "type": "better_manufacturing:pneu_native_cost_bundle",
+            "anchor": {
+              "tag": "forge:gears/compressed_iron"
+            },
+            "marker": "pneumaticcraft:manual_compressor"
           }
         },
         "result": {

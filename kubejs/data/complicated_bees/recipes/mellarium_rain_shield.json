@@ -1,33 +1,84 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "#": {
-      "item": "minecraft:prismarine"
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "better_manufacturing"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "minecraft:prismarine"
+          },
+          "A": {
+            "item": "complicated_bees:mellarium_base"
+          },
+          "H": {
+            "item": "minecraft:heart_of_the_sea"
+          },
+          "N": {
+            "item": "minecraft:nautilus_shell"
+          },
+          "J": {
+            "item": "tconstruct:tool_handle"
+          },
+          "P": {
+            "item": "tconstruct:large_plate"
+          }
+        },
+        "pattern": [
+          "JHP",
+          "NAN",
+          "###"
+        ],
+        "result": {
+          "item": "complicated_bees:mellarium_rain_shield"
+        },
+        "show_notification": true
+      }
     },
-    "A": {
-      "item": "complicated_bees:mellarium_base"
-    },
-    "H": {
-      "item": "minecraft:heart_of_the_sea"
-    },
-    "N": {
-      "item": "minecraft:nautilus_shell"
-    },
-    "J": {
-      "item": "tconstruct:tool_handle"
-    },
-    "P": {
-      "item": "tconstruct:large_plate"
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "better_manufacturing"
+          }
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "category": "misc",
+        "key": {
+          "#": {
+            "item": "minecraft:prismarine"
+          },
+          "A": {
+            "item": "complicated_bees:mellarium_base"
+          },
+          "H": {
+            "item": "minecraft:heart_of_the_sea"
+          },
+          "N": {
+            "item": "minecraft:nautilus_shell"
+          }
+        },
+        "pattern": [
+          " H ",
+          "NAN",
+          "###"
+        ],
+        "result": {
+          "item": "complicated_bees:mellarium_rain_shield"
+        },
+        "show_notification": true
+      }
     }
-  },
-  "pattern": [
-    "JHP",
-    "NAN",
-    "###"
-  ],
-  "result": {
-    "item": "complicated_bees:mellarium_rain_shield"
-  },
-  "show_notification": true
+  ]
 }
