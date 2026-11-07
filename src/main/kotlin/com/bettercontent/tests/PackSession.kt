@@ -179,7 +179,14 @@ private class PackSession(private val evidence: SessionEvidence, private val req
     }
 
     override fun awaitServerReady() {
-        server!!.waitForLog(Regex("Done \\([0-9.]+s\\)!.*For help"), startupTimeout, "server readiness")
+        // A new Lineage world starts a closed candidate server first. Its "Done" line is
+        // not the playable server: wait for the supervisor to promote/reopen the save.
+        val ready = Regex("Done \\([0-9.]+s\\)!.*For help")
+        server!!.waitUntil(startupTimeout, "published world server readiness") {
+            val output = serverLog.readText()
+            val finalLaunch = output.lastIndexOf("launching current world under lifecycle supervision")
+            finalLaunch >= 0 && ready.containsMatchIn(output.substring(finalLaunch))
+        }
         evidence.event("server_ready")
     }
 

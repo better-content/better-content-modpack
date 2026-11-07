@@ -10,17 +10,6 @@ StartupEvents.registry('fluid', function (event) {
 
 StartupEvents.registry('item', function (event) {
     ;[
-        ['nether_font_grout', 'Nether Font Grout'],
-        ['aether_font_grout', 'Aether Font Grout'],
-        ['bumblezone_font_grout', 'Bumblezone Font Grout']
-    ].forEach(function (definition) {
-        event.create(definition[0])
-            .displayName(definition[1])
-            .texture('tconstruct:item/grout')
-    })
-
-    ;[
-        ['refractory_compound', 'Refractory Compound'],
         ['sky_steel_ingot', 'Sky Steel Ingot'],
         ['sky_steel_sheet', 'Sky Steel Sheet'],
         ['pressure_seal', 'Pressure Seal'],

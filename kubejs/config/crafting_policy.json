@@ -2291,7 +2291,7 @@
   "capability_roots": [
     {
       "capability": "tconstruct.seared_metallurgy",
-      "required_proofs": ["kubejs:refractory_compound", "tconstruct:seared_brick"]
+      "required_proofs": ["tconstruct:grout", "tconstruct:seared_brick"]
     },
     {
       "capability": "create.workshop",

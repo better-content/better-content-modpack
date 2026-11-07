@@ -1,0 +1,4 @@
+# Initial shared-spawn biome blacklist (one additional registered biome ID per line).
+# All biomes in #minecraft:is_ocean are ALWAYS excluded, including warm and deep frozen oceans.
+# This file only adds exclusions; it cannot enable an ocean spawn or affect successor spawns.
+# Example: minecraft:river

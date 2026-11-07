@@ -1,0 +1,17 @@
+# Existing successor-prestige biome preferences only. Fresh initial worlds use
+# Cold Sweat's parametric habitable bounds; this list does not gate first joins.
+minecraft:plains
+minecraft:sunflower_plains
+minecraft:meadow
+minecraft:forest
+minecraft:flower_forest
+minecraft:birch_forest
+minecraft:old_growth_birch_forest
+minecraft:dark_forest
+ars_nouveau:archwood_forest
+quark:glimmering_weald
+natures_spirit:cedar_thicket
+natures_spirit:lavender_fields
+natures_spirit:marigold_meadows
+natures_spirit:flowering_shrubland
+natures_spirit:wisteria_forest

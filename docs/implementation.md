@@ -134,6 +134,54 @@ owns recipes, progression and explicit role-specific ratings. Outputs store only
 consumed normally; no retained parts, wear, refunds or qualification-transfer history are used.
 Material reload changes future crafts, not existing machines. Missing/invalid settings use native baseline.
 
+The player-facing model is [power infrastructure plus fitted parts](progression.md#power-progression-at-a-glance):
+one processing apparatus can be driven by different energy systems, while its crafted properties remain
+independent of the source. This documentation framing changes no recipes, registry IDs, save data or
+acceptance status. It does not authorize moving most machines into Hand Workshop or replacing specialist
+pressure/chemical/electrical processes with Create recipes.
+
+#### Power and fitted-part implementation cross-reference
+
+Local Java paths below are relative to
+[`better-manufacturing/src/main/java/com/bettercontent/manufacturing/`](../../mod_source/better-manufacturing/src/main/java/com/bettercontent/manufacturing/).
+These are source-inspection references, not evidence that every optional family works in the assembled pack.
+
+| Surface | Recipe/config evidence | Native behavior hook / boundary |
+| --- | --- | --- |
+| Rated Press/Mixer and inherited Whisk | `kubejs/server_scripts/progression/20_powered_works.js` | `recipe/PartVariantRecipe.java`, `api/NumericEvaluator.java`, `mixin/WorkshopRateMixins.java`, `integration/create/KineticVariantBehaviour.java`: capture numeric settings, adjust native work and persist the configured machine; power source is not part of the rating. |
+| Construction-only parts | `20_powered_works.js`, `30_precision_factory.js`, conditional Create recipe JSONs | Ordinary shaped/shapeless recipes consume parts but do not confer ratings; do not infer performance from an ingredient alone. |
+| Steam → SU | `30_precision_factory.js`: Precision Mechanism plus Tough Handle piston rod, not a Brass Machine Block | `integration/createbulk/BulkNative.java`, `mixin/CreatebulkSteamShaftMixin.java`: adjust available shaft capacity within the rated conversion/mechanical limit; retain native boiler efficiency, heat/water supply and speed steps. Heat Sync owns its separate heat buffer, not stored SU. |
+| SU → compressed air | `40_thermal_pressure.js`; `defaultconfigs/compressedcreativity-server.toml` | `mixin/CompressedConversionMixin.java` and `mixin/CompressedKineticCostMixin.java`: rated air production pays corresponding kinetic stress. Native pressure/storage rules remain. |
+| Compressed air → SU | `kubejs/data/compressedcreativity/recipes/crafting/compressed_air_engine.json`; same server config | `mixin/CompressedConversionMixin.java`: output respects the native 256-RPM ceiling; sub-baseline working output reduces running air cost correspondingly, while higher ratings do not discount air at unchanged capped output. Idle/overstressed accounting remains native. |
+| Electricity → SU | `kubejs/data/powergrid/recipes/mechanical_crafting/electric_motor.json`; `defaultconfigs/powergrid-server.toml` | `mixin/PowergridMotorLeverageMixin.java`: the Tough Handle rotor's drive rating adjusts native coil resistance. PowerGrid circuit power determines output; batteries, wiring and thermal behavior remain PowerGrid-owned, not an independent free-SU multiplier. |
+| Kinetic transmission | `config/better_create_kinetic_loss-common.toml` | Separate `better-create-kinetic-loss` mod: `network/NetworkScanner.kt` sums component/RPM loss; `mixin/StressCalculatorMixin.kt` adds it to network stress. No shaft-material loss rating or gradual RPM decay is implied. |
+
+Pressure and electrical storage buffer their own medium before conversion. Their capacities, supply
+thresholds, charging/discharging behavior and losses must be checked against the pinned implementations;
+there is no universal efficiency, runtime or interchangeability promise. Short local shaft runs can avoid
+some kinetic transmission demand, but that alone does not establish an air/electric layout as more efficient.
+
+#### Functional acquisition audit boundary
+
+The [Create/addon family ledger](progression.md#create-and-addon-acquisition-audit--source-only-not-a-retier)
+reconciles native recipe IDs, pack JSON overrides, KubeJS removals/replacements,
+and conditional Manufacturing/fallback branches at **source level**. Its
+[93 Create + 73 addon coverage entries](../kubejs/data/better_manufacturing/coverage.json)
+are selections for fitted parts (including six excluded entries), not verified
+survival acquisitions or a count of recipe edits. Horse Power and Aquatic
+Ambitions require separate scrutiny, while decorative Create Deco variants are
+not individual manufacturing gates. Construction-only TCon ingredients do not
+inherit ratings; the separately configured kinetic transmission cost is not
+computed from those parts. The Mixer is not gated by the name of its
+`20_powered_works.js` script. The current Millstone requires Nether brick,
+whereas the proposal to make its two-feed ore route early and permit local-wood
+water/wind roots is explicitly [deferred](design.md#create-power-and-capability-retier).
+No candidate-matched loaded full-pack acceptance establishes the entire roster,
+its alternate recipes or the Horse Crank's usable output. No gameplay edits or
+runtime validation followed from this documentation audit.
+
+#### Existing validation record
+
 The first wave authored candidate settings-bearing recipes and native hooks for Create/Sifter,
 PNCR/Compressed, fluids/heat, Power Grid, Clockwork, vehicles and other selected families, plus
 construction-only exact-ID overrides. Candidate JSON counts do **not** establish effective
@@ -501,7 +549,10 @@ a staging area inside an active root.
 
 | Surface | Runtime authority | Pack-owned boundary |
 | --- | --- | --- |
-| Five active technology eras and Machine Blocks | Pack KubeJS | Exact cross-mod root recipes, transition items, optional transport gates; aerospace deferred |
+| Five power-centered technology eras and Machine Blocks | Pack KubeJS | Cumulative workshop supply options; exact cross-mod capability roots, transition items and optional transport gates remain unchanged; aerospace deferred |
+| Fitted working parts and conversion hardware | Better Manufacturing + native TCon parts | Pack supplies recipes/roles; selected settings affect native machines, construction-only ingredients do not imply ratings; acceptance remains family-specific |
+| Pressure/electrical supply to Create | PneumaticCraft + Compressed Creativity / PowerGrid | Pack gates access; native storage, networks and conversion supply existing kinetic machines rather than replacement processing blocks |
+| Kinetic transmission demand | Better Create Kinetic Loss | Pack config sets component/RPM costs; no material-dependent shaft loss |
 | Geological deposits and processing | Realistic Ores | Era inputs only; see [`progression.md#realistic-ore-processing`](progression.md#realistic-ore-processing) |
 | Radiation and contained chemistry | Latent ChemLib | Cross-mod gates; no duplicate physical simulation |
 | Industrial heat | Heat Sync | Era placement and integrations; Heat Sync owns storage, transfer, ambient mapping, and Create boiler heat |
@@ -741,9 +792,18 @@ bounded and clean transient state. `better-spawns` always owns first-join specta
 permanent spawn locking. Its active `progression` embark mode asks World Lifecycle Manager for the
 current lineage policy: new lineages receive site-only onboarding, class perks expose only their
 unlocked classes, and unlocking all six classes exposes the bounded Embark point-buy. World
-Lifecycle Manager separately owns ordered successor spawn-biome preferences.
-The pack's default preference list contains the same six safe temperate biomes as first-join
-onboarding. A successor attempt checks the final shared-spawn feet biome before publication.
+Lifecycle Manager separately owns successor spawn-biome preferences in
+`config/better_world_management-successor-biomes.txt`. Fresh initial worlds no longer
+read a biome-ID preference list: they select a final shared-spawn biome whose registered
+base temperature is within Cold Sweat's loaded habitable bounds (10–37.78°C in this
+pack) and which is not in `#minecraft:is_ocean`. The same rule applies at the two
+blocks above the saved position, because vanilla first-join placement can lift a
+spectator into a vertically different ocean biome. Additional initial-only excluded
+IDs may be added to `config/better_world_management-initial-spawn-blacklist.txt`;
+the ocean tag exclusion applies even if that file is absent. No FULL-chunk terrain-safety check
+is required for first-join spectators. This biome-baseline criterion does not guarantee
+effective comfort at every time, season or elevation. Successor spawn checks retain
+their existing terrain policy.
 Once a player joins a candidate, Lifecycle Manager writes an inhabited marker in that world;
 the supervisor preserves the candidate and transaction if the marker or saved player data is
 present, including after a failed health check or interrupted retry.

@@ -217,10 +217,15 @@ install_server() {
   fi
   # World Axiom projection is a server supervisor input, not part of the client export.
   [ -f "$ROOT/world-axioms.py" ] && [ ! -L "$ROOT/world-axioms.py" ] || fail 'missing regular World Axiom projector'
-  cp "$ROOT/run.sh" "$ROOT/run-forge.sh" "$ROOT/better-world-management-server.sh" "$ROOT/world-axioms.py" "$server/"
+  [ -f "$ROOT/better-world-management-initial-spawn.py" ] && [ ! -L "$ROOT/better-world-management-initial-spawn.py" ] \
+    || fail 'missing regular initial-spawn supervisor'
+  cp "$ROOT/run.sh" "$ROOT/run-forge.sh" "$ROOT/better-world-management-server.sh" \
+    "$ROOT/world-axioms.py" "$ROOT/better-world-management-initial-spawn.py" "$server/"
   chmod 0755 "$server/run.sh" "$server/run-forge.sh" "$server/better-world-management-server.sh"
-  chmod 0644 "$server/world-axioms.py"
+  chmod 0644 "$server/world-axioms.py" "$server/better-world-management-initial-spawn.py"
   cmp -s "$ROOT/world-axioms.py" "$server/world-axioms.py" || fail 'World Axiom server projector copy differs'
+  cmp -s "$ROOT/better-world-management-initial-spawn.py" "$server/better-world-management-initial-spawn.py" \
+    || fail 'initial-spawn supervisor copy differs'
 }
 
 archive_server_tree() {

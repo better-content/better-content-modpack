@@ -2,15 +2,183 @@
 
 ## Progression
 
-This pack uses five active technology eras. Machine Blocks prove capability at
-explicitly named roots; fitted native Tinkers' Construct parts carry configured
-Manufacturing behavior. The retained Andesite, Copper, Brass, Airtight, and
-Electrical block recipes produce batches of four, four, four, two, and two.
-Creating Space and its Space Machine Block are retired from this candidate.
+The five technology eras describe an enduring workshop with increasingly capable
+power infrastructure, not five sets of replacement processing machines. Create
+remains the processing apparatus for its established domains: the same Press or
+Mixer can keep working as its supply changes from player effort to generated
+rotation, steam, compressed air, or electricity. Specialist capabilities such as
+Tinkers' metallurgy, pressure processing, and electronics retain their own apparatus.
+
+There are three interacting progression axes:
+
+- **Power infrastructure:** how energy is generated, buffered, distributed, and
+  converted into rotation at the machine.
+- **Fitted components:** native Tinkers' Construct parts give selected machines
+  and conversion hardware their Better Manufacturing properties.
+- **Capability access:** recipes and apparatus still determine which processes
+  are available. A stronger power source or better material does not bypass them.
+
+These are cumulative options. Water and wind remain useful after steam, pressure,
+and electricity become available. This framing does **not** move recipes earlier
+or mean that most machines already unlock in Hand Workshop. Machine Blocks prove
+capability at explicitly named roots, rather than serving as mandatory ingredients
+in every machine. The retained Andesite, Copper, Brass, Airtight, and Electrical
+block recipes produce batches of four, four, four, two, and two. Creating Space
+and its Space Machine Block are retired from this candidate.
 
 Progression is communicated by executable recipes, apparatus, native guides,
 item-hover annotations, loading lessons, contextual Threads, and event or world
 feedback. Learning surfaces do not impose an objective graph or grant quest rewards.
+
+### Power progression at a glance
+
+| Era | Supply to the kinetic workshop | What changes |
+| --- | --- | --- |
+| 1 — Hand Workshop | Player effort → Hand Crank → rotation | Hands-on operation of the early workshop; usable load and RPM still matter. |
+| 2 — Powered Workshop | Water/wind → rotation | Continuous generation without continuous player operation; transmission layout becomes important. |
+| 3 — Steam Power | Heat and water → boiler/Steam Engine → rotation | Fuel, water supply, boiler capacity, and heat management support a larger workshop. |
+| 4 — Compressed-Air Power | Compressor → pressure storage/tubes → Compressed Air Engine → rotation | Store and distribute compressed air, then drive machinery near the point of use. |
+| 5 — Electrical Power | Generation/storage → electrical circuit → motor → rotation | Batteries, circuit supply, wiring, and motor load shape distributed machine operation. |
+
+Air engines and electric motors are **conversion bridges**, not replacements for
+Create processing machines. Their behavior comes from the upstream energy system:
+PneumaticCraft/Compressed Creativity pressure, volume, operating thresholds and air
+consumption; PowerGrid battery behavior, voltage/current, circuit load and thermal
+limits. Storage decouples generation from use only within those native limits.
+Neither chain is a lossless or universal "SU battery". Likewise, boiler heat and
+Heat Sync heat storage are not a tank of stored SU or a new steam-fluid network.
+
+### Fitted parts: what the workshop is made from
+
+Better Manufacturing's candidate recipes consume native TCon parts and calculate
+machine-specific settings at crafting time. A configured Whisk carries its rating
+into a Mixer; a configured Propeller carries its rating into a Fan. The resulting
+settings persist with supported machines, independently of the chosen power source.
+Material reloads affect future crafts, not existing machines. This is not a universal
+in-place part-swapping, wear, salvage, or retained-part-inventory system.
+
+| Machine or component | Consumed part | Authored rating role |
+| --- | --- | --- |
+| Mechanical Press / Millstone | Large Plate | Working surface / work rate |
+| Mechanical Drill / Saw | Pick Head / Small Blade | Cutting work and supported harvest tier |
+| Mechanical Mixer | Whisk made with a Tool Handle | Inherited mixing work rate |
+| Encased Fan | Propeller made with four Small Blades | Inherited airflow |
+| Mechanical Pump | Tool Handle | Pump pressure |
+| Crushing Wheels | Hammer Head + Large Plate | Work rate and kinetic load |
+| Mechanical Plough / Roller | Small Axe Head / Large Plate | Debris breaking / excavation work, not invented crop-growth bonuses |
+| Basin / Fluid Tank | Large Plate liner | Fluid capacity |
+| Fluid Pipe / Valve / Item Drain / Spout | Large Plate liner | Fluid rate |
+| Hose Pulley / Portable Fluid Interface | Large Plate fitting | Fluid transfer rate |
+| Weighted Ejector | Bow Limb | Recharge/launch rating used in charging and stress accounting; native trajectory remains |
+| Steam Engine | Tough Handle piston rod | Conversion and mechanical capacity limit |
+| Rotational Compressor / Compressed Air Engine | Large Plate + Tough Handle; engine also consumes a configured rotor | Conversion rating within native pressure/output rules |
+| PowerGrid Electric Motor | Tough Handle rotor | Drive rating applied through native circuit load |
+
+**A part ingredient does not always imply a performance rating.** Shafts,
+cogwheels, the Deployer, Mechanical Crafter and other construction-only recipes
+consume parts without acquiring material-dependent speed or efficiency. Their
+native behavior remains. Higher-rated conversion hardware also does not imply free
+energy: compressor output pays matching kinetic stress, and the air engine retains
+its native RPM ceiling and running air accounting.
+
+These are source-authored candidate recipes/hooks, not a full-pack gameplay
+acceptance claim. Better Manufacturing remains in progress; see
+[implementation status and source references](implementation.md#manufacturing-ownership-and-implementation-status).
+
+### Delivering power costs capacity
+
+Better Create Kinetic Loss adds component- and RPM-dependent transmission demand
+to the native network's stress total. Shafts, gears, belts and chains consume part
+of the available capacity; this is not gradual RPM decay along a shaft. Its rates
+come from [pack configuration](../config/better_create_kinetic_loss-common.toml),
+not the material of a handle used to craft a shaft.
+
+A central shaft-driven workshop and local air/electric drives therefore present
+different layout choices. Converting energy near a machine can shorten kinetic
+transmission, but replaces that distance with pressure or electrical distribution
+and its own costs and limits. It is not automatically more efficient. After
+conversion, the same Create stress/RPM rules, transmission demand, fitted working
+parts and processing recipes still govern useful work.
+
+### Capability gates remain distinct
+
+| Capability | Current authored access, independent of the power-era framing |
+| --- | --- |
+| Basic hand-powered Create workshop | Iron workshop transmission, first Press and Hand Crank; Mixer consumes its fitted Whisk. |
+| Renewable water/wind power | Skyroot-log acquisition; this is not a shared gate on all workshop utilities. |
+| Milling, Sifting and Crushing Wheels | Their Nether-brick roots remain; powered separation is not moved into the primitive workshop. |
+| Precision automation and steam | Brass composition through TCon; Brass Casing for Deployer/Crafter, Precision Mechanism for Steam Engine. |
+| Pressure processes | Compressed iron, seals and pressure apparatus; recipe-specific pressure and other inputs still apply. |
+| Electrical generation/control | Conductive casing, pressure-made generator fittings and the authored electrical roots; PCB starts the circuit-design station. |
+
+The detailed sections below retain acquisition and processing facts. Older script
+and recipe labels map to these headings: `powered_works` = Powered Workshop,
+`precision_factory` = Steam Power and precision, `thermal_pressure` = Compressed-Air
+Power and process heat, `electrical_control` = Electrical Power. These labels and
+item/recipe IDs are unchanged.
+
+### Create and addon acquisition audit — source-only, not a retier
+
+This family-level inventory compares the pinned Create 6.0.8 and addon recipe
+artifacts with pack datapack overrides and KubeJS removals/replacements. It is
+**not** a loaded full-pack recipe graph or proof of survival acquisition. In
+particular, a file's `hand_workshop`, `powered_works`, or `precision_factory`
+location does not impose an unlock: the actual ingredients and alternate outputs
+do. `source-authored` below means a recipe or policy edge exists in the inspected
+sources; `unverified` means its effective current-pack route or runtime behavior
+has not been established by candidate-matched loaded evidence. No family here is
+claimed `loaded-verified`. Earlier isolated Create/Sifter checks in
+[implementation status](implementation.md#manufacturing-ownership-and-implementation-status)
+do not establish the whole current roster. Both conditional Better Manufacturing
+and no-Manufacturing recipe branches, native alternatives and later KubeJS removal
+passes must be checked before a release claim.
+
+The [Manufacturing selection ledger](../kubejs/data/better_manufacturing/coverage.json)
+lists 93 Create IDs and 73 Sifting/Diesel/Compressed Creativity/Clockwork/Trackwork
+IDs, including six explicitly excluded entries. It inventories part coverage,
+**not** 166 progression gates, live machines or accepted routes. The separately
+pinned Horse Power and Aquatic Ambitions need their own checks; Create Deco's
+mostly decorative variants, color/material blocks, technical controller blocks
+and creative-only entries do not each need an era. Functional Create items not
+selected for Manufacturing (such as the Blaze Burner, Redstone Link, depot,
+display controls and track) still belong in the audit. Counts reflect the
+inspected source selection, not an active-world registry census.
+
+For precedence, the KubeJS scripts remove exact native IDs for Hand Crank,
+Millstone, Press, Mixer, Deployer, Crafter, Sifter and Crushing Wheels before
+adding distinct `kubejs:` recipe IDs for those outputs; wheel/wind, Harvester/Plough, Steam Engine,
+Requester and casings are removed **by output**. Many other Create roots use
+same-ID [`forge:conditional` datapack recipes](../kubejs/data/create/recipes/)
+with a part-consuming Manufacturing branch and an ordinary fallback; the
+Sifter/Millstone/Crushing Wheels KubeJS branches also cover both modes.
+[`removed_items.js`](../kubejs/server_scripts/policy/removed_items.js),
+[`crafting_policy.json`](../kubejs/config/crafting_policy.json) and
+[`ore_sifting_and_spouting.js`](../kubejs/server_scripts/processing/ore_sifting_and_spouting.js)
+can close outputs or processing paths independently of an apparatus recipe.
+Neither these source removals nor native recipe IDs alone prove that no other
+recipe produces the same output in the loaded pack.
+
+| Functional family | Current source route and alternative | Capability; provisional placement and impact | Evidence |
+| --- | --- | --- | --- |
+| Hand workshop, gearing and local transfer | [`10_hand_workshop.js`](../kubejs/server_scripts/progression/10_hand_workshop.js) authors a Hand Crank; [`20_powered_works.js`](../kubejs/server_scripts/progression/20_powered_works.js) also supplies iron-based shaft/cogwheel alternatives without an Andesite Alloy prerequisite; primitive chute and depot have separate roots. Parts in shafts/gears are construction costs, not material-dependent loss ratings. | Keep basic local work and transmission early. A source-script name does not lock the output to its named era. | source-authored; full-pack unverified |
+| Ordinary Create transformation | The same `20_powered_works.js` authors the first iron Press, Whisk/Mixer and Basin; [conditional Create recipe overrides](../kubejs/data/create/recipes/) offer Saw, Drill, Fan, Pump, Spout and Item Drain with ordinary iron/copper/andesite and, with Manufacturing, native TCon parts. No Nether/Skyroot ingredient is intrinsic to the Mixer recipe. | Keep ordinary pressing, mixing, cutting, airflow and local fluids as a common workshop; machine rating and available SU/RPM govern performance, not invented new processing tiers. | source-authored; full-pack unverified |
+| Early versus enhanced ore work | Hand String Mesh yields one primary unit. `20_powered_works.js` currently puts Nether brick on Millstone, powered Sifter and mechanical-crafted Crushing Wheels. The Millstone gives **two feeds per chunk**, Wheels three; wet zinc/brass meshes and later pressure assay expose different coproduct depth. Advanced Brass Mesh output is removed in [`ore_sifting_and_spouting.js`](../kubejs/server_scripts/processing/ore_sifting_and_spouting.js). | **Deferred proposal only:** let an early Millstone make two ore feeds without Nether brick. Retain Nether on Sifter and Wheels, brass mesh grades and pressure assay. This changes recovery, not merely the machine's name or food-grinding access. | source-authored; full-pack unverified |
+| First continuous SU and animal work | `20_powered_works.js` removes native wheel/windmill outputs and rebuilds all three with Skyroot logs, including conditional Manufacturing costs. The pinned Create Horse Power JAR's native Horse Crank uses an oak fence, cogwheel and stone; no pack recipe replacement was found. | **Deferred proposal only:** local obtainable wood for the basic/large water wheels and windmill, preserving existing material/part bills and optional Skyroot compatibility. Horse Crank is an unverified possible earlier sustained-power alternative; audit output/upkeep rather than call it a bypass. | wheel/wind source-authored; horse behavior unverified |
+| Steam, diesel and process heat | [`30_precision_factory.js`](../kubejs/server_scripts/progression/30_precision_factory.js) roots the Steam Engine in a Precision Mechanism and optional TCon piston rod. The native Blaze Burner still needs its distinct Blaze fuel/heat route; native Diesel bulk fermentation and brass/fuel engines are separate. [`crafting_policy.json`](../kubejs/config/crafting_policy.json) and [`removed_items.js`](../kubejs/server_scripts/policy/removed_items.js) close Diesel crude extraction/distillation and inputless lava fermentation. Heat Sync heats Create boilers. | Keep later fuel/boiler management and retained finite-fuel engines distinct; inspect actual alternative fuels before treating Diesel as a steam or pressure shortcut. Neither heat nor fuel is stored SU. | source-authored; full-pack unverified |
+| Pressure and electrical conversion | [`40_thermal_pressure.js`](../kubejs/server_scripts/progression/40_thermal_pressure.js) roots the Rotational Compressor in pressure parts; Compressed Creativity's configured Air Engine converts pressure back to SU. [`50_electrical_control.js`](../kubejs/server_scripts/progression/50_electrical_control.js) roots PowerGrid generation in pressure-made wiring/casings; its motor converts circuit power to SU. | Keep air/electrical buffering and specialist chemistry/electronics later; local drives still pay kinetic transmission stress. Compressed Creativity's Heater remains unresolved for survival acquisition, not a proven new power tier. | source-authored; full-pack and Heater acquisition unverified |
+| Precision crafting and moving-item automation | `30_precision_factory.js` replaces Deployer and Mechanical Crafter recipes with Brass Casing/electron-tube roots; conditional [Mechanical Arm](../kubejs/data/create/recipes/crafting/kinetics/mechanical_arm.json) and speed-control recipes use Brass/Precision Mechanism. | Retain later autonomous action, assembly and precision control despite their use in crafting. Early hand Press/Mixer must not imply an early Deployer/Crafter. | source-authored; full-pack unverified |
+| Instruments, redstone and displays | Native Create Speedometer/Stressometer, Redstone Link, threshold switches and display parts use their own material recipes; some smart controls also consume Brass Casing or Precision Mechanism. No single Manufacturing selection covers all these controls. | Keep measurement and local logic distinct from autonomous routing, precision crafting and stored power; check control recipes and alternate signals before treating the whole family as a later machine gate. | source-authored; full-pack unverified |
+| Local versus intelligent logistics | Primitive chute, early funnels/tunnels, belts and vaults are local transfer. [Stock Link](../kubejs/data/create/recipes/crafting/logistics/stock_link.json) uses vault plus native copper/redstone Transmitter; packaging and stock displays have separate ordinary recipes. [`20_meteor_logistics.js`](../kubejs/server_scripts/progression/20_meteor_logistics.js) gives the Redstone Requester finite meteor Certus rather than requiring an ME network. | Keep basic transport distinct from requests/routing. Audit early Stock Link/packaging behavior and alternative requester outputs; do not equate a cheap observation link with unrestricted inventory networking. | source-authored; full-pack unverified |
+| Stationary versus moving world work | A stationary Drill/Saw can have early workshop ingredients. [Bearings, pistons and gantries](../kubejs/data/create/recipes/crafting/kinetics/) have comparatively ordinary casing/shaft recipes, whereas Roller inherits Crushing Wheels. [`85_dimension_font_ecology.js`](../kubejs/server_scripts/progression/85_dimension_font_ecology.js) ties Harvester/Plough to Bumblezone materials. | Keep basic heads useful; review assembled mobile quarry/farm reach before changing any bearing or motion recipe. Existing Bumblezone and wheel gates stay intact; source cheapness alone is not evidence of an exploit. | source-authored; full-pack/mobile impact unverified |
+| Schematics and construction at scale | [Schematicannon](../kubejs/data/create/recipes/crafting/schematics/schematicannon.json) uses iron blocks, logs and dispenser (plus a plate with Manufacturing); Schematic Table has a simpler native/conditional route. | Potentially powerful bulk building but still consumes actual material. Audit in-world reach and legitimate construction benefit before choosing a deeper gate; do not reclassify stored schematics as free inventory. | source-authored; full-pack/impact unverified |
+| Bulk fluids and item/contraption interfaces | [Hose Pulley](../kubejs/data/create/recipes/crafting/kinetics/hose_pulley.json) uses copper casing, dried kelp and copper (plus fitted plate conditionally); portable interfaces and tanks have separate recipes. [`create-server.toml`](../defaultconfigs/create-server.toml) sets `bottomlessFluidMode = "DENY_ALL"`. | Ordinary pumping/spouting stays useful early. Audit range, transport and world effects of Hose Pulley before retiering; the infinite-source safeguard does not by itself settle those impacts. | source-authored; full-pack/impact unverified |
+| Rail and optional vehicles | `30_precision_factory.js` roots Train Station in Precision Mechanism/Railway Casing; native track assembly uses Deployer and Press. [`10_optional_engineering_roots.js`](../kubejs/server_scripts/transport/10_optional_engineering_roots.js) separates rough Clockwork/Trackwork from brass precision, pressure and electrical controls; the Rail Beetle has its own staged modules. | Preserve usable primitive ships/basic wheels and later precision trains, stable high-performance flight and powered vehicle modules. Clockwork Copter Bearing is registered but lacks confirmed survival acquisition. | source-authored; full-pack/Copter acquisition unverified |
+| Marine processing and other addon recipes | [`22_underwater_works.js`](../kubejs/server_scripts/progression/22_underwater_works.js) removes selected Aquatic Ambitions geology/heart-of-sea recipes and makes the Mechanical Conduit from a native Conduit, prismarine parts, fluid pipe and Blaze Rod. Create Sifting's graded meshes remain distinct from the ordinary workshop. Create Deco contributes construction finishes rather than a machine era. | Keep marine channeling, controlled material sources and themed processing distinct. Do not infer Certus is consumed by the conduit from an outdated source comment; verify any other surviving output route before claiming closure. | source-authored; full-pack unverified |
+
+This audit makes **no** Schematicannon, Hose Pulley, mobile-contraption, stock
+logistics or Horse Crank gate decision. It does not turn source-only candidates
+into friends' playtest observations. The bounded future retier and reasons for
+its deferral live in [Aspirational features](design.md#create-power-and-capability-retier).
 
 ### Life attributes — staged pack candidate, not gameplay-accepted
 
@@ -89,7 +257,7 @@ primitive hand axe. Cave floors also hold occasional fallen oak wood and rare
 azalea trees. These resources recur in newly generated caves; the chosen spawn
 point does not receive a guaranteed cache.
 
-### Era 1 — Hand Workshop and Tinkers' Construct
+### Era 1 — Hand Workshop
 
 Ore separation starts here rather than at the furnace. Use a String Mesh by hand
 on a geological chunk to recover one canonical primary unit. Heat remains a
@@ -98,10 +266,11 @@ separation and never require ceremonial smelting.
 
 Build native Tinkers' Construct tools and acquire two different underground
 rock families among Gabbro, Slate, Phyllite, Quartzite, and Schist. One stone
-from each family makes two Refractory Compound; smelting one makes a Seared
-Brick. Named Font grouts remain registered for saved stacks but have no recipes.
-Seared metallurgy owns alloy composition: the automated path alloys molten
-stone with molten iron or zinc, then casts molten Andesite Alloy. A Melter can
+from each family makes two ordinary TConstruct Grout; smelting or blasting one
+grout makes a Seared Brick. The old named Font grouts and Refractory Compound
+are no longer registered. Seared metallurgy owns alloy composition: the
+automated path alloys molten stone with molten iron or zinc, then casts molten
+Andesite Alloy. A Melter can
 instead consume one andesite with 10 mB of either molten metal to cast one
 native Create Andesite Alloy. Iron-fitted shaft, cogwheel, casing, press and
 Hand Crank routes make the basic Create workshop available before Seared entry.
@@ -133,7 +302,7 @@ therefore offer cabbage and tomatoes as food, not their seeds. The cultivar loot
 modifier runs after the pack's other global loot modifiers so grass cannot leak
 wheat or sage seed into the Overworld.
 
-### Era 2 — Create Powered Works
+### Era 2 — Powered Workshop
 
 Exact terrain recovery profiles cover 205 inputs and 27 profiles. Their 500-tick
 Crushing or waterlogged Brass Sifting routes cap physical return at 25 percent,
@@ -169,7 +338,7 @@ uses Skyroot logs. The Mechanical Pump, funnels and tunnels remain local
 workshop utilities without a dimensional gate. Native part-bearing shaft,
 cogwheel, propeller and pump alternatives remain available where applicable.
 
-### Era 3 — Create Precision and Steam
+### Era 3 — Steam Power
 
 Brass Sifters provide the high-throughput physical separation route and expose
 all authored coproduct grades when waterlogged. A Spout is not a separator: it
@@ -185,15 +354,16 @@ parts, and the existing batch yield carry the Steam Engine and transport
 controls without a second full-block casing. Quark's automatic Crafter is downstream of
 the Create Mechanical Crafter rather than an independent iron-and-redstone bypass.
 
-### Era 4 — PneumaticCraft and Heat Sync
+### Era 4 — Compressed-Air Power
 
 Four matching rinsed feeds at 2 bar yield four primary units plus the complete
 deterministic geological assay. This is the maximum-recovery route, especially
 for trace and precious coproducts.
 
-Native Nether grout is disabled. Foundry access instead uses a heated Create
-Mixer to combine rinsed Hotstone, rinsed Black Shale, and gravel into Scorched
-Bricks, making the geological, kinetic, and TConstruct systems meet at one
+Native Nether grout is disabled; this does not affect ordinary Seared grout.
+Foundry access instead uses a heated Create Mixer to combine rinsed Hotstone,
+rinsed Black Shale, and basalt into Scorched Bricks, making the geological,
+kinetic, and TConstruct systems meet at one
 visible boundary. Primitive compressed iron and dried-kelp/iron-plate pressure
 seals keep the pressure entry reachable. Mechanically craft
 `kubejs:airtight_machine_block` from the Brass block, four compressed iron
@@ -222,7 +392,7 @@ Create mixing. These routes have no Electrical Machine Block or PowerGrid gate.
 Heat Sync stores and moves process heat; its Boiler Heater consumes exactly
 1/2/3 heat for an active Create boiler's 1/2/3 heat level.
 
-### Era 5 — PowerGrid and More Red
+### Era 5 — Electrical Power
 
 Mechanically apply insulation/red-alloy wiring to Copper Casing for the first
 PowerGrid conductive casing. Pressure-craft `kubejs:electrical_machine_block`
@@ -375,10 +545,10 @@ visual acceptance require separately authorized, candidate-matched evidence.
 
 | Domain | Upstream behavior | Pack behavior | Owner | Rationale | Channels | Verification |
 |---|---|---|---|---|---|---|
-| Technology eras | Parallel roots | Hand/TCon → Create Powered Works → Create precision/steam → PneumaticCraft + Heat Sync → PowerGrid + More Red; spaceflight deferred | pack progression | Legible capability sequence | recipes, guides | recipe/config source inspection |
+| Technology eras | Parallel roots | Hand Workshop → Powered Workshop → Steam Power → Compressed-Air Power → Electrical Power; cumulative supply options for enduring machinery, with fitted parts and distinct capability gates; spaceflight deferred | pack progression | Explain power infrastructure without implying replacement machines or changed acquisition | recipes, guides | recipe/config source inspection; Manufacturing acceptance remains separate |
 | Primitive workshop | Generic rustic utilities inherit crop and machine-mod defaults | Straw, rope, canvas, fired goods, and simple metal fittings supply pre-Font local handling, homesteading, clothing, lighting, construction, and transport; plates, redstone, alloys, casings, and scalable automation remain later | pack progression | Useful handmade play before dimensional industry | recipes, guides | recipe source inspection |
 | Ore separation | Create Bulk Washing and source-specific output ladders | String-mesh hand Sifting → powered dry/waterlogged Sifting → Spout-prepared pressure assay; Blood, Hexerei, Ars, and Occultism converge on the same canonical resources with distinct costs | Realistic Ores / Create Sifting | One resource economy with early access and meaningful recovery depth | recipes, items, guides | generated processing-contract tests and recipe inspection |
-| Create steam | Native low-cost engine | Brass Machine Block required | Create | Precision proof | recipe | recipe/config source inspection |
+| Create steam | Native low-cost engine | Precision Mechanism root; Manufacturing recipe consumes a Tough Handle piston rod, not a Brass Machine Block | Create / Better Manufacturing | Precision access and fitted conversion hardware | recipe, native capacity hook | `30_precision_factory.js`; Manufacturing source inspection, not full-pack acceptance |
 | Electrical generation | Dynamo, bee, weather, AE2, and Ars conversion peers | PowerGrid alone owns stationary electrical generation; OC2R remains a consumer/peer and Clockwork's steam generator is gas-network machinery | PowerGrid | One electrical authority | recipes, loot, guides | recipe/config source inspection |
 | Conventional tools | Many fixed tools | Ordinary fixed tools close; unique weapons and gear remain | Tinkers' Construct | Material-system coherence | recipes, loot, trades | crafting-policy selectors and source inspection |
 | Mahogany | Hexerei and Nature's Spirit plus Dynamic Trees | Nature's Spirit owns the canonical mahogany wood set and progression; Dynamic Trees Hexerei supplies dynamic Hexerei tree structures | Nature's Spirit | One material authority | recipes, worldgen, loot | crafting-policy selectors and source inspection |

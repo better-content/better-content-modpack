@@ -30,5 +30,7 @@ ServerEvents.tags('block', function (event) {
         event.add('minecraft:mineable/shovel', grassyRegolith)
         event.remove('minecraft:mineable/pickaxe', regolith)
         event.remove('minecraft:mineable/pickaxe', grassyRegolith)
+        event.remove('minecraft:mineable/hoe', regolith)
+        event.remove('minecraft:mineable/hoe', grassyRegolith)
     }
 })

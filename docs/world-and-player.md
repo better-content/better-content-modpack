@@ -409,8 +409,15 @@ especially for solo and multiplayer travel, distant deaths, and repeated deaths.
    priority over ordinary non-forced bed and anchor changes. The native death
    screen remains visible because `do_immediate_respawn=false` in
    [Global Game Rules](../config/globalgamerules-common.toml). The configured
-   World Lifecycle Manager sets the initial shared spawn in a configured temperate biome for
-   fresh worlds and sets its spawn radius to zero. The player's permanent personal respawn can
+   World Lifecycle Manager selects a fresh world's initial shared-spawn biome by
+   Cold Sweat's loaded habitable base-temperature bounds and rejects all
+   `#minecraft:is_ocean` biomes plus any extra initial-spawn biome IDs in
+   [`config/better_world_management-initial-spawn-blacklist.txt`](../config/better_world_management-initial-spawn-blacklist.txt).
+   The saved spawn and the two blocks above it must all qualify, because vanilla
+   can lift a first-join spectator into a vertically different biome. This
+   blacklist does not affect successor or personal spawns. The shared spawn
+   radius is zero; first-join players scout in spectator mode, so terrain safety
+   is not a condition for publishing an uninhabited initial world. The player's permanent personal respawn can
    be selected in any biome; `spawn_radius=256` remains the configured fallback on established
    worlds where no personal spawn governs the return.
    Arena Challenges has a separate match-return handler described below; its
@@ -607,8 +614,8 @@ contextual tips cover persistent injuries, trauma, and treatment. Injury type ch
 medicine; region chooses impairment. HP healing, trauma expiry, and injury treatment
 remain different systems.
 
-Main-menu tips are stable per application launch. Esc tips use actual conditions and
-remain stable while open. Final-death advice uses the committed final cause and shares
+Main-menu tips are stable per application launch. Esc-menu tips are disabled.
+Final-death advice uses the committed final cause and shares
 measured space with the native injury/treatment recap. The previously cited source
 teaching guide is absent from the selected Learning Surfaces tree; the
 [learning-surfaces contract](#learning-surfaces) and its linked authoring roster record
@@ -634,7 +641,7 @@ content. Their tasks and rewards are not transferred into Learning Surfaces or a
 | --- | --- |
 | Loading lessons and Threads Lessons | Spoiler-free fundamentals and changed mental models, available before the relevant event |
 | Main-menu tips | One stable preparation or possibility tip per application launch |
-| Esc-menu tips | Practical advice selected from actual current conditions, stable while open |
+| Esc-menu tips | Disabled; the pause menu remains free of tip overlays |
 | Death tips and native recap | Final-cause advice plus the current life’s injury and treatment history |
 | Contextual Thread cards | A broader rule discovered through actual play evidence and remembered across the lineage |
 | Item-hover annotations | Concise item-local facts, identical in inventory and EMI hover |
@@ -660,8 +667,10 @@ behavior must not be presented as implemented.
 
 Preserve stable concept, Thread, and lesson identities when their meaning is unchanged.
 Learning Surfaces has 53 live cards across seven topics; the Lessons reference and loading
-rotation share 18 lessons. The main-menu, Esc, and death contexts share 199 authored tips. Follow [Threads](world-and-player.md#threads) for the single-explanation schema,
-personal trigger evidence, native doorways, and lineage persistence. Domain mods
+rotation share 18 lessons. The main-menu and death contexts draw from a 199-tip
+catalogue (Esc tips are disabled). Follow [Threads](world-and-player.md#threads)
+for the single-explanation schema, personal trigger evidence, native doorways,
+and lineage persistence. Domain mods
 own their gameplay events; Learning Surfaces adapters translate those events into card signals.
 
 Annotate pack transition families and curriculum-important systems with a natural
@@ -748,17 +757,16 @@ illustrations use reviewed Journal copperplate art; the card copy and triggers a
 Do not recreate a quest compiler, layout harness, atlas exporter, or parallel validation
 framework. Durable guidance belongs here; raw evidence belongs outside living docs.
 
-### Main-menu, Esc-menu, and death tips
+### Main-menu and death tips
 
 The fixed 199-tip catalogue declares each tip's eligible surface, requirements, relevant
 mods, concept, and mechanical source. The main menu chooses one stable preparation or
-possibility tip per application launch. Esc selects practical advice from current
-server context when opened and keeps it still while the screen is open. A stale context
-falls back to general advice. Death uses the committed final cause, including the
-injury provider's final-death event when present, and stays fixed until respawn or
-logout. Contextual relevance takes priority over unseen novelty.
+possibility tip per application launch. Esc-menu tips are disabled; existing pause
+entries remain in the catalogue but are not shown. Death uses the committed final
+cause, including the injury provider's final-death event when present, and stays
+fixed until respawn or logout. Contextual relevance takes priority over unseen novelty.
 
-Each surface keeps its own client-local exposure history. A tip counts as seen only
+Each active surface keeps its own client-local exposure history. A tip counts as seen only
 when its copy is actually rendered. Hidden or clipped advice does not consume history.
 The native injury recap owns death controls and space; Learning Surfaces uses its measured
 remaining area and omits a tip if the full copy will not fit. Tips never delay respawn

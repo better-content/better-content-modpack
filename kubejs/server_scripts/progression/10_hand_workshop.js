@@ -1,4 +1,4 @@
-// Seared metallurgy needs two independently acquired underground rock families.
+// Ordinary grout needs two independently acquired underground rock families.
 // Raw/cobbled forms belong to one family; Schist axes are not separate families.
 // The ordinary Create workshop does not depend on these metallurgical recipes.
 var BC_REFRACTORY_FAMILIES = [
@@ -27,26 +27,22 @@ ServerEvents.recipes(function (event) {
         S: 'minecraft:red_sand'
     }).id('kubejs:hand_workshop/tconstruct/blank_red_sand_cast')
 
+    // Replace clay/sand defaults, keeping the same native grout and Seared Brick IDs.
     event.remove({ output: 'tconstruct:grout' })
     event.remove({ input: 'tconstruct:grout' })
-    ;['nether', 'aether', 'bumblezone'].forEach(function (origin) {
-        // Keep the item registrations for saved stacks, but no metallurgy routes.
-        event.remove({ output: 'kubejs:' + origin + '_font_grout' })
-        event.remove({ input: 'kubejs:' + origin + '_font_grout' })
-    })
     // Unordered distinct-family pairs: two union-tag slots would accept duplicates.
     BC_REFRACTORY_FAMILIES.forEach(function (left, index) {
         BC_REFRACTORY_FAMILIES.slice(index + 1).forEach(function (right) {
-            event.shapeless('2x kubejs:refractory_compound', [
+            event.shapeless('2x tconstruct:grout', [
                 '#kubejs:refractory_stone/' + left[0],
                 '#kubejs:refractory_stone/' + right[0]
-            ]).id('kubejs:hand_workshop/refractory/' + left[0] + '_' + right[0])
+            ]).id('kubejs:hand_workshop/grout/' + left[0] + '_' + right[0])
         })
     })
-    event.smelting('tconstruct:seared_brick', 'kubejs:refractory_compound')
-        .id('kubejs:hand_workshop/refractory/seared_brick')
-    event.blasting('tconstruct:seared_brick', 'kubejs:refractory_compound')
-        .id('kubejs:hand_workshop/refractory/seared_brick_blasting')
+    event.smelting('tconstruct:seared_brick', 'tconstruct:grout')
+        .id('kubejs:hand_workshop/grout/seared_brick')
+    event.blasting('tconstruct:seared_brick', 'tconstruct:grout')
+        .id('kubejs:hand_workshop/grout/seared_brick_blasting')
 
     // Close surface synthesis and cross-family conversions, not cobble restoration.
     ;[

@@ -26,7 +26,10 @@ AXIOM_STAGED_FILE="$CONTROL_DIR/world-axiom-staged-v1.json"
 AXIOM_RESET_FILE="$CONTROL_DIR/world-axiom-reset-v1.json"
 AXIOM_HEALTH_FILE="$CONTROL_DIR/world-axiom-health-v1.json"
 AXIOM_SNAPSHOT_REL='data/better_world_management/world-axioms-v1.json'
-BIOME_CONFIG="$SCRIPT_DIR/config/better_world_management-biomes.txt"
+BIOME_CONFIG="$SCRIPT_DIR/config/better_world_management-successor-biomes.txt"
+# An existing administrator's customized successor list takes precedence on upgrade.
+[[ ! -e "$SCRIPT_DIR/config/better_world_management-biomes.txt" ]] \
+  || BIOME_CONFIG="$SCRIPT_DIR/config/better_world_management-biomes.txt"
 MAX_ATTEMPTS=8
 HEALTH_TIMEOUT_SECONDS="${PRESTIGE_HEALTH_TIMEOUT_SECONDS:-300}"
 HEALTH_STABILITY_SECONDS="${PRESTIGE_HEALTH_STABILITY_SECONDS:-10}"
@@ -745,6 +748,21 @@ if [[ ! -e "$RESET_FILE" ]]; then
   ACTIVE_WORLD_NAME="$(server_property level-name)"; validate_world_name "$ACTIVE_WORLD_NAME"
   ACTIVE_WORLD="$SCRIPT_DIR/$ACTIVE_WORLD_NAME"
   restore_normal_axioms
+  INITIAL_SPAWN_ACTIVE="$STATE_DIR/initial-spawn/active-v2.tsv"
+  [[ ! -e "$INITIAL_SPAWN_ACTIVE" && ! -L "$INITIAL_SPAWN_ACTIVE" ]] \
+    || die "interrupted initial-spawn stage; inspect protected attempts and server.properties backup before manual recovery: $INITIAL_SPAWN_ACTIVE"
+  if [[ ! -e "$ACTIVE_WORLD" && ! -L "$ACTIVE_WORLD" ]]; then
+    (( GENERATION == 0 )) || die "established-world save is missing; refusing new generation"
+    [[ -f "$SCRIPT_DIR/better-world-management-initial-spawn.py" && ! -L "$SCRIPT_DIR/better-world-management-initial-spawn.py" ]] \
+      || die "missing protected initial-spawn stage supervisor"
+    event INFO "preparing generation-zero world in closed, isolated candidates"
+    python3 "$SCRIPT_DIR/better-world-management-initial-spawn.py" --root "$SCRIPT_DIR" \
+      --world "$ACTIVE_WORLD_NAME" -- "$@" \
+      || die "initial-spawn preparation failed; no candidate was admitted or published"
+    [[ -f "$ACTIVE_WORLD/level.dat" ]] || die "initial-spawn promotion did not produce a saved world"
+  elif [[ ! -d "$ACTIVE_WORLD" || ! -f "$ACTIVE_WORLD/level.dat" ]]; then
+    die "world name is occupied by a non-world path; refusing generation"
+  fi
   event INFO "launching current world under lifecycle supervision"
   set +e; "$SCRIPT_DIR/run-forge.sh" "$@"; INITIAL_EXIT=$?; set -e
   event INFO "current world Forge process exited code=$INITIAL_EXIT reset_pending=$([[ -e "$RESET_FILE" ]] && printf yes || printf no)"

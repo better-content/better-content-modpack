@@ -13,8 +13,12 @@ file = "README.md"
 hash = "9e56fbb7145c942719643ffff94f3cca4e58920ea484a8a365e83cf983a5286f"
 
 [[files]]
+file = "better-world-management-initial-spawn.py"
+hash = "dc1bcf7b4579e02850df6ce299627053fef2dc349d61b9c57da31033c4774dd3"
+
+[[files]]
 file = "better-world-management-server.sh"
-hash = "6b7c3df7b14c477874a9fcb9a736f8797ee5b37f5346e90137ef6072b6622548"
+hash = "e094be983152441562695037a9fd4178f85e06c7d348bac8c0bf622b42e1a6d2"
 
 [[files]]
 file = "config/CoroUtil/General.toml"
@@ -2309,8 +2313,12 @@ file = "config/better_wildfire-common.toml"
 hash = "2fd5f115152a60b1f7e805c568dd9325747c31b03dd3b025a66da6ac7e704512"
 
 [[files]]
-file = "config/better_world_management-biomes.txt"
-hash = "e0cf54035b60c12f46bd6412d3dff346c69d2ad72418e2f401c767eb84658b5b"
+file = "config/better_world_management-initial-spawn-blacklist.txt"
+hash = "f8f43ad7d8bc4bdaf9f0ae18559c8d8cade579d285365aace745aaef4abcd3e0"
+
+[[files]]
+file = "config/better_world_management-successor-biomes.txt"
+hash = "3d4023b2b635493e5c61044d8e0909310dc992ca43f0752942b29c7a7265cc56"
 
 [[files]]
 file = "config/bettercaves/forge-1_20_1/liquidregions.json"
@@ -2378,7 +2386,7 @@ hash = "ef1c661cbf86bd3a3d6262e6c543844673dd03789f1f191614c6f99f52a4bc51"
 
 [[files]]
 file = "config/coldsweat/world.toml"
-hash = "43b4d52f8c8896b89deada8ad06a277f3fdb1bd78f55376f577ab6d64571c310"
+hash = "c2b2bcbb854788a4c582fcf49cff8ecbb3ff287f3a9913c5ebc32a88b8a6c6ea"
 
 [[files]]
 file = "config/collective.json5"
@@ -2894,7 +2902,7 @@ hash = "a5d08b917ef15d63c2be151c5741f52ec8a892027c1dd6b3cf23a88282834229"
 
 [[files]]
 file = "config/quark-common.toml"
-hash = "cb8a51f46f04aebab779d77a47cb80335b40893388e3423dbe410de0a1438cb9"
+hash = "4a423f2e549004990ca1cf0e61a5cdf980f021a55cc6f0cc081c5fdad8588375"
 
 [[files]]
 file = "config/rats-common.toml"
@@ -8050,7 +8058,7 @@ hash = "a8e1a50392ea418aa0ee5323dcfb21485fcd6ec527650b589d67bedda19a7771"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "697714cf10a371b41b49194c3118993c67f3330a322864f00a817c09955cf963"
+hash = "3aad4fb7e175ad547ccdf0ca4a71c606428128ddde361aad97f1878487152e04"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -8070,7 +8078,7 @@ hash = "43a53f08fa5a32fdc0cdf5563bbf28962aae46070ef7562b8738ee3f20b77918"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "971a292fe6c53e5a0028b835e80aba57b8f171d0ff1c99b072568f87e39449e0"
+hash = "c00004977d09d8eaf5328831f701276770669351acfa62a07388860f8137fa57"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -8217,6 +8225,14 @@ file = "kubejs/data/ae2/recipes/network/blocks/energy_dense_energy_cell_from_bla
 hash = "c0d99e582741ef1dc3603001e5e2622b29af4f8adb6f0e7b967a5cf8ba50f986"
 
 [[files]]
+file = "kubejs/data/ae2/recipes/network/blocks/energy_energy_acceptor.json"
+hash = "cc532d26e6bc392abb2f22908392570e8f95bdedeebe0dab2a95e8920a474a89"
+
+[[files]]
+file = "kubejs/data/ae2/recipes/network/blocks/energy_energy_acceptor_alt.json"
+hash = "d821fc52b6b07e02dd62e11d6b335c3f332b8517d32eb037faf75db9cade9885"
+
+[[files]]
 file = "kubejs/data/ae2/recipes/network/blocks/energy_energy_cell.json"
 hash = "5d1add7a522e018d131b8f13554eef7e60feb3f3e21838309f02097d6eb40166"
 
@@ -8229,6 +8245,10 @@ file = "kubejs/data/ae2/recipes/network/blocks/interfaces_interface.json"
 hash = "b6dd6d016289ed5a964a412a2d4240b845b3c272abffdbf9dc9095502f6eb5e2"
 
 [[files]]
+file = "kubejs/data/ae2/recipes/network/blocks/interfaces_interface_alt.json"
+hash = "8792b94a9bb13e4ba7c8878eb8dceb2521a237aa114ae35ebce86050a9c5c0ca"
+
+[[files]]
 file = "kubejs/data/ae2/recipes/network/blocks/io_condenser.json"
 hash = "ad72e2d1a07ffa0191219e483113205026521ea75d52f9274eae9a384ab9119b"
 
@@ -8239,6 +8259,10 @@ hash = "24bfdb9b565ef4f97f53a5da7a4bbb74503794f33669021b10966fc36e9566a9"
 [[files]]
 file = "kubejs/data/ae2/recipes/network/blocks/pattern_providers_interface.json"
 hash = "349cfd7dba7d6139cd3334269baa6d044fc9dbfb8a362bbce6ec33dabc0da751"
+
+[[files]]
+file = "kubejs/data/ae2/recipes/network/blocks/pattern_providers_interface_alt.json"
+hash = "0b4029bdbc95602d4c879d1b10c23f0bb4e2fa0b27deac54e9f2c3cb87b11995"
 
 [[files]]
 file = "kubejs/data/ae2/recipes/network/blocks/quantum_link.json"
@@ -8818,15 +8842,15 @@ hash = "16007d23f84aa10e70f62c1638f0b3e712b5426524c905a18d7ea37073cb5562"
 
 [[files]]
 file = "kubejs/data/better_industrial_heat/recipes/boiler_heater.json"
-hash = "c318c15016b2a50e79387c73a41a2dc81ddc3921c97edc324c2735f9c4249adf"
+hash = "4445a1ba2acdb70ae792f4b3aa38e5143682f15a03acb8eca1e7d4dcf5c81160"
 
 [[files]]
 file = "kubejs/data/better_industrial_heat/recipes/coolant_exchanger.json"
-hash = "d9b866ffb0561ebfbb81a1b164d20f07a17c1c00be39189a6483830cb2017b6a"
+hash = "aa4015ed1a61a716c7de1e2f1d168f49cd67e251eaac17032f3e34befbee9fca"
 
 [[files]]
 file = "kubejs/data/better_industrial_heat/recipes/heat_pipe.json"
-hash = "5a194bf9a5e997fa4f38d40bf6e2a1f0c94c2327ffa4ae80bc6625796dcdc2c0"
+hash = "cd37a5120f9ebe3550d4950ffef2487b6d4ff65ec9cb290f8412e6f365fa173c"
 
 [[files]]
 file = "kubejs/data/better_industrial_heat/tags/blocks/pipe_cold_sources.json"
@@ -8842,11 +8866,139 @@ hash = "bef7dc3a08a144421ddea6fc657fb0d2437ad13394da4906b090627d4ebc0d28"
 
 [[files]]
 file = "kubejs/data/better_manufacturing/coverage.json"
-hash = "0393a1f6bfb7ca7f231552a4b973e2be27922abff6e04eaa934cb752c6ef391e"
+hash = "8cac1e505c3bdf9b726bc80c04414ca5ccaa4ad638ba1271ef0397fb05d08bb7"
 
 [[files]]
 file = "kubejs/data/better_manufacturing/implementation.json"
-hash = "dd71c07123090f430d9ceaf5aa1cab74086b9e2d44e32065fd7f61942992fd08"
+hash = "35a7b9a0ad2c53d7be757cf11cb0b9f06061b044bf5fffe03e4401e10e77b048"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/clockwork_propeller_blade_cutting_prep.json"
+hash = "ba2a755b8e9e4615c5dfd50b5a9cc14070f91d52c20fbba19c7a3b2ec67338f8"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/clockwork_wide_propeller_blade_cutting_prep.json"
+hash = "28c3d9525958ef9c31bdb3fb733c3fba264748da60980700c682492b8014fbd5"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneu_prepare_compressed_iron_drill_bit.json"
+hash = "dea524702697a3d2e621e0aa2052026e71fa2ad68f6a1e1ad27862a70ee4cea1"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneu_prepare_diamond_drill_bit.json"
+hash = "087c34b2f8b8a293dbb0bd5e5b98aa73d618a046cd382596d17fb47d1d47c08a"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneu_prepare_iron_drill_bit.json"
+hash = "49011a23b16fdbbd9e4e0bf5082c784548daf5e0570a7213d218e7e97ca00a9d"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/electrostatic_compressor.json"
+hash = "6c0baa6f2d23a53b8495fc2420c5efd6350ca9a0489de1063f864fe91236f1e4"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/etching_tank.json"
+hash = "a8ddd95608978edb73612b32fe20175eafc9cf70bd478f4a653f1d995ce09216"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/fluid_mixer.json"
+hash = "b455a9204833241c698f3e98f0da08edac7c24b8deacc219941d35f1e8c6e530"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/flux_compressor.json"
+hash = "45cf473cab68a566050a476106aea0159fc3aa35cfa34188a0416932f340ab7f"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/heat_pipe.json"
+hash = "f7325489105061dffceddebec812fa2d3213fe483848d207f771a05256643bd7"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/heat_sink.json"
+hash = "c9a6e61a905dc99b132f4129647f3c2b8f84e142535392ac85f3a40485798e61"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/huge_tank.json"
+hash = "b2c6e59ae0303d67d1c774ceb25ea2f16b37b9515f8d49334163ad9812fa82fd"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/jackhammer.json"
+hash = "3c05af9ab99dc044315d0d93ea359bf49b45a3ab3e9fcd41e7dae09f028f0dd1"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/large_tank.json"
+hash = "0a11d168fbdc0c36bb3f42c33e7bdd88a8a6a2a37b06e2d2331f61bd42992a72"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/liquid_compressor.json"
+hash = "e0a86382af6f96f62c26816a46d6ace2ec06c2999eaf78728e71046e13dc1d34"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/manual_compressor.json"
+hash = "3cf1751c6836b177f78d9353aabe0a048484abe2a0676315202023707d4f494c"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/medium_tank.json"
+hash = "93264a15a08fc52341653b8dd76dd771a48fcad0868a360ee4870bd9f37d8e3a"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/pneumatic_cylinder.json"
+hash = "5960f0622c4f1593723ec0bb4c01c84fe37c9595b79d6b55f670c51c21f3b095"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/pressure_chamber_glass.json"
+hash = "11a3322ef5c73f6bd9ac7476b7987099080e08f38f8caa273c3f1203e7862ba6"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/pressure_chamber_valve.json"
+hash = "92d948cfdd7203a6391f786acccc823fe343f2d3dfe367ee1864ab4924000bfb"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/pressure_chamber_wall.json"
+hash = "21827c3e38ca1540803e017763c46af88d0e3509be3e8b196d63cc5a15d72546"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/pressure_tube.json"
+hash = "bcfc34febfdba1d2f8f4829d2cc67b3546b94fe9968ae00c8f747339677f8e37"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/refinery.json"
+hash = "3e5e3fd797aa470270a0bf2464d4c8b9bb2a1f44ea7e9a280e4b223335acd7dc"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/refinery_output.json"
+hash = "5486f4962541207a7007307642db9bb0757dd1308404b9302f8690cbf740b063"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/small_tank.json"
+hash = "32ca05e184d38153b8ab38888b07f52ac223ff680f9f79bab4442c9253297c5e"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/solar_compressor.json"
+hash = "81dcde45bb9802ddbf9ee81018776087105e562a7d4d3679ec7bcc2db99a9c61"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/thermal_compressor.json"
+hash = "ff1aa3d37c6c9725676c89eee31523a9d9eaca1100b959cf5204f6ea8c7ca3a7"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/tube_junction.json"
+hash = "a2b4ce2db5633dff8f76c2b53f454462611a5ebc10c989b9294feb39c9a42908"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/turbine_rotor.json"
+hash = "2023c6adf3f3d0acdae7331c41eca4afe4cbf393d43e45b0796ebccbebd0adc5"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/vacuum_pump.json"
+hash = "a1039bbde88b543992a910f076d04fef6b1fd43155e0869ae362e2309e696cc7"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/vacuum_trap.json"
+hash = "94915a36a90be287e2b98ce5aa1c422339e2956ee26cbf9657b9263529d4e604"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/pneumaticcraft_cost/vortex_tube.json"
+hash = "d4661d5b4086a1bfcf650dd8815f391fa9b20ad9a0372eab34454d69ffc6e284"
 
 [[files]]
 file = "kubejs/data/better_manufacturing/recipes/pneumatictools_drill_bit_compressed_iron.json"
@@ -8885,12 +9037,164 @@ file = "kubejs/data/better_manufacturing/recipes/polymer_pp_stock_material.json"
 hash = "5510e5d306f45dd18cdc3d399d86571ceed08d61a079bb8496c2fa4f88b24724"
 
 [[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_autolyzer.json"
+hash = "a027a08ceb065502a40ea6088d73dabae88249d73e1441c308f8eaa0836f877e"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_bee_sorter.json"
+hash = "597e9872314348f45ec36cb4c5f8c48e1f0efbe3dc96cd70ff1ad2474c7736bb"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_centrifuge.json"
+hash = "d0fc5e41d44113d80847792cc22424c561a47faa85580f7f68497ff17947939a"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_cold_frame.json"
+hash = "86abe7a8d80683dcef3e617dadc0d3d6ecea440bd94dc08a2e6e6184c8106972"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_deadly_frame.json"
+hash = "15ce7ba5dbb0bb80b11388ad734199e94909682a7797dff385538278143e9b12"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_dry_frame.json"
+hash = "36a8e5e315d258bec66029592698cca3c5a49e166b97f2fe79da28220f601671"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_frame.json"
+hash = "02d799e65852e3cfe407d0a349f377ba615c5972acdfe0ca5270f3acbcc53cdf"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_advanced_efficiency_unit.json"
+hash = "18edf4f3b6132edcebcb9dddd4abbb7fdeb5e17697d64c51e22565a8892e8df5"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_advanced_extraction_unit.json"
+hash = "f0669097de7863c3b08b85a386f73e7db2e4094b6faf85ec981d460cea51a2d2"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_advanced_processing_unit.json"
+hash = "58b6b7e17b1c01007819c84263dd7b9bcdcfe369207cc37f84d8dc29ed22e000"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_advanced_speed_unit.json"
+hash = "df66487987749b2341691ec7726d103008d8b0e04274a23b1fa8badc7649641d"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_base.json"
+hash = "d3d1bc7f02ca57da650def6624d1f1ccc023da6b8e76794361476b9474f4e3f8"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_basic_efficiency_unit.json"
+hash = "704a42024c921b1541329e60c9854c9deacf01a1cbbc220c6b6cc202e44653d2"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_basic_extraction_unit.json"
+hash = "1cbc65d315ff65367be28c2ee6ec5bb772ff0be1d2feb4048e47bec69283b375"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_basic_processing_unit.json"
+hash = "675bb20f7f91d10ba8fae287feef5a14df6a0ca2186fb36648b75de72361b654"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_basic_speed_unit.json"
+hash = "0d44f24d8958ed4aa330e742beae04e2489d12cbedb19131ce6bb60e00653bf1"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_efficiency_unit.json"
+hash = "607901328bcd7d68bc4cc076aa3cca1c6edaa59e9e363e90e2b49241ae380074"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_energy_cell.json"
+hash = "fd443812f8008bc3329542dd973d2a37419ef25c22e906dc52a796b88eaf6c5a"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_extraction_unit.json"
+hash = "2663893a24ac851ee5b159c5b143f2abc3b441ced22b3880f021aa78443b8d3a"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_input_hatch.json"
+hash = "1d6fe6fc8647a1bd774ce609e42b885c81b31fbd7cc2b26e6e30347edc5450c7"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_output_hatch.json"
+hash = "b0e3e7884e8b915a8d42fb3ac9f9b9ffd2577d0455dad720586e324c915ea38d"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_processing_unit.json"
+hash = "e054d5f200148a9c1567368882f00907c08bda4f1dff5f5e44d030d8c4e14004"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_gyrofuge_speed_unit.json"
+hash = "d5d68090a1781bce07fb3013309dadd5a17831219c80b9dd8a05ea75a6d8fc2d"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_honeyed_frame.json"
+hash = "86dfb13b900727dc94ea306dec9c565dca94696788dd316301867c887e799238"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_hot_frame.json"
+hash = "5eda6d833dc3992b428db8e3d83d7405672819e02f33f4e81a9b92552af5013d"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_mellarium_panel.json"
+hash = "273e5d4eb1ff741e05ead69daaaa089dfb953473f4126de89887561843d03937"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_restrictive_frame.json"
+hash = "f9cb1c9c49da95ab2b7f52048c6bf21448e0c12a8b1e0a1e3e4cb953c5e463be"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_soothing_frame.json"
+hash = "d34f282d14b234f090523137113217fbc14063f2fbfdcf365c168d603a8691f1"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_twisting_frame.json"
+hash = "3dcfce5ef0bcc2cf51350ca3fa3a982c423bb045d75bcd7856949605c134f0ce"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_waxed_frame.json"
+hash = "d06050a67f835bf8a7e1f7988e0b828967a60cf84bd4161899189ea4b4a6262c"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_wet_frame.json"
+hash = "451a97f015c1e94ab61e7aec1552bfb1ac4354d74eff1d6d0ab5b88116d59c50"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_bees_gyrofuge_torch.json"
+hash = "92ed9747d827370ca692e7e6c10c1a917176cef7e9fb92375d0b1bf17173e872"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_skyroot_wheel_log.json"
+hash = "503c96a4221bb3aceace7c7864e5af68ae31ebebc3a4a8162892e6b59f2c0fc0"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/prepared_upgrade_matrix_lapis.json"
+hash = "9219f651351b2f893544c572961c810eab1d2d2c709158ce87930c19fdd923b2"
+
+[[files]]
 file = "kubejs/data/better_manufacturing/recipes/retool_drill_head.json"
 hash = "01d0a1a1820e54c069fe3a265a3ffba801b3a88c9cdcd951b9ef965eee2155b3"
 
 [[files]]
 file = "kubejs/data/better_manufacturing/recipes/retool_mesh_frame.json"
 hash = "6b3b5ccc69576b72fdf1fa3d139167919330b6201a036d0bf3d3b45206a7691a"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/sophisticated_cost_bundle/controller_sophisticatedstorage.json"
+hash = "23fb4c3b74ee1e17662cffde37554c954accc22800a604c65a7515e9b79c66c9"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/sophisticated_cost_bundle/storage_io_sophisticatedstorage.json"
+hash = "70c5c7d61147d61a58c3c323d32dbb4e2670659013b568f54034665b63676fd0"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/sophisticated_cost_bundle/upgrade_base_sophisticatedbackpacks.json"
+hash = "50defb4a4cacf74e5ca221e323c84dbf9910a5c8d15f129c9b055f008dfb4577"
+
+[[files]]
+file = "kubejs/data/better_manufacturing/recipes/sophisticated_cost_bundle/upgrade_base_sophisticatedstorage.json"
+hash = "7cfe3c2584b100bcb75fa53ee020646ff44f912360ed0c5151bcefae501ac31a"
 
 [[files]]
 file = "kubejs/data/better_manufacturing/tinkering/materials/definition/pla.json"
@@ -8918,7 +9222,7 @@ hash = "1df015dc8b2773427e013ae70f9a577a249fa0ee03ec0515cbc09304f15a98d2"
 
 [[files]]
 file = "kubejs/data/better_rail_beetle/recipes/better_rail_beetle.json"
-hash = "b493ff391bdedb9ab3b9de89cfd97435bc073ef53455edc8f3b7cb02839e4651"
+hash = "28859deb851d0b3f78bba805fbd5a157521f4dc54f4cdb7f15c2a351d2683d35"
 
 [[files]]
 file = "kubejs/data/better_rail_beetle/recipes/route_beacon.json"
@@ -9014,123 +9318,123 @@ hash = "ad9ae501526f35ac028c2863997d1f419f46cfd221deffc7564288a9388972f9"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/autolyzer.json"
-hash = "1bc3992f79c06dc682f3ee195a6e64eba5005e26f31349c0d5b654ed155cd244"
+hash = "7c5ea2d28755e7eab23525b805f20d341db4217cfa861292c9c7d32efc38e328"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/bee_sorter.json"
-hash = "f2b76a27b9600e2e001a751c36702c29be5a338431a8e34ac72786c4610720e1"
+hash = "498dda729e5cf86b45f6445b2731600af1babe8d3ed722fb31329679ed86a4d0"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/centrifuge.json"
-hash = "2b64545c965bfb80a0f6fc07ac045ddf27fde1c578b422c089e7cda9ecab395b"
+hash = "ab7f89fd34db2aa8370cd4620a86afc6685b7f16ced4b7d6d4bfd6fa07fd6287"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/cold_frame.json"
-hash = "16656e1a51b4efec669d5827699b7b66c1b5798e7e1db98d5d00cf23ab7ee3e9"
+hash = "9d2adc08a5417a73ca5b6aa3781d672b08cbf42355c7aac8d005184b701e7bbf"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/deadly_frame.json"
-hash = "10e23b2a9175f9bbca6a1c820235f4eb011c89eaef1f418fd644170a2c6f62a8"
+hash = "2d17f86b3ab64c57ebffe55cc36bf7312b459526253ef1812dcfacd9f8ef4148"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/dry_frame.json"
-hash = "d22141576cb4106a8727d5526702a6c5cd459163019a357a62a2c29ad1dbde60"
+hash = "c379d685f3b1d1a629eb94ee8844f6ee512de58a85eb86ee34936a034dd10ea2"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/frame.json"
-hash = "c98f856ba103a759ea1512475cc87251d48575a90efc52e2dd3f6d6af8f94fcc"
+hash = "78a8bfb2a757fbde239b8f11e05cab579332cf5676511b73702793a31f86a162"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_advanced_efficiency_unit.json"
-hash = "4d45f527166264a92e9cf619e9888578b707b16ad0467e0765f2bde4ba798668"
+hash = "717d8d677ce0a76e2fcae1f6186ad7c71812d9319dbc1198a7071ca23b7387d2"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_advanced_extraction_unit.json"
-hash = "ef8cb316aefc329a9a84ac5f6dfbb31ea2df59ea2c7808d389c8640045e2057d"
+hash = "79f6bc46803ecc93fd9f4004faf8bac372b13419af4c6fcb10d79f54d8b80924"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_advanced_processing_unit.json"
-hash = "c0877f8a683869c1e23f605410513fe3ff8f55f11fad1f5acc435d1b07950120"
+hash = "c690b6605db27a40db0e5ff6479b0ace9133adc2f8e5d8548e2d0226c9b8f2f5"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_advanced_speed_unit.json"
-hash = "db06617c171c9381987d1f4681cca2bd55d38e5f7c9685692152930d2b5f9659"
+hash = "70fdc5f203b18526183e0a3d064fc0f2f5685fbe5775b651552b91d001dbec84"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_base.json"
-hash = "1142c3b6b54db2739f0f05e652c0727dfaf91447a0f71c588755f77fb9c95d96"
+hash = "4f2944a77db8994ccea71502565a92fcaf3bec243c58bd1c8916eb793b06c90c"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_basic_efficiency_unit.json"
-hash = "dc61a578d812e41533ec8cfb95212f073dca66764bb16b86800fd791a1b2624c"
+hash = "ee519e8aa9b444b793e3f1a0c1b60aa8ca8547a6f9ad8823277d301e75ac20b2"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_basic_extraction_unit.json"
-hash = "b2c2e127b73dc86413bd19475149cc761457ffad0942b6c877b7ea0ba99641b3"
+hash = "bbe43bcb0811d39547071a1243f4a4876264955add7bec1a13f62904a1d46228"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_basic_processing_unit.json"
-hash = "a935580bac839e71557b2f44d0aef38fad6dffebbb4d371404e6b22e6576c264"
+hash = "268216c83b5f1f48b941dc1f9e20662dd6f29befda5528628f379b886dfa23a9"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_basic_speed_unit.json"
-hash = "f87fc6d1e6a28551b9946ef1eecca8e3395fa568c779056fdf3f152181b62359"
+hash = "02a6b1e09019b8ae71e03c663b5dd7ee6c995edae7f6de22d331aa112c7cdb1d"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_efficiency_unit.json"
-hash = "70fa18cd63090b80980e1adee2ddab8015ae00f93c8ebc9b9f648e3c5ee5709c"
+hash = "1d5c5a615eb3c68d0c8134e59d207920bddff14eae5d6f668764e534353daeae"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_energy_cell.json"
-hash = "9012e50753a1f8ef4cc32b62d5d1ab47aa2238eac97d1e0381d62226043c994b"
+hash = "96a78a0f8033777feeea5fc6419afa3454e7772d1b8f4f56c81d5869d72fc2b4"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_extraction_unit.json"
-hash = "d4c3a76d233ce76b268feef1c76b0258b810915266adf06f0af6f41743de5b60"
+hash = "6563e68a511f176cd0c29f2c38f059a42b04625b01d453237f5b406674efbd30"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_input_hatch.json"
-hash = "0a56ed6c7cf851dace7d4e71121c445de7ac03392cc743038c53a3478fe6a17e"
+hash = "159021afc7ce73c86bc68e1c5b325c9ebc4b306e3bfb6fd31048f2c9ecfd23db"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_output_hatch.json"
-hash = "5c0cb1e13afcfa66406c5c356419cd2b3a27876d803df09ab5459a418f0bb54f"
+hash = "d9cd8ca44cfcbb5ffed004260b876ec13c5e9e0e03f37613f898fafb3e1732e6"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_processing_unit.json"
-hash = "c4d4d8f1e4920997df3250392eefe3cd8d5ae21822f7e47d8078179690ab2520"
+hash = "7754f2d33d8a13bf1aa662c0600d47dac38b53ff8fe719a97f154d8552232c60"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/gyrofuge_speed_unit.json"
-hash = "660b2d0898c58a14a8940563b12a22a3b0bfd53fdf3c588b90194c3f0f8009cc"
+hash = "b7131c6d1514107a80ce7049089aa1b62ab1c90bc40151216fcb9c7fc6e184a2"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/honeyed_frame.json"
-hash = "b5c47e39414f250af6d2c17017cb26a655c6a8c2eaed2a3e32434bad99bd7ba2"
+hash = "eb2ac474e36bb67f67f02784c7eb04f66c7b567e5c6275c4fd432bd13ba0782c"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/hot_frame.json"
-hash = "b00fe97fd11a8788e1baad3e6aae9d1b29b4e92b0a184612f0cf8571b468d566"
+hash = "7b2684e1b8024fe06c76b1732f7b9a398a9342d5cb40ed3fa839dffcc42be2ba"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_base.json"
-hash = "760bd065d8dffeaaa28410ebaaf66c5a1a187c06af227f45090ee566478a7ec4"
+hash = "d829d381197c2e2d2458fa584ac0aa5061bd0f3954f16d17bc1759e236d56a6f"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_energy_cell.json"
-hash = "ac8ac9ef477820bb3fce3354035c2ab5ec68cb58de1d14b65c7d988cc230477e"
+hash = "9d392fe5ba8ba7fd0890a9633010164e1388a8d9dcf778f1a240bcd04fd06b53"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_frame_housing_1.json"
-hash = "04024131ee3669fca82fb892d6eb8defb0380738b924eb183314b529fb1b97b8"
+hash = "a5f3f311eade90b87dd0cda37466d86deb7f61f14d284302ca9b902260f5942b"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_frame_housing_2.json"
-hash = "f2c0b0ede52416f2ff5fca6f6ad89bffe0fab92d4f6cd411c9c3cd6487edf1f9"
+hash = "1feef50adcf791f410d571c1af591c8bbff79febed2c6d4fe5d318afbfab7a5a"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_frame_housing_3.json"
-hash = "154e7c1a982b9f97b196d63f042cc61b010aaa604e6da19eee5705edf878723c"
+hash = "35061b7614e47e846e944d4d9f7b4ca7a8be37ec5c9604e5c5cb976157d39b0a"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_hydroregulator.json"
@@ -9138,23 +9442,23 @@ hash = "539983e89272e80b002b3d959244923507c85b2d9eb6642dfcd93e0aeeee29ff"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_mutator.json"
-hash = "322c7877eff788d78673839b4d83d88400d0f1004209a48d6bf01d5b24516ef7"
+hash = "d5e096df5dd617d814861f3cb92daa60464858ef3656c1800850a86700c87076"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_output_hatch.json"
-hash = "6261c2e4409272b698bf915073d734ab953698aa0486b631240d3c3da3beb66b"
+hash = "e6edaf7ca6ad3a0504ae8711b27f9dd97c5dff9673391c69917da06161e5a48b"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_panel.json"
-hash = "918b61d161713f5223c808dd23db3f1839ce1a8301ad108dc78a8baab939c70f"
+hash = "d4d04f75230139582dfb45cbbc5d258266ee1d4e0ea5bb89598de23e0d67d79f"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_rain_shield.json"
-hash = "0df013099ec2db1ba2c17e7439a8f89dd5989c2178836596074fc237c9ac4563"
+hash = "9dfa4e3ba99e4ddf00e7507b4b6bb8926141f2b2c25b18e83c5dbcc15a20c128"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_skybox.json"
-hash = "56275a09b32214e0382d4a558c072b8134111a8be02740ba126f1b7655306425"
+hash = "3cb6fcaf4b0727d8ad83d3bbb49cc23c4b476dc002935367a1def4af6348f21c"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_temp_unit.json"
@@ -9166,31 +9470,31 @@ hash = "f5e10127c838176a4cff8a2e7db914c432da12b95d3b49d819153fe6328dd2fe"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/mellarium_temporal_simulator.json"
-hash = "6a4f2a14fa0a166583a8e48d5a45115b14947d1802a7598bee02656c23ea0f89"
+hash = "c01138bbbf06af164b1016eaafb738cbfabb9d98f20f87387f0eb952ffd8ec85"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/microscope.json"
-hash = "8252c4e59868c5502581589ecc240082c276db8dae692ac8a547aa722365ace2"
+hash = "18dd22c9d6127597239c9daddc795dcb5f0d47e78aa2e80928f551cf225efd1a"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/restrictive_frame.json"
-hash = "e9f9c90585c694e8d709737578dd34b7cddc0c33babafb0176d2448f55c844d9"
+hash = "e6141196245a703d48831bfd42ac54ad617ad97bf32321a196c7466f68121f37"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/soothing_frame.json"
-hash = "d3905e8052d371069db56776216eb941e62c29e2c541e266c4d6ee98ce835b6a"
+hash = "2414669c49296de3c8c143190764a40a5540b248bc78f2120c77ab9008d4b6aa"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/twisting_frame.json"
-hash = "2253d99f83f069e83a6f05b33a17aa7668204eb29753b5be17533cb3b2390f7c"
+hash = "9980498a41642a95d339d84aa3e601c83393d3e310f9cd9c492afc06dfb40948"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/waxed_frame.json"
-hash = "33262037c35dd5d8dacdf7602a87689f8e0def84b5481adb106b0301cd9dace8"
+hash = "608937e8df97bdbcd8707ad8612a4bb12a820be06555aef653e910f247af08f0"
 
 [[files]]
 file = "kubejs/data/complicated_bees/recipes/wet_frame.json"
-hash = "1c6c2e3763bae17d27bd31b3985ff16bf8cc686c773229bfbd098bf788c9296b"
+hash = "5619ad41ef78a8eda9999122f86a6ddbfc095013ad3b7ea008257b6e4e720264"
 
 [[files]]
 file = "kubejs/data/compressedcreativity/loot_tables/blocks/air_blower.json"
@@ -9234,11 +9538,11 @@ hash = "d3cac1fcbdf4cc678dd91572778db9d692549ac800aa7c63e6da12c706a300a4"
 
 [[files]]
 file = "kubejs/data/compressedcreativity/recipes/crafting/engine_rotor.json"
-hash = "658a9b364e3dbe7450b53f00c3f29011a63704ea5297a33c05a2e7da257c66ec"
+hash = "b8b49f1913ee432787f4b10857d70c17d173f0b1dff3ae3b51c1fdea62c32aef"
 
 [[files]]
 file = "kubejs/data/compressedcreativity/recipes/crafting/industrial_air_blower.json"
-hash = "f4a1b5caf11c3f43989c41038f1ace58058354af927a9748ff1e358c0b428bea"
+hash = "d11a0c7ccf54adbab14f3c0b8f5bcdb85e93945fb83c9ff03587cc2d9fed1566"
 
 [[files]]
 file = "kubejs/data/compressedcreativity/recipes/crafting/mesh_dense.json"
@@ -9246,7 +9550,7 @@ hash = "d1974ee74d3751049a5a1a89606cd5640bcc8671ccf0aa290337e58b888b5767"
 
 [[files]]
 file = "kubejs/data/compressedcreativity/recipes/crafting/mesh_empty.json"
-hash = "b72dbe303f0e9b020fe828ad198cfd1ea0e937660f4529eb7497a0baa7d12c9d"
+hash = "5389ce4a5061c441d5596da3e6642434c5c58ecb6d5ecf8932738a4b46373b6c"
 
 [[files]]
 file = "kubejs/data/compressedcreativity/recipes/crafting/mesh_haunted.json"
@@ -9442,19 +9746,19 @@ hash = "1fde3e51530b34ec152c2bb0a6721cf5fdc23af47ebd0cdb09eca90c21a69552"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/fluid_pipe.json"
-hash = "ae235a170042b130696211c2b5085fee3d7f22ebf78c7919c35567c784e32374"
+hash = "cc99d13de5733286a2ebb74404f38373acb88a507f32fb9857e19e6e492fea4e"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/fluid_pipe_vertical.json"
-hash = "40e7e8abd5f6ac6d56e5327d0907df4292730026c44a7ad02b01931b13ef1bca"
+hash = "a0cdda97c2ba760f8a6373e76f837a7837b5e531db02c45ec3671df9bc8a3b62"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/fluid_tank.json"
-hash = "a57c026db7df94fe0156894045ef61d99da70491c82a2f0524e0fbc64a65730f"
+hash = "608b456320778d0c047aef33817072837f5c260b3730ebb10139384d535e30b7"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/fluid_valve.json"
-hash = "41db6c5cbde1249d0b622074e3eaefde98592820e847baf18e3ce5e976c23eb8"
+hash = "06d2783efec83478d99d686729f05307e7dbe4094845184f73ae36320c5494b2"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/gantry_carriage.json"
@@ -9474,7 +9778,7 @@ hash = "6ac0e953fdebe41edeab7c90195747eba7a7aa424fa87923cc9660ed36ec387b"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/hose_pulley.json"
-hash = "e60e50a98bc4febacf4a331ff2a8a232fd5f8121bfbe51c976531192b02d33c3"
+hash = "e4c64ce7383318eb75a51abf5cf913d09db351abb56b9e78a6984a02a346c306"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/item_drain.json"
@@ -9502,11 +9806,11 @@ hash = "c2d2a369222df127e2ecee1db672aed172f20bdf908acca0c5b3f81029a69d96"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/mechanical_drill.json"
-hash = "e40798636574a4ceae7af8aadd89a6c3cec94272778619d8250f44af6d1235d1"
+hash = "58ffb596c6d43546b1bbdc9811076b863b03d270906275d80f2bf7cd22223563"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/mechanical_harvester.json"
-hash = "760ceeb266846371d285911e0b2553b38c367f0c18066151999ff94956be587b"
+hash = "4d65817754edf54652a12d521c531b6292f9ddd6248d722dd41bbda08d580e75"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/mechanical_mixer.json"
@@ -9518,11 +9822,11 @@ hash = "a41598d02b85eabfc8eb0b9eef080ca29e3856b2487f5128ba3c9fec56fdbc4c"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/mechanical_plough.json"
-hash = "d1549e17a04f10a55ac41b39040996f8bc7d1d8fcb5d2c405698cfdf94a292ae"
+hash = "c874a760a8b718479eb82b13eda10e65703fe39236028995623ea439ab225dda"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/mechanical_press.json"
-hash = "44c783dbefbcb3b25d996cd7192507a4b07a920b954e220b6728de0608054420"
+hash = "d179385c029aa18d2be4b9c59416a99de2117adb3552649d11b206d58c3f3929"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/mechanical_pump.json"
@@ -9534,11 +9838,11 @@ hash = "1a6f37ab22e3445055c824e2ba8823d3157e7f4448821f28c87f9bbc800bcf26"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/mechanical_saw.json"
-hash = "272393f77a169d55c3f012b52a1441b9912edde7ca5fb03505f829824a4929df"
+hash = "20ac9861752455a28af1bfb029b68f7bb9f1e067ddb58df598d930a3544820ee"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/millstone.json"
-hash = "2f196ab7c8220b3b15d9be0e0769231a63cd13868bebea3aaf53002b81e267de"
+hash = "6e84838a2ecb279c0eb34a8da9cb794396357c425f3a173c26d330b731ced1b5"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/piston_extension_pole.json"
@@ -9554,7 +9858,7 @@ hash = "4a49920b30f790e227c5a0a3367ebc855444f0eda45ceb8059b0eab1516073bb"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/propeller.json"
-hash = "45cfddc5c431c1b1a65724b65e79533f18037511daf9264480715e04117128c2"
+hash = "adee13b39abc4f2e5ab5884d57a90be3f5d93702db442ef2fb492d02b7ca0146"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/radial_chassis.json"
@@ -9583,6 +9887,10 @@ hash = "a5b07b561b235aeca4e47db19f6a26cbad1c4c983fbc8b88bf70e591439ef9e9"
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/smart_chute.json"
 hash = "16d6afb896574eceea05ed57ec519cc051567601c72e7373106a7aa2853765be"
+
+[[files]]
+file = "kubejs/data/create/recipes/crafting/kinetics/smart_fluid_pipe.json"
+hash = "5ae2c6b1d9cc6c366faad945e5e9ab757c92c35aa4069e12c5ae87dd17e394d5"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/spout.json"
@@ -9614,7 +9922,7 @@ hash = "f7c377d43232ec42b6d9400a24f1e7d33ec0f0797edefec161733de24fb9baf7"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/kinetics/whisk.json"
-hash = "25e30bf130bb9c320d93ab56f26a0917d1f4a12f0f79caddea319a1ff5c18eb0"
+hash = "e3352bb38add9e057f046df70f8b44c4aab2bd4d48a72ca5b1c80fe734e12835"
 
 [[files]]
 file = "kubejs/data/create/recipes/crafting/logistics/andesite_funnel.json"
@@ -9750,11 +10058,11 @@ hash = "7cd1226b9ba6bde44966f023c0abf046cc39df6d2618bd223d2bcf2565f51931"
 
 [[files]]
 file = "kubejs/data/createdieselgenerators/recipes/crafting/basin_lid.json"
-hash = "6c72e2b2ddbcf5f4b7fc4e618129bb37c5c1702597a1a2e6be3bee240a68efd0"
+hash = "4d65c9af1fed24290c0afaaa4a219cb0ad223a9d1f1fd7501d2844a2e21ab8ed"
 
 [[files]]
 file = "kubejs/data/createdieselgenerators/recipes/crafting/bulk_fermenter.json"
-hash = "ba35ca3ed3de4d92c1317a0febbf7c93131e48b34121dc91b5d52e942abcbbbf"
+hash = "dbfe57bdc3403486427e737174ce5d14972710d0b90ec27d718fd8759b9bd2cc"
 
 [[files]]
 file = "kubejs/data/createdieselgenerators/recipes/crafting/diesel_engine.json"
@@ -9770,11 +10078,11 @@ hash = "a3425e227d2f3a88a3e378ee607408bf567775108a713e8d9c7c4e06ea346aeb"
 
 [[files]]
 file = "kubejs/data/createdieselgenerators/recipes/crafting/engine_turbocharger.json"
-hash = "ca677f4f2a104b2f99096dfc1a96daf2b14bb1d968fc631687ff0a95fa0a4150"
+hash = "e3502fa59c54af0acdd15f144bc08df65491ac1ea86e28272c805d47ebf1f821"
 
 [[files]]
 file = "kubejs/data/createdieselgenerators/recipes/crafting/huge_diesel_engine.json"
-hash = "adf4909e62c09c63c7fb5d9dc346e0f96f832ebe86bee66d8b639d2a6c3b3632"
+hash = "f24a3736e8cb5bf939ee758f2c51134699e1c9bbe277fa34d602b713f92f6a71"
 
 [[files]]
 file = "kubejs/data/createdieselgenerators/recipes/crafting/large_diesel_engine.json"
@@ -9790,27 +10098,27 @@ hash = "d9fae9dd4518b47cabf748e767f82a37ecb075835d3df4d01761600d69a95f28"
 
 [[files]]
 file = "kubejs/data/createsifter/recipes/andesite_mesh.json"
-hash = "5937fdd46bd31dec2284bcbb594512674945bf3f8320f33c98c0ab5f386652d6"
+hash = "f991816b4f4abf319eba31d330268b9d767a16c12ebaa496131b828ee9a5eeca"
 
 [[files]]
 file = "kubejs/data/createsifter/recipes/brass_mesh.json"
-hash = "ad24bde3667a229999c1759c45cf88d96ba054f8b8aa9e10f668051110d9c01c"
+hash = "7feb43b4a9d57ede9ab301dab2b2681d7564b9905989fe0243517c80c14034f3"
 
 [[files]]
 file = "kubejs/data/createsifter/recipes/brass_sifter.json"
-hash = "e23e6cdd5e2997820c08c9883d6f2a246e90210a4bc90135a3694b51a7af568d"
+hash = "0f06ef6fa6440766a14b5b7c2bd3adb7f0156198e21f77a9ff92b7f765b6fae0"
 
 [[files]]
 file = "kubejs/data/createsifter/recipes/sifter.json"
-hash = "7f52f3cbdca1da0449cafb3b6ef17196b75408e1a9b24ce5478f6f88923143b7"
+hash = "6cf08435ba2d60abc84304938cc9f08b47a055712e4975ee54d7e428f3c8e5e0"
 
 [[files]]
 file = "kubejs/data/createsifter/recipes/string_mesh.json"
-hash = "52406ce75173657bbd9570f63f303726cf80a69762eb9a4dc7ac7d24a61ca7a8"
+hash = "4a19217c98efe9f9aace99d21f49cd48de75c8b862d5f21d33d3312b437b8ae3"
 
 [[files]]
 file = "kubejs/data/createsifter/recipes/zinc_mesh.json"
-hash = "1e734bd90ea3912cadf20e0344f234e3f185f7f4d956b251a4553e68e7a4c9c7"
+hash = "bccdc77cca8f3e23521c1c6017f7a7f410d72f7046272fe63d0b4c9d5ac1ef33"
 
 [[files]]
 file = "kubejs/data/curios/tags/items/back.json"
@@ -10998,7 +11306,7 @@ hash = "aa6b952c7e718e7e8dae9f045860741c8c882185771f203d9043f4a69864a1c9"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/transport/electrical_control/better_rail_beetle/flux_traction_motor.json"
-hash = "824bfab180fc159a9c303f5abc90cfce3a9e77145669bde182eeb41cddff6cf4"
+hash = "02758a5506524144c253b633e7bfb2c7c309a1473b1996a9a683162d2007bbc8"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/transport/precision_factory/better_rail_beetle/adhesion_sanders_1.json"
@@ -11066,7 +11374,7 @@ hash = "487c85af58c9e867c348289e524000418a7ebc1cda5715ca91a6b933c5011ae9"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/transport/thermal_pressure/better_rail_beetle/pneumatic_expansion_motor.json"
-hash = "390c1b50f457f6c1e590c95ef78cb5924a23fea6a0637541958b7304a75ccb90"
+hash = "750d5d10f12b59b99e6f20400de7ad8b77dff65339c1795fa67864e8512ae753"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/transport/thermal_pressure/better_rail_beetle/reinforced_drawgear_2.json"
@@ -11390,79 +11698,83 @@ hash = "d400cf8392dfb9d1c625069bcc05ee69bd2ca0d2b978c9cbeee5c0e80d397127"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/barge.json"
-hash = "22963ea6b27f73c323f0fbb53c75bb80a23bc1246b5abdaa8a28ab7b789cc71a"
+hash = "f7b9498d5459a45dfa660ebee6d882277d2ecf681b89e5c80c10abcfc578e774"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/barge_dock.json"
-hash = "3383d0b58aa4c438d7ad4dc490c69afacb1237f9136bb072ebaeaf464b33370e"
+hash = "a8d94bae436b55a80c021a6d9ea180fd2243f0398ebd4b9a211defe6e823d816"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/barrel_barge.json"
-hash = "deac9f432dc266d86f295d1944efb97243345b3b7b4febddada69e7649fc127d"
+hash = "bb83cb03b728e04aed6cb8a9e3c81936dc1bc5dbe47e4d10b310119c2a310410"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/barrel_car.json"
-hash = "ece8bd05ed72f896b50f58ac2ee99b53dbb5bbffc1990981efb12be03c67eaf3"
+hash = "7d8194a5800c337cf9fcc80fc1c53b92aecb9c073f0e514f024dca3239463d3d"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/car_dock_rail.json"
-hash = "18a655c891122cd9e8c5913ff9e1b8f8480885656e3c7d460b7bbce170201200"
+hash = "22752e3bc769044dfdc65f48ed422a2d254fee2f88ca161ee612d3fac6bd942c"
+
+[[files]]
+file = "kubejs/data/littlelogistics/recipes/dock_stone_paid_spring.json"
+hash = "4c3380fdeab555337d0c78dd51a7239ac369bac057b123925ad8d2326fda8d04"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/energy_locomotive.json"
-hash = "6464d928894cfba28e7cf6de566696f089e054ad41ac0a2bf055e7bd22108310"
+hash = "d12454354382683de1521dc22c531f4598485b5dc986c198c40ccad852e51cf0"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/energy_tug.json"
-hash = "e424638f5a52abd691e53f029c1217de440dcca79119a3616ff5f5258b0c86b8"
+hash = "64cf57fafe21fdfd022d807086a9cc829b1e620d30d91135e8966b2094af7a53"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/fishing_barge.json"
-hash = "010b812d7a7ca31a023051ddb2dd58c7a3c721c27e123e341d757073d59dd07e"
+hash = "ea7b092595d3511a18982ab02b61ccae3e87799151836488395e12786fc420d3"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/fluid_barge.json"
-hash = "9d801f8544244775180b397c61b742173375c43bf878db829580d8b1615c958d"
+hash = "269a1576f999d9c25c6934275fd3212ce6839266e376381f97fd8db88989db0e"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/fluid_car.json"
-hash = "d6ca12ddc34a4d4965bd56eb033213d1025cca2899f66ab5ff083c96f24728d3"
+hash = "5f84752004f597188e04f51acd4f3f2fe3223b7346a4435d8b1ab800afc98797"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/locomotive_dock_rail.json"
-hash = "b92cbec2261bc8a1078080641b535453bc6299ea1c755221ec778874cd6a9015"
+hash = "25ef583375eff9f974752f587b2e0791e01d6a847d0018b76e4f9a226693ce33"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/rapid_hopper.json"
-hash = "62c872aa1809e2af1305a3ffb4b80e3681eddabd5ea2d17f276ce7e57bd320c6"
+hash = "a05e9f12aac6d97d65feb4e039b80f0a0eef26067f7ebcb7721f930af245d4cc"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/seater_barge.json"
-hash = "1d85adff147d416e33d325b844c9ae681125c3b6adf09f9f7c6f054a31f5525e"
+hash = "6ca67337ab92c30af2a7c1059435ad238973409f07c4b9d5fcac1f0d6c3e9ca6"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/spring.json"
-hash = "ee81282ffa7bec1d909318be83d5f6e29f0ab7ab11c9c087c49e4f69868eaf46"
+hash = "c4ce827cab2a2917ade10e71696a90c1901c6f17b2eb546d9cafa12c0eda8f93"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/steam_locomotive.json"
-hash = "7c9440abd2a94af3ade8f8eaa5c7e918dcb741ef1d1a9e964212f7dfdd11f7c6"
+hash = "c0ee327fc06d9b9b0a0dba0dcfe879e293021d84086d5a64f5a93b24866b4c64"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/tug.json"
-hash = "2af27618bd252f3f0786b9cb3e17d5655f9aa8d0e083606bd78b4a1d2b06c833"
+hash = "f483bf7e1e86205cf27a8d6abc3a746afda35a4f0d4719ee3b5788f3f806eee9"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/tug_dock.json"
-hash = "fd9093c4c69e9bbf7a715c8080344663afc95849897e39eb8048bbca293f4c49"
+hash = "3026d3156913f80b6f9a4012348a38b026d44c98f816ee154ab5660fa3c0eb2d"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/vacuum_barge.json"
-hash = "3879a8440a90ed4aeca16c8a77d815f57b7017faacc21c8e45225de6c303a307"
+hash = "066856dcb742919bf3e06c16063c443813c8c4633febd79cd90d7da25303b03d"
 
 [[files]]
 file = "kubejs/data/littlelogistics/recipes/vessel_charger.json"
-hash = "83bb30a063eaef16028e92c347b24580b2ef278c7d21c2b2f793562b0c5a4ebc"
+hash = "36380e9801704688346909eecb79f526a2740e356514ef497117331bf89ee80f"
 
 [[files]]
 file = "kubejs/data/mae2/tags/items/p2p_attunements/eu_p2p_tunnel.json"
@@ -11665,6 +11977,10 @@ file = "kubejs/data/minecraft/loot_tables/chests/simple_dungeon.json"
 hash = "6a63aee466b074ea543e72d458d8b2fa9b87dbb56d824539fcec8d13eeeb7eac"
 
 [[files]]
+file = "kubejs/data/minecraft/recipes/gyrofuge_panel.json"
+hash = "c29d71e55896eda9ac9d9c005405e2581f76873ac63621ae051e33742b529a79"
+
+[[files]]
 file = "kubejs/data/minecraft/tags/blocks/crops.json"
 hash = "20175362b3d787751c0252cf965d209061dc6100b3974798cae01083220d76c2"
 
@@ -11850,39 +12166,39 @@ hash = "ef2f515544b0c96839a891785bad066e9521ef82bfb11ebfd9689f77f151f4c6"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/charger.json"
-hash = "e4ec66acb0c77938b659869f0c5cd0c17a2245696fc7966d5498ad5e28759f0d"
+hash = "f7c7c40d8a2fc06e7106ba163b9e5ee671a093b61f9f70f3f0a1466c87263843"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/computer.json"
-hash = "861b3cc090253f7b2899e6206506687f6d4623dcb7ef3df23171461498128c85"
+hash = "549c569599c8d639ec695cee817f1eabe1f7508989803a76bbfe6c3c9fc54141"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/disk_drive.json"
-hash = "3d3256bed14bfa6a8fc8f5a86394e0f2d199fdd4cdefa87ab19d6c56c9a67570"
+hash = "dfdfca0ecfefae8e459b2a116a1d07831510c5b4d3ff048ca5782a0deb6a179d"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/flash_memory_flasher.json"
-hash = "d28b8fbac1b2de7677366472c43f5f8a0282d8fd4f07a1e32b8783080ffb0056"
+hash = "a30d3a116e419f9b5fa45905cf6fd6141eaaaa4c6f6f4b890eedd0ab795475ae"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/keyboard.json"
-hash = "2d28c0f99cff38bc46c9531c97707ec39652b7fa0b5244f588453cbc1717b4ed"
+hash = "31ae4fb4925274c3848c034057534218f9340d30546de6225da5271c28fb1ae8"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/network_connector.json"
-hash = "4c48a9e17951a89ff7bd6927f0d65f1e887091ffe8dfe821e72bff59e8404200"
+hash = "160ceaf0d335df3d42518281c1331b206a7d6e23b3d4a5b40be770e7d51c8b30"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/network_hub.json"
-hash = "ff627fa37667fc1fce43513f09bde4d7927da94e68ccd4337543d44434799c15"
+hash = "518a255a0cc024ec4b6e931e4af069c7180f817aa10bebba3b8ac726d985048d"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/projector.json"
-hash = "cd4d80b249a2440796e860d150b978043ba26527ec062a3fdf913d259bf85e95"
+hash = "084967d2b08eed2fcb6071b2c030e3d2bae44b29a19d8b35497152d486141d96"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/redstone_interface.json"
-hash = "99a30db36cc597a5c46ad2a243ebb1dcb1cab9b55ddf14f61be9ebd198e526a0"
+hash = "c221809850b15251653de7ab08655fb7aa6d265ad39a768d18f5eac3635f4088"
 
 [[files]]
 file = "kubejs/data/oc2r/tags/items/wrenches.json"
@@ -12017,6 +12333,10 @@ file = "kubejs/data/pneumaticcraft/recipes/aerial_interface.json"
 hash = "7af4cf2b9f86913dd5221399e798aee2363360e0ac69f2ce31cf8b9f2cb83503"
 
 [[files]]
+file = "kubejs/data/pneumaticcraft/recipes/assembly/netherite_drill_bit.json"
+hash = "ce5968bbfda3d9febb10b7c8ea5941edf7131ef994d786518ee577e2cf2dac50"
+
+[[files]]
 file = "kubejs/data/pneumaticcraft/recipes/assembly/pressure_chamber_valve.json"
 hash = "62a3ed639f2a467019f678a2bc372e78f2a2800bb3b6c7f8bb267bce9dacda4d"
 
@@ -12046,19 +12366,19 @@ hash = "2ca97bed29bedaf203259853942a30b0ce72b1c1d09da1a2c4a27b7fb0f9d381"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/electrostatic_compressor.json"
-hash = "8acd556277e4767366f9b1e10eb3649b29c97739cb32914da1d6e4a624e54e2d"
+hash = "8201dd1c24a82db1dcef4fac0bc86ed2156b6ac8a463cfca34a74cd42d589456"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/etching_tank.json"
-hash = "47aad45fe7f88f57f59b0f5bbecae36a000ca1accf209a145481a0dc13df083d"
+hash = "16cf31ae40649a7ae9e34c70b2f2953eef10ca24f5cf6b2b87a264070a0513d6"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/fluid_mixer.json"
-hash = "d8552d00f0502c9dc674a09f3536a2be44caaf7bdaf849d6b4d66e3f8d08362d"
+hash = "291badc669a3cce5871e7881086de45cc4fcf963ce33e2bffc5c68e85b762dc4"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/flux_compressor.json"
-hash = "86f779f2a138887760b70b49719bbc4b836d31da65ac57f5d61c4e9a4297e73c"
+hash = "6be60cf4f71d53403c4aeffedc6eaf4003aa69f9a7aec64917da49f77cb97d93"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/gas_lift.json"
@@ -12074,27 +12394,27 @@ hash = "1cee19141bbaa2b1d485d6b9d40fa6c56090535edb63e7660c9951c461d812eb"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/heat_pipe.json"
-hash = "62d060258a62b008d460e8b08079ba0ecd0dec9653fd1b98f00db0ba5d2572d7"
+hash = "308dddf5457f502645c0a91fafacce88d4f0b1a17cd6e409e451358778c9e0d4"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/heat_sink.json"
-hash = "e92936fbca9619611582470ac444a079991cc68f8182dc5978949fec7c6f4c99"
+hash = "096478ad9e94de0c9822d81c447e512ca5d19cb4f6174bfc8336c99491212957"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/huge_tank.json"
-hash = "1581034884e9025d2465d4596f29f639f3d8a7d8bd9f4e77cc5e535e906f2529"
+hash = "68757cb992823a20e421f2f2086fda7290cb13308f1af9a8619591f380b61fc9"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/jackhammer.json"
-hash = "21710fcbeb20943e1b2ac172fcc770abbefdf3551e1e8128453762141e670832"
+hash = "84e9ece65de4235a9874cf0592fb6f2c8ffa95fdcba63efa4104038a9fdd7d7d"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/large_tank.json"
-hash = "6fcc135eb0edfce5e03dc049ec8cff5b55c63dce726dbc364af1263107d3dc51"
+hash = "3db6aac7da9945ff59d211ffac98fd8c62e32ca56f31b5d493dd7ab62042280f"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/liquid_compressor.json"
-hash = "c89d14fd09e0ead49436ffd5f9e54954525a1e85de7c29b2bda07d4e902f6d02"
+hash = "fb0df5ce612dd8ecbf9e4368cc0235a61c0ae309506dbd230a83adb577d943a0"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/liquid_hopper.json"
@@ -12134,11 +12454,11 @@ hash = "b29d429b04ecf8017a90c58190aac9e0a1ee6c7ffa2638b1853955d27f7c4e87"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/manual_compressor.json"
-hash = "be678995945feab4e9c0159a4cb75298f3cbc6693864c914f5988b44258a7bdb"
+hash = "40d502f8ba834d76a2b4ebdd8114e9dcff3d98e2b3e8bd5026332494eefef72d"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/medium_tank.json"
-hash = "d4294a60ea8807067819ac4093807c1b4972fe63aa5a3f1a34e5ec75d0aeeab3"
+hash = "c1d11a27026964c23b9a882e5b872f74717cd9e451aa03f85f6d7c32f908ab9f"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/omnidirectional_hopper.json"
@@ -12146,7 +12466,7 @@ hash = "b525cca3acf9a0e6d2ebb93bdb8e262fd64619fcf9231be31af67a0e7f72493e"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/pneumatic_cylinder.json"
-hash = "307e5fcf7c7c1b919ada183f6f5b1c3c8445ffeff2d28c306c48ef0ebf5ffc8c"
+hash = "6f7878f29eeee13ef5362340ab5bed5ae26314eff7eca0caf288c2493e3ef8d5"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/pressure_chamber/turbine_blade.json"
@@ -12154,7 +12474,7 @@ hash = "d89d98450dfb722488e8dff78232f5418cf29327b85dca12a90a651a314d5818"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/pressure_chamber_glass.json"
-hash = "558e0791a433cda8fa989e946ebe7879f4bb412c52473daa6c4bf1c6a81189c0"
+hash = "b88380b2440d89f0c07d1b2870fb9fdff7f12e8828f6862e5abb0f758183e771"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/pressure_chamber_glass_x1.json"
@@ -12166,7 +12486,7 @@ hash = "52fc5553cd79e57c94065344d891324a3bb40774d1b2cf498754a21448fe092e"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/pressure_chamber_valve.json"
-hash = "6065c4b19d34af56e0015361b87a9b09181cacf440f14578cfe74d74c1cdd0d3"
+hash = "eec9fb543e588f451e80e0ecb9d41337695e3c69114a5538bee198f8939fa144"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/pressure_chamber_valve_x1.json"
@@ -12178,19 +12498,19 @@ hash = "71ef1f2a568aa262a8c8f8dc95e6d6107936fab2f6b1c2bde10b7a0496ddfefd"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/pressure_chamber_wall.json"
-hash = "85b3e8ba79cad03eb846f11208d9c537dfab9268f4097e0ea9bb9d0f8fd06f47"
+hash = "a240ccbac49bef401d84b473eddd1c64e3cc8fc56b0ee2e7773d8d9beace0cba"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/pressure_tube.json"
-hash = "8d447ed733ab3c30f97117aa0ba360b59c6bc07d6c3cf38cf2e9f1ad651c708a"
+hash = "94d98893fbc86d1c37ef9b3f4b63b2c25b005a8100fc2c1eeb036ddc911d8d8f"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/refinery.json"
-hash = "6afa3629a71499c59c91be098c24ac2bd295908a3e74c8394d00e63b4bf98a5e"
+hash = "f51e211b563cc48b2c9e901f6e4fea438a51a80eaecffb4a09ee3b7b3f8e1a92"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/refinery_output.json"
-hash = "869ddde504366f29c780420796f8dceddc809ee465073b6247ae993cbb5bc5a3"
+hash = "c0062bc60baaae7f636b8efef457ca5e5cd333800eaeb6bc1ab478fe48445c1b"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/security_station.json"
@@ -12198,15 +12518,31 @@ hash = "0d9f0a01ee1661dc2306fe06843b524434e28bcf191fdba4a0b756a2cc57e29b"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/small_tank.json"
-hash = "e2501a8609b19ed8426c13c20f9b322942d4dc6c4536e31988701b2b688c190d"
+hash = "2580c8ea9c3fdf3bbd4ca411718bb355b0328e886dcd5c742181f8c26db27956"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/solar_compressor.json"
-hash = "6c3fc4e30d9ba08e3a205aa8739e360a6a20f9389a491e3499b10900448861f2"
+hash = "700b1e440516b59dbe6e2f7e666140fee3b55405dc241adc020478600d78279e"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/thermal_compressor.json"
-hash = "23bfb8f63b0989b8411a2585bdb05066dc8a0b244781e2afa6f25bec5f251d68"
+hash = "caa3dfbdf77d5780cd0ac64f63a9489acba17e8590262e4317531397bda616a3"
+
+[[files]]
+file = "kubejs/data/pneumaticcraft/recipes/thermo_plant/compressed_iron_drill_bit.json"
+hash = "a68708e09ee7088b0307067aef362f4ac8f2de8e16d14580b32012d52616f8bc"
+
+[[files]]
+file = "kubejs/data/pneumaticcraft/recipes/thermo_plant/diamond_drill_bit.json"
+hash = "af01b05240133fa35212b6c67c91e68322806e709412859955dbf9e0e0df08bb"
+
+[[files]]
+file = "kubejs/data/pneumaticcraft/recipes/thermo_plant/iron_drill_bit.json"
+hash = "fd58504d70c779c90a436519458c069d2698c31b6efdfd307621c03254efe286"
+
+[[files]]
+file = "kubejs/data/pneumaticcraft/recipes/thermo_plant/upgrade_matrix.json"
+hash = "6e14d2a7f6b0a9e78e78c23f11f24730eb6b3638ff9d34154a807df51fd3a1e7"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/thermopneumatic_processing_plant.json"
@@ -12214,11 +12550,15 @@ hash = "9dbcbc3c04a98cb63de0c59cbb34c4636b8b5e012afb2cb5d43a5c32ec775d33"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/tube_junction.json"
-hash = "48ddfb8f267eb9d81cdba7fc93c83a0d543f599127e72139bdbae5c4848e0a62"
+hash = "dd197528b6c6dd24ef8527e5fb937acdcb0848d17db0e2ce5a3f341db2d706fa"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/turbine_rotor.json"
-hash = "a6a7a4ca7f4e8e7d540b75ec817caa905c6c1ece4d891c6faafafd953f3e2052"
+hash = "3f8883a4a320990bcbb62b76a53d048b711c38549be095749804b98460fd8406"
+
+[[files]]
+file = "kubejs/data/pneumaticcraft/recipes/unassembled_netherite_drill_bit.json"
+hash = "e91a5c7236de49f7534234a26fc6431d08fdad123cbf7f21ec8d9ca084497c2b"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/uv_light_box.json"
@@ -12226,15 +12566,15 @@ hash = "a3d2ed469dbcd771f008c6170643a1a9c690f0cf715790216813ddd230694383"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/vacuum_pump.json"
-hash = "c3ff782fd31b82c4da2b10159e4f9de90b765900f8f938fad405f7250aa0d679"
+hash = "8294dc7f873e9ee769225d3ac67a00c6d4fa3a260511053bfb2cb969c39faeec"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/vacuum_trap.json"
-hash = "c95503a00f9464a695e30dbb8176e5ee9da60a72a7f6e06e5efca0156143a1e8"
+hash = "f83906ce8b57c8aebc763edf1d5c759d9ab4f0fbd01858058a4862597d9c8599"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/vortex_tube.json"
-hash = "f3d7d25a313a82a13b44b6c169ad4f568bf5dbe428a8e5ffe1ac73addb22cfb2"
+hash = "aa3b2c6c703484aaf173bfdf04006d359983239356584a076990f7c1fd43a839"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/tags/fluids/etching_acid.json"
@@ -12299,6 +12639,10 @@ hash = "430a145335c4759c3da83eb61cdbdfb94ccdea5a0f70fac26b226b8a9fd39e09"
 [[files]]
 file = "kubejs/data/powergrid/recipes/crafting/copper_coil.json"
 hash = "5a5f80356600008055fafe9c5fa287716e03b5c2898531504de0e676424d9a4f"
+
+[[files]]
+file = "kubejs/data/powergrid/recipes/crafting/current_gauge_from_conversion.json"
+hash = "ef70402ee2e93d6ab75d82f3cc2dc6a9bca4f0b30bd6336af92c80fd2e1c1594"
 
 [[files]]
 file = "kubejs/data/powergrid/recipes/crafting/electric_fan.json"
@@ -12373,6 +12717,10 @@ file = "kubejs/data/powergrid/recipes/crafting/voltage_gauge.json"
 hash = "187696f2e366ca20fe394c65bd4c5af9260e354fd3c579ce2434ff46f77c2adc"
 
 [[files]]
+file = "kubejs/data/powergrid/recipes/crafting/voltage_gauge_from_conversion.json"
+hash = "f503ff1675cb948e3ca6e90a08cfbb3e3cabdf64d41f6903ca17c36ff6aec473"
+
+[[files]]
 file = "kubejs/data/powergrid/recipes/mechanical_crafting/basin_heater.json"
 hash = "851f79fab46e5d5a0d52df92c9d5c78c5e8a49a8344c0aae8d9e94f47990198f"
 
@@ -12422,11 +12770,11 @@ hash = "8babf73f6f525415a665b003138bfe5c9c33bf10d15e547d85fb57a236d1cfbd"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/high_extraction_module.json"
-hash = "6599ac938e4698552dd89772828c98930a48c8c5440d0636f670ec0b3f806e82"
+hash = "75cc473c3605a23ffcb1375f2f5c61481aef2c8ce73f6d8a47d5f2902c968248"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/high_speed_module.json"
-hash = "975a3769cdaca80e52224afa49ae7881573b4a8cf1cd0c90bdfb40c2d782b6df"
+hash = "6655957373194abefc8d097fd71f213b96801e5c8e4accabd1b941fe7b71422e"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/item_terminal.json"
@@ -12438,7 +12786,7 @@ hash = "05a5852976f3a66be2b9853a8ba90b2db16d48f61e0607f71e59f3af257ff0f2"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/low_extraction_module.json"
-hash = "7098680f69e43f845304e3ce10ee36b9907169741d83c89230cbd84793ea4df0"
+hash = "7fba40fc4acf288f93153838cf25de3f890b3330440ab0b04082aca67b1ab534"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/low_filter_module.json"
@@ -12458,7 +12806,7 @@ hash = "894153668d78807891e9307a6c6c01078de92087ba3660b4abbe81318a64866b"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/low_speed_module.json"
-hash = "2698a9d62e86aee34731946698037e1c609043fa9a3f52bfdd4ab39a5da786d8"
+hash = "127438fb9dd29ed776fb6e306500502340ad0d8b2134b34669ee6bf6b032074f"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/medium_crafting_module.json"
@@ -12466,7 +12814,7 @@ hash = "81b00b8426d21a25d484e059bd0334753c2ff0f784b0baa8ea7f2fcd5463afd1"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/medium_extraction_module.json"
-hash = "def4a3a305d63a4662a0509c65274d18c39da510ef3f69f6be6605a083b6706d"
+hash = "be5f5c4a76336e717374a03a2322fa1989d38b81b425fd574bf4abb99ff37724"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/medium_filter_module.json"
@@ -12486,7 +12834,7 @@ hash = "0c0407cc3c4801571ca581698c7745b0985fad5f1e6efad499a75b16ee725b0d"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/medium_speed_module.json"
-hash = "e12cb6517b8eab235b77585a5388f91b59ed28ca318582bc42cde596ebe4604b"
+hash = "83561e379cd451d1be20f0381fd059bce00bbbc75c872197edb715195d6d342b"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/pipe_frame.json"
@@ -12494,7 +12842,7 @@ hash = "aa56f5a6d3f2c1b4fefec64cf91a7e41fae974ffd083ac778550ce619d99d54b"
 
 [[files]]
 file = "kubejs/data/prettypipes/recipes/pressurizer.json"
-hash = "a3913eb2803b94aee72835af8d1a73f32b485da5c63f12a751b7538540290e82"
+hash = "04cdcbc835ce440b083b706b723f81d12a2178f68908c15bbd88e62d2b32cdc0"
 
 [[files]]
 file = "kubejs/data/projectvibrantjourneys/forge/biome_modifier/cave_rocks.json"
@@ -12570,7 +12918,7 @@ hash = "12a921b3031c22003cb6ae6391ec7f347af8ee091bc2a669da41f72b0c48b4d9"
 
 [[files]]
 file = "kubejs/data/sophisticatedbackpacks/recipes/upgrade_base.json"
-hash = "3ce1854c8bef6b9a5e043bc71d291af80981b211bdf8d8969534f93dd81ed7bc"
+hash = "30cdcfad85d9533223e030286c4c532128272a8c51da847586735952e82a1a7f"
 
 [[files]]
 file = "kubejs/data/sophisticatedstorage/recipes/acacia_barrel.json"
@@ -12610,7 +12958,7 @@ hash = "ec23dd809f66a6b46901c907a916f70beb43424968d28e2e3695410739b006e4"
 
 [[files]]
 file = "kubejs/data/sophisticatedstorage/recipes/controller.json"
-hash = "e99f453b36e77ceac60d07e6c745b5a8999a0cacf5329d6db4eb77fdb0e1e072"
+hash = "446e7713a8869b8db08d92655db49319e47986688b2d4462d3d6fa03cddf4852"
 
 [[files]]
 file = "kubejs/data/sophisticatedstorage/recipes/crimson_barrel.json"
@@ -12670,15 +13018,19 @@ hash = "78dbd7a9e752cc9d140200c8ed2b043f926be2a998b53257072cb6950c609c2b"
 
 [[files]]
 file = "kubejs/data/sophisticatedstorage/recipes/storage_io.json"
-hash = "d2123aace2638d54ba863820f032ad4b253a7524e775af60b63164dd8edb3d7d"
+hash = "597c8a8da44f6bd8d520baa890f5f199068b20e9c38960954d590fb55daa4072"
 
 [[files]]
 file = "kubejs/data/sophisticatedstorage/recipes/storage_link.json"
 hash = "7504dddfa60c9c691d2d22caa392d5497732123a7aad26e533f6324d6877eccd"
 
 [[files]]
+file = "kubejs/data/sophisticatedstorage/recipes/storage_link_from_controller.json"
+hash = "3ae15a710d81fb3b6a06890167cec106714c22d24352221fbbbaa6510da7d0e3"
+
+[[files]]
 file = "kubejs/data/sophisticatedstorage/recipes/upgrade_base.json"
-hash = "e276d57dabf0ddbc8ac6c884b9d4d52d8499d269cd1b7132bc576c7861393bdd"
+hash = "d9a1a8a68bced55eedeee97fb844672872214cb4c3a74c2496186f32a14f4b49"
 
 [[files]]
 file = "kubejs/data/sophisticatedstorage/recipes/warped_barrel.json"
@@ -13346,7 +13698,7 @@ hash = "b076a3354b323671af966247a7876324f857c42bbebd25f1bc10d570e9396b24"
 
 [[files]]
 file = "kubejs/data/trackwork/recipes/large_phys_track.json"
-hash = "770390b239dc6ba4bd606419ba6ac8a5ce79ecb7b1a9839c3d5430ac7811f6d4"
+hash = "2a07a8290ec4f6380cd4ae0a166931c57d10f958933c5aa4031bcb00480e1fa8"
 
 [[files]]
 file = "kubejs/data/trackwork/recipes/large_simple_wheel.json"
@@ -13354,11 +13706,11 @@ hash = "641b74fc1731d815b205ec925907cd75042f6ff10db8373e79f28274ebc00e48"
 
 [[files]]
 file = "kubejs/data/trackwork/recipes/large_suspension_track.json"
-hash = "11f741fad0183bee05c90821cfe5b243cd842c33295da32ed224b6e34f8dc0ca"
+hash = "3f8a0411b01e887dbae2fe38333b99442c8343f8c59454b409d6d84c97ad04e9"
 
 [[files]]
 file = "kubejs/data/trackwork/recipes/med_phys_track.json"
-hash = "487570536e818c328811de07c75fccf9ae44dc600d49ef8730764e6a8c42518d"
+hash = "46312969a62b493d2b1cd21bd6f208e8be336781cb921e06d7e3bda4a304c77e"
 
 [[files]]
 file = "kubejs/data/trackwork/recipes/med_simple_wheel.json"
@@ -13366,7 +13718,7 @@ hash = "f73023b0ca888e07a66d82228bd5d5865724aa5b44d7405fca6d224b12dd31e7"
 
 [[files]]
 file = "kubejs/data/trackwork/recipes/med_suspension_track.json"
-hash = "c1fd56e51256af7f0f30fc2bd91f4bce9ead5ca67803a0d5607c8f77f7ba9a6c"
+hash = "3b7ad068989032dbd54ee897af0936942aa6f8804c74b5644f9fc94d0412cefd"
 
 [[files]]
 file = "kubejs/data/trackwork/recipes/oleo_wheel.json"
@@ -13642,7 +13994,7 @@ hash = "8f11758c2641df4d607dec192400d8462bc20d67022fb1cfc861d0b2674aec41"
 
 [[files]]
 file = "kubejs/data/vs_clockwork/recipes/crafting/kinetics/andesite_flap_bearing.json"
-hash = "338d6961c5a45d0df4c5324ca1f92d9f8f718030df02e6dfcc3cde5fc40bfb75"
+hash = "5aea8865e4e38805c5fbfc77dc4fcf45ccd99b248826050af450e88610245c55"
 
 [[files]]
 file = "kubejs/data/vs_clockwork/recipes/crafting/kinetics/blade_controller.json"
@@ -13650,7 +14002,7 @@ hash = "cc1f3048f14bf4389108ff7f2b4a4e93b584ffc5ec6037f728f11067fc346dc7"
 
 [[files]]
 file = "kubejs/data/vs_clockwork/recipes/crafting/kinetics/brass_propeller_bearing.json"
-hash = "78f575f7d5338de86ad2b052033f0d52e9120296225659c89975482645737afc"
+hash = "207d5e4b333c94147e51e2427996d1e9af52a9021e4c6cc955eaf857e9fbd84e"
 
 [[files]]
 file = "kubejs/data/vs_clockwork/recipes/crafting/kinetics/command_seat.json"
@@ -13686,11 +14038,11 @@ hash = "f90efea61508f43a7ca9d65b1422d62a3fb96b10117be326d9a6ddc2181a17f8"
 
 [[files]]
 file = "kubejs/data/vs_clockwork/recipes/crafting/physics/gyro.json"
-hash = "095918d0eb3c1bb82c214399d466dac480be10b04c7ad77103a500a09d7bc75b"
+hash = "9d99317594affebf5fa0f37af1efceca3519613186a42dcce9f2396105f8a5fe"
 
 [[files]]
 file = "kubejs/data/vs_clockwork/recipes/crafting/pneumatics/air_compressor.json"
-hash = "8ec2a0af0e8a9a263ac9e1a078b8d3a07a639c170dc10d19c76fb437a37f7c17"
+hash = "c7c66970d1e0d635d82d90a5deb703e1225a06ca8279fdb0dd7bddfdcbbf5520"
 
 [[files]]
 file = "kubejs/data/vs_clockwork/recipes/crafting/pneumatics/coal_burner.json"
@@ -13750,7 +14102,15 @@ hash = "a1849c61dd3d6c2aa5fe61884aee4d9010ac60f01472ae5e0669927a56ea5db6"
 
 [[files]]
 file = "kubejs/data/vs_clockwork/recipes/mechanical_crafting/gas_thruster.json"
-hash = "f4823694b10b646773d9ca6df09d6b3d3c749517d28f6aec8f88168060ac4b30"
+hash = "e723a983268e9eecafa3ffc48d1d2dcd4b5d6cd1e107a61743d87dbeefe716bd"
+
+[[files]]
+file = "kubejs/data/vs_clockwork/recipes/sequenced_assembly/extendon_hose.json"
+hash = "5a20ad0b397524843f48c4497122ae2ad322b38b84a9b44ec0ba9c2519a2646c"
+
+[[files]]
+file = "kubejs/data/vs_clockwork/recipes/sequenced_assembly/universal_shaft_item.json"
+hash = "55edb3807802ee7ea9072b62c4398738ad45564da7efccf445f15449073c3a68"
 
 [[files]]
 file = "kubejs/data/vs_eureka/loot_tables/blocks/engine.json"
@@ -13762,7 +14122,7 @@ hash = "e16e551466877ab74c2b0058a5537ae8b14511bcfd8a959a99d91c9f7db851ab"
 
 [[files]]
 file = "kubejs/data/vs_eureka/recipes/engine.json"
-hash = "208a6efe2183f9cd0f403ffa8784d407cfef1ea1288b728a09b91eeaf4d743b7"
+hash = "e2b71e2cb679891ed1be228b9821234438d29b7c512ebcf2431a1475c2cef8ee"
 
 [[files]]
 file = "kubejs/data/wares/loot_tables/agreement/village/desert_payment_sell.json"
@@ -13866,7 +14226,7 @@ hash = "24c62acdb6c0d3d64166b27deb0fe2b6e74eb59a8540bfe960cc27cefc6a8056"
 
 [[files]]
 file = "kubejs/server_scripts/99_world_axioms.js"
-hash = "352d4af8c783ea27e79ef43d5ac7c830e04176bd94917ed73ed6960a4377d9b4"
+hash = "60972371f17cddec9c1bb18b777ec8353ab0a7dbc81e65a074c4e8611211d3ef"
 
 [[files]]
 file = "kubejs/server_scripts/compat/curios_backpack_slot.js"
@@ -13966,7 +14326,7 @@ hash = "90a816bb1bdaa22e6df1ebf99ebe28f8d6bc878f48078d78c49a3dcf5375dcca"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__compatability__45_stone_surface_tool_compat.js"
-hash = "01dc4319e4f9c567283bb05811f72c38ff10d39e54ba3cfa6b3ff4403e1b2d5b"
+hash = "9a42033b59e98ceba3c50f7d2ebb85273dfe82a643543b020c45e4ecdf0e14b6"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__compatability__85_dirt_grass_tag_compat.js"
@@ -14090,7 +14450,7 @@ hash = "3922e4735f8a520c00fe65d6ec15baabcbe3c7a8f145a7a437787b7e034c9a0c"
 
 [[files]]
 file = "kubejs/server_scripts/progression/10_hand_workshop.js"
-hash = "03c178176aa49241aad632a94c8f8839f45f3dbc4d330c74fbdd33a325531655"
+hash = "bf4c616e27214501602261f10bd4b95ade3a92c6206ab325d7076e08c953aa2f"
 
 [[files]]
 file = "kubejs/server_scripts/progression/20_logistics_roots.js"
@@ -14098,11 +14458,11 @@ hash = "b9e573cf9e5388f3fe220ca2eb9a4e1efd4cfb246c3317afc7af3c8ed28c287e"
 
 [[files]]
 file = "kubejs/server_scripts/progression/20_meteor_logistics.js"
-hash = "f114bc0d4da459377b79a15ac046a18a8635e8a0e102b613920481b82928c426"
+hash = "6f1e17221137b88fd987320a072c9ed2287cf961efbfaf13099c23b79bf908ea"
 
 [[files]]
 file = "kubejs/server_scripts/progression/20_powered_works.js"
-hash = "e49e6529d1761cc9649693c68cd1d3a01737e80ef0942c67bb574a6d4525dbe7"
+hash = "884b6379011874a2244ccd69a9e0833ed4b16d4882ffbdd2d6cb60eb871c2e05"
 
 [[files]]
 file = "kubejs/server_scripts/progression/21_better_bumblezone_crops.js"
@@ -14122,11 +14482,11 @@ hash = "28cdd70f767357b469e1ff84a1b40b46fa9ceea12039c62dc6030c7544ed0b5d"
 
 [[files]]
 file = "kubejs/server_scripts/progression/30_precision_factory.js"
-hash = "abcca788af40b84aad25c0d3b3cb070e3004e4f1d6d85d147b3bb83f712a68dd"
+hash = "9099b809d2afd9f48f7a08b9c9591afb699962795e935680c31cd0e273cd0730"
 
 [[files]]
 file = "kubejs/server_scripts/progression/40_thermal_pressure.js"
-hash = "5b58f2e9956a6fe5c7f6f2e39f11d97c5b146a41c83cdbd244a38facd28a918f"
+hash = "ceb074c5270197120f5422e8254db19e646a3e1586b80329b3904cc756b35825"
 
 [[files]]
 file = "kubejs/server_scripts/progression/45_acid_chemistry.js"
@@ -14138,11 +14498,19 @@ hash = "890845a29510de39883d866c22735d1db58c8bce85ace0d70780f6a350e85594"
 
 [[files]]
 file = "kubejs/server_scripts/progression/50_electrical_control.js"
-hash = "b10090ced7002bf17ba12f152f5ba0d417014a69ef3ee1794146d8ea685eb9e6"
+hash = "605702622b340d6d10e524b4d802c31390ed6279c33dca9da0b1ca0bc1bd7fc3"
 
 [[files]]
 file = "kubejs/server_scripts/progression/50_malum_soulstone_bootstrap.js"
 hash = "f2df573f9a0918b015a0a2f239b798f3aab958965f79355f8026d505c47ed063"
+
+[[files]]
+file = "kubejs/server_scripts/progression/51_powergrid_cutting.js"
+hash = "42fdcd0814c63a7bd04ae98ff4b8832b89130466ec4430cc0dd6e7d9916b1362"
+
+[[files]]
+file = "kubejs/server_scripts/progression/52_clockwork_blade_cutting.js"
+hash = "33bc29ead16aca1548e0ede4fbd68718da8e0976dcfedace328a4cf0b82c9518"
 
 [[files]]
 file = "kubejs/server_scripts/progression/60_aerospace.js"
@@ -14186,7 +14554,7 @@ hash = "5396cc7a12951bef5550869fa171c991e43d589df4764211f191e856f2b2ef54"
 
 [[files]]
 file = "kubejs/server_scripts/progression/85_dimension_font_ecology.js"
-hash = "dacf4f8785ace2c614a93db774974085fae82e3a2dd0e123c6c0f867eec1ee88"
+hash = "2610ecac1acf47305d8403bec1e7f4c49469b773e704ad9b7c39475cb4508bfc"
 
 [[files]]
 file = "kubejs/server_scripts/progression/86_dimension_transport.js"
@@ -14270,7 +14638,7 @@ hash = "68d8cdcb789c02a27ab681df22c80a14d07221a59292967198fa8912f54fcf7e"
 
 [[files]]
 file = "kubejs/startup_scripts/progression/20_transition_items.js"
-hash = "708a03c61d3c74777c95b25c247dae3b45f87b316b99d9899475e6da7da33c55"
+hash = "49f0b1be696f9d8333c1f684d78d3703488f29cca6591c37b5dc6c8990467f5c"
 
 [[files]]
 file = "kubejs/startup_scripts/progression/22_fish_families.js"
@@ -14368,215 +14736,215 @@ metafile = true
 
 [[files]]
 file = "mods/better-abyssal-city-0.1.0.jar"
-hash = "8817d30473b5eaeeb5609bad58d1627b39f770233c9a8cc185e9ec460c56eb89"
+hash = "0472b5b7222c1e5da62a3ba7d096ad18251790f1a09dd4a2ffa79360104ad2d0"
 
 [[files]]
 file = "mods/better-airtight-machines-0.1.0.jar"
-hash = "fc0c2a96bdda8bf7b92313636a16a7aef121f25657b312645b9d828f27eb9218"
+hash = "aed755172dfcbc0ce4b132aff7cf163e71e66d6ff50985ef89170fac1dc646c9"
 
 [[files]]
 file = "mods/better-arena-trials-0.1.0.jar"
-hash = "ad11f8f3d23bea1f1b844ddb2308b2e5384072faa9e1d9ee228a7c1d8447a7b9"
+hash = "f9daa8193d0455fa881bba201cb219ca979990a4b563970bc8be87696c98c242"
 
 [[files]]
 file = "mods/better-block-placement-preview-0.1.0.jar"
-hash = "830809f4306cca0dc668f2317535d24b9a5681aace070c5e2c4e08ac41ea8197"
+hash = "5f8af52e2d8bc422d2f696ac8a925b3944022a0ed825dabec77107739573395d"
 
 [[files]]
 file = "mods/better-bumblezone-crops-0.1.0.jar"
-hash = "2572bc85384f6ab2b3ca6084967086c650da779ba93f926e2e4bc0eda376e6e5"
+hash = "171456aaa0f3262a4f65ee4475c9b63f6fd1a4caf5caf52d27a6e7d5427a4b71"
 
 [[files]]
 file = "mods/better-buried-encounters-0.1.0.jar"
-hash = "3287acc636a65b585a6b2eb9972b3f85f4bf9dea5e896ce84f076463222f950c"
+hash = "27b9a6871e0085c80780d48d5b576774de50800e078b7fe3f4f9f5d0d095e04b"
 
 [[files]]
 file = "mods/better-cave-encounters-0.2.1.jar"
-hash = "36a9c6845dda99c011b055a3d0014bc8be30a443c02ae13a3225814a9802a15b"
+hash = "8390bb3f3add9bb1c813c7e4d3743cab360afe9de8a34091faffb71afe1be0f5"
 
 [[files]]
 file = "mods/better-celestial-events-0.1.0.jar"
-hash = "81bc0642459fe67d37113ead3d86bc89ec90f6907de345b04dcbbf49beb99709"
+hash = "8c9f8aca76b2efcb6ed5a44e5890cdd60978a011927a8fe2aab53b2e181f6ec2"
 
 [[files]]
 file = "mods/better-chemlib-hazards-0.2.0.jar"
-hash = "f3e5c1885c9174252e84066e98c251ce29b407ea48ef32fe76d69423001e2115"
+hash = "ff06069cf272e84ca051cc26a086bc76715fc46f72f0a9614343aadcfa1cc1a4"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
-hash = "9732fa20e268294d4e4ffb3031e25207f6ca82a083ad300a30c0fbbe0c05e2d3"
+hash = "23fd6f22ff219cae35a79cd95c9883f1acb268458324026f26368e14c4b66942"
 
 [[files]]
 file = "mods/better-cooking-0.1.0.jar"
-hash = "1028c6e6a8301d13108cbb6cd7b5e60cc9796cd063c0b441f63b47224782e95f"
+hash = "f71d7a738909c8864e493cef5156d852e7969391a356a1a0358385e165e9467f"
 
 [[files]]
 file = "mods/better-craftable-bouquets-0.1.0.jar"
-hash = "043b5a202eda83698c196e85e7a6fb20a43c5174a9da474e351ab27c0420593c"
+hash = "f5ec2d37c5240e8f7e4f95e5248cbdb58202439f11282e0f27adf215799d0eb4"
 
 [[files]]
 file = "mods/better-create-kinetic-loss-0.1.0.jar"
-hash = "116b7aa67df5ae0f4f6a0113e1f9b6f2dd3cb89733dfe950ac72cf652330c668"
+hash = "9d5148a4c900051f3eb6617f28f7036612945700a29fabdcbc00df0427f0f946"
 
 [[files]]
 file = "mods/better-create-train-fuel-0.1.0.jar"
-hash = "2a071b47dab31adaed119b83b47491d125ea24ffe2c49ed976afea5adfd0caed"
+hash = "7ecbee759dd66573f4984fc02a3141f9f8039e60004923684d1bee0440f33214"
 
 [[files]]
 file = "mods/better-deaths-door-1.0.0.jar"
-hash = "985ffabe7f9819e1fb737a1723929f383e073468b5b7e2c98b05068695e3d7e6"
+hash = "97fb5f047040eb8ed8fb67b270003617aeaeb672ad3ae7ccbaed199cdf3a11ed"
 
 [[files]]
 file = "mods/better-dimension-fonts-1.0.0.jar"
-hash = "14efdd4dc1cdc7dae3963de975a4052ebf48db423571b8310356ae562cf13034"
+hash = "9163c9b09c89037dcb78b35264d8c60d77ecf877d76b27e36a1aab877caaf07c"
 
 [[files]]
 file = "mods/better-discovery-guides-1.0.0.jar"
-hash = "e6d45ccc5d526129fc474f875441b1fa0d341381da921e7b2f4813ff60719440"
+hash = "20fa971696858191d11db6407531bcaef1d913f411854305841180cc6a104620"
 
 [[files]]
 file = "mods/better-drinking-water-1.1.0.jar"
-hash = "a5ede2454bb0490005e539e88433ecf717dc95f90529d214c4b60a23ba90b1d1"
+hash = "58ffa35b69a55e93f91d3f3b93d930e5bd3ee92d982cf67ab6d255570310379d"
 
 [[files]]
 file = "mods/better-electrochemistry-0.1.0.jar"
-hash = "7793c65c3ac500b0c7d2f280f583d309997b3887eddc574455d1cef340ff6568"
+hash = "63aeab8b4d0435113c764e7fe1118292ee306dfef1c3725565df4351d496edd3"
 
 [[files]]
 file = "mods/better-exploration-load-control-0.1.0.jar"
-hash = "818a04cb9472870fcab54a70928646cfc837e63c62c614a9f52960e43cc68b4b"
+hash = "205d2d396beed2fcd2cd44f5340dbd10636b1354a33c9cfe18dad0c304173a0d"
 
 [[files]]
 file = "mods/better-gameplay-notices-1.0.1.jar"
-hash = "70864e2ecdf96d372a06b883f26910dd4e824a97d8112925be72f71bc728d50b"
+hash = "75ca11c9b99c22e365328e83274d7e48be7c3c5b0e137a1a9b680a3e7edfca5c"
 
 [[files]]
 file = "mods/better-hexerei-dynamic-trees-1.0.1.jar"
-hash = "dae802e14e6564840eb1531f8ee82ebe153e15c5cb207523cf6b05100253fe72"
+hash = "528cf2aa9bcb2b0a68164733e8bbe1fd86576543540d48ebbc4af240789690d6"
 
 [[files]]
 file = "mods/better-industrial-heat-0.1.0.jar"
-hash = "2be9ab0ca40ce881ea93c8ecfe5666c3c0146d34f3fe2e47b4668043a8dd1b8e"
+hash = "87f52475be4e1f7037453e6dbbbadba951bcab792290f35c125c31ed1d470d46"
 
 [[files]]
 file = "mods/better-journal-inventory-0.1.0.jar"
-hash = "11d57d2332c589ac9d5562771cc6f0052c5f13302bcc9887acbd13039749c083"
+hash = "617fa1b4a99b92ec69dc4b8af3d4bfb5828c78acf49dbf2d28f11895667c0d7c"
 
 [[files]]
 file = "mods/better-magic-chunk-anchors-0.1.0.jar"
-hash = "38b6cde2622e03ec86cab370cb7e3aa52a26b57f2dc3cef872f3f686052d73bc"
+hash = "5326440ca31aab0471b2671dc418d9e35785f2e96eb146182fc68c7f1f5eaf71"
 
 [[files]]
 file = "mods/better-malum-dynamic-trees-1.0.1.jar"
-hash = "7530cff6f590fe7d24b0fb33ecac2460803796e62c465df7e56bfcb58b2407fa"
+hash = "788e21af814a617e0a05bc094c57d4dff01445940006babd54ec0db748e619d4"
 
 [[files]]
 file = "mods/better-manufacturing-0.1.0.jar"
-hash = "7cf7f54dfd904494f8f0e696c0e1220d83624fbf2c1e72b70397ce7b3540cc24"
+hash = "d3d1691febfb44d38ee6302c01cf9d5438fe4164314eea5382f014fc9352ea78"
 
 [[files]]
 file = "mods/better-mining-lamp-0.1.0.jar"
-hash = "20e7340eead32c3aaaebd58a34eef5c9145c13b810674904965bbc2bc8799724"
+hash = "53a69b47ed18072e5086ddbe9280be14d499f8349ce6abcbed9f64794c5088ce"
 
 [[files]]
 file = "mods/better-oc2r-create-controls-0.1.0.jar"
-hash = "ba9eaa960f36f85c544e651d8a67d80b949d8c9a70686fef17ad05fe91829391"
+hash = "7df590e3aef6fb0b7f433de402ba9ad269de820339d175e4c4447f1560ae445f"
 
 [[files]]
 file = "mods/better-oc2r-wireless-messaging-1.0.0.jar"
-hash = "e6929e2e373c9c722662f762c91367b7e08ad714c69ec2fecaf5b077d8261fc7"
+hash = "03996afd2449efc85a3a908eebc7bde1829f12032788ff3a99cedb089d834b7d"
 
 [[files]]
 file = "mods/better-ore-geology-0.3.0.jar"
-hash = "ff483650dca3134395c253b7cfd74f2aa6dc0e4cb5719e482d637c11a5c43da9"
+hash = "69db734523da9fc95407367627c9af4ba8be1dfa8b39a311579144da18d8f09d"
 
 [[files]]
 file = "mods/better-pillager-campaigns-0.5.4.jar"
-hash = "b932b508d1a49e0b659b45d473e2f88f616667903b79e0d38ad7b5c61401a1fc"
+hash = "eefa9902772f81a4f17d0b9571e7fa6eaa0dbfacd17fe677ed54c889311dcb8c"
 
 [[files]]
 file = "mods/better-player-traces-0.1.0.jar"
-hash = "75df2471a0752c00f5bce4bac9817b79aea281353b315d6baefbc90614c44439"
+hash = "07779476a2eb56b90ac0b8a13d12a9def4e1cd2873bdf4fc220b09265588436a"
 
 [[files]]
 file = "mods/better-rail-beetle-0.1.0.jar"
-hash = "796e8eb740ff5f5556332816c1464a81acf149af27c9891197e19ad38a84cead"
+hash = "ab5ac0b93a893bfaf399b3bfa08d498502a160fae00b53fb9f0a6c1b704fbb90"
 
 [[files]]
 file = "mods/better-regolith-farming-0.1.0.jar"
-hash = "2a674fdf909938a93bd77661a1dadb5e45fd0b1de1036381f1be2e54a52856dc"
+hash = "124e8d17b791b195aed699a2a3f057180501cf2e1fe95d787381064d66d59c31"
 
 [[files]]
 file = "mods/better-rehooked-grappling-0.1.0.jar"
-hash = "2c50d3b1798a7ec9f72cd6bcd33a6ef280994fd6164a3b4b4a57632c16a3cc7e"
+hash = "97c48217e4ec8b9e5e5b4fd068580fb625bb6eb509892617a6dedd8e5a76e422"
 
 [[files]]
 file = "mods/better-rpg-progression-1.0.1.jar"
-hash = "b4a1889de2c9f411307d13edd14e8a449250847a545839f6dae904cdfa75059b"
+hash = "1d42a70ea6bac34753ab68b85480bae1065426079852bc3ce103f5ec88b92eae"
 
 [[files]]
 file = "mods/better-runtime-diagnostics-0.1.0.jar"
-hash = "420a2fc51d0229108afbe76e34ab8222977bcd1ad90ea9274574886c588b82be"
+hash = "e1ad5faa0b63455b79fe512e2ed98c813d0bf378621c1b076b2b78e9262d9036"
 
 [[files]]
 file = "mods/better-seasonal-daylight-0.1.0.jar"
-hash = "9723fd1878228fc2792b3ffb70f25496d2c8057fa550f8395347bc739978568e"
+hash = "3197348f704aa5f4a7014a5e6628f063f7f6be0438c46bbda019474809df2a6e"
 
 [[files]]
 file = "mods/better-seasonal-trees-0.1.0.jar"
-hash = "78fd2d5cedc5d671aa8d1efbd5c2ca6b80ec78e8853d3b4b3c14fb240eb51bc8"
+hash = "14bf04a262d4471eba11c0ad3e2c8f7ddfa652d6196f0b259b03b6ecaa5d5347"
 
 [[files]]
 file = "mods/better-settlement-roads-0.1.0.jar"
-hash = "5f4b4495211994fb7b0c8069fb28f7976a9824c05689de497e181667b08dabc8"
+hash = "5c81e761d706be29a845f653a715f4b47c30811a00e99f4d28e8d5259e634ace"
 
 [[files]]
 file = "mods/better-spaceflight-0.1.0.jar"
-hash = "c4bc257d0c1c48ee26f226cae1478c0e7aaa5267e1eac0438050e1f00df226b9"
+hash = "1af61494d783450c80565d69804c3d7cc54edc6440667f7db956e38b17c65d00"
 
 [[files]]
 file = "mods/better-spawns-1.0.0.jar"
-hash = "f72bab2c567c355a28e1b6ad44272706e199ed2130a7b988ad006a9698046dba"
+hash = "5be49a4191df8aeba9be582720495669ec840c9ab4ce187252fc5729c3c31989"
 
 [[files]]
 file = "mods/better-spicy-farmers-0.1.0.jar"
-hash = "77381d06d590cd7badf9b23e04eb6ee08b3cfce25ba617e6e336a975b6a40495"
+hash = "6e2be2871f0c04744f41d591a272a6a0e04afbf377a95dca9d5cce1d6259d33c"
 
 [[files]]
 file = "mods/better-spirit-commerce-1.0.1.jar"
-hash = "36eae3c45890ac2983fe19937082529e1eed7f62c5a521accd268fbc8b0d90a0"
+hash = "5b6c83f6fce9e5119d8cec9c2a461f2a298a8b5b9b041e00d95e0ffe2b73b835"
 
 [[files]]
 file = "mods/better-survival-hud-1.0.0.jar"
-hash = "821819cedf267516a81101f4dcfce1ab6c24ee92bdf72d4f4ae7e465eeaf7135"
+hash = "8f5c33ac34a861078fbd765d123742c3a2bbddbc9d3a984b5222f67d66c7878b"
 
 [[files]]
 file = "mods/better-survival-physiology-0.1.1.jar"
-hash = "fef16ce3bdb23acc79bf9d14b992bc919b07bb279c90df246efef2477517f89b"
+hash = "eb7263a9d556ad9abf23b3d18960b5bf6fdd02273c46bfb0c972a49782d35549"
 
 [[files]]
 file = "mods/better-tinkers-loot-affixes-1.0.0.jar"
-hash = "4cc590623c4e523f894efbdb8e78dd2f1c4600c85a3d2419b22831a88124525d"
+hash = "cf3515ba18d6355ed1ab0df961e9fe7ea4f19d952cea7f8f13b817ac47764d43"
 
 [[files]]
 file = "mods/better-village-fortifications-1.0.0.jar"
-hash = "b28a0381f64ff039a61fa9ef51e9f40909f9a17538de96ebfe54e11d6981bcd0"
+hash = "a45c843d41c1472af0b1065387eec096c0ee91bd721070422cff973adce2211a"
 
 [[files]]
 file = "mods/better-weathering-offline-progress-0.1.0.jar"
-hash = "e7a4ca7cfb643aa556cb66794a9246e81b08bd8867abd332df2f9ae454be525d"
+hash = "91d6030591ef84bf97529991eee5edd0e7803ac5f01a9c710130ef207d5b4ec2"
 
 [[files]]
 file = "mods/better-wild-fruit-trees-0.1.1.jar"
-hash = "95b4f33d5a54a9a03ae4d7fc3c87cbd3d7f59e4ec0f5da6f4f0cb5d43ae92925"
+hash = "38d62b22a9e527278719d73d5bcdbbd669301bfff885f7e1169b990138e68687"
 
 [[files]]
 file = "mods/better-wildfire-0.1.0.jar"
-hash = "8c963c7ff99c73c6bcee693d556133562b26a9ff85d87ca930738da57b8c0730"
+hash = "ffd114eae74bd5b134fa9e85cd21f58655881eb6ba5b1a6e24990f6668aff6d7"
 
 [[files]]
 file = "mods/better-world-management-0.1.0.jar"
-hash = "be5aaa316f9d650aacc8ed4b77a9ea6246b4ad1aa81988d191ebadfbd7ef7fd0"
+hash = "531f37d4c100667c71e4640aff967271a589d3bde79195885bf5c89808171299"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -15400,7 +15768,7 @@ metafile = true
 
 [[files]]
 file = "mods/scalable-tnt-0.1.0.jar"
-hash = "0ae751023c386ec6967fb67694507c3d2d6cd235558172bd717e843e4fcd156f"
+hash = "d58c6c6ba858a9e4a4866524362e7138946c7cd037b93604d75938a16e00a51c"
 
 [[files]]
 file = "mods/searchables.pw.toml"
