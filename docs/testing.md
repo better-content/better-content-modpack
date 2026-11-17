@@ -1,5 +1,13 @@
 # Smoke, Overworld Tele Soak, Tele Soak and fresh distributions
 
+## Complete playtest suite: authoring in progress
+
+The user-approved [complete playtest qualification suite](playtest-suite.md) adds acquisition/progression, gameplay, fake-player scale, GUI and repository-promise coverage. Its [repository assessments](playtest-repository-assessments.md) and draft catalogue are **not** passing tests or an authoring-complete checkpoint. The native campaign adapter, concrete acquisition/route/roster authoring and final review remain incomplete; the new `campaign`/`qualify` commands fail closed on that draft. No new-suite or repository test execution is authorized by the authoring plan.
+
+Existing runtime tiers, standing permissions and release markers below retain their current semantics. A future `playtest-qualified.json` is a separate full-suite gate and does not reinterpret a package-ready or Smoke-ready result. The new expensive CI workflow is manual-only and requires a separately provisioned qualification runner; no workflow was invoked during suite authoring.
+
+## Existing runtime tiers and releases
+
 There are three distinct pack-level runtime tiers. Ordinary configurable-duration Soak is retired; historical Soak receipts remain unchanged, but new commands reject it. They share one lifecycle and consume existing packaged inputs; they do not build mods, deploy JARs, refresh Packwiz, package a release, or run repository-local verification. The current consolidation operation records user authorization in its operation `EXECUTION.md`; this pack checkout has no root `AGENTS.md`. A disposable fixture requires the selected command and exact candidate pair, and the run receipt must still prove its lifecycle.
 
 | Tier | Acceptance |

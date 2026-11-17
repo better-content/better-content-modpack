@@ -1,0 +1,1412 @@
+{
+  "schema": "bc.playtest_repository_oracle_review.v1",
+  "status": "source-review-only",
+  "reference": {
+    "path": "/home/dev/better-content-modpack/src/test/resources/playtest/build-71-coverage.json",
+    "sha256": "5e1eb85d2f084e272919d187d1fb338b1efa7c708120a3b58517d3f6ba00d24e"
+  },
+  "reviewed_narrow_mappings": 54,
+  "complete_packaged_promises": 0,
+  "executed_candidate_bound_assertions": 0,
+  "records": [
+    {
+      "repository": "better-abyssal-city",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-abyssal-city/docs/playtest-qualification.md",
+        "sha256": "64b1d1d0bc29b5cb79d8691935f436ca0354fc2d2dab4fa55eb46de44f59b9d6"
+      },
+      "source_sha256": "6e7efca44725c5e6f55864b5517d105b936d3ba762e723cc034538449b5bece4",
+      "shipped_promise_excerpt": "The actual registered surface is a **fresh-world** `better_abyssal_city:abyssal` dimension backed by the v12 `better_abyssal_city:metropolis` chunk generator (`src/main/resources/data/better_abyssal_city/dimension/abyssal.json`, `AbyssalCityMod.java`, `MetropolisChunkGenerator.java`). It generates layered architectural cities, walkable public rooms/vertical spines, dry circulation, wayfinding signs and rail routes with vanilla water and vanilla minecarts; the resolved `authored_modded` palette requires pinned Create Deco, Immersive Weathering, Create and Moonlight assets. The separate `vanilla_core` palette is an *explicit development profile*, not an automatic production fallback (`AuthoredPaletteSpec.java`, `CityPalette.java`). No new item, block, fluid, recipe, GUI, survival portal or automatic entry mechanism is registered by this mod. Acquisition of city architecture is **world generation**, not crafting: check the dimension JSON, `MetropolisChunkGenerator.java`, `MetropolisPlanner.java` and palette mappings in `AuthoredPaletteSpec.java`; Minecraft/vendor blocks and signs retain their own acquisition/recipes, not recipes supplied here. Permission-2, harness-only `/abyssal enter <0|1>` and `/abyssal inspect` are diagnostic/dev travel (`HarnessCommands.java`), not a survival acquisition route. The Overworld and player spawn are unchanged. The v11 preview dimension and `city` generator are removed; existing saves have **no migration or safe regeneration guarantee** (`METROP",
+      "reviewed_oracle_summary": "The active v12 test rejects a missing metropolis dimension/generator; retired v11 structural tests do not establish v12.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/abyssal/MetropolisGameTests.java",
+        "class": "com.bettercontent.abyssal.StructuralGameTests",
+        "method": "metropolisGenerationContract",
+        "kind": "native",
+        "line": 28,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/abyssal/MetropolisGameTests.java",
+        "line": 34,
+        "expression": "if(world==null||!(world.getChunkSource().getGenerator() instanceof MetropolisChunkGenerator)) { helper.fail(\"Real v12 metropolis dimension/generator missing\"); return; }"
+      },
+      "layer": "native",
+      "boundary": "actual registered v12 GameTest; old StructuralGameTests retired",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-airtight-machines",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-airtight-machines/docs/playtest-qualification.md",
+        "sha256": "7b29949d475966f8afc3f75b8ea276c9feafc5c28ae7b1ce7c44dd9b699ed658"
+      },
+      "source_sha256": "2c7d619633ea1bf5cfe5ec3a33ec427a619e0b1b09b3bec7fc08c500a297d0bc",
+      "shipped_promise_excerpt": "`better_airtight_machines:airtight_upgrade` is a stack-of-16 item registered by `ChemistryContent`; holding it in the main hand and right-clicking an unsealed Create Basin, PneumaticCraft Fluid Mixer, or Thermopneumatic Processing Plant applies one seal in survival. An empty-hand sneak right-click on a sealed machine unseals it and refunds one item (inventory or requested world drop); breaking a sealed machine in survival requests a drop. `AirtightUpgradeInteraction` registers on the Forge event bus in `ModMain`. The three block entities implement `AirtightUpgradeHolder`; the Create Basin exposes its sealed state to Better Chemlib Hazards' `AirtightInventory` contract, draws a client-only iron-trapdoor lid, and saves a namespaced NBT boolean. The PneumaticCraft machines persist the same boolean and reject gas-containing recipes when unsealed (`GasRecipeContainment` checks ChemLib gas items and Better Chemlib Hazards' gas-fluid codec). The Empty PCB etching-fluid hook chooses ChemLib nitric acid if registered. Sources: `src/main/java/.../chemistry/`, `.../mixin/chemistry/`, `ModMain.java`, `src/main/resources/META-INF/mods.toml` and `better_airtight_machines.mixins.json`. These are source-level intended behaviors, **not** evidence that the staged build, world persistence, client rendering or a real recipe loop works.",
+      "reviewed_oracle_summary": "An upgrade installs and a sneaking removal consumes exactly one owned upgrade.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/betterairtightmachines/gametest/AirtightChemistryGameTests.java",
+        "class": "com.bettercontent.betterairtightmachines.gametest.AirtightChemistryGameTests",
+        "method": "registeredInteractionInstallsAndSneakRemovesExactlyOneUpgrade",
+        "kind": "native",
+        "line": 74,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/betterairtightmachines/gametest/AirtightChemistryGameTests.java",
+        "line": 88,
+        "expression": "helper.assertTrue(installed.isCanceled() && installed.getCancellationResult().consumesAction(), \"Registered install interaction must be handled\");"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-arena-trials",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-arena-trials/docs/playtest-qualification.md",
+        "sha256": "b05e7fe71a462f5ce33c8d1c4aece9f9a2c100a64eb9cc97d58b5d6c6f0b220e"
+      },
+      "source_sha256": "9412803448fbf3d44c31151e334e66458c1a35b5baa542ffa3a48cdf2a5c2c2b",
+      "shipped_promise_excerpt": "A naturally generated Arena Totem offers nearby players a consensual two-player duel or one of three solo mob trials in the natural terrain around it; the match temporarily swaps the participant's inventory/XP/health for a kit and restores the snapshot at completion, cancellation/logout or death recovery. Victory permits claiming **one** of three unique rewards from that totem's finite, per-block-entity stock. Duels are archived through the required Player Traces provider; the gallery renders visual armor-stand replays, with names only if both players opted in. This is implemented in `worldgen/ArenaStructure*.java`, `server/ArenaMatchService.java`, `block/ArenaTotemBlockEntity.java`, `server/ArenaReplayService.java`, `menu/ArenaMenu.java` and `client/ArenaScreen.java`. The match area is a three-dimensional radius of 48 blocks with a 10-second out-of-range grace (`server/ArenaArea.java`), not a constructed battle dimension. The optional Better Deaths Door bridge registers match containment for life-record accounting (`server/ArenaLifeRecordsBridge.java`). These are source behaviors, not proof that full-pack gameplay is usable.",
+      "reviewed_oracle_summary": "Native arena containment uses 3-D terrain range, not horizontal-only distance.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterarenatrials/server/ArenaAreaTest.java",
+        "class": "com.bettercontent.betterarenatrials.server.ArenaAreaTest",
+        "method": "naturalTerrainRangeIsThreeDimensional",
+        "kind": "unit",
+        "line": 12,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterarenatrials/server/ArenaAreaTest.java",
+        "line": 13,
+        "expression": "assertTrue(ArenaArea.contains(100.5, 65, -29.5, TOTEM));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-block-placement-preview",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-block-placement-preview/docs/playtest-qualification.md",
+        "sha256": "f4570f25ca07b42df71a7115e0525a7b02d28276650ad2a0934dcde80bcd26b6"
+      },
+      "source_sha256": "0cf358e9e75e4e2e048ae8dcff1b779113d7b68969dad0e9ba6a3891194987a4",
+      "shipped_promise_excerpt": "This is an integration mod, **not a new block, item, recipe, or GUI**. Its `ModMain`, `SupportPreviewClient`, `SupportPreviewServer`, `RbpSupportPreviewAdapter` and RotaVision mixins implement an advisory, server-evaluated support tint on RotaVision's existing placement ghost for block items. The client observes the main-hand placement preview, requests an evaluation at most every 250 ms (500 ms refresh for unchanged focus), caches the server response for up to 750 ms, and shades vanilla-invalid placements red, supported placements teal, predicted fall/crush amber, and unmanaged/unknown placements neutral white (`PreviewTint`). The server reconstructs placement using the actual held item, hit and rotation, checks reach (8 blocks) and loaded chunks, models bed/door/double-height companion states, and evaluates the candidate against a virtual RBP overlay with read-only task manager. This does **not** authorize placement or promise the real subsequent physics simulation will match every prediction: errors and unsupported/unmodeled configurations return UNKNOWN. Only the exact compatible RotaVision 1.0.2, RBP 1.0.0 and Realistic Physics 1.0.1 versions are evaluated (`SupportPreviewVersions`); `mods.toml` also declares mandatory dependencies. The client mixin affects RotaVision's renderer, not a standalone preview GUI.",
+      "reviewed_oracle_summary": "Invalid vanilla placement stays red regardless of structural verdict.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterblockplacementpreview/placementpreview/PreviewTintTest.java",
+        "class": "com.bettercontent.betterblockplacementpreview.placementpreview.PreviewTintTest",
+        "method": "invalidVanillaPlacementRemainsRedForEveryStructuralVerdict",
+        "kind": "unit",
+        "line": 10,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterblockplacementpreview/placementpreview/PreviewTintTest.java",
+        "line": 12,
+        "expression": "assertEquals(new PreviewTint(0xFF, 0x28, 0x28, 160), PreviewTint.resolve(false, verdict, 0));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-bumblezone-crops",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-bumblezone-crops/docs/playtest-qualification.md",
+        "sha256": "b8cfbf97fe08334043ce3c73a03efe49372705e7601e582c342a85a640cecf75"
+      },
+      "source_sha256": "32fde48b982e0b5e3dedadde66359a74873a8dde8e0d3deaa360489637abcc51",
+      "shipped_promise_excerpt": "The mod's fixed `src/main/resources/defaults/cultivars.json` catalog defines imported plants, their propagules, produce, maturity rules, placement adapters and Bumblezone origin dimension. `CultivarChunkFinalizer` places up to 24 living pollen nurseries on pollen in **new** Bumblezone chunks only; `LivingPollenNurseryBlock#getDrops` supplies four catalog seeds with source metadata. `CultivarLootModifier` filters unsolicited/off-origin propagules and limits off-origin harvest reimbursement to a mature, sourced planting (persistent-harvest crops excluded), while mature origin crops can propagate. `CultivarPlantings` tracks provenance. `WildCropForage` makes seven Farmer's Delight wild vegetable blocks food-only, not a renewable seed source; the flower policy constrains relocation versus multiplication. `RootminEcologyHandler`/`FirethornEcologyPolicy` provide bounded Bumblezone ecology. These are present source behaviors, **not** a claim of end-to-end pack verification or that every catalog entry is obtainable in every generated world.",
+      "reviewed_oracle_summary": "Tall flower halves and sniffer loot do not produce off-origin seeds.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterbumblezonecrops/CultivarPropagationPolicyTest.java",
+        "class": "com.bettercontent.betterbumblezonecrops.CultivarPropagationPolicyTest",
+        "method": "persistentHarvestPlantsNeverCreateSeedsOutsideTheirOrigin",
+        "kind": "unit",
+        "line": 69,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterbumblezonecrops/CultivarPropagationPolicyTest.java",
+        "line": 70,
+        "expression": "assertEquals(0, CultivarLootModifier.seedCount(false, false, true, true, 0));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-buried-encounters",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-buried-encounters/docs/playtest-qualification.md",
+        "sha256": "04b9ea20c89af665699e67b38202abc2282c6bf1b5701e5ecb55f437d2f48b3a"
+      },
+      "source_sha256": "4b2db77624f646ad14407872913e2c6380580df5f9fad3081d137500f7f31c92",
+      "shipped_promise_excerpt": "Rare Overworld `better_buried_encounters:buried_encounter` surface structures advertise a half-buried vanilla TNT pile and buried `better_buried_encounters:sealed_monster` blocks. The structure set uses random spread (`spacing: 48`, `separation: 16`, `salt: 163840271`) and an Overworld biome tag. `BuriedEncounterPiece` places an 8-block TNT pile (2\u00d72\u00d72, subject to valid terrain and bounding-box placement), deterministic surface clues and up to 32 sealed blocks from `FieldLayout.create`; it skips placements when height/bounds or block writes prevent them. `FieldProfile` selects radius 16 normally or 32 when `explosionoverhaul` is loaded. The monster roster prefers available registered hostile types from Born in Chaos / Alex's Caves and vanilla, falling back to vanilla zombie or silverfish. Removing a sealed block server-side releases its stored mob; an explosion tracker watches for optional direct chunk removal and releases it on the next scan, avoiding a second release via the normal removal callback. These are source intentions, **not** measured structure frequency, 32 guaranteed placed blocks, safety of exploding a field near a base, or proof of a generated field in the selected pack.",
+      "reviewed_oracle_summary": "A sealed block opened by TNT releases its mob once rather than leaving the sealed block.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/betterburiedencounters/BuriedEncountersGameTests.java",
+        "class": "com.bettercontent.betterburiedencounters.BuriedEncountersGameTests",
+        "method": "tntExplosionBreaksASealedBlockAndReleasesItsMob",
+        "kind": "native",
+        "line": 48,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/betterburiedencounters/BuriedEncountersGameTests.java",
+        "line": 53,
+        "expression": "helper.assertTrue(!helper.getLevel().getBlockState(pos).is(BuriedRegistries.SEALED_MONSTER.get()),"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-cave-encounters",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-cave-encounters/docs/playtest-qualification.md",
+        "sha256": "c3412cce853aa71f4c166592b22fffb02e8937985586e9ff8c665e3ea09e1875"
+      },
+      "source_sha256": "38ea77ea29a056e3bba3708ee3a330afee38b2916d10710af75a0731d234f383",
+      "shipped_promise_excerpt": "The principal shipped behavior is a **server-authoritative, depth-scaled underground encounter Director**: survival/adventure players below the locally calculated surface reserve accumulate pressure, receive warning/telegraph, and encounter bounded, player-targeting mobs from data-defined ecologies. The Director handles locality/participant accounting, spawn-position safety, per-tick/per-second/global caps, native lineage root accounting, and encounter/pressure persistence (`DirectorRuntime`, `DirectorPolicy`, `SpawnLocator`, `DirectorLineages`, `DirectorSavedData`, `DepthDirectorEvents`, `DirectorConfig`; six `src/main/resources/data/better_cave_encounters/director_ecologies/*.json`). Separately, `GeologicalSpawns`/`GeologicalRegistry` integrate tagged underground rock habitats into **native natural** monster spawning rather than creating a second timed spawn loop; `WaterwayDirector`/`WaterwayRegistry` provide bounded exposed-waterway encounters. These are source behavior claims, not evidence of successful gameplay with actual friends.",
+      "reviewed_oracle_summary": "Saved director lineage round-trips versioned policy and credits without dropping family identity.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/bettercaveencounters/DirectorLineagesSavedDataTest.java",
+        "class": "com.bettercontent.bettercaveencounters.DirectorLineagesSavedDataTest",
+        "method": "versionedRoundTripKeepsFrozenPolicyCreditsUnloadedMembersAndFamilyHeavyIdentity",
+        "kind": "unit",
+        "line": 30,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/bettercaveencounters/DirectorLineagesSavedDataTest.java",
+        "line": 32,
+        "expression": "assertEquals(root, DirectorLineages.load(root).save(new CompoundTag()));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-celestial-events",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-celestial-events/docs/playtest-qualification.md",
+        "sha256": "e8e4db92baea2ca860525087e89c8552e4022620d096fa22bea70e147d3b2dbb"
+      },
+      "source_sha256": "a97c3b7edc1664b196b668d7370cc1d9a2311d5f55c8b0916b3e6df835ad941f",
+      "shipped_promise_excerpt": "The primary promise is four **rare, server-scheduled Overworld nights** (Thin Veil, Spirit Fair, Wandering Lights, Open Ways), with a persistent calendar, event announcements, unique occurrences, unsleepable active nights, client moon textures and transition state (`CelestialEvents`, `MoonCalendar`, `CalendarSavedData`, `MoonPresentation`, `MoonNetwork`, `mods.toml`). Natural gaps are 8\u201312 days; the four-event shuffled bag avoids repeating across bag boundaries. Operator `/celestial inspect|force|end` can inspect/override without consuming the natural bag. `CelestialEventsApi` exposes read-only snapshots and an optional Font locator for consumers; it does not implement the commerce or portal mechanics itself. This is source behavior, not proof of player-visible behavior in a packaged client.",
+      "reviewed_oracle_summary": "Required event entity types appear in native Forge registry.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/celestial/calendar/MoonCalendarTest.java",
+        "class": "com.bettercontent.celestial.calendar.MoonCalendarTest",
+        "method": "forced_night_does_not_consume_due_natural_event",
+        "kind": "unit",
+        "line": 50,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/celestial/calendar/MoonCalendarTest.java",
+        "line": 54,
+        "expression": "assertEquals(day,c.nextDay());assertEquals(natural,c.nextEvent());"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-chemlib-hazards",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-chemlib-hazards/docs/playtest-qualification.md",
+        "sha256": "6e5a2d193ac0e2ed2796ea816b223adbff7825f0de81b14680c7ff84ebbf5ede"
+      },
+      "source_sha256": "4d38fe5f5eea6eb2cf987a1f7b05556c00919f65dee7411e68f24a9b730d3c14",
+      "shipped_promise_excerpt": "This mod adds server-side consequences to *existing* ChemLib matter rather than registering a new player-facing machine, GUI, recipe, or acquisition path. `LatentChemlibMod` registers `GasEscapeHandler`, `NuclearSurfaceScanner`, `PlacedNuclearLifecycle`, `SimulationScheduler`, the AdPother validation hook, a reload listener, and the placed-nuclear loot modifier codec. Loose gas items and gas fluid/bucket boundaries can release native AdPother pollutant blocks when space accepts them; blocked releases must retain matter. ChemLib radioactive forms, including uranium blocks, carry isotope/material state through placement, collection, decay/fission, radiation and accepted Heat Sync transfer. Some Better Ore Geology hosted ores are inert until disturbed by placement; the form tags and defaults are in `src/main/resources/data/better_chemlib_hazards/nuclear_forms/`. `ChemicalOutcomeEvent` describes committed outcomes, not hypothetical processing. These claims describe implemented source paths, not measured player experience or proof of the staged build.",
+      "reviewed_oracle_summary": "Rejected thermal transfer emits no accepted heat event.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/betterchemlibhazards/gametest/ChemicalOutcomeGameTests.java",
+        "class": "com.bettercontent.betterchemlibhazards.gametest.ChemicalOutcomeGameTests",
+        "method": "heat_outcome_requires_accepted_transfer",
+        "kind": "native",
+        "line": 141,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/betterchemlibhazards/gametest/ChemicalOutcomeGameTests.java",
+        "line": 149,
+        "expression": "helper.assertTrue(capture.events.isEmpty(), \"Emitting heat without an accepting thermal body is not useful transfer\");"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-compat-fixes",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-compat-fixes/docs/playtest-qualification.md",
+        "sha256": "279cea3e5195aad2e2c14dc20503be7458cad749ec910849ca94714e960dbac6"
+      },
+      "source_sha256": "5ac91117d2784693db88a93d4d7c5bef165cc1ffc346af4ff7d779c657b87da6",
+      "shipped_promise_excerpt": "This is a compatibility/stabilization mod, not a new progression tree: its `@Mod` entrypoint (`src/main/java/com/bettercontent/bettercompatfixes/BetterContentFixes.java`) registers conditional hooks for offhand placement, farmland and decorative-vegetation trampling, ambient spawns, fluid mixing, backpack/Curios equipment, sleep interruption, and optional upstream integrations. `src/main/java/com/bettercontent/bettercompatfixes/mixin/` contains the version-sensitive upstream repairs. A player should be able to use the *existing* items and mechanics of the installed mods without crashes, broken interactions or damaged saves; optional integrations must not require absent mods. This is the source's implemented behavior, **not** a claim that every hook is verified in build 69 or on a live multiplayer server.",
+      "reviewed_oracle_summary": "Pinned optional Curios hook remains version-scoped and does not intercept unrelated removals.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/bettercompatfixes/BackpackEquipmentNativeContractTest.java",
+        "class": "com.bettercontent.bettercompatfixes.BackpackEquipmentNativeContractTest",
+        "method": "hooksAreOptionalVersionPinnedFinalScopedAndNeverInterceptRemovalOrCommands",
+        "kind": "unit",
+        "line": 113,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/bettercompatfixes/BackpackEquipmentNativeContractTest.java",
+        "line": 115,
+        "expression": "assertTrue(plugin.contains(\"hasVersion(mods, \\\"curios\\\", \\\"5.14.1+1.20.1\\\")\"));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-cooking",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-cooking/docs/playtest-qualification.md",
+        "sha256": "18986ae46bf9c88a376554c7dfa47b7efefc7920a6439671bb59c301d0eaf8aa"
+      },
+      "source_sha256": "6270d8722b1622ab314fd2c042d47cbabef059e99cdab523141584c8f95e4e1a",
+      "shipped_promise_excerpt": "| Named promise / blocker | Acquisition mapping and source check | Remaining evidence / ownership |\n| --- | --- | --- |\n| Recipe-only exact-ID changes and retained routes | Acquire exact selected pack ZIP pair and hash the installed `kubejs/config/cooking_recipes.json`, `84_cooking_recipes.js`, recipe resources and `better-cooking-0.1.0.jar`; compare with `tools/tests/test_recipe_only_kubejs.py`, `test_recipe_installation.py`, `test_recipe_routes.py`, `test_canonical_acquisition.py`, `test_knife_interop.py` and the pack's `verify_recipe_installation.py` / `/runtimedata recipe-policy` receipt. These tests check different layers, not interchangeable proof. | Installed server serializers/recipe manager, actual craft/serving and alternative acquisition paths in the exact pair; pack owner must bind tests/receipt to selected hashes. Source fixture examples such as `example:bulk` are synthetic, NOT pack item proof. |\n| Native food consumption (including placed bites), hydration, nutrients and spice | Source boundaries `CulinaryConsumption`, `CookingRuntime`, `NativeFoodServings`; `src/test/.../policy/CulinaryPolicyTest.java`, `placed/NativeFoodServingsTest.java`, `placed/PlacedProvenanceDataTest.java`, `placed/PlacedProvenanceIsolationTest.java`; `src/nativeFixture/.../placed/NativeFoodServingGameTests.java` requires a **genuine connected client**, not a FakePlayer. For each named food use its exact installed registry ID, current policy row, item/block properties, recipe/loot acquis",
+      "reviewed_oracle_summary": "Incomplete culinary catalogue remains unqualified/pass-through; dormant native serving is not shipped gameplay.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/bettercooking/policy/CulinaryPolicyTest.java",
+        "class": "com.bettercontent.bettercooking.fixture.tests.placed.NativeFoodServingGameTests",
+        "method": "incompleteBundledCatalogueLoadsWithoutClaimingGameplayCoverage",
+        "kind": "native",
+        "line": 27,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/bettercooking/policy/CulinaryPolicyTest.java",
+        "line": 29,
+        "expression": "assertFalse(PolicyRepository.current().qualified());"
+      },
+      "layer": "native",
+      "boundary": "incomplete catalogue pass-through; native placed-food test is dormant policy, not shipped food gameplay",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-craftable-bouquets",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-craftable-bouquets/docs/playtest-qualification.md",
+        "sha256": "5f7672f93dc105bac42977d4e235073874c4cd48cb588d454a6fddfc654a32e3"
+      },
+      "source_sha256": "88d6e0ac51289786b085b6ca3b1c608700cde579a17d528f5f51ef8e9785dafd",
+      "shipped_promise_excerpt": "The mod registers `better_craftable_bouquets:bouquet_grid` and `:potted_bouquet` blocks and `:bouquet_grid`, `:bouquet`, and `:potted_bouquet` items (`ProceduralBouquets`, `registry/ModBlocks.java`, `registry/ModItems.java`). The grid is a 16\u00d716 placement/editor surface with a configurable cap of at most 64 flowers; flower items may be placed into free cells, and the menu supports inventory transfer, cursor movement and rotation. A populated grid exports an arrangement-bearing bouquet when broken; an empty grid drops the grid item (`block/BouquetGridBlock.java`, `blockentity/BouquetGridBlockEntity.java`, `menu/BouquetGridMenu.java`). Bouquet items can pot an existing empty vanilla flower pot, preserving their arrangement; alternatively an arrangement-bearing bouquet plus a flower pot crafts a placeable potted bouquet item. A filled potted block drops its flower pot and preserved bouquet (`item/BouquetItem.java`, `recipe/PottedBouquetRecipe.java`, `block/PottedBouquetBlock.java`). The entry NBT is stored on item stacks and block entities (`data/BouquetData.java`). These are source behavior claims, not proof of installed binary or live-client fidelity.",
+      "reviewed_oracle_summary": "Potted bouquet recipe resolves and preserves bouquet data on placement.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/bettercraftablebouquets/gametest/ProceduralBouquetsGameTests.java",
+        "class": "com.bettercontent.bettercraftablebouquets.gametest.ProceduralBouquetsGameTests",
+        "method": "pottedRecipePreservesBouquetDataOnItemAndPlacement",
+        "kind": "native",
+        "line": 126,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/bettercraftablebouquets/gametest/ProceduralBouquetsGameTests.java",
+        "line": 136,
+        "expression": "helper.assertTrue(loaded instanceof PottedBouquetRecipe, \"recipe JSON should resolve to the custom NBT-preserving serializer\");"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-create-kinetic-loss",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-create-kinetic-loss/docs/playtest-qualification.md",
+        "sha256": "937186d8a96cc6af5c84270476337c56f993b053ce7aab595a857ac188807448"
+      },
+      "source_sha256": "072fad21ec7121e73de00987133388bb984fa4e9ebe0ee5acb43a7cb06c5c760",
+      "shipped_promise_excerpt": "Create kinetic networks incur configurable extra stress-unit (SU) loss from recognized transmission blocks, scaled by each member's RPM. `StressCalculatorMixin` appends sampled loss to `KineticNetwork.calculateStress`; `NetworkRuntimeBridge` recognizes Create shafts/encased shafts, cogs, large cogs, gearboxes, belts and chain drives, and `NetworkScanner` sums per-component prices. `LossCache` reuses stable snapshots and invalidates on topology/speed changes via `NetworkDirtyMixin`/`KineticSpeedMixin`; `TransmissionLossConfig` exposes common-config costs and scaling. This is the existing gameplay contract, not a proposed new machine or progression branch. The goggles mixin offers block and same-type network loss hints; `/transloss debug here` and `/transloss recalc here` show targeted summaries; `/demo transloss` is an operator-only creative demonstration. `/transloss profile` explicitly says profiling is not implemented. The mixins use `require = 0`, so source presence alone is not proof that injections applied at runtime. The native hook GameTest specifically checks this for `calculateStress`, but does not validate assembled topology or the goggles injection.",
+      "reviewed_oracle_summary": "Config changes invalidate cached kinetic loss instead of reusing stale snapshot.",
+      "test": {
+        "source": "src/test/kotlin/com/bettercontent/bettercreatekineticloss/network/LossCacheTest.kt",
+        "class": "com.bettercontent.bettercreatekineticloss.network.LossCacheTest",
+        "method": "changedConfigInvalidatesCachedSnapshotAndMissingSnapshotsStayEmpty",
+        "kind": "unit",
+        "line": 110,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/kotlin/com/bettercontent/bettercreatekineticloss/network/LossCacheTest.kt",
+        "line": 116,
+        "expression": "assertEquals(cached.lossSu, LossCache.getLoss(id))"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-create-train-fuel",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-create-train-fuel/docs/playtest-qualification.md",
+        "sha256": "686085cd803ce6ad3d5fdebd22b7c8ffd9232c2bbe9fbb0e4fb0c3f2c71b5d81"
+      },
+      "source_sha256": "5b1d2f87ddd1f28fdb3dd129da53e63844a85efed6db616228f4994cb4e7e6ae",
+      "shipped_promise_excerpt": "The existing mod changes **Create powered train fuel consumption according to speed**: `TrainMixin` replaces `Train.burnFuel()` when the common config is enabled. `TrainFuelCostCalculator` converts absolute blocks/tick to blocks/second, computes `baseCost * exp(k * (speed/normalMax - 1))` bounded by configured minimum/maximum, and accumulates fractional per-train fuel debt. By default normal maximum speed costs one fuel tick per call, faster motion costs more, stopped motion does not drain, and reverse motion uses the same magnitude as forward. The normal maximum comes from Create's `poweredTrainTopSpeed` (fallback 40 bps). When fuel runs out, the mixin scans carriage fuel item handlers in direction-of-travel order, extracts a burnable item using Forge burn time, and attempts to return any crafting remainder. It writes the debt to `CreateTrainFuelScalingFuelDebt` in train NBT and restores finite nonnegative debt on read. Config defaults/ranges are in `TrainFuelScalingConfig`; the permission-2 `/better_create_train_fuel formula <speedBps>` command reports a calculated cost. `TrainFuelConsumedEvent` is emitted only for qualifying excess consumption with a server and train owner; it is not a guarantee of client UI feedback.",
+      "reviewed_oracle_summary": "Train speed converts blocks/tick to blocks/second at the exact factor.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/bettercreatetrainfuel/TrainFuelCostCalculatorTest.java",
+        "class": "com.bettercontent.bettercreatetrainfuel.TrainFuelCostCalculatorTest",
+        "method": "speedBpsConvertsBlocksPerTick",
+        "kind": "unit",
+        "line": 11,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/bettercreatetrainfuel/TrainFuelCostCalculatorTest.java",
+        "line": 12,
+        "expression": "assertEquals(10.0, TrainFuelCostCalculator.speedBps(0.5), EPSILON);"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-deaths-door",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-deaths-door/docs/playtest-qualification.md",
+        "sha256": "443ac850ef3808840555a893def27f04d5e42d6c66aa79436ae6baf5a56eb778"
+      },
+      "source_sha256": "4b22d5213666c18906b930384525d7b8956fbd8ecc67e100c984df4c696e89af",
+      "shipped_promise_excerpt": "For eligible survival players, a non-bypass lethal hit enters Death's Door instead of immediately completing death: the player survives at a sentinel HP value with semantic zero health and an injury; further accepted damage can roll for final death. Injuries affect death risk, maximum HP, movement and arms; a short healing lock follows zero crossing. A player can inspect their own body or interact with another player and deliberately start hands-on treatment, which removes injuries over time **without consumable items**. Final deaths freeze a life recap, and current-life injury state must survive appropriate reconnect/clone paths without leaking into a new life. Source anchors: `RevivalManager.java` (damage, state, treatment and recap), `RevivalForgeEvents.java` (death, login/logout/clone, player interaction), `state/BodyState.java`, `network/BodyActionPacket.java`, `client/MendScreen.java`, and `records/LifeRecords.java`. This is a source contract, not a claim of verified real-client UX or pack behavior.",
+      "reviewed_oracle_summary": "Five native entry losses reach a bounded health floor without a duplicate final debit.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/betterdeathsdoor/gametest/LifeRecordsGameTests.java",
+        "class": "com.bettercontent.betterdeathsdoor.gametest.LifeRecordsGameTests",
+        "method": "fiveNativeEntryLossesReachExactHundredHpAndFinalSentinelAddsZero",
+        "kind": "native",
+        "line": 187,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/betterdeathsdoor/gametest/LifeRecordsGameTests.java",
+        "line": 201,
+        "expression": "require(!RevivalManager.state(f.player).atDoor() && Math.abs(f.player.getHealth()-20) < .001,"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-dimension-fonts",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-dimension-fonts/docs/playtest-qualification.md",
+        "sha256": "eda9978ad1010a5e5e1635f1af4e3c59dbf1be7c395f02375216a1f431039609"
+      },
+      "source_sha256": "606a4047c45d24e7179bb062b432b762f881a16fcd4b45e2bd0ff11a834cdf3f",
+      "shipped_promise_excerpt": "The source implements naturally generated, charge-bearing **dimensional fonts** at small altars. A player activates a font with an empty hand to enter a run in its configured canonical destination; a return seal or run return brings participants back, and shared runs should persist until the final participant returns (`content/ObeliskBlock.kt`, `runtime/run/RunRegistry.kt`, `gametest/ObeliskSmokeGameTests.kt`). This is the gameplay promise to qualify, not a roadmap for new dimensions or machines. `ObeliskBlockEntity.kt` handles reservoir/charge behavior; `data/ObeliskDataManager.kt` and `src/main/resources/defaults/fonts/*.json` provide definitions. A registered font item/block is `better_dimension_fonts:dimensional_font` (`registry/ModBlocks.kt`, `registry/ModItems.kt`); `return_seal`, `font_pourer`, and three collars are registered items, not evidence of crafting recipes. **No recipe JSON exists under this mod's `src/main/resources/data`**; do not invent a craftable acquisition path. The font block loot table at `data/better_dimension_fonts/loot_tables/blocks/dimensional_font.json` drops the font item (subject to block/tool behavior).",
+      "reviewed_oracle_summary": "Shared Font run remains until the last participant returns; smoke command alone is narrow evidence.",
+      "test": {
+        "source": "src/main/kotlin/com/bettercontent/betterdimensionfonts/gametest/ObeliskSmokeGameTests.kt",
+        "class": "com.bettercontent.betterdimensionfonts.gametest.ObeliskSmokeGameTests",
+        "method": "shared_run_closes_only_after_final_player_returns",
+        "kind": "native",
+        "line": 46,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/kotlin/com/bettercontent/betterdimensionfonts/gametest/ObeliskSmokeGameTests.kt",
+        "line": 64,
+        "expression": "helper.assertTrue(result == 1, \"Expected console smoke command to pass\")"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-discovery-guides",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-discovery-guides/docs/playtest-qualification.md",
+        "sha256": "e8d0b07767aa88e6e2a27bca3db499d8064058b12095fd9eff45553fc812f232"
+      },
+      "source_sha256": "1bfe6feb0944bba1d8165f34ae7691fb220adba3377c927af9933c3868c2d3cf",
+      "shipped_promise_excerpt": "The shipped *source implementation*, not the old authoring images or future plans, presents a Threads journal of discovered gameplay rules and an immediately available Lessons library. `src/main/resources/data/better_discovery_guides/threads/catalogue.json`, `ThreadDefinitions`, and `ThreadArt` define the 48 live cards, their committed-outcome routes and explanations; `ThreadSignals` credits the owner on the server only when a valid correlated outcome matches, persists discovery/unread/history/pending notices, and syncs the client. `ThreadPlayerState` scopes state by server and player UUID, with a Better World Management lineage backend when loaded and overworld SavedData fallback otherwise. `LoadingBriefs` loads 18 packaged lessons and filters optional-provider lessons by mod availability. `ThreadDeckScreen`, `LearningLibraryScreen`, `ThreadClient`, `ThreadNetwork`, and `ProviderHooks` provide the reader, previews, networking, and optional adapter routes. A lesson is **not** gated behind a discovery; a card is not awarded by merely reading a lesson. `ThreadFacsimileItem` describes its legacy copies as display-only, not unlocks or rewards.",
+      "reviewed_oracle_summary": "A prompt does not remain visible when no discovery remains unread.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterdiscoveryguides/LoadingBriefAvailabilityTest.java",
+        "class": "com.bettercontent.betterdiscoveryguides.LoadingBriefAvailabilityTest",
+        "method": "optionalProviderLessonIsOnlyPresentedWhenItsModIsLoaded",
+        "kind": "unit",
+        "line": 10,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterdiscoveryguides/LoadingBriefAvailabilityTest.java",
+        "line": 15,
+        "expression": "assertEquals(List.of(base), LoadingBriefs.available(List.of(base, plonk), id -> false));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-drinking-water",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-drinking-water/docs/playtest-qualification.md",
+        "sha256": "9fac9c34d34ae14dbb09353c3ede4ecf6200668508f477562927f9f917e6568b"
+      },
+      "source_sha256": "fe5681fef1bb71379f1fb2e8c99ad169ad9e74a20018b61d33a06d851731c229",
+      "shipped_promise_excerpt": "| Promise | Existing source-level assertions and implementation boundary | Qualification still needed |\n| --- | --- | --- |\n| Acquisition | `src/main/resources/data/better_drinking_water/recipes/rain_collector.json` is the shaped-plank **rain collector** recipe; `WaterSurvivalGameTests.exposedCollectorFillsOneChargePerPulse`, `coveredCollectorDoesNotFill`, `collectorDirectDrinkAndBottleEachDebitOneConfiguredPortion` exercise rain, sky, direct drink, bottle fill and empty failure. `snowInCampfireCubeMeltsWithoutExtinguishing` covers snow-block-to-water around a campfire. `WaterSourceGameTests` covers a water cauldron and a Create fluid tank as paid sources. | Recipe file existence is not proof a fresh-player pack can obtain planks, campfire, snow, collector, glass bottle, or actual rain at their spawn. Walk the exact pack acquisition path and check its permissions, climates and item availability. |\n| Purification / dirty0\u2013pure3 | `WaterSurvivalGameTests.waterHasOnlyDirtyAndPurifiedQuality` covers legacy item/fluid 0,1,2,3 normalization, writer, display and campfire/smelting recipes; `allDirtyQualitiesAndUntaggedWaterUseFixedEffects` covers effects for -1,0,1,2 and safe 3; `WaterSourceGameTests.bowlsAndBucketsRemainPurifiableWithoutVesselGenerators` covers dirty/untagged bowls/buckets and `bucketTankTransfersPreserveQualityWithoutRefillInheritance` covers transfers. New `WaterQualityTest` parameterizes exact endpoint semantics including out-of-range values. `WaterQuality`, `mix",
+      "reviewed_oracle_summary": "Tank transfer conserves exactly the extracted volume and purity metadata.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/betterdrinkingwater/WaterSourceGameTests.java",
+        "class": "com.bettercontent.betterdrinkingwater.WaterSourceGameTests",
+        "method": "bucketTankTransfersPreserveQualityWithoutRefillInheritance",
+        "kind": "native",
+        "line": 108,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/betterdrinkingwater/WaterSourceGameTests.java",
+        "line": 114,
+        "expression": "helper.assertTrue(extracted.getAmount() == 1000 && WaterPurity.getPurity(extracted) == purity,"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-electrochemistry",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-electrochemistry/docs/playtest-qualification.md",
+        "sha256": "126612ef33cc7bb8c3d886033002fc9fdc527afbfcb8afd7450cb4bbd8055c82"
+      },
+      "source_sha256": "2598dbb7bea67be26a8d87a5c2cb48a99eb04692550786f7999ae56c75832943",
+      "shipped_promise_excerpt": "This source adds a native PowerGrid-powered process to an ordinary Create Basin, rather than a new machine or a Forge Energy converter (`BasinPowerEndpointMixin`, `BasinBatchStateMixin`, `BasinOperatorArbitrationMixin`). With **both real PowerGrid wires**, a loaded eligible `better_electrochemistry:basin_batch` recipe, free output, and sufficient voltage, the Basin reserves inputs, accounts for native delivered watts/20 per tick, and produces the item only after paying its work requirement. A running Create Mixer/Press retains its ordinary cycle. V1 is an item-only compatibility/test fixture; V2 electroforming consumes one copper ingot and one Create copper sheet, reserves **250 mB** aqueous copper(II) sulfate, returns that bath to the native input before output, and yields **two Create copper sheets**. The V2 runtime gate is currently `true` in `BasinBatchRecipe`; this does not prove the pack recipe loads or the result works in a client. There is no gas or dry copper sulfate product. `ElectrochemistryEmiPlugin` displays loaded V2 recipes on the client only when its fluid and recovery item are registered; the card treats bath as a retained catalyst and the canister as an exceptional refund, not output. No automatic transfer is offered.",
+      "reviewed_oracle_summary": "Native low-voltage/idle batch does not claim product before an energized productive batch.",
+      "test": {
+        "source": "src/nativeFixture/java/com/bettercontent/electrochemistry/gametest/BasinBatchGameTests.java",
+        "class": "com.bettercontent.electrochemistry.gametest.BasinBatchGameTests",
+        "method": "loadedItemRecipeIdleLowVoltageThenExactlyOneProductiveBatch",
+        "kind": "native",
+        "line": 194,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/nativeFixture/java/com/bettercontent/electrochemistry/gametest/BasinBatchGameTests.java",
+        "line": 202,
+        "expression": "helper.assertTrue(wireCount(helper) == 2 && port.electrochemistry$hasBothCables()"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-exploration-load-control",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-exploration-load-control/docs/playtest-qualification.md",
+        "sha256": "82fec75308fb404f25f4f3c4eafd53e6a4536439e9b48be6fa5db4b08d31ee60"
+      },
+      "source_sha256": "409acad0a700e7174b921e1463d86e11bd6b093f5501f5a5e4a5d4def776b84f",
+      "shipped_promise_excerpt": "This mod supplies server-side load protection, not a new item progression line: `PerformanceGovernorService` samples server tick durations, exposes operator command `/better_exploration_load_control performance_status`, and, if the optional Distant Horizons adapter is available, requests a *temporary API override* disabling distant world generation when the rolling p95 exceeds the configured budget or the spike threshold is crossed. It attempts to clear its own override on recovery and server shutdown. It does not change the user's underlying DH setting or take ownership of other API consumers' overrides (`ApiOverrideDistantGenerationControl`). The default common config in `GovernorConfig` enables this with a 100-tick window, 50 ms pause p95, 40 ms resume p95, 100 ms spike and 600 healthy recovery ticks. Tick metrics remain available when DH is absent or fails; this is not a guarantee of a target TPS. `DistantHorizonsGenerationControl` binds to the DH 2.4.5 API, while `mods.toml` declares DH optional `[2.4.5-b,2.4.6)`.",
+      "reviewed_oracle_summary": "The control must never override a user-disabled setting.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterexplorationloadcontrol/performance/ApiOverrideDistantGenerationControlTest.java",
+        "class": "com.bettercontent.betterexplorationloadcontrol.performance.ApiOverrideDistantGenerationControlTest",
+        "method": "neverEnablesOrOverridesAUserDisabledSetting",
+        "kind": "unit",
+        "line": 10,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterexplorationloadcontrol/performance/ApiOverrideDistantGenerationControlTest.java",
+        "line": 13,
+        "expression": "assertFalse(control.pause());"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-gameplay-notices",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-gameplay-notices/docs/playtest-qualification.md",
+        "sha256": "6e33bb3c1164f017dc5a31aa649192d2fa80308be28d1a0461404f68e7c73f57"
+      },
+      "source_sha256": "ff6135f44db532eff30199cfad3dd42a24d8bae5095d510a1f01ac8534a5468c",
+      "shipped_promise_excerpt": "This mod is a **notice presentation and transport library**, not a source of collectible items or blocks. Feature mods can call `GameplayNotices.send(ServerPlayer, GameplayNotice)` to send a server-owned, themed title/hint to one client (`GameplayNotices.java`, `NoticeNetwork.java`). The client presents a FIFO discovery queue, suppresses simultaneous duplicates by notice identity, plays a page-turn sound on first visible frame, and clears its ephemeral queue on logout (`NoticeQueue.java`, `NoticeClient.java`). The five themes are THREADS, COMBAT, TRACES, SPAWN and LIFE (`NoticeTheme.java`, `NoticeStyle.java`); their display times are 8 s, 3.2 s, 3.2 s, 8 s and 8 s respectively. Client-only callers may submit a single keyed, validity-checked transient notice; discovery arrivals supersede it, and an unseen transient expires after five monotonic seconds. `NoticeReminder` retries an unseen prompt after five seconds and schedules its next attempt one minute after actual presentation. Hidden HUD/screens pause render progression, but the client tick still maintains transient validity/expiry.",
+      "reviewed_oracle_summary": "A visible prompt follows the authored reminder interval only after display.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/gameplaynotices/TransientNoticeTest.java",
+        "class": "com.bettercontent.gameplaynotices.TransientNoticeTest",
+        "method": "logoutClearsSlotAndCallbacksCanCancelOrEnqueueWithoutStaleFrame",
+        "kind": "unit",
+        "line": 128,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/gameplaynotices/TransientNoticeTest.java",
+        "line": 130,
+        "expression": "assertEquals(1, queue.clear());"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-hexerei-dynamic-trees",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-hexerei-dynamic-trees/docs/playtest-qualification.md",
+        "sha256": "52d29c75a69fb97cea844c99110bab3aa938240b5bfcd4b991dec722320ca978"
+      },
+      "source_sha256": "694d69755741dbd161db675a097f60852c6a020500db4cb1c0e53ec910aafd5c",
+      "shipped_promise_excerpt": "This addon supplies Dynamic Trees species for Hexerei **mahogany, willow, and witch hazel** (`src/main/resources/trees/better_hexerei_dynamic_trees/{species,families,leaves_properties}/`). The species use Hexerei primitive logs, leaves, and saplings; dynamic willow specifies Hexerei hanging vine blocks. `world_gen/default.json` splices mahogany into jungle/bamboo jungle, willow into `#forge:is_swamp`, and witch hazel into birch forest without overriding biome tree density or chance. `world_gen/feature_cancellers.json` and `HexereiTreeFeatureCanceller.java` cancel matching Hexerei static tree features in those selected biomes to avoid double-spawning. They do not prove actual trees generate or static features disappear in terrain. This is compatibility/replacement behavior, **not** a new crafting or GUI system.",
+      "reviewed_oracle_summary": "Native replacement cancels static Hexerei feature when valid species exists.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/betterhexereidynamictrees/gametest/DthexereiGameTests.java",
+        "class": "com.bettercontent.betterhexereidynamictrees.gametest.DthexereiGameTests",
+        "method": "hexereiStaticTreeFeaturesAreCancelledForReplacement",
+        "kind": "native",
+        "line": 41,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/betterhexereidynamictrees/gametest/DthexereiGameTests.java",
+        "line": 51,
+        "expression": "helper.assertTrue(species.isValid(), \"species should load: \" + tree);"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-industrial-heat",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-industrial-heat/docs/playtest-qualification.md",
+        "sha256": "8f6d548858aa59c778dec3acd23e36e5d5b1ede634eb177b66d687f582448b5c"
+      },
+      "source_sha256": "0040018773177a5f011514ad5eee657b27c28bbeab7920ac584dd5c31b363d1c",
+      "shipped_promise_excerpt": "`HeatSyncMod.kt` registers industrial heat storage, pipes, coolant exchange and food thermal tracking; optional integrations are conditional on installed mods (Cold Sweat ambient/body temperature, Power Grid, PneumaticCraft, AE2), with a Create boiler-heater integration. `HeatSyncRegistries.kt` registers `better_industrial_heat:heat_pipe`, `:boiler_heater`, `:coolant_exchanger`, `:thermal_firebox`, creative hot/cold sources, and the bundled hot-water fluid and bucket. The shipped-source liquid-coolant definition is `src/main/resources/data/better_industrial_heat/liquid_coolants/water_to_hot_water.json`; `HeatSyncAe2Registries.kt` registers `:impossible_matter_transducer` **only** when AE2 is present. These are source capabilities, not proof that every integration works in the full pack or that players can acquire everything in survival.",
+      "reviewed_oracle_summary": "Create tank construction does not probe uninitialized PneumaticCraft heat capability.",
+      "test": {
+        "source": "src/main/kotlin/com/bettercontent/betterindustrialheat/compat/pneumaticcraft/PneumaticHeatBridgeGameTests.kt",
+        "class": "com.bettercontent.betterindustrialheat.compat.pneumaticcraft.PneumaticHeatBridgeGameTests",
+        "method": "createTankConstructionDoesNotQueryUninitializedCapabilities",
+        "kind": "native",
+        "line": 21,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/kotlin/com/bettercontent/betterindustrialheat/compat/pneumaticcraft/PneumaticHeatBridgeGameTests.kt",
+        "line": 29,
+        "expression": "helper.assertTrue("
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-journal-inventory",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-journal-inventory/docs/playtest-qualification.md",
+        "sha256": "c4ff020995a15d1312f555015a52a1009bcc79c94493b2e81168a2ad26665884"
+      },
+      "source_sha256": "4d064bd72f089136eb05a7767ee9f1ded96f986b09e2d924284784149cb22cea",
+      "shipped_promise_excerpt": "`src/main/resources/META-INF/mods.toml` describes journal panels over **native vanilla/Curios personal inventory**, native crafting, and separate native backpack screens, with dark UI styling; it expressly excludes a custom storage backend or transfer protocol. `JournalClient` owns only `InventoryScreen` and native Curios screens, displays read-only record/effects and EMI presentation, and leaves backpack menus separate. `NativeInventoryOpening` requests a server-authoritative Curios screen only when the native equipment capability has the required one-slot schema and the ordinary inventory is eligible; `NativeOpenRequest` drains abandoned/late untagged replies rather than treating them as fresh opens. `PersonalPolymorphRecipes` delegates crafting selection to Polymorph's player recipe authority. These are source contracts, not real-client or server-load verdicts. The optional `journalReview` source set is not in the production JAR.",
+      "reviewed_oracle_summary": "Journal book panel bounds use native origin rather than Curios main-frame offsets.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterjournalinventory/presentation/PersistentJournalPanelsTest.java",
+        "class": "com.bettercontent.betterjournalinventory.presentation.PersistentJournalPanelsTest",
+        "method": "bookBoundsUseNativeOriginRatherThanCuriosMainFrame",
+        "kind": "unit",
+        "line": 88,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterjournalinventory/presentation/PersistentJournalPanelsTest.java",
+        "line": 90,
+        "expression": "assertFalse(client.contains(\"left -= 177\"));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-magic-chunk-anchors",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-magic-chunk-anchors/docs/playtest-qualification.md",
+        "sha256": "48f31f7ef7c92777952c552858264a0e5803af0c59437e08be52e442db1e7082"
+      },
+      "source_sha256": "8e9031dd6e2e780bb1729951b42860d5725676c5fb09faff8a8713e82af462b1",
+      "shipped_promise_excerpt": "`AnchorRegistries` registers seven placeable block/item pairs in `better_magic_chunk_anchors`: flux, kinetic, source, lifeforce, pressure, soul and spirit chunk anchors. A powered, non-redstone-disabled anchor requests **fully ticking** Forge block tickets for its centered 3\u00d73 chunks; power starvation, redstone disable and removal release those tickets (`AnchorData`, `AnchorMath`, `AnchorLifecycleGameTests`). `AnchorWorkApi.supportingAnchor` additionally checks actual tickets and a live anchor, and declines work close to an online player; do not equate its operation-support decision with merely seeing an anchor block. Power comes respectively from FE, Create rotational speed, Ars Source, Blood Magic life essence, PneumaticCraft air, Goety soul energy or tagged Malum spirits (`ArcaneAnchorBlockEntity`, `KineticAnchorBlockEntity`, `AnchorConfig`). Defaults target two hours at 20 TPS, not an independently measured runtime guarantee. Ownership and restorable state are persisted through `AnchorSavedData`; the item tooltip reports stored charge (`AnchorBlockItem`). These are source behaviors, not claims about a verified installed candidate.",
+      "reviewed_oracle_summary": "Ticket state follows actual power, redstone and removal transitions.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/bettermagicchunkanchors/AnchorLifecycleGameTests.java",
+        "class": "com.bettercontent.bettermagicchunkanchors.AnchorLifecycleGameTests",
+        "method": "tickingTicketsFollowPowerRedstoneAndRemoval",
+        "kind": "native",
+        "line": 176,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/bettermagicchunkanchors/AnchorLifecycleGameTests.java",
+        "line": 191,
+        "expression": "helper.assertTrue(energy.getEnergyStored() > 0, \"redstone release must happen before fuel starvation\");"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-malum-dynamic-trees",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-malum-dynamic-trees/docs/playtest-qualification.md",
+        "sha256": "a7c21b12a04f9168ddc0efcd9a1f9ca9babb5933dfacb193d3cb72112fa683ec"
+      },
+      "source_sha256": "41bf1b47d8ddb8d6f2d79bbb229e6b10d433bc86fe4de29a1aa4e467981408ed",
+      "shipped_promise_excerpt": "In Malum's tagged Runewood and Azure Runewood biomes, this addon registers Dynamic Trees families/species using Malum's primitive logs, leaves and saplings, and replaces the matching static Malum tree features with a district-gated dynamic selector. Outside a qualifying district, selection falls back to Dynamic Trees' native biome selector; Azure selection additionally requires base temperature <= 0.40. The static-feature canceller targets Malum's two runewood features, not soulwood (`src/main/java/.../mixin/DynamicTreeFeatureMixin.java`, `MalumDistrictPolicy.java`, `MalumRunewoodFeatureCanceller.java`, `src/main/resources/trees/better_malum_dynamic_trees/world_gen/{default,feature_cancellers}.json`). Existing additional worldgen behavior gates Malum's Weeping Well candidates by district and submits a rare native Malum blight event at eligible overworld sites; these are source behavior, not evidence of natural terrain placement (`WeepingWellStructureMixin.java`, `BlightLocusBootstrap.java`). No recipe, GUI, or new crafting progression is supplied by this addon.",
+      "reviewed_oracle_summary": "Soulwood growth delegates through the native Malum blight generator.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/bettermalumdynamictrees/BlightLocusBootstrapSourceTest.java",
+        "class": "com.bettercontent.bettermalumdynamictrees.BlightLocusBootstrapSourceTest",
+        "method": "pinnedMalumEventDelegatesSoulwoodGrowthToItsNativeBlightGenerator",
+        "kind": "unit",
+        "line": 64,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/bettermalumdynamictrees/BlightLocusBootstrapSourceTest.java",
+        "line": 68,
+        "expression": "assertTrue(event.contains(\"SoulwoodTreeFeature\"));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-manufacturing",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-manufacturing/docs/playtest-qualification.md",
+        "sha256": "203612e66d2b9b56a3535354c56c73a3e3948b73952d3a4ae4309d1e71df9570"
+      },
+      "source_sha256": "1c1bfd938460b011ffca2a7074081ea824e60bd27ab849116c84f2b6ec3a482b",
+      "shipped_promise_excerpt": "The implemented mod (`ManufacturingMod`, `ManufacturingRecipes`, `ManufacturingContent`, `integration/*`, `mixin/*`) uses native Tinkers' Construct material parts in existing machines and processes: configured construction transfers bounded part provenance, qualifications and saved numerical settings while native operation, yields, costs and unrelated metadata remain owned by their respective mods. It has **12 registered component items and no own block** (`ManufacturingContent`; `BuildPersistenceTests.componentBudget`), not a new standalone factory. Optional integrations load with their upstream mods; this is not a claim that every optional owner or every recipe route works in the assembled pack. Recipe registration and actual acquisition depend heavily on *pack* KubeJS scripts/data, not just this JAR.",
+      "reviewed_oracle_summary": "Native settings extraction preserves distinct limb pull and ejector velocity values.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/manufacturing/nativeparts/create/BulkPartNativeRatesTest.java",
+        "class": "com.bettercontent.manufacturing.nativeparts.create.BulkPartNativeRatesTest",
+        "method": "nativeLimbPullAndVelocityProduceIndependentEjectorSettings",
+        "kind": "unit",
+        "line": 24,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/manufacturing/nativeparts/create/BulkPartNativeRatesTest.java",
+        "line": 27,
+        "expression": "assertEquals(1.15, draw, 1e-9);"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-mining-lamp",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-mining-lamp/docs/playtest-qualification.md",
+        "sha256": "0974cede5f0e92f2bfd1339e1a05bacb7ae7623e9ba6f16650d9f7c47bda63b7"
+      },
+      "source_sha256": "6acc413c3b84c997a4980a32636aeeddbce13f5e4f37a3e505813d6eea258b4e",
+      "shipped_promise_excerpt": "`better_mining_lamp:better_mining_lamp` is a craftable copper utility helmet (165 durability, one defense) usable in the armor head slot or a Curios head slot. The client registers a water-sensitive, luminance-15 player dynamic light **only if** the optional Sodium Dynamic Lights mod is loaded; without that provider, do not promise actual moving light. The bundled dynamic-light item definition also advertises luminance 15 and water sensitivity. Server-side Curios-head wear is at least one durability per positive, non-armor-bypassing final damage event, otherwise `floor(damage / 4)`; exhaustion breaks the stack. These are source contracts, not observations of real multiplayer clients. See `MiningHelmetItem`, `MiningLampLightPolicy`, `MiningHelmetEvents`, `MiningHelmetClient`, `DynamicLightsCompat`, the dynamiclights JSON and `META-INF/mods.toml`.",
+      "reviewed_oracle_summary": "The registered helmet retains its own durability and effective recipe in native registry.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/bettermininglamp/MiningHelmetGameTests.java",
+        "class": "com.bettercontent.bettermininglamp.MiningHelmetPolicyTest",
+        "method": "registryDurabilityRepairAndRecipeAreLive",
+        "kind": "unit",
+        "line": 24,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/bettermininglamp/MiningHelmetGameTests.java",
+        "line": 31,
+        "expression": "helper.assertTrue(helper.getLevel().getRecipeManager().byKey("
+      },
+      "layer": "unit",
+      "boundary": "native registered helmet and recipe presence; natural craft/Curios wear still separately required",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-oc2r-create-controls",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-oc2r-create-controls/docs/playtest-qualification.md",
+        "sha256": "30b5c1b875c096db3236e0d2947fac5823f8bbf8ae1e1d7e5370b5507f9da963"
+      },
+      "source_sha256": "f32f49217a5a8573c2746eb4254ec9affc760c73458fdd9affc3b16fb947e8e5",
+      "shipped_promise_excerpt": "The mod registers six OC2R `BlockDeviceProvider`s for existing Create block entities (`src/main/kotlin/.../integration/oc2r/Oc2rCreateProviders.kt`, wired by `ComputerBridgeMod.kt`): rotation speed controller, creative motor, sequenced gearshift, sticker, speedometer and stressometer. It supplies RPC devices for speed control/reading, sequencing, sticker operation, stress reading, and speed/stress change events; it does **not** add a new block, recipe, item, GUI, or computer. See `api/devices/`, `compat/adapters/kinetics/`, `compat/events/` and `compat/providers/CreateBlockEntityDeviceProvider.kt` for actual method/attachment behavior. The provider only supplies a device when the queried position has a matching block entity. Diagnostics are optional and bounded (`diagnostics/`). The description in `gradle.properties` says Create's *documented CC: Tweaked peripheral API*; the implementation here is an OC2R object-device bridge, not a promise of native CC computers or a new CC GUI.",
+      "reviewed_oracle_summary": "Stress updates emit only when values move.",
+      "test": {
+        "source": "src/test/kotlin/com/bettercontent/betteroc2rcreatecontrols/compat/events/StressometerEventTrackerTest.kt",
+        "class": "com.bettercontent.betteroc2rcreatecontrols.compat.events.StressometerEventTrackerTest",
+        "method": "stress changes are emitted only when values move",
+        "kind": "unit",
+        "line": 15,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/kotlin/com/bettercontent/betteroc2rcreatecontrols/compat/events/StressometerEventTrackerTest.kt",
+        "line": 19,
+        "expression": "assertEquals(emptyList(), tracker.poll(12f, 24f, false))"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-oc2r-wireless-messaging",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-oc2r-wireless-messaging/docs/playtest-qualification.md",
+        "sha256": "3e7cef66e68e0f3b6e51e98d810f67bf95c88d6048deb80e435902b37a501599"
+      },
+      "source_sha256": "f83c717295d02c0eb0ed4d306ce54437b9b9b151d8a32dddfe473a45c8845c00",
+      "shipped_promise_excerpt": "The implemented source registers `better_oc2r_wireless_messaging:wireless_card` and `:wireless_relay` (`Oc2rWirelessMod`, `registry/ModItems.java`, `ModBlocks.java`, `ModBlockEntities.java`, `ModItemDeviceProviders.java`). A card in an OC2R server-side computer host exposes `wireless_card` / `wireless` / `message_bus` callbacks (`device/WirelessCardItemDevice.java`): send/push messages to named topics and pop/poll or wildcard-poll them through a **per-dimension saved broker**, with per-consumer offsets, topic enumeration and depth. The sending computer must find a loaded relay near it; the relay draws Forge Energy for the send, while receive does not debit it (`WirelessTransmission.java`, `blockentity/WirelessRelayBlockEntity.java`). `assets/.../lua/wifi.lua` and `wifi-send.lua`, `wifi-tail.lua`, `wifi-topics.lua` are bundled helper programs, not proof of successful OC2R interaction. No GUI is defined in this repository; validate the OC2R computer/device UI in the real client instead of inventing a wireless GUI test.",
+      "reviewed_oracle_summary": "Wireless poll clamps max items and leaves unread messages for next poll.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betteroc2rwirelessmessaging/data/WirelessNetworkSavedDataTest.java",
+        "class": "com.bettercontent.betteroc2rwirelessmessaging.data.WirelessNetworkSavedDataTest",
+        "method": "maxItemsUpperClampLeavesRemainingMessagesForNextPoll",
+        "kind": "unit",
+        "line": 52,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betteroc2rwirelessmessaging/data/WirelessNetworkSavedDataTest.java",
+        "line": 60,
+        "expression": "assertEquals(64, firstBatch.size());"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-ore-geology",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-ore-geology/docs/playtest-qualification.md",
+        "sha256": "a7a0d148bc2a73df7fdc15a8aa4d3cd81a6fbaf4d33d82999639390363880572"
+      },
+      "source_sha256": "413d1054050aa9696775a8f1f0c889ea4f8b80d5e0bde6f0b3b470282779d422",
+      "shipped_promise_excerpt": "The mod registers eight JSON-defined geological families (`coal_measures`, `ironstone`, `copper_bloom`, `tin_quartz`, `brassroot`, `evaporite_beds`, `hotstone`, `black_shale`) as ore blocks with stone/deepslate variants and collectible surface samples (`ModBlocks`, `ModItems`, `data/better_ore_geology/better_ore_geology/`). Geological deposit features place family deposits according to generated configured/placed features and Forge biome modifiers, with home/echo profiles and optional dimension/host selectors (`GeologicalDepositFeature`, `tools/geological_worldgen.json`, `data/better_ore_geology/worldgen/`, `data/better_ore_geology/forge/biome_modifier/`). The checked-in resource contract expects 14 configured and 33 placed feature files, including optional-provider routes; these counts are *not* proof of actual deposits in any world. The disabled-feature resources replace overlapping ore routes; world continuity and resource availability must be checked in a real pack, not inferred from JSON.",
+      "reviewed_oracle_summary": "Disabled placed feature resources are actually present for static validation.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betteroregeology/worldgen/GeologicalWorldgenResourceTest.java",
+        "class": "com.bettercontent.betteroregeology.worldgen.GeologicalWorldgenResourceTest",
+        "method": "resourcesUseOneDualHostConfigurationAndTwoAltitudeProfilesPerFamily",
+        "kind": "unit",
+        "line": 20,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betteroregeology/worldgen/GeologicalWorldgenResourceTest.java",
+        "line": 22,
+        "expression": "assertEquals(14, manifest.size());"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-pillager-campaigns",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-pillager-campaigns/docs/playtest-qualification.md",
+        "sha256": "72b0a73a92a8e577f7e34ef9eb81949ee18cef5ee477c56e726d7d90fd1a1ab7"
+      },
+      "source_sha256": "cb33cb4a0d47dd7c052d0f99940d179d2d71f0b30b3c28436f116c1269bca4d6",
+      "shipped_promise_excerpt": "The existing Forge mod runs a pack-owned, server-side overland campaign director: eligible living Survival players establish *regional presence* through actual online ticks, receive sparse scouts and warned, progress-gated pillager assaults, and face authored mixed rosters; group proximity, terrain-aware strategic travel, reachable local approaches, caps and campaign mob persistence govern delivery. An encounter is not a new craftable item or block. Source anchors: `PillagerCampaignsEvents.kt` (server ticks, online presence, chunk/terrain events, command inspection), `PillagerCampaignsConfig.kt` (defaults/caps), `system/InvasionRoster.kt` (registered recruit types), `system/InvasionRuntime.kt` (mob materialization/cleanup), `data/PillagerWorldData.kt` and `data/TerrainAtlasData.kt` (saved state), and `invasion-core/src/main/...` (pure director, routing and presence). `gradle.properties` calls this version `0.5.4`; do not infer that the pack contains this exact source revision.",
+      "reviewed_oracle_summary": "Terrain atlas retains sampled cells after actual chunk unload without forcing reload.",
+      "test": {
+        "source": "src/test/kotlin/com/bettercontent/betterpillagercampaigns/system/InvasionForgeRulesTest.kt",
+        "class": "com.bettercontent.betterpillagercampaigns.system.InvasionForgeRulesTest",
+        "method": "authored roster has bounded explicit progression and vanilla fallback",
+        "kind": "unit",
+        "line": 34,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/kotlin/com/bettercontent/betterpillagercampaigns/system/InvasionForgeRulesTest.kt",
+        "line": 36,
+        "expression": "assertTrue(roster.any { it.entityId == \"minecraft:pillager\" && !it.optional && it.unlockIntensity == 0 })"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-player-traces",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-player-traces/docs/playtest-qualification.md",
+        "sha256": "83c6e4d78d1a1e1990c2c8369c1fdcbdf15600e7cd95694c72337fa081bd35ce"
+      },
+      "source_sha256": "92b9cdef3d4b2ee0ec51af88c3134a862dacd9c524c598e8c659532832e6a892",
+      "shipped_promise_excerpt": "Walking players leave server-owned footprint traces: `events/TracesForgeEvents.kt` forwards player ticks and dimension/login/logout events to `server/TraceServerRuntime.kt`, while `logic/CaptureService.kt`, `storage/TraceStorageManager.kt` and `storage/TraceSerializer.kt` implement capture and durable per-world shards. `network/TracesNetwork.kt` serves bounded nearby tile snapshots and annotations; `client/TracesClientHandlers.kt` polls and toggles a reveal overlay, and `client/TracesClientRenderer.kt` renders it. Players can leave/edit shared annotations and follow connected guidance routes (`logic/AnnotationService.kt`, `logic/GuidanceService.kt`); death traces and echoes have server validation, saved data and client rendering (`logic/DeathEchoValidation.kt`, `storage/DeathTraceSavedData.kt`, `client/death/`). Rain and water erode traces (`logic/ErosionService.kt`). These are source-backed behaviors, **not** proof of their appearance or stability in build-69 or in the full pack. `src/echoPrototype` and `verifyEchoPrototype` are explicitly non-shipping prototype work; do not count prototype capabilities as released gameplay.",
+      "reviewed_oracle_summary": "Deferred annotation edits coalesce and atomically yield a slot to removal.",
+      "test": {
+        "source": "src/test/kotlin/com/bettercontent/betterplayertraces/TraceStorageV3Test.kt",
+        "class": "com.bettercontent.betterplayertraces.TraceStorageV3Test",
+        "method": "deferredAnnotationEditsCoalesceOverlayAndYieldTheirSlotAtomicallyToRemoval",
+        "kind": "unit",
+        "line": 335,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/kotlin/com/bettercontent/betterplayertraces/TraceStorageV3Test.kt",
+        "line": 348,
+        "expression": "assertTrue(authority.deferAnnotationEdit(shard, firstEdit))"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-rail-beetle",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-rail-beetle/docs/playtest-qualification.md",
+        "sha256": "fbb83970cfe0850c9118d4a67290427b637c3939f803acb17ab70c42e7db6410"
+      },
+      "source_sha256": "251f85acfd834860ef4665f568f22c0d9503f183256e25d6bd433fa0b5f1da05",
+      "shipped_promise_excerpt": "A placeable minecart-sized Rail Beetle surveys cave-floor rail extensions, proposes bounded routes, consumes its own rails/supports/fuel to lay track, and can be controlled via its menu/route selection (including beacon-targeted routes). It supports Create minecart coupling when installed, with a discoverable cave siding and a recoverable body. Sources: `RailBeetleItem.useOn`, `RailBeetleEntity`, `TerrainRoutePlanner`, `RailBeetleMenu`, `RailBeetleNetwork`, `SidingMarker` and `SidingWorldgen`. This is source implementation, **not** proof that each interaction works in the staged modpack. Optional power providers, upgrade families and visual polish are not prerequisites to establishing this core promise.",
+      "reviewed_oracle_summary": "Planner returns seven bounded, diverse cave-floor routes from the fixture.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/betterrailbeetle/RailBeetleGameTests.java",
+        "class": "com.bettercontent.betterrailbeetle.RailBeetleGameTests",
+        "method": "plannerReturnsSevenBoundedDiverseCaveFloorRoutes",
+        "kind": "native",
+        "line": 184,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/betterrailbeetle/RailBeetleGameTests.java",
+        "line": 201,
+        "expression": "helper.assertTrue(routes.size() == 7, \"open cave floor must produce seven quality proposals\");"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-regolith-farming",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-regolith-farming/docs/playtest-qualification.md",
+        "sha256": "bc14be9be4097e0c18b906cb48ea1228a26c92f7d989ce9a06da4cdcf805f45e"
+      },
+      "source_sha256": "370bb2996a0d1163e4b528eab9dd91bf371f02abcab76b0596a791a7952b5bb3",
+      "shipped_promise_excerpt": "The mod registers 17 farmland blocks and matching block items (`RegolithFarmlandDefinitions`, `RegolithFarmlandPalette`). A hoe with `HOE_TILL` action applied to either the grassy or plain **Unearthed** regolith of one of those 17 types, with air above and excluding a downward face, converts it server-side to the corresponding `better_regolith_farming:<stem>_better_regolith_farming` block (`RegolithFarmlandTilling`). It costs one durability, plays hoe sound, and cancels the interaction. This is a tilling interaction, **not a crafting recipe**. The source does not add a GUI, a crop item, or a world-generation source of regolith.",
+      "reviewed_oracle_summary": "Farmland block variants each have an owned block-item drop definition.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterregolithfarming/RegolithFarmlandPaletteResourceTest.java",
+        "class": "com.bettercontent.betterregolithfarming.RegolithFarmlandPaletteResourceTest",
+        "method": "breakingEachFarmlandHasAnOwnedBlockItemDrop",
+        "kind": "unit",
+        "line": 75,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterregolithfarming/RegolithFarmlandPaletteResourceTest.java",
+        "line": 80,
+        "expression": "assertEquals(\"minecraft:block\", loot.get(\"type\").getAsString(), lootPath.toString());"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-rehooked-grappling",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-rehooked-grappling/docs/playtest-qualification.md",
+        "sha256": "da6206e80a5357badf2cb2b7ed95e960579063b5b0ce6053736ae566a85c41f0"
+      },
+      "source_sha256": "dbc160a4993f628c2c3ac6c4ae30067f32d89ab1592fc4dc6778a73a919d95cd",
+      "shipped_promise_excerpt": "When ReHooked is loaded, `ModMain` registers six native `HookItem` variants and their `HookData` (`IntroHookContent`, `IntroHookProfile`): Soap on a Rope, Block and Tackle, Grapnel Bundle, Climbing Vine, Ratchet Reel and Angler's Gaff. They have bounded ordinary hook range/travel/pull relative to wooden/iron hooks. The server mixins add soap vertical-pull damping, vine foliage-dependent pull, ratchet 3-pull/2-hold cadence, a small grapnel solid-edge catch and gaff boat hook/boarding within 2.5 blocks. `HookEntityMixin` and `RehookedMobGrappling` additionally allow server-side mob targets (including bosses extending `Mob`) to be grappled and tugged without hit damage; removed/ineligible targets retract; ordinary block grapples should retain priority. `ReHookedConfig` exposes `rehooked.mobGrappling`, default true, disabled when ReHooked is absent. ReHooked is optional in `mods.toml` but required to deliver this gameplay; mixins are gated by `ModMixinPlugin`. This is source behavior, **not verified client gameplay**.",
+      "reviewed_oracle_summary": "Grapnel edge forgiveness is bounded, not an unlimited catch.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterrehookedgrappling/compat/rehooked/IntroHookBehaviorPolicyTest.java",
+        "class": "com.bettercontent.betterrehookedgrappling.compat.rehooked.IntroHookBehaviorPolicyTest",
+        "method": "grapnelCatchesOnlyWithinTheSmallEdgeForgivenessRadius",
+        "kind": "unit",
+        "line": 39,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterrehookedgrappling/compat/rehooked/IntroHookBehaviorPolicyTest.java",
+        "line": 40,
+        "expression": "assertTrue(IntroHookBehaviorPolicy.shouldForgivingCatch(0.0D));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-rpg-progression",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-rpg-progression/docs/playtest-qualification.md",
+        "sha256": "fff22967204fa370b527cc318d02b639fc70bd3f04b0dbf3eb05672b934814b7"
+      },
+      "source_sha256": "7bb95a56fdb0a8dbaaafc868525aba0cb3d38d6639ceb6c01a8770e4b53c4616",
+      "shipped_promise_excerpt": "The mod provides a server-owned, per-Life RPG allocation ledger and eight JSON-defined build identities (`src/main/resources/data/better_rpg_progression/stats/{aerialist,artisan,sharpshooter,skirmisher,spellcaster,survivalist,trailblazer,vanguard}.json`). Server ticks grant one point for each newly reached experience level above the player's Life peak; login baselines existing players to their current level rather than retroactively awarding points (`PointAwarder.kt`, `CommonForgeEvents.kt`). Players open the stats UI with **O** (`client/input/Keybinds.kt`), choose manual allocations or a durable ordered automatic plan, and the server validates allocations and syncs the outcome (`C2SApplyStats.kt`, `C2SAutoAllocationPlan.kt`, `AllocationPolicy.kt`, `Network.kt`). At final death the current Life points/allocations are reset while auto-plan preferences persist; ordinary non-death clone preserves the ledger (`PlayerStats.kt`, `CommonForgeEvents.kt`). Stat projections include movement, combat and survival effects, with optional integrations gated by loaded mods (`StatAttributeProjector.kt`, `EffectAvailability.kt`, `RpgStatsMod.kt`). This is not a claim that every optional projection works in the selected pack.",
+      "reviewed_oracle_summary": "Death clone retains preferences while wiping per-life state on the replacement.",
+      "test": {
+        "source": "src/test/kotlin/com/bettercontent/betterrpgprogression/common/data/PlayerStatsTest.kt",
+        "class": "com.bettercontent.betterrpgprogression.common.data.PlayerStatsTest",
+        "method": "death clone retains plan preferences but wipes Life state on the new instance",
+        "kind": "unit",
+        "line": 25,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/kotlin/com/bettercontent/betterrpgprogression/common/data/PlayerStatsTest.kt",
+        "line": 40,
+        "expression": "assertEquals(enabled, replacement.autoAllocationEnabled)"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-runtime-diagnostics",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-runtime-diagnostics/docs/playtest-qualification.md",
+        "sha256": "4a83d93bea4f5b72a1e429fb66086d9793afc5e5744e081896adfe260ebb8d97"
+      },
+      "source_sha256": "3aa9ca2806ebb44e1403ce1e9cee8a58e47b32d3e8a5e2d3b298918d5ad2e3a3",
+      "shipped_promise_excerpt": "Authoring inventory, **not an execution receipt**. No tests or native sessions were run for this document. This repository's principal shipped promise is bounded, opt-in `BC_PLAYTEST schema=bc.playtest.v1` diagnostic output and explicit source identity from its **own** mod metadata, alongside operator-triggered export/snapshot and Debug-world observation. Diagnostic output must not affect gameplay or claim native multiplayer success by itself.",
+      "reviewed_oracle_summary": "Pure logging sink enforces a 20-record burst and does not rearm from reset.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterruntimediagnostics/diagnostics/PlaytestLogContractTest.java",
+        "class": "com.bettercontent.betterruntimediagnostics.diagnostics.PlaytestLogContractTest",
+        "method": "globalBudgetSummariesAndTeardownDoNotRearmAllowance",
+        "kind": "unit",
+        "line": 26,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterruntimediagnostics/diagnostics/PlaytestLogContractTest.java",
+        "line": 30,
+        "expression": "check(sink.messages.size() == 20, \"burst is not twenty\");"
+      },
+      "layer": "unit",
+      "boundary": "bounded pure sink/clock; native server lifecycle and log impacts separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-seasonal-daylight",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-seasonal-daylight/docs/playtest-qualification.md",
+        "sha256": "727906fe5ed913df5901f20a3de26b8b61add23ea198892dc13d9ea80a435ed3"
+      },
+      "source_sha256": "7b350e1e3ab19e3cb0c552d3d050e03f358c4bc5e6c22d6e6f69ecfae9198dc0",
+      "shipped_promise_excerpt": "The mod's bounded, player-visible purpose is **one server-authoritative Overworld sky clock** replacing Simple Day Length Extender, not new content. With defaults, each sunrise-to-sunrise cycle lasts 50,000 simulation ticks at 20 TPS; daylight shares follow Serene Seasons' actual northern annual phase (equinox 50%, summer 70%, winter 30%). Day and night exchange time without changing the 50,000-tick total. `SeasonCurve`, `ClockAccumulator`, `SeasonAdapter`, `SeasonalDaylightRuntime`, the dayTime mixins and `ClientClock` implement the source-side intent. This mod must not change gameTime/TPS or the Serene Seasons logical calendar (`day_duration` stays 24,000). The clock continues with no players; there is no first-player wait. The Overworld clock respects `doDaylightCycle=false`, /time changes and sleep, and is persisted as a bounded phase (`ClockSavedData`). Other dimensions are not clock targets. This is a source contract; actual client appearance, server correctness and staged pack behavior still require native evidence.",
+      "reviewed_oracle_summary": "Full equinox cycle advances exactly the configured simulation ticks without rewinding day time.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/seasonaldaylight/clock/ClockAccumulatorTest.java",
+        "class": "com.bettercontent.seasonaldaylight.clock.ClockAccumulatorTest",
+        "method": "fullEquinoxCycleUsesExactlyFiftyThousandSimulationTicks",
+        "kind": "unit",
+        "line": 12,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/seasonaldaylight/clock/ClockAccumulatorTest.java",
+        "line": 17,
+        "expression": "assertTrue(next >= time, \"dayTime must never rewind at tick \" + tick);"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-seasonal-trees",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-seasonal-trees/docs/playtest-qualification.md",
+        "sha256": "9cbeba310b3f66acf7f2247b3bd1856b0d9a9c3d4b44f42983f364c3e08a06cf"
+      },
+      "source_sha256": "7351e44b435dcebea5334690952fa278b280fd5aaf927890a3d013ba8ed9f9de",
+      "shipped_promise_excerpt": "The additive promise is physical, species-specific seasonal behavior for eligible **Dynamic Trees** trees under **Serene Seasons**: deciduous leaves shed without seasonal loot, remain absent during dormancy, and return through *one-use*, support- and obstruction-respecting opportunities; cherry and other eligible species have season-specific blossom visuals. Newly world-generated eligible trees are intended to start with season-correct foliage **before first chunk visibility** (not leafy followed by a tick-later strip). Evergreen/unchanged controls retain native foliage; tropical dry-deciduous profiles use their eligible local calendar. The default server limits are 64 mutation attempts and 2,048 candidate/topology inspections per tick; synchronous birth initialization has a separate geometry-derived bound. This is the implementation's player-facing contract (`README.md`, `docs/spring-generation.md`, `SeasonalRuntime`, `SpringBirthSchedule`), **not** a claim that the candidate JAR or friends' world has demonstrated it.",
+      "reviewed_oracle_summary": "Evergreen and out-of-biome trees remain on native growth path.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/seasonaltrees/scheduler/SpringBirthScheduleTest.java",
+        "class": "com.bettercontent.seasonaltrees.scheduler.SpringBirthScheduleTest",
+        "method": "evergreenUnchangedAndTropicalOutsideEligibleBiomeRemainNative",
+        "kind": "unit",
+        "line": 82,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/seasonaltrees/scheduler/SpringBirthScheduleTest.java",
+        "line": 85,
+        "expression": "assertFalse(SpringBirthSchedule.shouldInitialize(habit, true, 0, 0, BIRCH_END,"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-settlement-roads",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-settlement-roads/docs/playtest-qualification.md",
+        "sha256": "82e20a6213898b70a72e03591bfd0d910def23b2d851cc3aa12cb83128662508"
+      },
+      "source_sha256": "34f862f8a590a9dd27e2837fb1022f46b21ba59e86fabb44c44c063802405e0a",
+      "shipped_promise_excerpt": "With the server-side mod loaded, nearby **land structure starts** are discovered from loaded overworld chunks, clustered into settlement groups, and connected with surface ring roads and routed ground paths. The planner/placer uses loaded-chunk checks, saves discovered structures and completed segment IDs in overworld SavedData, and avoids ordinary constructed blocks when applying roads (`SettlementRoadsMod.kt`, `runtime/{SettlementRoadsRuntime,WorldStructureScanner,WorldNetworkPlanner,WorldNetworkPlacer}.kt`, `data/{SettlementRoadsSavedData,RoadNetworkState}.kt`). Ground surfaces become dirt path in grassy biomes or gravel in non-grassy biomes with sparse coarse-dirt detail (`WorldNetworkPlacer.kt`, `SurfacePaletteSelector.kt`). **Water bridging is off by default** (`config/SettlementRoadsConfig.kt`: `allow_water_bridges=false`, marked experimental/unsupported); bridge tests explicitly enable it and do not make bridges a default-world promise. Neither roads nor bridges are player-craftable items in this source.",
+      "reviewed_oracle_summary": "Grassy road surface selects dirt path rather than generic stone.",
+      "test": {
+        "source": "src/test/kotlin/com/bettercontent/bettersettlementroads/planner/palette/SurfacePaletteSelectorTest.kt",
+        "class": "com.bettercontent.bettersettlementroads.planner.palette.SurfacePaletteSelectorTest",
+        "method": "grassy_surface_chooses_dirt_path",
+        "kind": "unit",
+        "line": 10,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/kotlin/com/bettercontent/bettersettlementroads/planner/palette/SurfacePaletteSelectorTest.kt",
+        "line": 11,
+        "expression": "assertEquals(\"minecraft:dirt_path\", SurfacePaletteSelector.choose(true).mainBlockId)"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-spaceflight",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-spaceflight/docs/playtest-qualification.md",
+        "sha256": "d728c539a2b922153793c776a05815003c49822598e9007327aedb1a61b7f738"
+      },
+      "source_sha256": "80de0c55f214d19bec0ae2849f3777590c5bd4a92906d9ed6f2db3daa2624d4a",
+      "shipped_promise_excerpt": "**Status:** feasibility-stage adapter, **not shipped survival gameplay**. `src/main/java/com/bettercontent/spaceflight/BetterSpaceflight.java` registers only `better_spaceflight` and checks the installed Valkyrien Skies version; `src/main/resources/META-INF/mods.toml` explicitly calls this a non-playable feasibility adapter. No player-facing craft, recipe, GUI, flight progression, or ship-transfer command is registered in `src/main`. The primary *implemented* promise is a version-pinned VS 2.4.11 integration boundary with geometric assembly-offset and vertical section-layout guards (`src/main/java/com/bettercontent/spaceflight/vs/`). This is not evidence that spaceflight is available to friends or present in build-69. Inspect the actual staged artifact, pack manifest and source fingerprints before attributing any source behavior to that build; source and shipped bytes may differ. Do not enable this probe on the shared world to make qualification appear complete.",
+      "reviewed_oracle_summary": "Adapter rejects incompatible Nether-height section layout before native copy; no playable flight claim.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/spaceflight/vs/SectionLayoutTest.java",
+        "class": "com.bettercontent.spaceflight.vs.SectionLayoutTest",
+        "method": "rejectsNetherHeightBeforeNativeCopy",
+        "kind": "unit",
+        "line": 10,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/spaceflight/vs/SectionLayoutTest.java",
+        "line": 12,
+        "expression": "() -> new SectionLayout(-64, 384).requireCompatible(new SectionLayout(0, 256)));"
+      },
+      "layer": "unit",
+      "boundary": "production version-pinned geometry guard only; probe survival flight is nonshipping",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-spawns",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-spawns/docs/playtest-qualification.md",
+        "sha256": "483e06e056f0f90649a737c40e6b9df76da2c6e3b4867a9a45b8144319927e42"
+      },
+      "source_sha256": "eb8a836c9d2c05b3a23cc9142f9ce7c2c0156a25341cb57e2e3bf8d6be0f587e",
+      "shipped_promise_excerpt": "The active pack's `docs/implementation.md` (Custom compatibility ownership) identifies **first-join spectator scouting and permanent spawn locking** as Better Spawns' responsibility. Its `index.toml` includes `mods/better-spawns-1.0.0.jar`; the pack currently **excludes Better World Management (BWM)**. The bundled `data/better_spawns/embark/embark.json` has `mode: none`; `SelectionDataRepository.load` also falls back to spawn-only when progression is configured but BWM is absent. Do not present class, kit, Embark, generation unlocks, starter Schematicannon, or World Management's supervisor as active first-world selection. Existing progression tests exercise a source policy against synthetic inputs, not the shipped reduced pack. Never load an existing BWM world in this reduced pack without a separate save-compatibility review.",
+      "reviewed_oracle_summary": "Absent World Management forces spawn-only selection without class or Embark grants.",
+      "test": {
+        "source": "src/test/kotlin/com/bettercontent/betterspawns/embark/ProgressionSelectionTest.kt",
+        "class": "com.bettercontent.betterspawns.embark.ProgressionSelectionTest",
+        "method": "missingWorldManagementFallsBackToSpawnOnlyWithoutKitsOrEmbark",
+        "kind": "unit",
+        "line": 29,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/kotlin/com/bettercontent/betterspawns/embark/ProgressionSelectionTest.kt",
+        "line": 32,
+        "expression": "assertEquals(SelectionMode.NONE, data.mode)"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-spicy-farmers",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-spicy-farmers/docs/playtest-qualification.md",
+        "sha256": "b34027d03990c32412dfe6a3f0588e55b956b8e9305e624e53569d50ae3cfdb4"
+      },
+      "source_sha256": "126f0ed26fd6168e976addbb497cf242d111a791b4ef68b9640e7c6b48a60258",
+      "shipped_promise_excerpt": "The registered mod (`src/main/java/com/bettercontent/betterspicyfarmers/BetterSpicyFarmers.java`) supplies obtainable spices, physical/seasonal cultivation and wild plants, cinnamon/clove trees, 14 named sauces, a heat-dependent kettle and Create sauce processing, and seasoning of food including placed portions. `SpiceCatalog` defines 12 canonical culinary roots, their prepared equivalents and 14 immutable sauce compositions (1,000 mB batch, 250 mB bottle, 50 mB application, 250 mB seasoning cap); `SpiceApi` computes a per-serving dose. `SpiceRuntime` charges completed, committed server-player servings via damage rather than assigning nutrition; Diet integration remains the nutrition owner. Qualify acquisition \u2192 preparation \u2192 sauce production \u2192 seasoning \u2192 **paid** serving on the installed pack, not merely registry existence or speculative future content. See `cultivation/PlantKind.java`, `kettle/KettleBlockEntity.java`, `seasoning/PlacedFoodAdapters.java`, `runtime/SpiceRuntime.java`, and the `data/better_spicy_farmers/recipes` tree.",
+      "reviewed_oracle_summary": "Prepared ingredient forms conserve a canonical cooking batch.",
+      "test": {
+        "source": "src/nativeFixture/java/com/bettercontent/betterspicyfarmers/kettle/KettleGameTests.java",
+        "class": "com.bettercontent.betterspicyfarmers.kettle.KettleGameTests",
+        "method": "preparedFormsConserveCanonicalBatch",
+        "kind": "native",
+        "line": 57,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/nativeFixture/java/com/bettercontent/betterspicyfarmers/kettle/KettleGameTests.java",
+        "line": 60,
+        "expression": "helper.assertTrue(kettle.ingredients.isItemValid(1,halves),\"canonical prepared half admitted\");"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-spirit-commerce",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-spirit-commerce/docs/playtest-qualification.md",
+        "sha256": "52a1b920e2fa7a4ea1ed8c1bce9d81e1f8964b1ca443385a4ed66763d768ac4e"
+      },
+      "source_sha256": "0ba741f2af023d1843c7959e4922e2aa498627befc9038cce4c57ce96856d552",
+      "shipped_promise_excerpt": "The implemented player-facing core is **physical spirit acquisition and finite, themed commerce**: player-credited eligible mob deaths release Malum-mapped spirits at the victim, seven ordinary aspects convert to commerce currency, and themed wandering traders / villagers sell authored goods for spirits with stock limits. Ordinary visits, additional Spirit Fair visits, camp posts/campfires, local market browsing, resident barter and resident-facing Player Stalls have production code. `BetterSpiritCommerce` registers the event handlers, networks, commands and seven explicit GameTest classes; the common config and `data/better_spirit_commerce/spiritcommerce/{spirit_economy_policy,wandering_pool}.json` control policy and catalogue. See [spirit-acquisition.md](spirit-acquisition.md) for the **current checkout's** exact Malum conversion, exclusions, immediate release, Tempo limitation and queued-credit migration/rollback warning. That page is not an assertion about build-69 bytes: compare the packaged JAR first. Tempo remains registered in recipes/trades, but ordinary Malum mobs supply no Tempo via this death route; check whether required playtest progression depends on it before declaring the economy playable.",
+      "reviewed_oracle_summary": "Credited kill releases mapped Malum spirit at victim immediately.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/spiritcommerce/trader/WanderingTraderGameTests.java",
+        "class": "com.bettercontent.spiritcommerce.trader.WanderingTraderGameTests",
+        "method": "creditedKillReleasesMalumMappedSpiritsAtVictimImmediately",
+        "kind": "native",
+        "line": 204,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/spiritcommerce/trader/WanderingTraderGameTests.java",
+        "line": 218,
+        "expression": "helper.assertTrue(!expected.isEmpty(), \"Malum must return a mapped zombie spirit for this fixture\");"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-survival-hud",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-survival-hud/docs/playtest-qualification.md",
+        "sha256": "b7cd95efe0c998aa6afe73440c80c0dc269d4faa248d62e5b2842a5e258d099f"
+      },
+      "source_sha256": "42390e768938a94328113d5e86871ffbc4822c258732fadd298217e04668f4ce",
+      "shipped_promise_excerpt": "The client-side `better_survival_hud` mod registers a client config (`DynamicSurvivalHud.java`, `META-INF/mods.toml`) and fades inactive survival overlays on a per-element timer (`DynamicHudController`, `HudFadeState`). Defaults: enabled, 5-second hold, 0.5-second fade, danger fraction 1.0 (`DynamicSurvivalHudConfig`). Health (including semantic Death's Door health from the injury integration), hunger, air, thirst when loaded, and severe Cold Sweat temperatures can remain pinned visible; physical sneak peeks all managed elements. Changes to hotbar, armor, XP, mount and other tracked values re-reveal their respective elements. `GuiMixin` keeps the selected hotbar slot and offhand frame/slot visible when the rest fades; `RenderSystemMixin` applies the managed overlay alpha. `EffectStripOverlay` replaces the vanilla potion-icons overlay with a compact timed effect strip when icons are present. The integration API accepts injury health/risk and physical sneak state but does not own gameplay state. These are source-level intended behaviors, not proof of client pixels or delivered pack contents.",
+      "reviewed_oracle_summary": "Selected hotbar slot and offhand remain visible while hidden slots do not.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/bettersurvivalhud/client/hud/DynamicHudOverlayMappingTest.java",
+        "class": "com.bettercontent.bettersurvivalhud.client.hud.DynamicHudOverlayMappingTest",
+        "method": "keepsExactlyTheSelectedHotbarSlotAndOffhandVisible",
+        "kind": "unit",
+        "line": 39,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/bettersurvivalhud/client/hud/DynamicHudOverlayMappingTest.java",
+        "line": 42,
+        "expression": "assertEquals(renderSeed == selectedSlot + 1,"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-survival-physiology",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-survival-physiology/docs/playtest-qualification.md",
+        "sha256": "c8d0463114a5dacc423186f123aeb24bc5cc9bb9de12b5bf7ab3e304131bcf24"
+      },
+      "source_sha256": "c5f8c11427f813948fc72c1d8dac99dfed4b3efb76331d45ccc98a850c117a3f",
+      "shipped_promise_excerpt": "This mod integrates Diet's nutrient tracker with server-authoritative survival effects and temporary metabolic loads. Actual `SalienceEvents` applies nutrient-dependent mining, combat, movement, exhaustion, recovery and effect-duration behavior; `MetabolicState` carries sugar/Nectar, alcohol/Booze, blackout and cooldowns; `MetabolicStateStore` persists the state under `Player.PERSISTED_NBT_TAG/better_survival_physiology`, saves periodically and at logout, copies it on non-death clone and resets it on death. `DietBridge` uses the native Diet tracker and mirrors sugar/alcohol. `SalienceNetwork` and the client presentation classes display synced values; `DietScreenEvents` redirects Diet's screen opening to the inventory. These are source implementation claims, not a verified report of what build 69 players see. Inspect `runtime/SalienceEvents.java`, `nutrition/DietBridge.java`, `metabolism/MetabolicState*.java`, `client/`, `presentation/` and `network/` for the actual boundaries. Optional Spice/Water/Thirst/Brewing/Cold Sweat/Epic Fight behavior depends on compatible providers and installed pack binaries; do not infer typed Water support from the legacy Water runtime alone.",
+      "reviewed_oracle_summary": "Optional metabolic groups are explicitly enumerated, not generic effect guesses.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/bettersurvivalphysiology/metabolism/DietMetabolicGroupsTest.java",
+        "class": "com.bettercontent.bettersurvivalphysiology.metabolism.DietMetabolicGroupsTest",
+        "method": "optionalMetabolicGroupsAppearInTheNativeSuiteWithoutGenericEffects",
+        "kind": "unit",
+        "line": 19,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/bettersurvivalphysiology/metabolism/DietMetabolicGroupsTest.java",
+        "line": 23,
+        "expression": "assertEquals(Set.of(\"proteins\", \"grains\", \"fruits\", \"vegetables\", \"spice\", \"dairy\", \"sugars\", \"alcohol\"), groups);"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-tinkers-loot-affixes",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-tinkers-loot-affixes/docs/playtest-qualification.md",
+        "sha256": "aae1a5196915a5cd8a8d79563840ce3e46941c861ab7124724ffa9309cca1a28"
+      },
+      "source_sha256": "ab62f54624bb5df3694eb003f18686d74d88581f9ff44d2a2c7c45d6b0078b4c",
+      "shipped_promise_excerpt": "Player-attributed kills of eligible hostile mobs and `chests/*` loot tables can yield affixed Tinkers Construct parts, caches and reforging currencies (`GlobalAffixLoot`, `AffixItems`). The cache yields one material-compatible affixed part on successful server-side use, with natural-origin/provenance/salvage metadata (`TConAffixRewards`, `AffixCrafting`). Parts' compatible affixes transfer into assembled TConstruct tools with stat/modifier effects (`TConAffixRewards`, `AffixModifiers`); player-inventory interaction arms currency by right-click and applies it to a part by left-click, with confirmation for ruinous mutation and shift-right-click salvage (`AffixClientEvents`, `AffixNetwork`). The server checks menu, slot, current stack fingerprint and per-player nonce; successful operations consume one currency, while successful salvage spends the part's payout once. This is **not** proof of end-to-end crafting GUI behavior on a real client.",
+      "reviewed_oracle_summary": "Native cache use consumes one cache and yields one stamped part (fixture-given cache).",
+      "test": {
+        "source": "src/main/kotlin/com/bettercontent/bettertinkerslootaffixes/TConAffixGameTests.kt",
+        "class": "com.bettercontent.bettertinkerslootaffixes.TConAffixGameTests",
+        "method": "cacheUseProducesOneStampedPartAndConsumesOneCache",
+        "kind": "native",
+        "line": 51,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/kotlin/com/bettercontent/bettertinkerslootaffixes/TConAffixGameTests.kt",
+        "line": 58,
+        "expression": "helper.assertTrue(cache.count == 1, \"A successful cache use must consume exactly one cache\")"
+      },
+      "layer": "native",
+      "boundary": "native fixture grants cache directly; not natural acquisition proof",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-village-fortifications",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-village-fortifications/docs/playtest-qualification.md",
+        "sha256": "083af9185ebbd885f4a2c1fd51a8356af9a0c7f549d26c890599ee85c0dfa163"
+      },
+      "source_sha256": "0da8aaee967a2213f0da73c8b6195a9c9794b19befca608ed7bc00f9d285a8c6",
+      "shipped_promise_excerpt": "The primary promise is **automatic, biome-styled walls around detected villages on approach**, not a new craftable wall item or a guaranteed wall around every village. `VillageWalls` registers `AutoVillageWallBuilder` and the `WallStyleRegistry`. `AutoVillageWallBuilder` listens for loaded village structures and periodically scans loaded chunks around players; it checks proximity, rolls the common-config `automaticWalls.spawnChance` (default **0.5**, `enabled` defaults true), preloads the search/placement area with bounded budgets, and calls `VillageWallGenerator`. A selected `fortified_beginnings` world-axiom projection can force the automatic path independent of the normal enabled/chance settings (`WorldAxiomPolicy`), but the source-side projection parser is not proof of pack-level identity binding or installed policy. Completed or chance-skipped village cells persist in `better_village_fortifications_processed_villages_v7` SavedData; failures/incomplete search are not automatically proof of completed walls. The generator uses village structures/POIs for the footprint, outlines the enclosure, adapts to terrain and shallow water, selects gate locations and optionally adds lighting for inhabited villages. Large footprints can select a thicker walkable rampart. Specific wall appearance is data-driven; the default style is `temperate`, with selectors in `src/main/resources/data/better_village_fortifications/wall_style_selectors/regions.json`. The op-only player-context `/better",
+      "reviewed_oracle_summary": "Biome style priority selects expected wall style and falls back to default.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/bettervillagefortifications/config/WallStyleRegistryTest.java",
+        "class": "com.bettercontent.bettervillagefortifications.config.WallStyleRegistryTest",
+        "method": "selectorsUsePriorityAndFallBackToDefault",
+        "kind": "unit",
+        "line": 91,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/bettervillagefortifications/config/WallStyleRegistryTest.java",
+        "line": 100,
+        "expression": "assertEquals(snowy.id(), WallStyleRegistry.selectForBiome(new ResourceLocation(\"minecraft\", \"snowy_plains\")).orElseThrow().id());"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-weathering-offline-progress",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-weathering-offline-progress/docs/playtest-qualification.md",
+        "sha256": "07f1d29f0894b4112885d1bc6c2774d1e45c5a48d2832f06d61a413e3b1b8dfc"
+      },
+      "source_sha256": "c8207cf50d483af4df9876908622c35ce89fa3cc00eb90a7ca3a14e29be7e8d2",
+      "shipped_promise_excerpt": "Returning chunks receive **bounded Immersive Weathering catch-up**, not a replay of every missed random tick. `SamplerEvents` advances a dimension-level partitioned clear/rain and day/night clock during server level START ticks, records per-chunk snapshots in chunk NBT and queues previously initialized chunks on load. On the next tick, when enabled and the elapsed game time meets the configured minimum (default 100 ticks), `EndpointSampler` scans non-air sections and surface positions, samples probabilistic direct endpoints for weathering/rust and compatible Immersive Weathering growth rules, then invokes eligible actions only if the block state still matches. It skips sampling at random tick speed zero and avoids synchronously promoting unloaded FULL chunks for configurable growth; snow-icicle neighbors are guarded separately. Probability, density (default 1.0), and weather/rain partitioning affect the result; there is **no guarantee** that any particular block will visibly change on one reload. This mod is not an autonomous unloaded-world ticker, a new recipe tree, or proof of offline progress while the entire server is stopped. Sources: `SamplerEvents.java`, `ExposureSavedData.java`, `ChunkExposureData.java`, `EndpointSampler.java`, `ProbabilityMath.java`, `SamplerConfig.java`.",
+      "reviewed_oracle_summary": "Icicle sampler refuses boundary sampling when neighbor chunk is unloaded.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterweatheringofflineprogress/EndpointSamplingPolicyTest.java",
+        "class": "com.bettercontent.betterweatheringofflineprogress.EndpointSamplingPolicyTest",
+        "method": "icicleSamplingSkipsBoundariesWhenANeighborChunkIsNotLoaded",
+        "kind": "unit",
+        "line": 66,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterweatheringofflineprogress/EndpointSamplingPolicyTest.java",
+        "line": 70,
+        "expression": "assertFalse(EndpointSampler.snowIcicleNeighborhoodLoaded(new BlockPos(0, 64, 8), 1, originChunkOnly));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-wild-fruit-trees",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-wild-fruit-trees/docs/playtest-qualification.md",
+        "sha256": "d4eacc70db1c2151fbbd1d1fad6d441b7fa6c4617a829bf1dd0c06b967192ac8"
+      },
+      "source_sha256": "52ffb5214aea682d8ab7220591d9a7bd5f85cd5593a1ea80b819c86dc483b2c8",
+      "shipped_promise_excerpt": "`src/main/resources/META-INF/mods.toml` promises large, bountiful, non-propagable wild fruit trees for Dynamic Trees/Fruits Delight. `WildFruitPolicy` protects thirteen fruit species (including `dynamictrees:apple_oak`) and conditionally saguaro, coconut and ancient tree adapters; `WildFruitTrees`, `WildBushField` and the mixins implement sparse natural fields, rare wild trees, planting/propagule and axe restrictions, slower normalized production and eight-item mature fruit harvest. Food is deliberately not blanket-banned: edible products survive the loot filter and cooking/food uses; blocked stock, leaves and direct planting routes are distinct. `TreeFruitBudget` and `compat/RootLedger` hold per-root production/provenance, with unknown saved-data schema preserved and rejected rather than silently rewritten. `compat/LedgerNetwork` synchronizes *provenance*, not credit, to clients. These are source contracts, not claims of measured in-game success or an invitation to expand species.",
+      "reviewed_oracle_summary": "Edible fruit products remain registered and mature coconut harvest produces falling product.",
+      "test": {
+        "source": "src/main/java/com/bettercontent/betterwildfruittrees/gametest/OptionalTreeGameTests.java",
+        "class": "com.bettercontent.betterwildfruittrees.gametest.OptionalTreeGameTests",
+        "method": "edibleProductsSurviveLootAndMatureHarvestIncludesFallingCoconut",
+        "kind": "native",
+        "line": 95,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/main/java/com/bettercontent/betterwildfruittrees/gametest/OptionalTreeGameTests.java",
+        "line": 102,
+        "expression": "h.assertTrue(product != null && product != Items.AIR, \"Native food/product lost \" + id);"
+      },
+      "layer": "native",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-wildfire",
+      "assessment": {
+        "path": "/home/dev/mod_source/better-wildfire/docs/playtest-qualification.md",
+        "sha256": "67f72283c62839d3821fd978768887c7af6f85460832ba24cb1864489d7bbc2e"
+      },
+      "source_sha256": "60af13d9e5fc529890c85e95901e74f0bd3ee471da614164debd8eab2bae457a",
+      "shipped_promise_excerpt": "The source-level gameplay promise is that native fire consumption of supported ordinary combustible blocks produces a **source-state-preserving smoldering remnant**, then an inert charred remnant after the scheduled interval (`CharredRemnants.tryChar`, `FireBlockConsumptionMixin`, `RemnantBlock.tick`, `RemnantMemory`). It keeps source shape/collision and model identity, not the original block's loot, inventory, or gameplay callbacks. Smoldering can sustain native fire spread; this mod does **not** replace native fire's tick/spread lottery with a custom scanner. Server lightning near the bolt and a flaming-arrow block hit can explicitly ignite eligible sources (`FireEvents`); Dynamic Trees tree parts are deliberately deferred to Dynamic Trees, and block entities/protected blocks, TNT and unsupported shapes retain their protected/native paths as applicable. Legacy `smoldering_*`/`burnt_*` palette registry IDs remain for save compatibility, not the new conversion path. `FireConfig.spreadChance`, `maxIgnitionsPerTick`, and `playerRadius` are legacy inactive values; legacy burnt-ground recovery does not recover source-derived remnants.",
+      "reviewed_oracle_summary": "Absent blockstate never triggers broad texture scan.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/betterwildfire/CharredTextureDependenciesTest.java",
+        "class": "com.bettercontent.betterwildfire.CharredTextureDependenciesTest",
+        "method": "absentBlockstateDoesNotTriggerBroadTextureScan",
+        "kind": "unit",
+        "line": 73,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/betterwildfire/CharredTextureDependenciesTest.java",
+        "line": 74,
+        "expression": "assertTrue(new CharredTextureDependencies(file -> null).forBlock(id(\"demo:missing\")).isEmpty());"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "scalable-tnt",
+      "assessment": {
+        "path": "/home/dev/mod_source/scalable-tnt/docs/playtest-qualification.md",
+        "sha256": "fc003fc03348f3dfcead9ac263bc1bb88ba7ea7b178b336362eb282baab0afba"
+      },
+      "source_sha256": "5c6af55b1577e4125f4c7470da6310db70312d31206c2d929a20f69687c88364",
+      "shipped_promise_excerpt": "`scalable_tnt:low_yield_tnt` and `scalable_tnt:high_yield_tnt` are craftable/placeable TNT blocks with vanilla `PrimedTnt` fuse/entity behavior but tagged blast powers **3.0** and **4.5**, respectively, against vanilla TNT's usual **4.0**. `ScalableTntBlock` primes via redstone, fire/explosion, player flint-and-steel/fire-charge, fiery projectile and a registered dispenser behavior; successful insertion removes/consumes the source where applicable. `PrimedTntExplosionMixin` modifies the native explosion-power argument only for primed entities carrying the mod's float tag, bounds that value to [3.0, 4.5], and leaves untagged TNT's native argument alone. This is source behavior, not observed radius, persistence, coexistence, or multiplayer proof. See `ScalableTntMod.java`, `block/ScalableTntBlock.java`, `block/ScalableTntContent.java`, `policy/TntComposition.java`, `mixin/PrimedTntExplosionMixin.java` and `scalable_tnt.mixins.json` under `src/main`.",
+      "reviewed_oracle_summary": "Persisted TNT strength clamps at configured boundary and corrupt values fall back to vanilla.",
+      "test": {
+        "source": "src/test/java/com/bettercontent/scalabletnt/TntCompositionTest.java",
+        "class": "com.bettercontent.scalabletnt.TntCompositionTest",
+        "method": "persistedStrengthIsClampedAndCorruptValuesFallBackToVanilla",
+        "kind": "unit",
+        "line": 41,
+        "state": "annotated-source-only; discovery-and-execution-unverified"
+      },
+      "oracle": {
+        "path": "src/test/java/com/bettercontent/scalabletnt/TntCompositionTest.java",
+        "line": 42,
+        "expression": "assertEquals(TntComposition.MIN_VARIANT_POWER, TntComposition.boundedPower(0.0F));"
+      },
+      "layer": "unit",
+      "boundary": "narrow source contract; full-pack capability, registration, acquisition and scale are separate",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    },
+    {
+      "repository": "better-content-modpack",
+      "assessment": null,
+      "source_sha256": "3a095a0caedd67ea2d5a33218913542cc785a98ba9dd0d803de3bb03e126db7c",
+      "shipped_promise_excerpt": "Active pack Hand Workshop grout route static policy.",
+      "reviewed_oracle_summary": "Pack static KubeJS contract generates exactly ten distinct-family grout recipes and rejects retired intermediate routes; installed recipe manager and acquisition remain unverified.",
+      "test": {
+        "source": "src/test/kotlin/com/bettercontent/tests/GroutRecipeContractTest.kt",
+        "method": "distinctOverworldRockPairsProduceOrdinaryGrout",
+        "line": 18,
+        "kind": "unit"
+      },
+      "oracle": {
+        "path": "src/test/kotlin/com/bettercontent/tests/GroutRecipeContractTest.kt",
+        "line": 59,
+        "expression": "throw Error('unexpected grout recipe count');"
+      },
+      "layer": "unit",
+      "boundary": "Node KubeJS mock; effective installed recipe and natural acquisition not proved",
+      "state": "source-level mapping only; not executed or source-to-build-71-attested"
+    }
+  ]
+}

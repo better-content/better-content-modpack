@@ -141,13 +141,13 @@ behaviors has exact-pack runtime acceptance or an established-world migration.
 
 ## Dimensional Font ecology and resource links
 
-The three enabled expedition Fonts share a radial court, a ring of fully oxidized copper, a decorative field with candles and shallow pools, and a dimension-specific block palette. Bumblezone sites additionally form three dense wax and hive clusters. Tree biome sites use stripped logs from the local tree family for their four supports and roof ring. Treeless sites omit both. The structure is selected only in new worlds; existing sites are not migrated.
+The three enabled expedition Fonts share a radial court, a decorative field with candles and shallow pools, and a dimension-specific block palette. The 2026-11-16 source candidate replaces copper structural placements with stone bricks and copper roof shapes with corresponding deepslate-tile shapes, including village and arrival-site paths. Geometry and existing layout versions are retained. Bumblezone sites still form three dense wax and hive clusters. Tree biome sites use stripped local logs for their supports and roof ring; treeless sites omit these. This is future-placement-only: existing sites are not scanned, converted or migrated. The source candidate is not yet packaged or gameplay-qualified.
 
 | Font | Salience aspects | Spirit map sellers | Field vocabulary | Renewable or dimension-linked materials | Pack systems that consume them |
 | --- | --- | --- | --- | --- | --- |
-| Nether | Impact, Endurance | Infernal, Wicked | Blackstone, basalt, brick, magma, red candles | Wart, blaze powder/rod, magma cream, basalt | Heat Sync Boiler Heater, PneumaticCraft thermopneumatic plant, TCon Scorched Brick, Nether Font Libation |
-| Aether | Mobility, Renewal | Aerial, Sacred | Holystone, icestone, aerogel, pale sky stone | Blue berries, swet balls, skyroot leaves/logs, aerogel, blue aercloud | Rotational Compressor, Clockwork air compressor/propeller bearing/gas thruster, jet boots, Aether Font Libation |
-| Bumblezone | Work, Tempo, Robustness, Renewal | Earthen, Tempo, Sacred | Beeswax, ancient wax bricks and eyes, brood honeycomb, yellow candles | Pollen puffs, honeycomb, honey, carvable wax | Create mechanical harvester/plough, Airtight Upgrade, Bumblezone Font Libation, existing nursery systems |
+| Nether | Power, Endurance | Infernal, Wicked | Blackstone, basalt, brick, magma, red candles | Wart, blaze powder/rod, magma cream, basalt | Heat Sync Boiler Heater, PneumaticCraft thermopneumatic plant, TCon Scorched Brick, Nether Font Libation |
+| Aether | Motion, Renewal | Aerial, Sacred | Holystone, icestone, aerogel, pale sky stone | Blue berries, swet balls, skyroot leaves/logs, aerogel, blue aercloud | Rotational Compressor, Clockwork air compressor/propeller bearing/gas thruster, jet boots, Aether Font Libation |
+| Bumblezone | Power, Motion, Endurance, Renewal | Earthen, Tempo, Sacred | Beeswax, ancient wax bricks and eyes, brood honeycomb, yellow candles | Pollen puffs, honeycomb, honey, carvable wax | Create mechanical harvester/plough, Airtight Upgrade, Bumblezone Font Libation, existing nursery systems |
 
 Map offers use the saved index of already discovered natural Fonts. Each seller's allowed destinations are the union of Fonts sharing an aspect with its spirit identity. Maps rotate within that set after sale. The index lookup neither loads nor generates chunks. Resident spirit villagers receive a map listing at level two; wandering spirit traders can add a map to their authored catalogues.
 
@@ -251,24 +251,19 @@ Systemic Salience historically connected three separate authorities: RPG Stats o
 
 ### Canonical identity matrix
 
-The table describes the **staged Build 55 candidate**, not a friends-world or gameplay-accepted release. RPG Life categories were renamed; Diet and ore identities are unchanged. See [Life attributes — staged candidate](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted). Aspect words appear in tooltips and supporting cues, not in the ordinary stat, food-group, or deposit names.
+This is the canonical specification for the **2026-11-16 source-only backlog candidate**, not an installed, gameplay-accepted release or a result from the friends' world. Five shared teaching identities group eight independent food groups and eight deposits. Natural names and owner-specific mechanics remain primary; no shared gameplay-state service is introduced.
 
-| Legacy aspect slot | Glyph | Diet/ore sRGB | Staged RPG build (accent sRGB) | Diet identity | Ore identity |
+| Shared aspect | Prior teaching identities | Glyph / retained atlas slot | sRGB | Diet representatives | Ore representatives |
 | --- | --- | --- | --- | --- | --- |
-| Impact | ✦ | `#FF4055` | Vanguard (`#FF4055`) | Proteins | Hotstone |
-| Tempo | » | `#00A985` | Sharpshooter (`#8E5BB7`) | Sugar | Copper Bloom |
-| Work | ⚒ | `#F0E2C5` | Artisan (`#F0E2C5`) | Grains | Tin Quartz |
-| Mobility | ➜ | `#E0B01F` | Trailblazer (`#E0B01F`) | Fruits | Brassroot |
-| Endurance | ∞ | `#52606A` | Survivalist (`#AF6A2F`) | Vegetables | Coal Measures |
-| Robustness | ◆ | `#D85C32` | Spellcaster (`#6CCAF0`) | Spice | Ironstone |
-| Renewal | ✚ | `#6CCAF0` | Skirmisher (`#52606A`) | Dairy | Evaporite Beds |
-| Control | ⊕ | `#8E5BB7` | Aerialist (`#00A985`) | Alcohol | Black Shale |
+| Power | Impact + Work | ✦ / 0 | `#FF4055` | Protein, Grains | Hotstone, Tin Quartz |
+| Motion | Tempo + Mobility | ➜ / 3 | `#E0B01F` | Sugar, Fruit | Copper Bloom, Brassroot |
+| Endurance | Endurance + Robustness | ∞ / 4 | `#52606A` | Vegetables, Spice | Coal Measures, Ironstone |
+| Renewal | Renewal | ✚ / 6 | `#6CCAF0` | Dairy | Evaporite Beds |
+| Control | Control | ⊕ / 7 | `#8E5BB7` | Alcohol | Black Shale |
 
-The shipped ore and Diet aspect palette is unchanged; RPG build accents are independent.
-The retained glyph and badge slot describe asset continuity, **not** an equivalence of
-bonuses or an automatic alignment of RPG build colour to the adjacent Diet/ore identity.
-Glyph, name, morphology, and actual behavior remain mandatory cues; hue alone is not
-authoritative. Ore morphology and existing artwork are preserved.
+RPG retains all eight independent builds, colors, effects and legacy art slots; its slots do **not** determine the shared aspect count or imply matching mechanics. See [Life attributes — staged candidate](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted). All eight Diet stored values and all deposit varieties, morphology and processing outputs remain distinct. Glyph, name, morphology and behavior supplement color.
+
+Consumer mapping is explicit: physiology maps food-group identity to these five aspects; geology maps deposit-family identity; Font metadata uses Nether=Power/Endurance, Aether=Motion/Renewal and Bumblezone=Power/Motion/Endurance/Renewal. Discovery uses the five identifiers on relevant existing cards, retaining stable card IDs. Spirit commerce retains eight separate currency IDs and prices, including the **Tempo spirit**: those are economy identities, not a shared-aspect enum. Its existing Font-map seller relationships remain unchanged. No currency or RPG migration is implied.
 
 ### Sensory grammar
 
@@ -276,16 +271,13 @@ Every identity has one recurring motion and sound phrase. These cues play only a
 
 | Aspect | Motion | Sound motif | Geological expression |
 | --- | --- | --- | --- |
-| Impact | radial burst | low thud and transient | radiating Hotstone |
-| Tempo | two rapid pulses | paired clicks | clustered Copper Bloom |
-| Work | descending, settling sparks | tool strike and knock | Tin Quartz ribbons |
-| Mobility | directional rising sweep | short whoosh | branching Brassroot |
-| Endurance | slow expanding ring | sustained low tone | continuous Coal Measures seam |
-| Robustness | inward brace | shield-like clack | dense Ironstone bands |
-| Renewal | rising spiral and bloom | ascending chimes | Evaporite crystal bloom |
+| Power | radial burst | retained impact-family thud/transient | radiating Hotstone; Tin Quartz ribbons |
+| Motion | directional sweep | retained mobility-family whoosh | clustered Copper Bloom; branching Brassroot |
+| Endurance | expanding ring | retained endurance-family low tone | Coal Measures seams; dense Ironstone bands |
+| Renewal | rising bloom | ascending chimes | Evaporite crystal bloom |
 | Control | converging points | ticks resolving to a ping | Black Shale convergence |
 
-Systemic Salience and Realistic Ores share canonical byte-identical 18×18 aspect badges. RPG Stats retains its distinct 18×18 legacy badge-art slots for binary/asset compatibility, now mapped to the eight build names; its new colours and mechanics are independent of the adjacent Diet/ore column. Audio is a semantic family rather than a shared file: each aspect keeps the historical phrase in the table while RPG allocation UI, nutrition and systemic bodily cues, and Realistic Ores discovery use context-specific mixes. Tempo may add an event-specific broken-cadence variant without becoming a ninth identity. Realistic Ores reuses the badge strip while its world identity remains morphology-first dirty geology rather than an aspect-colour wash.
+Physiology and geology select five slots from the existing 18×18 badge atlas; unselected legacy art/audio may remain inert resources. Separate old Work, Tempo and Robustness cue identities are retired from these consumers. Context-specific sound mixes need not share one file. RPG allocation art/audio remains independently owned. Geology remains morphology-first, not an aspect-color wash.
 
 ### Teaching surfaces
 
@@ -317,8 +309,8 @@ Slice of Life: Carrot remains the sole owner of maximum-health progression.
 Diet is the authority for the eight active groups, classification, gains and stored values: Protein, Sugar, Grains, Fruit, Vegetables, Spice, Dairy, and Alcohol. Sugar and Alcohol are physiology-owned timed loads mirrored into Diet; Spice is awarded only from real paid doses. The Journal reads Diet's synced suite and values as the sole nutrition GUI. Better Survival Physiology exclusively owns effects driven by those values; Diet's native suite has no effects.
 
 - Protein increases melee damage and unlocks charged hits.
-- Grains increase correct-tool work speed and unlock mining sequences.
-- Fruit increases movement and swimming speed and unlocks travel perks.
+- Grains retain baseline correct-tool work speed; the extra sequence, grace and mining-burst layers are removed in the source candidate.
+- Fruit retains baseline movement/swimming, safer falls and the existing sprinting-jump leap; its separate extra sprint-speed bonus is removed.
 - Vegetables reduce hunger, thirst, and stamina costs and fund the existing emergency reserve. This replaces Tallow/Fats, not the removed historical temperature and knockback proposal.
 - Spice adds bounded work/movement benefits and charges a real seasoning cost on consumption.
 - Dairy accelerates the expiry of harmful effects and grants meal recovery and cleansing.
@@ -341,9 +333,11 @@ The complete player-facing roster is eight deposits plus the unrelated Oil Seep 
 
 Complex constituent recovery remains processing depth. Removed worldgen identities have no compatibility aliases or migrations.
 
+In the source candidate, small ore chunks collected from surface samples can be melted directly when their full-sized chunk already has a supported molten output. Direct melting rounds down: for a 40 mB full chunk made from nine small chunks, each small chunk gives **4 mB**. Nine direct melts therefore give **36 mB**, while bundling those nine first still gives **40 mB**. Direct melting is convenient, not equally efficient; existing full-chunk and processing yields are unchanged.
+
 ### Acceptance rule
 
-For every representative, test whether a player can predict its broad use from name, morphology, tooltip, and immediate behavior before reading exact numbers. A cue fails if it needs another row's identity to explain it, or if it merely exposes a weighted profile. New mechanics may project from one categorical identity, but new player-facing representatives must preserve the one-to-one matrix.
+For every representative, test whether a player can predict its broad use from name, morphology, tooltip, and immediate behavior before reading exact numbers. A cue fails if it needs another row's identity to explain it, or if it merely exposes a weighted profile. Each representative must retain an unambiguous shared-aspect assignment; multiple distinct food groups or deposits may deliberately share that aspect without merging their mechanics or stored values.
 
 ## Death, Return, and Tension
 
@@ -414,8 +408,11 @@ especially for solo and multiplayer travel, distant deaths, and repeated deaths.
    `#minecraft:is_ocean` biomes plus any extra initial-spawn biome IDs in
    [`config/better_world_management-initial-spawn-blacklist.txt`](../config/better_world_management-initial-spawn-blacklist.txt).
    The saved spawn and the two blocks above it must all qualify, because vanilla
-   can lift a first-join spectator into a vertically different biome. This
-   blacklist does not affect successor or personal spawns. The shared spawn
+   can lift a first-join spectator into a vertically different biome. The spawn's
+   chunk and all eight neighboring chunks must each have one qualifying biome
+   column; the eight neighbors are sampled at their chunk centers and predicted
+   surface heights. This is not a guarantee of contiguous land or effective comfort.
+   This blacklist does not affect successor or personal spawns. The shared spawn
    radius is zero; first-join players scout in spectator mode, so terrain safety
    is not a condition for publishing an uninhabited initial world. The player's permanent personal respawn can
    be selected in any biome; `spawn_radius=256` remains the configured fallback on established

@@ -1,0 +1,1382 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "bound_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "client",
+        "server",
+        "provenance",
+        "inventory"
+      ],
+      "properties": {
+        "client": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "server": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "provenance": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "inventory": {
+          "$ref": "#/$defs/bound_file"
+        }
+      }
+    },
+    "authoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "reviewer",
+        "reviewed_at",
+        "blockers"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "draft",
+            "reviewed"
+          ]
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "seed",
+        "view_distance",
+        "simulation_distance",
+        "cohorts",
+        "cohort_seconds",
+        "recovery_seconds",
+        "recovery_stable_seconds",
+        "tps_window_seconds",
+        "minimum_tps",
+        "tree_minimum",
+        "tree_minimum_sites",
+        "tree_maximum_sites",
+        "tree_dynamic_fraction",
+        "food_sample_size",
+        "threat_attempts",
+        "visual_profiles",
+        "timing_mode",
+        "participant_kind",
+        "server_heap_mib",
+        "hardware_profile"
+      ],
+      "properties": {
+        "seed": {
+          "const": 424242
+        },
+        "view_distance": {
+          "const": 10
+        },
+        "simulation_distance": {
+          "const": 10
+        },
+        "cohorts": {
+          "const": [
+            8,
+            16,
+            32
+          ]
+        },
+        "cohort_seconds": {
+          "const": 600
+        },
+        "recovery_seconds": {
+          "const": 120
+        },
+        "recovery_stable_seconds": {
+          "const": 30
+        },
+        "tps_window_seconds": {
+          "const": 30
+        },
+        "minimum_tps": {
+          "const": 19.0
+        },
+        "tree_minimum": {
+          "const": 100
+        },
+        "tree_minimum_sites": {
+          "const": 5
+        },
+        "tree_maximum_sites": {
+          "const": 20
+        },
+        "tree_dynamic_fraction": {
+          "const": 0.95
+        },
+        "food_sample_size": {
+          "const": 10
+        },
+        "threat_attempts": {
+          "const": 3
+        },
+        "visual_profiles": {
+          "const": [
+            "1280x720@2",
+            "1920x1080@3"
+          ]
+        },
+        "timing_mode": {
+          "const": "native-windows-and-boundaries"
+        },
+        "participant_kind": {
+          "const": "server-fake-player"
+        },
+        "server_heap_mib": {
+          "type": "integer"
+        },
+        "hardware_profile": {
+          "type": "string"
+        }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "artifact",
+        "artifact_sha256",
+        "source_sha256",
+        "tests_sha256",
+        "providers_sha256",
+        "toolchain_sha256",
+        "configuration_sha256",
+        "assessment",
+        "state",
+        "case_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "artifact": {
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        },
+        "source_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        },
+        "tests_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        },
+        "providers_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        },
+        "toolchain_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        },
+        "configuration_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        },
+        "assessment": {
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "assessment-pending",
+            "assessment-only",
+            "authored"
+          ]
+        },
+        "case_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "roster": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "complete",
+        "entries",
+        "gaps"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "entries": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "mechanism",
+        "execution_case",
+        "prerequisites",
+        "variants",
+        "variant_case",
+        "stage"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "mechanism": {
+          "type": "string"
+        },
+        "execution_case": {
+          "type": "string"
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "variant_case": {
+          "type": "string"
+        },
+        "stage": {
+          "type": "integer"
+        }
+      }
+    },
+    "acquisition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "stage",
+        "coverage",
+        "prerequisites",
+        "routes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "crafted",
+            "worldgen",
+            "harvest",
+            "loot",
+            "trade",
+            "fluid",
+            "intentional-unobtainable"
+          ]
+        },
+        "stage": {
+          "type": "integer"
+        },
+        "coverage": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/route"
+          }
+        },
+        "exclusion_reason": {
+          "type": "string"
+        }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "path",
+        "symbol"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "missing",
+            "authored"
+          ]
+        },
+        "path": {
+          "type": "string"
+        },
+        "symbol": {
+          "type": "string"
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "note_ids",
+        "owner",
+        "layer",
+        "context",
+        "assertions",
+        "targets",
+        "dependencies",
+        "stage",
+        "timeout_seconds",
+        "preconditions",
+        "actions",
+        "expected",
+        "cleanup",
+        "evidence_kinds",
+        "existing_tests",
+        "implementation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "note_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "owner": {
+          "type": "string"
+        },
+        "layer": {
+          "enum": [
+            "unit",
+            "native",
+            "campaign",
+            "visual",
+            "lifecycle",
+            "logs"
+          ]
+        },
+        "context": {
+          "type": "string"
+        },
+        "assertions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stage": {
+          "type": "integer"
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "preconditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expected": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cleanup": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidence_kinds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "existing_tests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "implementation": {
+          "$ref": "#/$defs/implementation"
+        }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "revision",
+        "authoring",
+        "candidate",
+        "profile",
+        "test_support",
+        "repositories",
+        "rosters",
+        "acquisitions",
+        "cases"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bc.playtest_manifest.v1"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "authoring": {
+          "$ref": "#/$defs/authoring"
+        },
+        "candidate": {
+          "$ref": "#/$defs/candidate"
+        },
+        "profile": {
+          "$ref": "#/$defs/profile"
+        },
+        "test_support": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "repositories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/repository"
+          }
+        },
+        "rosters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/roster"
+          }
+        },
+        "acquisitions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/acquisition"
+          }
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/case"
+          }
+        }
+      }
+    },
+    "assertion_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "file"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "file": {
+          "$ref": "#/$defs/bound_file"
+        }
+      }
+    },
+    "assertion_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "state",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "passed",
+            "failed",
+            "blocked",
+            "inconclusive",
+            "not_run"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assertion_evidence"
+          }
+        }
+      }
+    },
+    "case_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "case_id",
+        "case_sha256",
+        "catalogue_sha256",
+        "profile_sha256",
+        "candidate",
+        "state",
+        "diagnostic",
+        "run_id",
+        "world_id",
+        "started_at",
+        "completed_at",
+        "assertions",
+        "cleanup_complete",
+        "provisioned_targets"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bc.playtest_case_result.v1"
+        },
+        "case_id": {
+          "type": "string"
+        },
+        "case_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "catalogue_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "profile_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "candidate": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "state": {
+          "enum": [
+            "passed",
+            "failed",
+            "blocked",
+            "inconclusive",
+            "not_run"
+          ]
+        },
+        "diagnostic": {
+          "type": "boolean"
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "world_id": {
+          "type": "string"
+        },
+        "started_at": {
+          "type": "string"
+        },
+        "completed_at": {
+          "type": "string"
+        },
+        "assertions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assertion_result"
+          }
+        },
+        "cleanup_complete": {
+          "type": "boolean"
+        },
+        "provisioned_targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "catalogue_sha256",
+        "case_results",
+        "campaign",
+        "lifecycle",
+        "visual_review",
+        "gui_review",
+        "visual_release_run_id",
+        "repository_receipts",
+        "log_review"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bc.playtest_evidence_index.v1"
+        },
+        "catalogue_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "case_results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bound_file"
+          }
+        },
+        "campaign": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "lifecycle": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/bound_file"
+          }
+        },
+        "visual_review": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "gui_review": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "visual_release_run_id": {
+          "type": "string"
+        },
+        "repository_receipts": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/bound_file"
+          }
+        },
+        "log_review": {
+          "$ref": "#/$defs/bound_file"
+        }
+      }
+    },
+    "campaign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "status",
+        "diagnostic",
+        "catalogue_sha256",
+        "profile_sha256",
+        "candidate",
+        "test_support_sha256",
+        "instrumented",
+        "seed",
+        "world_id",
+        "run_id",
+        "world_directory",
+        "world_marker",
+        "worlds_created",
+        "cleanup_complete",
+        "saved_and_validated",
+        "surviving_owned_pids",
+        "case_ids",
+        "observed_rosters",
+        "events",
+        "started_at",
+        "completed_at",
+        "hardware",
+        "fixture_overrides"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bc.playtest_campaign.v1"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "blocked",
+            "inconclusive"
+          ]
+        },
+        "diagnostic": {
+          "type": "boolean"
+        },
+        "catalogue_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "profile_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "candidate": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "test_support_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "instrumented": {
+          "type": "boolean"
+        },
+        "seed": {
+          "const": 424242
+        },
+        "world_id": {
+          "type": "string"
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "world_directory": {
+          "type": "string"
+        },
+        "world_marker": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "worlds_created": {
+          "const": 1
+        },
+        "cleanup_complete": {
+          "type": "boolean"
+        },
+        "saved_and_validated": {
+          "type": "boolean"
+        },
+        "surviving_owned_pids": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "case_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "observed_rosters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "events": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "started_at": {
+          "type": "string"
+        },
+        "completed_at": {
+          "type": "string"
+        },
+        "hardware": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "fixture_overrides": {
+          "$ref": "#/$defs/bound_file"
+        }
+      }
+    },
+    "repository_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "repository",
+        "status",
+        "source_sha256",
+        "tests_sha256",
+        "providers_sha256",
+        "toolchain_sha256",
+        "configuration_sha256",
+        "artifact_sha256",
+        "case_ids",
+        "evidence"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bc.playtest_repository.v1"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "blocked",
+            "inconclusive",
+            "not_run"
+          ]
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "tests_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "providers_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "toolchain_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "configuration_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "artifact_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "const": ""
+            }
+          ]
+        },
+        "case_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bound_file"
+          }
+        }
+      }
+    },
+    "gui_capture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "screen",
+        "profile",
+        "screenshot",
+        "captured_at",
+        "observed_gui_scale",
+        "capture_kind",
+        "input_kind",
+        "approved",
+        "checks",
+        "input_log",
+        "input_first_line",
+        "input_last_line"
+      ],
+      "properties": {
+        "screen": {
+          "type": "string"
+        },
+        "profile": {
+          "enum": [
+            "1280x720@2",
+            "1920x1080@3"
+          ]
+        },
+        "screenshot": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "captured_at": {
+          "type": "string"
+        },
+        "observed_gui_scale": {
+          "enum": [
+            2,
+            3
+          ]
+        },
+        "capture_kind": {
+          "const": "live-client-screenshot"
+        },
+        "input_kind": {
+          "const": "authentic"
+        },
+        "approved": {
+          "type": "boolean"
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "no_clipping",
+            "no_overlap",
+            "textures_present",
+            "labels_readable",
+            "tooltips_readable",
+            "navigation_works",
+            "controls_work"
+          ],
+          "properties": {
+            "no_clipping": {
+              "type": "boolean"
+            },
+            "no_overlap": {
+              "type": "boolean"
+            },
+            "textures_present": {
+              "type": "boolean"
+            },
+            "labels_readable": {
+              "type": "boolean"
+            },
+            "tooltips_readable": {
+              "type": "boolean"
+            },
+            "navigation_works": {
+              "type": "boolean"
+            },
+            "controls_work": {
+              "type": "boolean"
+            }
+          }
+        },
+        "input_log": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "input_first_line": {
+          "type": "integer"
+        },
+        "input_last_line": {
+          "type": "integer"
+        }
+      }
+    },
+    "gui": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "status",
+        "catalogue_sha256",
+        "session_id",
+        "reviewer",
+        "captures"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bc.playtest_gui_review.v1"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "inconclusive"
+          ]
+        },
+        "catalogue_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "captures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gui_capture"
+          }
+        }
+      }
+    },
+    "log_signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signature",
+        "count",
+        "owner",
+        "impact",
+        "disposition"
+      ],
+      "properties": {
+        "signature": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "owner": {
+          "type": "string"
+        },
+        "impact": {
+          "type": "string"
+        },
+        "disposition": {
+          "type": "string"
+        }
+      }
+    },
+    "logs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "catalogue_sha256",
+        "status",
+        "reviewer",
+        "reviewed_at",
+        "unresolved_blockers",
+        "signatures",
+        "sources"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bc.playtest_log_review.v1"
+        },
+        "catalogue_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "inconclusive"
+          ]
+        },
+        "reviewer": {
+          "type": "string"
+        },
+        "reviewed_at": {
+          "type": "string"
+        },
+        "unresolved_blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/log_signature"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bound_file"
+          }
+        }
+      }
+    },
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "profile",
+        "server_heap_mib",
+        "view_distance",
+        "simulation_distance",
+        "cpu",
+        "jvm",
+        "contention_notes"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bc.playtest_hardware.v1"
+        },
+        "profile": {
+          "type": "string"
+        },
+        "server_heap_mib": {
+          "type": "integer"
+        },
+        "view_distance": {
+          "const": 10
+        },
+        "simulation_distance": {
+          "const": 10
+        },
+        "cpu": {
+          "type": "string"
+        },
+        "jvm": {
+          "type": "string"
+        },
+        "contention_notes": {
+          "type": "string"
+        }
+      }
+    },
+    "fixture_overrides": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "overrides"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bc.playtest_fixture_overrides.v1"
+        },
+        "overrides": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "setting",
+              "value",
+              "purpose",
+              "changes_asserted_behavior"
+            ],
+            "properties": {
+              "setting": {
+                "type": "string"
+              },
+              "value": {},
+              "purpose": {
+                "type": "string"
+              },
+              "changes_asserted_behavior": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "qualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "status",
+        "created_at",
+        "catalogue_sha256",
+        "candidate",
+        "profile_sha256",
+        "evidence_index",
+        "limitations"
+      ],
+      "properties": {
+        "schema": {
+          "const": "bc.playtest_qualification.v1"
+        },
+        "status": {
+          "const": "qualified"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "catalogue_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "candidate": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "profile_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "evidence_index": {
+          "$ref": "#/$defs/bound_file"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/manifest"
+    },
+    {
+      "$ref": "#/$defs/case_result"
+    },
+    {
+      "$ref": "#/$defs/index"
+    },
+    {
+      "$ref": "#/$defs/campaign"
+    },
+    {
+      "$ref": "#/$defs/repository_receipt"
+    },
+    {
+      "$ref": "#/$defs/gui"
+    },
+    {
+      "$ref": "#/$defs/logs"
+    },
+    {
+      "$ref": "#/$defs/hardware"
+    },
+    {
+      "$ref": "#/$defs/fixture_overrides"
+    },
+    {
+      "$ref": "#/$defs/qualification"
+    }
+  ]
+}

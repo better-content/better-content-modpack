@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bc.repository_input_use_agent_build.v1",
+  "description": "Reviewed nonshipping helper compilation provenance, not evidence of executing repository tests.",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "producer_source_sha256", "agent_jar_sha256", "exit_code", "reviewer", "reviewed_at"],
+  "properties": {
+    "schema": {"const": "bc.repository_input_use_agent_build.v1"},
+    "producer_source_sha256": {"$ref": "#/$defs/sha"},
+    "agent_jar_sha256": {"$ref": "#/$defs/sha"},
+    "exit_code": {"const": 0},
+    "reviewer": {"type": "string", "minLength": 1},
+    "reviewed_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {"sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

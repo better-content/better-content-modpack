@@ -247,6 +247,10 @@
       "primary_role": "infrastructure",
       "support_state": "not_applicable"
     },
+    "better_party": {
+      "primary_role": "gameplay_system",
+      "support_state": "not_applicable"
+    },
     "better_spirit_commerce": {
       "primary_role": "world",
       "support_state": "not_applicable"
@@ -297,6 +301,10 @@
     },
     "better_bumblezone_crops": {
       "primary_role": "edge_provider",
+      "support_state": "not_applicable"
+    },
+    "cavedust": {
+      "primary_role": "presentation",
       "support_state": "not_applicable"
     },
     "c2me": {
@@ -1374,6 +1382,10 @@
     "supplementaries": {
       "primary_role": "content",
       "support_state": "full"
+    },
+    "subwild": {
+      "primary_role": "world",
+      "support_state": "not_applicable"
     },
     "better_survival_physiology": {
       "primary_role": "gameplay_system",

@@ -92,6 +92,31 @@ class DedicatedSpawnStageTest(unittest.TestCase):
             self.root, 'run-1', 'lineage', 'random', 1))
         self.assertEqual('pending', (self.root / spawn.STATUS).read_text().strip())
 
+    def test_v4_requires_nine_distinct_chunk_samples_and_matching_center(self):
+        rows = self.receipt.read_text().splitlines()
+        rows[0] = 'BC_INITIAL_SPAWN_ATTEMPT_V4'
+        for index in range(9):
+            x = (128 // 16 + index % 3 - 1) * 16 + 8
+            z = (128 // 16 + index // 3 - 1) * 16 + 8
+            if index == 4:
+                x, z = 128, 128
+            rows.append(f'sample\t{index}\t{x}\t72\t{z}\tminecraft:plains\t0.6')
+        valid = '\n'.join(rows) + '\n'
+        self.receipt.write_text(valid)
+        self.assertEqual('resolved', spawn.receipt_info(self.root, 'run-1', 'lineage', 'random', 1))
+        for changed, message in (
+                (valid.replace('sample\t0\t120', 'sample\t0\t128'), 'outside its chunk'),
+                (valid.replace('sample\t8\t152', 'sample\t8\t120'), 'outside its chunk'),
+                (valid.replace('sample\t8\t152', 'sample\t7\t152'), 'malformed'),
+                (valid.replace('sample\t4\t128\t72', 'sample\t4\t128\t73'), 'outside its chunk'),
+                (valid.replace('sample\t8\t152\t72\t152\tminecraft:plains\t0.6',
+                               'sample\t8\t152\t72\t152\tminecraft:plains\t0.2'), 'climate bounds'),
+                (valid.rsplit('sample\t8', 1)[0].rstrip() + '\n', 'line count')):
+            with self.subTest(message=message):
+                self.receipt.write_text(changed)
+                with self.assertRaisesRegex(RuntimeError, message):
+                    spawn.receipt_info(self.root, 'run-1', 'lineage', 'random', 1)
+
     def test_v3_receipt_requires_exact_identity_saved_state_and_resolved_status(self):
         original = self.receipt.read_text()
         for before, after, error in (

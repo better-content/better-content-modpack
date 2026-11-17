@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bc.repository_input_use_worker.v2",
+  "description": "Nonshipping Java agent emitted from an actual observed Test/JavaExec worker JVM, never from the Gradle parent. Source-only input-use observation; not packaged-runtime proof.",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "scope", "run_id", "repository", "task", "reviewed_plan_sha256", "producer_sha256", "observed_process_pid", "observed_process_start", "captured_at", "java_executable", "java_executable_sha256", "java_version", "code_sources", "class_path"],
+  "properties": {
+    "schema": {"const": "bc.repository_input_use_worker.v2"},
+    "scope": {"const": "source-only-not-packaged-runtime"},
+    "run_id": {"type": "string", "minLength": 1},
+    "repository": {"type": "string", "minLength": 1},
+    "task": {"type": "string", "pattern": "^:[A-Za-z][A-Za-z0-9_-]*(?::[A-Za-z][A-Za-z0-9_-]*)*$"},
+    "reviewed_plan_sha256": {"$ref": "#/$defs/sha"},
+    "producer_sha256": {"$ref": "#/$defs/sha"},
+    "observed_process_pid": {"type": "integer", "minimum": 1},
+    "observed_process_start": {"type": "string", "format": "date-time"},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "java_executable": {"type": "string", "minLength": 1},
+    "java_executable_sha256": {"$ref": "#/$defs/sha"},
+    "java_version": {"type": "string", "minLength": 1},
+    "code_sources": {"type": "array", "minItems": 1, "maxItems": 4096, "items": {"$ref": "#/$defs/entry"}},
+    "class_path": {"type": "array", "minItems": 1, "maxItems": 4096, "items": {"$ref": "#/$defs/entry"}}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "entry": {"type": "object", "additionalProperties": false, "required": ["path", "sha256", "kind"], "properties": {
+      "path": {"type": "string", "minLength": 1},
+      "sha256": {"oneOf": [{"$ref": "#/$defs/sha"}, {"type": "null"}]},
+      "kind": {"enum": ["file", "directory"]}
+    }}
+  }
+}

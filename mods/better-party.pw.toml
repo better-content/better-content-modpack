@@ -1,0 +1,13 @@
+name = "Better Party"
+filename = "better-party-forge-1.20.1-1.1.9.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "a450190ef8580669611dd3c222b6ffd2386986a4"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 9434919
+project-id = 1610184

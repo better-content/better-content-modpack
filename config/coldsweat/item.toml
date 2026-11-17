@@ -121,6 +121,10 @@
 	# i.e. if an item has 5 insulation slots and gives one slot of cold insulation by default, it will only have 4 free slots left
 	# ⌄ 
 	"Insulating Armor" = [
+	    ["better_survival_physiology:wool_helmet", 1.5, 0],
+	    ["better_survival_physiology:wool_chestplate", 1.5, 0],
+	    ["better_survival_physiology:wool_leggings", 1.5, 0],
+	    ["better_survival_physiology:wool_boots", 1.5, 0],
 	    ["minecraft:leather_helmet", 5, 5],
 	    ["minecraft:leather_chestplate", 7, 7],
 	    ["minecraft:leather_leggings", 6, 6],

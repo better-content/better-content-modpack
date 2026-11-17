@@ -1,0 +1,31 @@
+{
+  "sample": {
+    "tick": 20,
+    "monotonic_nanos": 810000001000,
+    "start_wall_nanos": 1000,
+    "setup_completed_wall_nanos": 10000001000,
+    "setup_completed_tick": 2,
+    "end_tick_interval_nanos_includes_scheduler_wait": 1000000000,
+    "game_time": 120,
+    "observation_wall_millis": 800000,
+    "native_game_tick_delta": 20
+  },
+  "view_tuple": [0,0,10,9,8,8,8,8,1],
+  "interval_masks_base64": "BQM=",
+  "receipt": {
+    "scale_contract_version": 2,
+    "start_wall_nanos": 1000,
+    "setup_completed_wall_nanos": 10000001000,
+    "setup_completed_tick": 2,
+    "setup_wall_nanos": 10000000000,
+    "last_sample_wall_nanos": 810000001000,
+    "last_sample_tick": 20,
+    "end_wall_nanos": 810001001000,
+    "terminal_partial_interval_nanos": 1000000,
+    "observation_wall_millis": 800001,
+    "capture_horizon_millis": 810000,
+    "receipt_order": "sample_then_receipt",
+    "observed_samples": 1,
+    "tps_adjudication": "external_setup_inclusive_recovery_then_sustained_dwell_required"
+  }
+}

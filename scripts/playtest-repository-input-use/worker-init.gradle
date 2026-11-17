@@ -1,0 +1,58 @@
+// Controller-injected, hash-bound, nonshipping Gradle init script. Never accept user -I or
+// alternate build scripts. This script only binds reviewed Test/JavaExec leaf task JVMs;
+// it does not claim that a Gradle parent PID used any provider on behalf of a worker.
+import java.security.MessageDigest
+import java.util.Properties
+import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.testing.Test
+
+if (gradle.gradleHomeDir == null) throw new GradleException('Unknown Gradle distribution init-script directory')
+def builtInInit = new File(gradle.gradleHomeDir, 'init.d')
+if (builtInInit.isDirectory() && builtInInit.listFiles()?.length > 0)
+    throw new GradleException('Distribution supplied unreviewed init scripts')
+def bindingPath = System.getenv('BC_REPOSITORY_USE_BINDING')
+if (bindingPath == null || bindingPath.isBlank()) throw new GradleException('Missing fixed repository input-use binding')
+def bindingFile = new File(bindingPath).canonicalFile
+if (!bindingFile.isFile()) throw new GradleException('Missing repository input-use task binding')
+def binding = new Properties()
+bindingFile.withInputStream { binding.load(it) }
+def agent = new File(binding.getProperty('agent', '')).canonicalFile
+if (!agent.isFile || !binding.getProperty('agent_sha256', '').matches('[0-9a-f]{64}'))
+    throw new GradleException('Missing controller-pinned repository observer agent')
+def digest = { String value -> MessageDigest.getInstance('SHA-256').digest(value.getBytes('UTF-8')).encodeHex().toString() }
+def hashFile = { File file ->
+    def hash = MessageDigest.getInstance('SHA-256')
+    file.withInputStream { stream ->
+        byte[] bytes = new byte[8192]
+        int count
+        while ((count = stream.read(bytes)) != -1) hash.update(bytes, 0, count)
+    }
+    hash.digest().encodeHex().toString()
+}
+if (hashFile(agent) != binding.getProperty('agent_sha256'))
+    throw new GradleException('Observer JAR bytes differ from fixed controller binding')
+def expected = binding.stringPropertyNames().findAll { it.startsWith('task.') }.collect { it.substring(5) }.toSet()
+if (expected.isEmpty()) throw new GradleException('No reviewed repository test leaf tasks')
+def seen = new HashSet<String>()
+gradle.beforeProject { project ->
+    def attach = { task ->
+        def key = digest(task.path)
+        if (expected.contains(key)) {
+            def config = new File(binding.getProperty('task.' + key)).canonicalFile
+            if (!config.isFile || config.parentFile != bindingFile.parentFile)
+                throw new GradleException('Missing fixed worker config for ' + task.path)
+            seen.add(key)
+            if (task instanceof Test) { task.maxParallelForks = 1; task.forkEvery = 0L }
+            task.jvmArgs('-javaagent:' + agent.absolutePath + '=' + config.absolutePath)
+        }
+    }
+    project.tasks.withType(Test).configureEach(attach)
+    project.tasks.withType(JavaExec).configureEach(attach)
+}
+gradle.taskGraph.whenReady { graph ->
+    // Configuration and task graph evidence must match the exact reviewed leaf roster.
+    def selected = graph.allTasks.findAll { expected.contains(digest(it.path)) }
+    if (selected.collect { digest(it.path) }.toSet() != expected ||
+        !selected.every { it instanceof Test || it instanceof JavaExec } ||
+        !seen.containsAll(expected)) throw new GradleException('Reviewed leaf task has no JVM input-use observer')
+}

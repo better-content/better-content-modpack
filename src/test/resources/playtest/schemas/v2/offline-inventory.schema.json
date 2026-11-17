@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bc.playtest_offline_inventory.v2",
+  "type": "object",
+  "required": ["schema", "candidates", "members", "embedded_artifact_lock"],
+  "properties": {
+    "schema": {"const": "bc.playtest_offline_inventory.v2"},
+    "candidates": {"type": "object", "required": ["client_sha256", "server_sha256"], "properties": {"client_sha256": {"$ref": "#/$defs/sha"}, "server_sha256": {"$ref": "#/$defs/sha"}}, "additionalProperties": false},
+    "embedded_artifact_lock": {"type": "object", "required": ["schema", "artifacts"], "properties": {"schema": {"const": "bc.client_artifacts.v1"}, "artifacts": {"type": "array", "items": {"type": "object"}}}},
+    "members": {"type": "array", "items": {"type": "object", "required": ["side", "path", "size", "sha256"], "properties": {"side": {"enum": ["client", "server"]}, "path": {"type": "string"}, "size": {"type": "integer", "minimum": 0}, "sha256": {"$ref": "#/$defs/sha"}, "nested": {"type": "array", "items": {"type": "object", "required": ["path", "size", "sha256"], "properties": {"path": {"type": "string"}, "size": {"type": "integer", "minimum": 0}, "sha256": {"$ref": "#/$defs/sha"}, "json": {}, "metadata_text": {"type": "string"}}}}, "json": {}}}}
+  },
+  "$defs": {"sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+  "additionalProperties": false
+}

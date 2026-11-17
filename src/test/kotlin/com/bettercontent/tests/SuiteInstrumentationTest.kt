@@ -1,0 +1,61 @@
+package com.bettercontent.tests
+
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+
+class SuiteInstrumentationTest {
+    private fun support(): Path = Files.createTempFile(Path.of("/home/dev/.tmp"), "suite-instrumentation-", ".jar").also { jar ->
+        ZipOutputStream(Files.newOutputStream(jar)).use { zip ->
+            listOf("META-INF/mods.toml", "META-INF/bc-playtest-support.json").forEach { entry ->
+                zip.putNextEntry(ZipEntry(entry)); zip.write("fixture".toByteArray()); zip.closeEntry()
+            }
+        }
+    }
+    private val required = listOf("-Dbc.playtest.directory=/home/dev/.tmp/native",
+        "-Dbc.playtest.runId=epoch-123", "-Dbc.playtest.token=${"a".repeat(64)}")
+    private val emi = "b".repeat(64)
+
+    @Test fun requiredThreeAndDeclaredClientEmiProperty() {
+        val jar = support()
+        try {
+            val hash = Hashes.sha256(jar)
+            assertEquals(required, SuiteInstrumentation(jar, hash, required, false).javaArguments)
+            assertEquals(required.size + 1, SuiteInstrumentation(jar, hash,
+                required + "-Dbc.playtest.emiSha256=$emi", true, emi, clientInstrumentation = true).javaArguments.size)
+            assertEquals(required.size, SuiteInstrumentation(jar, hash, required.reversed(), true).javaArguments.size)
+        } finally { Files.deleteIfExists(jar) }
+    }
+
+    @Test fun missingDuplicateUnknownMalformedOrUndeclaredPropertiesFailClosed() {
+        val jar = support()
+        try {
+            val hash = Hashes.sha256(jar)
+            val invalid = listOf(required.dropLast(1), required + required.last(), required + "-Dbc.playtest.unknown=x",
+                required + "-Dbc.playtest.emiSha256=$emi", required + "-Dbc.playtest.emiSha256=${"c".repeat(64)}",
+                required.dropLast(1) + "-Dbc.playtest.token=", required.dropLast(1) + "-Dbc.playtest.token",
+                required.dropLast(1) + "-Dbc.playtest.token=not-a-sha", required.dropLast(1) + "-Dbc.playtest.token=${"a".repeat(64)}\n-Dx=y",
+                required.dropLast(1) + "-Dbc.playtest.token=${"a".repeat(64)}\r-Dx=y")
+            invalid.forEach { arguments ->
+                assertThrows(IllegalArgumentException::class.java) { SuiteInstrumentation(jar, hash, arguments, false) }
+            }
+            assertThrows(IllegalArgumentException::class.java) {
+                SuiteInstrumentation(jar, hash, required + "-Dbc.playtest.emiSha256=${"c".repeat(64)}", true,
+                    emi, clientInstrumentation = true)
+            }
+            assertThrows(IllegalArgumentException::class.java) {
+                SuiteInstrumentation(jar, hash, required, true, emi, clientInstrumentation = true)
+            }
+            assertThrows(IllegalArgumentException::class.java) {
+                SuiteInstrumentation(jar, hash, required + "-Dbc.playtest.emiSha256=$emi", false, emi, clientInstrumentation = true)
+            }
+            assertThrows(IllegalArgumentException::class.java) {
+                SuiteInstrumentation(jar, hash, required + "-Dbc.playtest.emiSha256=$emi", true, emi) // server side cannot declare EMI
+            }
+        } finally { Files.deleteIfExists(jar) }
+    }
+}

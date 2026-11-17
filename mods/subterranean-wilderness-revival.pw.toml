@@ -1,0 +1,13 @@
+name = "Subterranean Wilderness Revival"
+filename = "subwild-1.0.4-1.20.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "c06b93b2014b37aefe95ae1be6efe7f8ba4c2b9e"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7973286
+project-id = 1496336
