@@ -3,7 +3,8 @@
 #	Namespaces:   '<minecraft>'
 #	Tags:         '#forge:stone'
 #	IDs:          'minecraft:stone'
-Blocks = ["minecraft:andesite_wall", "minecraft:blackstone_wall", "minecraft:cobbled_deepslate_wall", "minecraft:cobblestone_wall", "minecraft:deepslate_tile_wall", "minecraft:diorite_wall", "minecraft:granite_wall", "minecraft:mossy_cobblestone_wall", "minecraft:polished_blackstone_wall", "minecraft:polished_deepslate_wall", "minecraft:prismarine_wall", "minecraft:red_sandstone_wall", "minecraft:sandstone_wall"]
+# Chimney masonry follows the existing narrow construction profile; RBP retains tile NBT.
+Blocks = ["adchimneys:cobblestone_chimney", "adchimneys:stone_chimney", "adchimneys:small_brick_chimney", "adchimneys:large_brick_chimney", "minecraft:andesite_wall", "minecraft:blackstone_wall", "minecraft:cobbled_deepslate_wall", "minecraft:cobblestone_wall", "minecraft:deepslate_tile_wall", "minecraft:diorite_wall", "minecraft:granite_wall", "minecraft:mossy_cobblestone_wall", "minecraft:polished_blackstone_wall", "minecraft:polished_deepslate_wall", "minecraft:prismarine_wall", "minecraft:red_sandstone_wall", "minecraft:sandstone_wall"]
 
 [Physics]
 	#The maximum weight the block(s) can support both horizontally and vertically.

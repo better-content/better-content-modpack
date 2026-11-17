@@ -82,8 +82,15 @@ internal fun sessionClientOptions(text: String): String {
     }
 }
 
-private class PackSession(private val evidence: SessionEvidence, private val request: SessionRequest,
-    private val replay: DiagnosticReplay? = null) : TeleSoakDriver, AutoCloseable {
+internal class PackSession(private val evidence: SessionEvidence, private val request: SessionRequest,
+    private val replay: DiagnosticReplay? = null,
+    private val instrumentation: SuiteInstrumentation? = null,
+    private val epochRuntime: SuiteEpochRuntime? = null,
+    private val clientInstrumentation: SuiteInstrumentation? = null) : TeleSoakDriver, AutoCloseable {
+    init {
+        require(epochRuntime == null || instrumentation != null) { "epoch runtime requires explicit suite instrumentation" }
+        require(clientInstrumentation == null || epochRuntime != null) { "client observer is explicitly epoch-owned" }
+    }
     private val pair = evidence.pair
     private val root = evidence.root
     private val fixture = evidence.fixture
@@ -93,8 +100,9 @@ private class PackSession(private val evidence: SessionEvidence, private val req
     private val username = "SmokeClient"
     private val serverLog = evidence.directory.resolve("server.log")
     private val clientLog = evidence.directory.resolve("client.log")
-    private val clientRoot = fixture.resolve("client")
+    private val clientRoot = epochRuntime?.restoredRoots?.getValue("client") ?: epochRuntime?.directory?.resolve("client") ?: fixture.resolve("client")
     private lateinit var serverRoot: Path
+    private var supervisedWorldLaunch = false
     private var server: ManagedProcess? = null
     private var client: ManagedProcess? = null
     private var display: ManagedProcess? = null
@@ -118,12 +126,23 @@ private class PackSession(private val evidence: SessionEvidence, private val req
 
     fun prepare() {
         check(System.getProperty("java.specification.version") == "17" && Files.isExecutable(java)) { "Java 17 is required" }
-        val extracted = fixture.resolve("server")
-        ZipContracts.extract(pair.server, extracted)
-        serverRoot = extracted.resolve(ZipContracts.soleTopLevelDirectory(pair.server))
+        val restored = epochRuntime?.restoredRoots != null
+        if (restored) {
+            serverRoot = epochRuntime!!.restoredRoots!!.getValue("server")
+            require(Files.isRegularFile(serverRoot.resolve("world/level.dat"))) { "restored epoch lacks its saved world" }
+        } else {
+            val extracted = (epochRuntime?.directory ?: fixture).resolve("server")
+            ZipContracts.extract(pair.server, extracted)
+            serverRoot = extracted.resolve(ZipContracts.soleTopLevelDirectory(pair.server))
+            require(!serverRoot.resolve("world").exists()) { "server ZIP contains a world; sessions require a fresh disposable world" }
+        }
         require(Files.isRegularFile(serverRoot.resolve("run.sh"))) { "server ZIP lacks its launcher" }
-        require(!serverRoot.resolve("world").exists()) { "server ZIP contains a world; sessions require a fresh disposable world" }
-        listOf("run.sh", "run-forge.sh", "better-world-management-server.sh").forEach {
+        if (epochRuntime != null) listOf(serverRoot).forEach { runtime ->
+            listOf(".suite-home", ".suite-tmp", ".suite-cache", ".suite-data", ".suite-config").forEach { runtime.resolve(it).createDirectories() }
+        }
+        val supervisor = serverRoot.resolve("better-world-management-server.sh")
+        supervisedWorldLaunch = Files.isRegularFile(supervisor)
+        (listOf("run.sh", "run-forge.sh") + if (supervisedWorldLaunch) listOf(supervisor.fileName.toString()) else emptyList()).forEach {
             check(serverRoot.resolve(it).toFile().setExecutable(true)) { "cannot enable server launcher $it" }
         }
         serverRoot.resolve("eula.txt").writeText("eula=true\n")
@@ -137,8 +156,9 @@ private class PackSession(private val evidence: SessionEvidence, private val req
         // 9x9 server view can finish; a 5x5 view still loads fresh terrain on
         // every move without pre-generating it or relaxing the TPS threshold.
         val distance = if (request.tier != SessionTier.SMOKE) "2" else "4"
-        values.setProperty("view-distance", distance)
-        values.setProperty("simulation-distance", distance)
+        values.setProperty("view-distance", if (instrumentation != null) "10" else distance)
+        values.setProperty("simulation-distance", if (instrumentation != null) "10" else distance)
+        if (instrumentation != null) values.setProperty("level-seed", "424242")
         Files.newOutputStream(props).use { values.store(it, "Disposable session profile; packaged inputs remain unchanged") }
         val serverHeap = if (request.tier != SessionTier.SMOKE) "-Xms4G\n-Xmx10G\n"
             else "-Xms1G\n-Xmx6G\n"
@@ -146,22 +166,50 @@ private class PackSession(private val evidence: SessionEvidence, private val req
             if (request.tier != SessionTier.SMOKE)
                 "-Dbc.pack_test.debug=true\n-Xlog:gc*:file=tele-soak-gc.log:time,uptime,level,tags:filecount=3,filesize=10m\n"
             else "")
+        instrumentation?.let {
+            it.install(serverRoot, restored)
+            serverRoot.resolve("user_jvm_args.txt").writeText(it.jvmText(if (epochRuntime != null) serverRoot else null))
+            evidence.event("test_support_installed", mapOf("sha256" to it.supportSha256,
+                "instrumented" to true, "seed" to 424242, "view_distance" to 10,
+                "simulation_distance" to 10, "server_heap_mib" to 16384))
+        }
         val backups = serverRoot.resolve("config/ftbbackups2.json")
-        if (Files.isRegularFile(backups)) backups.writeText(backups.readText().replace("\"enabled\": true", "\"enabled\": false"))
-        // The materializer uses only the ZIP, its embedded artifact lock and a content-addressed cache.
-        Commands.run(listOf("python3", root.resolve("src/main/resources/materialize_client.py").toString(), pair.client.toString(), clientRoot.toString()),
-            fixture, evidence.directory.resolve("client-materialization.log"))
-        configureClientProfile()
-        Commands.run(listOf("xauth", "-f", authority.toString(), "add", displayAddress, "MIT-MAGIC-COOKIE-1", UUID.randomUUID().toString().replace("-", "")),
-            fixture, evidence.directory.resolve("xauth.log"))
-        evidence.event("prepared", mapOf("fresh_world" to true, "server_port" to port,
-            "profile" to "loopback offline authentication, server distances 4 (both Tele Soaks 2), client render 4/simulation 5, software-rendered client; Tele Soak server heap 4-10 GiB and all client heaps 2-8 GiB; no feature scenarios",
+        if (epochRuntime == null && Files.isRegularFile(backups)) backups.writeText(backups.readText().replace("\"enabled\": true", "\"enabled\": false"))
+        if (instrumentation?.clientRequired != false || epochRuntime != null) {
+            // The materializer uses only the ZIP, its embedded artifact lock and a content-addressed cache.
+            // Origin checkpoints include an unused client installation, but never log that player in.
+            if (!restored) {
+                Commands.run(listOf("python3", root.resolve("src/main/resources/materialize_client.py").toString(), pair.client.toString(), clientRoot.toString()),
+                    fixture, evidence.directory.resolve("client-materialization.log"))
+                if (epochRuntime != null) Files.copy(clientRoot.parent.resolve("client-manifest.json"), clientRoot.resolve(".bc-client-manifest.json"))
+            }
+            if (epochRuntime != null) {
+                listOf(".suite-home", ".suite-tmp", ".suite-cache", ".suite-data", ".suite-config").forEach { clientRoot.resolve(it).createDirectories() }
+                val wheel = clientRoot.resolve(".suite-launcher.whl")
+                if (!restored) Files.copy(epochRuntime.launcherWheel, wheel)
+                require(Hashes.sha256(wheel) == epochRuntime.launcherSha256) { "restored launcher artifact changed" }
+            }
+            clientInstrumentation?.install(clientRoot, restored)
+            if (!restored || epochRuntime != null) configureClientProfile()
+            Commands.run(listOf("xauth", "-f", authority.toString(), "add", displayAddress, "MIT-MAGIC-COOKIE-1", UUID.randomUUID().toString().replace("-", "")),
+                fixture, evidence.directory.resolve("xauth.log"))
+        }
+        evidence.event("prepared", mapOf("fresh_world" to !restored, "restored_epoch" to restored, "server_port" to port,
+            "visual_profile" to epochRuntime?.visualProfile, "sandbox_sha256" to epochRuntime?.sandboxSha256,
+            "profile" to if (instrumentation == null) "loopback offline authentication, server distances 4 (both Tele Soaks 2), client render 4/simulation 5, software-rendered client; Tele Soak server heap 4-10 GiB and all client heaps 2-8 GiB; no feature scenarios"
+                else "instrumented test-support session; seed 424242; server distances 10, heap 4-16 GiB; client heap 2-8 GiB if required; not uninstrumented lifecycle evidence",
             "requested_connected_seconds" to request.connectedDuration.seconds,
             "diagnostic_remaining_seconds" to replay?.remainingSeconds(request)))
     }
 
     private fun configureClientProfile() {
         val options = clientRoot.resolve("options.txt")
+        if (epochRuntime != null) {
+            val existing = if (Files.isRegularFile(options)) options.readText() else ""
+            options.writeText(suiteClientOptions(existing, epochRuntime.guiScale))
+            // V3 does not silently disable production DH generation, graphics, or backup scheduling.
+            return
+        }
         if (Files.isRegularFile(options)) {
             options.writeText(sessionClientOptions(options.readText()))
         }
@@ -174,31 +222,43 @@ private class PackSession(private val evidence: SessionEvidence, private val req
 
     override fun startServer() {
         check(server == null) { "server may only start once" }
-        server = ManagedProcess("server", listOf("./run.sh", "nogui"), serverRoot, serverLog, mapOf("BC_JAVA" to java.toString()))
-        evidence.event("server_started", mapOf("pid" to server!!.pid))
+        server = ManagedProcess("server", suiteCommand(listOf("./run.sh", "nogui"), serverRoot), serverRoot, serverLog,
+            mapOf("BC_JAVA" to java.toString()) + ownedEnvironment(serverRoot))
+        evidence.event("server_started", launchIdentity(server!!))
     }
 
     override fun awaitServerReady() {
-        // A new Lineage world starts a closed candidate server first. Its "Done" line is
-        // not the playable server: wait for the supervisor to promote/reopen the save.
+        // A supervised world first boots a closed candidate; only its final launch is playable.
+        // The current pack has no supervisor and starts Forge directly from run.sh.
         val ready = Regex("Done \\([0-9.]+s\\)!.*For help")
         server!!.waitUntil(startupTimeout, "published world server readiness") {
             val output = serverLog.readText()
-            val finalLaunch = output.lastIndexOf("launching current world under lifecycle supervision")
-            finalLaunch >= 0 && ready.containsMatchIn(output.substring(finalLaunch))
+            check(!output.contains("Failed to start the minecraft server")) {
+                "server failed during startup; see $serverLog"
+            }
+            if (supervisedWorldLaunch) {
+                val finalLaunch = output.lastIndexOf("launching current world under lifecycle supervision")
+                finalLaunch >= 0 && ready.containsMatchIn(output.substring(finalLaunch))
+            } else ready.containsMatchIn(output)
         }
         evidence.event("server_ready")
     }
 
     override fun connectClient() {
+        check(instrumentation?.clientRequired != false) { "discovery must not start a client" }
         check(client == null) { "client may only connect once; reconnect is not a recovery strategy" }
         // TCP + an explicit cookie avoids X11 sockets/lock files in /tmp.
-        display = ManagedProcess("display", listOf("Xvfb", ":$displayNumber", "-screen", "0", "1280x720x24",
-            "-nolisten", "unix", "-listen", "tcp", "-nolock", "-auth", authority.toString()), fixture, evidence.directory.resolve("display.log"))
+        val resolution = epochRuntime?.resolution ?: "1280x720"
+        display = ManagedProcess("display", suiteCommand(listOf("Xvfb", ":$displayNumber", "-screen", "0", "${resolution}x24",
+            "-nolisten", "unix", "-listen", "tcp", "-nolock", "-auth", authority.toString()), fixture, clientRoot), fixture,
+            evidence.directory.resolve("display.log"), ownedEnvironment(clientRoot))
+        if (epochRuntime != null) evidence.event("display_started", launchIdentity(display!!))
         Thread.sleep(1000)
         check(display!!.alive) { "Xvfb failed; see display.log" }
-        val main = System.getenv("BC_TEST_CLIENT_MAIN") ?: Path.of(System.getProperty("user.home"), ".cache/bc/client-launcher").toString()
-        val manifest = jacksonObjectMapper().readTree(fixture.resolve("client-manifest.json").toFile())
+        val main = if (epochRuntime != null) clientRoot.resolve(".launcher").toString()
+            else System.getenv("BC_TEST_CLIENT_MAIN") ?: Path.of(System.getProperty("user.home"), ".cache/bc/client-launcher").toString()
+        val manifest = jacksonObjectMapper().readTree((if (epochRuntime != null) clientRoot.resolve(".bc-client-manifest.json")
+            else fixture.resolve("client-manifest.json")).toFile())
         val mc = manifest.path("minecraft").path("version").asText()
         val loader = manifest.path("minecraft").path("modLoaders").single { it.path("primary").asBoolean() }.path("id").asText()
         require(mc == "1.20.1" && loader.startsWith("forge-")) { "unsupported client manifest loader: $mc/$loader" }
@@ -206,14 +266,21 @@ private class PackSession(private val evidence: SessionEvidence, private val req
         // The full client's initial resource reload nearly exhausted the former 4 GiB Smoke heap
         // and stalled the first login until Minecraft's 30-second network read timeout fired.
         // Use the existing Tele Soak heap for every tier; no continuity or TPS gate changes.
-        val jvm = "-Xms2G -Xmx8G -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false"
-        client = ManagedProcess("client", listOf("pipx", "run", "--spec", "portablemc==4.4.1", "portablemc",
+        val jvm = "-Xms2G -Xmx8G -XX:+UseG1GC -Dfile.encoding=UTF-8 -Djava.net.preferIPv6Addresses=false" +
+            (if (epochRuntime != null) " \"-Duser.home=${clientRoot.resolve(".suite-home")}\" \"-Djava.io.tmpdir=${clientRoot.resolve(".suite-tmp")}\"" else "") +
+            clientInstrumentation?.javaArguments.orEmpty().joinToString("", transform = { argument ->
+                " \"${argument.replace("-Dbc.playtest.", "-Dbc.playtest.client.").replace("\\", "\\\\").replace("\"", "\\\"")}\""
+            })
+        val launcher = if (epochRuntime != null) listOf("python3", "-I", "-c",
+            "import sys; sys.path.insert(0, sys.argv.pop(1)); from portablemc.cli import main; main()", clientRoot.resolve(".suite-launcher.whl").toString())
+            else listOf("pipx", "run", "--spec", "portablemc==4.4.1", "portablemc")
+        client = ManagedProcess("client", suiteCommand(launcher + listOf(
             "--main-dir", main, "--work-dir", clientRoot.toString(), "--timeout", "120", "start", "--jvm", java.toString(),
-            "--jvm-args=$jvm", "--resolution", "1280x720", "-u", username, "-i", offlineId,
-            "-s", "127.0.0.1", "-p", port.toString(), "forge:$mc-${loader.removePrefix("forge-")}"), clientRoot, clientLog,
+            "--jvm-args=$jvm", "--resolution", resolution, "-u", username, "-i", offlineId,
+            "-s", "127.0.0.1", "-p", port.toString(), "forge:$mc-${loader.removePrefix("forge-")}"), clientRoot), clientRoot, clientLog,
             mapOf("DISPLAY" to displayAddress, "XAUTHORITY" to authority.toString(), "LIBGL_ALWAYS_SOFTWARE" to "1",
-                "MESA_GL_VERSION_OVERRIDE" to "4.6", "MESA_GLSL_VERSION_OVERRIDE" to "460", "ALSOFT_DRIVERS" to "null"))
-        evidence.event("client_started", mapOf("pid" to client!!.pid, "username" to username))
+                "MESA_GL_VERSION_OVERRIDE" to "4.6", "MESA_GLSL_VERSION_OVERRIDE" to "460", "ALSOFT_DRIVERS" to "null") + ownedEnvironment(clientRoot))
+        evidence.event("client_started", launchIdentity(client!!) + mapOf("username" to username))
     }
 
     override fun awaitClientJoined() {
@@ -514,6 +581,51 @@ private class PackSession(private val evidence: SessionEvidence, private val req
             "log_policy" to "warnings and nonfatal ERROR messages retained as diagnostics, not blanket failures"))
     }
 
+    /** Suite-only access; normal runtime tiers cannot bypass their client lifecycle. */
+    internal fun ensureSuiteServerAlive() {
+        check(instrumentation != null && server?.alive == true) { "instrumented server is not alive" }
+        check(!serverLog.readText().contains("Failed to start the minecraft server")) { "instrumented startup failed" }
+    }
+
+    internal fun stopDiscoveryServer() {
+        check(instrumentation?.clientRequired == false && client == null) { "not a server-only discovery" }
+        disconnected = true
+        saveAndStopServer()
+    }
+
+    internal fun suiteWorldDirectory(): Path {
+        check(instrumentation != null)
+        return serverRoot.resolve("world")
+    }
+
+    internal fun suiteRuntimeRoots(): Map<String, Path> {
+        check(epochRuntime != null)
+        return mapOf("server" to serverRoot, "client" to clientRoot)
+    }
+
+    private fun launchIdentity(process: ManagedProcess): Map<String, Any?> = mapOf("pid" to process.pid) +
+        if (epochRuntime == null) emptyMap() else mapOf("started_at" to requireNotNull(process.processStarts[process.pid]) {
+            "cannot attest launched process start identity"
+        }.toString())
+
+    internal fun suiteProcessIdentities(): List<com.bettercontent.tests.suite.checkpoints.OwnedProcessIdentity> {
+        check(epochRuntime != null)
+        return listOfNotNull(server, client, display).flatMap { process ->
+            val starts = process.processStarts
+            check(starts.keys == process.trackedPids) { "cannot attest start time for every owned process" }
+            starts.map { (pid, start) -> com.bettercontent.tests.suite.checkpoints.OwnedProcessIdentity(pid, start.toString()) }
+        }.distinct()
+    }
+
+    private fun suiteCommand(arguments: List<String>, cwd: Path, stateRoot: Path = cwd): List<String> =
+        epochRuntime?.command(arguments, cwd, evidence.directory, stateRoot,
+            evidence.directory.resolve(if (stateRoot == clientRoot) "client-native" else "native")) ?: arguments
+
+    private fun ownedEnvironment(runtime: Path): Map<String, String> = if (epochRuntime == null) emptyMap() else mapOf(
+        "HOME" to runtime.resolve(".suite-home").toString(), "TMPDIR" to runtime.resolve(".suite-tmp").toString(),
+        "XDG_CONFIG_HOME" to runtime.resolve(".suite-config").toString(), "XDG_CACHE_HOME" to runtime.resolve(".suite-cache").toString(),
+        "XDG_DATA_HOME" to runtime.resolve(".suite-data").toString())
+
     private fun processTreeMemory(process: ManagedProcess): Long? = process.trackedPids.mapNotNull(::processMemory).takeIf { it.isNotEmpty() }?.sum()
 
     private fun processMemory(pid: Long): Long? = runCatching {
@@ -539,6 +651,11 @@ private class PackSession(private val evidence: SessionEvidence, private val req
             runCatching { server!!.send("stop"); server!!.waitForExit(Duration.ofMinutes(2)) }
         }
         server?.let(resources::add)
-        cleanupFixtures(resources) { evidence.event("process_cleanup", it) }
+        cleanupFixtures(resources) { result ->
+            val identities = if (epochRuntime == null) emptyMap() else mapOf("owned_processes" to suiteProcessIdentities().map {
+                mapOf("pid" to it.pid, "started_at" to it.startedAt)
+            })
+            evidence.event("process_cleanup", result + identities)
+        }
     }
 }

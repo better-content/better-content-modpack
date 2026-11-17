@@ -12,6 +12,9 @@ class ProcessCleanupException(val survivingPids: List<Long>) : IllegalStateExcep
 /** Retains observed descendants even after their original parent exits. */
 internal class ProcessTracker(root: ProcessHandle) {
     private val handles = ConcurrentHashMap<Long, ProcessHandle>().apply { put(root.pid(), root) }
+    private val starts = ConcurrentHashMap<Long, java.time.Instant>().apply {
+        root.info().startInstant().ifPresent { put(root.pid(), it) }
+    }
     private val observer = Executors.newSingleThreadScheduledExecutor { action ->
         Thread(action, "process-tree-${root.pid()}").apply { isDaemon = true }
     }
@@ -23,11 +26,15 @@ internal class ProcessTracker(root: ProcessHandle) {
 
     private fun discover() {
         handles.values.toList().filter { it.isAlive }.forEach { handle ->
-            handle.descendants().use { descendants -> descendants.forEach { handles.putIfAbsent(it.pid(), it) } }
+            handle.descendants().use { descendants -> descendants.forEach {
+                handles.putIfAbsent(it.pid(), it)
+                it.info().startInstant().ifPresent { start -> starts.putIfAbsent(it.pid(), start) }
+            } }
         }
     }
 
     internal fun trackedPids(): Set<Long> = handles.keys.toSet()
+    internal fun processStarts(): Map<Long, java.time.Instant> = starts.toMap()
 
     @Synchronized
     fun stop(grace: Duration, force: Duration = Duration.ofSeconds(5)) {

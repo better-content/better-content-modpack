@@ -66,7 +66,7 @@ checkout is unchanged, changed, or based on a legacy JAR without an identity. Pr
 
 ### Canonical Active Inventory
 
-The candidate manifest has **54 custom mods** in `gradle/active-custom-mods.json`; this is a target inventory, not a built or Smoke-accepted distribution. It removes Dynamic Trees Dimension Compat, adds Electrochemistry, Seasonal Daylight and Seasonal Trees, and retains experimental Abyssal City and Better Spaceflight. Spaceflight uses the available `e3591959d2c614b71ca96d478ada43f8ac597f81` feasibility source; its unrecovered survival-preview flight, oxygen and destination code is retired. Abyssal City uses `verifyGeneration` and a controlled reobfuscated output. All included source-owned JARs, including unchanged providers, require a fresh isolated rebuild with source/provider/artifact provenance for this consolidation. Finite Water remains excluded; Creating Space and Undergarden are removed. No gameplay qualification, world migration or source-test result follows from manifest membership.
+The candidate manifest has **53 custom mods** in `gradle/active-custom-mods.json`; this is a target inventory, not a built or Smoke-accepted distribution. It removes Dynamic Trees Dimension Compat, adds Electrochemistry, Seasonal Daylight and Seasonal Trees, and retains experimental Abyssal City and Better Spaceflight. Spaceflight uses the available `e3591959d2c614b71ca96d478ada43f8ac597f81` feasibility source; its unrecovered survival-preview flight, oxygen and destination code is retired. Abyssal City uses `verifyGeneration` and a controlled reobfuscated output. All included source-owned JARs, including unchanged providers, require a fresh isolated rebuild with source/provider/artifact provenance for this consolidation. Finite Water remains excluded; Creating Space and Undergarden are removed. No gameplay qualification, world migration or source-test result follows from manifest membership.
 
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
@@ -114,7 +114,6 @@ The candidate manifest has **54 custom mods** in `gradle/active-custom-mods.json
 | [better-tinkers-loot-affixes](https://github.com/better-content/better-tinkers-loot-affixes) | `better_tinkers_loot_affixes` | `better-tinkers-loot-affixes-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-village-fortifications](https://github.com/better-content/better-village-fortifications) | `better_village_fortifications` | `better-village-fortifications-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-drinking-water](https://github.com/better-content/better-drinking-water) | `better_drinking_water` | `better-drinking-water-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-world-management](https://github.com/better-content/better-world-management) | `better_world_management` | `better-world-management-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-celestial-events](https://github.com/better-content/better-celestial-events) | `better_celestial_events` | `better-celestial-events-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-wild-fruit-trees](https://github.com/better-content/better-wild-fruit-trees) | `better_wild_fruit_trees` | `better-wild-fruit-trees-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [scalable-tnt](https://github.com/better-content/scalable-tnt) | `scalable_tnt` | `scalable-tnt-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
@@ -561,7 +560,7 @@ a staging area inside an active root.
 | Vanilla vessel durability and recipes | Better Content Fixes | No boat mutation or hiding script |
 | Credited-kill spirit release, seven village professions/stations/behaviours, matching spirit trades, and seven wandering identities | Better Content Economy | No parallel KubeJS spirit source, trade catalogue, profession conversion, or kill-drop script; pack policy only retires old coin/equipment surfaces |
 | TConstruct affixes and Epic Fight mapping | Tinkers' Construct Affixes | Pack supplies no parallel material-affix catalogue |
-| World reset lifecycle | World Lifecycle Manager | Pack supplies runtime configuration and deploys its independent JAR |
+| World reset lifecycle (deferred) | World Lifecycle Manager | Not deployed in the active pack; retained source/configuration is not active gameplay |
 | Persistent footprints and notes | Player Traces | Pack supplies runtime configuration and deploys its independent JAR |
 
 The five active Machine Block IDs are:
@@ -788,25 +787,13 @@ deserialize old pieces.
 
 `better_pillager_campaigns` bounds its loaded-column sampling, route search, and spawn production; it must
 never load terrain to seek a route. `better_settlement_roads` and `better_village_fortifications` likewise keep tick work
-bounded and clean transient state. `better-spawns` always owns first-join spectator scouting and
-permanent spawn locking. Its active `progression` embark mode asks World Lifecycle Manager for the
-current lineage policy: new lineages receive site-only onboarding, class perks expose only their
-unlocked classes, and unlocking all six classes exposes the bounded Embark point-buy. World
-Lifecycle Manager separately owns successor spawn-biome preferences in
-`config/better_world_management-successor-biomes.txt`. Fresh initial worlds no longer
-read a biome-ID preference list: they select a final shared-spawn biome whose registered
-base temperature is within Cold Sweat's loaded habitable bounds (10–37.78°C in this
-pack) and which is not in `#minecraft:is_ocean`. The same rule applies at the two
-blocks above the saved position, because vanilla first-join placement can lift a
-spectator into a vertically different ocean biome. Additional initial-only excluded
-IDs may be added to `config/better_world_management-initial-spawn-blacklist.txt`;
-the ocean tag exclusion applies even if that file is absent. No FULL-chunk terrain-safety check
-is required for first-join spectators. This biome-baseline criterion does not guarantee
-effective comfort at every time, season or elevation. Successor spawn checks retain
-their existing terrain policy.
-Once a player joins a candidate, Lifecycle Manager writes an inhabited marker in that world;
-the supervisor preserves the candidate and transaction if the marker or saved player data is
-present, including after a failed health check or interrupted retry.
+bounded and clean transient state. `better-spawns` owns first-join spectator scouting and permanent spawn locking. With
+World Lifecycle Manager deferred from the active pack, its configured `progression`
+mode falls back to spawn-only selection: no class, kit or Embark selection. The
+World Management successor-world and initial-spawn policies and supervisor remain
+retained source work, not active pack behavior. The nine-neighbor initial-spawn
+candidate is untested and was not packaged. Do not open an existing World
+Management world in this reduced pack without a separate save-compatibility review.
 
 ### Heat and pollution authority
 

@@ -23,4 +23,4 @@ export BC_JAVA
 if [[ "$#" -eq 0 ]]; then
   set -- nogui
 fi
-exec "$SCRIPT_DIR/better-world-management-server.sh" "$@"
+BC_PACK_LAUNCH=1 exec "$SCRIPT_DIR/run-forge.sh" "$@"
