@@ -41,19 +41,6 @@
       ]
     },
     {
-      "repository": "better-arena-trials",
-      "modId": "better_arena_trials",
-      "artifact": "better-arena-trials-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ],
-      "dependsOn": [
-        "better-player-traces",
-        "better-deaths-door"
-      ]
-    },
-    {
       "repository": "better-spirit-commerce",
       "modId": "better_spirit_commerce",
       "artifact": "better-spirit-commerce-1.0.1.jar",
@@ -122,8 +109,7 @@
         "better-settlement-roads",
         "better-survival-physiology",
         "better-tinkers-loot-affixes",
-        "better-drinking-water",
-        "better-world-management"
+        "better-drinking-water"
       ]
     },
     {
@@ -182,8 +168,8 @@
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-world-management",
-        "better-gameplay-notices"
+        "better-gameplay-notices",
+        "better-deaths-door"
       ]
     },
     {
@@ -288,6 +274,10 @@
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
+      ],
+      "dependsOn": [
+        "better-drinking-water",
+        "better-spicy-farmers"
       ]
     },
     {
@@ -352,7 +342,8 @@
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-deaths-door"
+        "better-deaths-door",
+        "better-gameplay-notices"
       ]
     },
     {
@@ -504,7 +495,8 @@
       ],
       "dependsOn": [
         "better-compat-fixes",
-        "better-gameplay-notices"
+        "better-gameplay-notices",
+        "better-spicy-farmers"
       ]
     },
     {
@@ -535,40 +527,6 @@
       ]
     },
     {
-      "repository": "better-world-management",
-      "modId": "better_world_management",
-      "artifact": "better-world-management-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ],
-      "dependsOn": [
-        "better-dimension-fonts",
-        "better-ore-geology",
-        "better-bumblezone-crops",
-        "better-celestial-events",
-        "better-spirit-commerce",
-        "better-chemlib-hazards"
-      ]
-    },
-    {
-      "repository": "better-cooking",
-      "modId": "better_cooking",
-      "artifact": "better-cooking-0.1.0.jar",
-      "tasks": [
-        "verifyFast",
-        "stageRuntimeJar"
-      ],
-      "dependsOn": [
-        "better-survival-physiology",
-        "better-drinking-water",
-        "better-industrial-heat",
-        "better-spicy-farmers",
-        "better-spirit-commerce",
-        "better-bumblezone-crops"
-      ]
-    },
-    {
       "repository": "better-abyssal-city",
       "modId": "better_abyssal_city",
       "artifact": "better-abyssal-city-0.1.0.jar",
@@ -580,15 +538,6 @@
       "repository": "better-spaceflight",
       "modId": "better_spaceflight",
       "artifact": "better-spaceflight-0.1.0.jar",
-      "tasks": [
-        "test",
-        "stageRuntimeJar"
-      ]
-    },
-    {
-      "repository": "better-electrochemistry",
-      "modId": "better_electrochemistry",
-      "artifact": "better-electrochemistry-0.1.0.jar",
       "tasks": [
         "test",
         "stageRuntimeJar"

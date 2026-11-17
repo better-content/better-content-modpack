@@ -180,52 +180,55 @@ logistics or Horse Crank gate decision. It does not turn source-only candidates
 into friends' playtest observations. The bounded future retier and reasons for
 its deferral live in [Aspirational features](design.md#create-power-and-capability-retier).
 
-### Life attributes — staged pack candidate, not gameplay-accepted
+<a id="life-attributes--staged-pack-candidate-not-gameplay-accepted"></a>
 
-The separately owned RPG mod now has a **staged, unreleased candidate** for eight per-life
-builds. The exact RPG JAR is in the local pack inputs and Build 55's packaged
-client/server pair. All 54 active custom mods were freshly built from local source
-for Build 52; changed cave and discovery-guides sources were rebuilt for Builds 53
-and 55, respectively, while unchanged staged JARs were reused. Build 55 passed
-real-client Smoke, and a separate disposable singleplayer world generated, rendered
-and saved. Neither check exercised pinned-mod combat, temperature or allocation effects. Do not mistake
-this for friends' playtesting or gameplay acceptance. Each new experience-level peak
-still awards one Life point; committed points are lost on final death. Old
-body-part IDs and auto-plans are **not** migrated: keep existing worlds untouched,
-and use a freshly created world for the eventual friends' playtest. The existing
-allocation screen previews drafted, committed, next-point, and 20-point values.
+### Life attributes — five-choice source candidate, not gameplay-accepted
+
+**2026-11-17 approved five-choice source contract — source and tests authored,
+compile-only checked; not staged or gameplay-accepted.** The bounded [five-aspect exception](design.md#five-gameplay-categories-for-diet-life-development-and-commerce)
+replaces the eight Life builds with **Power, Motion, Endurance, Renewal and
+Control**, using IDs `better_rpg_progression:power`, `:motion`, `:endurance`,
+`:renewal` and `:control`. This is a fresh-world change, not an update to existing
+characters. Old body-part/build allocations and auto-plans receive no migration,
+refund or compatibility guarantee; keep existing worlds untouched.
+
+Each new experience-level peak still awards one Life point. Committed points are
+not refunded during a life and are lost on final death. Drafted, committed,
+next-point and 20-point previews use the same definitions as the server. Obsolete
+allocation IDs must be rejected, not partially applied alongside valid requests.
 
 Steady bonuses follow `F(p)=p/(p+10)` and milestones follow
 `B(p)=min(p,20)/20`. At 20 points, `F=2/3` and `B=1`:
 
-- **Vanguard:** Epic Fight armor negation `+6F` percentage points and attack
-  knockback `+0.20F`; impact `+0.60B` modifies the hit, not a guaranteed stagger.
-- **Sharpshooter:** bow spread and TaCZ gun dispersion each `−18F%`, gun recoil
-  `−12F%`; bow launch velocity `+8B%`. Gun and bow effects are separate.
-- **Artisan:** mining speed `+12F%`, Tinkers' item-use speed `+0.09F` native
-  units; block reach `+B` blocks.
-- **Trailblazer:** safe fall `+3F` blocks, swim speed `+15F%`, step height
-  `+0.40B` blocks; a full one-block step still needs 0.60 baseline height.
-- **Survivalist:** independently slow outward heat/cold drift `15F%`; Cold
-  Sweat's resolved safe interval expands by `−0.5B` freezing and `+0.5B`
-  burning native units. Neither benefit replaces temperature equipment or food.
-- **Spellcaster:** Ars max mana `+60F` and regeneration `+1.2F` per second;
-  Goety soul-cost reduction `6F%`, casting-time reduction `8F%`, and additive
-  range `+B`. Goety's actual range is integer-valued; a fraction alone does
-  not extend a zero-baseline spell. Mana and souls are not interchangeable.
-- **Skirmisher:** independent ParCool and Epic Fight stamina capacity `+12F%`
-  and recovery `+10F%` on **each** pool. Pools and action costs stay separate;
-  no fixed extra-dodge count is promised.
-- **Aerialist:** Tinkers' jump boost `+0.09F` native units, Epic Fight basic
-  air-attack stamina cost `−12F%` (2 → 1.84 at 20 without other modifiers),
-  and existing Air Slash damage modifier `1.5+0.30B` (1.8× at 20). No vanilla
-  crit, grounded-hit, or fall-protection bonus.
+| Life choice | Retained bonuses | At 20 points |
+| --- | --- | --- |
+| **Power** | Epic Fight impact `+0.60B`; correct-tool mining speed `+12F%`; block reach `+B` blocks | `+0.60` impact, `+8%` mining, `+1` block reach |
+| **Motion** | Safe fall `+3F` blocks; swim speed `+15F%`; step height `+0.40B` blocks | `+2` safe-fall blocks, `+10%` swim, `+0.40` step height |
+| **Endurance** | Separate ParCool and Epic Fight stamina capacities each `+12F%`; outward heat/cold drift reduction `15F%`; freezing/burning boundaries `−0.5B/+0.5B` native units | Both capacities `+8%`, outward drift `−10%`, boundaries `−0.5/+0.5` |
+| **Renewal** | Separate ParCool and Epic Fight recovery each `+10F%`; Ars mana regeneration `+1.2F/sec`; Goety soul-cost reduction `6F%` | Both recoveries `+6⅔%`, mana regeneration `+0.8/sec`, soul costs `−4%` |
+| **Control** | Bow spread and TaCZ dispersion each reduced `18F%`; TaCZ recoil reduced `12F%`; Goety casting time reduced `8F%` | Spread/dispersion `−12%`, recoil `−8%`, casting time `−5⅓%` |
 
-These are bonuses on top of equipped/modded values, not replacements. The new
-Cold Sweat and Epic Fight hooks still need disposable in-world verification before
-friends-world deployment or a gameplay-accepted release; native GameTests and
-Build 55 Smoke and singleplayer world creation do not establish the promised outcomes. The one-pool stamina
-merger remains deferred.
+These are lean packages, **not combined full-strength old builds**. Unlisted
+Life effects are removed: no retained armor negation/attack-knockback bonus,
+bow-velocity bonus, Tinkers' item-use/jump boost, extra maximum mana/casting range,
+or Aerialist-specific air-attack cost/damage bonus. Equipment and other mods keep
+their own effects. Impact is not a guaranteed stagger; a one-block step still
+needs the ordinary 0.60 baseline plus 0.40; temperature benefits do not replace
+clothing or food. Optional-provider checks remain in force. Do not invent native
+attributes or compensating bonuses when a provider is absent.
+
+ParCool stamina, Epic Fight stamina, Ars mana and Goety souls remain separate
+native pools with their own action costs. The one-pool stamina merger remains
+deferred. Fresh five-choice allocation persistence, non-death clones, modifier
+cleanup and auto-allocation require their authored regressions and later runtime
+acceptance; all tests authored under this consolidation approval are **UNRUN**.
+
+**Historical artifact evidence is not five-choice evidence:** Build 55 packaged
+the earlier eight-build RPG candidate; its real-client Smoke and separate disposable
+singleplayer creation/render/save did not exercise the promised combat, climate or
+allocation effects. Neither those checks nor source compilation qualify this new
+five-choice contract or constitute results from the friends' playtest. No new RPG
+JAR staging, deployment or test execution is authorized by this source-work task.
 
 ### Prelude — Primitive Workshop
 

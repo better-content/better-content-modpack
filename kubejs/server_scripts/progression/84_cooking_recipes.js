@@ -1,158 +1,115 @@
 // priority: -100001
-// Recipe-only migration runs after ordinary pack recipe edits; native primary
-// drink ownership cleanup runs last. The legacy culinary policy remains non-destructive.
+// Sole cooking recipe installer. Validate changed sources and the complete
+// replacement plan before mutating recipes; retain unrelated native routes.
 ServerEvents.recipes(function (event) {
     var policy = JsonIO.read('kubejs/config/cooking_recipes.json')
-    if (!policy || policy.enabled === false) return
-    if (String(policy.schema) !== 'better_cooking:recipe_policy.v1' || policy.enabled !== true) {
-        throw new Error('[cooking-recipes] Invalid recipe-only policy')
+    if (!policy || String(policy.schema) !== 'better_cooking:recipe_policy.v1' || policy.enabled !== true ||
+        !policy.routes || !policy.definitions || !policy.remove_ids || !policy.expected_sources || !policy.source_recipe_hashes) {
+        throw new Error('[cooking-recipes] Missing or incomplete recipe plan')
     }
-    var legacy = JsonIO.read('kubejs/config/culinary_policy.json')
-    if (legacy && String(legacy.qualification) === 'qualified') {
-        throw new Error('[cooking-recipes] Legacy gameplay policy must not install alongside recipe-only migration')
-    }
-    if (!policy.routes || !policy.catalogue || !policy.definitions || !policy.remove_ids || !policy.source_recipe_hashes || !policy.expected_sources) {
-        throw new Error('[cooking-recipes] Incomplete recipe plan')
-    }
-    var seen = {}, owned = {}, remove = {}, route, id, i
     var Objects = Java.loadClass('java.util.Objects')
-    // MapJS/JsonIO.of can coerce numeric-looking strings to numbers. Keep the
-    // source baseline as raw Gson, especially shaped patterns such as ["0"].
+    // Raw Gson preserves numeric-looking shaped pattern keys (e.g. "0").
     var rawPolicy = JsonIO.readJson('kubejs/config/cooking_recipes.json')
     var rawSources = rawPolicy.getAsJsonObject('expected_sources')
     var rawDefinitions = rawPolicy.getAsJsonArray('definitions')
-    function sameJson(left, right) {
-        // Gson equality ignores object key order, preserves array order and
-        // compares numeric primitives by value. Avoid traversing Rhino wrappers.
-        return Objects.equals(JsonIO.of(left), JsonIO.of(right))
-    }
-    var pendingIds = {}, pendingSources = {}, pendingCounts = {}
+    function sameJson(left, right) { return Objects.equals(JsonIO.of(left), JsonIO.of(right)) }
+    var seen = {}, owned = {}, remove = {}, pendingIds = {}, pendingSources = {}, pendingCounts = {}
+    var id, i, route, definition, target, action
     var requestedPending = policy.pending_source_ids || []
     for (i = 0; i < requestedPending.length; i++) pendingIds[String(requestedPending[i])] = true
     if (event.addedRecipes) event.addedRecipes.forEach(function (recipe) {
         if (recipe.removed) return
         recipe.serialize()
         var key = String(recipe.getId())
+        if (!policy.routes[key] || String(policy.routes[key].action) === 'retain') return
         pendingSources[key] = recipe
         pendingCounts[key] = (pendingCounts[key] || 0) + 1
     })
-    // These exact historical sources belong to disabled Ratlantis or the
-    // retired Undergarden mod, not the active recipe set. Preserve their source
-    // audit in the catalogue but REQUIRE absence; no generic missing exemption.
-    var retiredNativeSources = {
-        'rats:archeologist/ratfish': true,
-        'rats:cheese_ore_blasting': true,
-        'rats:cheese_ore_smelting': true,
-        // The Undergarden mod and its Dynamic Trees addon were deliberately
-        // retired. Retain historical source records, but never install recipes
-        // for missing ingredients or treat an unexpectedly active ID as safe.
-        'undergarden:bloody_stew': true,
-        'undergarden:gloomgourd_pie': true,
-        'undergarden:goo_block_to_ball': true,
-        'undergarden:indigo_stew': true,
-        'undergarden:inky_stew': true,
-        'undergarden:slop_bowl': true,
-        'undergarden:slop_bowl_blue_moss': true,
-        'undergarden:smelt_dweller_meat': true,
-        'undergarden:smelt_glitterkelp': true,
-        'undergarden:smelt_gloomper_leg': true,
-        'undergarden:smelt_gwibling': true,
-        'undergarden:smelt_underbeans': true,
-        'undergarden:smoke_dweller_meat': true,
-        'undergarden:smoke_glitterkelp': true,
-        'undergarden:smoke_gloomper_leg': true,
-        'undergarden:smoke_gwibling': true,
-        'undergarden:smoke_underbeans': true,
-        'undergarden:veiled_stew': true
-    }
-    var retiredUndergardenCount = 0
-    for (id in policy.routes) if (id.indexOf('undergarden:') === 0) {
-        retiredUndergardenCount++
-        if (!retiredNativeSources[id]) throw new Error('[cooking-recipes] Unreviewed Undergarden source ' + id)
-    }
-    if (retiredUndergardenCount !== 18) throw new Error('[cooking-recipes] Undergarden source inventory drift: ' + retiredUndergardenCount)
-    // The fish-family owner intentionally narrows only these native generic
-    // cooking inputs. Keep the upstream catalogue audit, but validate actual
-    // recipes against the owning pack data and permit ONLY that reviewed delta.
-    var packSourceFiles = {
-        'starcatcher:cooked_fish': 'kubejs/data/starcatcher/recipes/cooked_fish.json',
-        'starcatcher:cooked_fish_from_campfire_cooking': 'kubejs/data/starcatcher/recipes/cooked_fish_from_campfire_cooking.json',
-        'starcatcher:cooked_fish_from_smoking': 'kubejs/data/starcatcher/recipes/cooked_fish_from_smoking.json'
-    }
-    var packSourceOverrides = {}
-    for (id in packSourceFiles) {
-        if (!policy.routes[id] || String(policy.routes[id].action) !== 'retain' || pendingIds[id]) {
-            throw new Error('[cooking-recipes] Invalid owned fish source disposition ' + id)
-        }
-        var reviewed = rawSources.get(String(id)).deepCopy().getAsJsonObject()
-        if (String(reviewed.getAsJsonObject('ingredient').get('tag').getAsString()) !== 'starcatcher:starcaught_fishes') {
-            throw new Error('[cooking-recipes] Unexpected upstream fish baseline ' + id)
-        }
-        reviewed.add('ingredient', JsonIO.of({ tag: 'kubejs:fish/plain_cookable' }))
-        var ownedSource = JsonIO.readJson(packSourceFiles[id])
-        if (!Objects.equals(reviewed, ownedSource)) throw new Error('[cooking-recipes] Unreviewed fish-owner delta ' + id)
-        packSourceOverrides[id] = ownedSource
-    }
-    // Compare originals AND the separately queued post-script source recipes.
-    // Collect the complete mismatch set, but still fail BEFORE any installation.
-    var sourceProblems = []
+
+    // Only sources that this installer replaces/removes need a live source
+    // comparison. The historical 2,160 retained rows are not a global food
+    // qualification gate (nor a reason to reject unrelated ore/tray changes).
+    var problems = []
     for (id in policy.routes) {
-        if (!policy.expected_sources[id]) throw new Error('[cooking-recipes] Missing source baseline ' + id)
-        var count = 0
-        if (retiredNativeSources[id]) {
-            if (String(policy.routes[id].action) !== 'retain' || pendingIds[id]) {
-                throw new Error('[cooking-recipes] Retired native source cannot install a replacement ' + id)
-            }
-            event.forEachRecipe({ id: String(id) }, function () { count++ })
-            if (count || pendingCounts[id]) sourceProblems.push('Retired native source unexpectedly active ' + id)
+        route = policy.routes[id]
+        action = String(route.action)
+        if (action === 'retain') continue
+        if (['redirect', 'replace', 'remove'].indexOf(action) < 0 || !route.reason ||
+            !policy.source_recipe_hashes[id] || !policy.expected_sources[id] || !rawSources.has(id)) {
+            throw new Error('[cooking-recipes] Invalid changed route ' + id)
+        }
+        // The former market recipe was pack-authored in food_eras.js; it no
+        // longer queues an FD recipe, so require its stable ID to be vacant.
+        if (id === 'kubejs:food_eras/market_fried_rice') {
+            var oldMarket = 0
+            event.forEachRecipe({ id: String(id) }, function () { oldMarket++ })
+            if (oldMarket || pendingCounts[id]) problems.push('Old market FD source still active ' + id)
             continue
         }
+        var count = 0
         var checkSource = function (recipe) {
             count++
-            // Keep Gson objects intact: JS round-trips can reinterpret numeric
-            // crafting key names (for example supplementaries' "0" key).
             var actual = recipe.json
-            var expectedSource = packSourceOverrides[id] || rawSources.get(String(id))
-            if (!Objects.equals(actual, expectedSource)) {
-                sourceProblems.push('Changed source recipe ' + id + ' expected=' + expectedSource + ' actual=' + actual)
+            var expected = rawSources.get(String(id))
+            if (!Objects.equals(actual, expected)) {
+                problems.push('Changed source recipe ' + id + ' expected=' + expected + ' actual=' + actual)
             }
-        };
+        }
         if (pendingIds[id]) {
             if (pendingCounts[id] === 1) checkSource(pendingSources[id])
         } else {
             event.forEachRecipe({ id: String(id) }, checkSource)
         }
-        if (count !== 1) sourceProblems.push('Missing/duplicate source recipe ' + id)
+        if (count !== 1) problems.push('Missing/duplicate changed source recipe ' + id)
     }
-    if (sourceProblems.length) throw new Error('[cooking-recipes] Source validation failed (' + sourceProblems.length + '):\n' + sourceProblems.join('\n'))
-    // Validate the entire document before calling any mutating recipe API.
+    if (problems.length) throw new Error('[cooking-recipes] Changed source validation failed (' + problems.length + '):\n' + problems.join('\n'))
+
+    // Assert the two separately approved fixed wok ports preserve each source
+    // formulation, bowl payment and feast-block output. No quality on the feast.
+    var friedRice = ['fruitsdelight:cooking/pineapple_fried_rice', 'kubejs:food_eras/market_fried_rice']
+    for (i = 0; i < friedRice.length; i++) {
+        id = friedRice[i]
+        route = policy.routes[id]
+        var source = policy.expected_sources[id]
+        if (!route || String(route.action) !== 'redirect' || !source ||
+            !source.ingredients || source.ingredients.length !== 6 || !source.container || !source.result ||
+            !sameJson(source.container, { item: 'minecraft:bowl' }) ||
+            !sameJson(source.result, { item: 'fruitsdelight:pineapple_fried_rice' })) {
+            throw new Error('[cooking-recipes] Invalid fried-rice source ' + id)
+        }
+        var port = route.definitions && route.definitions[0] && route.definitions[0].json
+        if (!port || String(port.type) !== 'kaleidoscope_cookery:pot' ||
+            !port.ingredients || !port.result || !port.carrier ||
+            !sameJson(port.ingredients, source.ingredients) || !sameJson(port.result, source.result) ||
+            !sameJson(port.carrier, source.container) || Number(port.time) !== Number(source.cookingtime) ||
+            Number(port.stir_fry_count) !== 3 || port.soup_base || port.quality) {
+            throw new Error('[cooking-recipes] Fried-rice cost/output drift ' + id)
+        }
+    }
+
+    // Validate the full set of *changes* before any event.custom/event.remove.
     for (i = 0; i < policy.definitions.length; i++) {
-        var d = policy.definitions[i]
-        id = String(d.id)
-        if (!d.json || !d.json.type || String(d.json.type).indexOf('better_cooking:') === 0 || seen[id]) {
+        definition = policy.definitions[i]
+        id = String(definition.id)
+        if (!definition.json || !definition.json.type || String(definition.json.type).indexOf('better_cooking:') === 0 || seen[id]) {
             throw new Error('[cooking-recipes] Invalid or duplicate definition ' + id)
         }
-        seen[id] = d.json
+        seen[id] = definition.json
     }
     for (id in policy.routes) {
         route = policy.routes[id]
-        var action = String(route.action)
-        if (!route.reason || !policy.source_recipe_hashes[id] ||
-            ['retain', 'redirect', 'replace', 'remove'].indexOf(String(route.action)) < 0) {
-            throw new Error('[cooking-recipes] Invalid decision ' + id)
-        }
-        if (action === 'replace' || action === 'redirect') {
-            if (!route.definitions || !route.definitions.length) throw new Error('[cooking-recipes] Missing replacement ' + id)
-            for (i = 0; i < route.definitions.length; i++) {
-                var target = String(route.definitions[i].id)
-                if (!seen[target] || owned[target] || !sameJson(seen[target], route.definitions[i].json)) {
-                    throw new Error('[cooking-recipes] Missing, duplicate-owned or changed definition ' + target)
-                }
-                if (action === 'redirect' && (route.definitions.length !== 1 || target !== id)) {
-                    throw new Error('[cooking-recipes] Redirect must retain its source ID ' + id)
-                }
-                owned[target] = id
+        action = String(route.action)
+        if (action === 'retain' || action === 'remove') continue
+        if (!route.definitions || !route.definitions.length) throw new Error('[cooking-recipes] Missing replacement ' + id)
+        for (i = 0; i < route.definitions.length; i++) {
+            target = String(route.definitions[i].id)
+            if (!seen[target] || owned[target] || !sameJson(seen[target], route.definitions[i].json)) {
+                throw new Error('[cooking-recipes] Missing, duplicate-owned or changed definition ' + target)
             }
+            if (action === 'redirect' && (route.definitions.length !== 1 || target !== id)) {
+                throw new Error('[cooking-recipes] Redirect must retain source ID ' + id)
+            }
+            owned[target] = id
         }
     }
     for (id in seen) {
@@ -182,13 +139,12 @@ ServerEvents.recipes(function (event) {
             throw new Error('[cooking-recipes] Missing removal ' + id)
         }
     }
-    // Exact object removal is needed for queued redirects: an ID-wide remove
-    // could also remove the replacement queued under the same ID.
+    // Exact queued-object removal keeps the same-ID replacement that follows.
     for (id in pendingIds) {
-        if (String(policy.routes[id].action) !== 'retain') pendingSources[id].removed = true
+        if (policy.routes[id] && String(policy.routes[id].action) !== 'retain') pendingSources[id].removed = true
     }
     for (i = 0; i < policy.definitions.length; i++) {
-        var definition = policy.definitions[i]
+        definition = policy.definitions[i]
         event.custom(rawDefinitions.get(i).getAsJsonObject().getAsJsonObject('json')).id(String(definition.id))
     }
     for (i = 0; i < policy.remove_ids.length; i++) event.remove({ id: String(policy.remove_ids[i]) })

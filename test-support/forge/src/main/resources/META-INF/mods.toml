@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All rights reserved"
+[[mods]]
+modId="better_playtest_native_support"
+version="${file.jarVersion}"
+displayName="Better Playtest Native Support (nonshipping)"
+description='''Standalone native test observer. Never distribute with gameplay mods.'''
+[[dependencies.better_playtest_native_support]]
+modId="forge"
+mandatory=true
+versionRange="[47.4.22,)"
+ordering="NONE"
+side="SERVER"
+[[dependencies.better_playtest_native_support]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.20.2)"
+ordering="NONE"
+side="SERVER"

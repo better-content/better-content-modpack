@@ -1,0 +1,178 @@
+// Controller-injected, hash-bound, nonshipping Gradle init script. Never accept user -I or
+// alternate build scripts. This script only binds reviewed Test/JavaExec leaf task JVMs;
+// it does not claim that a Gradle parent PID used any provider on behalf of a worker.
+import java.security.MessageDigest
+import java.util.Properties
+import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.testing.Test
+
+if (gradle.gradleHomeDir == null) throw new GradleException('Unknown Gradle distribution init-script directory')
+def builtInInit = new File(gradle.gradleHomeDir, 'init.d')
+if (builtInInit.isDirectory() && builtInInit.listFiles()?.length > 0)
+    throw new GradleException('Distribution supplied unreviewed init scripts')
+def bindingPath = System.getenv('BC_REPOSITORY_USE_BINDING')
+if (bindingPath == null || bindingPath.isBlank()) throw new GradleException('Missing fixed repository input-use binding')
+def bindingFile = new File(bindingPath).absoluteFile
+if (!bindingFile.isFile() || java.nio.file.Files.isSymbolicLink(bindingFile.toPath()) ||
+    java.nio.file.Files.isSymbolicLink(bindingFile.parentFile.toPath()))
+    throw new GradleException('Missing/linked repository input-use task binding')
+def bindingSha = System.getenv('BC_REPOSITORY_USE_BINDING_SHA256')
+if (bindingSha == null || !bindingSha.matches('[0-9a-f]{64}'))
+    throw new GradleException('Missing fixed binding SHA')
+def capturedProperties = { File file, int limit, String expectedSha ->
+    if (!file.isFile() || java.nio.file.Files.isSymbolicLink(file.toPath()) ||
+        java.nio.file.Files.isSymbolicLink(file.parentFile.toPath()))
+        throw new GradleException('Linked/missing controller property file')
+    byte[] raw = java.nio.file.Files.newInputStream(file.toPath(), java.nio.file.LinkOption.NOFOLLOW_LINKS).withCloseable {
+        it.readNBytes(limit + 1)
+    }
+    if (raw.length == 0 || raw.length > limit ||
+        MessageDigest.getInstance('SHA-256').digest(raw).encodeHex().toString() != expectedSha)
+        throw new GradleException('Unbounded or changed controller property bytes')
+    def seen = new HashSet<String>()
+    new String(raw, 'ISO-8859-1').readLines().each { line ->
+        if (!line.isBlank() && !line.startsWith('#') && !line.startsWith('!')) {
+            if (line.endsWith('\\')) throw new GradleException('Continued controller properties unsupported')
+            def one = new Properties(); one.load(new ByteArrayInputStream((line + '\n').getBytes('ISO-8859-1')))
+            if (one.size() != 1 || !seen.add(one.stringPropertyNames().iterator().next()))
+                throw new GradleException('Duplicate/ambiguous controller property')
+        }
+    }
+    def result = new Properties(); result.load(new ByteArrayInputStream(raw))
+    if (result.stringPropertyNames() != seen) throw new GradleException('Ambiguous controller properties')
+    result
+}
+def binding = capturedProperties(bindingFile, 65_536, bindingSha)
+def agent = new File(binding.getProperty('agent', '')).canonicalFile
+if (!agent.isFile() || !binding.getProperty('agent_sha256', '').matches('[0-9a-f]{64}'))
+    throw new GradleException('Missing controller-pinned repository observer agent')
+def digest = { String value -> MessageDigest.getInstance('SHA-256').digest(value.getBytes('UTF-8')).encodeHex().toString() }
+def hashFile = { File file ->
+    if (!file.isFile() || file.length() > 268_435_456L ||
+        java.nio.file.Files.isSymbolicLink(file.toPath())) throw new GradleException('Unbounded/linked worker input')
+    def hash = MessageDigest.getInstance('SHA-256')
+    file.withInputStream { stream ->
+        byte[] bytes = new byte[8192]
+        int count
+        while ((count = stream.read(bytes)) != -1) hash.update(bytes, 0, count)
+    }
+    hash.digest().encodeHex().toString()
+}
+if (hashFile(agent) != binding.getProperty('agent_sha256'))
+    throw new GradleException('Observer JAR bytes differ from fixed controller binding')
+def expected = binding.stringPropertyNames().findAll { it.startsWith('task.') }.collect { it.substring(5) }.toSet()
+if (expected.isEmpty() || binding.stringPropertyNames() !=
+    (['agent', 'agent_sha256'] + expected.collectMany { ['task.' + it, 'task_sha256.' + it] }).toSet())
+    throw new GradleException('Missing/unknown reviewed leaf/config bindings')
+def seen = new HashSet<String>()
+gradle.beforeProject { project ->
+    def attach = { task ->
+        def key = digest(task.path)
+        if (expected.contains(key)) {
+            def config = new File(binding.getProperty('task.' + key)).absoluteFile
+            if (config.parentFile != bindingFile.parentFile ||
+                !binding.getProperty('task_sha256.' + key, '').matches('[0-9a-f]{64}'))
+                throw new GradleException('Missing fixed worker config for ' + task.path)
+            capturedProperties(config, 16_384, binding.getProperty('task_sha256.' + key))
+            seen.add(key)
+            // Do not rewrite repository test semantics to make observation easier. Only the
+            // original single-worker/no-recycle profile is supported; reject others before fork.
+            task.doFirst {
+                // Gradle Test starts from gradle-worker.jar and then a dynamic VisitableURLClassLoader;
+                // java.class.path alone does not enumerate the latter. Capture task.classpath BEFORE
+                // fork; this is an allowed-input roster, NEVER a claim that those inputs were used.
+                def roster = new File(config.parentFile, key + '-task-inputs.txt')
+                if (roster.exists()) throw new GradleException('Nonfresh reviewed task roster')
+                def policy = task instanceof Test ?
+                    'policy\tTest\t' + task.maxParallelForks + '\t' + task.forkEvery + '\n' :
+                    'policy\tJavaExec\tnot-applicable\tnot-applicable\n'
+                if (task instanceof Test && (task.maxParallelForks != 1 || task.forkEvery != 0L))
+                    throw new GradleException('Unsupported ORIGINAL Test fork policy for ' + task.path +
+                        ': maxParallelForks=' + task.maxParallelForks + ' forkEvery=' + task.forkEvery)
+                def lines = [policy]; int inputCount = 0
+                task.classpath.files.each { file ->
+                    if (++inputCount > 4096) throw new GradleException('Unbounded task classpath')
+                    def row = { ->
+                    def path = file.canonicalFile.toPath()
+                    if (file.toPath().toAbsolutePath().normalize() != path ||
+                        path.toString().any { it == '\n' || it == '\r' || it == '\t' })
+                        throw new GradleException('Linked or ambiguous task classpath path')
+                    if (java.nio.file.Files.isRegularFile(path, java.nio.file.LinkOption.NOFOLLOW_LINKS))
+                        return 'file\t' + hashFile(path.toFile()) + '\t1\t' +
+                            java.nio.file.Files.size(path) + '\t' + path + '\n'
+                    if (java.nio.file.Files.notExists(path, java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
+                        // Gradle declares NO_SOURCE resource outputs even when no directory exists.
+                        // Only an exact generated build/resources/<sourceSet> may be absent;
+                        // missing provider JARs, class directories and arbitrary inputs still fail.
+                        def resources = project.layout.buildDirectory.dir('resources').get().asFile.canonicalFile.toPath()
+                        def leaf = path.fileName?.toString()
+                        if (path.parent != resources || !(leaf ==~ /[A-Za-z][A-Za-z0-9_-]{0,63}/) ||
+                            java.nio.file.Files.isSymbolicLink(path.parent) ||
+                            java.nio.file.Files.isSymbolicLink(path.parent.parent))
+                            throw new GradleException('Missing non-resource task classpath input: ' + path)
+                        return 'absent\t' + digest('bc.repository_absent.v1:' + path) + '\t0\t0\t' + path + '\n'
+                    }
+                    if (!java.nio.file.Files.exists(path, java.nio.file.LinkOption.NOFOLLOW_LINKS) ||
+                        !java.nio.file.Files.isDirectory(path, java.nio.file.LinkOption.NOFOLLOW_LINKS))
+                        throw new GradleException('Unknown/unsupported task classpath input kind')
+                    def nodes = []
+                    java.nio.file.Files.walk(path, 64).withCloseable { walk ->
+                        def iterator = walk.iterator()
+                        while (iterator.hasNext()) {
+                            def child = iterator.next()
+                            if (child == path) continue
+                            if (path.relativize(child).nameCount >= 64 &&
+                                java.nio.file.Files.isDirectory(child, java.nio.file.LinkOption.NOFOLLOW_LINKS))
+                                throw new GradleException('Unbounded task directory depth')
+                            if (nodes.size() >= 65_536 || java.nio.file.Files.isSymbolicLink(child))
+                                throw new GradleException('Unbounded/linked task directory')
+                            nodes.add(child)
+                        }
+                    }
+                    def digestDir = MessageDigest.getInstance('SHA-256'); int count = 0; long totalBytes = 0L
+                    nodes.sort().each { child ->
+                        if (!java.nio.file.Files.isDirectory(child, java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
+                            if (!java.nio.file.Files.isRegularFile(child, java.nio.file.LinkOption.NOFOLLOW_LINKS) ||
+                                java.nio.file.Files.size(child) > 16_777_216L)
+                                throw new GradleException('Unbounded/nonregular task directory file')
+                            totalBytes += java.nio.file.Files.size(child)
+                            digestDir.update(path.relativize(child).toString().getBytes('UTF-8'))
+                            digestDir.update((byte) 0)
+                            digestDir.update(hashFile(child.toFile()).getBytes('US-ASCII'))
+                            digestDir.update((byte) 0); count++
+                        }
+                    }
+                    'directory\t' + digestDir.digest().encodeHex().toString() + '\t' + count +
+                        '\t' + totalBytes + '\t' + path + '\n'
+                    }()
+                    lines.add(row)
+                }
+                byte[] raw = lines.join('').getBytes('UTF-8')
+                if (raw.length == 0 || raw.length > 1_048_576) throw new GradleException('Unbounded empty task roster')
+                java.nio.file.Files.write(roster.toPath(), raw, java.nio.file.StandardOpenOption.CREATE_NEW)
+                def sha = MessageDigest.getInstance('SHA-256').digest(raw).encodeHex().toString()
+                task.jvmArgs('-Dbc.repository.task.roster=' + roster.absolutePath + '@' + sha)
+            }
+            task.doLast {
+                if (task instanceof Test && (task.maxParallelForks != 1 || task.forkEvery != 0L))
+                    throw new GradleException('Test fork policy changed after worker observation: ' + task.path)
+            }
+            task.jvmArgs('-javaagent:' + agent.absolutePath + '=' + config.absolutePath + '@' +
+                binding.getProperty('task_sha256.' + key))
+        }
+    }
+    project.tasks.withType(Test).configureEach(attach)
+    project.tasks.withType(JavaExec).configureEach(attach)
+}
+gradle.taskGraph.whenReady { graph ->
+    // Configuration and task graph evidence must match the exact reviewed leaf roster.
+    def selected = graph.allTasks.findAll { expected.contains(digest(it.path)) }
+    if (selected.collect { digest(it.path) }.toSet() != expected ||
+        !selected.every { it instanceof Test || it instanceof JavaExec } ||
+        !seen.containsAll(expected)) throw new GradleException('Reviewed leaf task has no JVM input-use observer')
+    selected.findAll { it instanceof Test }.each { task ->
+        if (task.maxParallelForks != 1 || task.forkEvery != 0L)
+            throw new GradleException('Unsupported ORIGINAL Test fork policy before worker launch: ' + task.path +
+                ' maxParallelForks=' + task.maxParallelForks + ' forkEvery=' + task.forkEvery)
+    }
+}

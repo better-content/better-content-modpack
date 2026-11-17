@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bc.playtest_client_frame_review.v1",
+  "type": "object",
+  "required": ["schema", "status", "campaign_id", "lineage_id", "catalogue_sha256", "candidate", "reviewer", "frames"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "bc.playtest_client_frame_review.v1"},
+    "status": {"enum": ["pending", "approved", "rejected"]},
+    "campaign_id": {"type": "string"},
+    "lineage_id": {"type": "string"},
+    "catalogue_sha256": {"$ref": "#/$defs/hash"},
+    "candidate": {"type": "object", "required": ["client_sha256", "server_sha256"], "additionalProperties": false, "properties": {"client_sha256": {"$ref": "#/$defs/hash"}, "server_sha256": {"$ref": "#/$defs/hash"}}},
+    "reviewer": {"type": "object", "required": ["name", "kind", "reviewed_at"], "additionalProperties": false, "properties": {"name": {"type": "string", "minLength": 1}, "kind": {"const": "human"}, "reviewed_at": {"type": "string", "format": "date-time"}}},
+    "frames": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["epoch_id", "case_id", "trial_id", "request_sequence", "screen", "profile", "image_sha256", "screen_class", "menu_type", "dimension", "player_uuid", "approved", "disposition", "rationale"], "additionalProperties": false, "properties": {"epoch_id": {"type": "string"}, "case_id": {"type": "string"}, "trial_id": {"type": "string"}, "request_sequence": {"type": "integer", "minimum": 1}, "screen": {"type": "string"}, "profile": {"enum": ["1280x720@2", "1920x1080@3"]}, "image_sha256": {"$ref": "#/$defs/hash"}, "screen_class": {"type": "string"}, "menu_type": {"type": ["null", "string"]}, "dimension": {"type": "string"}, "player_uuid": {"type": "string"}, "approved": {"type": "boolean"}, "disposition": {"enum": ["pending", "approved", "rejected"]}, "rationale": {"type": "string"}}}}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

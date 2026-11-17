@@ -1,0 +1,16 @@
+{
+  "schema": "bc.playtest_physical_tool_capture_shapes.v5",
+  "producer": "PhysicalToolWitness.supportedReturn(callbacks,enters,exits,afterKind,sameOriginalObject)",
+  "synthetic_unrun_not_runtime_evidence": true,
+  "cases": [
+    {"id":"intact_one_wear_no_callback","callbacks":0,"enters":0,"exits":0,"after_kind":"nonempty","same_original_object":true,"capture_complete_shape":true},
+    {"id":"no_callback_same_original_now_empty_complete_behavior_contradiction","callbacks":0,"enters":0,"exits":0,"after_kind":"empty","same_original_object":true,"capture_complete_shape":true},
+    {"id":"one_callback_empty_break","callbacks":1,"enters":1,"exits":1,"after_kind":"empty","same_original_object":true,"capture_complete_shape":true},
+    {"id":"one_callback_nonempty_complete_behavior_contradiction","callbacks":1,"enters":1,"exits":1,"after_kind":"nonempty","same_original_object":true,"capture_complete_shape":true},
+    {"id":"two_fully_bound_callbacks_complete_behavior_contradiction","callbacks":2,"enters":2,"exits":2,"after_kind":"empty","same_original_object":true,"capture_complete_shape":true},
+    {"id":"empty_replaced_item_object_ambiguous","callbacks":0,"enters":0,"exits":0,"after_kind":"empty","same_original_object":false,"capture_complete_shape":false},
+    {"id":"callback_without_actual_consumer_cause","callbacks":1,"enters":0,"exits":0,"after_kind":"empty","same_original_object":true,"capture_complete_shape":false},
+    {"id":"consumer_cause_unbalanced","callbacks":1,"enters":1,"exits":0,"after_kind":"empty","same_original_object":true,"capture_complete_shape":false},
+    {"id":"callback_trace_cap_exceeded","callbacks":5,"enters":5,"exits":5,"after_kind":"empty","same_original_object":true,"capture_complete_shape":false}
+  ]
+}

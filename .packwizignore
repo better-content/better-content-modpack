@@ -30,6 +30,8 @@ docs
 /package.sh
 /settings.gradle.kts
 /src/
+# Nonshipping native qualification support; built separately, never exported.
+/test-support/
 /test.main.kts
 /pack-test-lock.main.kts
 /package.sh
@@ -61,6 +63,10 @@ logs
 /run.bat
 /run.sh
 /run-forge.sh
+# Deferred World Management tooling is retained in the checkout, not exported.
+/better-world-management-initial-spawn.py
+/better-world-management-server.sh
+/world-axioms.py
 server-instance
 server-template
 /server-config/

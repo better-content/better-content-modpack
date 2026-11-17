@@ -1,0 +1,89 @@
+name: Explicit playtest campaign or qualification
+
+# Authorship is not run approval. No automatic push/PR/schedule trigger.
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: Approved observation-only discovery, reviewed campaign, or evidence-only qualification
+        type: choice
+        options: [discover, campaign, qualify]
+        required: true
+      run_approved:
+        description: Human approval explicitly covers this invocation and its exact inputs
+        type: boolean
+        default: false
+        required: true
+      workspace:
+        description: Existing reviewed checkout on the dedicated qualification runner
+        required: true
+      manifest:
+        description: Absolute candidate-bound v2 manifest (only discovery accepts a structurally bound draft)
+        required: true
+      client:
+        description: Absolute client ZIP path (discovery or campaign)
+        required: false
+      server:
+        description: Absolute server ZIP path (discovery or campaign)
+        required: false
+      receipts:
+        description: Absolute evidence-index JSON path (qualify only)
+        required: false
+      discovery_output:
+        description: New output directory for non-qualifying discovery (discover only)
+        required: false
+      evidence_directory:
+        description: Exact run evidence directory to retain; never a player installation
+        required: true
+
+permissions:
+  contents: read
+concurrency:
+  group: better-content-playtest-qualification
+  cancel-in-progress: false
+
+jobs:
+  qualification:
+    if: ${{ inputs.run_approved }}
+    # No generic hosted runner is represented as the production-distance reference host.
+    # Provisioning or registering this runner is a separate operation, not done by this workflow.
+    runs-on: [self-hosted, better-content-qualification]
+    timeout-minutes: 1440
+    steps:
+      - name: Run only the explicitly approved command
+        env:
+          ACTION: ${{ inputs.action }}
+          SUITE_WORKSPACE: ${{ inputs.workspace }}
+          MANIFEST: ${{ inputs.manifest }}
+          CLIENT: ${{ inputs.client }}
+          SERVER: ${{ inputs.server }}
+          RECEIPTS: ${{ inputs.receipts }}
+          DISCOVERY_OUTPUT: ${{ inputs.discovery_output }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$SUITE_WORKSPACE"
+          case "$ACTION" in
+            discover)
+              test -n "$CLIENT" && test -n "$SERVER" && test -z "$RECEIPTS" && test -n "$DISCOVERY_OUTPUT"
+              ./test.main.kts discover --manifest "$MANIFEST" --client "$CLIENT" --server "$SERVER" --output "$DISCOVERY_OUTPUT"
+              ;;
+            campaign)
+              test -n "$CLIENT" && test -n "$SERVER" && test -z "$RECEIPTS" && test -z "$DISCOVERY_OUTPUT"
+              ./test.main.kts campaign --manifest "$MANIFEST" --client "$CLIENT" --server "$SERVER"
+              ;;
+            qualify)
+              test -n "$RECEIPTS" && test -z "$CLIENT" && test -z "$SERVER" && test -z "$DISCOVERY_OUTPUT"
+              # Uses a separately prepared validator; never builds, packages or starts Minecraft.
+              ./test.main.kts qualify --manifest "$MANIFEST" --receipts "$RECEIPTS"
+              ;;
+            *) echo 'Unsupported suite action' >&2; exit 2 ;;
+          esac
+      - name: Retain the declared owned evidence directory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playtest-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ inputs.evidence_directory }}
+          if-no-files-found: warn
+          retention-days: 30

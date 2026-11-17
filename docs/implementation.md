@@ -14,7 +14,7 @@ Copy that JAR into `../../better-content-modpack/mods/` only when deployment is 
 
 For ordinary pack implementation changes, run `./gradlew test` and `git diff --check` as relevant. Local verification is separate from Smoke, Overworld Tele Soak, full Tele Soak and fresh-distribution acceptance; none automatically runs all source-repository suites. Packwiz refresh belongs only to explicit fresh-distribution preparation after deployment settles.
 
-An explicitly requested fresh distribution uses `./release.main.kts`. The ordinary source-aware route stages changed active runtime sources in dependency order with `stageRuntimeJar` (not `clean` or `verifyFull`), reuses matching bundled artifacts, refreshes Packwiz and packages exactly once. By default it runs **no** runtime tier and writes `package-ready.json` for the unchanged ZIP pair. Select `--runtime-tiers smoke` for Smoke-certified `ready.json`; `--runtime-tiers overworld-tele-soak` and/or `tele-soak` opt into other complete tests on the same pair. A ready marker requires selected Smoke to pass, and never implies unrun tiers. The stricter `--fresh-source-plan` route requires a fresh qualified source and raw JAR for **every** approved active mod, including separately qualified World Management/supervisor bytes, even for a package-only candidate. The user has specifically permitted an **incomplete Cooking JAR** in a Smoke candidate: it loads in pass-through mode with unresolved catalogue data, preserving native food/recipe/crop behavior and making **no Cooking gameplay acceptance claim**. This exception does not qualify Cooking's full migration or World Condenser, and does not apply to the strict all-sources-qualified fresh-source-plan route. There is no `--skip-tests`, forced Debug rebuild or targeted-release bypass. `--use-bundled-mods` explicitly retains existing JARs and never inspects/builds sibling source checkouts; it is not a fresh-source qualification route. Independent visual review is a separate optional tier; see [testing](testing.md#smoke-overworld-tele-soak-tele-soak-and-fresh-distributions).
+An explicitly requested fresh distribution uses `./release.main.kts`. The ordinary source-aware route stages changed active runtime sources in dependency order with `stageRuntimeJar` (not `clean` or `verifyFull`), reuses matching bundled artifacts, refreshes Packwiz and packages exactly once. By default it runs **no** runtime tier and writes `package-ready.json` for the unchanged ZIP pair. Select `--runtime-tiers smoke` for Smoke-certified `ready.json`; `--runtime-tiers overworld-tele-soak` and/or `tele-soak` opt into other complete tests on the same pair. A ready marker requires selected Smoke to pass, and never implies unrun tiers. The stricter `--fresh-source-plan` route requires a fresh qualified source and raw JAR for **every** approved active mod, including separately qualified World Management/supervisor bytes, even for a package-only candidate. The earlier permission for an **incomplete Cooking JAR** applied to the existing unchanged installed candidate, not to the next source release. The next source release retires Cooking from the active manifest and excludes its old JAR from both candidate archives; the installed JAR and index remain untouched until a separately authorized release. Historical pass-through evidence never qualified Cooking gameplay or World Condenser. There is no `--skip-tests`, forced Debug rebuild or targeted-release bypass. `--use-bundled-mods` explicitly retains existing JARs and never inspects/builds sibling source checkouts; it is not a fresh-source qualification route. Independent visual review is a separate optional tier; see [testing](testing.md#smoke-overworld-tele-soak-tele-soak-and-fresh-distributions).
 
 The machine-readable active set is `gradle/active-custom-mods.json`. Its `dependsOn` graph orders typed providers before consumers; existing bundled providers seed release staging, and newly staged active providers replace them before consumers build. Optional compile-only fixtures can be supplied through `BC_RELEASE_COMPILE_FIXTURE_DIR`; they are recorded build inputs, never implicitly activated or deployed. Celestial Events is now an active typed provider for Fonts and is ordered before that consumer.
 
@@ -66,15 +66,14 @@ checkout is unchanged, changed, or based on a legacy JAR without an identity. Pr
 
 ### Canonical Active Inventory
 
-The candidate manifest has **54 custom mods** in `gradle/active-custom-mods.json`; this is a target inventory, not a built or Smoke-accepted distribution. It removes Dynamic Trees Dimension Compat, adds Electrochemistry, Seasonal Daylight and Seasonal Trees, and retains experimental Abyssal City and Better Spaceflight. Spaceflight uses the available `e3591959d2c614b71ca96d478ada43f8ac597f81` feasibility source; its unrecovered survival-preview flight, oxygen and destination code is retired. Abyssal City uses `verifyGeneration` and a controlled reobfuscated output. All included source-owned JARs, including unchanged providers, require a fresh isolated rebuild with source/provider/artifact provenance for this consolidation. Finite Water remains excluded; Creating Space and Undergarden are removed. No gameplay qualification, world migration or source-test result follows from manifest membership.
+The next-source candidate manifest has **50 custom mods** in `gradle/active-custom-mods.json` (Cooking is retired from this cohort); this is a target inventory, not a built or Smoke-accepted distribution. Electrochemistry and Arena Trials were removed from the active checkout on 2026-11-17 at the user's request; their source repositories and previous distributions are preserved. Their former runtime JARs and the two Electrochemistry-specific recipes are retained under Packwiz-excluded `disabled/electrochemistry-arena/`. This is not an existing-save migration: do not load a save with reserved Electrochemistry inputs, its registered fluids/items, Arena blocks/rewards or pending match snapshots without a separate recovery review. The candidate also excludes Dynamic Trees Dimension Compat, includes Seasonal Daylight and Seasonal Trees, and retains experimental Abyssal City and Better Spaceflight. Spaceflight uses the available `e3591959d2c614b71ca96d478ada43f8ac597f81` feasibility source; its unrecovered survival-preview flight, oxygen and destination code is retired. Abyssal City uses `verifyGeneration` and a controlled reobfuscated output. All included source-owned JARs, including unchanged providers, require a fresh isolated rebuild with source/provider/artifact provenance for this consolidation. Finite Water remains excluded; Creating Space and Undergarden are removed. No gameplay qualification, world migration or source-test result follows from manifest membership.
 
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
 | better-manufacturing | `better_manufacturing` | `better-manufacturing-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar`; implementation in progress, not deployed or gameplay-qualified |
 | [better-airtight-machines](https://github.com/better-content/better-airtight-machines) | `better_airtight_machines` | `better-airtight-machines-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-magic-chunk-anchors](https://github.com/better-content/better-magic-chunk-anchors) | `better_magic_chunk_anchors` | `better-magic-chunk-anchors-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-arena-trials](https://github.com/better-content/better-arena-trials) | `better_arena_trials` | `better-arena-trials-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-spirit-commerce](https://github.com/better-content/better-spirit-commerce) | `better_spirit_commerce` | `better-spirit-commerce-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
+| [better-spirit-commerce](https://github.com/better-content/better-spirit-commerce) | `better_spirit_commerce` | `better-spirit-commerce-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar`; resident/settlement simulation and Player Stalls removed from the source candidate; private [better-villager-society](https://github.com/better-content/better-villager-society) is a non-compiling, non-packaged preservation snapshot, not an active dependency |
 | [better-compat-fixes](https://github.com/better-content/better-compat-fixes) | `better_compat_fixes` | `better-compat-fixes-0.1.9.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-gameplay-notices](https://github.com/better-content/better-gameplay-notices) | `better_gameplay_notices` | `better-gameplay-notices-1.0.1.jar` | `./gradlew verifyFast stageRuntimeJar` |
 | [better-discovery-guides](https://github.com/better-content/better-discovery-guides) | `better_discovery_guides` | `better-discovery-guides-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
@@ -114,14 +113,11 @@ The candidate manifest has **54 custom mods** in `gradle/active-custom-mods.json
 | [better-tinkers-loot-affixes](https://github.com/better-content/better-tinkers-loot-affixes) | `better_tinkers_loot_affixes` | `better-tinkers-loot-affixes-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-village-fortifications](https://github.com/better-content/better-village-fortifications) | `better_village_fortifications` | `better-village-fortifications-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-drinking-water](https://github.com/better-content/better-drinking-water) | `better_drinking_water` | `better-drinking-water-1.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-world-management](https://github.com/better-content/better-world-management) | `better_world_management` | `better-world-management-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-celestial-events](https://github.com/better-content/better-celestial-events) | `better_celestial_events` | `better-celestial-events-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-wild-fruit-trees](https://github.com/better-content/better-wild-fruit-trees) | `better_wild_fruit_trees` | `better-wild-fruit-trees-0.1.1.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [scalable-tnt](https://github.com/better-content/scalable-tnt) | `scalable_tnt` | `scalable-tnt-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-cooking](https://github.com/better-content/better-cooking) | `better_cooking` | `better-cooking-0.1.0.jar` | `./gradlew verifyFast stageRuntimeJar`; legacy gameplay policy remains quarantined; separate recipe-only pack policy |
 | [better-abyssal-city](https://github.com/better-content/better-abyssal-city) | `better_abyssal_city` | `better-abyssal-city-0.1.0.jar` | isolated `scripts/verify_generation.sh` → reobfuscated output; gameplay unqualified |
 | [better-spaceflight](https://github.com/better-content/better-spaceflight) | `better_spaceflight` | `better-spaceflight-0.1.0.jar` | `./gradlew test stageRuntimeJar`; feasibility source only; gameplay unqualified |
-| [better-electrochemistry](https://github.com/better-content/better-electrochemistry) | `better_electrochemistry` | `better-electrochemistry-0.1.0.jar` | `./gradlew test stageRuntimeJar`; new-world activation pending gates |
 | [better-seasonal-daylight](https://github.com/better-content/better-seasonal-daylight) | `better_seasonal_daylight` | `better-seasonal-daylight-0.1.0.jar` | `./gradlew test stageRuntimeJar`; sole clock owner in new worlds, pending gates |
 | [better-seasonal-trees](https://github.com/better-content/better-seasonal-trees) | `better_seasonal_trees` | `better-seasonal-trees-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar`; new-world activation pending gates |
 
@@ -505,11 +501,9 @@ applies. See the source README for current native ownership and tested boundarie
 
 ### Recipe-only Cooking policy
 
-`kubejs/config/cooking_recipes.json` uses `better_cooking:recipe_policy.v1`, independently of the quarantined `culinary_policy.v1`. `84_cooking_recipes.js` checks both original and separately queued post-script source recipes before making exact-ID changes. Queued sources are serialized before the comparison; exact queued-object removal prevents an ID-wide removal from erasing a same-ID replacement. It uses existing installed serializers only. Never qualify the legacy gameplay policy to enable this migration.
+`kubejs/config/cooking_recipes.json` retains the historical `better_cooking:recipe_policy.v1` schema as pack-owned recipe data, **not** as an active Cooking gameplay qualification. `84_cooking_recipes.js` is the sole installer; `83_culinary_policy.js` is inert and its former source is archived under `docs/historical/`. The exhaustive `culinary_policy.json` is historical data, not read by the live installer. The 84 script checks only the recipes it changes (including queued creamy fig chicken), validates all definitions before mutation and preserves exact queued-object removal. The new pack-owned pure source check is `scripts/check_cooking_recipes.py`; the former Cooking repository tooling remains historical, not a required active mod or cookbook compiler. No source check proves live serializer acceptance or runtime tag membership.
 
-The source-owned tools `recipe_catalogue.py`, `recipe_baseline.py`, `recipe_routes.py`, `recipe_station_migration.py`, `compile_station_plan.py` and `recipe_policy.py` bind all 1,060 live default-stack foods, authored roles, source JSON and 2,242 explicit route decisions. Native cutting and cooking choices are separately authored and source-fingerprinted; comparisons use full cutting output vectors, including by-products, rather than only the display result. `verify_recipe_installation.py` checks the fresh server's original source JSON, committed recipe serializer bytes, loaded outputs/serializers, unchanged food properties and canonical compatibility tags. The operator command `/runtimedata recipe-policy` independently parses each intended definition with its installed serializer and compares its network bytes with the committed recipe manager; pending KubeJS event JSON is not mistaken for installed state. Its receipt is not Smoke or Tele Soak acceptance.
-
-Current choices install **82 exact-ID redirects**: 26 deterministic knife cuts onto Kaleidoscope chopping boards (with 104 model-stage resources), 21 stockpot routes, 20 stir-fry pot routes, and 15 flour/dough or dependency redirects. The queued pack-authored creamy fig-chicken route is included. Original ingredient alternatives, quantities, output NBT, deterministic by-products, portions and conditions are retained. Cooking choices check ingredient remainders and serving carriers against live FD/Kaleidoscope facts; native water/lid/heat or oil/stirring/heat handling and native XP behavior are explicit process changes, not claims of identical apparatus. FD-family knife compatibility remains tag-based.
+The next-source plan installs **84 exact-ID redirects**: the existing 26 deterministic knife cuts (104 pack-owned model stages), 21 stockpot routes, 20 wok routes, 15 flour/dough or dependency redirects, plus **two distinct fixed KC wok ports** of pineapple fried rice and market fried rice. Each preserves its own six paid ingredients, explicit bowl carrier and one original feast-block output. KC oil/stirring and native XP differ from FD cooking-pot processing; no feast-serving quality inheritance is claimed. Specialist/conditional/bulk alternatives and already KC-gated recipes remain unchanged. The installed pack pair is unchanged until separately approved release and runtime checks.
 
 Flour/dough producers use Kaleidoscope items with old-stock alternatives and additive wheat flour/dough tags. Slime-ball and Power Grid circuit-board consumers accept canonical dough without changing nonfood outputs, sequence steps or loops. Native retention is recipe-specific: probabilistic cuts, competing native cut formats, wild-crop acquisition, axe cuts, baking mats, distinct desserts/beverages/feasts, final plating, specialist processes, drying and nonfood infrastructure are preserved. Pineapple fried-rice routes retain their required bowl rather than silently losing it through Kaleidoscope's implicit stir-fry carrier lookup. Retained routes record source facts and same-output comparisons; unknown serializers fail review rather than receiving a blanket fallback. Registered items and FD/addon infrastructure stay installed. No new food properties, preservation/canning, intake profiles, custom preparation stages or physiology gates are introduced.
 
@@ -561,7 +555,7 @@ a staging area inside an active root.
 | Vanilla vessel durability and recipes | Better Content Fixes | No boat mutation or hiding script |
 | Credited-kill spirit release, seven village professions/stations/behaviours, matching spirit trades, and seven wandering identities | Better Content Economy | No parallel KubeJS spirit source, trade catalogue, profession conversion, or kill-drop script; pack policy only retires old coin/equipment surfaces |
 | TConstruct affixes and Epic Fight mapping | Tinkers' Construct Affixes | Pack supplies no parallel material-affix catalogue |
-| World reset lifecycle | World Lifecycle Manager | Pack supplies runtime configuration and deploys its independent JAR |
+| World reset lifecycle (deferred) | World Lifecycle Manager | Not deployed in the active pack; retained source/configuration is not active gameplay |
 | Persistent footprints and notes | Player Traces | Pack supplies runtime configuration and deploys its independent JAR |
 
 The five active Machine Block IDs are:
@@ -656,9 +650,8 @@ burner, smeltery, and generator emitters.
 
 Weapons of Miracles is added as a pinned candidate input. Its Epic Fight and tooltip
 ownership must be reconciled against the exact installed version; manifest
-presence does not qualify broad combat behavior. Electrochemistry supplies a
-fresh-world chemistry branch alongside retained PneumaticCraft/ChemLib/Manufacturing
-ownership, not a restoration of Creating Space flight processing. Seasonal Daylight
+presence does not qualify broad combat behavior. Electrochemistry's optional branch
+is retired; PneumaticCraft/ChemLib/Manufacturing chemistry remains. Seasonal Daylight
 and Seasonal Trees are fresh-world candidate additions; keep one sky-clock owner
 and preserve existing saved calendar state.
 
@@ -788,25 +781,13 @@ deserialize old pieces.
 
 `better_pillager_campaigns` bounds its loaded-column sampling, route search, and spawn production; it must
 never load terrain to seek a route. `better_settlement_roads` and `better_village_fortifications` likewise keep tick work
-bounded and clean transient state. `better-spawns` always owns first-join spectator scouting and
-permanent spawn locking. Its active `progression` embark mode asks World Lifecycle Manager for the
-current lineage policy: new lineages receive site-only onboarding, class perks expose only their
-unlocked classes, and unlocking all six classes exposes the bounded Embark point-buy. World
-Lifecycle Manager separately owns successor spawn-biome preferences in
-`config/better_world_management-successor-biomes.txt`. Fresh initial worlds no longer
-read a biome-ID preference list: they select a final shared-spawn biome whose registered
-base temperature is within Cold Sweat's loaded habitable bounds (10–37.78°C in this
-pack) and which is not in `#minecraft:is_ocean`. The same rule applies at the two
-blocks above the saved position, because vanilla first-join placement can lift a
-spectator into a vertically different ocean biome. Additional initial-only excluded
-IDs may be added to `config/better_world_management-initial-spawn-blacklist.txt`;
-the ocean tag exclusion applies even if that file is absent. No FULL-chunk terrain-safety check
-is required for first-join spectators. This biome-baseline criterion does not guarantee
-effective comfort at every time, season or elevation. Successor spawn checks retain
-their existing terrain policy.
-Once a player joins a candidate, Lifecycle Manager writes an inhabited marker in that world;
-the supervisor preserves the candidate and transaction if the marker or saved player data is
-present, including after a failed health check or interrupted retry.
+bounded and clean transient state. `better-spawns` owns first-join spectator scouting and permanent spawn locking. With
+World Lifecycle Manager deferred from the active pack, its configured `progression`
+mode falls back to spawn-only selection: no class, kit or Embark selection. The
+World Management successor-world and initial-spawn policies and supervisor remain
+retained source work, not active pack behavior. The nine-neighbor initial-spawn
+candidate is untested and was not packaged. Do not open an existing World
+Management world in this reduced pack without a separate save-compatibility review.
 
 ### Heat and pollution authority
 

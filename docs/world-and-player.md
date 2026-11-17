@@ -17,7 +17,7 @@ runtime logic.
 | Occult physical components | Hexerei | The mixing cauldron uses iron and a vanilla cauldron; impure chalk requires the three live Font trophies plus finite amethyst. Occultism retains rituals, spirit fire, bindings, servants, and the finite dimensional matrix |
 | Occult storage | None | Controllers, stabilizers, remotes, satchel, wormholes, mineshaft, and miners are closed; finite AE2 storage and meteor-certus-rooted logistics remain |
 | Vanilla boat durability, vessel-drop suppression, reinforced recipes | Better Content Fixes | No boat mutation or hiding scripts |
-| Player-kill spirit release, spirit commerce, seven village professions, and wandering-trader lifecycle | Better Content Economy | The standalone mod owns credited-kill release through Malum's animated spirit entities, the exact 245-offer villager catalogue, seven matching stations/outfits/behaviours, seven 13-good wandering stocks, and matching villager-egg offers; coins, emerald commerce, and eldritch/umbral trade are closed |
+| Player-kill spirit release, spirit commerce, village professions, and wandering-trader lifecycle | Better Spirit Commerce | The mod owns credited-kill release through Malum's animated spirit entities, authored spirit-priced villager and wandering offers, matching stations/outfits/behaviours and Local Market; coins, emerald commerce, and eldritch/umbral trade are closed. Resident needs, gathering, settlements, resident barter and Player Stalls were extracted to a private source-only repository and are not active pack content. |
 | TCon alloy composition and casting | Tinkers' Construct | Removes bypasses and authors exact cross-mod alloy recipes |
 | Kinetic assembly | Create | Uses Machine Blocks only at listed direct roots |
 | Acid and gas chemistry | ChemLib, PneumaticCraft, Create, Better Content Fixes | Pack authors canonical acid routes and renewable acetic uses; airtight machine upgrades retain gas-state ChemLib contents |
@@ -100,27 +100,47 @@ active achievement ledger or replacement reward system.
 
 ### Spirit commerce
 
-The eight village professions correspond to sacred, wicked, arcane, aerial,
-aqueous, earthen, infernal, and Tempo spirits. Each has a
-matching coloured workstation, outfit, local utility behaviour, and 35-offer
-catalogue priced only in its own spirit at 1–8. Other employed villager
-professions are normalized into these eight; raw vanilla and third-party offers
-are removed. Eldritch and umbral spirits never appear in commerce.
+**Five-spirit source foundation authored and reviewed; not staged or release-qualified.** Ordinary
+markets, professions and payments use **Power, Motion, Endurance, Renewal and
+Control**. The five registered core shard items are
+`better_spirit_commerce:{power,motion,endurance,renewal,control}_spirit`; they are
+both physical currency and native Malum reagents. Eldritch and Umbral remain
+specialist Malum items, not ordinary commerce currencies.
 
-Wandering traders use the same eight identities, colours, and matching payment
-spirits. Every identity carries 13 themed goods plus one one-use offer of two
-matching spirits for two villager eggs already assigned to the corresponding
-profession. Player-credited kills immediately release Better Content spirits at the
-dying mob through Malum's floating, homing item entities. Malum-native mappings remain authoritative, including mapped passive
-animals such as cows, pigs, sheep, and chickens. Only the unmapped fallback is
-hostile-only: it deterministically releases two ordinary spirits. Spawner-origin
-mobs, already-soulless victims, and economy actors release none. The seven ordinary
-Better Content spirits replace Malum's ordinary spirit items in recipes and other
-pack uses; Eldritch and Umbral remain Malum items. Currency stacks to 64 without
-delivery receipts. The native Spirit Pouch is
-the sole supported specialist storage surface. Create Deco coins, coin stacks,
-wallets, coin recipes, emerald-priced offers, Wares/Font adapters, and specialist
-harvesting tools are inert or hidden.
+The foundation mechanically projects the existing eight authored stock templates
+into five markets without redesigning their goods or prices. Merged markets keep
+both source lists and one matching campfire; the 288 authored wandering rows
+therefore supply 285 projected rows, **not 285 offers per visit**. Visits select
+12 goods plus the matching fire, with native egg/Font offers handled separately.
+The [five-market catalogue research](spirit-commerce-five-market-catalogue.md)
+has not been adopted as runtime data. Final catalogue selection/pricing remains
+separate work; existing Font destination relationships are unioned under the
+merged themes, not expanded to new destinations. Existing stock uses are not reset.
+
+Player-credited kills immediately release spirits at the dying mob through
+Malum's floating, homing entities. Native mappings and eligibility remain
+authoritative, including mapped passive animals. Only the unmapped fallback is
+hostile-only. Spawner-origin mobs, already-soulless victims and economy actors
+release none. Converging ordinary outputs are summed and split at stack limits;
+there is no dual payout or new Tempo source. Tagged ritual identities and exotic
+outputs remain distinct. Currency stacks to 64 without delivery receipts.
+
+Malum's old internal type/property names remain where native blockstates, ritual
+selection, particles and indexing need them. Their shard suppliers resolve to
+**five core plus two specialist items**; they do not impose seven separate ordinary
+reagent requirements. The native pouch retains 27 generic slots and the altar
+retains nine generic indices—container capacity is not an extra spirit category.
+Existing creative-tab and recipe-viewer policies hide raw native ordinary shards;
+actual client behavior remains unverified. Obsolete economy-to-native refinement
+adapters are retired rather than converted into self-to-self recipes.
+
+**Release hold:** nine pairs of native recipes lose input distinctions after
+merging. Their exact IDs and unresolved output-selection risks are recorded in the
+[five-spirit recipe follow-up](design.md#five-spirit-recipe-follow-up-release-hold).
+The foundation preserves their IDs/outputs/costs; it has **not** disabled them or
+chosen substitute reagents. Native first-match order is not an acceptable
+resolution. All authored tests are **UNRUN**; do not deploy this source candidate
+before catalogue/recipe follow-up and authorized runtime qualification.
 
 ### New worlds and backups
 
@@ -129,7 +149,10 @@ before updating an existing world. New worlds are the supported baseline because
 deposit identities, placed small chunks, disturbed radioactivity, and Machine
 Block identities all participate in saved state.
 
-The candidate adds Electrochemistry and Seasonal Trees for fresh worlds. Seasonal
+Electrochemistry and Arena Trials are excluded from the active pack as of 2026-11-17.
+Existing saves containing their fluids/items, arena sites or pending machine/match
+state require a separate recovery review; no migration or world reset is supplied.
+Seasonal Trees remains in the candidate for fresh worlds. Seasonal
 Daylight replaces Simple Day Length Extender atomically as the sole sky-clock owner;
 the old clock configuration is retained only for rollback. Its nominal full
 sunrise-to-sunrise cycle is 50,000 server ticks, while Minecraft and Serene
@@ -141,15 +164,15 @@ behaviors has exact-pack runtime acceptance or an established-world migration.
 
 ## Dimensional Font ecology and resource links
 
-The three enabled expedition Fonts share a radial court, a ring of fully oxidized copper, a decorative field with candles and shallow pools, and a dimension-specific block palette. Bumblezone sites additionally form three dense wax and hive clusters. Tree biome sites use stripped logs from the local tree family for their four supports and roof ring. Treeless sites omit both. The structure is selected only in new worlds; existing sites are not migrated.
+The three enabled expedition Fonts share a radial court, a decorative field with candles and shallow pools, and a dimension-specific block palette. The 2026-11-16 source candidate replaces copper structural placements with stone bricks and copper roof shapes with corresponding deepslate-tile shapes, including village and arrival-site paths. Geometry and existing layout versions are retained. Bumblezone sites still form three dense wax and hive clusters. Tree biome sites use stripped local logs for their supports and roof ring; treeless sites omit these. This is future-placement-only: existing sites are not scanned, converted or migrated. The source candidate is not yet packaged or gameplay-qualified.
 
-| Font | Salience aspects | Spirit map sellers | Field vocabulary | Renewable or dimension-linked materials | Pack systems that consume them |
+| Font | Salience aspects | Spirit map sellers (five-market source candidate) | Field vocabulary | Renewable or dimension-linked materials | Pack systems that consume them |
 | --- | --- | --- | --- | --- | --- |
-| Nether | Impact, Endurance | Infernal, Wicked | Blackstone, basalt, brick, magma, red candles | Wart, blaze powder/rod, magma cream, basalt | Heat Sync Boiler Heater, PneumaticCraft thermopneumatic plant, TCon Scorched Brick, Nether Font Libation |
-| Aether | Mobility, Renewal | Aerial, Sacred | Holystone, icestone, aerogel, pale sky stone | Blue berries, swet balls, skyroot leaves/logs, aerogel, blue aercloud | Rotational Compressor, Clockwork air compressor/propeller bearing/gas thruster, jet boots, Aether Font Libation |
-| Bumblezone | Work, Tempo, Robustness, Renewal | Earthen, Tempo, Sacred | Beeswax, ancient wax bricks and eyes, brood honeycomb, yellow candles | Pollen puffs, honeycomb, honey, carvable wax | Create mechanical harvester/plough, Airtight Upgrade, Bumblezone Font Libation, existing nursery systems |
+| Nether | Power, Endurance | Power, Control | Blackstone, basalt, brick, magma, red candles | Wart, blaze powder/rod, magma cream, basalt | Heat Sync Boiler Heater, PneumaticCraft thermopneumatic plant, TCon Scorched Brick, Nether Font Libation |
+| Aether | Motion, Renewal | Motion, Renewal | Holystone, icestone, aerogel, pale sky stone | Blue berries, swet balls, skyroot leaves/logs, aerogel, blue aercloud | Rotational Compressor, Clockwork air compressor/propeller bearing/gas thruster, jet boots, Aether Font Libation |
+| Bumblezone | Power, Motion, Endurance, Renewal | Endurance, Motion, Renewal | Beeswax, ancient wax bricks and eyes, brood honeycomb, yellow candles | Pollen puffs, honeycomb, honey, carvable wax | Create mechanical harvester/plough, Airtight Upgrade, Bumblezone Font Libation, existing nursery systems |
 
-Map offers use the saved index of already discovered natural Fonts. Each seller's allowed destinations are the union of Fonts sharing an aspect with its spirit identity. Maps rotate within that set after sale. The index lookup neither loads nor generates chunks. Resident spirit villagers receive a map listing at level two; wandering spirit traders can add a map to their authored catalogues.
+Map offers use the saved index of already discovered natural Fonts. The five-market source preserves the union of each merged market's previous destination relationships; the salience-aspect column does not independently grant additional destinations. Existing dormant Ratlantis relationships are retained, not newly enabled by this consolidation. Maps rotate within that set after sale. The index lookup neither loads nor generates chunks. Resident spirit villagers receive a map listing at level two; wandering spirit traders can add a map to their authored catalogues.
 
 ### Libation and Pourer
 
@@ -247,28 +270,47 @@ The recipe is authored at `kubejs/data/kubejs/recipes/malum/soulwood_growth_from
 
 ## Systemic Salience
 
-Systemic Salience historically connected three separate authorities: RPG Stats owns permanent Life development, Diet plus `better_survival_physiology` own temporary bodily state, and Realistic Ores owns geological deposits. The staged RPG builds retain legacy aspect badge slots but have their own accents and mechanics; a shared slot no longer promises identical meaning or colour across systems. They never share state. TConstruct is outside this matrix; its materials keep their native behavior.
+Systemic Salience connects separate authorities: RPG Stats owns per-life development, Diet owns temporary nourishment, Better Survival Physiology owns nourishment-driven effects, Realistic Ores owns deposits, and Spirit Commerce owns its currencies/reagents. Matching identities do not share balances. TConstruct remains outside this matrix; its materials keep their native behavior.
 
 ### Canonical identity matrix
 
-The table describes the **staged Build 55 candidate**, not a friends-world or gameplay-accepted release. RPG Life categories were renamed; Diet and ore identities are unchanged. See [Life attributes — staged candidate](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted). Aspect words appear in tooltips and supporting cues, not in the ordinary stat, food-group, or deposit names.
+**2026-11-17 approved five-aspect source contract — foundation authored and reviewed,
+compile-only checked; not installed or gameplay-accepted.** This supersedes the eight-food/eight-build
+teaching-only proposal. The bounded exception addresses the reported difficulty of
+understanding eight categories, not a finding from the friends' playtest. Diet has
+five actual native groups, Life has five lean choices, and commerce/crafting share
+five ordinary spirit types. Food names lead in nutrition UI; aspects are secondary
+teaching cues. No shared gameplay-state service is introduced.
 
-| Legacy aspect slot | Glyph | Diet/ore sRGB | Staged RPG build (accent sRGB) | Diet identity | Ore identity |
-| --- | --- | --- | --- | --- | --- |
-| Impact | ✦ | `#FF4055` | Vanguard (`#FF4055`) | Proteins | Hotstone |
-| Tempo | » | `#00A985` | Sharpshooter (`#8E5BB7`) | Sugar | Copper Bloom |
-| Work | ⚒ | `#F0E2C5` | Artisan (`#F0E2C5`) | Grains | Tin Quartz |
-| Mobility | ➜ | `#E0B01F` | Trailblazer (`#E0B01F`) | Fruits | Brassroot |
-| Endurance | ∞ | `#52606A` | Survivalist (`#AF6A2F`) | Vegetables | Coal Measures |
-| Robustness | ◆ | `#D85C32` | Spellcaster (`#6CCAF0`) | Spice | Ironstone |
-| Renewal | ✚ | `#6CCAF0` | Skirmisher (`#52606A`) | Dairy | Evaporite Beds |
-| Control | ⊕ | `#8E5BB7` | Aerialist (`#00A985`) | Alcohol | Black Shale |
+| Aspect / Life / core spirit ID | Actual Diet group / ID | Glyph | Teaching palette (sRGB) | Unchanged ore representatives |
+| --- | --- | --- | --- | --- |
+| Power / `power` | Protein / `proteins` | ✦ | `#FF4055` | Hotstone, Tin Quartz |
+| Motion / `motion` | Carbs / `carbs` | ➜ | `#E0B01F` | Copper Bloom, Brassroot |
+| Endurance / `endurance` | Spice / `spice` | ∞ | `#52606A` | Coal Measures, Ironstone |
+| Renewal / `renewal` | Vegetables / `vegetables` | ✚ | `#6CCAF0` | Evaporite Beds |
+| Control / `control` | Alcohol / `alcohol` | ⊕ | `#8E5BB7` | Black Shale |
 
-The shipped ore and Diet aspect palette is unchanged; RPG build accents are independent.
-The retained glyph and badge slot describe asset continuity, **not** an equivalence of
-bonuses or an automatic alignment of RPG build colour to the adjacent Diet/ore identity.
-Glyph, name, morphology, and actual behavior remain mandatory cues; hue alone is not
-authoritative. Ore morphology and existing artwork are preserved.
+Sprite-sheet indices are owner-local: Life and Physiology use different existing
+atlases, and nutrition retains a distinct paid-Spice food badge. Matching identities
+and teaching colors do not mean that copying one mod's numeric atlas slot selects
+the correct art in another.
+
+All eight deposits, their morphology and processing outputs remain distinct.
+Eldritch and Umbral remain specialist spirits outside the five ordinary types
+(seven spirit types total). Stamina, mana, souls, Life allocations and nutrition
+remain independent native pools. See the [exact lean Life packages](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted).
+Glyph, name, morphology and behavior supplement color.
+
+Font aspect metadata remains Nether=Power/Endurance, Aether=Motion/Renewal and
+Bumblezone=Power/Motion/Endurance/Renewal. Discovery uses the same five identities
+without inventing acquisition events. Spirit mergers conserve existing quantities:
+Infernal/Impact + Arcane/Work → Power; Aerial/Mobility + Tempo → Motion;
+Aqueous/Endurance + Earthen/Robustness → Endurance; Sacred → Renewal; Wicked →
+Control. No new Tempo supply or second payout is introduced. Reagents are included,
+not merely renamed coins. Catalogue goods/prices and recipe-specific substitute
+reagents remain separate follow-up; no new Font trade destinations are authorized.
+This is a fresh-world target with no old-character, item or auto-plan migration or
+refunds. Existing worlds remain untouched.
 
 ### Sensory grammar
 
@@ -276,16 +318,13 @@ Every identity has one recurring motion and sound phrase. These cues play only a
 
 | Aspect | Motion | Sound motif | Geological expression |
 | --- | --- | --- | --- |
-| Impact | radial burst | low thud and transient | radiating Hotstone |
-| Tempo | two rapid pulses | paired clicks | clustered Copper Bloom |
-| Work | descending, settling sparks | tool strike and knock | Tin Quartz ribbons |
-| Mobility | directional rising sweep | short whoosh | branching Brassroot |
-| Endurance | slow expanding ring | sustained low tone | continuous Coal Measures seam |
-| Robustness | inward brace | shield-like clack | dense Ironstone bands |
-| Renewal | rising spiral and bloom | ascending chimes | Evaporite crystal bloom |
+| Power | radial burst | retained impact-family thud/transient | radiating Hotstone; Tin Quartz ribbons |
+| Motion | directional sweep | retained mobility-family whoosh | clustered Copper Bloom; branching Brassroot |
+| Endurance | expanding ring | retained endurance-family low tone | Coal Measures seams; dense Ironstone bands |
+| Renewal | rising bloom | ascending chimes | Evaporite crystal bloom |
 | Control | converging points | ticks resolving to a ping | Black Shale convergence |
 
-Systemic Salience and Realistic Ores share canonical byte-identical 18×18 aspect badges. RPG Stats retains its distinct 18×18 legacy badge-art slots for binary/asset compatibility, now mapped to the eight build names; its new colours and mechanics are independent of the adjacent Diet/ore column. Audio is a semantic family rather than a shared file: each aspect keeps the historical phrase in the table while RPG allocation UI, nutrition and systemic bodily cues, and Realistic Ores discovery use context-specific mixes. Tempo may add an event-specific broken-cadence variant without becoming a ninth identity. Realistic Ores reuses the badge strip while its world identity remains morphology-first dirty geology rather than an aspect-colour wash.
+Physiology and geology select five slots from the existing 18×18 badge atlas; unselected legacy art/audio may remain inert resources. Separate old Work, Tempo and Robustness cue identities are retired from these consumers. Context-specific sound mixes need not share one file. RPG allocation art/audio remains independently owned. Geology remains morphology-first, not an aspect-color wash.
 
 ### Teaching surfaces
 
@@ -308,23 +347,67 @@ These owners already implement meaningful pauses at their own scopes. Keep ordin
 
 ### RPG development
 
-**Staged Build 55 candidate, not gameplay-accepted:** RPG allocations use `cap × p/(p+10)` for steady bonuses and capped 20-point landmarks. Allocations cannot be refunded during the life, and death wipes the ledger. The eight new IDs are Vanguard, Sharpshooter, Artisan, Trailblazer, Survivalist, Spellcaster, Skirmisher and Aerialist. See the [exact proposed effects and separate resource pools](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted). Old body-part allocations and auto-plans do **not** migrate; preserve existing worlds and test only a disposable fresh world. Build 55 Smoke establishes a real client joined and the world saved; separate singleplayer creation also rendered and saved a disposable world. Neither check establishes that the new combat or climate effects work.
+The approved source contract replaces the eight builds with **Power, Motion,
+Endurance, Renewal and Control**, using `F(p)=p/(p+10)` and
+`B(p)=min(p,20)/20`. These are lean packages, not concatenated old builds. One
+point is earned per new Life level peak; final death resets allocations, while
+non-death clones and reconnects preserve fresh five-choice characters. Obsolete
+allocation requests must fail atomically, including mixed old/valid IDs. See the
+[exact effects and independent resource pools](progression.md#life-attributes--staged-pack-candidate-not-gameplay-accepted).
+
+Five-choice Life source and regression tests are authored and compile-only checked.
+Historical Build 55 Smoke and singleplayer checks used the older candidate and
+establish neither these five choices nor their combat/climate effects. No tests, Minecraft launches or new JAR
+staging are authorized in this source pass; authored regressions remain **UNRUN**.
 
 Slice of Life: Carrot remains the sole owner of maximum-health progression.
 
 ### Nutrition
 
-Diet is the authority for the eight active groups, classification, gains and stored values: Protein, Sugar, Grains, Fruit, Vegetables, Spice, Dairy, and Alcohol. Sugar and Alcohol are physiology-owned timed loads mirrored into Diet; Spice is awarded only from real paid doses. The Journal reads Diet's synced suite and values as the sole nutrition GUI. Better Survival Physiology exclusively owns effects driven by those values; Diet's native suite has no effects.
+Diet's native registry, `builtin` suite and tracker own exactly **Protein, Carbs,
+Spice, Vegetables and Alcohol**. Retired group definitions are excluded at native
+loading, including reload, rather than hidden in the UI. Physiology retains only
+cooldown/event state, not independent Sugar or Alcohol balances. The Journal reads
+the synced native suite/values; Physiology owns their effects and the Diet suite
+has no competing effects.
 
-- Protein increases melee damage and unlocks charged hits.
-- Grains increase correct-tool work speed and unlock mining sequences.
-- Fruit increases movement and swimming speed and unlocks travel perks.
-- Vegetables reduce hunger, thirst, and stamina costs and fund the existing emergency reserve. This replaces Tallow/Fats, not the removed historical temperature and knockback proposal.
-- Spice adds bounded work/movement benefits and charges a real seasoning cost on consumption.
-- Dairy accelerates the expiry of harmful effects and grants meal recovery and cleansing.
-- Sugar amplifies benefits while raising hunger and nutrient costs; Alcohol reduces incoming damage at the cost of increasing impairment, up to blackout.
+- **Protein / Power:** melee support and Heavy Blow/cleave, plus continuous
+  correct-tool mining. No Work Rhythm, grace period or mining-burst layer.
+- **Carbs / Motion:** movement/swimming, safer falls and the sprint-jump leap;
+  existing sugar amplification and accelerated expenditure now apply to all
+  Carbs. No hidden Sugar meter or extra sprint-speed stack.
+- **Spice / Endurance:** paid seasoning health cost, capped mining/movement
+  benefits, resource conservation and Deep Reserve. Merely reading a Spice value
+  never charges health or awards a dose.
+- **Vegetables / Renewal:** harmful-effect expiry, meal recovery and cleansing;
+  no new maximum-health progression.
+- **Alcohol / Control:** optional protection with impairment, blackout and
+  recovery, retaining Carb interactions. Drinking is not required for nutrition
+  completeness or progression.
 
-Food tooltips show Diet-derived gains; the Journal explains group-specific effects and estimates without exposing Diet's separate screen. The group's value is never inferred from a missing badge or an alternate UI roster.
+Native tags and recipe inheritance remain authoritative for unmanaged foods;
+there is no manually rewritten whole-food catalogue. Old grains, fruit and sugar
+source contributions become Carbs. Dairy defaults to a configurable **80% Protein
+/ 20% Carbs**, conserving the contribution. Unambiguously dairy-only native recipe
+trails can use that split; mixed native membership retains native set-based shares,
+not invented ingredient weights. Paid preparation provenance resolves each ingredient
+before aggregation. Canonical five-key vectors are explicitly typed and never
+remapped; mirrors, quality and portions are resolved once.
+
+Unmanaged consumption stays Diet-owned. Managed Cooking/Drinking Water completion
+owns its committed paid serving; previews and cancellation award nothing. Cooking
+uses actual completion identities to reject duplicate callbacks, not item/tick
+heuristics that merge distinct portions. Fractional water intake advances its paid
+reserve before releasing the serving. Native Carbs/Alcohol decay multipliers are
+zero because their existing metabolic clocks update the native values directly;
+Protein, Spice and Vegetables retain ordinary Diet decay and applicable upper-band
+behavior. Native final-death reset and non-death clone semantics are retained.
+
+Food tooltips and the Journal use the same canonical results, not an alternate
+hidden roster. Source/fixture/test compilation is available for the Diet/intake
+batch; authored native integration and regression tests are **UNRUN**. Mixin
+application, remote-client synchronization, real completion and lifecycle behavior
+still require later authorized runtime acceptance.
 
 ### Ores
 
@@ -341,9 +424,11 @@ The complete player-facing roster is eight deposits plus the unrelated Oil Seep 
 
 Complex constituent recovery remains processing depth. Removed worldgen identities have no compatibility aliases or migrations.
 
+In the source candidate, small ore chunks collected from surface samples can be melted directly when their full-sized chunk already has a supported molten output. Direct melting rounds down: for a 40 mB full chunk made from nine small chunks, each small chunk gives **4 mB**. Nine direct melts therefore give **36 mB**, while bundling those nine first still gives **40 mB**. Direct melting is convenient, not equally efficient; existing full-chunk and processing yields are unchanged.
+
 ### Acceptance rule
 
-For every representative, test whether a player can predict its broad use from name, morphology, tooltip, and immediate behavior before reading exact numbers. A cue fails if it needs another row's identity to explain it, or if it merely exposes a weighted profile. New mechanics may project from one categorical identity, but new player-facing representatives must preserve the one-to-one matrix.
+For every representative, test whether a player can predict its broad use from name, morphology, tooltip, and immediate behavior before reading exact numbers. A cue fails if it needs another row's identity to explain it, or if it merely exposes a weighted profile. Each representative must retain an unambiguous shared-aspect assignment. The five real food groups map one-to-one to the five aspects, while multiple distinct deposits may share an aspect without merging their geology or outputs. Shared names never merge nutrition, Life, currency or native resource pools.
 
 ## Death, Return, and Tension
 
@@ -414,14 +499,15 @@ especially for solo and multiplayer travel, distant deaths, and repeated deaths.
    `#minecraft:is_ocean` biomes plus any extra initial-spawn biome IDs in
    [`config/better_world_management-initial-spawn-blacklist.txt`](../config/better_world_management-initial-spawn-blacklist.txt).
    The saved spawn and the two blocks above it must all qualify, because vanilla
-   can lift a first-join spectator into a vertically different biome. This
-   blacklist does not affect successor or personal spawns. The shared spawn
+   can lift a first-join spectator into a vertically different biome. The spawn's
+   chunk and all eight neighboring chunks must each have one qualifying biome
+   column; the eight neighbors are sampled at their chunk centers and predicted
+   surface heights. This is not a guarantee of contiguous land or effective comfort.
+   This blacklist does not affect successor or personal spawns. The shared spawn
    radius is zero; first-join players scout in spectator mode, so terrain safety
    is not a condition for publishing an uninhabited initial world. The player's permanent personal respawn can
    be selected in any biome; `spawn_radius=256` remains the configured fallback on established
    worlds where no personal spawn governs the return.
-   Arena Challenges has a separate match-return handler described below; its
-   interaction with Class Selector needs runtime confirmation.
 
 The event boundary is deliberately narrow. The feeling of death tension emerges
 from independently owned systems. A death attempt, an accepted death, and a
@@ -438,7 +524,6 @@ completed respawn are different lifecycle moments.
 | Food and hunger | Configurable Death does not retain food level or saturation. Diet's installed `2.1.1` JAR defaults to a 100-percentage-point loss of each nutrient group on death, floored at zero (`deathPenaltyMethod=AMOUNT`); the pack does not pin a Diet server override | [Configurable Death](../defaultconfigs/configurabledeath-server.toml), [Diet manifest](../mods/diet.pw.toml) |
 | Health progression | Spice of Life: Carrot Edition starts at five hearts, adds one heart per configured milestone, and retains its eaten-food list through death (`resetOnDeath=false`) | [Sol Carrot server defaults](../defaultconfigs/solcarrot-server.toml) |
 | Per-life development | RPG Stats allocations clear on death; its separately stored Auto plan persists so later earned points can follow the plan | [RPG Stats source](https://github.com/better-content/better-rpg-progression) |
-| Arena match exception | Arena Challenges snapshots the player's ordinary inventory, XP, and health before issuing a loaned kit. It restores that snapshot when the match ends, including after a match death; its own respawn handler also attempts to return the player to the arena | [Arena Challenges source](https://github.com/better-content/better-arena-trials) |
 | Bodily injury | Current-life injuries and treatment history clear on confirmed final death; a recap remains while dead and clears on respawn | [Revival source](https://github.com/better-content/better-deaths-door) |
 | Lineage and discoveries | Ordinary death does not reset Threads discovery generations or the World Lifecycle Manager lineage | [Threads](world-and-player.md#threads), [World Lifecycle Manager source](https://github.com/better-content/better-world-management) |
 
@@ -459,7 +544,6 @@ state. Each name links to its owning source repository.
 | [RPG Stats](https://github.com/better-content/better-rpg-progression) | Per-life allocation loss, persistent Auto plan, and XP-level-derived final-death Heart Fragments |
 | [Depth Director](https://github.com/better-content/better-cave-encounters) | Underground pressure, warnings, bounded surges, semantic low-health response, and injury-aware pacing; injuries slow buildup without retiring the encounter |
 | [Pillager Campaigns](https://github.com/better-content/better-pillager-campaigns) | Surface scouts and warned multi-wave assaults; Death's Door players remain targets, and the death observer retires a target and starts death grace |
-| [Arena Challenges](https://github.com/better-content/better-arena-trials) | Bounded duels and trials with loaned kits; player death resolves a match, restores saved inventory and XP, and requests an arena return on respawn |
 | [Dimension Drink](https://github.com/better-content/better-dimension-fonts) | Font run ends on final death; actual transport back to the origin is a separate successful-return event |
 | [Player Traces](https://github.com/better-content/better-player-traces) | Records recent pose as a final-death echo and marks respawn in the world; ongoing Door play still generates traces |
 | [Learning Surfaces](https://github.com/better-content/better-discovery-guides) | Injury discoveries, final-cause death tips, and a lineage memory that survives ordinary death |
@@ -532,12 +616,11 @@ reproduced bug.
 
 | Seam | Current fact | Candidate review |
 | --- | --- | --- |
-| Accepted death versus event observation | Threads consumes Revival's `InjuryEvent.FinalDeath`. RPG Stats, Player Traces, Dimension Drink, Pillager Campaigns, Depth Director, and Arena Challenges also subscribe to `LivingDeathEvent` at differing priorities; Class Selector refreshes its personal spawn at that hook. Pillager Campaigns, Depth Director, and Arena Challenges do not explicitly inspect `event.isCanceled` in their death subscribers | For each side effect, decide whether it needs the accepted-death signal, can safely observe a possibly canceled attempt, or belongs at respawn. Preserve early XP capture where later handlers can clear it |
+| Accepted death versus event observation | Threads consumes Revival's `InjuryEvent.FinalDeath`. RPG Stats, Player Traces, Dimension Drink, Pillager Campaigns, and Depth Director also subscribe to `LivingDeathEvent` at differing priorities; Class Selector refreshes its personal spawn at that hook. Pillager Campaigns and Depth Director do not explicitly inspect `event.isCanceled` in their death subscribers | For each side effect, decide whether it needs the accepted-death signal, can safely observe a possibly canceled attempt, or belongs at respawn. Preserve early XP capture where later handlers can clear it |
 | Retention authority | Configurable Death keeps normal gear while the vanilla `keep_inventory` rule is false; Curios and KeepCuriosInventory add their own policies | Observe normal, Curios, and modded inventory slots across representative final deaths before promising complete gear retention |
 | Native saves and corpse artifacts | Revival says totems do not prevent player death; several installed mods provide save or death-artifact mechanisms | Record each actual activation path and whether it cancels a death, runs after acceptance, or remains irrelevant when no items drop |
 | Teaching and configuration drift | Revival's source now describes active play at Death's Door with no bleed-out, while its tracked common config still contains bleed/revive-era keys. Death tips and other pack copy may describe older treatment or totem behavior | Reconcile player-facing language and identify which config keys are live before editing either mechanics or copy |
 | Geography and task choice | Return location and resource geography are independently owned; there is no explicit distance-to-base rule | Judge travel tension and post-respawn choice in play before adding a mechanic or moving repository boundaries |
-| Arena versus personal return | Arena Challenges teleports a match loser to the arena during `PlayerRespawnEvent`; Class Selector teleports to the saved personal point at `LOWEST` priority. Arena also restores its pre-match XP and gear after death | Verify which location and audiovisual cue the player actually gets, whether the loaned kit is fully removed, and whether XP restoration is the intended scoped exception to normal death loss |
 
 Keep the domain owners separate while those seams are investigated. A shared
 confirmation signal is useful only for consequences that truly require an

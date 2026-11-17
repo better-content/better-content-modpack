@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bc.playtest_authoring_catalogue.v3",
+  "description": "Non-executable draft obligation catalogue, never a campaign manifest or receipt.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "purpose", "status", "reviewed_by", "reviewed_at", "execution_eligible", "qualification_eligible", "source_documents", "required_owner_count", "required_source_repository_count", "notes", "owners", "cases", "control_metadata", "diagnostic_obligations"],
+  "properties": {
+    "schema": {"const": "bc.playtest_authoring_catalogue.v3"},
+    "purpose": {"const": "diagnostic"},
+    "status": {"enum": ["draft-unbound", "reviewed"]},
+    "reviewed_by": {"type": ["string", "null"]},
+    "reviewed_at": {"type": ["string", "null"]},
+    "execution_eligible": {"type": "boolean"},
+    "qualification_eligible": {"type": "boolean"},
+    "source_documents": {"type": "object", "required": ["historical_catalogue", "source_oracles", "open_assessments", "candidate_reference"], "additionalProperties": {"$ref": "#/$defs/boundSource"}},
+    "required_owner_count": {"const": 54},
+    "required_source_repository_count": {"const": 53},
+    "notes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "owners": {"type": "array", "minItems": 54, "maxItems": 54, "items": {"type": "object", "required": ["id", "case_ids", "source_path", "test_path", "source_role", "production_source_paths", "provider_paths", "toolchain_paths", "configuration_paths", "artifact_sha256", "source_to_artifact", "expected_runtime_test_ids", "observed_runtime_test_ids", "status"]}},
+    "cases": {"type": "array", "minItems": 206, "items": {"$ref": "#/$defs/obligation"}},
+    "control_metadata": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/controlMetadata"}},
+    "diagnostic_obligations": {"type": "array", "maxItems": 1, "items": {"$ref": "#/$defs/diagnosticObligation"}}
+  },
+  "if": {"properties": {"status": {"const": "draft-unbound"}}},
+  "then": {"properties": {"reviewed_by": {"type": "null"}, "reviewed_at": {"type": "null"}, "execution_eligible": {"const": false}, "qualification_eligible": {"const": false}}},
+  "$defs": {
+    "boundSource": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+    "openContract": {"type": "object", "required": ["status"], "properties": {"status": {"enum": ["missing", "pending", "requires-review", "reviewed", "reviewed-not-applicable"]}}},
+    "diagnosticObligation": {"type": "object", "additionalProperties": false,
+      "required": ["id", "kind", "required_assertions", "required_capabilities", "required_inventory_domains", "implementation_path", "source_path", "test_path", "state", "review_status", "candidate_binding", "scope_review", "remaining_defects"],
+      "properties": {
+        "id": {"const": "control.mutation.external-getter-negative"},
+        "kind": {"const": "diagnostic-negative-only-not-qualification"},
+        "required_assertions": {"const": []},
+        "required_capabilities": {"const": ["block_mutation.control_expose_states_v1"]},
+        "required_inventory_domains": {"const": []},
+        "implementation_path": {"const": "src/main/kotlin/com/bettercontent/tests/suite/drivers/Stage1ExternalGetterNegativeControlDriver.kt"},
+        "source_path": {"const": "src/main/kotlin/com/bettercontent/tests/suite/drivers/Stage1ExternalGetterNegativeControlDriver.kt"},
+        "test_path": {"const": "src/test/kotlin/com/bettercontent/tests/suite/drivers/Stage1ExternalGetterNegativeControlDriverTest.kt"},
+        "state": {"enum": ["authored-uncompiled-unrun-not-executable", "authored-compiled-unrun-not-executable", "reviewed-diagnostic-only"]},
+        "review_status": {"enum": ["pending", "reviewed"]},
+        "candidate_binding": {"type": ["object", "null"]},
+        "scope_review": {"type": ["object", "null"]},
+        "remaining_defects": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "controlMetadata": {"type": "object", "additionalProperties": false,
+      "required": ["id", "source_path", "test_path", "required_capabilities", "supported_input_profiles", "state", "reviewed_profile"],
+      "properties": {
+        "id": {"enum": ["control.travel.walk-route", "control.client.inventory-screen"]},
+        "source_path": {"type": "string", "minLength": 1}, "test_path": {"type": "string", "minLength": 1},
+        "required_capabilities": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "exact_action_sequence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "supported_input_profiles": {"const": ["1280x720@2", "1920x1080@3"]},
+        "plan_cardinality": {"const": "fixed-reviewed-1-to-4-legs"},
+        "state": {"const": "authored-control-only-unrun"},
+        "reviewed_route_sha256": {"type": "null"}, "reviewed_framebuffer_sha256": {"type": "null"},
+        "reviewed_profile": {"type": "null"}
+      }},
+    "obligation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "domain", "historical_assertions", "required_assertions", "required_capabilities", "required_inventory_domains", "inventory_domain_review", "implementation_path", "source_path", "test_path", "provider_paths", "target_bindings", "producer_contract", "acquisition", "persistence", "reviews", "state", "remaining_defects", "historical_requirement"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9._-]+$"},
+        "domain": {"type": "string", "minLength": 1},
+        "historical_assertions": {"type": "array", "items": {"type": "string"}},
+        "required_assertions": {"type": "array", "items": {"type": "string"}},
+        "required_capabilities": {"type": "array", "items": {"type": "string"}},
+        "required_inventory_domains": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "inventory_domain_review": {"enum": ["missing", "reviewed"]},
+        "implementation_path": {"type": ["string", "null"]},
+        "source_path": {"type": ["string", "null"]},
+        "test_path": {"type": ["string", "null"]},
+        "provider_paths": {"type": "array", "items": {"type": "string"}},
+        "target_bindings": {"type": "array"},
+        "producer_contract": {"$ref": "#/$defs/openContract"},
+        "acquisition": {"$ref": "#/$defs/openContract"},
+        "persistence": {"$ref": "#/$defs/openContract"},
+        "reviews": {"$ref": "#/$defs/openContract"},
+        "state": {"enum": ["missing-unrun", "authored-uncompiled-unrun-not-executable", "authored-previously-compiled-unrun-not-executable", "reviewed"]},
+        "supported_input_profiles": {"type": "array", "uniqueItems": true, "items": {"enum": ["1280x720@2", "1920x1080@3"]}},
+        "remaining_defects": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "historical_requirement": {"type": "array", "items": {"type": "string"}},
+        "source_oracle": {"type": "object", "required": ["test", "assertion", "layer", "boundary", "state", "reviewed_summary", "assessment", "open_required_sections", "expected_runtime_test_ids", "observed_runtime_test_ids"]}
+      },
+      "allOf": [{"if": {"properties": {"id": {"const": "world.onboarding"}}, "required": ["id"]},
+        "then": {"required": ["supported_input_profiles"], "properties": {
+          "required_assertions": {"const": ["world.onboarding.first-join-spectator", "world.onboarding.genuine-spawn-only-input", "world.onboarding.safe-final-survival-site"]},
+          "required_capabilities": {"const": ["world.entry", "player.observe_onboarding.arm", "client.input_hold", "client.input_release", "client.input_status", "player.observe_onboarding.await", "player.snapshot"]},
+          "supported_input_profiles": {"const": ["1280x720@2", "1920x1080@3"]}
+        }}}]
+    }
+  }
+}

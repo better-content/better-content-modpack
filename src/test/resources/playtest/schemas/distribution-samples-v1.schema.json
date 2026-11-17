@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bc.playtest_distribution_samples.v1",
+  "description": "Captured classified units bound to a prior reviewed plan; externally authenticate native/site origin and observation time before interpreting statistical output. Null/unknown classifications are inconclusive, not skipped.",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "plan_sha256", "first_captured_at", "completed_at", "samples"],
+  "properties": {
+    "schema": {"const": "bc.playtest_distribution_samples.v1"},
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "first_captured_at": {"type": "string", "format": "date-time"},
+    "completed_at": {"type": "string", "format": "date-time"},
+    "samples": {"type": "array", "minItems": 1, "maxItems": 512, "items": {"type": "object", "additionalProperties": false,
+      "required": ["unit_id", "bin_id"], "properties": {
+        "unit_id": {"type": "string", "minLength": 1},
+        "bin_id": {"type": ["string", "null"]}
+      }}}
+  }
+}

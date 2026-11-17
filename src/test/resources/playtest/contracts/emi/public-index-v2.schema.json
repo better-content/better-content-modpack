@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bc.playtest_emi_public_index.v2",
+  "description": "Structural contract only. This is NOT producer evidence or a blessed recipe roster; raw bytes must be generated at test phase by the native production serializer.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "emi_jar_sha256", "index_ids", "recipes"],
+  "properties": {
+    "schema": {"const": "bc.playtest_emi_public_index.v2"},
+    "emi_jar_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "index_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "recipes": {"type": "array", "items": {"$ref": "#/$defs/recipe"}}
+  },
+  "$defs": {
+    "recipe": {
+      "type": "object", "additionalProperties": false,
+      "required": ["identity_kind", "recipe_id", "provider_class", "category_id", "output_ids", "input_alternative_ids", "projection_sha256"],
+      "properties": {
+        "identity_kind": {"enum": ["public_recipe_id", "anonymous_public_projection"]},
+        "recipe_id": {"type": ["string", "null"]},
+        "provider_class": {"type": "string", "minLength": 1},
+        "category_id": {"type": "string", "minLength": 1},
+        "output_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "input_alternative_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "projection_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      },
+      "oneOf": [
+        {"properties": {"identity_kind": {"const": "public_recipe_id"}, "recipe_id": {"type": "string", "minLength": 1}, "input_alternative_ids": {"maxItems": 0}, "projection_sha256": {"type": "null"}}},
+        {"properties": {"identity_kind": {"const": "anonymous_public_projection"}, "recipe_id": {"type": "null"}, "provider_class": {"const": "dev.emi.emi.recipe.EmiSyntheticIngredientRecipe"}, "category_id": {"const": "emi:ingredient"}, "input_alternative_ids": {"minItems": 1}, "projection_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}
+      ],
+      "allOf": [
+        {"if": {"properties": {"output_ids": {"maxItems": 0}}}, "then": {"properties": {"provider_class": {"enum": ["dev.emi.emi.recipe.EmiFuelRecipe", "dev.emi.emi.api.recipe.EmiInfoRecipe", "dev.emi.emi.recipe.EmiSyntheticIngredientRecipe"]}}}}
+      ]
+    }
+  }
+}

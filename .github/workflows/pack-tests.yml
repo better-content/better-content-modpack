@@ -1,4 +1,4 @@
-name: Explicit Smoke or Soak
+name: Explicit packaged runtime tier
 
 on:
   workflow_dispatch:
@@ -6,11 +6,8 @@ on:
       tier:
         description: Existing-artifact lifecycle
         type: choice
-        options: [smoke, soak]
+        options: [smoke, overworld-tele-soak, tele-soak]
         default: smoke
-      minutes:
-        description: Connected minutes for Soak (1..240 on this CI runner)
-        default: '30'
       client_url:
         description: URL of the existing packaged client ZIP
         required: true
@@ -49,17 +46,14 @@ jobs:
       - name: Run selected lifecycle
         env:
           TIER: ${{ inputs.tier }}
-          MINUTES: ${{ inputs.minutes }}
           BC_TEST_RUN_ID: ci-${{ github.run_id }}-${{ github.run_attempt }}
         run: |
           mkdir -p "$HOME/.tmp"
           export TMPDIR="$HOME/.tmp"
-          if [ "$TIER" = soak ]; then
-            [[ "$MINUTES" =~ ^[0-9]+$ ]] && ((MINUTES >= 1 && MINUTES <= 240))
-            ./test.main.kts soak --minutes "$MINUTES"
-          else
-            ./test.main.kts smoke
-          fi
+          case "$TIER" in
+            smoke|overworld-tele-soak|tele-soak) ./test.main.kts "$TIER" ;;
+            *) echo "Unsupported runtime tier" >&2; exit 2 ;;
+          esac
       - name: Upload complete evidence
         if: always()
         uses: actions/upload-artifact@v4

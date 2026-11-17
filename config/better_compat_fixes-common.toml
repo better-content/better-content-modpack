@@ -8,13 +8,6 @@
 	#Hides only Minecraft's Creative inventory search tab. JEI, EMI, item contents, and every other Creative tab remain available.
 	hideSearchTab = true
 
-[sleepingOverhaul]
-	#Paces Sleeping Overhaul's simulated ticks instead of allowing an effectively instant night.
-	paceTimelapse = true
-	#Target simulated ticks per real second while Sleeping Overhaul timelapse is active.
-	#Range: 20 ~ 2000
-	targetTicksPerSecond = 800
-
 [items]
 	#Extra horizontal item-pickup radius in blocks. Vanilla vertical reach is unchanged.
 	#Range: 0.0 ~ 8.0

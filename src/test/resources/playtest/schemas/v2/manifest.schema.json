@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bc.playtest_manifest.v2",
+  "type": "object",
+  "required": ["schema", "authoring", "candidate", "artifact_locks", "acquisitions", "profile", "test_support", "repositories", "rosters", "cases"],
+  "properties": {
+    "schema": {"const": "bc.playtest_manifest.v2"},
+    "original_v1": {"type": "object"},
+    "authoring": {"type": "object", "required": ["state", "reviewer", "reviewed_at", "blockers"], "properties": {"state": {"enum": ["draft", "reviewed"]}, "reviewer": {"type": "string"}, "reviewed_at": {"type": "string"}, "blockers": {"type": "array", "items": {"type": "string"}}}},
+    "candidate": {"type": "object", "required": ["client", "server"], "properties": {"client": {"$ref": "#/$defs/binding"}, "server": {"$ref": "#/$defs/binding"}}},
+    "artifact_locks": {"type": "array", "items": {"type": "object", "required": ["path", "sha256", "sides"], "properties": {"path": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "sides": {"type": "array", "minItems": 1, "items": {"enum": ["client", "server"]}}}}},
+    "discovery": {"$ref": "#/$defs/binding"},
+    "protocol": {"type": "object", "required": ["schema", "support_capabilities"], "properties": {"schema": {"const": "bc.playtest_action.v2"}, "support_capabilities": {"$ref": "#/$defs/binding"}}},
+    "driver_bindings": {"type": "array", "items": {"type": "object", "required": ["case_id", "driver_id", "parameters", "required_actions"], "properties": {"case_id": {"type": "string"}, "driver_id": {"type": "string"}, "parameters": {"type": "object"}, "required_actions": {"type": "array", "items": {"type": "string"}}}}},
+    "profile": {"type": "object"}, "test_support": {"type": "object"}, "repositories": {"type": "array"}, "rosters": {"type": "array"}, "cases": {"type": "array"},
+    "acquisitions": {"type": "array", "items": {"$ref": "#/$defs/acquisition"}}
+  },
+  "$defs": {
+    "binding": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}, "additionalProperties": false},
+    "route": {"type": "object", "required": ["id", "mechanism", "execution_case", "stage", "prerequisites", "ingredients"], "properties": {"id": {"type": "string"}, "mechanism": {"type": "string"}, "execution_case": {"type": "string"}, "stage": {"type": "integer", "minimum": 0}, "prerequisites": {"type": "array", "items": {"type": "string"}}, "ingredients": {"type": "array", "items": {"type": "array", "minItems": 1, "items": {"type": "string"}}}}, "additionalProperties": false},
+    "acquisition": {"type": "object", "required": ["id", "kind", "stage", "coverage", "prerequisites", "routes"], "properties": {"id": {"type": "string"}, "kind": {"enum": ["crafted", "worldgen", "harvest", "loot", "trade", "fluid", "intentional-unobtainable"]}, "stage": {"type": "integer", "minimum": 0}, "coverage": {"type": "array", "items": {"type": "string"}}, "prerequisites": {"type": "array", "items": {"type": "string"}}, "routes": {"type": "array", "items": {"$ref": "#/$defs/route"}}, "exclusion": {"type": "object", "required": ["reason", "evidence", "review"], "properties": {"reason": {"type": "string"}, "evidence": {"$ref": "#/$defs/binding"}, "review": {"type": "object", "required": ["state", "reviewer", "reviewed_at"], "properties": {"state": {"enum": ["draft", "reviewed"]}, "reviewer": {"type": "string"}, "reviewed_at": {"type": "string"}}}}}, "legacy_routes": {"type": "array"}, "conversion_pending": {"type": "boolean"}}}
+  }
+}

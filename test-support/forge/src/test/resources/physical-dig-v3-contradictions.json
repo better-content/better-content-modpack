@@ -1,0 +1,48 @@
+{
+  "schema": "bc.playtest_passive_packet_dig_producer_projection_fixtures.v3",
+  "source": "PassivePhysicalDig.classifyCapture(Capture,expectedVariant,expectedDrop,expectedHarvest)",
+  "synthetic_unrun_not_runtime_evidence": true,
+  "cases": [
+    {
+      "id": "wrong_actual_harvest",
+      "expected_packet_variant": "instant_start_only",
+      "expected_drop_outcome": "one_full_pickup",
+      "expected_harvest_result": true,
+      "actual_packet_variant": "instant_start_only",
+      "actual_drop_outcome": "one_full_pickup",
+      "actual_stored_can_harvest": false,
+      "decision": {"actual_packet_variant":"instant_start_only","actual_drop_outcome":"one_full_pickup","actual_stored_can_harvest":false,"observation_complete":true,"reviewed_expectation_matches":false,"expectation_mismatches":["harvest_result"]}
+    },
+    {
+      "id": "wrong_actual_packet_variant",
+      "expected_packet_variant": "progress_start_stop",
+      "expected_drop_outcome": "one_full_pickup",
+      "expected_harvest_result": true,
+      "actual_packet_variant": "instant_start_only",
+      "actual_drop_outcome": "one_full_pickup",
+      "actual_stored_can_harvest": true,
+      "decision": {"actual_packet_variant":"instant_start_only","actual_drop_outcome":"one_full_pickup","actual_stored_can_harvest":true,"observation_complete":true,"reviewed_expectation_matches":false,"expectation_mismatches":["packet_variant"]}
+    },
+    {
+      "id": "unexpected_complete_pickup",
+      "expected_packet_variant": "progress_start_stop",
+      "expected_drop_outcome": "no_drop_negative",
+      "expected_harvest_result": false,
+      "actual_packet_variant": "progress_start_stop",
+      "actual_drop_outcome": "one_full_pickup",
+      "actual_stored_can_harvest": false,
+      "decision": {"actual_packet_variant":"progress_start_stop","actual_drop_outcome":"one_full_pickup","actual_stored_can_harvest":false,"observation_complete":true,"reviewed_expectation_matches":false,"expectation_mismatches":["drop_outcome"]}
+    },
+    {
+      "id": "incomplete_missing_callback_not_behavior",
+      "expected_packet_variant": "instant_start_only",
+      "expected_drop_outcome": "no_drop_negative",
+      "expected_harvest_result": false,
+      "actual_packet_variant": "instant_start_only",
+      "actual_drop_outcome": null,
+      "actual_stored_can_harvest": null,
+      "missing_harvest_callback": true,
+      "decision": {"actual_packet_variant":"instant_start_only","actual_drop_outcome":null,"actual_stored_can_harvest":null,"observation_complete":false,"reviewed_expectation_matches":false,"expectation_mismatches":[],"unsupported_reason":"incomplete_real_packet_source_or_terminal_interval"}
+    }
+  ]
+}

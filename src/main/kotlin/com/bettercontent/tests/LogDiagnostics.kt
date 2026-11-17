@@ -28,6 +28,8 @@ internal fun recordLogDiagnostics(directory: Path, logs: Map<String, Path>): Map
             }
         }
     }
+    val signatures = recordLogSignatures(directory, logs)
     return mapOf("path" to output.toString(), "counts" to counts,
+        "signatures" to signatures.toString(),
         "raw_logs_retained" to logs.mapValues { (_, path) -> Files.isRegularFile(path) })
 }

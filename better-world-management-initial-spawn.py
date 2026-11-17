@@ -231,8 +231,8 @@ def ensure_uninhabited(world: Path) -> None:
 
 def receipt_info(world: Path, identity: str, target: str, mode: str, attempt: int,
                  *, legacy_v2: bool = False) -> str:
-    # Keep the established filename for both schemas. A new candidate MUST have
-    # the parametric V3 receipt; only an explicitly historical caller may read V2.
+    # Keep the established filename for all schemas. V4 records nine biome columns;
+    # V3 remains readable for rollback and existing saves, while V2 is historical only.
     file = world / RECEIPT
     if file.is_symlink() or not file.is_file():
         fail('candidate did not write a regular attempt receipt')
@@ -240,10 +240,12 @@ def receipt_info(world: Path, identity: str, target: str, mode: str, attempt: in
     if not lines:
         fail('candidate receipt is missing its version')
     v2 = lines[0] == 'BC_INITIAL_SPAWN_ATTEMPT_V2'
+    v3 = lines[0] == 'BC_INITIAL_SPAWN_ATTEMPT_V3'
+    v4 = lines[0] == 'BC_INITIAL_SPAWN_ATTEMPT_V4'
     if v2 and not legacy_v2:
-        fail('new candidate requires a V3 attempt receipt')
-    if (v2 and len(lines) != 9) or (not v2 and
-            (lines[0] != 'BC_INITIAL_SPAWN_ATTEMPT_V3' or len(lines) != 12)):
+        fail('new candidate requires a V3 or V4 attempt receipt')
+    if not ((v2 and len(lines) == 9) or (v3 and len(lines) == 12)
+            or (v4 and len(lines) == 21)):
         fail('candidate receipt version or line count differs from the staged attempt')
     if lines[1:4] != [f'attempt\t{identity}', f'target\t{target}', f'number\t{attempt}']:
         fail('candidate receipt identity differs from the staged attempt')
@@ -274,7 +276,7 @@ def receipt_info(world: Path, identity: str, target: str, mode: str, attempt: in
         if status != 'resolved':
             fail('new candidate requires resolved V3 status')
         temperatures = []
-        for field, line in zip(('base_temp_mc', 'min_temp_mc', 'max_temp_mc'), lines[9:]):
+        for field, line in zip(('base_temp_mc', 'min_temp_mc', 'max_temp_mc'), lines[9:12]):
             parts = line.split('\t')
             if len(parts) != 2 or parts[0] != field or not re.fullmatch(
                     r'-?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?', parts[1]):
@@ -286,6 +288,23 @@ def receipt_info(world: Path, identity: str, target: str, mode: str, attempt: in
         base, minimum, maximum = temperatures
         if not minimum <= base <= maximum:
             fail('candidate receipt temperature is outside its inclusive range')
+        if v4:
+            for index, line in enumerate(lines[12:]):
+                fields = line.split('\t')
+                if len(fields) != 7 or fields[:2] != ['sample', str(index)] \
+                        or any(not re.fullmatch(r'-?[0-9]+', value) for value in fields[2:5]) \
+                        or not re.fullmatch(r'[a-z0-9_.-]+:[a-z0-9_./-]+', fields[5]) \
+                        or not re.fullmatch(r'-?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?', fields[6]):
+                    fail(f'candidate neighborhood sample {index} is malformed')
+                sx, sy, sz = (int(value) for value in fields[2:5])
+                expected_x = x if index == 4 else (x // 16 + index % 3 - 1) * 16 + 8
+                expected_z = z if index == 4 else (z // 16 + index // 3 - 1) * 16 + 8
+                sample_base = float(fields[6])
+                if (sx, sz) != (expected_x, expected_z) or index == 4 and sy != y \
+                        or not math.isfinite(sample_base) or not minimum <= sample_base <= maximum:
+                    fail(f'candidate neighborhood sample {index} is outside its chunk or climate bounds')
+                if index == 4 and (fields[5] != biome or sample_base != base):
+                    fail('candidate neighborhood center differs from saved spawn')
     data, generator = saved_level(world / 'level.dat')
     if (data.get('SpawnX'), data.get('SpawnY'), data.get('SpawnZ')) != (x, y, z) \
             or generator.get('seed') != seed:

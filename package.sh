@@ -6,6 +6,16 @@ FORGE_VERSION=47.4.22
 FORGE_COORD="$MC_VERSION-$FORGE_VERSION"
 fail() { printf 'package failed: %s\n' "$*" >&2; exit 1; }
 
+reject_test_support() {
+  python3 - "$ROOT/mods" <<'PY'
+import pathlib, sys, zipfile
+for artifact in pathlib.Path(sys.argv[1]).glob('*.jar'):
+    with zipfile.ZipFile(artifact) as archive:
+        if 'META-INF/bc-playtest-support.json' in archive.namelist():
+            raise SystemExit(f'nonshipping playtest support must not enter a distribution: {artifact}')
+PY
+}
+
 copy_content() {
   local target="$1" path
   mkdir -p "$target"
@@ -215,17 +225,8 @@ install_server() {
   else
     printf '%s\n' '-Xms2G' '-Xmx8G' '-XX:+UseG1GC' '-Dfile.encoding=UTF-8' > "$server/user_jvm_args.txt"
   fi
-  # World Axiom projection is a server supervisor input, not part of the client export.
-  [ -f "$ROOT/world-axioms.py" ] && [ ! -L "$ROOT/world-axioms.py" ] || fail 'missing regular World Axiom projector'
-  [ -f "$ROOT/better-world-management-initial-spawn.py" ] && [ ! -L "$ROOT/better-world-management-initial-spawn.py" ] \
-    || fail 'missing regular initial-spawn supervisor'
-  cp "$ROOT/run.sh" "$ROOT/run-forge.sh" "$ROOT/better-world-management-server.sh" \
-    "$ROOT/world-axioms.py" "$ROOT/better-world-management-initial-spawn.py" "$server/"
-  chmod 0755 "$server/run.sh" "$server/run-forge.sh" "$server/better-world-management-server.sh"
-  chmod 0644 "$server/world-axioms.py" "$server/better-world-management-initial-spawn.py"
-  cmp -s "$ROOT/world-axioms.py" "$server/world-axioms.py" || fail 'World Axiom server projector copy differs'
-  cmp -s "$ROOT/better-world-management-initial-spawn.py" "$server/better-world-management-initial-spawn.py" \
-    || fail 'initial-spawn supervisor copy differs'
+  cp "$ROOT/run.sh" "$ROOT/run-forge.sh" "$server/"
+  chmod 0755 "$server/run.sh" "$server/run-forge.sh"
 }
 
 archive_server_tree() {
@@ -237,6 +238,7 @@ archive_server_tree() {
 package_dist() {
   (($# == 0)) || fail 'distribution output is fixed at the repository dist/ directory'
   for command in java packwiz python3 zip curl; do command -v "$command" >/dev/null || fail "$command is required"; done
+  reject_test_support
   local out_root="$ROOT/dist"
   local current_version current_build next_build version version_dir_name release_dir client_dir server_dir stage
   current_version="$(awk -F ' *= *' '$1 == "version" { value=$2; gsub(/^"|"$/, "", value); print value; exit }' "$ROOT/pack.toml")"

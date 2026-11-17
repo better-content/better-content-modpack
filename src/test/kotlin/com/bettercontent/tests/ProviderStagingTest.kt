@@ -30,12 +30,14 @@ class ProviderStagingTest {
         val bundled = Files.createDirectories(root.resolve("mods"))
         val fixtures = Files.createDirectories(root.resolve("compile-fixtures"))
         Files.writeString(bundled.resolve("active.jar"), "bundled runtime")
+        Files.writeString(bundled.resolve("better-cooking-0.1.0.jar"), "retired non-provider")
         Files.writeString(bundled.resolve("active.pw.toml"), "not a provider JAR")
         Files.writeString(fixtures.resolve("optional.jar"), "compile-only fixture")
         val staging = root.resolve("staged-jars")
         assertEquals(listOf("active.jar", "optional.jar"),
             seedProviderStaging(bundled, staging, fixtures).map { it.fileName.toString() })
         assertTrue(Files.notExists(bundled.resolve("optional.jar")))
+        assertTrue(Files.notExists(staging.resolve("better-cooking-0.1.0.jar")))
         assertEquals("bundled runtime", Files.readString(staging.resolve("active.jar")))
     }
 

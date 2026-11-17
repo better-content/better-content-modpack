@@ -15,14 +15,6 @@ ServerEvents.recipes(function (event) {
         result: { item: 'fruitsdelight:fig_chicken_stew' }
     }).id('kubejs:food_eras/creamy_fig_chicken')
 
-    event.custom({
-        type: 'farmersdelight:cooking', container: { item: 'minecraft:bowl' },
-        cookingtime: 200, experience: 0.2,
-        ingredients: [
-            { item: 'fruitsdelight:pineapple' }, { tag: 'forge:grain/rice' },
-            { item: 'farmersdelight:cabbage' }, { item: 'farmersdelight:tomato' },
-            { item: 'minecraft:egg' }, { item: 'farmersdelight:beef_patty' }
-        ],
-        result: { item: 'fruitsdelight:pineapple_fried_rice' }
-    }).id('kubejs:food_eras/market_fried_rice')
+    // The distinct six-ingredient market feast is installed exactly once by
+    // 84_cooking_recipes.js as a fixed KC wok recipe with a paid bowl.
 })

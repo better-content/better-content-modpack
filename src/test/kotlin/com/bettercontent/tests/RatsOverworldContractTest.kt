@@ -67,22 +67,16 @@ class RatsOverworldContractTest {
                     }
             }
         }
-        // Execute the real policy consumer with the real retained audit policy. Any recipe
-        // read/write would fail, so the exception above cannot hide active installation.
+        // Preserve the historical audit data, but the retired 83 installer must
+        // not read that policy or register ANY recipe event, even if later qualified.
         if (hasRetiredId(root.resolve("kubejs/config/culinary_policy.json"))) Commands.run(listOf("node", "-e", """
             const fs = require('fs'), vm = require('vm');
-            const policy = JSON.parse(fs.readFileSync('kubejs/config/culinary_policy.json', 'utf8'));
-            let invoked = false, warned = false;
-            const forbidden = () => { throw new Error('unqualified policy reached recipe installation'); };
-            const event = new Proxy({}, { get: forbidden });
+            const forbidden = () => { throw new Error('retired culinary installer is active'); };
             vm.runInNewContext(fs.readFileSync('kubejs/server_scripts/progression/83_culinary_policy.js', 'utf8'), {
-                Platform: { isLoaded: () => true },
-                JsonIO: { read: () => policy },
-                console: { warn: message => { if (!message.includes('UNQUALIFIED')) throw Error(message); warned = true; } },
-                ServerEvents: { recipes: handler => { invoked = true; handler(event); } }
+                JsonIO: { read: forbidden },
+                ServerEvents: { recipes: forbidden }
             });
-            if (!invoked || !warned) throw new Error('quarantine branch was not exercised');
-        """.trimIndent()), root, temp.resolve("culinary-quarantine.log"), timeout = Duration.ofSeconds(15))
+        """.trimIndent()), root, temp.resolve("culinary-retired.log"), timeout = Duration.ofSeconds(15))
         assertFalse(text("kubejs/server_scripts/progression/85_dimension_font_ecology.js").contains("ratlantis_libation"))
         assertFalse(text("kubejs/startup_scripts/progression/20_transition_items.js").contains("ratlantis_font_grout"))
     }

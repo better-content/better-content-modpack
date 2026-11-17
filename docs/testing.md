@@ -1,5 +1,19 @@
 # Smoke, Overworld Tele Soak, Tele Soak and fresh distributions
 
+## Complete playtest suite: source closeout complete; full qualification deferred
+
+**User decision, 2026-11-16:** close out the retained source and defer further full-suite implementation. **Full-suite qualification is no longer a prerequisite to starting the friends' world.** The friends' playtest has not started. The [suite status and authoritative deferrals](playtest-suite.md#explicit-deferrals) replace the earlier all-suite-before-play requirement, without changing technical qualification standards or existing release/publication gates.
+
+The [complete playtest qualification suite](playtest-suite.md) remains **incomplete and unqualified**. Registered scenario code, narrow controls, diagnostic-only entries, regression sources and unfinished drafts are distinguished in [driver coverage](playtest-driver-coverage.md#current-closeout-inventory--2026-11-16). Repository assessments, catalogue entries and compile successes are not passing tests. Missing producers, acquisition/provider bindings, persistence coverage and broad gameplay implementations remain actual implementation gaps; `campaign`/`qualify` must continue to reject unsupported or incomplete coverage.
+
+The bounded closeout completed static review and one approved pack/native/helper compilation batch, with no source repairs or retries. All three invocations succeeded with stable expanded input manifests; native Java and helper compilation tasks were **UP-TO-DATE**, not fresh Java compiles. It ran **no tests, GameTests, catalogue/fixture generators, helper/worker execution, Minecraft, GUI/Robot, distribution packaging, staging or deployment**. The ordinary harness `:jar` dependency ran during pack compilation. See [closeout verification](playtest-suite.md#closeout-verification) for exact receipts and limits. All suite work is paused again; this closeout did not select a candidate, start the friends' world or authorize those operations.
+
+Separate future readiness work may check an exact candidate with Smoke, actual onboarding and early resource/tool/food/water progression, two-player interaction, and save–stop–restart–reconnect with inventory/container continuity. Those checks require applicable execution authorization and cannot be relabeled full-suite qualification. Smoke itself does not cover restart or two-player behavior.
+
+Existing runtime tiers, standing permissions and release markers below retain their semantics; the scoped closeout does not invoke any of them. Historical Build71 exact-pair Smoke remains historical evidence for that pair only. A future `playtest-qualified.json` is a separate full-suite result and does not reinterpret a package-ready or Smoke-ready result. The expensive CI workflow remains manual-only and requires a separately provisioned qualification runner; this closeout does not invoke it.
+
+## Existing runtime tiers and releases
+
 There are three distinct pack-level runtime tiers. Ordinary configurable-duration Soak is retired; historical Soak receipts remain unchanged, but new commands reject it. They share one lifecycle and consume existing packaged inputs; they do not build mods, deploy JARs, refresh Packwiz, package a release, or run repository-local verification. The current consolidation operation records user authorization in its operation `EXECUTION.md`; this pack checkout has no root `AGENTS.md`. A disposable fixture requires the selected command and exact candidate pair, and the run receipt must still prove its lifecycle.
 
 | Tier | Acceptance |
@@ -109,6 +123,19 @@ The standing full-pack world approval requires no per-run environment tokens. St
 After a candidate is packaged, a **different identified reviewer** may conduct a fresh owned, real-client, in-world session and submit its capture/review receipts using `./release.main.kts --visual-tier /absolute/path/package-ready.json --visual-review /absolute/path/review.json`. Validation binds the actual package marker, unchanged ZIP hashes, provenance/inventory, candidate/world identity, reviewer independence, in-world screenshots and authentic input log, save and cleanup. A failed or stale review cannot become acceptance; attempted world identities are retained to prevent reuse. Success creates separate `generated/test-evidence/<run-id>/visual/receipt.json` and **never rewrites** `package-ready.json` or `ready.json`. No synthetic mouse evidence or old-world screenshots. The first Smoke-only candidate does **not** run this tier. Historical `--finalize-visual PENDING_JSON --visual-review REVIEW_JSON` is retained solely for previously issued pending receipts; it does not approve a new candidate.
 
 ## Local regressions
+
+**2026-11-17 maintenance-value pruning:** the active Kotlin suite contains **309 `@Test fun`
+declarations**, down from 481. The 172 retired methods and original mixed classes are preserved
+in the [retired meta-test archive](historical/retired-meta-tests-2026-11-17/README.md), outside
+active compilation and execution—not as another maintained test profile. Counts are source
+counts, not passing results. Synthetic approval/provenance/qualification fixtures and redundant
+evidence bookkeeping were retired even inside driver/client test areas. Mixed classes retain
+their useful assertions unchanged: game action/outcome checks, crafting-root calculations,
+process/save/workspace/ZIP safety and real runtime-tier measurements. Actual gameplay scenario
+implementations, native GameTests and custom-mod tests are unchanged. No blanket package
+exclusion, weaker assertions or replacement qualification system was added. Both worker-provenance
+bridges are archived; their previous failures are not converted to passes. Main/test compilation
+passed after pruning; no test or world run was performed for this change.
 
 ```sh
 ./gradlew test

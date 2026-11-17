@@ -98,9 +98,13 @@ object ZipContracts {
 
 /** Events and a single terminal result; logs/worlds are never pruned by the runner. */
 class SessionEvidence(val root: Path, val runId: String, val tier: String, val pair: CandidatePair,
-    val diagnostic: Boolean = false) {
+    val diagnostic: Boolean = false, ownedDirectory: Path? = null,
+    private val eventContext: Map<String, Any?> = emptyMap()) {
     private val mapper = jacksonObjectMapper()
-    val directory = root.resolve("generated/test-evidence/$runId/$tier${if (diagnostic) "-diagnostic" else ""}")
+    val directory = (ownedDirectory ?: root.resolve("generated/test-evidence/$runId/$tier${if (diagnostic) "-diagnostic" else ""}"))
+        .toAbsolutePath().normalize().also {
+            require(it.startsWith(root.resolve("generated/test-evidence").toAbsolutePath().normalize())) { "evidence escapes owned tree" }
+        }
     val fixture = directory.resolve("fixture")
     private val started = Instant.now()
     private val teleSoak = if (!diagnostic && tier in setOf(SessionTier.TELE_SOAK.selector,
@@ -109,6 +113,7 @@ class SessionEvidence(val root: Path, val runId: String, val tier: String, val p
 
     init {
         require(runId.matches(Regex("[A-Za-z0-9][A-Za-z0-9_.-]{0,127}"))) { "unsafe run ID" }
+        require(eventContext.keys.none { it in setOf("type", "time") })
         directory.parent.createDirectories()
         // Reusing an old run must never overwrite a previous pass or masquerade as fresh evidence.
         Files.createDirectory(directory)
@@ -119,7 +124,8 @@ class SessionEvidence(val root: Path, val runId: String, val tier: String, val p
 
     @Synchronized fun event(type: String, fields: Map<String, Any?> = emptyMap()) {
         teleSoak?.record(type, fields)
-        val event = linkedMapOf<String, Any?>("time" to Instant.now().toString(), "type" to type).apply { putAll(fields) }
+        require(fields.keys.intersect(eventContext.keys).isEmpty()) { "event cannot replace its immutable session context" }
+        val event = linkedMapOf<String, Any?>("time" to Instant.now().toString(), "type" to type).apply { putAll(eventContext); putAll(fields) }
         val line = mapper.writeValueAsString(event)
         Files.writeString(directory.resolve("events.jsonl"), "$line\n", StandardOpenOption.CREATE, StandardOpenOption.APPEND)
         println("[${tier}${if (diagnostic) "-diagnostic" else ""}] $line")
@@ -177,6 +183,7 @@ class ManagedProcess(
     val alive: Boolean get() = process.isAlive
     val pid: Long get() = process.pid()
     internal val trackedPids: Set<Long> get() = tracker.trackedPids()
+    internal val processStarts: Map<Long, Instant> get() = tracker.processStarts()
 
     fun send(line: String) {
         check(process.isAlive) { "$name is not running; see $log" }

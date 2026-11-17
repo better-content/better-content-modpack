@@ -61,19 +61,25 @@ class MellariumConstructionSourceTest(unittest.TestCase):
         self.assertEqual([MOD_ABSENT], fallback["conditions"])
         self.assertEqual(original, fallback["recipe"])
         authored = loaded["recipe"]
-        self.assertEqual(["HP#", "#A#", "###"], authored["pattern"])
+        # The documented source-only route extends the native bill into a 4x3 Create
+        # mechanical craft. This does not establish loaded/progression acceptance.
+        self.assertEqual("create:mechanical_crafting", authored["type"])
+        self.assertIs(False, authored["acceptMirrored"])
+        self.assertEqual(["### ", "#A#H", "###P"], authored["pattern"])
+        self.assertEqual(original["pattern"], [row[:3] for row in authored["pattern"]])
         self.assertEqual(original["result"], authored["result"])
-        self.assertEqual(original["category"], authored["category"])
-        self.assertEqual(original["show_notification"], authored["show_notification"])
-        self.assertEqual(original["type"], authored["type"])
+        self.assertEqual(set(original["key"]) | {"H", "P"}, set(authored["key"]))
         self.assertEqual(original["key"]["#"], authored["key"]["#"])
         self.assertEqual(original["key"]["A"], authored["key"]["A"])
         self.assertEqual({"item": "tconstruct:tool_handle"}, authored["key"]["H"])
         self.assertEqual({"item": "tconstruct:large_plate"}, authored["key"]["P"])
-        # This wave-one construction override costs six panels, not the native eight.
-        # The present fix restores the no-Manufacturing native route, not cost parity.
-        self.assertEqual(6, "".join(authored["pattern"]).count("#"))
+        # Native category/notification fields remain protected by exact fallback equality;
+        # they are not fields of this authored mechanical-crafting branch.
+        bill = "".join(authored["pattern"])
+        self.assertEqual(8, bill.count("#"))
         self.assertEqual(8, "".join(original["pattern"]).count("#"))
+        for symbol in ("A", "H", "P"):
+            self.assertEqual(1, bill.count(symbol))
 
     def test_full_grid_temp_keeps_all_nine_paid_items_before_handle(self):
         name = "mellarium_temp_unit"

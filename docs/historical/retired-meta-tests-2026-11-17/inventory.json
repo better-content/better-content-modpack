@@ -1,0 +1,149 @@
+{
+  "archived_at": "2026-11-17T04:51:35.547520+00:00",
+  "before_test_methods": 481,
+  "archived_test_methods": 103,
+  "active_test_methods": 378,
+  "remaining_test_sources_byte_identical": true,
+  "files": [
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/SuiteEvidenceTest.kt",
+      "sha256": "be758e19cdee86fd20cce5a99fbee1bc7326074cfc0ad74edb01526ae80f350e",
+      "test_methods": 8
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/SuiteV2QualificationTest.kt",
+      "sha256": "5b2c4c1669071a498bd9b9e38e160cbdc6d091db557925eaa6b812b0b1bfaee1",
+      "test_methods": 6
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/repositories/AuthoringCatalogueTest.kt",
+      "sha256": "f77670524d8ce3b75d006cd50904c638f1966e187160954fa5603472284b82a4",
+      "test_methods": 7
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/repositories/RepositoryActualWorkerBridgeTest.kt",
+      "sha256": "3039e86d4e0e3daf78113431edf14992dcd120423c1538ea7886429d5f9d0d5b",
+      "test_methods": 1
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/repositories/RepositoryGradleTestWorkerBridgeTest.kt",
+      "sha256": "2f4ca87e4db439fe4f63dbccffe78af57b5e41cdb51f2daf3a710260e056ff08",
+      "test_methods": 3
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/repositories/RepositoryInputUseAgentWeakIdentityTest.kt",
+      "sha256": "30e71bb5b21f33049c8c7b348db2bd89b8ec45fbf35fc80f289345931eaab30f",
+      "test_methods": 1
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/repositories/RepositoryInputUseTest.kt",
+      "sha256": "4901f5fa5043cd857f6af118aba963c4296cfaa8a53570b12095e66e6d5392eb",
+      "test_methods": 4
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/repositories/RepositoryReportImporterTest.kt",
+      "sha256": "d165f432837943c5bf480de41da3f244beb7b06a5fbfacc3d550b574bb68002b",
+      "test_methods": 10
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/repositories/RepositoryRunPlanTest.kt",
+      "sha256": "34e7b4bb1b1ab7520b80930cfabcb918319d91cf782345b86efa85b41371a6d6",
+      "test_methods": 14
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/repositories/RepositoryWorkerInputUseTest.kt",
+      "sha256": "f077512fa6cd24d1de9cacefce47d129734baddc925a3feba5f33a821ba781ad",
+      "test_methods": 11
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/BlockMutationWireTest.kt",
+      "sha256": "e8421afd92ce8ef155e3beb2a8b4aeb7647bb65832aea1f9f2c48434f8125be9",
+      "test_methods": 2
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/BranchContractsTest.kt",
+      "sha256": "bfff81d6695855123bd8c5a25117fd7066373a1eb7fba1ff261ce9073e6a7eca",
+      "test_methods": 4
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/DiagnosticInventoryTest.kt",
+      "sha256": "e659e2fb81420fef07db9c5937d5b1abcf8a03a6799db8f0b20a160a982d46d2",
+      "test_methods": 1
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/DiagnosticMutationControlPlanTest.kt",
+      "sha256": "e7fff14bafb6353ed3f2348a141df80135403620da2f7825d517f63ab2497a94",
+      "test_methods": 1
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/DiagnosticMutationNegativeTest.kt",
+      "sha256": "d0b2b75ce1281c042e3d2bc643841c439564b2c6ad27022d6015d781e57add5b",
+      "test_methods": 1
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/DiagnosticNegativeStopTest.kt",
+      "sha256": "fc70d39bbcd89c6dce5f1548c896c949b2e10320658dd90ed53cf82eaad43072",
+      "test_methods": 1
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/ExecutionPurposeTest.kt",
+      "sha256": "93c733611997f0eee904c93d5e2eaf45774da65f121c013564a1e585aeebb664",
+      "test_methods": 2
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/FrozenNaturalTargetTest.kt",
+      "sha256": "b2185c203e6af7da8916d969e2c43d724e8be7247b5646986a29ff8660597a63",
+      "test_methods": 2
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/LoadedBlockCensusWireTest.kt",
+      "sha256": "f296b4ee8171ee7b0dc94428e5c50a48b912ad06d9d57a3838c6997387c85426",
+      "test_methods": 3
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/LoadedTargetRoutingTest.kt",
+      "sha256": "cf050e57e4a852fa609401df4af92aa1a8784f60a11ef8039a7307bb937ad276",
+      "test_methods": 2
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/NativeAcquisitionWireTest.kt",
+      "sha256": "0f2ec729269322ae05ac2798fac186015f07a87e77b1c2e5917010ab3b01bab2",
+      "test_methods": 4
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/ParentTerrainAbsenceTest.kt",
+      "sha256": "1e4175cdc47b39ec7270ed9cf19dcd3253a1fc95e9dffd44766c7b989761bd5d",
+      "test_methods": 2
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/RuntimeWitnessContractsTest.kt",
+      "sha256": "1e354d444936a5b62bb7c6e92e0b53569a7ab0d5c3ccb1b4201b702d1a3a41ea",
+      "test_methods": 3
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/ScopedSavedAcquisitionTest.kt",
+      "sha256": "d178a859653abb9f0caa5c62645521b622c24b6b22537b79357ad5f832967786",
+      "test_methods": 2
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/ShutdownDrainWireTest.kt",
+      "sha256": "64cd08383df77bcb0230296ad57a42debf6f3582601b1d71877bf038d7624a0b",
+      "test_methods": 2
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/StrictCapturedEvidenceTest.kt",
+      "sha256": "dedd62c94554c96230e2800b8a116587c06afd1fac18a74a0b82e1fa46907165",
+      "test_methods": 2
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/SuiteV3QualificationTest.kt",
+      "sha256": "83b6efeb5a24ce07699c2ce705ea3d8f264b603650157ac471f9469e3f75db87",
+      "test_methods": 4
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/repositories/RepositoryBridgeGradleLaunch.kt",
+      "sha256": "5fb835e70a2e0edaa917356031f788584a27b4f1a427ee2d8c7bc85081ca3763",
+      "test_methods": 0
+    }
+  ]
+}

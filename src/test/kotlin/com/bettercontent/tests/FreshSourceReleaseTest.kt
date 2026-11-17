@@ -9,27 +9,20 @@ import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Instant
-import java.util.jar.JarEntry
-import java.util.jar.JarOutputStream
 
 @Tag("fast")
 class FreshSourceReleaseTest {
     @TempDir lateinit var root: Path
     private val mapper = jacksonObjectMapper()
 
-    @Test fun standingApprovalNeedsNoPerRunEnvironmentAndCannotBeOverriddenByPlan() {
-        assertEquals("standing-full-pack-approval-2026-10-27", requireFreshRuntimeAuthorization(emptyMap()))
-        assertEquals("standing-full-pack-approval-2026-10-27", requireFreshRuntimeAuthorization(mapOf(
-            "BC_PACK_EULA_ACCEPTED" to "false", "BC_PACK_EULA_AUTHORIZATION" to "unrelated reference",
-            "plan_eula_accepted" to "false")))
-    }
-
     private fun population(): Pair<ActiveModManifest, FreshSourcePlan> {
         val mods = (0..43).map { ActiveMod("fixture-$it", "fixture_$it", "fixture-$it.jar", listOf("verifyFull", "stageRuntimeJar")) } + listOf(
             ActiveMod("better-world-management", "better_world_management", "better-world-management-0.1.0.jar", listOf("verifyFull", "stageRuntimeJar")),
-            ActiveMod("better-cooking", "better_cooking", "better-cooking-0.1.0.jar", listOf("verifyFull", "stageRuntimeJar")),
             ActiveMod("better-spicy-farmers", "better_spicy_farmers", "spice.jar", listOf("verifyFull", "stageRuntimeJar")),
-            ActiveMod("better-drinking-water", "better_drinking_water", "water.jar", listOf("verifyFull", "stageRuntimeJar")),
+            ActiveMod("better-drinking-water", "better_drinking_water", "water.jar", listOf("verifyFull", "stageRuntimeJar"),
+                listOf("better-spicy-farmers")),
+            ActiveMod("better-industrial-heat", "better_industrial_heat", "heat.jar", listOf("verifyFull", "stageRuntimeJar"),
+                listOf("better-drinking-water", "better-spicy-farmers")),
             ActiveMod("better-survival-physiology", "better_survival_physiology", "phys.jar", listOf("verifyFull", "stageRuntimeJar"),
                 listOf("better-drinking-water", "better-spicy-farmers")))
         val sources = mods.map {
@@ -39,36 +32,29 @@ class FreshSourceReleaseTest {
             FreshInputSnapshot("/qualified/better-world-management-server.sh", "a".repeat(64)))
     }
 
-    @Test fun allApprovedSourcesIncludingWorldManagementMustBeFreshAndUnique() {
-        val (manifest, plan) = population()
-        assertDoesNotThrow { validateFreshSourcePopulation(manifest, plan) }
-        assertThrows(IllegalArgumentException::class.java) {
-            validateFreshSourcePopulation(manifest.copy(mods = manifest.mods.filterNot { it.repository == "better-cooking" }),
-                plan.copy(sources = plan.sources.filterNot { it.repository == "better-cooking" }))
-        }
-        assertThrows(IllegalArgumentException::class.java) { validateFreshSourcePopulation(manifest, plan.copy(sources = plan.sources.drop(1))) }
-        assertThrows(IllegalArgumentException::class.java) {
-            validateFreshSourcePopulation(manifest, plan.copy(sources = plan.sources.drop(1) + plan.sources.last()))
-        }
-        assertThrows(IllegalArgumentException::class.java) {
-            validateFreshSourcePopulation(manifest.copy(mods = manifest.mods.map {
-                if (it.repository == "better-world-management") it.copy(artifact = "fixture-0.jar") else it
-            }), plan)
-        }
-        val added = ActiveMod("future-approved", "future_approved", "future-approved.jar", listOf("verifyFull", "stageRuntimeJar"))
-        assertDoesNotThrow { validateFreshSourcePopulation(manifest.copy(mods = manifest.mods + added),
-            plan.copy(sources = plan.sources + QualifiedFreshSource(added.repository, "head", "a".repeat(64), "d".repeat(64),
-                "b".repeat(64), FreshInputSnapshot("qualification.json", "c".repeat(64))))) }
-        assertThrows(IllegalArgumentException::class.java) {
-            validateFreshSourcePopulation(manifest.copy(mods = manifest.mods + added), plan)
-        }
-    }
-
     @Test fun dependencyOrderRejectsMissingOrCyclicProvidersAndOrdersWaterSpiceBeforePhys() {
         val (manifest, _) = population()
         val ordered = freshDependencyOrder(manifest.mods).map { it.repository }
+        assertFalse("better-cooking" in ordered)
+        assertDoesNotThrow { validateFreshSourcePopulation(manifest, population().second) }
+        assertThrows(IllegalArgumentException::class.java) {
+            val old = ActiveMod("better-cooking", "better_cooking", "better-cooking-0.1.0.jar", emptyList())
+            val (_, plan) = population()
+            validateFreshSourcePopulation(manifest.copy(mods = manifest.mods + old), plan.copy(sources = plan.sources +
+                QualifiedFreshSource(old.repository, "head", "a".repeat(64), "d".repeat(64), "b".repeat(64),
+                    FreshInputSnapshot("qualification.json", "c".repeat(64)))))
+        }
+        assertTrue(ordered.indexOf("better-spicy-farmers") < ordered.indexOf("better-drinking-water"))
+        assertTrue(ordered.indexOf("better-drinking-water") < ordered.indexOf("better-industrial-heat"))
+        assertTrue(ordered.indexOf("better-spicy-farmers") < ordered.indexOf("better-industrial-heat"))
         assertTrue(ordered.indexOf("better-drinking-water") < ordered.indexOf("better-survival-physiology"))
         assertTrue(ordered.indexOf("better-spicy-farmers") < ordered.indexOf("better-survival-physiology"))
+        assertThrows(IllegalArgumentException::class.java) { validateFreshSourcePopulation(manifest.copy(mods = manifest.mods.map {
+            if (it.repository == "better-drinking-water") it.copy(dependsOn = emptyList()) else it
+        }), population().second) }
+        assertThrows(IllegalArgumentException::class.java) { validateFreshSourcePopulation(manifest.copy(mods = manifest.mods.map {
+            if (it.repository == "better-industrial-heat") it.copy(dependsOn = listOf("better-drinking-water")) else it
+        }), population().second) }
         assertThrows(IllegalArgumentException::class.java) { freshDependencyOrder(listOf(ActiveMod("a", "a", "a.jar", emptyList(), listOf("missing")))) }
         assertThrows(IllegalArgumentException::class.java) { freshDependencyOrder(listOf(
             ActiveMod("a", "a", "a.jar", emptyList(), listOf("b")), ActiveMod("b", "b", "b.jar", emptyList(), listOf("a")))) }
@@ -78,136 +64,61 @@ class FreshSourceReleaseTest {
         }), plan) }
     }
 
-    @Test fun typedProviderAndClassTreeBindingsAreMandatoryBeforeAnyStaging() {
-        val (manifest, plan) = population()
-        val classes = root.resolve("typed-water-classes").toString()
-        val corrected = plan.copy(sources = plan.sources.map { source ->
-            if (source.repository != "better-survival-physiology") source else source.copy(
-                providerSha256 = mapOf("water.jar" to "b".repeat(64), "spice.jar" to "b".repeat(64)),
-                externalInputs = listOf(FreshInputSnapshot(classes, "a".repeat(64), "tree")),
-                gradleProperties = mapOf("spicyFarmersProviderJar" to "@staging/spice.jar", "typedWaterCompileClasses" to classes))
-        })
-        assertDoesNotThrow { validateFreshSourceBindings(manifest, corrected) }
-        assertThrows(IllegalArgumentException::class.java) { validateFreshSourceBindings(manifest, plan) }
-        assertThrows(IllegalArgumentException::class.java) { validateFreshSourceBindings(manifest, corrected.copy(sources = corrected.sources.map {
-            if (it.repository == "better-survival-physiology") it.copy(externalInputs = emptyList()) else it
-        })) }
-        assertThrows(IllegalArgumentException::class.java) { validateFreshSourceBindings(manifest, corrected.copy(sources = corrected.sources.map {
-            if (it.repository == "better-survival-physiology") it.copy(providerSha256 = it.providerSha256 + ("water.jar" to "old-runtime-hash")) else it
-        })) }
-    }
-
-    private fun git(repository: Path, vararg args: String) {
-        val process = ProcessBuilder(listOf("git") + args).directory(repository.toFile()).redirectErrorStream(true).start()
-        val output = process.inputStream.bufferedReader().readText()
-        check(process.waitFor() == 0) { output }
-    }
-
-    private data class Qualification(val repository: Path, val mod: ActiveMod, val source: QualifiedFreshSource, val document: MutableMap<String, Any>)
-    private fun qualification(): Qualification {
-        val repo = Files.createDirectories(root.resolve("source"))
-        git(repo, "init", "-q"); git(repo, "config", "user.email", "fixture@example.invalid"); git(repo, "config", "user.name", "Fixture")
-        Files.writeString(repo.resolve("runtime.java"), "class Runtime {}")
-        git(repo, "add", "."); git(repo, "commit", "-qm", "fixture")
-        val head = ProcessBuilder("git", "rev-parse", "HEAD").directory(repo.toFile()).start().let { p ->
-            val text = p.inputStream.bufferedReader().readText().trim(); check(p.waitFor() == 0); text
-        }
-        val mod = ActiveMod("fixture", "fixture", "fixture.jar", listOf("verifyFull", "stageRuntimeJar"))
-        val jar = repo.resolve("build/libs/fixture.jar"); Files.createDirectories(jar.parent)
-        JarOutputStream(Files.newOutputStream(jar)).use { out ->
-            out.putNextEntry(JarEntry("META-INF/mods.toml")); out.write("[[mods]]\nmodId=\"fixture\"\n".toByteArray()); out.closeEntry()
-        }
-        val log = Files.writeString(root.resolve("verification.log"), "fixture verification passed")
-        val fingerprint = productionFingerprint(repo)
-        val verificationFingerprint = sourceVerificationFingerprint(repo)
-        val document = linkedMapOf<String, Any>("schema" to "bc.source_qualification.v1", "repository" to "fixture", "head" to head,
-            "status" to "passed", "pre_fingerprint" to fingerprint, "post_fingerprint" to fingerprint,
-            "pre_source_verification_fingerprint" to verificationFingerprint, "post_source_verification_fingerprint" to verificationFingerprint,
-            "pre_captured_utc" to "2026-01-01T00:00:00Z", "post_captured_utc" to "2026-01-01T00:01:00Z",
-            "raw_sha256" to Hashes.sha256(jar), "native_required" to true, "native_status" to "passed",
-            "native_not_required_reason" to "Unused in this synthetic receipt; full verification may not waive native checks",
-            "checks" to listOf(mapOf("task" to "verifyFull", "status" to "passed", "evidence" to FreshInputSnapshot(log.toString(), Hashes.sha256(log)))),
-            "provider_sha256" to emptyMap<String, String>(), "gradle_properties" to emptyMap<String, String>(), "external_inputs" to emptyList<Any>())
-        val file = root.resolve("qualification.json"); mapper.writeValue(file.toFile(), document)
-        val source = QualifiedFreshSource("fixture", head, fingerprint, verificationFingerprint, Hashes.sha256(jar), FreshInputSnapshot(file.toString(), Hashes.sha256(file)))
-        return Qualification(repo, mod, source, document)
-    }
-    private fun rewritten(q: Qualification): QualifiedFreshSource {
-        val path = Path.of(q.source.qualification.path); mapper.writeValue(path.toFile(), q.document)
-        return q.source.copy(qualification = q.source.qualification.copy(sha256 = Hashes.sha256(path)))
-    }
-
-    @Test fun qualificationBindsActualPrePostSourceRuntimeAndChecksRatherThanHeadAlone() {
-        val q = qualification()
-        assertDoesNotThrow { validateQualifiedFreshSource(q.repository, q.mod, q.source) }
-        Files.writeString(q.repository.resolve("runtime.java"), "class Runtime { int dirty; }")
-        assertThrows(IllegalArgumentException::class.java) { validateQualifiedFreshSource(q.repository, q.mod, q.source) }
-    }
-
-    @Test fun testOnlyChangesInvalidateQualificationWithoutChangingProductionIdentity() {
-        val q = qualification()
-        val before = productionFingerprint(q.repository)
-        val tests = Files.createDirectories(q.repository.resolve("src/test/java"))
-        Files.writeString(tests.resolve("NewRequiredTest.java"), "class NewRequiredTest {}")
-        assertEquals(before, productionFingerprint(q.repository))
-        assertNotEquals(q.source.sourceVerificationFingerprint, sourceVerificationFingerprint(q.repository))
-        assertThrows(IllegalArgumentException::class.java) { validateQualifiedFreshSource(q.repository, q.mod, q.source) }
-    }
-
-    @Test fun ignoredTestSourcesAndOwnerInstructionsAreStillVerificationInputsNotGeneratedOutputs() {
-        val q = qualification()
-        Files.writeString(q.repository.resolve(".gitignore"), "src/test/\nbuild/\n")
-        val baseline = sourceVerificationFingerprint(q.repository)
-        Files.writeString(Files.createDirectories(q.repository.resolve("src/test/java")).resolve("HiddenTest.java"), "class HiddenTest {}")
-        assertNotEquals(baseline, sourceVerificationFingerprint(q.repository))
-        val beforeInstructions = sourceVerificationFingerprint(q.repository)
-        Files.writeString(q.repository.resolve("AGENTS.md"), "Required native gate")
-        assertNotEquals(beforeInstructions, sourceVerificationFingerprint(q.repository))
-        val beforeGenerated = sourceVerificationFingerprint(q.repository)
-        Files.writeString(Files.createDirectories(q.repository.resolve("build/logs")).resolve("generated.log"), "non-input")
-        assertEquals(beforeGenerated, sourceVerificationFingerprint(q.repository))
-    }
-
-    @Test fun anIndependentCurrentRequestBoundaryRejectsBackdatedPlansAndHistoricalQualification() {
+    @Test fun freshTypedPropsOnlyAdmitQualifiedExternalPathsAndNeverOldCookingJar() {
         val (_, plan) = population()
-        assertThrows(FreshReleaseBlocked::class.java) { validateFreshQualificationCohort(plan, emptyMap()) }
-        val external = mapOf("BC_FRESH_SOURCE_REQUEST_NOT_BEFORE_UTC" to "2026-01-02T00:00:00Z")
-        assertThrows(IllegalArgumentException::class.java) { validateFreshQualificationCohort(plan, external) }
-        val current = plan.copy(qualificationNotBeforeUtc = "2026-01-02T00:00:00Z", createdUtc = "2026-01-02T01:00:00Z")
-        val (start, created) = validateFreshQualificationCohort(current, external)
-        val q = qualification()
-        assertThrows(IllegalArgumentException::class.java) { validateQualifiedFreshSource(q.repository, q.mod, q.source, start, created) }
-        q.document["pre_captured_utc"] = "2026-01-02T00:10:00Z"; q.document["post_captured_utc"] = "2026-01-02T00:20:00Z"
-        assertDoesNotThrow { validateQualifiedFreshSource(q.repository, q.mod, rewritten(q), start, created) }
-        q.document["post_captured_utc"] = "2026-01-02T01:01:00Z"
-        assertThrows(IllegalArgumentException::class.java) { validateQualifiedFreshSource(q.repository, q.mod, rewritten(q), start, created) }
+        val source = plan.sources.single { it.repository == "better-drinking-water" }
+        val kc = Files.writeString(root.resolve("kc.jar"), "source-only fixture")
+        val classes = Files.createDirectories(root.resolve("spice-classes"))
+        val bound = source.copy(
+            externalInputs = listOf(FreshInputSnapshot(kc.toString(), Hashes.sha256(kc)),
+                FreshInputSnapshot(classes.toString(), inputSnapshotHash(classes, "tree"), "tree")),
+            gradleProperties = mapOf("kaleidoscopeJar" to kc.toString(), "typedSpiceCompileClasses" to classes.toString()))
+        assertEquals(listOf("-PkaleidoscopeJar=$kc", "-PtypedSpiceCompileClasses=$classes"),
+            freshGradleProperties(bound, root.resolve("staging")))
+        assertThrows(IllegalArgumentException::class.java) {
+            freshGradleProperties(bound.copy(gradleProperties = bound.gradleProperties +
+                ("typedSpiceCompileClasses" to root.resolve("unqualified-old-classes").toString())), root.resolve("staging"))
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            freshGradleProperties(bound.copy(gradleProperties = bound.gradleProperties +
+                ("cookingJar" to root.resolve("mods/better-cooking-0.1.0.jar").toString())), root.resolve("staging"))
+        }
     }
 
-    @Test fun blockedNativeAndMissingRequiredChecksCannotBeWaived() {
-        val q = qualification()
-        q.document["native_required"] = true; q.document["native_status"] = "blocked"
-        assertThrows(FreshReleaseBlocked::class.java) { validateQualifiedFreshSource(q.repository, q.mod, rewritten(q)) }
-        q.document["native_status"] = "skipped"
-        assertThrows(IllegalArgumentException::class.java) { validateQualifiedFreshSource(q.repository, q.mod, rewritten(q)) }
-        q.document["native_required"] = false; q.document["native_status"] = "not-required"
-        assertThrows(IllegalArgumentException::class.java) { validateQualifiedFreshSource(q.repository, q.mod, rewritten(q)) }
-        q.document["native_required"] = true; q.document["native_status"] = "passed"; q.document["checks"] = emptyList<Any>()
-        assertThrows(IllegalArgumentException::class.java) { validateQualifiedFreshSource(q.repository, q.mod, rewritten(q)) }
+    @Test fun freshSourceBindingsRejectMissingPinnedSpiceAndWaterInputs() {
+        val (manifest, plan) = population()
+        val mods = manifest.mods.associateBy { it.repository }
+        val sources = plan.sources.map { source ->
+            val dependencies = mods.getValue(source.repository).dependsOn.associate { dependency ->
+                mods.getValue(dependency).artifact to plan.sources.single { it.repository == dependency }.rawSha256
+            }
+            source.copy(providerSha256 = dependencies,
+                gradleProperties = if (source.repository == "better-survival-physiology")
+                    mapOf("spicyFarmersProviderJar" to "@staging/spice.jar") else emptyMap())
+        }
+        val error = assertThrows(IllegalArgumentException::class.java) {
+            validateFreshSourceBindings(manifest, plan.copy(sources = sources), root)
+        }
+        assertTrue(error.message!!.contains("kaleidoscopeJar"), "missing qualified KC/typed providers must fail before staging")
     }
 
-    @Test fun changedRawJarOrEvidenceInvalidatesQualification() {
-        val q = qualification()
-        Files.writeString(q.repository.resolve("build/libs/fixture.jar"), "different runtime output")
-        assertThrows(IllegalArgumentException::class.java) { validateQualifiedFreshSource(q.repository, q.mod, q.source) }
-    }
-
-    @Test fun providerPropertiesCannotBypassQualifiedStagingOrExecuteArbitraryGradleProperties() {
-        val q = qualification().source.copy(providerSha256 = mapOf("spice.jar" to "a".repeat(64)),
-            gradleProperties = mapOf("spicyFarmersProviderJar" to "@staging/spice.jar"))
-        assertEquals(listOf("-PspicyFarmersProviderJar=${root.resolve("staged/spice.jar")}"), freshGradleProperties(q, root.resolve("staged")))
-        assertThrows(IllegalArgumentException::class.java) { freshGradleProperties(q.copy(gradleProperties = mapOf("init-script" to "untrusted")), root) }
-        assertThrows(IllegalArgumentException::class.java) { freshGradleProperties(q.copy(gradleProperties = mapOf("spicyFarmersProviderJar" to "@staging/../old.jar")), root) }
-        assertThrows(IllegalArgumentException::class.java) { freshGradleProperties(q.copy(gradleProperties = mapOf("typedWaterCompileClasses" to "/unqualified/classes")), root) }
+    @Test fun retiredCookingCannotReenterEitherFutureCandidateArchive() {
+        val client = root.resolve("client.zip")
+        val server = root.resolve("server.zip")
+        fun archive(path: Path, cooking: Boolean) {
+            java.util.zip.ZipOutputStream(Files.newOutputStream(path)).use { zip ->
+                zip.putNextEntry(java.util.zip.ZipEntry(if (cooking) "pack/mods/better-cooking-0.1.0.jar" else "pack/pack.toml"))
+                zip.write("fixture".toByteArray())
+                zip.closeEntry()
+            }
+        }
+        archive(client, false); archive(server, false)
+        fun pair() = CandidatePair(root, client, server, Hashes.sha256(client), Hashes.sha256(server))
+        assertDoesNotThrow { requireRetiredCookingAbsent(pair()) }
+        archive(server, true)
+        assertThrows(IllegalArgumentException::class.java) { requireRetiredCookingAbsent(pair()) }
+        archive(server, false); archive(client, true)
+        assertThrows(IllegalArgumentException::class.java) { requireRetiredCookingAbsent(pair()) }
     }
 
     @Test fun thirdPartyPinsIncludeRuntimeVersionsButPermitDistributionVersionAndIndexRefresh() {

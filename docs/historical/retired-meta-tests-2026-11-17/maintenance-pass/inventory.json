@@ -1,0 +1,125 @@
+{
+  "created_at": "2026-11-17T05:03:25.259986+00:00",
+  "files": [
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/client/AuthenticAttackInputEvidenceTest.kt",
+      "sha256": "be4a7b093aa0714aeb8438d175aa9104e26358d5b30dd1c914f0ec9967063228",
+      "original_test_methods": 2,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/client/AuthenticEmiGuiEvidenceTest.kt",
+      "sha256": "8676704ae67ba528f2491ae9b633679b3fad3c0e9d8a186d49dfe19e81927eb5",
+      "original_test_methods": 1,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/client/AuthenticHeldInputEvidenceTest.kt",
+      "sha256": "a52fdca05405ae36bf933f70f52aba837c9cb3dd3c809e8792fcacf9f9d589a3",
+      "original_test_methods": 3,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/client/AuthenticInventoryInputEvidenceTest.kt",
+      "sha256": "e9a91253da5a90ad5616c53d690551fcd34a749832b9a98209c5633764ccb948",
+      "original_test_methods": 1,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/client/AuthenticWalkInputEvidenceTest.kt",
+      "sha256": "380d55598606e1a4887aaf7849559f092e4dbbec83ad6bdc11447492cd220886",
+      "original_test_methods": 2,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/client/ClientEmiNavigationEvidenceTest.kt",
+      "sha256": "25149889cdd458ef6c37a5c43ba78761274c8fc584de8d2ba0be49133163d6b1",
+      "original_test_methods": 1,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/client/ClientFrameReviewTest.kt",
+      "sha256": "d6f1dd8088309e01703d06be4c3498b9bcf460b12f649370e95c8c36b95419e4",
+      "original_test_methods": 1,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/drivers/Stage1ExternalGetterNegativeControlDriverTest.kt",
+      "sha256": "0429fd20ea2611f69d780aa71916e980feeb04efe413da743f322572ff57f5a1",
+      "original_test_methods": 2,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/drivers/Stage1PositiveControlDriversTest.kt",
+      "sha256": "0a21f84cdbb7d793e8c452f8d3eeee66b82b6f43f26ee29bfec79a50e38dacd0",
+      "original_test_methods": 2,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/drivers/Stage1RealNegativeControlDriversTest.kt",
+      "sha256": "7b590c517d811bbdbee0e16749833f51ef7d8fd325525a6186df181fc3d51612",
+      "original_test_methods": 2,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/drivers/FoodStochasticEvidenceTest.kt",
+      "sha256": "f5d4de53267f0435772586735ee2059d02a7f4dc2ebf0dce577e06205ed644e8",
+      "original_test_methods": 2,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/drivers/IncomingDamageControlEvidenceTest.kt",
+      "sha256": "9d71434f3f14d9a962dc39ee6c5b903c4d8dabd2de6389a21a3d159c9459d168",
+      "original_test_methods": 2,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/drivers/PhysicalPrimitiveHarvestDriverTest.kt",
+      "sha256": "d17537639d56ef32c3e0ee65a3da2e0bc4e71dc1501481ec10a64dbb0c85d4bc",
+      "original_test_methods": 3,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/drivers/ScaleConformanceControlDriverTest.kt",
+      "sha256": "54557b7f62b02bca2aaa6ed667f1b647ca430eec49f123c8d562867bdd4eb036",
+      "original_test_methods": 2,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/SuiteGuiReviewTest.kt",
+      "sha256": "23842ed20fbec82b4916920d3fc139b6b76518c7b59298d702a2b1dbbf53989a",
+      "original_test_methods": 3,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/checkpoints/ExecutionBindingsTest.kt",
+      "sha256": "379acdea4274607d598380d689bedd0bfd0a628d4cefbd519a498836c7ab699a",
+      "original_test_methods": 2,
+      "mode": "whole-file-retired"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/FreshSourceReleaseTest.kt",
+      "sha256": "9b83d3b8de82425f7b068ea13ed86b7613617ff5fe4685cc99588f1b13533ba0",
+      "original_test_methods": 21,
+      "mode": "mixed-class-original"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/VisualReleaseGateTest.kt",
+      "sha256": "3ee9add39468b847773a78e41462730e1a65a574796e4617495bdd8dfe1d0dce",
+      "original_test_methods": 25,
+      "mode": "mixed-class-original"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/SuiteContractTest.kt",
+      "sha256": "c0041ad1678d498c356d8e3a3310462c39fd4d65457d69d32db6405518269aba",
+      "original_test_methods": 12,
+      "mode": "mixed-class-original"
+    },
+    {
+      "original_path": "src/test/kotlin/com/bettercontent/tests/suite/client/ClientInputRuntimeTest.kt",
+      "sha256": "1172fa77c7eae5a21921c69deffa4c18dc47a9f06b7054eed96aaab82735d882",
+      "original_test_methods": 7,
+      "mode": "mixed-class-original"
+    }
+  ]
+}

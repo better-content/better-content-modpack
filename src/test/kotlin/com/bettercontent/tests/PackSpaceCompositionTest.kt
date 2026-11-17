@@ -16,14 +16,30 @@ class PackSpaceCompositionTest {
     @Test fun newSourcesAreExplicitAndCreatingSpaceIsNotADeclaredDownload() {
         val manifest = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         val mods = manifest.path("mods")
-        assertEquals(54, mods.size())
+        // World Management remains excluded; Electrochemistry and Arena Trials are retired.
+        assertEquals(51, mods.size())
         val rows = mods.associateBy { it.path("repository").asText() }
+        assertEquals(mods.size(), rows.size, "active repository identities must be unique")
+        assertFalse(rows.containsKey("better-world-management"))
         val indexed = Files.readString(root.resolve("index.toml"))
+        assertFalse(indexed.contains("mods/better-world-management-"))
+        for (repository in listOf("better-electrochemistry", "better-arena-trials")) {
+            assertFalse(rows.containsKey(repository), "$repository must remain inactive")
+            assertFalse(indexed.contains("mods/$repository-"), "$repository must not be exported")
+            Files.list(root.resolve("mods")).use { files ->
+                assertFalse(files.anyMatch { it.fileName.toString().startsWith("$repository-") },
+                    "$repository must not remain in the runtime mods directory")
+            }
+        }
+        for (recipe in listOf("aqueous_copper_ii_sulfate", "copper_sheet_deposition")) {
+            val relative = "kubejs/data/better_content/recipes/chemistry/electrical/$recipe.json"
+            assertFalse(Files.exists(root.resolve(relative)), "retired Electrochemistry recipe: $recipe")
+            assertFalse(indexed.contains(relative), "retired recipe must not be exported: $recipe")
+        }
         for ((repository, id) in listOf(
             "better-abyssal-city" to "better_abyssal_city",
             "better-spaceflight" to "better_spaceflight",
             "better-manufacturing" to "better_manufacturing",
-            "better-electrochemistry" to "better_electrochemistry",
             "better-seasonal-daylight" to "better_seasonal_daylight",
             "better-seasonal-trees" to "better_seasonal_trees"
         )) {
@@ -54,6 +70,8 @@ class PackSpaceCompositionTest {
         assertEquals("world", policy.path("better_abyssal_city").path("primary_role").asText())
         assertEquals("gameplay_system", policy.path("better_spaceflight").path("primary_role").asText())
         assertFalse(policy.has("creatingspace"))
+        assertFalse(policy.has("better_electrochemistry"))
+        assertFalse(policy.has("better_arena_trials"))
         val aerospace = Files.readAllLines(root.resolve("kubejs/server_scripts/progression/60_aerospace.js"))
         assertTrue(aerospace.all { it.isBlank() || it.startsWith("//") }, "retired aerospace placeholder must contain comments only")
     }

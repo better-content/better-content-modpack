@@ -1,0 +1,32 @@
+{
+  "schema": "bc.playtest_emi_cross_language_contract.v1",
+  "status": "template-unapproved-unexecuted",
+  "producer": {
+    "source": "test-support/forge/src/main/java/com/bettercontent/playtestsupport/client/EmiPublicObservation.java",
+    "projection_method": "projectRecipe(Object,String,Method,Method,Method,Method,Method,Method,Method)",
+    "serializer_method": "serializeInventory(String,List<String>,List<JsonObject>)",
+    "production_capture_must_call_same_methods": true
+  },
+  "consumer": {
+    "source": "src/main/kotlin/com/bettercontent/tests/suite/client/EmiIndexDriver.kt",
+    "expected_field": "expected_recipe_records",
+    "source_schema": "bc.playtest_emi_public_index.v2"
+  },
+  "bridge": {
+    "task": "emiProducerConsumerContract",
+    "native_focused_membership": "com.bettercontent.playtestsupport.client.EmiPublicObservationTest.producerConsumerFixture",
+    "kotlin_focused_membership": "com.bettercontent.tests.suite.client.EmiProducerConsumerContractTest.productionProjectionBytesReachTheActualSharedConsumer",
+    "output_property": "bc.emi.contract.output",
+    "fresh_exclusive_directory_required": true,
+    "both_producer_and_consumer_membership_required": true,
+    "execution_approved": false
+  },
+  "generated_bytes": null,
+  "test_phase_only": true,
+  "required_acceptance": [
+    "A-owned task invokes actual native production serializer after human approval of test execution, never during compile",
+    "Kotlin consumer reads exact freshly produced bytes and SHA-bound envelope, not a hand-written lookalike",
+    "Native projection includes public-ID, allowed empty-output fuel/info, and anonymous synthetic ingredient with domain-separated projection hash",
+    "Reviewer binds selected candidate EMI SHA and independently reviewed recipe/index membership; this template supplies neither"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "bc.playtest_client_frame_review.v1",
+  "status": "pending",
+  "campaign_id": "REPLACE_WITH_ACTUAL_CAMPAIGN_ID",
+  "lineage_id": "REPLACE_WITH_ACTUAL_LINEAGE_ID",
+  "catalogue_sha256": "REPLACE_WITH_ACTUAL_MANIFEST_SHA256",
+  "candidate": {
+    "client_sha256": "REPLACE_WITH_ACTUAL_CLIENT_ZIP_SHA256",
+    "server_sha256": "REPLACE_WITH_ACTUAL_SERVER_ZIP_SHA256"
+  },
+  "reviewer": {
+    "name": "REPLACE_WITH_HUMAN_REVIEWER_NAME",
+    "kind": "human",
+    "reviewed_at": "REPLACE_WITH_ACTUAL_REVIEW_TIME_AFTER_CAMPAIGN"
+  },
+  "frames": [
+    {
+      "epoch_id": "REPLACE_WITH_SOURCE_EPOCH_ID",
+      "case_id": "REPLACE_WITH_SOURCE_CASE_ID",
+      "trial_id": "REPLACE_WITH_SOURCE_TRIAL_ID",
+      "request_sequence": 0,
+      "screen": "REPLACE_WITH_REVIEWED_GUI_ROSTER_SCREEN",
+      "profile": "1280x720@2",
+      "image_sha256": "REPLACE_WITH_EXACT_NATIVE_FRAMEBUFFER_SHA256",
+      "screen_class": "REPLACE_WITH_OBSERVED_SCREEN_CLASS",
+      "menu_type": null,
+      "dimension": "REPLACE_WITH_OBSERVED_DIMENSION",
+      "player_uuid": "REPLACE_WITH_JOINED_PLAYER_UUID",
+      "approved": false,
+      "disposition": "pending",
+      "rationale": "Not reviewed; do not approve before examining the actual bound screenshot and UI context."
+    }
+  ]
+}

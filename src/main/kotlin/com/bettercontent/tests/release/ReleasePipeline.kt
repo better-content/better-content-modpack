@@ -43,6 +43,23 @@ data class SourceUpdate(
 private val mapper = jacksonObjectMapper()
 private const val SOURCE_METADATA_ENTRY = "META-INF/better-content-source.properties"
 private const val SOURCE_METADATA_SCHEMA = "bc.custom_mod_source.v1"
+private const val RETIRED_COOKING_ARTIFACT = "better-cooking-0.1.0.jar"
+private const val PINNED_KC_SHA256 = "0eee5579b36746825d6586c65051d9e68fc84178a19dec4372fc9d64b8629d62"
+private const val SPICE_PLACED_EVENT = "com/bettercontent/betterspicyfarmers/api/event/NativePlacedServingEvent.class"
+private const val WATER_DRINK_EVENT = "com/bettercontent/betterdrinkingwater/api/NativeDrinkProducedEvent.class"
+private fun pinnedKaleidoscopeJar(): Path = Path.of(System.getProperty("user.home"),
+    ".cache/bc/packwiz-downloads/mods/kaleidoscopecookery-1.6.0-forge+mc1.20.1.jar")
+private fun requirePinnedKaleidoscopeJar(): Path = pinnedKaleidoscopeJar().also {
+    require(Files.isRegularFile(it) && Hashes.sha256(it) == PINNED_KC_SHA256) {
+        "pinned KC 1.6.0 source input is missing or changed"
+    }
+}
+private fun typedSourceClasses(workspace: Path, repository: String, marker: String): Path =
+    workspace.resolve("mod_source/$repository/build/classes/java/main").also {
+        require(Files.isRegularFile(it.resolve(marker))) {
+            "fresh $repository typed source output missing $marker"
+        }
+    }
 
 fun main(args: Array<String>) {
     if (args.firstOrNull() == "--visual-tier") {
@@ -67,6 +84,9 @@ fun main(args: Array<String>) {
         runFreshSourceRelease(root, jobs, Path.of(args[5]), tiers)
         return
     }
+    require(!useBundledMods) {
+        "Cooking-retired pack requires rebuilt typed Water/Spice/Heat providers; old bundled generation is not a source release"
+    }
     val workspace = root.parent
     val manifest: ActiveModManifest = mapper.readValue(root.resolve("gradle/active-custom-mods.json").toFile())
     require(manifest.schema == "bc.active_custom_mods.v1") { "unexpected active-mod manifest schema" }
@@ -74,6 +94,10 @@ fun main(args: Array<String>) {
     val repositories = manifest.mods.map { it.repository }.toSet()
     require(repositories.size == manifest.mods.size) { "duplicate repository in active-mod manifest" }
     require(manifest.mods.map { it.modId }.toSet().size == manifest.mods.size) { "duplicate mod ID in active-mod manifest" }
+    require(manifest.mods.none { it.repository == "better-cooking" || it.modId == "better_cooking" }) {
+        "retired Cooking must not enter the next source release"
+    }
+    requireTypedProviderOrder(manifest.mods)
     manifest.mods.forEach { mod ->
         require(mod.repository !in mod.dependsOn) { "${mod.repository} cannot depend on itself" }
         require(mod.dependsOn.all { it in repositories }) { "${mod.repository} has an unknown release dependency" }
@@ -100,7 +124,11 @@ fun main(args: Array<String>) {
         if (useBundledMods) SourceUpdate(mod.repository, mod.artifact, "not-inspected",
             readSourceCommit(root.resolve("mods").resolve(mod.artifact), mod), "bundled-input")
         else inspectSourceUpdate(root, workspace, mod).let { update ->
-            if (forceRebuildAll && update.status == "same") update.copy(status = "forced-rebuild") else update
+            when {
+                forceRebuildAll && update.status == "same" -> update.copy(status = "forced-rebuild")
+                mod.repository == "better-spicy-farmers" && update.status == "same" -> update.copy(status = "typed-provider-rebuild")
+                else -> update
+            }
         }
     }
     val sourceUpdatesByRepository = sourceUpdates.associateBy { it.repository }
@@ -175,12 +203,14 @@ fun main(args: Array<String>) {
             "deployment lost or misidentified ${mod.artifact}"
         }
     }
+    retireCookingForNextRelease(root, evidence)
 
     runLogged(root, listOf("packwiz", "refresh"), evidence.resolve("packwiz-refresh.log"))
     runLogged(root, listOf("git", "diff", "--check"), evidence.resolve("diff-check.log"))
     val previousReleases = releaseDirectories(root)
     runLogged(root, listOf(root.resolve("dist.sh").toString()), evidence.resolve("dist.log"))
     val candidates = locateNewRelease(root, previousReleases)
+    requireRetiredCookingAbsent(candidates)
     val ready = candidates.release.resolve("ready.json")
     require(!ready.exists()) { "new packaged release unexpectedly has a ready marker" }
     val provenance = mapOf(
@@ -304,9 +334,21 @@ internal fun build(
             val tmp = evidence.resolve("spaceflight-gradle-tmp").also { Files.createDirectories(it) }
             listOf("-Dorg.gradle.jvmargs=-Xmx2G -XX:ActiveProcessorCount=2 -Djava.io.tmpdir=$tmp")
         } else emptyList()) + listOf(if (mod.repository == "better-abyssal-city") "jar" else "stageRuntimeJar") +
-        if (mod.repository == "better-survival-physiology") {
+        if (mod.repository == "better-spicy-farmers") {
+            listOf("-PkaleidoscopeJar=${requirePinnedKaleidoscopeJar()}")
+        } else if (mod.repository == "better-drinking-water") {
+            val spiceClasses = typedSourceClasses(workspace, "better-spicy-farmers", SPICE_PLACED_EVENT)
+            listOf("-PkaleidoscopeJar=${requirePinnedKaleidoscopeJar()}",
+                "-PtypedSpiceCompileClasses=$spiceClasses",
+                "-PgameplayNoticesRuntimeJar=${staging.resolve("better-gameplay-notices-1.0.1.jar")}")
+        } else if (mod.repository == "better-industrial-heat") {
+            val waterClasses = typedSourceClasses(workspace, "better-drinking-water", WATER_DRINK_EVENT)
+            val spiceClasses = typedSourceClasses(workspace, "better-spicy-farmers", SPICE_PLACED_EVENT)
+            listOf("-PtypedWaterCompileClasses=$waterClasses", "-PtypedSpiceCompileClasses=$spiceClasses")
+        } else if (mod.repository == "better-survival-physiology") {
             val spice = staging.resolve("better-spicy-farmers-0.1.0.jar")
-            val waterClasses = workspace.resolve("mod_source/better-drinking-water/build/classes/java/main")
+            val waterClasses = typedSourceClasses(workspace, "better-drinking-water", WATER_DRINK_EVENT)
+            val spiceClasses = typedSourceClasses(workspace, "better-spicy-farmers", SPICE_PLACED_EVENT)
             require(Files.isRegularFile(spice) && jarDeclaresMod(spice, "better_spicy_farmers")) {
                 "stage the active Spice provider before physiology"
             }
@@ -314,19 +356,8 @@ internal fun build(
                 Files.isRegularFile(waterClasses.resolve("com/bettercontent/betterdrinkingwater/$it"))
             }) { "drinking-water did not produce the required nonshipping typed API classes" }
             listOf("-PspicyFarmersProviderJar=$spice", "-PtypedWaterCompileClasses=$waterClasses",
+                "-PtypedSpiceCompileClasses=$spiceClasses",
                 "-PgameplayNoticesRuntimeJar=${staging.resolve("better-gameplay-notices-1.0.1.jar")}")
-        } else if (mod.repository == "better-drinking-water") {
-            listOf("-PgameplayNoticesRuntimeJar=${staging.resolve("better-gameplay-notices-1.0.1.jar")}")
-        } else if (mod.repository == "better-cooking") {
-            val cache = Path.of(System.getProperty("user.home"), ".cache/bc/packwiz-downloads/mods")
-            val ponder = Path.of(System.getProperty("user.home"), ".gradle/caches/modules-2/files-2.1/net.createmod.ponder/Ponder-Forge-1.20.1/1.0.91/f110340ad6af13a09c1f8b91e0a71ba9ae737bcd/Ponder-Forge-1.20.1-1.0.91.jar")
-            require(Hashes.sha256(ponder) == "86e6b64372aba6d9c56f2c35725ea26d8febf2c75eed9950566e7f2849443b34") {
-                "Cooking Ponder compile input is missing or has changed"
-            }
-            listOf("-PkaleidoscopeJar=${cache.resolve("kaleidoscopecookery-1.6.0-forge+mc1.20.1.jar")}",
-                "-PfarmersDelightJar=${cache.resolve("FarmersDelight-1.20.1-1.3.1.jar")}",
-                "-PubesDelightJar=${cache.resolve("ubesdelight-forge-1.20.1-0.4.11.jar")}",
-                "-PponderJar=$ponder")
         } else emptyList()
     val buildEnvironment = providerBuildEnvironment(staging) + when (mod.repository) {
         "better-abyssal-city" -> mapOf("ABYSSAL_WORK_ROOT" to evidence.resolve("abyssal-runtime").toString())
@@ -546,14 +577,50 @@ internal fun packageResolveCommand(root: Path, target: Path): List<String> = lis
     "client",
 )
 
+// Retirement is applied only during a separately authorized release, after
+// staging and (on the strict path) the workspace preservation gate. Never
+// mutate the installed JAR or index while authoring this next-release plan.
+internal fun retireCookingForNextRelease(root: Path, evidence: Path) {
+    val mods = root.resolve("mods")
+    val old = mods.resolve(RETIRED_COOKING_ARTIFACT)
+    if (Files.exists(old, java.nio.file.LinkOption.NOFOLLOW_LINKS)) {
+        require(Files.isRegularFile(old) && !Files.isSymbolicLink(old) && jarDeclaresMod(old, "better_cooking")) {
+            "retired Cooking path is not the expected installed custom JAR"
+        }
+        val backup = evidence.resolve("retired-cooking-installed.jar")
+        Files.copy(old, backup)
+        require(Hashes.sha256(old) == Hashes.sha256(backup)) { "retired Cooking backup changed" }
+        Files.delete(old)
+    }
+    Files.list(mods).use { files ->
+        require(files.filter { Files.isRegularFile(it) && it.name.endsWith(".jar") }
+            .noneMatch { jarDeclaresMod(it, "better_cooking") }) {
+            "another Cooking JAR remains in the candidate runtime directory"
+        }
+    }
+}
+
+internal fun requireRetiredCookingAbsent(pair: CandidatePair) {
+    listOf(pair.client, pair.server).forEach { archive ->
+        java.util.zip.ZipFile(archive.toFile()).use { zip ->
+            require(zip.entries().asSequence().none { it.name.endsWith("/mods/$RETIRED_COOKING_ARTIFACT") ||
+                it.name == "mods/$RETIRED_COOKING_ARTIFACT" }) {
+                "retired Cooking JAR was copied into the candidate: $archive"
+            }
+        }
+    }
+}
+
 // Compile-only fixtures are explicit inputs, never added to the active runtime deployment list.
-// Bundled providers seed the full compile classpath; ordered active builds replace their own JARs.
+// Bundled providers seed compile inputs except the retired Cooking JAR;
+// ordered active builds replace their own JARs.
 internal fun seedProviderStaging(bundled: Path, staging: Path, compileFixtures: Path? = null): List<Path> {
     staging.createDirectories()
     fun copyDirectory(directory: Path, optional: Boolean) {
         require(Files.isDirectory(directory)) { "missing provider directory: $directory" }
         Files.list(directory).use { paths ->
-            paths.filter { Files.isRegularFile(it) && it.name.endsWith(".jar") }.sorted().forEach { source ->
+            paths.filter { Files.isRegularFile(it) && it.name.endsWith(".jar") && it.name != RETIRED_COOKING_ARTIFACT }
+                .sorted().forEach { source ->
                 val target = staging.resolve(source.fileName)
                 require(!optional || !target.exists() || Hashes.sha256(source) == Hashes.sha256(target)) {
                     "compile-only fixture must not override bundled provider: ${source.name}"
@@ -635,6 +702,17 @@ internal fun validateFreshQualificationCohort(plan: FreshSourcePlan, environment
     return start to created
 }
 
+internal fun requireTypedProviderOrder(mods: List<ActiveMod>) {
+    val byRepository = mods.associateBy { it.repository }
+    val water = byRepository["better-drinking-water"]
+    val heat = byRepository["better-industrial-heat"]
+    require(water != null && heat != null &&
+        "better-spicy-farmers" in water.dependsOn &&
+        heat.dependsOn.containsAll(listOf("better-drinking-water", "better-spicy-farmers"))) {
+        "typed source build order must be Spice -> Water -> Heat"
+    }
+}
+
 internal fun freshDependencyOrder(mods: List<ActiveMod>): List<ActiveMod> {
     require(mods.map { it.repository }.toSet().size == mods.size) { "duplicate source repository" }
     val pending = mods.associateBy { it.repository }.toMutableMap()
@@ -658,9 +736,11 @@ internal fun validateFreshSourcePopulation(manifest: ActiveModManifest, plan: Fr
     require(manifest.mods.none { it.repository == "better-finite-water" }) {
         "incomplete Finite Water is not an authorized runtime input"
     }
-    require(manifest.mods.count { it.repository == FROZEN_WLM_REPOSITORY } == 1 &&
-        manifest.mods.count { it.repository == "better-cooking" } == 1) {
-        "new World Management and qualified Cooking must both be active in the fresh-source cohort"
+    require(manifest.mods.count { it.repository == FROZEN_WLM_REPOSITORY } == 1) {
+        "new World Management must be active in the fresh-source cohort"
+    }
+    require(manifest.mods.none { it.repository == "better-cooking" || it.modId == "better_cooking" }) {
+        "retired Cooking must not enter the next fresh-source cohort"
     }
     require(plan.sources.size == manifest.mods.size && plan.sources.map { it.repository }.toSet() ==
         manifest.mods.map { it.repository }.toSet()) {
@@ -670,10 +750,12 @@ internal fun validateFreshSourcePopulation(manifest: ActiveModManifest, plan: Fr
     require(physiology.dependsOn.containsAll(listOf("better-drinking-water", "better-spicy-farmers"))) {
         "Physiology must follow its typed Water and Spice providers"
     }
+    requireTypedProviderOrder(manifest.mods)
     freshDependencyOrder(manifest.mods)
 }
 
-internal fun validateFreshSourceBindings(manifest: ActiveModManifest, plan: FreshSourcePlan) {
+internal fun validateFreshSourceBindings(manifest: ActiveModManifest, plan: FreshSourcePlan,
+    workspace: Path = Path.of(System.getProperty("user.home"))) {
     val definitions = manifest.mods.associateBy { it.repository }
     val sources = plan.sources.associateBy { it.repository }
     plan.sources.forEach { source ->
@@ -691,10 +773,34 @@ internal fun validateFreshSourceBindings(manifest: ActiveModManifest, plan: Fres
         (physiology.gradleProperties["drinkingWaterRuntimeJar"] == null || physiology.gradleProperties["drinkingWaterRuntimeJar"] == "@staging/$water")) {
         "Physiology must bind newly qualified staged Water/Spice; no legacy or compile-only Spice substitute"
     }
-    val classes = physiology.gradleProperties["typedWaterCompileClasses"]
-    require(!classes.isNullOrBlank() && !classes.startsWith("@staging/") && physiology.externalInputs.any {
-        it.kind == "tree" && Path.of(it.path).toAbsolutePath().normalize() == Path.of(classes).toAbsolutePath().normalize()
-    }) { "Physiology requires an explicit hash-pinned typed Water compile-class tree before staging" }
+    val spiceSource = sources.getValue("better-spicy-farmers")
+    val waterSource = sources.getValue("better-drinking-water")
+    val heatSource = sources.getValue("better-industrial-heat")
+    val spiceClasses = workspace.resolve("mod_source/better-spicy-farmers/build/classes/java/main").toAbsolutePath().normalize()
+    val waterClasses = workspace.resolve("mod_source/better-drinking-water/build/classes/java/main").toAbsolutePath().normalize()
+    fun boundInput(source: QualifiedFreshSource, key: String, expected: Path, kind: String, marker: String? = null) {
+        val path = expected.toAbsolutePath().normalize()
+        require(source.gradleProperties[key] == path.toString()) {
+            "${source.repository} must bind qualified $key from its exact provider source"
+        }
+        val input = source.externalInputs.singleOrNull {
+            it.kind == kind && Path.of(it.path).toAbsolutePath().normalize() == path
+        }
+        require(input != null && Regex("[0-9a-f]{64}").matches(input.sha256) &&
+            (kind != "file" || (input.sha256 == PINNED_KC_SHA256 && !Files.isSymbolicLink(path))) &&
+            (marker == null || Files.isRegularFile(path.resolve(marker)))) {
+            "${source.repository} lacks hash-pinned $key provider input"
+        }
+        requireSnapshot(input)
+    }
+    val kc = pinnedKaleidoscopeJar()
+    boundInput(spiceSource, "kaleidoscopeJar", kc, "file")
+    boundInput(waterSource, "kaleidoscopeJar", kc, "file")
+    boundInput(waterSource, "typedSpiceCompileClasses", spiceClasses, "tree", SPICE_PLACED_EVENT)
+    boundInput(heatSource, "typedWaterCompileClasses", waterClasses, "tree", WATER_DRINK_EVENT)
+    boundInput(heatSource, "typedSpiceCompileClasses", spiceClasses, "tree", SPICE_PLACED_EVENT)
+    boundInput(physiology, "typedWaterCompileClasses", waterClasses, "tree", WATER_DRINK_EVENT)
+    boundInput(physiology, "typedSpiceCompileClasses", spiceClasses, "tree", SPICE_PLACED_EVENT)
 }
 
 internal fun inputSnapshotHash(path: Path, kind: String): String {
@@ -777,7 +883,8 @@ internal fun validateQualifiedFreshSource(
 }
 
 internal fun freshGradleProperties(source: QualifiedFreshSource, staging: Path): List<String> {
-    val allowed = setOf("drinkingWaterRuntimeJar", "spicyFarmersProviderJar", "typedWaterCompileClasses")
+    val allowed = setOf("drinkingWaterRuntimeJar", "spicyFarmersProviderJar", "typedWaterCompileClasses",
+        "typedSpiceCompileClasses", "kaleidoscopeJar")
     require(source.gradleProperties.keys.all { it in allowed }) { "unapproved Gradle property in fresh-source plan" }
     return source.gradleProperties.toSortedMap().map { (key, value) ->
         val path = if (value.startsWith("@staging/")) {
@@ -1117,7 +1224,7 @@ private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path, tiers: 
         }
         val (qualificationNotBefore, planCreated) = validateFreshQualificationCohort(plan, System.getenv())
         validateFreshSourcePopulation(manifest, plan)
-        validateFreshSourceBindings(manifest, plan)
+        validateFreshSourceBindings(manifest, plan, root.parent)
         fun validateSource(source: QualifiedFreshSource) {
             validateQualifiedFreshSource(root.parent.resolve("mod_source/${source.repository}"), manifest.mods.single { it.repository == source.repository },
                 source, qualificationNotBefore, planCreated)
@@ -1186,6 +1293,7 @@ private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path, tiers: 
         distributionMods.forEach {
             Files.copy(it.jar, root.resolve("mods/${it.definition.artifact}"), StandardCopyOption.REPLACE_EXISTING)
         }
+        retireCookingForNextRelease(root, evidence)
         requireSnapshot(supervisor)
         runLogged(root, listOf("packwiz", "refresh"), evidence.resolve("packwiz-refresh.log"))
         runLogged(root, listOf("git", "diff", "--check"), evidence.resolve("diff-check.log"))
@@ -1193,6 +1301,7 @@ private fun runFreshSourceRelease(root: Path, jobs: Int, planPath: Path, tiers: 
         val previous = releaseDirectories(root)
         runLogged(root, listOf(root.resolve("dist.sh").toString()), evidence.resolve("dist.log"))
         val pair = locateNewRelease(root, previous)
+        requireRetiredCookingAbsent(pair)
         require(thirdPartyPins(root) == plan.thirdPartyPins) { "third-party pins changed while packaging" }
         distributionMods.forEach { mod ->
             require(archiveMemberHash(pair.client, "/mods/${mod.definition.artifact}") == mod.sha256 &&
@@ -1381,7 +1490,9 @@ private fun streamHash(input: java.io.InputStream, algorithm: String = "SHA-256"
     return digest.digest().joinToString("") { "%02x".format(it) }
 }
 private fun customBinary(name: String, mods: List<ActiveMod>, open: () -> java.io.InputStream): Boolean {
-    if (mods.any { it.artifact == name }) return true
+    // The accepted historical bundle contains Cooking. Its removal is a custom
+    // mod retirement, not an unauthorized third-party binary deletion.
+    if (name == RETIRED_COOKING_ARTIFACT || mods.any { it.artifact == name }) return true
     // Only inspect plausible renamed custom JARs, not thousands of third-party class entries.
     if (mods.none { name.startsWith(it.repository + "-") || name.startsWith(it.artifact.replace(Regex("-[0-9].*\\.jar$"), "") + "-") }) return false
     return java.util.jar.JarInputStream(open()).use { jar ->

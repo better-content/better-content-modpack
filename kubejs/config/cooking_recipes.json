@@ -14106,6 +14106,40 @@
       }
     },
     {
+      "id": "fruitsdelight:cooking/pineapple_fried_rice",
+      "json": {
+        "carrier": {
+          "item": "minecraft:bowl"
+        },
+        "ingredients": [
+          {
+            "item": "fruitsdelight:pineapple"
+          },
+          {
+            "tag": "forge:grain/rice"
+          },
+          {
+            "tag": "forge:grain/rice"
+          },
+          {
+            "tag": "forge:grain/rice"
+          },
+          {
+            "tag": "forge:salad_ingredients/cabbage"
+          },
+          {
+            "tag": "forge:eggs"
+          }
+        ],
+        "result": {
+          "item": "fruitsdelight:pineapple_fried_rice"
+        },
+        "stir_fry_count": 3,
+        "time": 200,
+        "type": "kaleidoscope_cookery:pot"
+      }
+    },
+    {
       "id": "fruitsdelight:cooking/pineapple_marinated_pork",
       "json": {
         "ingredients": [
@@ -14233,6 +14267,40 @@
         "soup_base": "minecraft:water",
         "time": 200,
         "type": "kaleidoscope_cookery:stockpot"
+      }
+    },
+    {
+      "id": "kubejs:food_eras/market_fried_rice",
+      "json": {
+        "carrier": {
+          "item": "minecraft:bowl"
+        },
+        "ingredients": [
+          {
+            "item": "fruitsdelight:pineapple"
+          },
+          {
+            "tag": "forge:grain/rice"
+          },
+          {
+            "item": "farmersdelight:cabbage"
+          },
+          {
+            "item": "farmersdelight:tomato"
+          },
+          {
+            "item": "minecraft:egg"
+          },
+          {
+            "item": "farmersdelight:beef_patty"
+          }
+        ],
+        "result": {
+          "item": "fruitsdelight:pineapple_fried_rice"
+        },
+        "stir_fry_count": 3,
+        "time": 200,
+        "type": "kaleidoscope_cookery:pot"
       }
     },
     {
@@ -62380,7 +62448,6 @@
     "kubejs:food/drying_rack/salmon",
     "kubejs:food_eras/creamy_fig_chicken",
     "kubejs:food_eras/foragers_fruit_salad",
-    "kubejs:food_eras/market_fried_rice",
     "kubejs:sifting/migrated_malum_create_washing_crushed_brilliance",
     "occultism:crushing/datura"
   ],
@@ -209396,18 +209463,55 @@
       "source_sha256": "6624b5a8cc0245e44669411c106a9640942ac6cc9e267106239920e0596e4c6b"
     },
     "fruitsdelight:cooking/pineapple_fried_rice": {
-      "action": "retain",
+      "action": "redirect",
       "alternative_comparisons": [
         {
           "id": "kubejs:food_eras/market_fried_rice",
           "same_fluids": true,
           "same_inputs": false,
           "same_requirements": true,
-          "selected_action": "retain",
+          "selected_action": "redirect",
           "serializer": "farmersdelight:cooking"
         }
       ],
-      "family": "native_station_reviewed_exception",
+      "definitions": [
+        {
+          "id": "fruitsdelight:cooking/pineapple_fried_rice",
+          "json": {
+            "carrier": {
+              "item": "minecraft:bowl"
+            },
+            "ingredients": [
+              {
+                "item": "fruitsdelight:pineapple"
+              },
+              {
+                "tag": "forge:grain/rice"
+              },
+              {
+                "tag": "forge:grain/rice"
+              },
+              {
+                "tag": "forge:grain/rice"
+              },
+              {
+                "tag": "forge:salad_ingredients/cabbage"
+              },
+              {
+                "tag": "forge:eggs"
+              }
+            ],
+            "result": {
+              "item": "fruitsdelight:pineapple_fried_rice"
+            },
+            "stir_fry_count": 3,
+            "time": 200,
+            "type": "kaleidoscope_cookery:pot"
+          },
+          "preservation_review": "Exact six paid inputs, explicit bowl carrier and one original feast-block item; KC oil/stir process replaces FD pot and FD experience is not a KC wok field. No inferred quality transfer to feast servings."
+        }
+      ],
+      "family": "fixed_native_kaleidoscope_port",
       "native_facts_sha256": "cdd74e5bec543dbcc8a658ca841e82700e9507fa988ea50560ea24d5df7f8b2a",
       "native_source_facts": {
         "container": "minecraft:bowl",
@@ -209416,7 +209520,7 @@
         "cookingtime": 200,
         "experience": 0.1
       },
-      "reason": "Retain this exact pineapple fried-rice formulation: live FD getOutputContainer requires one bowl, while native KC ItemUtils reports air for this output. A stir-fry conversion would erase its bowl cost; assigning a water stockpot would change the process, and adding an output-container tag could affect downstream ingredient returns. Preserve the native FD recipe rather than silently change those semantics.",
+      "reason": "Fixed Kaleidoscope wok port of the original six-input pineapple rice feast; explicitly pay one bowl as the recipe carrier despite the foreign output's implicit container being air. Preserve three separate rice inputs, one feast-block output and native source identity; do not infer quality for the four newly created feast servings.",
       "same_output_vector_routes": [
         "kubejs:food_eras/market_fried_rice"
       ],
@@ -291103,18 +291207,55 @@
       "source_sha256": "46aa6e045bb0c542acd809f93c60a32690ebd35a8ab642978f0ff8d798fa0698"
     },
     "kubejs:food_eras/market_fried_rice": {
-      "action": "retain",
+      "action": "redirect",
       "alternative_comparisons": [
         {
           "id": "fruitsdelight:cooking/pineapple_fried_rice",
           "same_fluids": true,
           "same_inputs": false,
           "same_requirements": true,
-          "selected_action": "retain",
+          "selected_action": "redirect",
           "serializer": "farmersdelight:cooking"
         }
       ],
-      "family": "native_station_reviewed_exception",
+      "definitions": [
+        {
+          "id": "kubejs:food_eras/market_fried_rice",
+          "json": {
+            "carrier": {
+              "item": "minecraft:bowl"
+            },
+            "ingredients": [
+              {
+                "item": "fruitsdelight:pineapple"
+              },
+              {
+                "tag": "forge:grain/rice"
+              },
+              {
+                "item": "farmersdelight:cabbage"
+              },
+              {
+                "item": "farmersdelight:tomato"
+              },
+              {
+                "item": "minecraft:egg"
+              },
+              {
+                "item": "farmersdelight:beef_patty"
+              }
+            ],
+            "result": {
+              "item": "fruitsdelight:pineapple_fried_rice"
+            },
+            "stir_fry_count": 3,
+            "time": 200,
+            "type": "kaleidoscope_cookery:pot"
+          },
+          "preservation_review": "Distinct six paid market ingredients including prepared beef patty, explicit bowl and one original feast-block item; KC oil/stir replaces FD pot and FD experience has no KC field. No feast-serving quality assumption."
+        }
+      ],
+      "family": "fixed_native_kaleidoscope_port",
       "native_facts_sha256": "cdd74e5bec543dbcc8a658ca841e82700e9507fa988ea50560ea24d5df7f8b2a",
       "native_source_facts": {
         "container": "minecraft:bowl",
@@ -291123,7 +291264,7 @@
         "cookingtime": 200,
         "experience": 0.2
       },
-      "reason": "Retain the distinct market formulation of pineapple fried rice with cabbage, tomato, egg and prepared beef patty. The live FD recipe requires a bowl while KC reports no serving carrier for this item; preserve that bowl cost rather than silently drop it or assign the stir-fried dish a water base.",
+      "reason": "Fixed Kaleidoscope wok port of the distinct six-input market feast with one rice, cabbage, tomato, egg and prepared beef patty; explicitly pay one bowl, preserve one feast-block output and do not infer quality for the four newly created feast servings.",
       "same_output_vector_routes": [
         "fruitsdelight:cooking/pineapple_fried_rice"
       ],
