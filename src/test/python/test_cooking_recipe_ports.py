@@ -12,6 +12,11 @@ SPEC.loader.exec_module(checker)
 
 
 class CookingFixedPortTest(unittest.TestCase):
+    # Frozen from pack-originals-20261117T1139Z, before the two approved ports.
+    # Only the original definitions are pinned; unrelated retained source/tag
+    # resources are deliberately not a new global recipe gate.
+    ORIGINAL_DEFINITIONS_SHA256 = '1e7ed28c6014f7718222d4117f1f803dcd212d50b6fa334aa85c303b99abbc39'
+
     @classmethod
     def setUpClass(cls):
         cls.plan = json.loads((ROOT / 'kubejs/config/cooking_recipes.json').read_text())
@@ -22,6 +27,16 @@ class CookingFixedPortTest(unittest.TestCase):
         self.assertNotEqual(first, second)
         self.assertEqual(first.count({'tag': 'forge:grain/rice'}), 3)
         self.assertEqual(second.count({'tag': 'forge:grain/rice'}), 1)
+
+    def test_all_82_prior_definitions_remain_canonically_unchanged(self):
+        original = sorted((row for row in self.plan['definitions'] if row['id'] not in checker.PORTS),
+                          key=lambda row: row['id'])
+        self.assertEqual(len(original), 82)
+        self.assertEqual(len(self.plan['definitions']), 84)
+        self.assertEqual(checker.fingerprint(original), self.ORIGINAL_DEFINITIONS_SHA256)
+        changed = copy.deepcopy(original)
+        changed[0]['json']['time'] = 999
+        self.assertNotEqual(checker.fingerprint(changed), self.ORIGINAL_DEFINITIONS_SHA256)
 
     def test_paid_carrier_or_yield_drift_fails(self):
         plan = copy.deepcopy(self.plan)
