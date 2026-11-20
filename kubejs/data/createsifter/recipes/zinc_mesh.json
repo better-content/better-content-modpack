@@ -11,18 +11,19 @@
       "recipe": {
         "type": "better_manufacturing:part_variant",
         "pattern": [
-          " H ",
+          "SHS",
           "HMH",
-          " H "
+          "SHS"
         ],
         "key": {
           "H": {
             "item": "tconstruct:tool_handle"
           },
           "M": {
-            "type": "forge:partial_nbt",
-            "item": "minecraft:stick",
-            "nbt": "{better_manufacturing:{zinc_mesh_paid:1}}"
+            "item": "create:zinc_ingot"
+          },
+          "S": {
+            "item": "minecraft:stick"
           }
         },
         "result": {

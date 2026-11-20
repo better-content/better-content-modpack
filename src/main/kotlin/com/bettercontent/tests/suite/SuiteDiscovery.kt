@@ -90,9 +90,26 @@ internal fun discoverSuite(root: Path, manifestPath: Path, client: Path, server:
         inventory = mailbox.execute("discovery.inventory", "inventory.discover", jsonObject(), Duration.ofMinutes(10),
             ensureAlive = session::ensureSuiteServerAlive).payload
         require(inventory.path("files").isArray && !inventory.path("files").isEmpty) { "native inventory returned no raw files" }
-        inventory.path("files").forEach { file ->
+        val rawFiles = inventory.path("files").toList()
+        val rosters = inventory.path("measured_domain_rosters")
+        require(rosters.isObject && rosters.size() == rawFiles.size &&
+            rawFiles.all { rosters.path(it.path("domain").asText()).isObject }) {
+            "native inventory missing a measured roster sidecar"
+        }
+        val rosterFiles = rosters.fields().asSequence().map { (domain, file) ->
+            require(file.path("domain").asText() == domain) { "native inventory roster domain mismatch" }
+            file
+        }.toList()
+        (rawFiles + rosterFiles).forEach { file ->
             val relative = Path.of(file.path("path").asText())
-            require(!relative.isAbsolute && !relative.normalize().startsWith("..")) { "native inventory escaped mailbox" }
+            val byteCap = if (file in rawFiles && file.path("domain").asText() == "recipes_semantics")
+                50_331_648 else 16_777_216
+            require(!relative.isAbsolute && !relative.normalize().startsWith("..") &&
+                relative.startsWith("inventory")) { "native inventory escaped mailbox" }
+            require(file.path("bytes").isIntegralNumber && file.path("bytes").asLong() in 1..byteCap &&
+                Files.size(mailbox.directory.resolve(relative)) == file.path("bytes").asLong()) {
+                "native inventory file exceeds its bounded domain or changed size"
+            }
             val actual = boundInput(mailbox.directory, file)
             require(actual.toRealPath().startsWith(mailbox.directory.toRealPath())) { "native inventory symlink escaped mailbox" }
         }

@@ -13,7 +13,7 @@
         "pattern": [
           "WAW",
           "HCH",
-          " N "
+          "SNS"
         ],
         "key": {
           "W": {
@@ -29,9 +29,10 @@
             "item": "tconstruct:tool_handle"
           },
           "N": {
-            "type": "forge:partial_nbt",
-            "item": "minecraft:nether_brick",
-            "nbt": "{better_manufacturing:{sifter_paid_sticks:1}}"
+            "item": "minecraft:nether_brick"
+          },
+          "S": {
+            "item": "minecraft:stick"
           }
         },
         "result": {

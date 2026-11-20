@@ -1,12 +1,6 @@
 // Narrow deny policy. Each listed output is intentionally unavailable; unlike
 // the former staging script this never scans arbitrary recipe JSON.
 var BC_DISABLED_ITEMS = (JsonIO.read('kubejs/config/quarantined_items.json') || { items: [] }).items || []
-var BC_CHEMLIB_HIDDEN = JsonIO.read('kubejs/config/chemlib_form_policy.json') || {}
-BC_DISABLED_ITEMS = BC_DISABLED_ITEMS
-    .concat(BC_CHEMLIB_HIDDEN.hidden_gas_buckets || [])
-    .concat(BC_CHEMLIB_HIDDEN.hidden_forms || [])
-    .concat(BC_CHEMLIB_HIDDEN.hidden_compounds || [])
-
 ServerEvents.recipes(function (event) {
     ;[
         'createdieselgenerators:bulk_fermenting/lava',

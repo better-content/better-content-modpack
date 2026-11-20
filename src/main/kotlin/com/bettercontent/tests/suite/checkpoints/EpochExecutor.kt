@@ -850,22 +850,44 @@ internal fun verifyLiveInventory(manifest: JsonNode, observed: JsonNode, origin:
         }
         val directory = requireNotNull(nativeDirectory) { "diagnostic raw inventory directory missing" }.toRealPath()
         files.filter { it.path("domain").asText() in required }.forEach { file ->
+            val byteCap = if (file.path("domain").asText() == "recipes_semantics") 50_331_648 else 25_000_000
             val relative = Path.of(file.path("path").asText())
             require(!relative.isAbsolute && relative.normalize() == relative && relative.nameCount > 1 &&
                 relative.startsWith("inventory") && file.path("sha256").asText().matches(Regex("[0-9a-f]{64}")) &&
-                file.path("bytes").isIntegralNumber && file.path("bytes").asLong() in 1..25_000_000) {
+                file.path("bytes").isIntegralNumber && file.path("bytes").asLong() in 1..byteCap) {
                 "diagnostic inventory file metadata invalid"
             }
             val path = directory.resolve(relative).normalize()
             require(path.startsWith(directory) && !Files.isSymbolicLink(path.parent) && !Files.isSymbolicLink(path) &&
                 path.toRealPath().startsWith(directory) && Files.isRegularFile(path) &&
                 Files.size(path) == file.path("bytes").asLong()) { "diagnostic inventory file location/size changed" }
-            val bytes = Files.newInputStream(path, java.nio.file.LinkOption.NOFOLLOW_LINKS).use { it.readNBytes(25_000_001) }
+            val bytes = Files.newInputStream(path, java.nio.file.LinkOption.NOFOLLOW_LINKS).use { it.readNBytes(byteCap + 1) }
             val hash = java.security.MessageDigest.getInstance("SHA-256").digest(bytes)
                 .joinToString("") { "%02x".format(it) }
             require(bytes.size.toLong() == file.path("bytes").asLong() && hash == file.path("sha256").asText()) {
                 "diagnostic inventory file bytes changed"
             }
+            val roster = observed.path("measured_domain_rosters").path(file.path("domain").asText())
+            require(roster.isObject && roster.path("domain").asText() == file.path("domain").asText() &&
+                roster.path("sha256").asText().matches(Regex("[0-9a-f]{64}")) &&
+                roster.path("bytes").isIntegralNumber && roster.path("bytes").asLong() in 1..16_777_216) {
+                "diagnostic measured roster sidecar missing or unbounded"
+            }
+            val rosterRelative = Path.of(roster.path("path").asText())
+            require(!rosterRelative.isAbsolute && rosterRelative.normalize() == rosterRelative &&
+                rosterRelative.startsWith("inventory")) { "diagnostic roster escaped inventory" }
+            val rosterPath = directory.resolve(rosterRelative).normalize()
+            require(rosterPath.startsWith(directory) && !Files.isSymbolicLink(rosterPath.parent) &&
+                !Files.isSymbolicLink(rosterPath) && rosterPath.toRealPath().startsWith(directory) &&
+                Files.isRegularFile(rosterPath) && Files.size(rosterPath) == roster.path("bytes").asLong()) {
+                "diagnostic measured roster location/size changed"
+            }
+            val rosterBytes = Files.newInputStream(rosterPath, java.nio.file.LinkOption.NOFOLLOW_LINKS)
+                .use { it.readNBytes(16_777_217) }
+            val rosterHash = java.security.MessageDigest.getInstance("SHA-256").digest(rosterBytes)
+                .joinToString("") { "%02x".format(it) }
+            require(rosterBytes.size.toLong() == roster.path("bytes").asLong() &&
+                rosterHash == roster.path("sha256").asText()) { "diagnostic measured roster bytes changed" }
         }
         return
     }

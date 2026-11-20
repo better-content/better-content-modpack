@@ -16,19 +16,37 @@
         "type": "minecraft:crafting_shaped",
         "category": "misc",
         "pattern": [
-          "HMP"
+          "HMP",
+          "012",
+          "345"
         ],
         "key": {
           "H": {
             "item": "tconstruct:tool_handle"
           },
           "M": {
-            "type": "forge:partial_nbt",
-            "item": "minecraft:stick",
-            "nbt": "{better_manufacturing:{bees_cost_frame:1}}"
+            "item": "minecraft:stick"
           },
           "P": {
             "item": "tconstruct:large_plate"
+          },
+          "0": {
+            "tag": "forge:string"
+          },
+          "1": {
+            "tag": "forge:rods/wooden"
+          },
+          "2": {
+            "tag": "forge:rods/wooden"
+          },
+          "3": {
+            "tag": "forge:rods/wooden"
+          },
+          "4": {
+            "tag": "forge:rods/wooden"
+          },
+          "5": {
+            "tag": "forge:rods/wooden"
           }
         },
         "result": {

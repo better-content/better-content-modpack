@@ -23,11 +23,11 @@ Moonlight soft-fluid counts are not Forge mB. A serializable custom EMI stack di
 
 ## Saucing
 
-The crafting-grid category obtains the loaded `SeasoningRecipe`, calls its matcher/assembler, and displays its actual bottle remainder. The ingredient cycles through the five supported 50–250 mB bottle states; the last dose returns glass. Removing the recipe removes these crafting examples.
+**2026-11-18 source transition — not shipped or fully native-qualified:** the approved bottle-sauce replacement removes sauce fluids and the Create-spout route. Filled bottles carry captured composition and 1–5 remaining splashes as item NBT, with no fluid capability. One splash is internally 50 mB-equivalent; food retains its 250 mB-equivalent capacity. Empty bottles return vanilla glass. The intended production routes are the heated manual kettle and Create-powered heated maker, with a Create-powered item-fed saucer for application.
 
-The separate Create-spout category calls `SpoutSeasoning.fill` with a copied food and 50 mB of the actual sauce fluid. It is registered only when Create and the spout exist. Each accepted default food/placed-food item gets examples for the registered named sauces.
+The inspected source crafting-grid category obtains the loaded `SeasoningRecipe` and calls its matcher/assembler for first-dose examples using full bottles and named composition templates. These are not exhaustive mixture/food-NBT combinations. Removing the recipe removes these crafting examples. Existing food data and earlier seasoning remain owned by the native operation; no autofill or recipe-tree support is claimed.
 
-These are **first-dose examples**, not an enumeration of every possible mixed-sauce or food-NBT combination. The panel explains the 50 mB increment and 250 mB per-food capacity. Existing food data and earlier seasoning remain owned by the native operation. No autofill or recipe-tree support is claimed for these stateful examples.
+**Open presentation gap at this checkpoint:** `sauce_making` is registered without process examples; partial/glass remainders, 1–5-dose bottle examples, supported placed-food coverage and automated-workstation guidance are not yet complete in the inspected EMI implementation. These are required follow-up checks, not working features inferred from registration. The previous fluid/spout description applies only to the earlier implementation, not this source candidate.
 
 ## Hosted geology
 
@@ -43,7 +43,7 @@ Client acceptance still requires the actual pack:
 
 1. On a fresh join, verify the three categories/routes register without EMI errors; repeat after recipe reload.
 2. Compare displayed cauldron batches against native crafting, including insufficient reserve, cold versus boiling water, surround-eight inputs, and fluid-only output. Verify vessel icons are not treated as actual bottle outputs.
-3. Look up a food and each sauce. Compare crafting-grid and spout results, 50 mB consumption, 50 mB bottle -> glass, partial-bottle remainders, existing mixed seasoning, and rejection at 250 mB.
+3. On an accepted bottle-system candidate, look up sauce production and ordinary/supported placed foods. Verify actual ingredient/water/glass inputs, four-bottle batch output, manual/automatic requirements, crafting-grid and saucer guidance, one-splash consumption, last-splash glass return, partial-bottle remainders, existing mixed seasoning and the five-splash capacity. Confirm no retired sauce-fluid/spout examples remain. The open presentation gaps above must be resolved before claiming this check passes.
 4. Hold a hosted ore block and use R/U. Verify both recipes, host-rock remainder, 2x2 crafting, and absence of hundreds of hosted blocks from the index.
 5. Remove each native dynamic recipe via a disposable datapack and reload; ensure no stale examples survive.
 6. Exercise optional absence (EMI, Amendments, Create, Excavated Variants) and the cauldron crafting config switch. Confirm no optional client class is loaded on a dedicated server.

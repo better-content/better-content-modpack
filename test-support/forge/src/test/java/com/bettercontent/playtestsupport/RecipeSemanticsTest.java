@@ -29,6 +29,27 @@ final class RecipeSemanticsTest {
         assertEquals("unsupported_unmapped_serializer_or_provider", RecipeSemantics.family("other:unknown",
                 "other.mod.Recipe", "other:unknown", false));
     }
+    public static abstract class PublicRecipeApi {
+        public abstract String getTag();
+        public abstract String serialize(boolean preview);
+    }
+    private static final class HiddenRecipeValue extends PublicRecipeApi {
+        @Override public String getTag() { return "none"; }
+        @Override public String serialize(boolean preview) { return preview ? "preview" : "definition"; }
+    }
+    @Test void pinnedPublicRecipeApiDoesNotReflectIntoHiddenImplementation() throws Exception {
+        var value = new HiddenRecipeValue();
+        assertEquals("none", RecipeSemantics.invokePublic(value, "getTag", new Class<?>[0]));
+        assertEquals("definition", RecipeSemantics.invokePublic(value, "serialize", new Class<?>[]{boolean.class}, false));
+        assertThrows(NoSuchMethodException.class,
+                () -> RecipeSemantics.invokePublic(value, "hidden", new Class<?>[0]));
+    }
+    @Test void boundedExportFailureDetailIsDiagnosticOnly() {
+        assertNull(RecipeSemantics.boundedExportErrorDetail(null));
+        assertEquals("custom ingredient predicate not exhaustively public",
+                RecipeSemantics.boundedExportErrorDetail("custom ingredient predicate not exhaustively public"));
+        assertEquals(160, RecipeSemantics.boundedExportErrorDetail("x".repeat(1000)).length());
+    }
     @Test void exactPinnedHandWorkshopTconstructProviderOnlyAndOversizeRejects() {
         // Reviewed Mantle ICommonRecipe isSpecial=true for its book policy, even for exact
         // pinned TCon alloy/casting models; unknown special recipes still fail above.

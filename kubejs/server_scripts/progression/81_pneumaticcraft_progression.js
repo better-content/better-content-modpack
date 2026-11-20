@@ -1,6 +1,5 @@
-// TECH-03: PneumaticCraft owns air, pressure, heat chemistry and its machine
-// upgrades. PowerGrid keeps stationary electrical generation and the acid
-// chemistry script keeps nitric-acid PCB etching intact.
+// TECH-03: PneumaticCraft owns air, pressure, native PCB etching and its machine
+// upgrades. PowerGrid keeps stationary electrical generation.
 ServerEvents.recipes(function (event) {
     var partVariants = Platform.isLoaded('better_manufacturing')
     event.remove({ output: 'pneumaticcraft:air_compressor' })

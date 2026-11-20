@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public final class Protocol {
     private Protocol() {}
     public static final Set<String> DRIVERS = Set.of("inventory.discover", "server.snapshot", "player.snapshot",
-            "player.interact", "player.use_item", "player.break_block", "block.snapshot", "wait.ticks", "fixture.begin", "fixture.restore", "fixture.cleanup", "world.sample", "world.entry", "player.water_snapshot", "player.dig", "player.dig.witness_v1", "player.observe_item_use.arm", "player.observe_item_use.await", "player.observe_onboarding.arm", "player.observe_onboarding.await", "player.attack", "player.lifecycle_snapshot", "entity.snapshot", "fixture.begin_water", "scale.begin", "scale.cleanup", "player.select_item", "target.observe.loaded_v1", "player.water_auto_snapshot_v1",
+            "player.interact", "player.use_item", "player.break_block", "block.snapshot", "wait.ticks", "fixture.begin", "fixture.restore", "fixture.cleanup", "world.sample", "world.entry", "player.water_snapshot", "player.dig", "player.dig.witness_v1", "player.observe_item_use.arm", "player.observe_item_use.await", "player.observe_craft.arm_v1", "player.observe_craft.await_v1", "player.observe_onboarding.arm", "player.observe_onboarding.await", "player.attack", "player.lifecycle_snapshot", "entity.snapshot", "fixture.begin_water", "scale.begin", "scale.cleanup", "player.select_item", "target.observe.loaded_v1", "player.water_auto_snapshot_v1",
             "player.water_auto_observe.arm_v1", "player.water_auto_observe.await_v1",
             "player.observe_dig.arm_v5", "player.observe_dig.await_v5",
             "player.incoming_damage.arm_v2", "player.incoming_damage.await_v2",
@@ -19,6 +19,7 @@ public final class Protocol {
             "player.snapshot", "player.lifecycle_snapshot", "player.water_snapshot", "entity.snapshot",
             "world.sample", "world.entry", "block.snapshot", "target.observe.loaded_v1", "wait.ticks", "fixture.cleanup",
             "player.observe_item_use.arm", "player.observe_item_use.await",
+            "player.observe_craft.arm_v1", "player.observe_craft.await_v1",
             "player.observe_onboarding.arm", "player.observe_onboarding.await",
             "player.water_auto_snapshot_v1", "player.water_auto_observe.arm_v1", "player.water_auto_observe.await_v1",
             "player.observe_dig.arm_v5", "player.observe_dig.await_v5",

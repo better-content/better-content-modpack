@@ -142,7 +142,7 @@ ServerEvents.recipes(function (event) {
         Q: { item: 'kubejs:sky_steel_sheet' },
         L: { item: 'better_industrial_heat:heat_pipe' },
         A: { item: 'protection_pixel:alloyarmorplate' },
-        F: { item: 'better_chemlib_hazards:gas_reaction_chamber' },
+        F: { item: 'pneumaticcraft:thermopneumatic_processing_plant' },
         C: { item: 'ae2:engineering_processor' }
     }, 'kubejs:create/mechanical_crafting/protection_pixel/armor_load_platform')
 
@@ -154,7 +154,7 @@ ServerEvents.recipes(function (event) {
         'HFHFH'
     ], {
         H: { item: 'better_industrial_heat:heat_pipe' },
-        F: { item: 'better_chemlib_hazards:gas_reaction_chamber' },
+        F: { item: 'pneumaticcraft:thermopneumatic_processing_plant' },
         Q: { item: 'kubejs:ae_logic_package' },
         C: { item: 'ae2:engineering_processor' },
         A: { item: 'protection_pixel:alloyarmorplate' }

@@ -13,9 +13,7 @@
         "category": "misc",
         "key": {
           "#": {
-            "type": "forge:partial_nbt",
-            "item": "littlelogistics:spring",
-            "nbt": "{better_manufacturing:{dock_stone_paid:1}}"
+            "item": "littlelogistics:spring"
           },
           "$": {
             "item": "minecraft:iron_ingot"

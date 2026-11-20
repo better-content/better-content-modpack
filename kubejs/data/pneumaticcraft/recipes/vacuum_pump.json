@@ -22,9 +22,6 @@
           "R": {
             "item": "pneumaticcraft:turbine_rotor"
           },
-          "S": {
-            "item": "pneumaticcraft:reinforced_stone_slab"
-          },
           "T": {
             "item": "pneumaticcraft:pressure_tube"
           },
@@ -35,11 +32,7 @@
             "item": "tconstruct:tough_handle"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "item": "pneumaticcraft:reinforced_stone_slab"
-            },
-            "marker": "pneumaticcraft:vacuum_pump"
+            "item": "pneumaticcraft:reinforced_stone_slab"
           }
         },
         "result": {

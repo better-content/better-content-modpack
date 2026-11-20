@@ -11,7 +11,7 @@
       "recipe": {
         "type": "better_manufacturing:part_variant",
         "pattern": [
-          " T ",
+          "0T ",
           "LRA",
           "TPT"
         ],
@@ -25,18 +25,14 @@
           "T": {
             "item": "pneumaticcraft:small_tank"
           },
-          "W": {
-            "item": "pneumaticcraft:reinforced_brick_wall"
-          },
           "L": {
             "item": "tconstruct:large_plate"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "item": "pneumaticcraft:reinforced_brick_wall"
-            },
-            "marker": "pneumaticcraft:fluid_mixer"
+            "item": "pneumaticcraft:reinforced_brick_wall"
+          },
+          "0": {
+            "item": "pneumaticcraft:reinforced_brick_wall"
           }
         },
         "result": {

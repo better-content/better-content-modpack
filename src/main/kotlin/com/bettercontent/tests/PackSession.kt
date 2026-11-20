@@ -181,11 +181,11 @@ internal class PackSession(private val evidence: SessionEvidence, private val re
                 "-Dbc.pack_test.debug=true\n-Xlog:gc*:file=tele-soak-gc.log:time,uptime,level,tags:filecount=3,filesize=10m\n"
             else "")
         instrumentation?.let {
-            it.install(serverRoot, restored)
+            val policyOverlay = it.install(serverRoot, restored)
             serverRoot.resolve("user_jvm_args.txt").writeText(it.jvmText(if (epochRuntime != null) serverRoot else null))
             evidence.event("test_support_installed", mapOf("sha256" to it.supportSha256,
                 "instrumented" to true, "seed" to 424242, "view_distance" to 10,
-                "simulation_distance" to 10, "server_heap_mib" to 16384))
+                "simulation_distance" to 10, "server_heap_mib" to 16384) + policyOverlay)
         }
         val backups = serverRoot.resolve("config/ftbbackups2.json")
         if (epochRuntime == null && Files.isRegularFile(backups)) backups.writeText(backups.readText().replace("\"enabled\": true", "\"enabled\": false"))
@@ -552,11 +552,24 @@ internal class PackSession(private val evidence: SessionEvidence, private val re
         ensureConnected()
         val offset = Files.size(serverLog)
         server!!.send("forge tps")
-        // Chunk-generation pauses can delay a console response without proving a TPS
-        // recovery. The 120-second hop deadline and strict <=2s stability gaps still apply.
+        // A delayed console reply must not leave the independent 30-second
+        // client-proof window empty. Request a real, dimension-qualified client
+        // marker while waiting, without treating it as a TPS sample or extending
+        // the existing 30-second console and 120-second hop deadlines.
+        val started = System.nanoTime()
+        var checkedClientDuringWait = false
         server!!.waitUntil(Duration.ofSeconds(30), "fresh Forge 47.4.22 overall TPS sample") {
             ensureConnected()
-            runCatching { TeleSoakProbes.overallTps(readLogFrom(serverLog, offset).text) }.isSuccess
+            val sampled = runCatching { TeleSoakProbes.overallTps(readLogFrom(serverLog, offset).text) }.isSuccess
+            if (!sampled && !checkedClientDuringWait &&
+                System.nanoTime() - started >= Duration.ofSeconds(8).toNanos()) {
+                checkedClientDuringWait = true
+                heartbeat() // Actual server-conditional tellraw received in the live client.
+                check(System.nanoTime() - started <= Duration.ofSeconds(30).toNanos()) {
+                    "fresh Forge TPS sample exceeded 30 seconds during client proof"
+                }
+            }
+            sampled || runCatching { TeleSoakProbes.overallTps(readLogFrom(serverLog, offset).text) }.isSuccess
         }
         val tps = TeleSoakProbes.overallTps(readLogFrom(serverLog, offset).text)
         evidence.event("forge_tps", mapOf("tps" to tps, "source" to "Forge 47.4.22 /forge tps Overall Mean TPS"))

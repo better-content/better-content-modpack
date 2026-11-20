@@ -33,6 +33,15 @@ class TeleSoakClientEvidenceTest {
         assertThrows(IllegalArgumentException::class.java) { check(valid.map { it.replace("\"server_conditional\":true", "\"server_conditional\":false") }) }
     }
 
+    @Test fun delayedForgeProbeNeedsAnotherRealClientProofRatherThanWiderAcceptanceWindow() {
+        val delayed = valid.map { it.replace("00:01:14Z", "00:01:21Z").replace("00:01:20Z", "00:01:25Z") }
+        assertThrows(IllegalArgumentException::class.java) { check(delayed) } // 31 seconds after arrival is still rejected.
+        val refreshed = delayed.toMutableList().apply {
+            add(5, """{"time":"2026-01-01T00:01:02Z","type":"heartbeat","marker":"probe-wait","client_received":true,"server_alive":true,"verified_dimension":"$dimension"}""")
+        }
+        check(refreshed) // Only an additional distinct, received, dimension-qualified marker closes the gap.
+    }
+
     @Test fun fullRetainedEventEvidenceCanBeCheckedReadOnlyWhenProvided() {
         val supplied = System.getenv("BC_VALIDATE_TELE_EVENTS") ?: return
         val path = Path.of(supplied)

@@ -1,0 +1,368 @@
+#Scans additional underground cave spaces to improve terrain generation compatibility at a lower performance cost (may drastically reduce cave feature generation in large caves).
+"Expensive Scan" = true
+#Adapts SubWild cave selection to the biome above the cave so modded surface biomes can use matching cave themes. Disable this to use the older tagged-biome behavior and rocky fallback.
+"Adapt Cave Biomes to Modded Biomes" = true
+#The amount of non-solid blocks in front of a cave wall at which stairs and slabs spawn at a reduced rate to avoid high density narrow caves
+#Range: 0 ~ 16
+"Slope Threshold" = 3
+#The dimensions in which cave biomes will generate in
+"Dimension Whitelist" = ["minecraft:overworld"]
+
+[Features]
+	#Enable pebble generation in rocky and sandy cave biomes.
+	"Generate Pebbles" = true
+	#Allow pebble items to be thrown as small projectiles with a short shared cooldown. Sneaking while aiming at a block will throw instead of place.
+	"Throwable Pebbles" = true
+	#Enable to generate vines in fungal, lush and mossy cave biomes
+	"Generate Vines" = true
+	#Enable to generate puddles in lush, mossy muddy, dead coral cave biomes
+	"Generate Puddles" = true
+	#Enable to generate stairs in cave biomes. Slope Generation Chance must also be above 0 for stairs to generate.
+	"Generate Stairs" = true
+	#Enable to generate slabs in cave biomes. Slope Generation Chance must also be above 0 for slabs to generate.
+	"Generate Slabs" = true
+	#Enable to generate patches (varying heights of slabs and snow) in cave biomes.
+	"Generate Patches" = true
+	#Enable to generate speleothems in cave biomes.
+	"Generate Speleothems" = true
+	#Allows waterloggable cave features like speleothems, slabs, and stairs to generate inside water-filled caves and cave lakes.
+	"Generate Features in Water" = true
+	#Enable to generate glowing foxfires in cave biomes.
+	"Generate Foxfires" = true
+	#Enable all SubWild custom ore variants. When disabled, no SubWild ores will generate.
+	"Generate SubWild Ores" = false
+	#Enable to generate dead bushes in mesa, sandy and sandy rocky cave biomes.
+	"Generate Dead Bushes" = true
+	#Enable to generate lily pads in lush, mossy and mossy rocky cave biomes.
+	"Generate Lily Pads" = true
+	#Enable to generate wall coral in coral cave biomes.
+	"Generate Wall Coral" = true
+	#Enable to generate dead wall coral in dead coral cave biomes.
+	"Generate Dead Wall Coral" = true
+	#Enable to generate floor coral in coral cave biomes.
+	"Generate Floor Coral" = true
+	#Enable to generate dead floor coral in dead coral cave biomes.
+	"Generate Dead Floor Coral" = true
+	#Enable to generate saplings in jungle and jungle volcanic cave biomes.
+	"Generate Saplings" = true
+	#Allows SubWild cave decorations to generate inside large structures and underground complexes (excluding mineshafts).
+	"Generate In Structures" = false
+	#Allows shears to clean moss off vanilla mossy blocks, stairs, slabs, and walls, dropping a vine and restoring the clean variant.
+	"Shear Vanilla Mossy Blocks" = true
+
+[Speleothems]
+	#Default generation chance for all speleothem families, as a percentage. Individual entries below use this value until they are given their own override. Default: 67 (recommended to reduce crowding). Max: 100.
+	#Range: 0.0 ~ 100.0
+	"Global Generation Chance" = 67.0
+	#Stone speleothem generation chance, as a percentage. Set to -1 to use the global speleothem generation chance. Frozen stone speleothems follow this value in icy caves.
+	#Range: -1.0 ~ 100.0
+	"Stone Generation Chance" = -1.0
+	#Deepslate speleothem generation chance, as a percentage. Set to -1 to use the global speleothem generation chance.
+	#Range: -1.0 ~ 100.0
+	"Deepslate Generation Chance" = -1.0
+	#Granite speleothem generation chance, as a percentage. Set to -1 to use the global speleothem generation chance. Frozen granite speleothems follow this value in icy caves.
+	#Range: -1.0 ~ 100.0
+	"Granite Generation Chance" = -1.0
+	#Diorite speleothem generation chance, as a percentage. Set to -1 to use the global speleothem generation chance. Frozen diorite speleothems follow this value in icy caves.
+	#Range: -1.0 ~ 100.0
+	"Diorite Generation Chance" = -1.0
+	#Andesite speleothem generation chance, as a percentage. Set to -1 to use the global speleothem generation chance. Frozen andesite speleothems follow this value in icy caves.
+	#Range: -1.0 ~ 100.0
+	"Andesite Generation Chance" = -1.0
+	#Sandstone speleothem generation chance, as a percentage. Set to -1 to use the global speleothem generation chance. Frozen sandstone speleothems follow this value in icy caves.
+	#Range: -1.0 ~ 100.0
+	"Sandstone Generation Chance" = -1.0
+	#Red sandstone speleothem generation chance, as a percentage. Set to -1 to use the global speleothem generation chance. Frozen red sandstone speleothems follow this value in icy caves.
+	#Range: -1.0 ~ 100.0
+	"Red Sandstone Generation Chance" = -1.0
+	#Obsidian speleothem generation chance, as a percentage. Set to -1 to use the global speleothem generation chance. Frozen obsidian speleothems follow this value in icy caves.
+	#Range: -1.0 ~ 100.0
+	"Obsidian Generation Chance" = -1.0
+	#Blackstone speleothem generation chance, as a percentage. Set to -1 to use the global speleothem generation chance. Frozen blackstone speleothems follow this value in icy caves.
+	#Range: -1.0 ~ 100.0
+	"Blackstone Generation Chance" = -1.0
+	#Basalt speleothem generation chance, as a percentage. Set to -1 to use the global speleothem generation chance. Frozen basalt speleothems follow this value in icy caves.
+	#Range: -1.0 ~ 100.0
+	"Basalt Generation Chance" = -1.0
+
+[Foxfires]
+	#Short foxfire mushroom generation chance, as a percentage. Higher values increase how often this variant appears when foxfires generate.
+	#Range: 0.0 ~ 100.0
+	"Short Foxfire Generation Chance" = 100.0
+	#Long foxfire mushroom generation chance, as a percentage. Higher values increase how often this variant appears when foxfires generate.
+	#Range: 0.0 ~ 100.0
+	"Long Foxfire Generation Chance" = 100.0
+
+["Cave Types"]
+
+	["Cave Types".Global]
+		#Replace every SubWild cave type with the selected cave type. This overrides individual cave type settings.
+		"Replace All Cave Types" = false
+		#Extends the selected replacement cave type through all lower cave layers down to bedrock.
+		"Replace Deep/Tuff Caves" = true
+		#The cave type used when the global replace-all setting is enabled.
+		"Replacement Cave Type" = "subwild:basic"
+
+	["Cave Types"."Basic Caves"]
+		#How Basic Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Basic Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Basic Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:basic"
+
+	["Cave Types"."Coral Caves"]
+		#How Coral Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Coral Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Coral Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:coral"
+
+	["Cave Types"."Dead Coral Caves"]
+		#How Dead Coral Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Dead Coral Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Dead Coral Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:dead_coral"
+
+	["Cave Types"."Fungal Caves"]
+		#How Fungal Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Fungal Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Fungal Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:fungal"
+
+	["Cave Types"."Icy Caves"]
+		#How Icy Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Icy Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Icy Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:icy"
+
+	["Cave Types"."Icy Rocky Caves"]
+		#How Icy Rocky Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Icy Rocky Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Icy Rocky Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:icy_rocky"
+
+	["Cave Types"."Jungle Caves"]
+		#How Jungle Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Jungle Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Jungle Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:lush"
+
+	["Cave Types"."Jungle Volcanic Caves"]
+		#How Jungle Volcanic Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Jungle Volcanic Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Jungle Volcanic Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:lush_volcanic"
+
+	["Cave Types"."Mesa Caves"]
+		#How Mesa Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Mesa Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Mesa Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:mesa"
+
+	["Cave Types"."Mossy Caves"]
+		#How Mossy Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Mossy Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Mossy Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:mossy"
+
+	["Cave Types"."Mossy Rocky Caves"]
+		#How Mossy Rocky Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Mossy Rocky Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Mossy Rocky Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:mossy_rocky"
+
+	["Cave Types"."Muddy Caves"]
+		#How Muddy Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Muddy Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Muddy Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:muddy"
+
+	["Cave Types"."Podzol Caves"]
+		#How Podzol Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Podzol Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Podzol Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:podzol"
+
+	["Cave Types"."Rocky Caves"]
+		#How Rocky Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Rocky Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Rocky Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:rocky"
+
+	["Cave Types"."Sandy Caves"]
+		#How Sandy Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Sandy Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Sandy Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:sandy"
+
+	["Cave Types"."Sandy Red Caves"]
+		#How Sandy Red Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Sandy Red Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Sandy Red Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:sandy_red"
+
+	["Cave Types"."Sandy Red Rocky Caves"]
+		#How Sandy Red Rocky Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Sandy Red Rocky Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Sandy Red Rocky Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:sandy_red_rocky"
+
+	["Cave Types"."Sandy Red Volcanic Caves"]
+		#How Sandy Red Volcanic Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Sandy Red Volcanic Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Sandy Red Volcanic Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:sandy_red_volcanic"
+
+	["Cave Types"."Sandy Rocky Caves"]
+		#How Sandy Rocky Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Sandy Rocky Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Sandy Rocky Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:sandy_rocky"
+
+	["Cave Types"."Sandy Volcanic Caves"]
+		#How Sandy Volcanic Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Sandy Volcanic Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Sandy Volcanic Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:sandy_volcanic"
+
+	["Cave Types"."Volcanic Caves"]
+		#How Volcanic Caves should behave when selected by SubWild world generation.
+		#Allowed Values: ON, LEAVE_VANILLA, REPLACE_WITH_SUBWILD
+		Mode = "ON"
+		#Extends Volcanic Caves through all lower cave layers down to bedrock when it replaces another cave type.
+		"Affect Deep/Tuff Caves" = true
+		#The cave type used when Volcanic Caves is disabled and set to replace with another SubWild cave type.
+		"Replacement Cave Type" = "subwild:volcanic"
+
+[Frequencies]
+	#The chance of a slab or stairs generating normally in caves. Higher numbers increase the amount of slabs/stairs/slopes. Zero should stop generating them entirely.
+	#Range: 0 ~ 8
+	"Slope Generation Chance" = 6
+	#The chance of a slab or stairs generating when within the Slope Threshold. Should be lower than the Slope Generation Chance.
+	#Range: 0 ~ 7
+	"Slope Threshold Generation Chance" = 2
+
+	[Frequencies."Deep and Volcanic Caves"]
+		#Coal shards still respect the existing "Generate Pebbles" toggle.
+		#Range: 1.0 ~ 100.0
+		"Coal Shard Generation Chance" = 1.79
+
+	[Frequencies.Puddles]
+		#Water puddle generation chance in cave biomes that support puddles, as a percentage.
+		#Range: 0.0 ~ 100.0
+		"Water Puddle Generation Chance" = 100.0
+
+	[Frequencies."Jungle Caves"]
+		#Use the "Generate Lily Pads" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Lily Pad Generation Chance" = 8.33
+		#Controls how often decorative leaves generate in jungle caves. Zero disables them. Default: 65 (recommended to avoid overcrowding). Max: 100.
+		#Range: 0.0 ~ 100.0
+		"Leaves Generation Chance" = 65.0
+		#Use the "Generate Saplings" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Sapling Generation Chance" = 10.0
+
+	[Frequencies."Jungle Volcanic Caves"]
+		#Controls how often decorative leaves generate in jungle volcanic caves. Zero disables them. Default: 65 (recommended to avoid overcrowding). Max: 100.
+		#Range: 0.0 ~ 100.0
+		"Leaves Generation Chance" = 65.0
+		#Use the "Generate Saplings" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Sapling Generation Chance" = 10.0
+
+	[Frequencies."Mesa Caves"]
+		#Use the "Generate Dead Bushes" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Dead Bush Generation Chance" = 2.94
+
+	[Frequencies."Mossy Caves"]
+		#Use the "Generate Lily Pads" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Lily Pad Generation Chance" = 8.33
+
+	[Frequencies."Mossy Rocky Caves"]
+		#Use the "Generate Lily Pads" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Lily Pad Generation Chance" = 8.33
+
+	[Frequencies."Rocky Caves"]
+		#Use the "Generate Pebbles" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Pebble Generation Chance" = 7.14
+
+	[Frequencies."Red Sandy Caves"]
+		#Use the "Generate Pebbles" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Red Sandstone Pebble Generation Chance" = 7.14
+
+	[Frequencies."Sandy Caves"]
+		#Use the "Generate Dead Bushes" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Dead Bush Generation Chance" = 3.85
+
+	[Frequencies."Sandy Rocky Caves"]
+		#Use the "Generate Pebbles" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Pebble Generation Chance" = 7.14
+		#Use the "Generate Dead Bushes" config option to stop generating them entirely.
+		#Range: 1.0 ~ 100.0
+		"Dead Bush Generation Chance" = 2.38

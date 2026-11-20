@@ -28,11 +28,7 @@
             "tag": "forge:stone"
           },
           "H": {
-            "type": "better_manufacturing:sophisticated_cost_bundle",
-            "marker": "sophisticatedstorage:controller",
-            "anchor": {
-              "tag": "forge:stone"
-            }
+            "item": "tconstruct:large_plate"
           }
         },
         "pattern": [

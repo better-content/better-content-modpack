@@ -12,19 +12,37 @@
         "type": "minecraft:crafting_shaped",
         "category": "misc",
         "pattern": [
-          "HMP"
+          "HMP",
+          "012",
+          "345"
         ],
         "key": {
           "H": {
             "item": "tconstruct:tool_handle"
           },
           "M": {
-            "type": "forge:partial_nbt",
-            "item": "complicated_bees:honeyed_planks",
-            "nbt": "{better_manufacturing:{bees_cost_bee_sorter:1}}"
+            "item": "complicated_bees:honeyed_planks"
           },
           "P": {
             "item": "tconstruct:large_plate"
+          },
+          "0": {
+            "item": "minecraft:hopper"
+          },
+          "1": {
+            "item": "minecraft:comparator"
+          },
+          "2": {
+            "item": "minecraft:diamond"
+          },
+          "3": {
+            "item": "complicated_bees:propolis"
+          },
+          "4": {
+            "item": "complicated_bees:honeyed_planks"
+          },
+          "5": {
+            "item": "complicated_bees:honeyed_planks"
           }
         },
         "result": {

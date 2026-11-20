@@ -2,7 +2,10 @@
 
 import kotlin.system.exitProcess
 
-val root = __FILE__.canonicalFile.parentFile
+// Kotlin's script cache can retain __FILE__ from a byte-identical copied checkout.
+// The release runner supplies its owning checkout explicitly for exact-pair evidence.
+val root = System.getenv("BC_PACK_TEST_ROOT")?.let { java.io.File(it).canonicalFile }
+    ?: __FILE__.canonicalFile.parentFile
 
 // Additive authoring/qualification facade. Existing lifecycle commands below retain their contracts.
 if (args.firstOrNull() in setOf("campaign", "qualify", "discover", "convert-suite", "inspect-suite")) {

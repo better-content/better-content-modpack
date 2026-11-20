@@ -12,19 +12,37 @@
         "type": "minecraft:crafting_shaped",
         "category": "misc",
         "pattern": [
-          "HMP"
+          "HMP",
+          "012",
+          "345"
         ],
         "key": {
           "H": {
             "item": "tconstruct:tool_handle"
           },
           "M": {
-            "type": "forge:partial_nbt",
-            "item": "complicated_bees:gyrofuge_panel",
-            "nbt": "{better_manufacturing:{bees_cost_gyrofuge_base:1}}"
+            "item": "complicated_bees:gyrofuge_panel"
           },
           "P": {
             "item": "tconstruct:large_plate"
+          },
+          "0": {
+            "item": "minecraft:iron_block"
+          },
+          "1": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "2": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "3": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "4": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "5": {
+            "item": "complicated_bees:gyrofuge_panel"
           }
         },
         "result": {

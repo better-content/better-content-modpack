@@ -71,7 +71,10 @@ internal fun validateV3Authoring(root: Path, m: JsonNode, purpose: ExecutionPurp
             val client = boundInput(root, candidate.path("client"))
             val server = boundInput(root, candidate.path("server"))
             boundPair(root, m, client, server)
-            val inspected = inspectCandidate(client, server)
+            // Diagnostic authoring may study a real candidate despite unrelated malformed
+            // third-party resources; the strict qualification inventory still rejects them.
+            val inspected = inspectCandidate(client, server, diagnostic = true)
+            need(!inspected.path("qualification_eligible").asBoolean(true), "diagnostic inventory must not qualify")
             need(listOf("client", "server").all { side -> inspected.path("candidates").path("${side}_sha256").asText() ==
                 candidate.path(side).path("sha256").asText() }, "diagnostic archive identity differs")
             m.path("artifact_locks").forEach { lock -> lock.path("sides").forEach { side ->

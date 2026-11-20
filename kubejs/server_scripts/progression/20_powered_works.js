@@ -140,14 +140,14 @@ ServerEvents.recipes(function (event) {
         event.remove({ output: output })
         var id = 'kubejs:powered_works/direct_root/' + output.substring('create:'.length)
         if (partVariants && output !== 'create:windmill_bearing') {
-            // Water wheels are needed before mechanical crafters. Mark a real
-            // Skyroot log with one consumed handle; keep all five native logs.
-            var paidKey = { L: { item: 'aether:skyroot_log' }, I: { tag: 'forge:ingots/iron' },
-                P: { type: 'forge:partial_nbt', item: 'aether:skyroot_log',
-                    nbt: '{better_manufacturing:{skyroot_wheel_log:1}}' } }
-            paidKey[output === 'create:large_water_wheel' ? 'W' : 'S'] =
+            // No hidden prepared log: fit the handle directly into the wheel
+            // alongside four Skyroot logs. These early wheels stay hand-crafted.
+            var wheelKey = { L: { item: 'aether:skyroot_log' }, I: { tag: 'forge:ingots/iron' },
+                H: { item: root[3] } }
+            wheelKey[output === 'create:large_water_wheel' ? 'W' : 'S'] =
                 { item: output === 'create:large_water_wheel' ? 'create:water_wheel' : 'create:shaft' }
-            event.custom({ type: 'minecraft:crafting_shaped', pattern: root[1], key: paidKey,
+            event.custom({ type: 'minecraft:crafting_shaped',
+                pattern: root[1].map(function (row) { return row.replace('P', 'H') }), key: wheelKey,
                 result: { item: output } }).id(id)
         } else {
             event.shaped(output, partVariants ? root[1] : root[2], key).id(id)
@@ -169,35 +169,13 @@ ServerEvents.recipes(function (event) {
     if (Platform.isLoaded('createsifter')) {
         event.remove({ id: 'createsifter:sifter' })
         if (partVariants) {
-            // Pay all eight native sticks and the tier-specific center before
-            // the four physical handle parts become a configured mesh.
-            ;[
-                ['string', 'minecraft:string'], ['andesite', 'create:andesite_alloy'],
-                ['zinc', 'create:zinc_ingot'], ['brass', 'create:brass_ingot']
-            ].forEach(function (row) {
-                event.shaped(Item.of('minecraft:stick',
-                    '{better_manufacturing:{' + row[0] + '_mesh_paid:1}}'),
-                    row[0] === 'string' ? ['SMS', 'SSS', 'SSS'] : ['SSS', 'SMS', 'SSS'],
-                    { S: 'minecraft:stick', M: row[1] })
-                    .id('kubejs:powered_works/refinement/prepare_' + row[0] + '_mesh')
-            })
-            // Preserve both native sticks and the Nether-brick gate without
-            // moving this early machine behind the mechanical crafter.
-            event.shaped(Item.of('minecraft:nether_brick', '{better_manufacturing:{sifter_paid_sticks:1}}'),
-                [' S ', ' N ', ' S '], { S: 'minecraft:stick', N: 'minecraft:nether_brick' })
-                .id('kubejs:powered_works/refinement/paid_sifter_brick')
-            // Bundle the complete native brass-upgrade bill, leaving the
-            // predecessor Sifter intact so its saved rating can be inherited.
-            event.shaped(Item.of('minecraft:redstone', '{better_manufacturing:{brass_sifter_paid_materials:1}}'),
-                ['PPP', 'B B', 'BRB'], { P: '#forge:plates/brass', B: '#forge:ingots/brass',
-                    R: '#forge:dusts/redstone' })
-                .id('kubejs:powered_works/refinement/brass_sifter_paid_materials')
+            // Put the native stick cost and Nether-brick gate directly around
+            // the two working handles. No visually identical marked precursor.
             event.custom({ type: 'better_manufacturing:part_variant',
-                pattern: ['WAW', 'HCH', ' N '],
+                pattern: ['WAW', 'HCH', 'SNS'],
                 key: { W: { tag: 'minecraft:planks' }, A: { item: 'create:andesite_casing' },
                     H: { item: 'tconstruct:tool_handle' }, C: { item: 'create:cogwheel' },
-                    N: { type: 'forge:partial_nbt', item: 'minecraft:nether_brick',
-                        nbt: '{better_manufacturing:{sifter_paid_sticks:1}}' } },
+                    S: { item: 'minecraft:stick' }, N: { item: 'minecraft:nether_brick' } },
                 result: { item: 'createsifter:sifter' }, function: 'better_manufacturing:sifter/machine',
                 parts: [{ role: 'left', slot: 3 }, { role: 'right', slot: 5 }]
             }).id('kubejs:powered_works/refinement/sifter')

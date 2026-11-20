@@ -19,7 +19,6 @@ function bcSynArsImbuement(event, id, input, output, pedestalItems, sourceCost) 
 }
 
 var BC_SYN_MAGIC_CRYSTALS = [
-    { input: 'minecraft:quartz', output: 'chemlib:silicon_dioxide', source: 400, pedestal: ['ars_nouveau:source_gem'] },
     { input: 'ae2:certus_quartz_crystal', output: 'ae2:fluix_dust', source: 1800, pedestal: ['ars_nouveau:source_gem', 'minecraft:redstone', 'bloodmagic:infusedslate'] }
 ]
 

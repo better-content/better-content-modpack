@@ -19,7 +19,7 @@
           "IPI",
           "XTX",
           "IRI",
-          "HP "
+          "HQ "
         ],
         "key": {
           "I": {
@@ -27,6 +27,9 @@
           },
           "P": {
             "item": "tconstruct:large_plate"
+          },
+          "Q": {
+            "item": "minecraft:light_weighted_pressure_plate"
           },
           "T": {
             "item": "oc2r:transistor"
@@ -59,7 +62,7 @@
       "recipe": {
         "type": "minecraft:crafting_shaped",
         "pattern": [
-          "HPJ",
+          "IPI",
           "XTX",
           "IRI"
         ],
@@ -78,12 +81,6 @@
           },
           "R": {
             "tag": "forge:storage_blocks/redstone"
-          },
-          "H": {
-            "item": "tconstruct:tool_handle"
-          },
-          "J": {
-            "item": "tconstruct:large_plate"
           }
         },
         "result": {

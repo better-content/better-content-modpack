@@ -17,7 +17,7 @@
         // Parse the unchanged JSON text so strict type/constant checks stay meaningful in Rhino.
         var data = JSON.parse(JsonIO.readString('kubejs/config/terrain_recovery.json'))
         if (!data || data.schema !== 'bc.terrain_recovery.v1') fail('missing catalogue or unsupported schema')
-        keys(data, ['schema', 'survey_pins', 'processing_time', 'recovery', 'archives', 'physical_units', 'profiles', 'entries', 'exclusions', 'remove_recipes', 'recycling_exclusions', 'chemistry_audit', 'conversion_sources'], 'catalogue')
+        keys(data, ['schema', 'survey_pins', 'processing_time', 'recovery', 'archives', 'physical_units', 'profiles', 'entries', 'exclusions', 'remove_recipes', 'recycling_exclusions', 'conversion_sources'], 'catalogue')
         if (data.processing_time !== 500 || data.recovery !== 0.25 || !data.entries || !data.entries.length) fail('invalid catalogue constants')
         item('createsifter:brass_mesh')
         var seen = {}, used = {}, excluded = {}, groups = {}
@@ -46,8 +46,11 @@
             profile.chemical.forEach(function (output) {
                 keys(output, ['item', 'count', 'chance', 'consumer', 'basis'], 'chemical output')
                 item(output.item)
-                var audit = data.chemistry_audit[output.item]
-                if (outputs[output.item] || output.count !== 1 || !number(output.chance, 0.000001, 1 / 64) || !output.basis || !audit || audit.status !== 'eligible' || audit.consumer !== output.consumer) fail('invalid chemical output ' + name)
+                // Chemlib's chemistry audit was retired. Only the still-installed
+                // Blood Magic saltpeter route from guano retains a chemical output.
+                if (outputs[output.item] || output.count !== 1 || !number(output.chance, 0.000001, 1 / 64) || !output.basis
+                    || output.item !== 'bloodmagic:saltpeter' || (name !== 'guano' && name !== 'guanostone')
+                    || output.consumer !== 'kubejs/server_scripts/progression/45_acid_chemistry.js#nitric_acid_saltpeter') fail('invalid chemical output ' + name)
                 outputs[output.item] = true
             })
         })

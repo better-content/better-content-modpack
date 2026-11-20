@@ -19,16 +19,15 @@
             "item": "tconstruct:large_plate"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "item": "pneumaticcraft:reinforced_bricks"
-            },
-            "marker": "pneumaticcraft:pressure_chamber_wall"
+            "item": "pneumaticcraft:reinforced_bricks"
+          },
+          "0": {
+            "item": "pneumaticcraft:reinforced_bricks"
           }
         },
         "pattern": [
           "XAI",
-          "I I",
+          "I0I",
           "III"
         ],
         "result": {

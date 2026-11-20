@@ -1,6 +1,7 @@
 package com.bettercontent.tests
 
 import com.bettercontent.tests.suite.BoundFile
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -31,6 +32,40 @@ class SuiteInstrumentationTest {
                 required + "-Dbc.playtest.emiSha256=$emi", true, emi, clientInstrumentation = true).javaArguments.size)
             assertEquals(required.size, SuiteInstrumentation(jar, hash, required.reversed(), true).javaArguments.size)
         } finally { Files.deleteIfExists(jar) }
+    }
+
+    @Test fun fixtureOnlyPolicyOverlayPreservesUnknownNamespaceGuardAndCandidateHash() {
+        val jar = support()
+        val root = Files.createTempDirectory(Path.of("/home/dev/.tmp"), "suite-policy-")
+        try {
+            Files.createDirectories(root.resolve("mods"))
+            val policy = root.resolve("kubejs/config/crafting_policy.json")
+            Files.createDirectories(policy.parent)
+            val original = """{"schema":"bc.crafting_policy.v1","namespaces":{"minecraft":{"primary_role":"content","support_state":"not_applicable"}},"enforcement":{"enabled":true}}"""
+            Files.writeString(policy, original)
+            val originalHash = Hashes.sha256(policy)
+            val instrumented = SuiteInstrumentation(jar, Hashes.sha256(jar), required, false)
+            val receipt = instrumented.install(root)
+            assertEquals(originalHash, receipt["candidate_policy_sha256"])
+            assertEquals(Hashes.sha256(policy), receipt["fixture_policy_sha256"])
+            assertEquals("better_playtest_native_support", receipt["fixture_policy_overlay"])
+            val mapper = jacksonObjectMapper()
+            val before = mapper.readTree(original)
+            val after = mapper.readTree(policy.toFile())
+            assertEquals(before.path("enforcement"), after.path("enforcement"))
+            assertEquals(before.path("namespaces").size() + 1, after.path("namespaces").size())
+            assertEquals(before.path("namespaces").path("minecraft"), after.path("namespaces").path("minecraft"))
+            assertTrue(after.path("namespaces").path("unclassified_mod").isMissingNode)
+            assertEquals("infrastructure", after.path("namespaces").path("better_playtest_native_support")
+                .path("primary_role").asText())
+            assertEquals(null, instrumented.install(root, restored = true)["candidate_policy_sha256"])
+            Files.writeString(policy, original)
+            assertThrows(IllegalArgumentException::class.java) { instrumented.install(root, restored = true) }
+            assertThrows(IllegalArgumentException::class.java) { instrumented.install(root) }
+        } finally {
+            Files.walk(root).sorted(Comparator.reverseOrder()).forEach(Files::deleteIfExists)
+            Files.deleteIfExists(jar)
+        }
     }
 
     @Test fun serverOnlyImmutablePrelaunchScopePairDoesNotRelaxThreeMailboxProperties() {

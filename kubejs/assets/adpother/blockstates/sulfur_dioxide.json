@@ -1,7 +1,0 @@
-{
-  "variants": {
-    "density=light": {"model": "adpother:block/sulfur_light"},
-    "density=medium": {"model": "adpother:block/sulfur_medium"},
-    "density=heavy": {"model": "adpother:block/sulfur_heavy"}
-  }
-}

@@ -28,9 +28,7 @@
             "item": "tconstruct:large_plate"
           },
           "K": {
-            "type": "forge:partial_nbt",
-            "item": "littlelogistics:spring",
-            "nbt": "{better_manufacturing:{dock_stone_paid:1}}"
+            "item": "littlelogistics:spring"
           }
         },
         "pattern": [

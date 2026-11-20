@@ -31,11 +31,7 @@
             "item": "tconstruct:large_plate"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "item": "pneumaticcraft:reinforced_stone_slab"
-            },
-            "marker": "pneumaticcraft:refinery"
+            "item": "pneumaticcraft:reinforced_stone_slab"
           }
         },
         "result": {

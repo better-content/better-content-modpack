@@ -29,11 +29,7 @@
             "item": "tconstruct:tough_handle"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "item": "pneumaticcraft:thermal_lagging"
-            },
-            "marker": "pneumaticcraft:heat_pipe"
+            "item": "pneumaticcraft:thermal_lagging"
           }
         },
         "result": {

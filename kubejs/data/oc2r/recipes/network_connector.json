@@ -57,8 +57,7 @@
         "type": "minecraft:crafting_shaped",
         "pattern": [
           "IGI",
-          "ITI",
-          "HP "
+          "ITI"
         ],
         "key": {
           "I": {
@@ -69,12 +68,6 @@
           },
           "T": {
             "item": "oc2r:transistor"
-          },
-          "H": {
-            "item": "tconstruct:tool_handle"
-          },
-          "P": {
-            "item": "tconstruct:large_plate"
           }
         },
         "result": {

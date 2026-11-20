@@ -16,19 +16,42 @@
         "type": "minecraft:crafting_shaped",
         "category": "misc",
         "pattern": [
-          "HMP"
+          "HMP",
+          "012",
+          "345"
         ],
         "key": {
           "H": {
             "item": "tconstruct:tool_handle"
           },
           "M": {
-            "type": "forge:partial_nbt",
-            "item": "complicated_bees:waxed_stick",
-            "nbt": "{better_manufacturing:{bees_cost_twisting_frame:1}}"
+            "item": "complicated_bees:waxed_stick"
           },
           "P": {
             "item": "tconstruct:large_plate"
+          },
+          "0": [
+            {
+              "item": "minecraft:soul_sand"
+            },
+            {
+              "item": "minecraft:soul_soil"
+            }
+          ],
+          "1": {
+            "item": "complicated_bees:waxed_stick"
+          },
+          "2": {
+            "item": "complicated_bees:waxed_stick"
+          },
+          "3": {
+            "item": "complicated_bees:waxed_stick"
+          },
+          "4": {
+            "item": "complicated_bees:waxed_stick"
+          },
+          "5": {
+            "item": "complicated_bees:waxed_stick"
           }
         },
         "result": {

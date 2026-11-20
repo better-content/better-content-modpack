@@ -32,11 +32,7 @@
             "item": "tconstruct:tough_handle"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "tag": "forge:ingots/compressed_iron"
-            },
-            "marker": "pneumaticcraft:vortex_tube"
+            "tag": "forge:ingots/compressed_iron"
           }
         },
         "result": {

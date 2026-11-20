@@ -20,6 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -78,6 +79,9 @@ final class RecipeSemantics {
     static boolean withinAlternativeBudget(int count) { return count >= 0 && count <= MAX_ALTERNATIVES; }
     static boolean withinSlotBudget(int count) { return count > 0 && count <= MAX_SLOTS; }
     static boolean withinValueBudget(String value) { return value != null && value.length() <= MAX_JSON_CHARS; }
+    static String boundedExportErrorDetail(String detail) {
+        return detail == null ? null : detail.substring(0, Math.min(160, detail.length()));
+    }
     static boolean ingredientIsPublicVanilla(boolean vanilla) { return vanilla; }
 
     /** Exact serializer AND implementation allowlist. Unknown/special/dynamic recipes never inherit vanilla semantics. */
@@ -166,6 +170,9 @@ final class RecipeSemantics {
             row.add("output", item(recipe.getResultItem(access)));
             return finish(row);
         } catch (Exception error) {
+            // A typed diagnostic, never a recovered definition or a completeness upgrade.
+            String detail = boundedExportErrorDetail(error.getMessage());
+            if (detail != null) row.addProperty("export_error_detail", detail);
             return unsupported(row, "public_semantic_export_error:" + error.getClass().getSimpleName());
         }
     }
@@ -194,7 +201,7 @@ final class RecipeSemantics {
         row.add("fluid_input", fluidIngredient(invoke(recipe, "getFluid")));
         Object result = invoke(recipe, "getResult");
         if (invoke(result, "getTag") != null) return unsupported(row, "casting_dynamic_output_tag_not_exhaustively_exported");
-        JsonElement definition = (JsonElement) result.getClass().getMethod("serialize", boolean.class).invoke(result, false);
+        JsonElement definition = (JsonElement) invokePublic(result, "serialize", new Class<?>[]{boolean.class}, false);
         requireBounded(definition.toString()); row.add("output_definition", definition);
         row.add("output", item((ItemStack) invoke(recipe, "getOutput")));
         row.addProperty("cooling_time_ticks", (Integer) invoke(recipe, "getCoolingTime"));
@@ -260,8 +267,20 @@ final class RecipeSemantics {
         return row;
     }
     private static Object invoke(Object source, String method) throws Exception {
+        return invokePublic(source, method, new Class<?>[0]);
+    }
+    /** Pinned Mantle returns package-private implementation objects of public ingredient/output APIs.
+     * Invoke only their genuinely public inherited declaration, never setAccessible or a hidden member. */
+    static Object invokePublic(Object source, String method, Class<?>[] signature, Object... arguments) throws Exception {
         if (source == null) throw new IllegalStateException("missing public recipe value");
-        Method accessor = source.getClass().getMethod(method); return accessor.invoke(source);
+        Method accessor = source.getClass().getMethod(method, signature);
+        if (!Modifier.isPublic(accessor.getDeclaringClass().getModifiers())) {
+            Class<?> parent = source.getClass().getSuperclass();
+            while (parent != null && !Modifier.isPublic(parent.getModifiers())) parent = parent.getSuperclass();
+            if (parent == null) throw new IllegalAccessException("no public recipe API for " + method);
+            accessor = parent.getMethod(method, signature);
+        }
+        return accessor.invoke(source, arguments);
     }
     private static void requireBounded(String jsonOrNbt) {
         if (!withinValueBudget(jsonOrNbt)) throw new IllegalStateException("semantic value exceeds bounded size");

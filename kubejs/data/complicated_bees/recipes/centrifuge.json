@@ -12,16 +12,37 @@
         "type": "better_manufacturing:part_variant",
         "category": "misc",
         "pattern": [
-          "HM"
+          "HM0",
+          "123",
+          "456"
         ],
         "key": {
           "H": {
             "item": "tconstruct:tough_handle"
           },
           "M": {
-            "type": "forge:partial_nbt",
-            "item": "minecraft:iron_ingot",
-            "nbt": "{better_manufacturing:{bees_cost_centrifuge:1}}"
+            "item": "minecraft:iron_ingot"
+          },
+          "0": {
+            "item": "minecraft:chest"
+          },
+          "1": {
+            "item": "minecraft:redstone"
+          },
+          "2": {
+            "item": "minecraft:smooth_stone"
+          },
+          "3": {
+            "item": "minecraft:iron_ingot"
+          },
+          "4": {
+            "item": "minecraft:iron_ingot"
+          },
+          "5": {
+            "item": "minecraft:iron_ingot"
+          },
+          "6": {
+            "item": "minecraft:iron_ingot"
           }
         },
         "result": {

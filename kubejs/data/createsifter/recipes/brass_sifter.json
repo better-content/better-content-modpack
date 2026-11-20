@@ -12,8 +12,9 @@
         "type": "better_manufacturing:part_variant",
         "category": "sifter",
         "pattern": [
-          "HSH",
-          " K "
+          "HPH",
+          "ISI",
+          "IRI"
         ],
         "key": {
           "H": {
@@ -22,10 +23,14 @@
           "S": {
             "item": "createsifter:sifter"
           },
-          "K": {
-            "type": "forge:partial_nbt",
-            "item": "minecraft:redstone",
-            "nbt": "{better_manufacturing:{brass_sifter_paid_materials:1}}"
+          "P": {
+            "tag": "forge:plates/brass"
+          },
+          "I": {
+            "tag": "forge:ingots/brass"
+          },
+          "R": {
+            "tag": "forge:dusts/redstone"
           }
         },
         "result": {
@@ -39,7 +44,7 @@
             "role": "left"
           },
           {
-            "slot": 1,
+            "slot": 4,
             "role": "core"
           },
           {

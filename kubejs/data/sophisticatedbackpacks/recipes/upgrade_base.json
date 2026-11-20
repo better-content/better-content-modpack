@@ -25,11 +25,7 @@
             "tag": "forge:string"
           },
           "H": {
-            "type": "better_manufacturing:sophisticated_cost_bundle",
-            "marker": "sophisticatedbackpacks:upgrade_base",
-            "anchor": {
-              "tag": "forge:string"
-            }
+            "item": "tconstruct:large_plate"
           }
         },
         "pattern": [

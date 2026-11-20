@@ -171,10 +171,6 @@
       "primary_role": "world",
       "support_state": "full"
     },
-    "better_airtight_machines": {
-      "primary_role": "content",
-      "support_state": "full"
-    },
     "alexscaves": {
       "primary_role": "world",
       "support_state": "full"
@@ -381,10 +377,6 @@
     },
     "c2me_threading_worldgen": {
       "primary_role": "infrastructure",
-      "support_state": "not_applicable"
-    },
-    "chemlib": {
-      "primary_role": "content",
       "support_state": "not_applicable"
     },
     "citadel": {
@@ -989,10 +981,6 @@
     },
     "kuma_api": {
       "primary_role": "infrastructure",
-      "support_state": "not_applicable"
-    },
-    "better_chemlib_hazards": {
-      "primary_role": "content",
       "support_state": "not_applicable"
     },
     "lithostitched": {

@@ -15,19 +15,6 @@
       ]
     },
     {
-      "repository": "better-airtight-machines",
-      "modId": "better_airtight_machines",
-      "artifact": "better-airtight-machines-0.1.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ],
-      "dependsOn": [
-        "better-industrial-heat",
-        "better-chemlib-hazards"
-      ]
-    },
-    {
       "repository": "better-magic-chunk-anchors",
       "modId": "better_magic_chunk_anchors",
       "artifact": "better-magic-chunk-anchors-0.1.0.jar",
@@ -98,7 +85,6 @@
         "better-dimension-fonts",
         "better-deaths-door",
         "better-industrial-heat",
-        "better-chemlib-hazards",
         "better-oc2r-create-controls",
         "better-oc2r-wireless-messaging",
         "better-pillager-campaigns",
@@ -156,6 +142,7 @@
         "better-deaths-door",
         "better-rpg-progression",
         "better-survival-physiology",
+        "better-survival-hud",
         "better-gameplay-notices"
       ]
     },
@@ -287,18 +274,6 @@
       "tasks": [
         "verifyFull",
         "stageRuntimeJar"
-      ]
-    },
-    {
-      "repository": "better-chemlib-hazards",
-      "modId": "better_chemlib_hazards",
-      "artifact": "better-chemlib-hazards-0.2.0.jar",
-      "tasks": [
-        "verifyFull",
-        "stageRuntimeJar"
-      ],
-      "dependsOn": [
-        "better-industrial-heat"
       ]
     },
     {
@@ -494,7 +469,6 @@
         "stageRuntimeJar"
       ],
       "dependsOn": [
-        "better-compat-fixes",
         "better-gameplay-notices",
         "better-spicy-farmers"
       ]

@@ -1,6 +1,6 @@
 // Occultism's tag-output fallback becomes an unusable placeholder when the preferred
-// item is absent. Own only the twelve confirmed broken recipes and retain their
-// original IDs so downstream recipe references remain stable.
+// item is absent. Own only the ten confirmed outputs with present providers and
+// retain their original IDs so downstream recipe references remain stable.
 ;(function () {
     var RECIPES = [
         ['blaze_powder_from_rod', 'forge:rods/blaze', 'minecraft:blaze_powder', 1, false],
@@ -12,12 +12,14 @@
         ['iesnium_dust_from_ingot', 'forge:ingots/iesnium', 'occultism:iesnium_dust', 1, true],
         ['iesnium_dust_from_raw', 'forge:raw_materials/iesnium', 'occultism:iesnium_dust', 2, false],
         ['iesnium_dust_from_raw_block', 'forge:storage_blocks/raw_iesnium', 'occultism:iesnium_dust', 18, false],
-        ['iridium_dust_from_ingot', 'forge:ingots/iridium', 'chemlib:iridium_dust', 1, true],
-        ['redstone_dust', 'forge:ores/redstone', 'minecraft:redstone', 4, false],
-        ['tungsten_dust_from_ingot', 'forge:ingots/tungsten', 'chemlib:tungsten_dust', 1, true]
+        ['redstone_dust', 'forge:ores/redstone', 'minecraft:redstone', 4, false]
     ]
 
     ServerEvents.recipes(function (event) {
+        // Native tag-based outputs for these two metals have no remaining ingot/dust
+        // provider. Suppress them instead of synthesizing an unregistered dust.
+        event.remove({ id: 'occultism:crushing/iridium_dust_from_ingot' })
+        event.remove({ id: 'occultism:crushing/tungsten_dust_from_ingot' })
         RECIPES.forEach(function (spec) {
             var id = 'occultism:crushing/' + spec[0]
             event.remove({ id: id })

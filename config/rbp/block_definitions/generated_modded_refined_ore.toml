@@ -4,18 +4,6 @@
 #	Tags:         '#forge:stone'
 #	IDs:          'minecraft:stone'
 Blocks = [
-	"chemlib:aluminum_metal_block",
-	"chemlib:cobalt_metal_block",
-	"chemlib:iridium_metal_block",
-	"chemlib:lead_metal_block",
-	"chemlib:nickel_metal_block",
-	"chemlib:osmium_metal_block",
-	"chemlib:palladium_metal_block",
-	"chemlib:platinum_metal_block",
-	"chemlib:silver_metal_block",
-	"chemlib:tin_metal_block",
-	"chemlib:uranium_metal_block",
-	"chemlib:zinc_metal_block",
 	"create:brass_block",
 	"create:industrial_iron_block",
 	"create:raw_zinc_block",

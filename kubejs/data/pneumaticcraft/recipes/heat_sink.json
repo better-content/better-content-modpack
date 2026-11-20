@@ -12,7 +12,8 @@
         "type": "better_manufacturing:part_variant",
         "pattern": [
           "ABH",
-          "LGI"
+          "LGI",
+          "01 "
         ],
         "key": {
           "B": {
@@ -31,11 +32,13 @@
             "item": "tconstruct:tough_handle"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "item": "minecraft:iron_bars"
-            },
-            "marker": "pneumaticcraft:heat_sink"
+            "item": "minecraft:iron_bars"
+          },
+          "0": {
+            "item": "minecraft:iron_bars"
+          },
+          "1": {
+            "tag": "forge:ingots/compressed_iron"
           }
         },
         "result": {

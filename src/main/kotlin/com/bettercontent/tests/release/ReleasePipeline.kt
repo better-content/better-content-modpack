@@ -260,7 +260,8 @@ fun main(args: Array<String>) {
             requireStableCandidates(candidates)
             val command = listOf(root.resolve("test.main.kts").toString(), tier,
                 "--client", candidates.client.toString(), "--server", candidates.server.toString())
-            runLogged(root, command, evidence.resolve("$tier.log"), mapOf("BC_TEST_RUN_ID" to runId))
+            runLogged(root, command, evidence.resolve("$tier.log"), mapOf(
+                "BC_TEST_RUN_ID" to runId, "BC_PACK_TEST_ROOT" to root.toString()))
             requireStableCandidates(candidates)
             val receipt = root.resolve("generated/test-evidence/$runId/$tier/run.json")
             when (tier) {
@@ -330,6 +331,10 @@ internal fun build(
     Files.createDirectories(nativeLock.parent)
     val buildCommand = listOf("flock", "--wait", "1800", nativeLock.toString(),
         repository.resolve("gradlew").toString(), "--no-daemon", "--max-workers=2") +
+        // Force a real source compilation for a requested all-source rebuild;
+        // merely invoking stageRuntimeJar can otherwise reuse UP-TO-DATE outputs.
+        (if (System.getenv("BC_RELEASE_FORCE_REBUILD_ALL") == "1")
+            listOf("--no-build-cache", "--rerun-tasks") else emptyList()) +
         (if (mod.repository == "better-spaceflight") {
             val tmp = evidence.resolve("spaceflight-gradle-tmp").also { Files.createDirectories(it) }
             listOf("-Dorg.gradle.jvmargs=-Xmx2G -XX:ActiveProcessorCount=2 -Djava.io.tmpdir=$tmp")
@@ -365,7 +370,7 @@ internal fun build(
             val fixture = evidence.resolve("world-axiom-compile-only").also { Files.createDirectories(it) }
             val names = listOf("better-dimension-fonts-1.0.0.jar", "better-ore-geology-0.3.0.jar",
                 "better-bumblezone-crops-0.1.0.jar", "better-celestial-events-0.1.0.jar",
-                "better-spirit-commerce-1.0.1.jar", "better-chemlib-hazards-0.2.0.jar")
+                "better-spirit-commerce-1.0.1.jar")
             names.forEach { name -> Files.copy(staging.resolve(name), fixture.resolve(name)) }
             val lodestone = Path.of(System.getProperty("user.home"), ".cache/bc/packwiz-downloads/mods/lodestone-1.20.1-1.6.4.1.jar")
             Files.copy(lodestone, fixture.resolve(lodestone.fileName))
@@ -550,6 +555,12 @@ internal fun requireStableCandidates(candidates: CandidatePair) {
         Hashes.sha256(candidates.server) == candidates.serverSha256) { "release candidate hashes changed" }
 }
 
+internal fun requireAmbientAttributionEnabled(serverLog: Path) {
+    require(Files.isRegularFile(serverLog) && Files.newBufferedReader(serverLog).use { reader ->
+        reader.lineSequence().none { it.contains("Ambient rate attribution disabled:") }
+    }) { "ambient temperature rate attribution disabled or raw server log missing: $serverLog" }
+}
+
 internal fun validateSmokeEvidence(path: Path, runId: String, candidates: CandidatePair, started: Instant, tier: String = "smoke") {
     require(tier == "smoke") { "unknown runtime tier" }
     require(Files.isRegularFile(path)) { "missing successful $tier evidence: $path" }
@@ -567,6 +578,26 @@ internal fun validateSmokeEvidence(path: Path, runId: String, candidates: Candid
         pair.path("client_sha256").asText() == candidates.clientSha256 &&
         pair.path("server_sha256").asText() == candidates.serverSha256) { "$tier evidence does not match the exact release pair" }
     requireStableCandidates(candidates)
+    // A production EMI recipe-screen injector can fail at WARN level while Smoke
+    // still joins. Its absence disables available-first crafting guidance, so
+    // reject that exact regression using the retained real client log.
+    val clientLog = path.parent.resolve("client.log")
+    require(Files.isRegularFile(clientLog) && Files.newBufferedReader(clientLog).use { reader ->
+        reader.lineSequence().none { it.contains("Mixin apply failed better_compat_fixes.mixins.json:emi.RecipeScreenMixin") }
+    }) { "client EMI recipe-screen mixin failed or its raw Smoke log is missing: $clientLog" }
+    // A KubeJS recipe with an absent result can fail at server reload without
+    // stopping Smoke. Reject the actual malformed-output signature in the retained
+    // raw server log rather than treating a successful login as recipe validity.
+    val serverLog = path.parent.resolve("server.log")
+    require(Files.isRegularFile(serverLog) && Files.newBufferedReader(serverLog).use { reader ->
+        reader.lineSequence().none { line ->
+            line.contains("Failed to create recipe for type") &&
+                line.contains("ItemStack 'result' can't be empty!")
+        }
+    }) { "KubeJS recipe has an empty result or its raw Smoke server log is missing: $serverLog" }
+    // Cold Sweat's ambient-only rate seam fails closed when its pinned WORLD
+    // modifier order changes. A passing login must not certify that disabled path.
+    requireAmbientAttributionEnabled(serverLog)
 }
 
 internal fun packageResolveCommand(root: Path, target: Path): List<String> = listOf(
@@ -963,6 +994,7 @@ internal fun validateTeleSoakReceipt(path: Path, runId: String, pair: CandidateP
         "TeleSoak candidate paths/hashes do not match the exact fresh pair"
     }
     requireStableCandidates(pair)
+    requireAmbientAttributionEnabled(path.resolveSibling("server.log"))
 }
 
 internal fun validateTeleSoakEvents(path: Path, dimensions: List<String>) {

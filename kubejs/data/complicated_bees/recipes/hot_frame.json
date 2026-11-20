@@ -16,19 +16,37 @@
         "type": "minecraft:crafting_shaped",
         "category": "misc",
         "pattern": [
-          "HMP"
+          "HMP",
+          "012",
+          "345"
         ],
         "key": {
           "H": {
             "item": "tconstruct:tool_handle"
           },
           "M": {
-            "type": "forge:partial_nbt",
-            "item": "minecraft:nether_brick",
-            "nbt": "{better_manufacturing:{bees_cost_hot_frame:1}}"
+            "item": "minecraft:nether_brick"
           },
           "P": {
             "item": "tconstruct:large_plate"
+          },
+          "0": {
+            "item": "minecraft:magma_block"
+          },
+          "1": {
+            "item": "minecraft:nether_brick"
+          },
+          "2": {
+            "item": "minecraft:nether_brick"
+          },
+          "3": {
+            "item": "minecraft:nether_brick"
+          },
+          "4": {
+            "item": "minecraft:nether_brick"
+          },
+          "5": {
+            "item": "minecraft:nether_brick"
           }
         },
         "result": {

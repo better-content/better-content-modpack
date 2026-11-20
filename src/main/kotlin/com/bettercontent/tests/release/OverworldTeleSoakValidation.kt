@@ -37,6 +37,7 @@ internal fun validateOverworldTeleSoakReceipt(path: Path, runId: String, pair: C
     require(receipt.path("candidates") == mapper.valueToTree<JsonNode>(pair.document())) { "candidate pair differs" }
     requireStableCandidates(pair)
     validateOverworldTeleSoakEvents(eventsPath)
+    requireAmbientAttributionEnabled(path.resolveSibling("server.log"))
 }
 
 internal fun validateOverworldTeleSoakEvents(path: Path) {

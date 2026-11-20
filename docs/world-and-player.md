@@ -20,7 +20,7 @@ runtime logic.
 | Player-kill spirit release, spirit commerce, village professions, and wandering-trader lifecycle | Better Spirit Commerce | The mod owns credited-kill release through Malum's animated spirit entities, authored spirit-priced villager and wandering offers, matching stations/outfits/behaviours and Local Market; coins, emerald commerce, and eldritch/umbral trade are closed. Resident needs, gathering, settlements, resident barter and Player Stalls were extracted to a private source-only repository and are not active pack content. |
 | TCon alloy composition and casting | Tinkers' Construct | Removes bypasses and authors exact cross-mod alloy recipes |
 | Kinetic assembly | Create | Uses Machine Blocks only at listed direct roots |
-| Acid and gas chemistry | ChemLib, PneumaticCraft, Create, Better Content Fixes | Pack authors canonical acid routes and renewable acetic uses; airtight machine upgrades retain gas-state ChemLib contents |
+| Pressure, plastic, and PCB processing | PneumaticCraft | Native compressed-air, petroleum/plastic, and PCB etching routes remain; ChemLib acids and gas-containment upgrades are absent |
 | Electrical components and stationary generation | PowerGrid and MoreRed | Electrical Block starts PowerGrid's first generator/design roots; competing stationary generators are cut |
 | Dragon ecology and materials | Ice and Fire | Replaces vanilla dragon-boss products; rare Overworld ecology supplies tagged products and equal-stat Dragonsteel TCon materials |
 | Spaceflight feasibility | Better Spaceflight | Experimental feasibility-only source; no survival flight, oxygen or destination route is claimed |

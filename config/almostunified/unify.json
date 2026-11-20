@@ -1,8 +1,11 @@
 {
   "modPriorities": [
     "better_ore_geology",
-    "chemlib",
     "minecraft",
+    "tconstruct",
+    "occultism",
+    "fallout_wastelands_",
+    "alexscaves",
     "kubejs",
     "crafttweaker",
     "create",
@@ -499,6 +502,10 @@
     "forge:wires/zinc"
   ],
   "ignoredItems": [
+    "alexscaves:uranium",
+    "alexscaves:uranium_shard",
+    "fallout_wastelands_:uranium_ingot",
+    "fallout_wastelands_:uranium_nugget",
     "excavated_variants:aether_holystone_lead_zinc_vein",
     "excavated_variants:aether_mossy_holystone_lead_zinc_vein",
     "excavated_variants:andesite_lead_zinc_vein",

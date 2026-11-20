@@ -25,11 +25,7 @@
             "item": "tconstruct:large_plate"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "item": "minecraft:iron_bars"
-            },
-            "marker": "pneumaticcraft:small_tank"
+            "item": "minecraft:iron_bars"
           }
         },
         "pattern": [

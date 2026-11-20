@@ -23,9 +23,6 @@
           "C": {
             "item": "pneumaticcraft:pneumatic_cylinder"
           },
-          "D": {
-            "tag": "forge:gems/diamond"
-          },
           "H": {
             "item": "tconstruct:pick_head"
           },
@@ -39,11 +36,7 @@
             "item": "pneumaticcraft:pressure_tube"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "tag": "forge:gems/diamond"
-            },
-            "marker": "pneumaticcraft:jackhammer"
+            "tag": "forge:gems/diamond"
           }
         },
         "result": {

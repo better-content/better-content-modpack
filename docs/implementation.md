@@ -71,7 +71,6 @@ The next-source candidate manifest has **50 custom mods** in `gradle/active-cust
 | Repository | Mod ID | Runtime artifact | Local validation and staging |
 |---|---|---|---|
 | better-manufacturing | `better_manufacturing` | `better-manufacturing-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar`; implementation in progress, not deployed or gameplay-qualified |
-| [better-airtight-machines](https://github.com/better-content/better-airtight-machines) | `better_airtight_machines` | `better-airtight-machines-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-magic-chunk-anchors](https://github.com/better-content/better-magic-chunk-anchors) | `better_magic_chunk_anchors` | `better-magic-chunk-anchors-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-spirit-commerce](https://github.com/better-content/better-spirit-commerce) | `better_spirit_commerce` | `better-spirit-commerce-1.0.1.jar` | `./gradlew verifyFull stageRuntimeJar`; resident/settlement simulation and Player Stalls removed from the source candidate; private [better-villager-society](https://github.com/better-content/better-villager-society) is a non-compiling, non-packaged preservation snapshot, not an active dependency |
 | [better-compat-fixes](https://github.com/better-content/better-compat-fixes) | `better_compat_fixes` | `better-compat-fixes-0.1.9.jar` | `./gradlew verifyFull stageRuntimeJar` |
@@ -93,7 +92,6 @@ The next-source candidate manifest has **50 custom mods** in `gradle/active-cust
 | [better-exploration-load-control](https://github.com/better-content/better-exploration-load-control) | `better_exploration_load_control` | `better-exploration-load-control-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-industrial-heat](https://github.com/better-content/better-industrial-heat) | `better_industrial_heat` | `better-industrial-heat-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-weathering-offline-progress](https://github.com/better-content/better-weathering-offline-progress) | `better_weathering_offline_progress` | `better-weathering-offline-progress-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
-| [better-chemlib-hazards](https://github.com/better-content/better-chemlib-hazards) | `better_chemlib_hazards` | `better-chemlib-hazards-0.2.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-mining-lamp](https://github.com/better-content/better-mining-lamp) | `better_mining_lamp` | `better-mining-lamp-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-oc2r-create-controls](https://github.com/better-content/better-oc2r-create-controls) | `better_oc2r_create_controls` | `better-oc2r-create-controls-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
 | [better-oc2r-wireless-messaging](https://github.com/better-content/better-oc2r-wireless-messaging) | `better_oc2r_wireless_messaging` | `better-oc2r-wireless-messaging-1.0.0.jar` | `./gradlew verifyFull stageRuntimeJar` |
@@ -122,6 +120,11 @@ The next-source candidate manifest has **50 custom mods** in `gradle/active-cust
 | [better-seasonal-trees](https://github.com/better-content/better-seasonal-trees) | `better_seasonal_trees` | `better-seasonal-trees-0.1.0.jar` | `./gradlew verifyFull stageRuntimeJar`; new-world activation pending gates |
 
 ### Manufacturing ownership and implementation status
+
+**Current pack boundary:** the ChemLib-dependent PLA/PP acquisition and casting
+routes are retired; the existing Manufacturing material registrations remain to
+protect saved worlds. Earlier candidate validation notes below are historical
+receipts, not claims that those routes still load in the active pack.
 
 The active scope is part-based machine variants, replacing the broader chemistry/recovery program.
 `mod_source/better-manufacturing` owns crafting-time calculation and native behavior hooks. The pack
@@ -548,7 +551,7 @@ a staging area inside an active root.
 | Pressure/electrical supply to Create | PneumaticCraft + Compressed Creativity / PowerGrid | Pack gates access; native storage, networks and conversion supply existing kinetic machines rather than replacement processing blocks |
 | Kinetic transmission demand | Better Create Kinetic Loss | Pack config sets component/RPM costs; no material-dependent shaft loss |
 | Geological deposits and processing | Realistic Ores | Era inputs only; see [`progression.md#realistic-ore-processing`](progression.md#realistic-ore-processing) |
-| Radiation and contained chemistry | Latent ChemLib | Cross-mod gates; no duplicate physical simulation |
+| Pollution and radiation environment | Pollution of the Realms / AdPother and other retained native systems | ChemLib Hazards simulation is retired; independent emission, detection, and protection remain native to their owners |
 | Industrial heat | Heat Sync | Era placement and integrations; Heat Sync owns storage, transfer, ambient mapping, and Create boiler heat |
 | Dimension Fonts | Dimension Drink | Recipes and learning references only; Dimension Drink owns obelisks, charge, sessions, tickets, and arrival sites |
 | Settlement paths | Settlement Roads | No pack placement script; Settlement Roads owns dry-route planning, persistence, road palette, and placement; bridge scaffolding is dormant and unsupported |
@@ -651,7 +654,7 @@ burner, smeltery, and generator emitters.
 Weapons of Miracles is added as a pinned candidate input. Its Epic Fight and tooltip
 ownership must be reconciled against the exact installed version; manifest
 presence does not qualify broad combat behavior. Electrochemistry's optional branch
-is retired; PneumaticCraft/ChemLib/Manufacturing chemistry remains. Seasonal Daylight
+is retired; PneumaticCraft native petroleum, plastic and PCB etching remain. ChemLib acids and the custom PLA/PP acquisition chains are retired; Manufacturing's existing material registrations remain for save continuity. Seasonal Daylight
 and Seasonal Trees are fresh-world candidate additions; keep one sky-clock owner
 and preserve existing saved calendar state.
 
@@ -795,12 +798,11 @@ Management world in this reduced pack without a separate save-compatibility revi
 exchange. Create: Power Grid retains its electrical and device-overheat simulation; its optional
 `ThermalBehaviour` adapter exposes that temperature to HeatSync without creating a second heat API.
 
-`better_chemlib_hazards` owns contained high-energy chemistry, decay heat, criticality, radiation, and
-mass-debit semantics. It has no reactor power ladder or atmospheric scheduler. Released gases
-become native AdPother pollutant blocks at the configured contained-mass boundary; AdPother then
-owns movement, wind, impacts, detection, protection, emitters, chimneys, filters, and cleanup.
-PneumaticCraft retains native pressure and thermo-plant behavior, with explicit normal-air and
-chemical-service ledgers at the Latent boundary.
+ChemLib, ChemLib Hazards, and Better Airtight Machines are absent from the active
+pack. Their contained-gas, criticality, decay-heat, and radiation hooks do not
+run. AdPother independently owns its configured pollutant movement, impacts,
+detection, protection, emitters, chimneys, filters, and cleanup. PneumaticCraft
+retains native pressure, thermo-plant, petroleum/plastic and PCB etching behavior.
 
 Rebuild and deploy custom JARs through [Custom Mod Workspace](implementation.md#custom-mod-workspace). Run pack
 suites only when explicitly ordered, following [Testing and fresh distributions](testing.md#smoke-overworld-tele-soak-tele-soak-and-fresh-distributions).

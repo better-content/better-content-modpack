@@ -64,6 +64,16 @@ class FreshSourceReleaseTest {
         }), plan) }
     }
 
+    @Test fun activeRuntimeGraphKeepsNonshippingWaterCompatFixtureOutOfProviderDAG() {
+        val manifest = mapper.readValue(Path.of("gradle/active-custom-mods.json").toFile(), ActiveModManifest::class.java)
+        val ordered = freshDependencyOrder(manifest.mods).map { it.repository }
+        assertTrue(ordered.indexOf("better-spicy-farmers") < ordered.indexOf("better-drinking-water"))
+        assertTrue(ordered.indexOf("better-drinking-water") < ordered.indexOf("better-industrial-heat"))
+        assertTrue(ordered.indexOf("better-industrial-heat") < ordered.indexOf("better-compat-fixes"))
+        assertTrue(ordered.indexOf("better-compat-fixes") < ordered.indexOf("better-survival-physiology"))
+        assertFalse("better-compat-fixes" in manifest.mods.single { it.repository == "better-drinking-water" }.dependsOn)
+    }
+
     @Test fun freshTypedPropsOnlyAdmitQualifiedExternalPathsAndNeverOldCookingJar() {
         val (_, plan) = population()
         val source = plan.sources.single { it.repository == "better-drinking-water" }
@@ -222,6 +232,7 @@ class FreshSourceReleaseTest {
         event("session_finished", mapOf("success" to true))
         val path = root.resolve("run.json")
         writeTele(path, pair, events)
+        Files.writeString(path.resolveSibling("server.log"), "[Server thread/INFO] fixture temperature attribution intact\n")
         return Triple(path, pair, events)
     }
     private fun writeTele(path: Path, pair: CandidatePair, events: List<Map<String, Any>>) {
@@ -241,6 +252,16 @@ class FreshSourceReleaseTest {
         assertThrows(IllegalArgumentException::class.java) { validateTeleSoakReceipt(path, "old", pair, Instant.EPOCH) }
         Files.writeString(pair.client, "changed")
         assertThrows(IllegalArgumentException::class.java) { validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH) }
+    }
+
+    @Test fun teleReceiptRejectsDisabledAmbientAttributionInRawServerLog() {
+        val (path, pair, _) = teleFixture()
+        Files.writeString(path.resolveSibling("server.log"),
+            "[Server thread/WARN] Ambient rate attribution disabled: duplicate ambient RATE modifiers\n")
+        val rejected = assertThrows(IllegalArgumentException::class.java) {
+            validateTeleSoakReceipt(path, "fresh", pair, Instant.EPOCH)
+        }
+        assertTrue(rejected.message.orEmpty().contains("ambient temperature rate attribution disabled"))
     }
 
     @Test fun rawRegisteredRosterAndExactBlacklistAreMandatory() {

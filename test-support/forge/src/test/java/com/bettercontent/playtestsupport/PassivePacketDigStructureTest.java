@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Opcodes;
 
 import java.io.InputStream;
@@ -37,6 +38,35 @@ final class PassivePacketDigStructureTest {
         assertEquals(Set.of("handleBlockBreakAction(Lnet/minecraft/core/BlockPos;Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket$Action;Lnet/minecraft/core/Direction;II)V",
                 "destroyBlock(Lnet/minecraft/core/BlockPos;)Z"), methods("RealGameModeDigObserverMixin"));
     }
+    @Test void packetDigMixinUsesReobfuscatableDirectPlayerFieldNotAnUnmappedShadow() throws Exception {
+        int[] directReads = {0};
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream(
+                "com/bettercontent/playtestsupport/mixin/RealPacketDigObserverMixin.class")) {
+            assertNotNull(in);
+            new ClassReader(in).accept(new ClassVisitor(Opcodes.ASM9) {
+                @Override public FieldVisitor visitField(int access, String name, String descriptor,
+                                                          String signature, Object value) {
+                    assertNotEquals("player", name, "unmapped @Shadow field breaks production startup");
+                    return null;
+                }
+                @Override public MethodVisitor visitMethod(int access, String method, String descriptor,
+                                                              String signature, String[] exceptions) {
+                    if (!method.startsWith("bc$")) return null;
+                    return new MethodVisitor(Opcodes.ASM9) {
+                        @Override public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
+                            if (owner.equals("net/minecraft/server/network/ServerGamePacketListenerImpl") &&
+                                    name.equals("player")) {
+                                assertEquals(Opcodes.GETFIELD, opcode);
+                                directReads[0]++;
+                            }
+                        }
+                    };
+                }
+            }, 0);
+        }
+        assertEquals(2, directReads[0], "both read-only dig observations need a production-remappable field access");
+    }
+
     private static Set<String> methods(String name) throws Exception {
         Set<String> seen = new HashSet<>();
         try (InputStream in = PassivePacketDigStructureTest.class.getClassLoader().getResourceAsStream(

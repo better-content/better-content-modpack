@@ -82,16 +82,11 @@ ServerEvents.recipes(function (event) {
     if (has('eternal_engine')) {
         var wheelParts = Platform.isLoaded('better_manufacturing')
         if (wheelParts) {
-            // Any native plank species can pay the eighth plank plus binding.
-            // The marker is a construction receipt, not a new component.
-            event.shapeless(Item.of('minecraft:oak_planks',
-                '{better_manufacturing:{eternal_engine_plank:1}}'),
-                ['#minecraft:planks', 'tconstruct:tool_binding'])
-                .id('kubejs:world_axioms/eternal_engine/paid_plank')
-            event.custom({ type: 'minecraft:crafting_shaped', pattern: ['PPP', 'PAP', 'PPM'],
+            // Keep the binding visible in the hand-crafted water wheel; seven
+            // planks of any species still form its frame without a receipt.
+            event.custom({ type: 'minecraft:crafting_shaped', pattern: ['PPP', 'PAP', 'PPB'],
                 key: { P: { tag: 'minecraft:planks' }, A: { item: 'create:andesite_alloy' },
-                    M: { type: 'forge:partial_nbt', item: 'minecraft:oak_planks',
-                        nbt: '{better_manufacturing:{eternal_engine_plank:1}}' } },
+                    B: { item: 'tconstruct:tool_binding' } },
                 result: { item: 'create:water_wheel' }
             }).id('kubejs:world_axioms/eternal_engine/small_water_wheel')
         } else {
@@ -114,18 +109,13 @@ ServerEvents.recipes(function (event) {
     }
     if (has('captive_hearth')) {
         if (Platform.isLoaded('better_manufacturing')) {
-            // Pay the entire native eight-brick/furnace bill at the original
-            // crafting station; then attach the rated plate without requiring
-            // a mechanical crafter for this early captive-hearth route.
-            event.shaped(Item.of('minecraft:brick', '{better_manufacturing:{firebox_native_bill:1}}'),
-                ['BBB', 'BFB', 'BBB'], { B: 'minecraft:brick', F: 'minecraft:furnace' })
-                .id('kubejs:world_axioms/captive_hearth/firebox_bill')
-            event.custom({ type: 'better_manufacturing:part_variant', pattern: ['B', 'P'],
-                key: { B: { type: 'forge:partial_nbt', item: 'minecraft:brick',
-                    nbt: '{better_manufacturing:{firebox_native_bill:1}}' },
+            // Fit the rated plate directly into the eight-brick/furnace shape,
+            // replacing one brick rather than hiding the entire native bill.
+            event.custom({ type: 'better_manufacturing:part_variant', pattern: ['BBB', 'BFB', 'BBP'],
+                key: { B: { item: 'minecraft:brick' }, F: { item: 'minecraft:furnace' },
                     P: { item: 'tconstruct:large_plate' } },
                 result: { item: 'better_industrial_heat:thermal_firebox' },
-                function: 'better_manufacturing:industrialheat/thermal', parts: [{ role: 'thermal_surface', slot: 1 }]
+                function: 'better_manufacturing:industrialheat/thermal', parts: [{ role: 'thermal_surface', slot: 8 }]
             }).id('kubejs:world_axioms/captive_hearth/firebox')
         } else {
             event.shaped('better_industrial_heat:thermal_firebox', ['BBB', 'BFB', 'BBB'], {

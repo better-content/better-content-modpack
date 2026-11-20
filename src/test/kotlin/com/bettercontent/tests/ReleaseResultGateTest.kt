@@ -1,6 +1,7 @@
 package com.bettercontent.tests
 
 import com.bettercontent.tests.release.validateSmokeEvidence
+import com.bettercontent.tests.release.requireAmbientAttributionEnabled
 import com.bettercontent.tests.release.validateOverworldTeleSoakReceipt
 import com.bettercontent.tests.release.releaseDirectories
 import com.bettercontent.tests.release.locateNewRelease
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -33,6 +35,10 @@ class ReleaseResultGateTest {
         root.resolve("run.json").also {
             mapper.writeValue(it.toFile(), mapOf("run_id" to run, "status" to status, "tier" to tier,
                 "candidates" to pair.document()))
+            if (tier == "smoke") {
+                Files.writeString(root.resolve("client.log"), "[client] real raw client log fixture\n")
+                Files.writeString(root.resolve("server.log"), "[server] real raw server log fixture\n")
+            }
         }
 
     private fun release(name: String): Path {
@@ -91,6 +97,88 @@ class ReleaseResultGateTest {
         val pair = pair()
         val started = Instant.now().minusSeconds(1)
         assertDoesNotThrow { validateSmokeEvidence(evidence(pair), "fresh", pair, started) }
+    }
+
+    @Test fun emiRecipeScreenMixinWarningCannotAuthorizeSmoke() {
+        val pair = pair()
+        val receipt = evidence(pair)
+        Files.writeString(root.resolve("client.log"),
+            "[12:00:00] [Thread-35] [WARN] Mixin apply failed better_compat_fixes.mixins.json:emi.RecipeScreenMixin -> dev.emi.emi.screen.RecipeScreen\n")
+        assertThrows(IllegalArgumentException::class.java) {
+            validateSmokeEvidence(receipt, "fresh", pair, Instant.EPOCH)
+        }
+        Files.delete(root.resolve("client.log"))
+        assertThrows(IllegalArgumentException::class.java) {
+            validateSmokeEvidence(receipt, "fresh", pair, Instant.EPOCH)
+        }
+    }
+
+    @Test fun kubeJsEmptyRecipeOutputOrMissingRawServerLogCannotAuthorizeSmoke() {
+        val pair = pair()
+        val receipt = evidence(pair)
+        Files.writeString(root.resolve("server.log"),
+            "[19:58:39] [main/ERROR] [KubeJS Server/]: progression/80_tech_palette.js#68: " +
+                "Failed to create recipe for type 'kubejs:shaped': ItemStack 'result' can't be empty!\n")
+        val malformed = assertThrows(IllegalArgumentException::class.java) {
+            validateSmokeEvidence(receipt, "fresh", pair, Instant.EPOCH)
+        }
+        assertTrue(malformed.message.orEmpty().contains("KubeJS recipe has an empty result"))
+        Files.delete(root.resolve("server.log"))
+        val missing = assertThrows(IllegalArgumentException::class.java) {
+            validateSmokeEvidence(receipt, "fresh", pair, Instant.EPOCH)
+        }
+        assertTrue(missing.message.orEmpty().contains("raw Smoke server log is missing"))
+    }
+
+    @Test fun ambientRateDisabledWarningCannotAuthorizeSmoke() {
+        val pair = pair()
+        val receipt = evidence(pair)
+        Files.writeString(root.resolve("server.log"),
+            "[Server thread/WARN] [AmbientRateSeam/]: Ambient rate attribution disabled: " +
+                "unknown/interleaved WORLD: InventoryItemsTempModifier\n")
+        val rejected = assertThrows(IllegalArgumentException::class.java) {
+            validateSmokeEvidence(receipt, "fresh", pair, Instant.EPOCH)
+        }
+        assertTrue(rejected.message.orEmpty().contains("ambient temperature rate attribution disabled"))
+    }
+
+    @Test fun ambientRateWarningsInAnyNativeTierCannotAuthorizeRelease() {
+        val serverLog = root.resolve("server.log")
+        Files.writeString(serverLog, "[Server thread/WARN] Ambient rate attribution disabled: duplicate ambient RATE modifiers\n")
+        val rejected = assertThrows(IllegalArgumentException::class.java) {
+            requireAmbientAttributionEnabled(serverLog)
+        }
+        assertTrue(rejected.message.orEmpty().contains("ambient temperature rate attribution disabled"))
+        Files.writeString(serverLog, "[Server thread/INFO] native source and ambient probes intact\n")
+        assertDoesNotThrow { requireAmbientAttributionEnabled(serverLog) }
+        Files.delete(serverLog)
+        assertThrows(IllegalArgumentException::class.java) { requireAmbientAttributionEnabled(serverLog) }
+        System.getenv("BC_VALIDATE_TELE_AMBIENT_DISABLED")?.let { prior ->
+            assertThrows(IllegalArgumentException::class.java) {
+                requireAmbientAttributionEnabled(Path.of(prior))
+            }
+        }
+    }
+
+    @Test fun suppliedExactArtifactSmokeEvidenceCanBeRecheckedReadOnly() {
+        val good = System.getenv("BC_VALIDATE_SMOKE_GOOD") ?: return
+        val bad = System.getenv("BC_VALIDATE_SMOKE_BAD") ?: return
+        fun replay(path: Path) {
+            val receipt = mapper.readTree(path.toFile())
+            val candidates = receipt.path("candidates")
+            val client = Path.of(candidates.path("client").asText())
+            val server = Path.of(candidates.path("server").asText())
+            val pair = CandidatePair(path.parent, client, server,
+                candidates.path("client_sha256").asText(), candidates.path("server_sha256").asText())
+            validateSmokeEvidence(path, receipt.path("run_id").asText(), pair, Instant.EPOCH)
+        }
+        assertDoesNotThrow { replay(Path.of(good)) }
+        val rejected = assertThrows(IllegalArgumentException::class.java) { replay(Path.of(bad)) }
+        assertTrue(rejected.message.orEmpty().contains("KubeJS recipe has an empty result"))
+        System.getenv("BC_VALIDATE_SMOKE_AMBIENT_DISABLED")?.let { prior ->
+            val ambient = assertThrows(IllegalArgumentException::class.java) { replay(Path.of(prior)) }
+            assertTrue(ambient.message.orEmpty().contains("ambient temperature rate attribution disabled"))
+        }
     }
 
     @Test fun missingFailedWrongRunAndWrongTierCannotAuthorize() {

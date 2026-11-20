@@ -52,6 +52,8 @@ import java.util.stream.Collectors;
 public final class NativeSupport {
     private static final Logger LOG = LogUtils.getLogger();
     private static final int MAX_REQUEST = 1_048_576, MAX_ROWS = 100_000, MAX_INVENTORY_BYTES = 16_777_216;
+    // Build 81's effective recipe semantics are 37,756,555 bytes; leave all other domain caps unchanged.
+    private static final int MAX_RECIPE_SEMANTICS_BYTES = 50_331_648;
     private static final Gson JSON = new GsonBuilder().disableHtmlEscaping().create();
     private static volatile NativeSupport instance;
     private record DropScope(BlockPos pos, boolean matched) {}
@@ -489,6 +491,12 @@ public final class NativeSupport {
         try { s.incomingHit.actualArmorOperands(actor, source, amount, armor, toughness, s.tick); }
         catch (Throwable error) { s.incomingHit.fail("incoming_actual_armor_operands_capture_failed:" + error.getClass().getSimpleName()); }
     }
+    public static void incomingArmorCaptureUnavailable(net.minecraft.world.entity.LivingEntity entity, String reason) {
+        NativeSupport s = instance;
+        if (s != null && s.incomingHit != null && s.server != null && s.server.isSameThread() &&
+                entity instanceof ServerPlayer actor && s.incomingHit.binding.actorId.equals(actor.getUUID()))
+            s.incomingHit.fail(reason);
+    }
     public static void incomingBeforeMagic(net.minecraft.world.entity.player.Player target,
                                            net.minecraft.world.damagesource.DamageSource source, float actual) {
         NativeSupport s = instance;
@@ -603,6 +611,9 @@ public final class NativeSupport {
     private boolean fixtureEverMutated, nativeActionEverMutated;
     private NativeDig pendingDig;
     private PassiveItemUse itemObserver;
+    private PassiveCraftEvent craftObserver;
+    private Protocol.Request pendingCraftAwait;
+    private long pendingCraftDeadline;
     private PassiveOnboarding onboardingObserver;
     private PassiveWaterAuto waterAutoObserver;
     private volatile PassivePhysicalDig physicalDig;
@@ -855,6 +866,18 @@ public final class NativeSupport {
             }
         }
     }
+    @SubscribeEvent(priority = EventPriority.MONITOR)
+    public void craftedObserved(PlayerEvent.ItemCraftedEvent event) {
+        if (craftObserver != null && server != null && server.isSameThread() &&
+                event.getEntity() instanceof ServerPlayer actor) {
+            try {
+                if (craftObserver.binding.actorId.equals(actor.getUUID())) nativeActionEverMutated = true;
+                craftObserver.crafted(actor, event, tick);
+            } catch (Throwable capture) {
+                craftObserver.fail("craft_observer_failed:" + capture.getClass().getSimpleName());
+            }
+        }
+    }
     @SubscribeEvent(priority = EventPriority.MONITOR, receiveCanceled = true)
     public void breakObserved(BlockEvent.BreakEvent event) {
         if (event.getPlayer() instanceof ServerPlayer player) {
@@ -917,6 +940,10 @@ public final class NativeSupport {
             try { itemObserver.tick(server.getPlayerList().getPlayer(itemObserver.binding.actorId), tick); }
             catch (Throwable capture) { itemObserver.fail("item_tick_observer_failed:" + capture.getClass().getSimpleName()); }
         }
+        if (craftObserver != null) {
+            try { craftObserver.tick(server.getPlayerList().getPlayer(craftObserver.binding.actorId), tick); }
+            catch (Throwable capture) { craftObserver.fail("craft_tick_observer_failed:" + capture.getClass().getSimpleName()); }
+        }
         if (onboardingObserver != null) {
             try { onboardingObserver.tick(server.getPlayerList().getPlayer(onboardingObserver.binding.actorId), tick); }
             catch (Throwable capture) { onboardingObserver.fail("onboarding_tick_observer_failed:" + capture.getClass().getSimpleName()); }
@@ -968,6 +995,20 @@ public final class NativeSupport {
                     if (item) itemObserver = null; else onboardingObserver = null;
                     nextRequest++;
                 } catch (IOException failure) { stopped = true; LOG.error("Passive await terminal could not be persisted", failure); }
+            }
+            return;
+        }
+        if (pendingCraftAwait != null) {
+            Protocol.Request current = pendingCraftAwait;
+            if (!craftObserver.terminal() && tick >= pendingCraftDeadline)
+                craftObserver.fail("craft_await_tick_budget_exceeded");
+            if (craftObserver.terminal()) {
+                try {
+                    observe(current, craftObserver.observedNarrow() ? "completed" : "failed", craftObserver.receipt());
+                    pendingCraftAwait = null; craftObserver = null; nextRequest++;
+                } catch (IOException failure) {
+                    stopped = true; LOG.error("Craft diagnostic await terminal could not be persisted", failure);
+                }
             }
             return;
         }
@@ -1180,6 +1221,8 @@ public final class NativeSupport {
         if ((itemObserver != null || onboardingObserver != null) &&
                 !PassiveItemUse.AWAIT.equals(request.driver()) && !PassiveOnboarding.AWAIT.equals(request.driver()))
             throw new IllegalStateException("armed passive observer permits only its corresponding await on native mailbox");
+        if (craftObserver != null && !PassiveCraftEvent.AWAIT.equals(request.driver()))
+            throw new IllegalStateException("armed craft observer permits only its corresponding await on native mailbox");
         if (waterAutoObserver != null && !PassiveWaterAuto.AWAIT.equals(request.driver()) &&
                 !request.driver().equals("wait.ticks"))
             throw new IllegalStateException("armed water observer permits only bounded wait or corresponding await");
@@ -1291,7 +1334,7 @@ public final class NativeSupport {
             case "player.water_snapshot" -> { Protocol.only(p, "player_uuid", "hand"); yield WaterSnapshot.read(realPlayer(p), Protocol.string(p, "hand")); }
             case "player.incoming_damage.arm_v2" -> {
                 if (incomingHit != null || physicalDig != null || waterAutoObserver != null ||
-                        itemObserver != null || onboardingObserver != null || fixture != null || pendingDig != null)
+                        itemObserver != null || craftObserver != null || onboardingObserver != null || fixture != null || pendingDig != null)
                     throw new IllegalStateException("incoming hit observer needs no fixture or other observer");
                 incomingHit = PassiveIncomingHit.arm(request, p, realPlayer(p), tick);
                 JsonObject arm = incomingHit.binding.echo(); arm.addProperty("schema", "bc.playtest_passive_incoming_hit_arm.v2");
@@ -1310,7 +1353,7 @@ public final class NativeSupport {
             }
             case "player.observe_dig.arm_v5" -> {
                 if (physicalDig != null || waterAutoObserver != null || itemObserver != null ||
-                        onboardingObserver != null || fixture != null || pendingDig != null)
+                        craftObserver != null || onboardingObserver != null || fixture != null || pendingDig != null)
                     throw new IllegalStateException("packet dig observation requires no other observer/fixture/dig");
                 physicalDig = PassivePhysicalDig.arm(request, p, realPlayer(p), tick);
                 JsonObject receipt = physicalDig.binding.echo();
@@ -1342,8 +1385,8 @@ public final class NativeSupport {
                         Protocol.string(p, "provider_artifact_sha256"));
             }
             case "player.water_auto_observe.arm_v1" -> {
-                if (waterAutoObserver != null || itemObserver != null || onboardingObserver != null ||
-                        physicalDig != null || fixture != null)
+                if (waterAutoObserver != null || itemObserver != null || craftObserver != null ||
+                        onboardingObserver != null || physicalDig != null || fixture != null)
                     throw new IllegalStateException("water observation requires no fixture or other observer");
                 waterAutoObserver = PassiveWaterAuto.arm(request, p, realPlayer(p), tick);
                 JsonObject row = waterAutoObserver.binding.echo();
@@ -1371,8 +1414,33 @@ public final class NativeSupport {
                 nativeActionEverMutated = true; yield useItem(request, realPlayer(p), p); }
             case "player.break_block" -> { Protocol.only(p, "player_uuid", "dimension", "x", "y", "z");
                 nativeActionEverMutated = true; yield breakBlock(realPlayer(p), p); }
+            case "player.observe_craft.arm_v1" -> {
+                if (craftObserver != null || itemObserver != null || onboardingObserver != null ||
+                        waterAutoObserver != null || physicalDig != null || incomingHit != null ||
+                        pendingDig != null || fixture != null)
+                    throw new IllegalStateException("craft diagnostic requires an unmodified observer-free origin");
+                craftObserver = PassiveCraftEvent.arm(request, realPlayer(p), p, tick);
+                JsonObject arm = craftObserver.binding.echo(); arm.addProperty("schema", "bc.playtest_passive_craft_arm.v1");
+                arm.addProperty("armed_before_input", true);
+                arm.addProperty("source_ancestry_proven_by_native", false);
+                yield arm;
+            }
+            case "player.observe_craft.await_v1" -> {
+                if (craftObserver == null || pendingCraftAwait != null)
+                    throw new IllegalStateException("no unawaited bound craft diagnostic arm");
+                Protocol.only(p, "observer_id", "arm_request_sequence", "arm_action_ordinal",
+                        "player_uuid", "dimension", "witness_context");
+                ServerPlayer actor = server.getPlayerList().getPlayer(craftObserver.binding.actorId);
+                craftObserver.binding.await(request, p,
+                    actor == null ? craftObserver.binding.actorId : actor.getUUID(),
+                    actor == null ? craftObserver.binding.dimension : actor.serverLevel().dimension().location().toString());
+                if (actor == null) craftObserver.fail("craft_actor_disconnected_before_await");
+                pendingCraftAwait = request;
+                pendingCraftDeadline = Math.min(Math.addExact(tick, request.timeout()), craftObserver.binding.deadlineTick);
+                yield new JsonObject();
+            }
             case "player.observe_item_use.arm" -> {
-                if (itemObserver != null || onboardingObserver != null || waterAutoObserver != null || physicalDig != null)
+                if (itemObserver != null || craftObserver != null || onboardingObserver != null || waterAutoObserver != null || physicalDig != null)
                     throw new IllegalStateException("passive observer already active");
                 itemObserver = PassiveItemUse.arm(request, realPlayer(p), p, tick, fixture);
                 JsonObject arm = itemObserver.binding.echo(); arm.addProperty("armed_before_input", true);
@@ -1384,7 +1452,7 @@ public final class NativeSupport {
                 yield arm;
             }
             case "player.observe_onboarding.arm" -> {
-                if (fixture != null || onboardingObserver != null || itemObserver != null ||
+                if (fixture != null || onboardingObserver != null || itemObserver != null || craftObserver != null ||
                         waterAutoObserver != null || physicalDig != null)
                     throw new IllegalStateException("passive observer requires no fixture or pre-existing observer");
                 onboardingObserver = PassiveOnboarding.arm(request, realPlayer(p), p, tick);
@@ -1893,8 +1961,9 @@ public final class NativeSupport {
                 String id = row.get("id").getAsString();
                 if (seen.add(id)) ids.add(id); // Domain membership flag retains duplicate evidence; roster cannot.
             }
-            Collections.sort(ids);
-            measuredRosters.add(name, strings(ids));
+            JsonObject rosterFile = inventoryFile(requestSequence, "roster_" + name + ".jsonl", measuredRosterRows(ids));
+            rosterFile.addProperty("domain", name);
+            measuredRosters.add(name, rosterFile);
             files.add(file); domains.addProperty(name, domain.complete());
             membership.addProperty(name, domain.membershipComplete());
             definitions.addProperty(name, domain.definitionComplete());
@@ -1905,6 +1974,7 @@ public final class NativeSupport {
         result.add("files", files); result.add("complete_by_domain", domains);
         result.add("membership_by_domain", membership); result.add("definition_by_domain", definitions);
         result.add("measured_domain_rosters", measuredRosters);
+        result.add("effective_deep_void_resources", EffectiveDeepVoidResources.capture(server));
         result.addProperty("seed", server.overworld().getSeed());
         result.addProperty("seed_source", "server.overworld().getSeed()");
         result.addProperty("player_count", server.getPlayerCount());
@@ -1922,12 +1992,21 @@ public final class NativeSupport {
         result.addProperty("complete", EffectiveInventory.globallyComplete(capturedDomains, unsupportedProviders));
         return result;
     }
+    static List<String> measuredRosterRows(List<String> ids) {
+        return ids.stream().distinct().sorted().map(id -> {
+            JsonObject row = new JsonObject(); row.addProperty("id", id); return row.toString();
+        }).toList();
+    }
+    static int inventoryByteCap(String name) {
+        return name.equals("recipes_semantics.jsonl") ? MAX_RECIPE_SEMANTICS_BYTES : MAX_INVENTORY_BYTES;
+    }
     private JsonObject inventoryFile(long requestSequence, String name, List<String> rows) throws Exception {
         if (rows.size() > MAX_ROWS) throw new IOException("inventory row cap exceeded: " + name);
         List<String> sortedRows = new ArrayList<>(rows);
         Collections.sort(sortedRows);
         byte[] bytes = (String.join("\n", sortedRows) + "\n").getBytes(StandardCharsets.UTF_8);
-        if (bytes.length > MAX_INVENTORY_BYTES) throw new IOException("inventory byte cap exceeded: " + name);
+        int byteCap = inventoryByteCap(name);
+        if (bytes.length > byteCap) throw new IOException("inventory byte cap exceeded: " + name + " (" + bytes.length + " > " + byteCap + ")");
         Path inventory = directory.resolve("inventory");
         if (!Files.exists(inventory, LinkOption.NOFOLLOW_LINKS)) Files.createDirectory(inventory);
         if (!Files.isDirectory(inventory, LinkOption.NOFOLLOW_LINKS)) throw new IOException("inventory path unsafe");

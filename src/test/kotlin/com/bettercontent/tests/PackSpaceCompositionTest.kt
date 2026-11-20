@@ -16,8 +16,9 @@ class PackSpaceCompositionTest {
     @Test fun newSourcesAreExplicitAndCreatingSpaceIsNotADeclaredDownload() {
         val manifest = jacksonObjectMapper().readTree(root.resolve("gradle/active-custom-mods.json").toFile())
         val mods = manifest.path("mods")
-        // World Management remains excluded; Electrochemistry and Arena Trials are retired.
-        assertEquals(51, mods.size())
+        // World Management remains excluded; Electrochemistry, Arena Trials, Airtight Machines,
+        // ChemLib Hazards and Cooking are retired from the active source inventory.
+        assertEquals(48, mods.size())
         val rows = mods.associateBy { it.path("repository").asText() }
         assertEquals(mods.size(), rows.size, "active repository identities must be unique")
         assertFalse(rows.containsKey("better-world-management"))

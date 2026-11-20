@@ -113,6 +113,14 @@ file = "config/adchimneys/Emitters/better_spirit_commerce$arcane_campfire_signal
 hash = "23b109412a7b420aaade149d3503f7f88f57aea8ad95140f2e649c2752163bcc"
 
 [[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$control_campfire.cfg"
+hash = "7c1ef0be248e7ee5c6105b9a64354ae640fa4ded450c401c1b8afea2966ae49e"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$control_campfire_signal.cfg"
+hash = "64ba9c51e2471d0f622ce2d39e85213b29b9408ad8b7586f4268160dd61140f4"
+
+[[files]]
 file = "config/adchimneys/Emitters/better_spirit_commerce$earthen_campfire.cfg"
 hash = "c6643a017173105ba2de3a07672313c528174dd10bd3fd6e9a2b743677d30ee7"
 
@@ -121,12 +129,44 @@ file = "config/adchimneys/Emitters/better_spirit_commerce$earthen_campfire_signa
 hash = "b6d2b14d153a9e7d6e08bf3d0098f0a4f47503ca4a8d82a279714542f98b9988"
 
 [[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$endurance_campfire.cfg"
+hash = "82b388dadc94d33733f747b1231420395170e5c71abaa1a17336cc1e29b0a95a"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$endurance_campfire_signal.cfg"
+hash = "bb2ce47f3147be1a55b6ed6378ee7de3f82349d6b0e784d8684adfff2f33e3a8"
+
+[[files]]
 file = "config/adchimneys/Emitters/better_spirit_commerce$infernal_campfire.cfg"
 hash = "5d4ba555b1e71a1906c0b14e9afec9742ff6d463be9c34f95b74f73b6ef46e8a"
 
 [[files]]
 file = "config/adchimneys/Emitters/better_spirit_commerce$infernal_campfire_signal.cfg"
 hash = "092371291e52f24e285f74d303d85a0d11fed63499648fa7cbfbf7becd6a11dc"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$motion_campfire.cfg"
+hash = "6ae6b82cadcbccf594fb905c65102b7a73788e725d58c711e9c9e180856d555a"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$motion_campfire_signal.cfg"
+hash = "9b91174b31a2ab15c0312b0c67d664ce39a022a1767a6749ebaf9e4c73df63db"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$power_campfire.cfg"
+hash = "367f7db7456e96ae74bd0f35a823c11ccd566c8d2c74d4c0b299ae49eb506ec4"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$power_campfire_signal.cfg"
+hash = "3b3f0dcb090c67f0ace12b0947c3e3bd516bbf26ff0ab702f45694d37063a447"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$renewal_campfire.cfg"
+hash = "1013200be40109ae1df343b6ab3875e9288c98257be9467525ff5f070ec18921"
+
+[[files]]
+file = "config/adchimneys/Emitters/better_spirit_commerce$renewal_campfire_signal.cfg"
+hash = "dfcf0e8ded124ad2fd021e98e08e178bc5aa861cdff4f34cd53886ade5bd0705"
 
 [[files]]
 file = "config/adchimneys/Emitters/better_spirit_commerce$sacred_campfire.cfg"
@@ -786,691 +826,691 @@ hash = "79526a65b96aa190f541fc36a63c6911529f08156fbdb566234be81477ba6b68"
 
 [[files]]
 file = "config/adpother/Emitters/cold_sweat$boiler.cfg"
-hash = "3f034941f6a69a2ce760751fc0ee91ad2a640e779106e33fbf8ba5de264e4e61"
+hash = "eeb6b57f1e1e99dd078bd51f1869b225a627c6420fd2f1090c806a392b68afd3"
 
 [[files]]
 file = "config/adpother/Emitters/cold_sweat$hearth.cfg"
-hash = "b1c70e76a71d1ba28a3f1062de2fbb64a61b1791284bae4d7d75d6186e829471"
+hash = "9b8c5f1612be2e9736d3a3bbbf6a9b530821e206268edfbf6a0950a175d7f30f"
 
 [[files]]
 file = "config/adpother/Emitters/create$blaze_burner.cfg"
-hash = "902481375393f885b86fee4b12c0c345126fb05444cb719625dc6ae417b4978d"
+hash = "6e70c569c5365a594e911913216db306213bf1b953cd12831ac8eee6bec4da41"
 
 [[files]]
 file = "config/adpother/Emitters/create$boiler.cfg"
-hash = "afa6190909a40e9cc353007ffb8423f4f1477f8d5cabd2aa229c7da5c14feb38"
+hash = "d0ca7987f5c4523365e4e60ef4f71e91a90c67ba98dc6d2f3b06ff06f8c1b2d6"
 
 [[files]]
 file = "config/adpother/Emitters/create$crushing_wheel_controller.cfg"
-hash = "41797d8ef1b88cbab51051e3e6cd048298820b1c2009967a17824b30eb2b2c4f"
+hash = "f6063839a6c30660af9ecacc7fa79aeaa01f2dd83428b3125a0757e334531d1a"
 
 [[files]]
 file = "config/adpother/Emitters/create$millstone.cfg"
-hash = "200d24ceecc69c3ab44708b54b5a13a46e450b7c256a7634137b52f9f4800188"
+hash = "9691160656b5a6d044fc78ff7535652d174c4531436455d60444db5cff510fee"
 
 [[files]]
 file = "config/adpother/Emitters/createdieselgenerators$burner.cfg"
-hash = "9bfac78bcc0d8fa94c72a6bd68a2f8690c0ca229a245d6c94cf7e0fe9c148ae2"
+hash = "b911cbba49e1769f241c2a93f31b4955068ff9b208f924686f896032ceb1ff6b"
 
 [[files]]
 file = "config/adpother/Emitters/createdieselgenerators$diesel_engine.cfg"
-hash = "8b1ed8f9b2c58ea673ed8acd1435f566acae47b0c0e73f45a7c91ca0334c942a"
+hash = "f3e901fb7e7f565c5313cf14cb02f16fc54589dc3f574ba59ad3e65bd8d9e391"
 
 [[files]]
 file = "config/adpother/Emitters/createdieselgenerators$huge_diesel_engine.cfg"
-hash = "5cb95981894fd6be14f65eff073a17a95e17f2703da3d21bbff60ea9ef659929"
+hash = "f1f78266dfe2cfef8d92dedb8007ed0f66fc7144e013089ea2779709068b537e"
 
 [[files]]
 file = "config/adpother/Emitters/createdieselgenerators$large_diesel_engine.cfg"
-hash = "84f351045396d1889fd6e40095e7c22ea2d900b8aab3d88b7176970b4558d5e6"
+hash = "d59a68c3299b787662b42eab2244d09551404b6c0ecbdc52ddf7c9b72b32d11e"
 
 [[files]]
 file = "config/adpother/Emitters/farmersdelight$stove.cfg"
-hash = "03d101a0464f33fd5c8b6e81dca2b6fe0f624a4cfa43e4608a4066e3fa333c4c"
+hash = "db7996a2f58889d052d2ecd2e0579077482ff2c00d53a1f5caa0088a9a513daa"
 
 [[files]]
 file = "config/adpother/Emitters/jumbofurnace$jumbo_furnace.cfg"
-hash = "bbff7f7f5c68844bc9c19684d18270709acf2de8ea73782b45afa4b2ac99891f"
+hash = "5fc32499ada236bd409b616ebd2f355769b87568fbea9bacd8ade040bc8041d6"
 
 [[files]]
 file = "config/adpother/Emitters/littlelogistics$steam_locomotive.cfg"
-hash = "417e5155d595dacb74a94027076e86e8ed7bed1cf458c31ebbc9fd5c2338be16"
+hash = "5ec4e7fc7523ca84f2407bf5c722c09b2e86e9792c9fd115f60a9dcbb7fab5a2"
 
 [[files]]
 file = "config/adpother/Emitters/littlelogistics$tug.cfg"
-hash = "dd2beff4ad17a65d2c76bac09e1cb7526ca5832d6ec2ec2224f08bfa795e74a7"
+hash = "0bad56f490145c8c5b72083d82d6049f8c533740ce74248d3fb1ecac3b4b0974"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$blast_furnace.cfg"
-hash = "5c79856bfc64a83331612dc29667375a81c2240ced764bad2944581190370f98"
+hash = "c61ca0aaca549e443ede89b13b9ec690bc1e632c3ce02a6412932e9bbd2fc8f5"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$campfire.cfg"
-hash = "2a41b57154433cd7ab9471c53d012a190d219e8b98b544917d764b91d4f61989"
+hash = "24a510487a09e08c7512c9508a1e0bc81d63a943db15532493e09a37a148249f"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$campfire_signal.cfg"
-hash = "b67237756403de1b59b32c0851a3cecfa6fb68c653060626475d761a6ce175f1"
+hash = "622ce7f2e360c8a8ac48d32344c3e36789c215ad3f38c29b8cae21573b6d55a4"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$fire.cfg"
-hash = "693b5b6eb35ac5b34c9d9e443242068e9155d7c552a8ea3310c5d736797ab660"
+hash = "387db89d0f38914171df3b208b5803cb8379a0eb988bc43f5c07c7d31cfea2e0"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$firework_rocket.cfg"
-hash = "d1938bd85cf728bdf5430f549068e9e7b30d7aaea017aa58afac296e7481971f"
+hash = "e36d2a5b96c42b9d1a141c72cb3b9bfd8bd0c7527d84382928b773f9e8921d63"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$furnace.cfg"
-hash = "3b2b76262b244b5378e98d2213238f8bdb8df540516e8d564426ba0d6e66cc6d"
+hash = "e47c9a23ba05e62ff4b6291d9cb23758faebdc4b306ca26cb1e125fc57adb74d"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$furnace_minecart.cfg"
-hash = "af50adbeeb565cd3cf67b622598b3d1d49cc43241676adee9b5d9f5de4cb26f5"
+hash = "13a6f6a45493fb3ce7a2a18cfd4a3b9ba04d076dfc369f66fc63733d9b4f2ab3"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$lava.cfg"
-hash = "f421f2bb1aa9c6af0da61dd78e2bac9f1c98c21e05c9f1a271373bde3a30066b"
+hash = "cd667552dd257a977cdfeb410345318090eee9c5931c420dfb1849aafb5ee345"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$smoker.cfg"
-hash = "1c9ad6fb584f64aa583be79452eb5630f95a7b83285de91fbe16e57c144a4636"
+hash = "728919ababe876451a950d648b4aed68b4c63b7226842ca8f43f48d7ca4fede2"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$soul_campfire.cfg"
-hash = "91985e3375ef5dfb5c4da6f84c63490f43f6138487edb6fac88a0277d3702dbc"
+hash = "fb463b087e1fe9d3afe52d11b8edc6b585c5312a39a5012c9ef1a8d40dff79ea"
 
 [[files]]
 file = "config/adpother/Emitters/minecraft$soul_campfire_signal.cfg"
-hash = "64ffe18cdfa08011252996df69171fb72cee1f83484fe5e074fe92e43c264cb0"
+hash = "27a8b4dadc7689a74b93451ddb929a547269d3a15286a561986df74c37a55d66"
 
 [[files]]
 file = "config/adpother/Emitters/tconstruct$foundry_controller.cfg"
-hash = "f0b10865a46de17ff56c96ee5919ba1f88808664ce913d08b75a86d7d82e6bb3"
+hash = "fb4732d103fd270f3e084f75e8ce6e55f39165ab742ce8dcb5fb5453ccf0bc41"
 
 [[files]]
 file = "config/adpother/Emitters/tconstruct$seared_melter.cfg"
-hash = "856739ea111b461a02e5b6c00ee87326e11960d9f31c185b94ce19f7057e7a5f"
+hash = "f78e0ceee7533f46a8a924957ce265bf38b93f72beb5086df7e1792901196770"
 
 [[files]]
 file = "config/adpother/Emitters/tconstruct$smeltery_controller.cfg"
-hash = "17318d863702522839d7f74f60e4b960b4fb4df5632c816db8a00da57c8a0d9b"
+hash = "a8645277f91a894719d9ca802386b8c78cc2f7e10053cb75255487190e3a13b0"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$benzene.cfg"
-hash = "237e66259d16d43ab49b2d433ef7e2c20c8cc22d989f1c913e9eddfe43173d9a"
+hash = "0a2451df8e4b8f57c34dc97574e43335a9d571537841123d7f97c0dea8f3cdc4"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$biodiesel.cfg"
-hash = "127eac0528047b916ff3e95ac47a085fc8b9576147ac517f574b31ed9605bf41"
+hash = "bbe3ccd61da795e81906fc89cdc03998adab17587a0f5406928ddb1ed5dc2ff7"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$bioethanol.cfg"
-hash = "ca03d89fd053e103724df4f4fd66a06921c7f6a8ebe355ea93878b215af66d7b"
+hash = "d77ad1d833d8d9b7fc92a4150a1489194ea3687211bdb966be263ed8097658fd"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$biofuel.cfg"
-hash = "3aac80fa46a23cb21614f21d68f6b06fd2752cf0beced2d1f1680166c45c5a66"
+hash = "77b864f44f9136bfef4dbad9fb67579f697b1435a73f67e97d88b75537ca17d0"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$biogas.cfg"
-hash = "692fbf50097bce1717d4d53140f1987495f75d5ebcde2057c6dda07474aa5a0d"
+hash = "5143abd36f0ae0a70f60c3cac80bcb04e10b6d67fe778d73380d3506f5e053f3"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$biomass.cfg"
-hash = "e15e85c3c0700551ba38e5f547364c44177d409b00dcb1d6c3e5339a3ceefaa8"
+hash = "16f244fdccd992ae29ce97580d2a7ff6d6258694d0e833b76187e11579abfe12"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$butane.cfg"
-hash = "372d09c6a3350d787c59749f1b42566b937b01d6d2a4deac8e993b38dc810475"
+hash = "fb98694d1cfa938ab16f7c8077cc57b70f35e73b28818975d2c4c38a8c8ae20f"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$butene.cfg"
-hash = "5947e2dd5497bd15354346c44fdee4081808d4e54b51a9882baea7d44710c987"
+hash = "9c94f0b3e4b0bb41a62da49d78a7822c121c8a112bbaae01b3df952787e965e4"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$creosote.cfg"
-hash = "8675762371cd49fd9799fc846b3544a2a8614349ec0481a9339fa279623030e1"
+hash = "8a3026f1795edefb23ad92f9a405471a716e5e71df6126011f0d47240df94db8"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$crudeoil.cfg"
-hash = "ac1f22e41f3c7f462059090617576f753aa987b02524aaadddc51c396436ae69"
+hash = "a6830659178c152a85d18e6cb45e9b19778b46a89f5376de126cb989771904c8"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$diesel.cfg"
-hash = "100ae10d35e79e9a39e4fd782287b545a6982fb266518760e736b0a3cbf7de0a"
+hash = "450522089aa62eba3ec1bf2fd24fe360382dbcc3ab895bcf2d74f4672b0e277d"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$ethane.cfg"
-hash = "bc0d6776f587d5408c92b50e6898440540f143f052ec3901d8191b4151c8fe13"
+hash = "7568c60e6e525bdb0be8f5f14ff21d8c96b8d0fd947739da4417f5a213c1f750"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$ethanol.cfg"
-hash = "b9bc70d30421702df1fecb318a7a10872e26edc396bf5230a0fd2988ce7ec601"
+hash = "2a74e76ea07570be7ce31fde4d08785820130b85b9486806d778a09c2f1e5700"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$ethylene.cfg"
-hash = "aaf52f0b49eaad1484f4b335fa4bbd75aab9dd718636a221e4c219e87b87aeb9"
+hash = "43ae14360eeb5dd39a48faaee9f8b5ac8d811718e0ca57caed6c2736c979566b"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$fishoil.cfg"
-hash = "3c20b45bd03b055cf3c00ad97f2f4575aa117ca46b3996ddc0364d76f40cdda2"
+hash = "0f19ee863d01ff1715e3aa47f81c5a2f7bb034a80ae2c8e4c9e99b3999a0c37b"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$fuelium.cfg"
-hash = "f68d6ab8309b0705c9fe720333d1c16dafdc16c87141dc9f819cf22acca56951"
+hash = "03d534153df76b9affa699d7ee489890b6594ac4b64751fe4c0142f74578edd0"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$gas.cfg"
-hash = "24a23c3e146e7d730fc50ebb13c10efcc431b450665488afd93b8a90a3575760"
+hash = "1ffd8586405c2e65a12e5a85f9d2a2c901e247155c9f891718770935370e64bc"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$gasoline.cfg"
-hash = "ce69471f167e90a4cd17c589e32f91acb889ec71e79b9625bd3764bfc0ee5f03"
+hash = "60403374736e2308abd84cfd177d2710f019b0fe0fbd720f416f3972a7d73eef"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$kerosene.cfg"
-hash = "92ff721d5a50e4bdf79294ee96183ca0e28fa3c42ebac55fedcc7637a2f36811"
+hash = "3be02d9df1c4ce0c2f1bb8ec2f1d982ba5425222058447afc3e0c90749c4ce85"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$lava.cfg"
-hash = "d7a67d1f29309bbfbe9adc4c3076c390b31f4e10ebc3bd15082255e2b011a82c"
+hash = "2c96b9cff6efb9d7f1ded04d779fc24f90d118efe4d945e0adf488ed77b8691a"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$lpg.cfg"
-hash = "4ae249f7d632c4726fca71ea0e9394209b5b1dd613536b178b5acabac9eadace"
+hash = "3338abcc0da6f46397951619adb45f1e7aec2d62f394e23f0711c9049a17b7b3"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$methane.cfg"
-hash = "0210163d4bedc24f424309d9615db1b3e3867c10f114824bff4a179efa06dafc"
+hash = "330005c6d6aacd9d8e7d83b0407c73a290356fcb6a78e1571641f50089935e5b"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$methanol.cfg"
-hash = "69ac7ca763b9c6148164aad9d6e83283639e3fd92596e8d35f6b45de6b9489bc"
+hash = "12a64dba5dcbb24cc283d5725bbc6211be8df36c41e714694ed8f83612ac001d"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$naphtha.cfg"
-hash = "2495cf2d4a998f4f247ba92fe1f0ff868e1b8688fbfd0e0a20afe858c68787d7"
+hash = "4be04079e1ac646c6a366abac1a9fb5c58c4a87caa88073c891228d28907297f"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$nitan.cfg"
-hash = "2df0a94935d472ee8ed76f40561a925ac59376741e2cf7a2047bb2d520e01646"
+hash = "4af018ba4bc34ad85ca190eee699dcc96ee16c47085716ebaa6117dbe18ff40f"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$octane.cfg"
-hash = "624bb18bce5765cb876edfa531b39bddc330480c29388ae20782a09bc25f19de"
+hash = "9e5074c46847f74d247d2c143a64519976d80cada07f4c612c2bb092a2590bee"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$petrol.cfg"
-hash = "b996c6602756605c44cbf47489d85124f299960ee3cab13287bfe16323acb03f"
+hash = "dc6c6a83e70b699a0a00854e606057543e2d2f3af78117555d0d93666a037008"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$petrolium.cfg"
-hash = "64988c5c222aba0cc9495a7426c02c13c4f68072c0188781dbd93caa6e21f291"
+hash = "7321bf8372d70baba1dec46b189decff14132b9515ea78f08100e61965c7234e"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$phenol.cfg"
-hash = "efb5e113f00ad1a7bcc3cc0dfc87511067192e815cfaa1a8128fb2c20f72d5cd"
+hash = "441167dfebd91c0369959331cdc77660097e9ce3290066affb6e3b25c981a0ed"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$plantoil.cfg"
-hash = "934037d4c97e82f42ae8fea9d92bdf16bf0c78c3e2c0b0c4cf7de84352bf561a"
+hash = "30d12a722c07b45ebdd65be16d8a767f14767d8ccd132dd90663aceeaa745188"
 
 [[files]]
 file = "config/adpother/Fuels/fluid$propane.cfg"
-hash = "8c4e9aefc3ee89e08cbc375382f510d01e49c1fa52960970988dbbad1d6221fd"
+hash = "f92e12109a0cf65e22d3aa22b75d7a99021b3fe04db65d00e5f4a0cd4585de86"
 
 [[files]]
 file = "config/adpother/Fuels/group$arrows.cfg"
-hash = "1af62aa6f47ebec165184713e8da181fd9b7a8b227bbc75682d63226b07ec7c3"
+hash = "3baae29636240ee611dfa44cf4490791b0834a8956d0155f786bd3960917fe55"
 
 [[files]]
 file = "config/adpother/Fuels/group$banners.cfg"
-hash = "2bc397506f8555250fc5268eb249fae0a408f61df7c8c2b73339c7df8c4588ef"
+hash = "e007999333b7fc5d530f6e12d4541228419cebb4140458f162f716befcd2d9f1"
 
 [[files]]
 file = "config/adpother/Fuels/group$beds.cfg"
-hash = "41d5314245dd09870cdd73b9308b5f70d453b06a2c04f0aeb7e6c863e2b2de92"
+hash = "b21cfbe97a276f556b5686bc08d40045133b2612da12574c43603a1958790b8e"
 
 [[files]]
 file = "config/adpother/Fuels/group$bio_fuels.cfg"
-hash = "4ed9b1259f3a7475ccecb1bb82813040692ba2ccc23985c571ffe3debfc8e4e3"
+hash = "849b1fae89002a1158b1c873250153376eb68dba2fd7bce55d7e833b0c876ca0"
 
 [[files]]
 file = "config/adpother/Fuels/group$blaze_rods.cfg"
-hash = "ba62dbe159dd8725df4300366553ac925aa4d9e8aceab87660e4bdbb45ca9141"
+hash = "45cded12eb4446de0cc7c238512ece3d206655163d9a2ea249f9bf15d3379970"
 
 [[files]]
 file = "config/adpother/Fuels/group$boats.cfg"
-hash = "301023923d53a1efd9dad4f9d264f237717f00b1b3510ace84deb927513e24cb"
+hash = "52db9af6f37c7e1f060a9cb6862270ad394f6ab9434438df83789d59c95db884"
 
 [[files]]
 file = "config/adpother/Fuels/group$bookshelves.cfg"
-hash = "e8da0bc1d98938ddf70629a6d78ca4eca13a68987a682b957ecb15dcb564e2a1"
+hash = "c0fc613eaaa5a9ff211b81e4a3e13fac9ffa73bffc496da90422374d2534ed79"
 
 [[files]]
 file = "config/adpother/Fuels/group$carpets.cfg"
-hash = "14814ed028b16d612200adeb39fefe8291ab90a9fc8731c54b753174efab8ca2"
+hash = "497631842fc9eb32d7e98cac91e77627b863d6e6152c8e5345b38e85315a13ee"
 
 [[files]]
 file = "config/adpother/Fuels/group$carrots.cfg"
-hash = "8973e117488674f46b44c2e8c703b322b5d03e9432e3b1a80c10e23e636b6c6b"
+hash = "bb22dc8b732c4bd4ef12117b7ecca0647f09d84b4ac921c73f281847a086fbfd"
 
 [[files]]
 file = "config/adpother/Fuels/group$charcoal.cfg"
-hash = "12222fd318f19b6df1e76bc956c0cb6d34c55ae580e27ff2a4afd3352280cffe"
+hash = "23c986e1682f412f96afc2c462e92a9c8ab35fd88e1476820374e90379a816cc"
 
 [[files]]
 file = "config/adpother/Fuels/group$charcoal_blocks.cfg"
-hash = "ec33e4d2e4223ccea74f7786bc5bb231a0ec01ddd37dfa1bcf876f789a06bbad"
+hash = "aabf0e6e8733c1002e217144e09fe5eb83b26487d8d007f34da924e0950fb6aa"
 
 [[files]]
 file = "config/adpother/Fuels/group$charcoal_dust.cfg"
-hash = "10435487444e2610b173501943ff6a7eb7436e0e06dd39b30c6f20b3a5cb1ce8"
+hash = "dee8a7023ba79bad77ba11fe991e858b5c75bd1256dafd79fda76725e9b55ac9"
 
 [[files]]
 file = "config/adpother/Fuels/group$coal_blocks.cfg"
-hash = "2f74954d9f0dffe1e98854a719892dc812748281f19614ebfdfe58665361111f"
+hash = "8c9e38a7eef761a0fc803effbc1ee163bcfc6cd0bc4fac0bfc443d6f7db3afaa"
 
 [[files]]
 file = "config/adpother/Fuels/group$coal_coke.cfg"
-hash = "661a33619176d6ce1e9287834e84aa9991362dd66df466297d226658e60114cb"
+hash = "41d83c9c2ba83cce64c575d4280fc84d85077e9012412e172b93c6f16d77214b"
 
 [[files]]
 file = "config/adpother/Fuels/group$coal_coke_blocks.cfg"
-hash = "5da674a87cd567b73c476e24c3917bc3487d749b0b91ef81058df519a87a02d4"
+hash = "5311c717b5eefa27f26c2e86ae56afd65ad8b1bc37cead57b3042b50dd42e6f5"
 
 [[files]]
 file = "config/adpother/Fuels/group$coal_coke_dust.cfg"
-hash = "edb19747b7e77748e25803b0e84a679110094897238706e39627e2d5e5fef63c"
+hash = "15f8c7a577e776c50f62823b0939a4182a52718c9193bb250b02d136b52394c8"
 
 [[files]]
 file = "config/adpother/Fuels/group$crops.cfg"
-hash = "6c105c17c948cf0719b7a99bb2585133632cf34b8045d7d7eca83ce2ad33fe12"
+hash = "3834fd32e23ebe9048ed54fb0026c7799f212220155031863f903776a52c78e5"
 
 [[files]]
 file = "config/adpother/Fuels/group$ender_pearls.cfg"
-hash = "552f47552ca33ab1f318b4f38c38340d07064948c50f319985dcda7499ec832a"
+hash = "14ab87a60a3aeb1d96427eef79919e80a5ef9e54b2dbca7d0d95912e48e5ab21"
 
 [[files]]
 file = "config/adpother/Fuels/group$feathers.cfg"
-hash = "abf2f0340dc676a28733f727b3944daf060961f6185d9850f6a89bc16f1c1350"
+hash = "8a17aa509ea0f7b899fede966b13c5903b9d32b78b287fb4c3dfb7c2cca9be5e"
 
 [[files]]
 file = "config/adpother/Fuels/group$fishes.cfg"
-hash = "61e4f69de152451af4eb1593ab6e9ca001a1eeb7e28523f23f7187b55d124877"
+hash = "f9efd83b1c970a997f4058c7672478595fdcb7ddf40d1e74f054e2ee1f02374f"
 
 [[files]]
 file = "config/adpother/Fuels/group$gunpowder.cfg"
-hash = "f224ce82d2149e2ac230b7cc184ecb4a71d1b30bdc45d5d4afa7427ef5426dad"
+hash = "5ed948a213172e3c96ec9205876cf2595dcc4f1044aeacb56eeca2fd04894bc2"
 
 [[files]]
 file = "config/adpother/Fuels/group$leaves.cfg"
-hash = "6f8e7ddeb136ac11cec5654ba1e3b881583fb15da00e44ffe9ad18080fb0e858"
+hash = "7d5dfe08b845fe7be00d54cb92d8b65d7fce3e4de0ff550ef3915dbecd9157c5"
 
 [[files]]
 file = "config/adpother/Fuels/group$lectern_books.cfg"
-hash = "43f10e894e8dac3a21a5d77c325bb40e0b6fc6cb0521284ee785da989cbb3dd9"
+hash = "f35e13ddb9ea9a663ac2247478432a9fd5d0873ae3021ecd9b05a7be9c6810c0"
 
 [[files]]
 file = "config/adpother/Fuels/group$logs.cfg"
-hash = "10474ef3815fc7ae532381b010bd510b35af542c39c4eea7a9eaed4c9395184b"
+hash = "3c7672548d4a54c5f69b7223e78879493ae3ca67636d7cc35e40208ac52b3252"
 
 [[files]]
 file = "config/adpother/Fuels/group$mushrooms.cfg"
-hash = "ba1ce3b388d4c4a39e3984532087d1c695c910e0d8cb836f6307f70a7f9ca724"
+hash = "05fbbd22102874fcd366a8021b48c41b4398752b5d81ce2ebb2cbab3e9d74ecf"
 
 [[files]]
 file = "config/adpother/Fuels/group$nether_stars.cfg"
-hash = "f63760465aa587025ffddbf4245a07bb28949edb2116dad6d345fa8eb276a44d"
+hash = "9191f01e67dbd4476b2e26d5c96fc298aa5e67c615f9daacb79c7de2e46856d3"
 
 [[files]]
 file = "config/adpother/Fuels/group$planks.cfg"
-hash = "fb97abb0b1e2a99865dfc2fac2aa5326cf71f99d95cf526dff6d0d63a673db8c"
+hash = "ff0f13386540dadf2a78152b12bd1cc5e1cba07ca797ebb4d799f1717350871e"
 
 [[files]]
 file = "config/adpother/Fuels/group$rails.cfg"
-hash = "6d9e4fc42edad79c1eb0eba82208fac592347bc5ee4c75070ca9515dc0f2739a"
+hash = "9a06afe1c622fc089b116c183547bec91276e765b5203952c189c9c0310e3606"
 
 [[files]]
 file = "config/adpother/Fuels/group$saplings.cfg"
-hash = "0c180a00dcef77cac81b7e04872f960066caf4ca1425d30d0c16020e898d007e"
+hash = "d04f662113250ba2efd3305fea1663982973fe24de4b3675f1ffb5f00e8cec0f"
 
 [[files]]
 file = "config/adpother/Fuels/group$seeds.cfg"
-hash = "8e7c91ce951e7108a06ca2e4a65df8ea6d97e142aa16f07fd6e0b8a1bd70dbb5"
+hash = "5e632e6812901caba570b321a54e2245ab393df692cadea34a4798824523c1de"
 
 [[files]]
 file = "config/adpother/Fuels/group$signs.cfg"
-hash = "61605f291ead5a51918280295eeb15472d3c7afa62119b7ff920a69cbfe2ed9b"
+hash = "0d84f463b4cc28a15d645b1d86da39a2e89b76522d9d6ec4f44ba8d029014929"
 
 [[files]]
 file = "config/adpother/Fuels/group$small_flowers.cfg"
-hash = "dc51ed47a71648b580b4397a2f4015d1567dbb719975cb2f0b28902e19467ec0"
+hash = "9c16fcf58aa481804421dbe49b78efdcff737ff12512009e71334c2575dcc14b"
 
 [[files]]
 file = "config/adpother/Fuels/group$sulfur_dust.cfg"
-hash = "cf08aa0d06bb49b742e495989ae9c5a5bc9acf40a08a66f27832aa404b44cab9"
+hash = "932ed933714ba7e3503d0aa0a6002b4f77f4cbb7280be182c267111fbdbb74eb"
 
 [[files]]
 file = "config/adpother/Fuels/group$tall_flowers.cfg"
-hash = "449285efe2c3ade4c23beff1abdd5f1fdefead80b2f4138b3814889d52085fec"
+hash = "be41587302f46b4d96d78914f6b303f609e02b419df160756e8f474d6bc27a92"
 
 [[files]]
 file = "config/adpother/Fuels/group$wooden_buttons.cfg"
-hash = "2eba2d2a0c73474eb62bcb9ab3e6b683666d08170539df6704f9be1b3275eec9"
+hash = "84fbee1ccc4ded64bc3ff823a9ea21540440103f883b5e4efa28fdd1c3898b2e"
 
 [[files]]
 file = "config/adpother/Fuels/group$wooden_chests.cfg"
-hash = "014e770ca768947fa909f7374dc891b61dc1035445107b142bcd1e7143985dff"
+hash = "a913ca49e93a3b7120e5519bade987a412b9444496ffdd0cd3e2dc4b0209455b"
 
 [[files]]
 file = "config/adpother/Fuels/group$wooden_doors.cfg"
-hash = "bd2b057808fc7b9a91e4acf8cdb81843c1be6e6e8f1ce9db8a2877653192111e"
+hash = "30f2e75b7e7847f8a38488d5007aa51396f6cb2c156eaaf393e107600c09f659"
 
 [[files]]
 file = "config/adpother/Fuels/group$wooden_fence_gates.cfg"
-hash = "961989558bf57d65b7d67c7e06dbaeb368c5191e77d3870461115a5fd3850046"
+hash = "2b55dff1824788285c982de4449b6725a62689930c8b4bc88fd190af0bc3b500"
 
 [[files]]
 file = "config/adpother/Fuels/group$wooden_fences.cfg"
-hash = "f5e4998f2f333d05786390b3c343a6bdecf0a6d28e034c016aa1296ff89f7e42"
+hash = "83cf5b6d83b9f55c21e1816eb0341edabcd12eaf2d2e9e28624991310a79776b"
 
 [[files]]
 file = "config/adpother/Fuels/group$wooden_pressure_plates.cfg"
-hash = "03fd04735d4365fe777fe2c1ff6af8a57278bfa0e9bc2d42f31db70c73be7029"
+hash = "027b7246e0c01d113134e46d10d0571d1403abac4985b97c8cad7207bd10bdff"
 
 [[files]]
 file = "config/adpother/Fuels/group$wooden_rods.cfg"
-hash = "b4eafd1306750e5e85cda9ba979bae1464f4f3d29c39a9f2df11cfe0e399ec7e"
+hash = "304c791598cf69007a13fc2b38be3aca8a8fa7b2bcf0cce7a9fef467535218b5"
 
 [[files]]
 file = "config/adpother/Fuels/group$wooden_slabs.cfg"
-hash = "83054caa9b5d4dd9f130d7b6df7a8380b7f855fe60b74fba4928f79fb6a910d8"
+hash = "28dcaf0592b3fa522592f0cab0433b9d24c9b0367923c6211352b15e3d34549c"
 
 [[files]]
 file = "config/adpother/Fuels/group$wooden_stairs.cfg"
-hash = "9c2164f4835d620a192063a30d824d142efd7c3e37d36446e1a462f4b4b663b1"
+hash = "7e35b3bb8368746ab1a05cfe425dd6d42c3236ff7a885b9df8f0df22768d3426"
 
 [[files]]
 file = "config/adpother/Fuels/group$wooden_trapdoors.cfg"
-hash = "b2fd5eaec293a580cd39def3198f53621fdf2e1a11463c9a2bbe5f4a202e8b1f"
+hash = "75ccf16a3e134ccbba3f3b952b1da8d12e922384ff7054f88ca9bbec9b1d6943"
 
 [[files]]
 file = "config/adpother/Fuels/group$wool.cfg"
-hash = "840421dd62264718d589586852bd90494425df816f212bcf6f278293cc97ede7"
+hash = "3297a43885e77fe19022389ff166e360eaa805a0ad11bac27410f900188348f5"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$apple.cfg"
-hash = "9f66a9fe3d21c826bab0ddf960efb12c38c42fd4112b979fda110f0335aa3841"
+hash = "b8f6a750737955ed19d65b01e9cf52b15cb4f72c2aa69a1fa78a92a0c62590ae"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$armor_stand.cfg"
-hash = "eddad21789670612c56be94ea2518e4b62355a6166b84e113b24f1e47b57d647"
+hash = "a4c621c69fa3aada0e016282c53dd5f49a970ce5766daaf52e463149d2d035b2"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$beef.cfg"
-hash = "a9aa470029fdc6407710ea03f538c058b0a6ee57e325ff831a7a4d0423c4f80e"
+hash = "e149c47872881205b46e1fd9cc09e571007a6d26dd3eff78fb99ad8123fda5a8"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$blaze_powder.cfg"
-hash = "810bc7e1c6c9ce1d83d344f22a5cb370e0c0d9e2fbee89cb282b930bda98ee7d"
+hash = "821c5b1b4bc80f5869c2adf762eb08ea58cd60074b293fd34efea711eb739c00"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$book.cfg"
-hash = "911ef7c396b794d60eac977fb9b03a3c1bbcb403d732375bc8bf96a4c8f2b514"
+hash = "132fff0406e423d414e0df18695fa8f36cfd574ad5fb72d251356c6345a63b88"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$bow.cfg"
-hash = "fe74093a9d73a8c5b96cc0ebe35ebef78f724dade8000a1e66c04270cd749eab"
+hash = "34f274edbb9e55886d30e6bd521a89437590a98d5afc894ff9ee951d34be61d8"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$bowl.cfg"
-hash = "7a32874975b914d967f112ee1b8bf20eb64e878d4911cd03e1ddc66eaaec0d39"
+hash = "cacf5e1a1671ecd49b48aca07c79f6b3da90034c8c69893ac83c7617e0416ddf"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$cactus.cfg"
-hash = "0ccc9957c2cd677d92a7a7ebfb26c0bed4ec494843897586a42c05feafd00174"
+hash = "c9c2d5bfd08ac89831c52906c908dcfcba36e4cc657b4566525e015f1cb542cf"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$carrot_on_a_stick.cfg"
-hash = "f695beb37346c1d283e9dfcde22c5dd98d9fc9a80efe176c25c17d079600b29d"
+hash = "9e7c5d3df4a331188c8939a2d8105154b1bcb3e5f8c68296b803c0297dce8ccd"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$charcoal.cfg"
-hash = "06f310ad5c65670aeb25cf9d51fece9a58310dcbff1e6ce1e931ec1e203e69f5"
+hash = "047e51189c6ceb5e0fc41d17af161fde65302b7bfd636d2e6a7519b67feea43c"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$chicken.cfg"
-hash = "e13692b2a16dee3943c0dcfb914f6099fbba1dcdc535dfe2e7f1f9d27de014b4"
+hash = "41c1d85c8966f30d655e43aee0a4112aeb5bf904a9b10adcf4f3ad2401a46b14"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$chorus_flower.cfg"
-hash = "13396784ad52b9c99573230d2d21154c27688af77bd6dce2d2a7a3c2a87a0bf3"
+hash = "0fee19ad0683543f58eb43570579042fa2cb3aa3b5d518b85b86596499efd84c"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$chorus_plant.cfg"
-hash = "55e1b4c0df57b63d06c2986ef77d2d888852650dad5f622c67640bae599cacaf"
+hash = "f40b79138f02bf4a5618241a4b2adc166834bd6df11caf2dfd98f8ac9bc6428c"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$coal.cfg"
-hash = "303bc6253249756125bcdba705b8f6ecd60646a681b036c7471535ff30dbb4b6"
+hash = "2c9fca6ffdaa09c3045f52ac2d123032afc9c0ce444ed54e7798a570a845a25f"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$cobweb.cfg"
-hash = "afe87f6e26ac9a333173bf5e73cfad28b6c5195466d811fec08db8ebeb78832b"
+hash = "0f3bf563ee03c9068c68683ccb02c91d101aa51cedaad205aef2b7bd8527e52a"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$crafting_table.cfg"
-hash = "b141dd40709e0715c6db1eb967f522517c37fe727eb7b717b6b6cca53412bc9f"
+hash = "d841e5fc3dbe29f64046fd237616f0aafb75fb25a31ba31caa7056913e1fb41e"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$crossbow.cfg"
-hash = "a09e2b503cf6442431ea70820bb4918deca2bcf3209020dae3a0c868656ae8be"
+hash = "fadcea054ea70c811e929d4830d35b28b5430ecbf7c52974cac3c0e8d27b8892"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$daylight_detector.cfg"
-hash = "cd39e893b8df1212cccc87caf186e4acbf8ea5933d382b73c8f3e036aa302391"
+hash = "652f64639b7054db32a49cfac451351fae74aee5904816b9344c4beb05d3b035"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$deadbush.cfg"
-hash = "88cbc21c44bf90216778dd0a0c352fc35e141849dfff89fab89f5a567a6f8f37"
+hash = "751db1d44f6b7cff4f5f564796298edf4e47d908bd4bb30416391ba4aad84caa"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$dragon_breath.cfg"
-hash = "f27d2447c1b3ecd45996f1148f48b97281d56b6b684e1963ac905b22b3a88f96"
+hash = "3d02adafd4f1cdca8bdb22febf7abb05d1bee2087b6075a1a3bd237c204e2dd1"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$dried_kelp_block.cfg"
-hash = "a6a2973c5f0382e498794a53662cb01458b6c0f4f8c8ba72bc4ca8fa80446a2c"
+hash = "7892142e63c90facd8a132e54c56f221c5d4de664617ca10ce66385e659e4c60"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$ender_eye.cfg"
-hash = "43a3c416cd80715a6387dc50274a0c127816f19cd7a12eb62baf7118069ce434"
+hash = "3a7c551e2c309832fdc4583b69ddc0223e53a83ce8484946ce43a03054439a91"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$fire_charge.cfg"
-hash = "03a03acfa1d6d2bf5df9b09e60a3e0246ab8aaac47dac54124647585da6e6ed7"
+hash = "ce1962d442af59a6da112478d04c12a3163b82174acf459578e299f2fe7a8a99"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$firework_rocket.cfg"
-hash = "429932b1d5422cbb64355442b45adc335c39996f8a1cae916f7ebca4a8a04b01"
+hash = "7cf8efde82236890489613c93673b55aa2add5c8f920561baa84011357cdf3ce"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$firework_star.cfg"
-hash = "be5fda47d42345d385088fbbc9c76b12834b5a66cc43dd52d77c6d3637c92cd1"
+hash = "0de7fda1b7f1ce4462719967cc0d0bbdeedf58ca00cdfd82c4ddb7868029888a"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$fishing_rod.cfg"
-hash = "9b9a340f0f40eef854accc56727039c9d73a2e2a0254f6cd36e482aeda836c43"
+hash = "4ab2cfb835ea0815075368d0754cff11b00af3d42c05f081394e4cdcb8b0a951"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$ghast_tear.cfg"
-hash = "5db6277c59e0ba0359e8a9c10795e5d2a58016e37e330e3783401f8f63b7878a"
+hash = "3f4da0833c4c8b21091a03edbb6fe7e7681cf23153236fc3e00ebc4cf5926591"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$golden_apple.cfg"
-hash = "cafbed0ed550241118adab2fda2daeb3b70e91599b3748b5d819b1134328720c"
+hash = "bbd89c6cee9de8f3f15e7443952e8b5f391ab6331d525e895cbde18a718501c7"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$grass.cfg"
-hash = "e9cb449b7bd0d3d17a6bc7ac4a8e4a3825bd5e113904c5e571921de553d4ae5a"
+hash = "7c07f122365fe8dd556d6d37c7fc329f1ed23a31c84adef6b6cc80f70466599c"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$hay_block.cfg"
-hash = "e73ff749da7842333152a6aa7a49a00529aa7fea71fe293e75a0bee20747e565"
+hash = "a26ddd546af98d72f6f5af774620e3587b4f778defe62b67d79ac7f5fb0a082a"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$item_frame.cfg"
-hash = "0521d339aa8033d8839343dcf052f6f842caf8ff88bc64bd1fef21330cda1822"
+hash = "b412e8dda3850ba10cfbe2d47daa07292aa248b3c6ef9694e1f01a10fd0eb83f"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$jukebox.cfg"
-hash = "a2d77c2adbf13da41f34a69f2cc225d097eb58d363a565d96f27b45ed1fc82b4"
+hash = "67fe0feb1de017d53930c714969e9e44292c58b30b6b2e67910b32f5ff7938da"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$ladder.cfg"
-hash = "b88441bbef9f03349dd082fe796a30287503e850053841d273e0e6b6b52c7354"
+hash = "a15654bb4e1a656fb9223f87d1708a32bd5ae23a785b2769d0bddbebe1bdc8d8"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$lever.cfg"
-hash = "7546bbfaecc3d89b406f6cb859384b68d40bbdd3802fa46e3af595f9f9a26948"
+hash = "152b974217d8606ba363b3460d928e5691e94effe295c601160db23a597d1eec"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$lily_pad.cfg"
-hash = "2a6055f939b925473c4ca459be50c816161d14915fc0f0e9b897815699428734"
+hash = "e7641ec4b646ab09db59e4aacf5bdc9e94033512f0f42a839fc8b1af0f492fd7"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$magma_cream.cfg"
-hash = "9c06f3d5253c58fa6a43dd4d089ec9f4de9cd036f895456aac230f8e622fbc7f"
+hash = "341684bf124918da15851b9cb5cf635fcedc233f501094ab5124529931c2012a"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$map.cfg"
-hash = "a67cde18bd3b4f1005ad5e2f5bd0cbd9eb2dd19cf4b5d478eb1daa264c266bb6"
+hash = "c9c2bc705d95d87d2b07c4120853f572598bc717ffffb7844f06a792a5859a79"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$mutton.cfg"
-hash = "5ac853406024882795efd964ff49ccb962154332dccfd187173bf408451d252d"
+hash = "5e55927a60c0c51f791e886647df140632152e1c8f072b98347ef3d5f4e6bf3d"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$note_block.cfg"
-hash = "fea8955be30819c9165c4a535b85e2b54fa217c7ca7735a3b38f8517f50555a8"
+hash = "a7cb4dc6d6c32c28782fcb8e73c1b3da1396856bb8ee0c5d3c71c5d21e052aec"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$painting.cfg"
-hash = "24fe085a3129577c33c5dfdb3c393d2eefc5775c9c7e5b11b47c849f0b2da0f1"
+hash = "a861849b424748076db0f3c4e5d278e294f598ef4852cea3a3254a65e1490521"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$paper.cfg"
-hash = "be2e98a1308cb15342d885853636f69475a2ee31967e9bcc51a0ab94086cc6c2"
+hash = "b8c4a95607475511a69469cddca64726d92949594a9a985d6f6fbec5fb08df92"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$piston.cfg"
-hash = "adf93a32d31154176762d7854d30af9f279ccd054dfffe8644170dfe0cab2e10"
+hash = "00f30fb2cfba8a968edcd54be18d267e3a0466feff233e10907d3a0ce8b2aea1"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$poisonous_potato.cfg"
-hash = "f8513a8ba905bd1c8bca39233ef68226f54e64950db5419302411b89ffbf372d"
+hash = "fd8ac1a08aaba93805dea365fac077e50601907810e41c4a5f80ee3625fde865"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$porkchop.cfg"
-hash = "cc6a6cdec69111ecf55c5596bd07fa7e2cc69b97ff7d49fe3d48d6c101713cb5"
+hash = "30b56c524fadf812022bb7b0cdc7df4cc7f8891fb3cdb44073b5eda617c1ccd5"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$potion.cfg"
-hash = "ad06c22b02997d479d4bdacbb0f9050f8f4995ec4f160f39eb45488e98ce4a0f"
+hash = "0f134c73d75ef0d6b80c24a171a3e4a4d2b2623d317dede8e8afaecce2723db9"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$rabbit.cfg"
-hash = "f86894c27402fe69339197a55533aa1ca43b750728363239bdb100599e914ca4"
+hash = "938f9de7bf9797e0483f3bb4e072d4838ce5945268255075731e17992273dd96"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$redstone_torch.cfg"
-hash = "8c8911518d3b350e5920fb84b5e407b5ea801f3add94c9c418fff23b24a3a018"
+hash = "fd2b66a4da38ad40d69385d6a760ef36953e994d2510f09f42d6aff1c862db71"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$rotten_flesh.cfg"
-hash = "04c16fd52b09ff6c454516a191b8d81101b7ee8368c8a0ad28dbf6e29091f396"
+hash = "ff838a079c2a8c0ae95aa996bcb12faa624c36cf40dd53acbf9d6862eb3459d9"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$seagrass.cfg"
-hash = "13a35e3deda6c9706ccee8323c66214f46bdfac92448710c0073497013c68d9a"
+hash = "41275b92d5ec5123973941cdef046b0541dba28a3a93ac9a5c48f3f7c70b6678"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$shield.cfg"
-hash = "55ce37697d5f63e5e0055ef8bd2c7f2fbd908de4ecee692230f7d7d12f976c25"
+hash = "d8398a1e5232fe05f555be56ef7bf9672a5a3b3a2396b149737dd286fbf837f8"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$short_grass.cfg"
-hash = "d6c5a7e9fb58454daa644a561126f13c140139903ab195276863549301a206ce"
+hash = "54cc602655901d13030e624e65d5fb66b2a3714f6d8a11db85649a9864befbcc"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$soul_torch.cfg"
-hash = "fa61262a12c12c1fee4b3fe7f96e607ae8d84327cd8575ac9e9346a49d6ba97d"
+hash = "b1c5fcce445d6f7bbab2bba265a69d886225eb323ca9e089836a7272425be108"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$spider_eye.cfg"
-hash = "acf0d03d451d9321d8e02612579773efefebc5cc97d918f753d6b288f44b5b06"
+hash = "6b3bd40ef54f91a74a9f33ac382efe1b0e191fd5fa76b73561764e9231c9e8b8"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$sticky_piston.cfg"
-hash = "78db799187261cd3079198968c0545d98056df50ab7a9e22992ce1c07cb0d376"
+hash = "2a0b23b5b6a7b72a11c8180503a0326919a5d5992559c4b9c8c79377e3fc970d"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$sugar_cane.cfg"
-hash = "b9e1b873943e45ad66643965697dbec6eb8ba33a1240bb19282c74b74a123718"
+hash = "85174aa1135ad65e7f7eaebf953e7173bba011eb900710b5d2456aa168cf5359"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$tall_grass.cfg"
-hash = "3cbce99ad97a10f55c8b1d232970958bc19e3dbd92dcc3bef17ef4c4abc31e13"
+hash = "ce010dbac41a77377db466474f93d1b11c260bd6d07ff083bd0c421a45236c8a"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$tnt.cfg"
-hash = "63ba986e55ae0cc686f01adffa0ba02bba8a9d1fc5153cad6c6f720815c7d666"
+hash = "567c91274fa24fe36f0faf49c971669bff70bab9c481ea5ed0fe91e8703d3191"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$tnt_minecart.cfg"
-hash = "0f9f7961b97a404b66baa25c9fd5eca4c13644d257b62c2474e454ac583abf0e"
+hash = "39646e06b6971fc04d56baecd62ab02400882d307b8ad93b0dbf03459dc2bae3"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$torch.cfg"
-hash = "fd0ca61a62cdbc000ccaea70481bfeaaef524090b86a27f29012d86269d6c93f"
+hash = "89a975a3f78eb75b38baf7a0e58aaf44d16b898a859f6828fdd03436c444a1c7"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$tripwire_hook.cfg"
-hash = "f29561e5ea3a1cd43a33d1ab4b32be418ab7571e23e9d1048167fe7dd73219ed"
+hash = "8d9e0a66a28028e64b016cfdbeb8c121b0d7cd0d7dfd7cc61cf1fe35016cc5df"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$vine.cfg"
-hash = "4e48cb2d55b6643cecbc03da0cb36a45b441083d05bb93893db05261eae0684d"
+hash = "6ea1a31648a25721f961670d330c6eb75e05fe5e2567c628021f7c7e52be6ba3"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$wooden_axe.cfg"
-hash = "8e26d249c144d44ccf51d580b04821b7b4144aaf7b814d458097a6cfb6e14c52"
+hash = "042682729af8282d4cfb8aa603b7238e1cc86dc369779e07c058c5f387209600"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$wooden_hoe.cfg"
-hash = "23ab9a8d7e82f1cfe47da2ae06e57f191d42e626259f14d2a6cec32dbaa0ff74"
+hash = "03f1247a4686a7335102a713da18c3a06579c2916a209d7ac6656ebafcac3849"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$wooden_pickaxe.cfg"
-hash = "fe26d0650441e7189cf91fd5538b8d540507f7bda6a44257626092475e67c86c"
+hash = "5a36f93e80d6b164149a1a611f9e092599b8d685b4b77039d9b21d4df8948ac1"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$wooden_shovel.cfg"
-hash = "bcbc722283e06aec204b9f4b5cebc0caf707e420cfc3aea15636fec408b8e54d"
+hash = "be9423cf1f471db7ee3ce84f15eb2c6e4537bb114191d26edde467a07b9cd1c3"
 
 [[files]]
 file = "config/adpother/Fuels/minecraft$wooden_sword.cfg"
-hash = "c32bd20a694c438accddbdeabb533411a87ebdff6c169e36a41b7cc4543507e3"
+hash = "1bd9a1e5a5a902e8361c463c3930e6a31a31aae59674912f222c95fc275b6121"
 
 [[files]]
 file = "config/adpother/Fuels/unlit$coal_dust.cfg"
-hash = "f848ea6fae7ad804752362dfe3808b06ca3009f964ba52ed5d52211aba7515b0"
+hash = "9f8be8cb9e7d013bde3f5aeb76d9b5b4bd75e16589fcf6833137d82e3f40c426"
 
 [[files]]
 file = "config/adpother/Impacts/environment.cfg"
-hash = "c14011cd8f0aa395ca298e9a6b3f82f0372cd32e6dccdc5b7947d0ce954d85de"
+hash = "8fd7d026bd1ce6b2e3543ba20f808b4314fc470361322dbae720ffd1a82e112d"
 
 [[files]]
 file = "config/adpother/Impacts/fluids.cfg"
@@ -1478,11 +1518,11 @@ hash = "1c08aca3e273514e0faff6f602554084b4bbec640f6426c6df0cc4df0c641088"
 
 [[files]]
 file = "config/adpother/Impacts/hostile_mobs.cfg"
-hash = "adb453701a8fbea1ca06727188abcc5012fcfc3ce97f43d26f1bb19172a49360"
+hash = "71687eaf5ff8d4f7bdbe060fcd1529ffc77035b315bbdcc739f1e1a0eb95c4cf"
 
 [[files]]
 file = "config/adpother/Impacts/livings.cfg"
-hash = "f8f43411ee28027558520d65b30a717c168334e4c7b56ed459dcd66e1fb73f0f"
+hash = "e3b71cc2e4e02a887355460e043a6a854a4b1cb7f99364ead22f92b3c25b9f4a"
 
 [[files]]
 file = "config/adpother/Items/aerometer.cfg"
@@ -1501,120 +1541,16 @@ file = "config/adpother/Items/vacuum_tube.cfg"
 hash = "1fb01fb706e8b4e12726a4306b802cc87f1091b30c7b9c025bbe2bfb9118dc39"
 
 [[files]]
-file = "config/adpother/Pollutants/acetylene.cfg"
-hash = "24a70c399442101382443b3acdd05d78e17207f9dbda3fe39e13eea723a5d306"
-
-[[files]]
-file = "config/adpother/Pollutants/ammonia.cfg"
-hash = "605290aa9fada08db92bf4e8148b313d4fc096b00010dbdaf668bd5d9b43ab39"
-
-[[files]]
-file = "config/adpother/Pollutants/ammonium.cfg"
-hash = "25bba44874d65913a59615ac6849353344151ae3104672bc73467bee9e226502"
-
-[[files]]
-file = "config/adpother/Pollutants/argon.cfg"
-hash = "cc0edf8b7f3df598112a0c8280f8c2ca184e76e2972938800290086d0ff9a697"
-
-[[files]]
-file = "config/adpother/Pollutants/butane.cfg"
-hash = "99f13629f87229ad083e4d2d67ac01b04505370e84e81ff96dacb48b147f9a9d"
-
-[[files]]
 file = "config/adpother/Pollutants/carbon.cfg"
 hash = "88c53c421b434b8e7d7919cb12c9e9918e9e391743072f374032e5d468e887e5"
-
-[[files]]
-file = "config/adpother/Pollutants/carbon_dioxide.cfg"
-hash = "36f054c567a895293bfd18f9e3b749404ce21063ba5cdf348d6250299405813e"
-
-[[files]]
-file = "config/adpother/Pollutants/carbon_monoxide.cfg"
-hash = "3fc17c0abc422a4ddc23ef25a575bf2f08da4f1fa56bdf7bcb82f511dc53aa6e"
-
-[[files]]
-file = "config/adpother/Pollutants/chlorine.cfg"
-hash = "a6502b06c099fabc62cce9d9b914c4cd1b54188059feb16c9acdfcca338e705f"
 
 [[files]]
 file = "config/adpother/Pollutants/dust.cfg"
 hash = "4119c6d58b6ee1f594a2a89e1bcfe9a8b2db48764046760faa092ae051cbeb76"
 
 [[files]]
-file = "config/adpother/Pollutants/ethane.cfg"
-hash = "56b519549a0689c94f55ac7681658fa85c39e6f4c86b60f9763ad4dabc2854ea"
-
-[[files]]
-file = "config/adpother/Pollutants/ethylene.cfg"
-hash = "84a6f0e3fe9912de27169d5f87170cbc0a0963157f418bb710a15dff49e12f15"
-
-[[files]]
-file = "config/adpother/Pollutants/fluorine.cfg"
-hash = "a009a0c2468354b0773e242fce7bce0900f212b68dd873c107f478e9356372e7"
-
-[[files]]
-file = "config/adpother/Pollutants/helium.cfg"
-hash = "5af0cb101ad68fc9f88b9a8d3b2ee0d781a04e0347dfd6d63b94df5e428ff3bd"
-
-[[files]]
-file = "config/adpother/Pollutants/hydrogen.cfg"
-hash = "b0fda9e8013ec2e53788e4350385feaf200f0fcabf0c1450aee5951030e6c184"
-
-[[files]]
-file = "config/adpother/Pollutants/hydrogen_sulfide.cfg"
-hash = "3c6de851493bbd3da10c7d75c6ab144c2e04437b74b1f5c5a63112d24960b980"
-
-[[files]]
-file = "config/adpother/Pollutants/krypton.cfg"
-hash = "d825e1b7923c3b64a5a3d757045797dc992d8e881e07af0deaf3f6bb12e1dd2b"
-
-[[files]]
-file = "config/adpother/Pollutants/methane.cfg"
-hash = "01cc74fdefebe1d4c749f54df87024291e95a06abece52697305a3275bab3009"
-
-[[files]]
-file = "config/adpother/Pollutants/neon.cfg"
-hash = "fc366863e40dede3b1e808b06d78106507a8c60863a949b27da81ddf1c469010"
-
-[[files]]
-file = "config/adpother/Pollutants/nitric_oxide.cfg"
-hash = "37341e56c8699fa5e50d92c409c40fc62031886704e2319fa59629be10b6eed3"
-
-[[files]]
-file = "config/adpother/Pollutants/nitrogen.cfg"
-hash = "b4d9c1b604891a742472e1270d00ad3974a6544f1e24513c46d7b1d225713b3d"
-
-[[files]]
-file = "config/adpother/Pollutants/nitrogen_dioxide.cfg"
-hash = "aea7b18657e8f9b7749baff2ca11cb8ab713c6a9dc7c6f8d6035a3c91441e533"
-
-[[files]]
-file = "config/adpother/Pollutants/oxygen.cfg"
-hash = "f61beed81e81089016bca075f4f9582bad5557aa96213b7b71bf74ac48e94278"
-
-[[files]]
-file = "config/adpother/Pollutants/propane.cfg"
-hash = "c3b083b7761c396a179a590b2986b1a845f18730e7bd8b26f924d7bde27f5cd3"
-
-[[files]]
-file = "config/adpother/Pollutants/propylene.cfg"
-hash = "d8ffdfa3a831ac21d0fc57944a368101aec0556db446be4fa7b4228b69c52e90"
-
-[[files]]
-file = "config/adpother/Pollutants/radon.cfg"
-hash = "bf3c0fa001b95b4a2a51ccc83e752ad06517a184ca0ace03796bcc8ca0a3dc08"
-
-[[files]]
 file = "config/adpother/Pollutants/sulfur.cfg"
 hash = "e5c114db3ce66d0bb06a144ae77d753b67a18ee34421dfd9feed6c0f811d70c7"
-
-[[files]]
-file = "config/adpother/Pollutants/sulfur_dioxide.cfg"
-hash = "4af6565ecc6f15a2566e6689de0681db17ef54c9a40e217f355bb534761cd798"
-
-[[files]]
-file = "config/adpother/Pollutants/xenon.cfg"
-hash = "9c8e94027ee096b4319ac6b94f0665409c5c371674827b97bd1eee100da818e2"
 
 [[files]]
 file = "config/adpother/Respirators/adpother$diamond_respirator.cfg"
@@ -1638,83 +1574,83 @@ hash = "c69378ba559e8c0d3032fcc6867b39928d7b0cd7b017e3adbfb4d24cec5f6d6a"
 
 [[files]]
 file = "config/adpother/Sources/animal_burning.cfg"
-hash = "bb1aba254192bd1f0fa80940ea52076cdc59c099d3348be30dfe86d359ae40dd"
+hash = "279beedd6682d8bf1614b64288ddb4a24f93068e99a6e152fe9447551b1f5fcb"
 
 [[files]]
 file = "config/adpother/Sources/animal_dying.cfg"
-hash = "7bb5db43152c407ddfd9928b04ba837c6f0e9acdfcbfd018176c438f3611cfc4"
+hash = "3f37f06db18a8cf5d60250956270a4ba0eb7747212bd9871514c9fdc1a6e40ab"
 
 [[files]]
 file = "config/adpother/Sources/animal_feeding.cfg"
-hash = "de5d15ffa874eed3cf4e35f448f2e0802c7596377873ed92ab8980bd8bcfed34"
+hash = "325e6fd2c02a432fddb47a51acc53583ca67231e3bcb1881028197a02b4b41b9"
 
 [[files]]
 file = "config/adpother/Sources/explosion.cfg"
-hash = "69029dd55cc390b1dceaf83cb05ea9c7c3fce9c1ff0b1ba2137a4096171cf4c9"
+hash = "9fb82e46ceeab2c519e21aac18a398a8e8423ce0c3ecefc7c9458d20758b03bc"
 
 [[files]]
 file = "config/adpother/Sources/hostile_mob_burning.cfg"
-hash = "512c74e85643d793b6ae2462bff8aecae77d124aa0cc27e8fea2e491aacf0eca"
+hash = "c02b6755d85b839ff6e3bf0a560f191c0387bd1671f4300c3d37c40263bb031c"
 
 [[files]]
 file = "config/adpother/Sources/hostile_mob_dying.cfg"
-hash = "02865b5e8339c59e08d06ae0abaedce711f92937d1f60a695c8343ca1d032849"
+hash = "39fabb0ba4d0b865099eeb64ae35ad47f37218341e4cc459e3cf3ee6e39acac3"
 
 [[files]]
 file = "config/adpother/Sources/lava_touching_water.cfg"
-hash = "dbb0f915cc105ddaa92fabbd0531ed02d4eaccf5edc1ae8d9d17fd1c089f8582"
+hash = "b6ff29709d4a069290bfbc51cbd96d5abca96a139e6b9d25ed40f6a41948b0ac"
 
 [[files]]
 file = "config/adpother/Sources/player_burning.cfg"
-hash = "ba18f79cc2a667fde5ff2b242a5fe13d5088e48d9b8899e45e6795b208aaa98e"
+hash = "65a97e4594f314629725897fc1c8921c31fb121c5afe16fa8b82a13273e4052d"
 
 [[files]]
 file = "config/adpother/Sources/player_dying.cfg"
-hash = "aefc6be8e8a0139cd75c8a9aa270818cbde56b258106ab5cb4e7bb9a1d0ddf9c"
+hash = "667a4832ddbadf5d7649fc25548cbd9fd193c738603d78cea2d8ca4db7195bed"
 
 [[files]]
 file = "config/adpother/Sources/player_eating.cfg"
-hash = "4dab34c4a400a79b00d7cf9746ac94b320f79a2fdda417b1f9a2a1329467cb51"
+hash = "83b1d94eb321cf811d18e4b40acb01a934dd9e1d9c268376cc78bd97fe46f589"
 
 [[files]]
 file = "config/adpother/Torches/aether$ambrosium_torch.cfg"
-hash = "7c755c3206dce33582a0f0142a66cb28cb46f0af6377008e8a22df8771b0f9dd"
+hash = "65cfa93f547be6d66b83250d2dfc280faf1334c4ae338b79e6033282d487608c"
 
 [[files]]
 file = "config/adpother/Torches/aether$ambrosium_wall_torch.cfg"
-hash = "e761f1e1a52935151b8e96bcad868693d41e0ea34caf9132df8876d814e0e7a4"
+hash = "cba194297a78745f0cc8360f37a7fe9560fb993651caf13dea9056320766b541"
 
 [[files]]
 file = "config/adpother/Torches/minecraft$soul_torch.cfg"
-hash = "8a0c0aaa84a39b4ecb861caf6532310f38e48422135454c834ed7ca66d5184e2"
+hash = "87e67596a6ae42af29a97bc678cbf903622c01fa268c9ac859c6d07b9d7a980c"
 
 [[files]]
 file = "config/adpother/Torches/minecraft$soul_wall_torch.cfg"
-hash = "4a41c54af4413380a7a65798ecc165922480c729c2cc453b3234cd8f2ae73e44"
+hash = "b050850a64ba970157b95c123e7cac5f85d72bc1be7048875faecce9f391d6c6"
 
 [[files]]
 file = "config/adpother/Torches/minecraft$torch.cfg"
-hash = "666096048d10b107ed3459b33be92793dbda410986a330a53cdeb09a4e379c36"
+hash = "db415154be8f8e4712de43b45e6010339634bbb1376d71961e0c31317df7f14f"
 
 [[files]]
 file = "config/adpother/Torches/minecraft$wall_torch.cfg"
-hash = "7ad20a4ff57595002d3d7b058a8bfd24edb3e4197f4a8d1783fa0f4f562c3774"
+hash = "9d901b54b4b88d778ab6555e092f01d880dcdd83ff7088dfd5b21f7434df1b3f"
 
 [[files]]
 file = "config/adpother/Torches/unlit$jack_o_lantern.cfg"
-hash = "d817a2e69a3193295764638653b883c8552358d78b154c63d3ec6790792f16f0"
+hash = "052900b5548231b483ece8afe2b8670a7d26b0760a29086741982be12b82471c"
 
 [[files]]
 file = "config/adpother/Torches/unlit$lantern.cfg"
-hash = "ff531da4871a733a76811aedd8c0a6ef6b5c6b5ea42750b28bb467233622425b"
+hash = "ce3832a06148b998abcc2f16c0914721caf68c62baf071606a05be239a0da8ad"
 
 [[files]]
 file = "config/adpother/Torches/unlit$standing_torch_lit.cfg"
-hash = "0c0ec4bac98fdc41cb15d56be76147aef1899b650c749beef1d34161962099d4"
+hash = "cd8ade2a2d4331484440159e19b67e17400a84136bc25f04b60c42d1aefea01c"
 
 [[files]]
 file = "config/adpother/Torches/unlit$wall_torch_lit.cfg"
-hash = "0a7b7b5f2e62c38cd7382e60f63e0288a7aaf4e6b12b58f93242bfa778ccb242"
+hash = "74f14dcabea9efd685a526702d2dc3d3ea25a4b00a21066cf55e52db09b99a1a"
 
 [[files]]
 file = "config/ae2/common.json"
@@ -1746,7 +1682,7 @@ hash = "ad711622f9b8c5cc8115f52396f5d82587b809fb20cbf9d94c7744aeebcaf4d5"
 
 [[files]]
 file = "config/almostunified/unify.json"
-hash = "e0b9efd3be792cfa1b5e52f4cd874c4e4a421df5e141ba90a9d15e452f45b03f"
+hash = "436daf23a89aecfad764b9d996ab010b6225e5863adec0d840ce9c58091f0175"
 
 [[files]]
 file = "config/amendments-client.toml"
@@ -2242,7 +2178,7 @@ hash = "ba8143c549f98ca6a96210964191c8039dce10ec1b5dd954ee29bd781e48f8db"
 
 [[files]]
 file = "config/better_compat_fixes-common.toml"
-hash = "d961dd521bbcc87e736bf27bdfbb26ccd50e789013cd2523e5ab41b05070bc49"
+hash = "aec686fc8ddc7cacaede94289ece0dc1eb214fdd6b173012d0b2b29752fdd8fe"
 
 [[files]]
 file = "config/better_craftable_bouquets-client.toml"
@@ -2353,10 +2289,6 @@ file = "config/c2me.toml"
 hash = "6fcb7aa275704a6217c8121379ad1459ad704974e7f978bbfcd7b4a6aa24753c"
 
 [[files]]
-file = "config/chemlib-common.toml"
-hash = "ea5d802ef100270cdba15042e9d24cc85384b404f523f0c4137923212e037a0f"
-
-[[files]]
 file = "config/coldsweat/client.toml"
 hash = "d62feb92fbe9497d298e8653876dcc2b4f02fda016aaf655a0dc76ac49cf5c15"
 
@@ -2370,7 +2302,7 @@ hash = "b01e5d23d33f4fcb167eb2f89207e9593042630d6eb5aa02a11e409b258a5ea4"
 
 [[files]]
 file = "config/coldsweat/item.toml"
-hash = "21c7bb27d06d4870f6902dd94e66719b2245ce95c0439548c45257c31d1570fc"
+hash = "cbbb89852c41a0ec84ac2233804e08f4bf9d94d67cc196b40a9422c44bcb4c96"
 
 [[files]]
 file = "config/coldsweat/main.toml"
@@ -2918,7 +2850,7 @@ hash = "8ad8f45f1e7788ae69dd23e2627d8c007ef75de350b14b03206917e388f63f55"
 
 [[files]]
 file = "config/rbp/block_definitions/basic_construction_wall.toml"
-hash = "8a58e51a646943023279254daf3ae8d72a28d618334ee4c3c16370673aaa17e6"
+hash = "c7b95cc2ab7c6ee14fd2c64e22881db392f32b5228596d22bb1d6014aad12287"
 
 [[files]]
 file = "config/rbp/block_definitions/bed.toml"
@@ -3014,7 +2946,7 @@ hash = "3abada5839308179fe7a134b66fe774fc42e77dc13ff388d863ec32f5acd0f98"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_refined_ore.toml"
-hash = "0151218e84e513da5963d13f214e20bbf8682e0df75602e5fffeed6975239bf9"
+hash = "a28644f6b56c8bfcdc82f00016b76fcd6b8912e8a780291bd26e70b213b31a08"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_sand.toml"
@@ -3022,7 +2954,7 @@ hash = "b8abbb068b58ccdf7dabf606fc364c4d8b79351a630c674242222c049a5fee36"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_stone.toml"
-hash = "439700e9f6c4d7726b703c452f2c25b4c89a9b4911c8aabaf704b846e824065e"
+hash = "ecb39054b361e757d4b940d7b714d99b7ecfa9841cf5a6256ecbddb2629b33d2"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_modded_wood.toml"
@@ -3034,11 +2966,11 @@ hash = "b344ed469e7da3a22ff7a171429263609ca609cb09c0fd587f7b8a3f5e418c8e"
 
 [[files]]
 file = "config/rbp/block_definitions/generated_pack_solid_blocks.toml"
-hash = "4471b7fe92b99a7306102898f48cf7136e7108db1141f21d2bee53b73b9260d1"
+hash = "ac51eafc1ba573d8ada13b17364dc7296e332e9f78b72dce87fd7528d809d493"
 
 [[files]]
 file = "config/rbp/block_definitions/glass.toml"
-hash = "c73585d07e7df72b2eadc743adff2d47348d8f969ed29acc3562f82e5ec16c72"
+hash = "c9f92478ef75dc3dad831e516f1d2e62fee566af5055f45568174df1bdf9d76e"
 
 [[files]]
 file = "config/rbp/block_definitions/glass_pane.toml"
@@ -3162,11 +3094,11 @@ hash = "35e0c37ce739d544b74853790b5869613e482edd8ffd0d2676ad3984c73869fe"
 
 [[files]]
 file = "config/rbp/block_definitions/produce.toml"
-hash = "7acd95123476bfef6b146c935dc2398c7b74e029782d7bc55bce396d97bde1b4"
+hash = "31f8afa47af95124b4aa4413f55bda89fca901e1046f9f2eb726c9f69592d09f"
 
 [[files]]
 file = "config/rbp/block_definitions/refined_ore.toml"
-hash = "959c9984191830b91cc012c9b4644b1c7b50255dc528bf89a68b2e1c37355fde"
+hash = "1e6f4b09a667a86041647bc42a7ea1549041eb2d9e1eaeccb546f8ae5657a355"
 
 [[files]]
 file = "config/rbp/block_definitions/sand.toml"
@@ -3329,10 +3261,6 @@ file = "config/simpledaylengthextender-common.toml"
 hash = "6a8ae3b04816750702cea582b5da604a6d0fb32d73c90cc55ff2451eebc25168"
 
 [[files]]
-file = "config/sleepingoverhaul-client.toml"
-hash = "94d9a0d7cd52e9558dd6ddb692f68e80be0141c92c06a73172c246fcaf13a128"
-
-[[files]]
 file = "config/sodiumdynamiclights-client.toml"
 hash = "6bf8584810e5e49dafb155bf12b987ecd2300a95702216f1d2b02669aa901660"
 
@@ -3383,6 +3311,10 @@ hash = "82c672fa05344fa0a6b18f5883b39989f9dfd5c0d2c3af9ed388567a2df50257"
 [[files]]
 file = "config/structurify.json"
 hash = "87538cbc5cb7c654e36fab113f966ccba7699ed3554af63ec8ef11600dadf1a5"
+
+[[files]]
+file = "config/subwild-common.toml"
+hash = "fe27a78966ae1a16290aec4f0fd6e4d2b631bdef9795c30a5de736c1635b8ad3"
 
 [[files]]
 file = "config/supplementaries-client.toml"
@@ -4441,6 +4373,10 @@ file = "datapacks/worldgen_compat_fixes/data/kubejs/tags/worldgen/biome/no_biome
 hash = "bef4d172fc1bfb34d342e79090726c4a0c272dd404783c3ea022b992e0e0415e"
 
 [[files]]
+file = "datapacks/worldgen_compat_fixes/data/minecraft/worldgen/density_function/overworld/noise_router/vein_toggle.json"
+hash = "51ff0d2f0d3a5d61edec31785532ea0d570f8c348d58b15b94ff9c2ca6e926a4"
+
+[[files]]
 file = "datapacks/worldgen_compat_fixes/data/minecraft/structures/village/common/animals/chickens_1.nbt"
 hash = "cfd07a787435d95e84d6e4abee5533039dd42b81a866e472c4c42318e541aa92"
 
@@ -4689,10 +4625,6 @@ file = "defaultconfigs/rehooked-server.toml"
 hash = "f38540cf88a712ab5542f289b2d4233b19431f24705230b165d8c5e8ef022e3c"
 
 [[files]]
-file = "defaultconfigs/sleepingoverhaul-server.toml"
-hash = "6615719b7f8cddfd5de5957922aebaabd6c4270b4750ce0fdc8978778910a54d"
-
-[[files]]
 file = "defaultconfigs/solcarrot-server.toml"
 hash = "3feb29d88be7d02904984e17068bde95c014717d560d798f557dcc483daa9035"
 
@@ -4791,206 +4723,6 @@ hash = "9bdc0a0d4d49a263a14df8afba189ff7f684bf2fc1e85510425b7fa69adb756f"
 [[files]]
 file = "kubejs/assets/additionalweaponry/textures/item/tool/arrow_sling/string_tconstruct_unknown.png"
 hash = "506e153aea32b5699bd96c54d8b7e821ef272fb36bb57a594b0400ee43feb099"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/acetylene.json"
-hash = "4519fdb8a8227e6a963429568921ff0ff5b01182470ccfd0ae5dc38c76f0fba5"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/ammonia.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/ammonium.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/argon.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/butane.json"
-hash = "4519fdb8a8227e6a963429568921ff0ff5b01182470ccfd0ae5dc38c76f0fba5"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/carbon_dioxide.json"
-hash = "4519fdb8a8227e6a963429568921ff0ff5b01182470ccfd0ae5dc38c76f0fba5"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/carbon_monoxide.json"
-hash = "4519fdb8a8227e6a963429568921ff0ff5b01182470ccfd0ae5dc38c76f0fba5"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/chlorine.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/ethane.json"
-hash = "4519fdb8a8227e6a963429568921ff0ff5b01182470ccfd0ae5dc38c76f0fba5"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/ethylene.json"
-hash = "4519fdb8a8227e6a963429568921ff0ff5b01182470ccfd0ae5dc38c76f0fba5"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/fluorine.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/helium.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/hydrogen.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/hydrogen_sulfide.json"
-hash = "8d4203f072beea51458c6d96e42d749d888f3e8af7152847395a866584b2b73d"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/krypton.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/methane.json"
-hash = "4519fdb8a8227e6a963429568921ff0ff5b01182470ccfd0ae5dc38c76f0fba5"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/neon.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/nitric_oxide.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/nitrogen.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/nitrogen_dioxide.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/oxygen.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/propane.json"
-hash = "4519fdb8a8227e6a963429568921ff0ff5b01182470ccfd0ae5dc38c76f0fba5"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/radon.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/sulfur_dioxide.json"
-hash = "8d4203f072beea51458c6d96e42d749d888f3e8af7152847395a866584b2b73d"
-
-[[files]]
-file = "kubejs/assets/adpother/blockstates/xenon.json"
-hash = "9f53605f2f5ddb4c9679fcf3a5d7f3404d280ed36bdb4d837248663fa36c9518"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/acetylene.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/ammonia.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/ammonium.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/argon.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/butane.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/carbon_dioxide.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/carbon_monoxide.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/chlorine.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/ethane.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/ethylene.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/fluorine.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/helium.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/hydrogen.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/hydrogen_sulfide.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/krypton.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/methane.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/neon.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/nitric_oxide.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/nitrogen.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/nitrogen_dioxide.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/oxygen.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/propane.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/radon.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/sulfur_dioxide.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
-
-[[files]]
-file = "kubejs/assets/adpother/models/item/xenon.json"
-hash = "b53cdbd4d216215d19b68ffc09f131167153ca90331de23a6003787d4390f584"
 
 [[files]]
 file = "kubejs/assets/aether/sounds.json"
@@ -7325,10 +7057,6 @@ file = "kubejs/assets/occultism/models/item/lighted_air.json"
 hash = "d04fdef30d6d12b3d258b9a2f4cf419ba19afacec62aca5c89a20d858e86252b"
 
 [[files]]
-file = "kubejs/assets/pneumaticcraft/lang/en_us.json"
-hash = "2601cf3a8eb56772f693220614e0a6a888ff38707f62ea7687a59de6b7066949"
-
-[[files]]
 file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/categories/compressors.json"
 hash = "f1f838e9b18720564229a0edd9d502319d0831eb31c7b6aaccd8d1ba2adce9a8"
 
@@ -7391,10 +7119,6 @@ hash = "52fe2c4a02fd950e601988e0a8ccec48ca847b3be02c8f5e830246ad6d106915"
 [[files]]
 file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/entries/manufacturing/assembly_system.json"
 hash = "e4c3c49c7853961190076585784511129653a54b3a7d3e3d46e3a24b35087f6e"
-
-[[files]]
-file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/entries/manufacturing/etching_acid.json"
-hash = "d377d1a88777f00d5ad573b3f1e5457e49b26675e7a76472007757ae9f370dc1"
 
 [[files]]
 file = "kubejs/assets/pneumaticcraft/patchouli_books/book/en_us/entries/manufacturing/pressure_chamber.json"
@@ -7990,7 +7714,7 @@ hash = "7e13ba7b4324b11b4667129f85e7fdbd14b7ca52868dc8e59d3ea7b533b61654"
 
 [[files]]
 file = "kubejs/client_scripts/compat/retained/remove__40_hide_quarantined_systems.js"
-hash = "0cdcd842a9aa30424f258210359023a6cd9002960ae97e265fd27f659fe10116"
+hash = "f300a769ef29bcebfb23cf7b909892b248082647ec220006b4221d278a69d502"
 
 [[files]]
 file = "kubejs/client_scripts/guidance/10_hover_annotations.js"
@@ -8025,18 +7749,6 @@ file = "kubejs/client_scripts/policy/hide_vanilla_tools.js"
 hash = "0da12b94112b647d4c9a68ed719d0458a5e3b9c85d8d2f4d3baf80adb18f9082"
 
 [[files]]
-file = "kubejs/config/adpother_latent_gas_policy.json"
-hash = "08b22db9ac1231db8a857570378aa9d46168f77f5e241fba083fcb95e88a2255"
-
-[[files]]
-file = "kubejs/config/chemistry_material_contract.json"
-hash = "23d4b01fde65d563c8f6ae9b770235b93c666bf9ca2873ed1dfc9bd0a35b462c"
-
-[[files]]
-file = "kubejs/config/chemlib_form_policy.json"
-hash = "d477cf5533dc6d646b43070fe7106b34ed48923a7caee2eda2f8468b47e74014"
-
-[[files]]
 file = "kubejs/config/client.properties"
 hash = "ca1bcfdcb5e2feb66eea14271ba8ceb5aaa1cc81fba3b5294a2cc0a14eb26b6e"
 
@@ -8046,11 +7758,11 @@ hash = "46a66b6e003ba7953c9a13428fd9c1967e862a673d7fd849831defab59eb08f1"
 
 [[files]]
 file = "kubejs/config/cooking_recipes.json"
-hash = "a8e1a50392ea418aa0ee5323dcfb21485fcd6ec527650b589d67bedda19a7771"
+hash = "0c58804db3c3a14f271156abc147a2445439e7c6b40bde199a0dce282717f744"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "1ec55f29e52ea4c61d15321123d66ff4c076f2e80959124d98bc434fba37f14a"
+hash = "ff7c8f527cca3cb2a539c231fbe57ad5c672e027f3be8a0d95736e85330c5517"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -8066,11 +7778,11 @@ hash = "ec4ae4457e064b8235054e90e10cbbb770487132534ceec446ede8e35089c580"
 
 [[files]]
 file = "kubejs/config/formal_magic_domains.json"
-hash = "43a53f08fa5a32fdc0cdf5563bbf28962aae46070ef7562b8738ee3f20b77918"
+hash = "19167e554c44791c1be8056c0fefb458760179cb91cbd15694d99d9a15a58981"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "c00004977d09d8eaf5328831f701276770669351acfa62a07388860f8137fa57"
+hash = "1773cd2ae8f39aa9704f663ca18746f920692516d93d7b247a4a0300c78075bd"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -8094,7 +7806,7 @@ hash = "b4393889d094c1fcca523cbf767cd496b031f3ec33cf01fdc3e5d73f0ec3f249"
 
 [[files]]
 file = "kubejs/config/terrain_recovery.json"
-hash = "ecd5c9cedbceb81e431bb7c78dee318874626151ff516b4e70aa5ce70d40cae3"
+hash = "232a22b389d0dde6d720fd47bb9d965f0882536d9805f90cc9c09e302233145c"
 
 [[files]]
 file = "kubejs/data/additionalweaponry/capabilities/weapons/butcher_knife.json"
@@ -8757,48 +8469,12 @@ file = "kubejs/data/better_celestial_events/tags/worldgen/biome/thin_veil_swamp.
 hash = "8cdb4f81fa15d70f5b2038b06378422d3000cb893617d7e39429dc8c70de52ff"
 
 [[files]]
-file = "kubejs/data/better_chemlib_hazards/chemical_traits/helium.json"
-hash = "7e250218495dc82894141304985303d9ce34827a515d10205d969a1c2b52f375"
-
-[[files]]
-file = "kubejs/data/better_chemlib_hazards/chemical_traits/hydrogen.json"
-hash = "5288538a6be82a8bacdac11df8592e3acff4240a44c22b1be6a281f4615c2083"
-
-[[files]]
-file = "kubejs/data/better_chemlib_hazards/chemical_traits/thorium.json"
-hash = "2ec9ca3101628ee1702e9d6c779cf6e44d06762de3c50c84ab16cb55ee302884"
-
-[[files]]
-file = "kubejs/data/better_chemlib_hazards/chemical_traits/uranium.json"
-hash = "740f2a29c6ca85053682bea15bc763849fd470f5027e66523b6ce06ebf06bb85"
-
-[[files]]
-file = "kubejs/data/better_chemlib_hazards/machine_profiles/default.json"
-hash = "464e1d1b328850567306e11f7aa627ae413c174663df3b40bdca3a7ca5e02a27"
-
-[[files]]
-file = "kubejs/data/better_chemlib_hazards/nuclear_decay/default.json"
-hash = "4710db4b02628b6ae2b5f6197bc075f537d1e0e68482af7364003cf2e079b725"
-
-[[files]]
-file = "kubejs/data/better_chemlib_hazards/reaction_rules/default.json"
-hash = "5419cf8493f975bfd576678b122cb5616da8337b2a5aa266da06095e6210881d"
-
-[[files]]
-file = "kubejs/data/better_chemlib_hazards/scheduler_profiles/default.json"
-hash = "bf2fac308f14992df8b4f604caa3cf3c9b96a8fcff16c31800f5e3dc5563e6d6"
-
-[[files]]
 file = "kubejs/data/better_compat_fixes/tags/entity_types/legacy_underground_ambient_denied.json"
 hash = "ad9ec0dad3f817bddb0e1bd1173be334086693b234dd836d4fe88bb81f73c55a"
 
 [[files]]
 file = "kubejs/data/better_compat_fixes/tags/items/seared_melter_heat_sources.json"
 hash = "62424537e90b4490093a8d76cb1a368dee7ff2a67fce1152c260b97f95003fd5"
-
-[[files]]
-file = "kubejs/data/better_content/recipes/chemistry/electrical/copper_i_oxide.json"
-hash = "1ad9e952e051b960aa69d4bbdbfe1a6a2afd79f437f84d642fd5c316acdc8d4a"
 
 [[files]]
 file = "kubejs/data/better_content/recipes/chemistry/household/tallow_soap_batch.json"
@@ -9003,22 +8679,6 @@ hash = "2359f636ac93b8505780185ab3b5b411e93bc5a206e79fb266b32829672cf08f"
 [[files]]
 file = "kubejs/data/better_manufacturing/recipes/pneupressure_valve_blank.json"
 hash = "f864ed024d164a4fd7e94750a0cf03a5b06526ec3ec5ff9472552d0fc5abc5ab"
-
-[[files]]
-file = "kubejs/data/better_manufacturing/recipes/polymer_pla_melt_material.json"
-hash = "e329816c68817a9d23bdd5e2855d23d2f47607b4f43a102d5fe7102f12a83e68"
-
-[[files]]
-file = "kubejs/data/better_manufacturing/recipes/polymer_pla_stock_material.json"
-hash = "0d310884979b422f2256c127a70c479cd1672066686a6b2025a144d35d9638c8"
-
-[[files]]
-file = "kubejs/data/better_manufacturing/recipes/polymer_pp_melt_material.json"
-hash = "b1d3d883a2500d2af3224d13879cc65c6891025050d6bc5092ada7425747a794"
-
-[[files]]
-file = "kubejs/data/better_manufacturing/recipes/polymer_pp_stock_material.json"
-hash = "5510e5d306f45dd18cdc3d399d86571ceed08d61a079bb8496c2fa4f88b24724"
 
 [[files]]
 file = "kubejs/data/better_manufacturing/recipes/prepared_bees_cost_autolyzer.json"
@@ -10806,7 +10466,7 @@ hash = "cf47d22623f9ecc27660f459511618683fc1969d5c24c8d07b43a538f923403f"
 
 [[files]]
 file = "kubejs/data/forge/loot_modifiers/global_loot_modifiers.json"
-hash = "b818c7778ba162aac2efa6ef5d30ec6c4fb2d687115c6a3e017213e13967fc60"
+hash = "d037ce536192c7799fa0303a603f31b4f138fdfc40a225fefcd54d5705f2683b"
 
 [[files]]
 file = "kubejs/data/forge/tags/blocks/farmland.json"
@@ -12150,39 +11810,39 @@ hash = "ef2f515544b0c96839a891785bad066e9521ef82bfb11ebfd9689f77f151f4c6"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/charger.json"
-hash = "f7c7c40d8a2fc06e7106ba163b9e5ee671a093b61f9f70f3f0a1466c87263843"
+hash = "a4cb7c5290f3e3f54e08bdffb1ed7163814d69faea75d52ed12f839a4879a1a7"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/computer.json"
-hash = "549c569599c8d639ec695cee817f1eabe1f7508989803a76bbfe6c3c9fc54141"
+hash = "319a5af9709094385c65ac481bec33b50196666f4dc8012c18e2f0b87b7cd316"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/disk_drive.json"
-hash = "dfdfca0ecfefae8e459b2a116a1d07831510c5b4d3ff048ca5782a0deb6a179d"
+hash = "222b36f99ae6184b2ad5d068f2a0eba4d0af49de44e8d4ef15944d9687428976"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/flash_memory_flasher.json"
-hash = "a30d3a116e419f9b5fa45905cf6fd6141eaaaa4c6f6f4b890eedd0ab795475ae"
+hash = "4cffadd7a72a84477fdb4bf5c0fe634b36efe7e51475b8dfbe0c6dae24b1d018"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/keyboard.json"
-hash = "31ae4fb4925274c3848c034057534218f9340d30546de6225da5271c28fb1ae8"
+hash = "1d3d8af1bcc0d6827e8c1d3806446179eae5eb4dda16301d16b5e475996f8ad8"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/network_connector.json"
-hash = "160ceaf0d335df3d42518281c1331b206a7d6e23b3d4a5b40be770e7d51c8b30"
+hash = "21ed063d5196068afa1f425db2259dda368c222b73b7ef42c985573f3d1bb77f"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/network_hub.json"
-hash = "518a255a0cc024ec4b6e931e4af069c7180f817aa10bebba3b8ac726d985048d"
+hash = "b94d7e6638e48c4f4d2ebc77e4cb01bbadce903e6e643345a94b73e137079aa0"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/projector.json"
-hash = "084967d2b08eed2fcb6071b2c030e3d2bae44b29a19d8b35497152d486141d96"
+hash = "483950e6c231fc45d21f3da570f55ec48927e74627bb8971bd769980b55a9b31"
 
 [[files]]
 file = "kubejs/data/oc2r/recipes/redstone_interface.json"
-hash = "c221809850b15251653de7ab08655fb7aa6d265ad39a768d18f5eac3635f4088"
+hash = "e07f08793759c72356867aa12307150885623f742ca2741a4988b73ea7de9439"
 
 [[files]]
 file = "kubejs/data/oc2r/tags/items/wrenches.json"
@@ -12303,14 +11963,6 @@ hash = "7032a7a08610677bc56a27630e8423346436ac9d982c631ea4f0f895f64c1672"
 [[files]]
 file = "kubejs/data/parcool/advancements/grant_parcool_guide.json"
 hash = "c57ab6bb6fb8d5659e33a3775af423168a5535ad7abf64cb609c546828a91b44"
-
-[[files]]
-file = "kubejs/data/pneumaticcraft/advancements/etchacid_bucket.json"
-hash = "217aed68a33866a15505abf5567b2715b64d1e28da9a46ba1df428c988611604"
-
-[[files]]
-file = "kubejs/data/pneumaticcraft/advancements/recipes/misc/etching_tank.json"
-hash = "c00fac496ed46522f72d795f58dfe6596997b2c2eceb04a2cc8040e47d5c33f4"
 
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/aerial_interface.json"
@@ -12559,10 +12211,6 @@ hash = "f83906ce8b57c8aebc763edf1d5c759d9ab4f0fbd01858058a4862597d9c8599"
 [[files]]
 file = "kubejs/data/pneumaticcraft/recipes/vortex_tube.json"
 hash = "aa3b2c6c703484aaf173bfdf04006d359983239356584a076990f7c1fd43a839"
-
-[[files]]
-file = "kubejs/data/pneumaticcraft/tags/fluids/etching_acid.json"
-hash = "caa71db03009d605fc31b477ac262367bd1a0c314e43199b8698d1656755e684"
 
 [[files]]
 file = "kubejs/data/powergrid/loot_tables/blocks/basin_heater.json"
@@ -13493,6 +13141,14 @@ file = "kubejs/data/the_bumblezone/bz_pollen_puff_entity_flowers/goety.json"
 hash = "0e021b948ab2f2a7cd3ea1d10b923bf0d78682c5bf18b11a3cf1165d7756d6f6"
 
 [[files]]
+file = "kubejs/data/the_deep_void/weapon_attributes/penitent_cross.json"
+hash = "01b23aff1fdbef9420e084e09d23f8576d5c17ed67867cedcc4660695722b686"
+
+[[files]]
+file = "kubejs/data/the_deep_void/weapon_attributes/the_catcher.json"
+hash = "b0a1099378e9c6c6fa7987ea2d8e7ea48630d16a12586deebce67d8016856ed7"
+
+[[files]]
 file = "kubejs/data/the_flesh_that_hates/worldgen/structure/house1.json"
 hash = "ed425f300f867650a68b8e20fc21d31c9857418b1fdefaf6d3a34bd0d084289d"
 
@@ -14274,11 +13930,11 @@ hash = "f187b4a6df95fa7dd8c2d92b2cd91635eb6ed30c4f0e7e8694df3242a3b61305"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__165_protection_pixel_post_ae2_gates.js"
-hash = "0820a0077e0a9a9ebd05af844a3ba4740d6241002c8ff0a1ee892ba0343c727c"
+hash = "425ee1f8e93df3c162ee01b1a70b603f92eab49b76ac9a47cfe837728187d886"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__166_tome_of_blood_post_ae2_gates.js"
-hash = "14be5779e2c0ce3827b5d75d460174f7063f0898af1ba832f740ae1f73e61670"
+hash = "0d1c181a85096c8b36885aef5aac239ef1596277247db5fae88daf3c1bd453af"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__balance__169_backpack_post_ae2_utility_gates.js"
@@ -14318,7 +13974,7 @@ hash = "006718398300efa792e66608781b1649c4c596bf2e50b87ca07fa2ddbf687e99"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__cross_mod_progression__59_formulaic_synthesis_magic_routes.js"
-hash = "69f4d166a806428163c12f57c596a88aaf690fdf049e71f5f3c4d3dc89ab12ad"
+hash = "feea5c87e45fe993d1f5f41e0ae253d7cf7b1cb29379bb5a05c4565fcfb6bd60"
 
 [[files]]
 file = "kubejs/server_scripts/compat/retained/refactor__move_to_mod__75_arcane_chunkloader_tags.js"
@@ -14341,10 +13997,6 @@ file = "kubejs/server_scripts/compat/retained/remove__10_campfire_recipe.js"
 hash = "0a13658f89679d53da0dc380c83f689f688f4201055278a6b19215eb8dda6177"
 
 [[files]]
-file = "kubejs/server_scripts/compat/reviewed/chemistry_fluid_compat.js"
-hash = "0871972a2a53c027f0e9f6c9f2ef9cc6227f9ed9c0c1a1539134aa8a2535c12f"
-
-[[files]]
 file = "kubejs/server_scripts/compat/reviewed/furnace_policy.js"
 hash = "c79beda30fd4533b5e0d222f75e26820f93da10e8ac362b58095b4d3511c1753"
 
@@ -14358,7 +14010,7 @@ hash = "79767d9ddefcb5ce0c54d6da348d9c134f09e25a5b6733a778778ffaa201448e"
 
 [[files]]
 file = "kubejs/server_scripts/compat/reviewed/occultism_crushing_outputs.js"
-hash = "ea5855ced9a286a5ba25a60293d82ecb3ad77d73cea0a7b1e6a868ec3d83d14d"
+hash = "9f4a9f05a981df061dfb449989427dc8db58c096455d3c45283dad437be7ef98"
 
 [[files]]
 file = "kubejs/server_scripts/compat/reviewed/replaceable_deepslate.js"
@@ -14367,6 +14019,10 @@ hash = "cdadd1a859c50c4f30afa283252ed053e100bafc58d9f12617a939df56adae98"
 [[files]]
 file = "kubejs/server_scripts/compat/reviewed/untamed_thalassophobia_pearls.js"
 hash = "6c121a40e55c58972918f1b55a77be1cff0f22ce658e34a899fcfbc6581dd578"
+
+[[files]]
+file = "kubejs/server_scripts/compat/stone_conversion.js"
+hash = "7297f87f8c76fa46e949e2c223bd37a2d6b8559bf5165ee8985f41d0aca7afbf"
 
 [[files]]
 file = "kubejs/server_scripts/policy/better_ore_geology_tag_policy.js"
@@ -14410,7 +14066,7 @@ hash = "284748286ba200eb7006178022eddd5af2610a1d3e9c11952554b3ddcc01a2a9"
 
 [[files]]
 file = "kubejs/server_scripts/policy/removed_items.js"
-hash = "9bec999b06b3fcd8ee92016a8ecc1ab95c87c36f4587371381add36666131fd8"
+hash = "7f2add24c3ba6e6c889b86a3039bd818cc200123bcdea648dc652e47e5d97856"
 
 [[files]]
 file = "kubejs/server_scripts/policy/storage_barrel_recipe.js"
@@ -14426,7 +14082,7 @@ hash = "3490f59e8b89b55f608480b65315def6bf8516231f0a8e49b0ebd0cf7b3b20d2"
 
 [[files]]
 file = "kubejs/server_scripts/processing/terrain_recovery.js"
-hash = "e4cbb90f2eba0eae632e7855319f5f9e755c145c1e438ba363e40173afe01e59"
+hash = "9d576b29a835f09e5cf1de994e4f30b3864a2c54c4c457c63b3e881bca6d7a93"
 
 [[files]]
 file = "kubejs/server_scripts/progression/00_primitive_workshop.js"
@@ -14474,11 +14130,7 @@ hash = "ceb074c5270197120f5422e8254db19e646a3e1586b80329b3904cc756b35825"
 
 [[files]]
 file = "kubejs/server_scripts/progression/45_acid_chemistry.js"
-hash = "f99523ebb035bdcf28685b6353250f28bcafc1f176315817d17d01afab14f802"
-
-[[files]]
-file = "kubejs/server_scripts/progression/46_polymer_manufacturing.js"
-hash = "890845a29510de39883d866c22735d1db58c8bce85ace0d70780f6a350e85594"
+hash = "bea027d6257ba3fefb906e32b81dbd4e0665375dbca5a26aa52b8efd103d2faa"
 
 [[files]]
 file = "kubejs/server_scripts/progression/50_electrical_control.js"
@@ -14502,15 +14154,15 @@ hash = "fc5d7d5003882551077a3507f3dae86d6209fca0900d8bcb32c33bbebd5a2532"
 
 [[files]]
 file = "kubejs/server_scripts/progression/70_transition_components.js"
-hash = "dd48452eca8cfc42e1c508afa5ecbe24032b4baee4f4825ad7f9cb503eb75449"
+hash = "b8499364e94248abd71f7f6aa0665b2fd54dededd3e8fa8448c3a2edda33dd35"
 
 [[files]]
 file = "kubejs/server_scripts/progression/80_tech_palette.js"
-hash = "226540260234c9555b1d242bca5ebd42d34adf6eba955b536dfe3a1e5c793390"
+hash = "1e032f39f725f69dddfdf29cb68b843d323bd8809d3e61a855952a9b07e2a4b5"
 
 [[files]]
 file = "kubejs/server_scripts/progression/81_pneumaticcraft_progression.js"
-hash = "31bde05005abf1a23d43011348b377c3a9200f523fcc11b9b7d60cac2fe743d3"
+hash = "bdde378b295e5255a81c7ca3ae79e48c9a909f546b58117c090fc13b45ca3c0e"
 
 [[files]]
 file = "kubejs/server_scripts/progression/82_food_drying.js"
@@ -14522,7 +14174,7 @@ hash = "e52208d4e549736b19393d1d48d49c79013f3a79e10cbcdd1763f296a37fbef4"
 
 [[files]]
 file = "kubejs/server_scripts/progression/83_culinary_policy.js"
-hash = "6abfe89f798355b86264922eba740bbd144644796cfd357b10e38538d003bfdb"
+hash = "8a53c35a7c13bd4c8db9c4150867ad28ae0613925104e40685b737b4c86e8367"
 
 [[files]]
 file = "kubejs/server_scripts/progression/83_station_crafting.js"
@@ -14530,7 +14182,7 @@ hash = "57ac719a1515efa680f07af89168004b0a6693f0e76d570bd4f5a3737613bb9e"
 
 [[files]]
 file = "kubejs/server_scripts/progression/84_cooking_recipes.js"
-hash = "2d831fae8306d12231f7a4ef5549e32a6e1dadb47b7999ddf1c80ee12ac3cfd8"
+hash = "17db75139bb54a36cba3415fe0f6ecd4fd43ae48cb5ac1891b139582c1aa7cae"
 
 [[files]]
 file = "kubejs/server_scripts/progression/85_certus_quartz_components.js"
@@ -14546,7 +14198,7 @@ hash = "d5955aa511bbe919c565ccd7d7a425f046b3c05380116b66d1eb3640e4ad9798"
 
 [[files]]
 file = "kubejs/server_scripts/progression/food_eras.js"
-hash = "a6d9266913110bdc591776b4f3dbde7ab385b45939ffde6cad2fc72ed8e78f65"
+hash = "a32569af925f83f918464efb141aa41866fc5f532ffd861d0adb967b5aa41cd0"
 
 [[files]]
 file = "kubejs/server_scripts/progression/plant_drinks.js"
@@ -14578,7 +14230,7 @@ hash = "3ea31e8bbe8dc2e98b874d982cbd7ff00521ebe51d6854d2c3ca79d140c2bf7b"
 
 [[files]]
 file = "kubejs/server_scripts/zz_recipe_clash_remediation.js"
-hash = "40bac330092188e299fd8080a1885af1c2b5f7027c8ef9749bde007c2c27f88e"
+hash = "4d4b2cc2c598b6b30e4120e35812c28bcd75b1813414e26a13027482143d734b"
 
 [[files]]
 file = "kubejs/startup_scripts/99_world_axioms.js"
@@ -14622,7 +14274,7 @@ hash = "68d8cdcb789c02a27ab681df22c80a14d07221a59292967198fa8912f54fcf7e"
 
 [[files]]
 file = "kubejs/startup_scripts/progression/20_transition_items.js"
-hash = "49f0b1be696f9d8333c1f684d78d3703488f29cca6591c37b5dc6c8990467f5c"
+hash = "3adc9613d39f59591945b2aaebc6b51b7015369c0d31b65ef2ce8b75130af1c5"
 
 [[files]]
 file = "kubejs/startup_scripts/progression/22_fish_families.js"
@@ -14720,119 +14372,107 @@ metafile = true
 
 [[files]]
 file = "mods/better-abyssal-city-0.1.0.jar"
-hash = "a971cf3b4acdb4f2318e5c78cae9b1f3dc266f6ec72a567bdc5c18fca65a60b4"
-
-[[files]]
-file = "mods/better-airtight-machines-0.1.0.jar"
-hash = "7ad569ab693755cf5e398934e68c803f7acb854950e5d431876ad14516447c04"
+hash = "f390cb0ef545b25f0e2e836a03428f0df689d5c0c3f2f6cf7bbe9b5a20870048"
 
 [[files]]
 file = "mods/better-block-placement-preview-0.1.0.jar"
-hash = "349774d29acbd0760ba8c28e36bfdd1f9c95deda8b162b69694d2ae4fc6b0e68"
+hash = "39bf90422b30d222828ca36a2c02ff81374cd2dcdb94936331642158d7867501"
 
 [[files]]
 file = "mods/better-bumblezone-crops-0.1.0.jar"
-hash = "e31b66fcfe0c53083cca608ecd35b70f7a615401515a408f1459fae882352a8c"
+hash = "5af5947297daa3d93feb50ea29fb0c64c4b0c290a87167d8ca4874ed2278b453"
 
 [[files]]
 file = "mods/better-buried-encounters-0.1.0.jar"
-hash = "d172fc63ee8bf27a002e0b1b5aae7dca73412bc4e47ab18cb048109d98f91aa4"
+hash = "1cdb694f4ef43e463a3330158f5bf86470dfbc6332ce11a84536a2390865e3c7"
 
 [[files]]
 file = "mods/better-cave-encounters-0.2.1.jar"
-hash = "471de7e89d04ffbc47ba0ed9d19895898c0929f8ab0386b4e5e6cd55fe96230f"
+hash = "172dee7c34ee1c7b3cc1517151469d1edebe11b32c92262c8151d01f5ee03754"
 
 [[files]]
 file = "mods/better-celestial-events-0.1.0.jar"
-hash = "30f8dba543927d5948c3d6dccaf09b965480b2cca46b4c2f9d7a1efee11969e8"
-
-[[files]]
-file = "mods/better-chemlib-hazards-0.2.0.jar"
-hash = "5b07e66f4d30c04f4386d105e0e2a7a4a49142156e1e8960882a652b50ef12fa"
+hash = "586c28013698751ac98015d0291b74e98eb7ecbf0daa54f81488745e52537a17"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
-hash = "2c4055c7fac5fd32bd6e55aed0ff9a96e6e1d50424a831f4fdcd2de14bd6bfaa"
-
-[[files]]
-file = "mods/better-cooking-0.1.0.jar"
-hash = "259a7d4c3892592cb7e0c8a9f6cd295511c3087ed1105a864044c2f9a4a8c312"
+hash = "03d80e3fbb42be94785bbcccf833b8ddf3b847fc9ae6ae96092dfb05ca609b56"
 
 [[files]]
 file = "mods/better-craftable-bouquets-0.1.0.jar"
-hash = "9169574b0348ff81320a2ece5978a99acaec7f525ebbc9f8cdcba42df6786356"
+hash = "86ff25b8cb14c9d61a53786e7021eea2d7da4766cfb38dd779b4e1583c6acb40"
 
 [[files]]
 file = "mods/better-create-kinetic-loss-0.1.0.jar"
-hash = "2b52a96e8ba545e6a443efba5310652964b2432285d60fea10b0b0f33c758b12"
+hash = "cc4113c5f725be75a87ca1d82e35265e8c2754df1b2b3b20276ee66b5fe414d9"
 
 [[files]]
 file = "mods/better-create-train-fuel-0.1.0.jar"
-hash = "c24144b9454e6e37e6ed4683b53eb83e8f6888f003d61555184e8c97b7832706"
+hash = "f3fc07b4099e0c795048f17da7be4a45dd40c2896912637e4eec25928a20f694"
 
 [[files]]
 file = "mods/better-deaths-door-1.0.0.jar"
-hash = "3175497c1c757e3b23e4cc4d8553a0d024657cb33c5baaa2ded5867d4b30d3f2"
+hash = "d0b14b3bef9b5076ff5502073e6d1d0d5555948733d966a1ad1219ed56e4331b"
 
 [[files]]
 file = "mods/better-dimension-fonts-1.0.0.jar"
-hash = "de9c607e0318481a7d6723036a11b8798b966a18fdcfb440dee49e67a9f1400d"
+hash = "a2da5a7d3598d6565e18816ee0ed734fe8649d15971a8554a0d5ef183a92343d"
 
 [[files]]
 file = "mods/better-discovery-guides-1.0.0.jar"
-hash = "04b3edbe50c05b35a8fe950a6a0dc63e6a80dc24a4cbc87c3449476327eac73d"
+hash = "83dfef938172430a0295c560e3a6ee3bc3c96779150673afa8d644784ab3e44f"
 
 [[files]]
 file = "mods/better-drinking-water-1.1.0.jar"
-hash = "30cfd485ab1f32c7d4f7af7d6f893931bce8fca52d957b87c954c7587f8cbff0"
+hash = "295fd48209eb764d47eb34888d6a42b71c3156a1989689bbc581bf87a30799d3"
 
 [[files]]
 file = "mods/better-exploration-load-control-0.1.0.jar"
-hash = "2874ff248101df8fa723bb1ec26eed08909dc29e8f5824ad97d3d0b352738564"
+hash = "cd49b94ea024ea03479336a2ac9e5c389f20ebf4a62db96604835e0b7ebdd82a"
 
 [[files]]
 file = "mods/better-gameplay-notices-1.0.1.jar"
-hash = "d875c6a34c61ff3bd747fc634f9098c8bbe4353a922cc40293bcd7af4a4955d6"
+hash = "b3ec47c32875cc976203ef7a79e9c11f9f77d5a87968b125959fb1469714331a"
 
 [[files]]
 file = "mods/better-hexerei-dynamic-trees-1.0.1.jar"
-hash = "e5b28c944e843ea149f707de8166a3b693a728d3e45afb95faf9de4fdd2a758c"
+hash = "1e63c8eac64528f84e92e7a62e3107eed6361b0f1548c38a79c733a251e84db5"
 
 [[files]]
 file = "mods/better-industrial-heat-0.1.0.jar"
-hash = "088bf19a96b4bf0aee879f751b0e452589eb1806be0da2fa6ff304933e186574"
+hash = "efe3e2620b6a37d931d60fc9d1e3e2f3fa5ce9d0f903280367f83d892fc55016"
 
 [[files]]
 file = "mods/better-journal-inventory-0.1.0.jar"
-hash = "704fd83f93e334ff414ea28eb0cffffe9f294d114ce05d02e5ed915cb94fa440"
+hash = "0add1891bb771b7ee5f19ff0c85d0c9435575cbc7f61f61ca996cd757499d1c5"
 
 [[files]]
 file = "mods/better-magic-chunk-anchors-0.1.0.jar"
-hash = "556f1bf9feb78e0c137e9bb6022793ac42536b889790e78db4d405ce7b81930a"
+hash = "3c0d146511a30ddd7f11d893483068e50cd56810f0fae3db24ee7c03b95afaf7"
 
 [[files]]
 file = "mods/better-malum-dynamic-trees-1.0.1.jar"
-hash = "22f26d8d765ff7503a59fd953635ac7563b077ae0595334b167d29832eb67204"
+hash = "99b3f6d621ca7a0b53f479234048ffe8e83685ea27b154c81f5fd0ee055a9aba"
 
 [[files]]
 file = "mods/better-manufacturing-0.1.0.jar"
-hash = "9036fbf8dd5756c9da0cd6f5ced7ead8328e2084a6b0dec97fdef8a3f99f30d8"
+hash = "f8d050ec2db6fe71651048c03fa1bbbd7fb996270bf8abdc79291899ec23936f"
 
 [[files]]
 file = "mods/better-mining-lamp-0.1.0.jar"
-hash = "67595e02fe2391cab4208aad2eb39d13619113449dcf424965e21312effbc617"
+hash = "6ec0279c084c9ba89a4898f01d42de16a8bc79f904d047fa90034315bc5b6956"
 
 [[files]]
 file = "mods/better-oc2r-create-controls-0.1.0.jar"
-hash = "7b54e4fb3f1ad627ad85eec4130e32fdd5b423028638ba29d2782c56c576335c"
+hash = "da656f413d30ece99cb8637d4d43709bb28cc0a4a63ad1bf664e676052734ab1"
 
 [[files]]
 file = "mods/better-oc2r-wireless-messaging-1.0.0.jar"
-hash = "4cc496dd36d652fec6013ae0e8ab8b420aac0227de6bd90c05d4217dbf450f67"
+hash = "964cc5ea8d2a417e9b1d9aa3026f207f41f9c5261659e8ec5735eedf3ebe8be8"
 
 [[files]]
 file = "mods/better-ore-geology-0.3.0.jar"
-hash = "0556e9090bc2e54e3e790e5e2b6b95a2033b90bf4f37a2f7c3035903380a5e74"
+hash = "8aa441e2c22c270acaf1a83fe545b953866323387b3e675eeeabed1b1238e5bb"
 
 [[files]]
 file = "mods/better-party.pw.toml"
@@ -14841,87 +14481,87 @@ metafile = true
 
 [[files]]
 file = "mods/better-pillager-campaigns-0.5.4.jar"
-hash = "db3c122b16c58b6c1769bb3bd0d1281a180b49a13e789f87684892e0c130cebf"
+hash = "11662d853c754a92753b08157f599c6056f479d2c54a54690a539924f0ea664d"
 
 [[files]]
 file = "mods/better-player-traces-0.1.0.jar"
-hash = "63b0235800dd06e3c0286b589bc34c491a32ae403496b658977e93c188589515"
+hash = "e87612c4b9b53d02857f46de224e3af6d311e70f5adc926c913c4261cf8c1581"
 
 [[files]]
 file = "mods/better-rail-beetle-0.1.0.jar"
-hash = "0faad794f516257d3f9e921276d59540c7e8e8468a5e1faed38c44016897a00e"
+hash = "2119149a82676a2f6d612e163daa31bc0dca6c705d1752d4727413f715087680"
 
 [[files]]
 file = "mods/better-regolith-farming-0.1.0.jar"
-hash = "c3e7962ed9f4c9bd77f72cfc41770f66e8862443e854491eee657e1b4d3c2de5"
+hash = "ca478148c91aa914b6db51323b5393651e4103fdc09e311cb762188f728d047a"
 
 [[files]]
 file = "mods/better-rehooked-grappling-0.1.0.jar"
-hash = "67aa8bf63e6a2bebe35a72896e497d5cbe0f69a045cc89111829f21b2a071c5c"
+hash = "35c8fe1728c8274c641e3b9f358398c745c82aa219d3f5914d1d9c85acc95a32"
 
 [[files]]
 file = "mods/better-rpg-progression-1.0.1.jar"
-hash = "bf82ec5c6b129ea06f541b5eb2ba8a0636bab000f9ee3044e32c416573c552f5"
+hash = "476e4c23333be84994bb419ed1f67577361733b4163b99eb7d8c505fa3e357c1"
 
 [[files]]
 file = "mods/better-runtime-diagnostics-0.1.0.jar"
-hash = "95fc93712db515ce942607f566b5515482648cef7b4dcf99e199def921f93882"
+hash = "4d1de3b68c86394013fe77c026ef16f359cae7be979503ed9c85e3076b42f630"
 
 [[files]]
 file = "mods/better-seasonal-daylight-0.1.0.jar"
-hash = "dc8857e5064e4028e00138cd76e22b22ba955a19b9b2bbe2b7a7dc3ebf39a2e7"
+hash = "2c1a18daa3053b1a161167dfd8a46ebb51bab45eb6ed0f71c30a231887b1bb3e"
 
 [[files]]
 file = "mods/better-seasonal-trees-0.1.0.jar"
-hash = "049297978a7ee81f6b2127c90638acef404bda9c931776a0c645f61224ebab4c"
+hash = "e35ab50ad6673e4cabba9ab93003907334a5d566a79bd8952b894a0d766534e2"
 
 [[files]]
 file = "mods/better-settlement-roads-0.1.0.jar"
-hash = "9b0554037e5da30caa1fc849eff04d2670d0b2e97e88d5fdda4e6c2374eddd52"
+hash = "c4baa300b15c4be74c1f10b7882a0547f6a5adbc28c991826ded3b1b7614af63"
 
 [[files]]
 file = "mods/better-spaceflight-0.1.0.jar"
-hash = "068e365b48200a994992e271f2f27d32b21303e8ed9ef30609a7919452ceaf4e"
+hash = "7576e9ca62a47081b9931f4a54f274c74ad1f34cf1a4a5d72ff425b8ecbfe739"
 
 [[files]]
 file = "mods/better-spawns-1.0.0.jar"
-hash = "e02f09a9a3a4234c47369583bd663223077cef0b72266432b6b87669b5646b60"
+hash = "62d09d043d7dbdc7db5c030e1e8b0a06f71df171e4be9fc230fbafe178f6a7b8"
 
 [[files]]
 file = "mods/better-spicy-farmers-0.1.0.jar"
-hash = "5bac4218f7993a754f0e57de0406cad711499bcdb683fa2c5235122448a7bf06"
+hash = "4559df2b2241acff8880c0e78dec9332a23ddc8e837fdb33c3829919be0d2376"
 
 [[files]]
 file = "mods/better-spirit-commerce-1.0.1.jar"
-hash = "2e4bf81a5229d58cfa153e4caae4a763f2e6c65547c459af0966801689d94402"
+hash = "49d09d1ee9b572b49c3791d651dd623385c118aaf12d7c87002705674dd578c0"
 
 [[files]]
 file = "mods/better-survival-hud-1.0.0.jar"
-hash = "964200e4cfdc25552b86c40c6f6e652f5351e3423b96746fccdab94980ca01b8"
+hash = "14e48fa6a0c0dfd88229be2f8dd1bc774d771676cc9bb12042002c23a2b68d88"
 
 [[files]]
 file = "mods/better-survival-physiology-0.1.1.jar"
-hash = "ed86787ae15c15f7d32e24c13910bbe08260bc2ccc6c2107f577753ce652e937"
+hash = "090f10b71b4c1d2651aedc0e1ed28ddc1631d00044bb3d6b3df732dbcd1f1aa7"
 
 [[files]]
 file = "mods/better-tinkers-loot-affixes-1.0.0.jar"
-hash = "fd4385e701b718a7425790a7b22e45683ff087dba60b0445923decce1931c99d"
+hash = "4ee4a811f45bf1c2cfc26191c601303ba42f7f12891a3390c338ed9bde5c6575"
 
 [[files]]
 file = "mods/better-village-fortifications-1.0.0.jar"
-hash = "b6e3b9d1f512b9a478947e51245beceff65ae91633515864d35c72c82bc5810e"
+hash = "0ccf7c1b9c5dcc1ca7ebd827f23721a9c6baced93f5415cae6cc16c86a1a3527"
 
 [[files]]
 file = "mods/better-weathering-offline-progress-0.1.0.jar"
-hash = "3d489563cdc29b01d7e6e5b52ea547d7fc83289a6cc079b450154986b514fa57"
+hash = "6bd0dfddef5044adc5ab8c3ed8145ffc130d8e7900d96ad31121f541e5350b15"
 
 [[files]]
 file = "mods/better-wild-fruit-trees-0.1.1.jar"
-hash = "d6a8bd88455a9b86165ce2a54fba2fc9b9ae744d064615951b41e3b442249b7c"
+hash = "d5a21df08019142254d2c6f4aa390364f69eda3fa5db84a0b8b27d53ede692a6"
 
 [[files]]
 file = "mods/better-wildfire-0.1.0.jar"
-hash = "9f3d54899876f1fb1a0a770fede61b3d6d5a0caa89d480ebaf49ca801b5d1011"
+hash = "f672f4f017f0f6548c855eb6cdac5876ef0aa72173efc5ae5262319492d9b1b3"
 
 [[files]]
 file = "mods/bettergrassify.pw.toml"
@@ -14961,11 +14601,6 @@ metafile = true
 [[files]]
 file = "mods/cave-dust-rethinking.pw.toml"
 hash = "3b5e437ec22197c027495d620e4c5f564da76bef30da8fa21490bcac96a6c6e3"
-metafile = true
-
-[[files]]
-file = "mods/chemlib.pw.toml"
-hash = "882da059a6d7439b9cdf746813c61ce1e8e73c00a88e4e0cbe4412d4c312702a"
 metafile = true
 
 [[files]]
@@ -15750,7 +15385,7 @@ metafile = true
 
 [[files]]
 file = "mods/scalable-tnt-0.1.0.jar"
-hash = "d674d7c96c8c304298508648be3e8118f852f1ec98d8bace38553751e922cc34"
+hash = "07359fbf76038f80c0f6e97619c339ec41fa2e492dad094b5a24b965d30774f7"
 
 [[files]]
 file = "mods/searchables.pw.toml"
@@ -15770,11 +15405,6 @@ metafile = true
 [[files]]
 file = "mods/shatterbyte-lib.pw.toml"
 hash = "21a65898c3292880bf020c3c7e1e9da3e3725b046625d24cb5e0742d342621a0"
-metafile = true
-
-[[files]]
-file = "mods/sleepingoverhaul2.pw.toml"
-hash = "0cab9964d74302b2b3cab1d89252eaa443a2a69681c4736b048c2b278a9a993c"
 metafile = true
 
 [[files]]
@@ -16119,11 +15749,11 @@ hash = "f6f084ae1df2f43e4a0e70b7d361ea766a0db9be9429ef43614d3d1ad8c20be4"
 
 [[files]]
 file = "shaderpacks/ComplementaryReimagined_r5.8.1.zip"
-hash = "83464c3da0914358c6f96cf4dc9f0eb8bd5d39884eccbee97e07b73878a9d1fd"
+hash = "b40ae38b29ce3c4afd09224d849c35954cebb158970a8766a1a219a977b11221"
 
 [[files]]
 file = "shaderpacks/ComplementaryReimagined_r5.8.1.zip.txt"
-hash = "3a5f45d40550d15a973b5d6a63b218e93a8930851690108d92add5d409bdaf2f"
+hash = "93782232a764573aba1f5766d4d30df3860e5cb2c7b6287f5f942b73eec658b0"
 
 [[files]]
 file = "tacz/applied-armorer.pw.toml"

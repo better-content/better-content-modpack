@@ -13,22 +13,36 @@
         "category": "misc",
         "pattern": [
           "HMP",
-          " A "
+          "0A1",
+          "234"
         ],
         "key": {
           "H": {
             "item": "tconstruct:tool_handle"
           },
           "M": {
-            "type": "forge:partial_nbt",
-            "item": "complicated_bees:gyrofuge_panel",
-            "nbt": "{better_manufacturing:{bees_cost_gyrofuge_output_hatch:1}}"
+            "item": "complicated_bees:gyrofuge_panel"
           },
           "P": {
             "item": "tconstruct:large_plate"
           },
           "A": {
             "item": "complicated_bees:gyrofuge_base"
+          },
+          "0": {
+            "tag": "forge:chests"
+          },
+          "1": {
+            "item": "minecraft:hopper"
+          },
+          "2": {
+            "item": "minecraft:powered_rail"
+          },
+          "3": {
+            "item": "complicated_bees:gyrofuge_panel"
+          },
+          "4": {
+            "item": "complicated_bees:gyrofuge_panel"
           }
         },
         "result": {

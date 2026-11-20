@@ -25,15 +25,14 @@
             "item": "tconstruct:tough_handle"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "item": "pneumaticcraft:turbine_blade"
-            },
-            "marker": "pneumaticcraft:turbine_rotor"
+            "item": "pneumaticcraft:turbine_blade"
+          },
+          "0": {
+            "item": "pneumaticcraft:turbine_blade"
           }
         },
         "pattern": [
-          "IX ",
+          "IX0",
           " H ",
           "A B"
         ],

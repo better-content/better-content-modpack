@@ -1,7 +1,0 @@
-{
-  "variants": {
-    "density=light": {"model": "adpother:block/carbon_light"},
-    "density=medium": {"model": "adpother:block/carbon_medium"},
-    "density=heavy": {"model": "adpother:block/carbon_heavy"}
-  }
-}

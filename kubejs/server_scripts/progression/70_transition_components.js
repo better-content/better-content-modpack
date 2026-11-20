@@ -1,6 +1,6 @@
 // Pack-owned transition components must have explicit, reachable manufacturing
 // routes. These recipes bridge owning mods without restoring the removed casing
-// ladder or hidden ChemLib plate forms.
+// ladder or retired ChemLib plate forms.
 
 ServerEvents.recipes(function (event) {
     // Fallout's composite is craftable from ordinary iron and coal, but its
@@ -45,7 +45,7 @@ ServerEvents.recipes(function (event) {
         ])
 
     // AE materials remain post-electrical and meteor-dependent. The pack sheet
-    // deliberately replaces hidden ChemLib plate forms in downstream recipes.
+    // remains the authored physical sheet form in downstream recipes.
     event.custom({
         type: 'create:mixing',
         heatRequirement: 'heated',
@@ -113,11 +113,11 @@ ServerEvents.recipes(function (event) {
 
     event.custom({
         type: 'create:mixing',
+        heatRequirement: 'heated',
         ingredients: [
             { item: 'better_ore_geology:gold_concentrate' },
             { item: 'better_ore_geology:gold_concentrate' },
-            { fluid: 'chemlib:hydrochloric_acid_fluid', amount: 250 },
-            { fluid: 'chemlib:nitric_acid_fluid', amount: 250 }
+            { fluid: 'minecraft:water', amount: 250 }
         ],
         results: [{ item: 'kubejs:platinum_group_residue', count: 2 }],
         processingTime: 260
@@ -129,18 +129,22 @@ ServerEvents.recipes(function (event) {
         ingredients: [
             { item: 'minecraft:soul_sand' },
             { item: 'minecraft:coal' },
-            { item: 'chemlib:sulfur' },
+            { item: 'bloodmagic:sulfur' },
             { item: 'bloodmagic:demonslate' }
         ],
         results: [{ item: 'kubejs:soulstone_carbon_matrix' }],
         processingTime: 220
     }).id('kubejs:transition/geology/soulstone_carbon_matrix')
 
-    // Titanium concentrate becomes available through the acid-authored Hotstone
-    // route. Pressing its canonical ingot gives aerospace a visible plate source.
+    // Retain the plate ID and paid downstream costs using available TCon
+    // refractory materials rather than an unregistered titanium ingot.
     event.custom({
-        type: 'create:pressing',
-        ingredients: [{ tag: 'forge:ingots/titanium' }],
+        type: 'create:compacting',
+        heatRequirement: 'heated',
+        ingredients: [
+            { item: 'tconstruct:steel_ingot' },
+            { item: 'tconstruct:scorched_brick' }
+        ],
         results: [{ item: 'kubejs:titanium_thermal_plate' }]
     }).id('kubejs:transition/aerospace/titanium_thermal_plate')
 

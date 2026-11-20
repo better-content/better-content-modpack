@@ -1,6 +1,7 @@
 package com.bettercontent.playtestsupport;
 
 import org.junit.jupiter.api.Test;
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -62,11 +63,19 @@ final class PassiveIncomingHitStructureTest {
         List<String> helper = calls("net/minecraft/world/item/enchantment/EnchantmentHelper.class", "getDamageProtection",
                 "(Ljava/lang/Iterable;Lnet/minecraft/world/damagesource/DamageSource;)I");
         assertFalse(helper.isEmpty());
-        List<String> observer = calls("com/bettercontent/playtestsupport/mixin/RealIncomingArmorOperandsObserverMixin.class",
-                "bc$actualArmorOperands", "(Lorg/spongepowered/asm/mixin/injection/invoke/arg/Args;Lnet/minecraft/world/damagesource/DamageSource;F)V");
-        assertEquals(3, observer.stream().filter("org/spongepowered/asm/mixin/injection/invoke/arg/Args.get(I)Ljava/lang/Object;"::equals).count());
-        assertTrue(observer.stream().noneMatch(call -> call.contains("Args.set(") ||
-                call.contains("CombatRules.getDamageAfterAbsorb")), "read original arguments without writing/re-evaluating");
+        String observerClass = "com/bettercontent/playtestsupport/mixin/RealIncomingArmorOperandsObserverMixin.class";
+        assertEquals(List.of(0, 1, 2), armorOperandIndexes(observerClass),
+                "all three original CombatRules operands need separate identity interceptors");
+        for (String method : List.of("bc$actualDamageOperand", "bc$actualArmorOperand", "bc$actualToughnessOperand")) {
+            List<String> wrapper = calls(observerClass, method,
+                "(F)F");
+            assertEquals(1, wrapper.stream().filter(
+                "com/bettercontent/playtestsupport/mixin/RealIncomingArmorOperandsObserverMixin.bc$captureOperand(IF)V"::equals).count());
+            assertTrue(wrapper.stream().noneMatch(call -> call.contains("CombatRules.getDamageAfterAbsorb") ||
+                call.contains("Args.set(")), "identity wrappers must not evaluate or alter the original helper");
+        }
+        List<String> collector = calls(observerClass, "bc$captureOperand", "(IF)V");
+        assertEquals(1, collector.stream().filter(call -> call.contains("NativeSupport.incomingArmorOperands(")).count());
     }
     /** Both original FSTORE3 sites must bracket onLivingDamage; later CombatTracker may be skipped on zero. */
     private static List<String> playerFloatStoreThreeOrder() throws Exception {
@@ -118,6 +127,30 @@ final class PassiveIncomingHitStructureTest {
             }, 0);
         }
         return result;
+    }
+    private static List<Integer> armorOperandIndexes(String resource) throws Exception {
+        List<Integer> indexes = new ArrayList<>();
+        try (var stream = PassiveIncomingHitStructureTest.class.getClassLoader().getResourceAsStream(resource)) {
+            assertNotNull(stream);
+            new ClassReader(stream).accept(new ClassVisitor(Opcodes.ASM9) {
+                @Override public MethodVisitor visitMethod(int access, String name, String descriptor,
+                                                              String signature, String[] exceptions) {
+                    if (!name.startsWith("bc$actual") || !descriptor.equals(
+                            "(F)F")) return null;
+                    return new MethodVisitor(Opcodes.ASM9) {
+                        @Override public AnnotationVisitor visitAnnotation(String annotation, boolean visible) {
+                            if (!annotation.endsWith("/ModifyArg;")) return null;
+                            return new AnnotationVisitor(Opcodes.ASM9) {
+                                @Override public void visit(String key, Object value) {
+                                    if (key.equals("index")) indexes.add((Integer) value);
+                                }
+                            };
+                        }
+                    };
+                }
+            }, 0);
+        }
+        return indexes.stream().sorted().toList();
     }
     private static List<String> calls(String resource, String name, String descriptor) throws Exception {
         List<String> found = new ArrayList<>(); int[] methods = {0};

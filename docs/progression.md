@@ -375,23 +375,12 @@ Pressure Chamber Interface consume pressure seals and configured native parts
 rather than an intact block. The Thermopneumatic Plant has one Nether-magma
 root with a configured liner part.
 
-Sugar fermentation supplies renewable ethanol, and an open Create Basin oxidizes
-it into canonical ChemLib acetic acid. Acetic acid preserves Pickled Pickles and,
-with kelp-derived cellulose, makes reusable-capacity Acetate Membranes for hazardous
-ChemLib pollutants. Two membranes, two pressure seals, and compressed iron make an
-Airtight Upgrade. Use it on a Basin, Fluid Mixer, or Thermopneumatic Processing Plant
-before processing gas-state ChemLib inputs or outputs; sneak-use empty-handed to
-recover it.
-
-The sealed pressure chain electrolyzes water, oxidizes Black Shale sulfur through
-the vanadium contact process, and hydrates sulfur trioxide into sulfuric acid. The
-full Black Shale pressure assay supplies the catalyst's vanadium. Sulfuric acid then
-converts kelp-derived sodium chloride into hydrochloric acid and saltpeter into
-nitric acid. Nitric acid is PneumaticCraft's sole PCB etchant; its native etching
-acid is hidden and has no recipe. Registered phosphoric acid forms remain outside
-the survival chemistry surface until they have a distinct supported purpose. Gold
-concentrate with hydrochloric and nitric acid yields Platinum Group Residue in
-Create mixing. These routes have no Electrical Machine Block or PowerGrid gate.
+The ChemLib acid, vanadium-contact, and gas-containment routes are retired for
+this pack. PneumaticCraft keeps its native plastic, fuel, heat, and PCB etching
+routes, including its native etching acid. Gold concentrate now yields
+Precious-Metal Residue through physical mineral processing rather than
+hydrochloric/nitric acid; the retained item ID is `kubejs:platinum_group_residue`.
+The separate pressure seal and structural Airtight Machine Block remain usable.
 Heat Sync stores and moves process heat; its Boiler Heater consumes exactly
 1/2/3 heat for an active Create boiler's 1/2/3 heat level.
 
@@ -742,17 +731,17 @@ Systemic Salience does not turn ores into neon aspect tokens.
 | Aluminum, cobalt, osmium, silver | live TConstruct materials and pack metallurgy/electrum routes |
 | Nickel | Retained molten material and historical source; no active space gate |
 | Titanium | Retained molten material and thermal plate; no active space gate |
-| Uranium | Hotstone fissile assay, Necronium, nuclear simulation, and Protection Pixel recipes |
-| Thorium | Hotstone fissile assay, nuclear decay chain, and Protection Pixel recipes |
+| Uranium | Hotstone fissile assay, Necronium, and Protection Pixel recipes; no Hazards nuclear simulation |
+| Thorium | Hotstone fissile assay and Protection Pixel recipes; no Hazards decay chain |
 | Lead, cadmium | Hotstone/Brassroot assay depth and real placeable-block absorber behavior in Latent's nuclear environment scan |
 
 The removed beryl/beryllium, calcium, carbon, chromium, gallium, iridium,
 magnesium, phosphate, platinum, silicon, sodium, tantalum, and tungsten
 concentrates had no distinct live consumer strong enough to earn assay output.
-The obsolete Alchemistry audit input was removed and is not a live use. The obsolete
-`better_chemlib_hazards/material_coefficients` data file was removed because the runtime
-nuclear simulation does not load it; absorber evidence comes from the actual
-block-ID environment scan.
+The obsolete Alchemistry audit input was removed and is not a live use. The
+ChemLib Hazards nuclear simulation and its material-coefficient contract are
+not part of the active pack; preserve uranium/thorium source forms for remaining
+native recipes.
 
 ## Weapon Balance Philosophy
 
@@ -871,15 +860,15 @@ The reviewed retained server fixture's static recipe/loot scan found no direct p
 
 Source snapshot: the active pack pin `pneumaticcraft-repressurized-6.0.22+mc1.20.1.jar`, CurseForge project/file `281849/7307654`, SHA-1 `cbe2d3c5df7c2770ac59eb6f02489d8917627c03`. The retained Build 292 server artifact has the same SHA-1. This is a source inventory; it does not prove that recipes load or that a route is reachable in a generated world.
 
-The matrix separates PneumaticCraft's native mechanics from the pack's recipe overrides. It records known route edges from `kubejs/server_scripts/progression/81_pneumaticcraft_progression.js`, `45_acid_chemistry.js`, and `utility/10_recipe_surface_helpers.js`. The progression script is currently dirty shared work and was read without editing.
+The matrix separates PneumaticCraft's native mechanics from the pack's recipe overrides. It records known route edges from `kubejs/server_scripts/progression/81_pneumaticcraft_progression.js` and `utility/10_recipe_surface_helpers.js`. ChemLib acid chemistry and its script have been retired.
 
 | Capability | Relevant PneumaticCraft identities | Current source route | Open source or acceptance edge |
 |---|---|---|---|
 | Basic compressed air | Air Compressor, pressure tubes, air canisters, pressure regulator/storage | Pack replaces the compressor recipe with iron plates, pressure tube, compressed iron, pressure seal and Create cogwheel. Tube, regulator and canister recipes remain native. | Exact earliest acquisition and pressure safety acceptance require candidate recipe loading and route verification. |
-| Pressure chamber | Pressure Chamber, glass, valve, pressure tube | Native pressure chamber route; pack retains it as a basic pressure-era processing surface. The added acid catalyst route uses 2.0 bar. | Native recipe inputs and unlock root have not been closed as a complete acquisition graph. |
-| Thermal and fluid processing | Thermopneumatic Processing Plant, Refinery, Fluid Mixer, Etching Tank, Thermal Compressor | Pack gates the thermopneumatic plant with advanced tube, compressed-iron gear and an authored airtight machine block. `45_acid_chemistry.js` authors acid reactions in the PneumaticCraft thermo plant/fluid mixer and preserves bounded pressure, temperature and batch inputs. | Native refinery/fuel routes and all output consumers need an exhaustive graph audit; no recipe-load/runtime result is claimed. |
-| Plastic and heat chemistry | Oil, LPG, plastic, heat sources and plant fuels | Plastic is explicitly left on PneumaticCraft's native petroleum and heat route. Acid chemistry stays with the owned heat plant; nitric acid uses two saltpeter dust per bounded batch. | No separate plastic bypass is authored here. Complete source/acquisition closure for oil, fuel and heat remains open. |
-| PCB manufacture | PCB Blueprint, Empty PCB, Unassembled PCB, Printed Circuit Board; laser assembly program | Native Empty PCB pressure-chamber recipe is retained. Native laser assembly produces Unassembled PCB; the authored acid script removes native etching-acid shortcut and provides nitric-acid chemistry. The pack's current script uses printed boards as electronic-control inputs. | `82_pneumaticcraft_acquisition.js` removes the four exact Amadron program/blueprint recipes and filters mechanic/villager sales of those four items plus printed PCBs. It authors a Laser Program (1.5 bar: Create precision mechanism/electron tube/brass plus pressure tube), Drill Program (2.5 bar: diamond/cylinder/compressed-iron gear/precision mechanism), and PCB Blueprint (1.5 bar: pressure tube/electron tube/brass/paper). The Blueprint recipe has no PCB or instrumentation prerequisite. PneumaticCraft’s native UV Light Box recipe consumes the Blueprint and pressure-era components; this is intended to support the first printed PCB. Native Empty PCB pressure-chamber recipe, UV exposure behavior and complete output reachability still need acceptance. |
+| Pressure chamber | Pressure Chamber, glass, valve, pressure tube | Native pressure chamber route remains a basic pressure-era processing surface; the ChemLib acid catalyst route is retired. | Native recipe inputs and unlock root have not been closed as a complete acquisition graph. |
+| Thermal and fluid processing | Thermopneumatic Processing Plant, Refinery, Fluid Mixer, Etching Tank, Thermal Compressor | Pack gates the thermopneumatic plant with advanced tube, compressed-iron gear and an authored structural airtight machine block. ChemLib acid reactions are retired; native thermo-plant/fluid-mixer behavior remains. | Native refinery/fuel routes and all output consumers need an exhaustive graph audit; no recipe-load/runtime result is claimed. |
+| Plastic and heat chemistry | Oil, LPG, plastic, heat sources and plant fuels | Plastic is explicitly left on PneumaticCraft's native petroleum and heat route. ChemLib acid chemistry is retired; native petroleum and heat routes remain. | No separate plastic bypass is authored here. Complete source/acquisition closure for oil, fuel and heat remains open. |
+| PCB manufacture | PCB Blueprint, Empty PCB, Unassembled PCB, Printed Circuit Board; laser assembly program | Native Empty PCB pressure-chamber recipe is retained. Native laser assembly produces Unassembled PCB; PneumaticCraft's native etching acid and Etching Tank behavior remain. The pack's current script uses printed boards as electronic-control inputs. | `82_pneumaticcraft_acquisition.js` removes the four exact Amadron program/blueprint recipes and filters mechanic/villager sales of those four items plus printed PCBs. It authors a Laser Program (1.5 bar: Create precision mechanism/electron tube/brass plus pressure tube), Drill Program (2.5 bar: diamond/cylinder/compressed-iron gear/precision mechanism), and PCB Blueprint (1.5 bar: pressure tube/electron tube/brass/paper). The Blueprint recipe has no PCB or instrumentation prerequisite. PneumaticCraft’s native UV Light Box recipe consumes the Blueprint and pressure-era components; this is intended to support the first printed PCB. Native Empty PCB pressure-chamber recipe, UV exposure behavior and complete output reachability still need acceptance. |
 | Assembly system and programs | Assembly Controller, Drill, Laser, Platform, Import/Export IO; Drill, Laser, Drill+Laser programs | Controller is authored through `bcPncrPressure` at 5 bar with advanced tube, PCB, PowerGrid integrated circuit and electrical machine block. Drill is authored with diamond, pneumatic cylinders, compressed iron and electrical instrumentation. Laser Program is authored at 1.5 bar; Drill Program at 2.5 bar. The native Drill+Laser combination recipe remains. Platform and IO recipes remain native. | Exact Amadron recipe rows for the three programs are removed and mechanic/villager sales are filtered. This closes the source-level purchase bypass; recipe loading, complete program output acquisition, and requirements for Platform/IO remain open. |
 | Sensors and logistics | Universal Sensor, Inventory Upgrade, Coordinate Tracker Upgrade | Pack replaces Universal Sensor with a seismometer, plastic, electrical instrumentation and pressure tube. Inventory Upgrade requires PCB, plastic, instrumentation and a wooden chest; Coordinate Tracker requires GPS tool, PCB, AE logic and redstone. | Sensor/upgrade outputs, alternate trades and all prerequisite roots remain unverified as a complete graph. |
 | Drones and armor | Drone, Drone Interface, Armor Upgrade and upgrade family | Drone recipe is pressure-gated at 5 bar and requires PCB, plastic, PowerGrid motor and Create precision mechanism. Armor Upgrade is authored from plastic, PCB, integrated circuit and compressed-iron gear. Script 82 filters the mechanic profession's direct base-Drone sale. | The exact mechanic trade bytecode includes a base Drone offer, now filtered. Specialized logistics/harvesting/collector/guard drones and the native Drone Interface/armor upgrade alternatives remain to be reconciled against their consumers; recipe loading and progression reachability remain open. |

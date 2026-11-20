@@ -146,7 +146,6 @@ ServerEvents.recipes(function (event) {
     // even where worldgen/casting prefers the primary form. No global retagging,
     // nine-unit compression profit, or quarantined Fallout steel source.
     ;[
-        ['chemlib_uranium_block', 'alexscaves:block_of_uranium', 'chemlib:uranium_metal_block'],
         ['iceandfire_raw_silver_block', 'occultism:raw_silver_block', 'iceandfire:raw_silver_block'],
         ['tconstruct_knightmetal_block', 'twilightforest:knightmetal_block', 'tconstruct:knightmetal_block']
     ].forEach(function (route) {
@@ -295,7 +294,6 @@ ServerEvents.recipes(function (event) {
         'tconstruct:common/slime/ichor/slimeblock': { '#': { item: 'tconstruct:ichor_slime_ball' } },
         'tconstruct:common/slime/sky/slimeblock': { '#': { item: 'tconstruct:sky_slime_ball' } },
         'alexscaves:uranium_from_shard': { N: { item: 'alexscaves:uranium_shard' } },
-        'chemlib:uranium_nugget_to_ingot': { N: { item: 'chemlib:uranium_nugget' } },
         'occultism:crafting/raw_silver_block': { p: { item: 'occultism:raw_silver' } },
         'iceandfire:raw_silver_to_raw_silver_block': { '#': { item: 'iceandfire:raw_silver' } },
         // Fallout steel ingots are already quarantined. Do not reopen that
@@ -318,7 +316,6 @@ ServerEvents.recipes(function (event) {
     })
     var identitySingles = {
         'alexscaves:uranium_from_block': 'alexscaves:block_of_uranium',
-        'chemlib:uranium_block_to_ingot': 'chemlib:uranium_metal_block',
         'occultism:crafting/raw_silver_ingot_from_block': 'occultism:raw_silver_block',
         'iceandfire:raw_silver_block_to_raw_silver': 'iceandfire:raw_silver_block',
         'tconstruct:common/materials/steel_nugget_from_ingot': 'tconstruct:steel_ingot',

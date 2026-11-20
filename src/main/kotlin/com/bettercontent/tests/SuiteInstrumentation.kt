@@ -1,7 +1,10 @@
 package com.bettercontent.tests
 
 import com.bettercontent.tests.suite.BoundFile
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.nio.file.Files
+import java.nio.file.LinkOption
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
 import java.util.zip.ZipFile
@@ -79,15 +82,33 @@ internal data class SuiteInstrumentation(
             }
         }
     }
-    fun install(serverRoot: Path, restored: Boolean = false) {
+    fun install(serverRoot: Path, restored: Boolean = false): Map<String, Any?> {
         require(Hashes.sha256(supportJar) == supportSha256) { "test support changed before installation" }
         val destination = serverRoot.resolve("mods/bc-playtest-support.jar")
-        if (restored) require(Files.isRegularFile(destination) && !Files.isSymbolicLink(destination)) { "restored support missing/unsafe" }
+        val policy = serverRoot.resolve("kubejs/config/crafting_policy.json")
+        require(Files.isRegularFile(policy, LinkOption.NOFOLLOW_LINKS) && !Files.isSymbolicLink(policy) &&
+            Files.size(policy) in 1..1_048_576) { "missing or unsafe candidate crafting policy" }
+        val mapper = jacksonObjectMapper()
+        val contract = mapper.readTree(policy.toFile()) as? ObjectNode
+            ?: error("candidate crafting policy must be an object")
+        require(contract.path("schema").asText() == "bc.crafting_policy.v1") { "unexpected crafting policy schema" }
+        val namespaces = contract.path("namespaces") as? ObjectNode
+            ?: error("candidate crafting policy namespaces must be an object")
+        val id = "better_playtest_native_support"
+        val expected = mapper.createObjectNode().put("primary_role", "infrastructure")
+            .put("support_state", "not_applicable")
+        val originalSha = if (restored) null else Hashes.sha256(policy)
+        if (restored) require(namespaces.path(id) == expected) { "restored fixture policy overlay missing or changed" }
         else {
+            require(!namespaces.has(id)) { "candidate policy already classifies nonshipping support" }
             require(!Files.exists(destination)) { "support already present in candidate" }
+            namespaces.set<ObjectNode>(id, expected)
+            Files.writeString(policy, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(contract) + "\n")
             Files.copy(supportJar, destination)
         }
-        require(Hashes.sha256(destination) == supportSha256)
+        require(Files.isRegularFile(destination, LinkOption.NOFOLLOW_LINKS) && Hashes.sha256(destination) == supportSha256)
+        return mapOf("fixture_policy_overlay" to id, "candidate_policy_sha256" to originalSha,
+            "fixture_policy_sha256" to Hashes.sha256(policy), "fixture_policy_only_added_namespace" to true)
     }
     fun jvmText(ownedRuntime: Path? = null): String {
         val stateArguments = ownedRuntime?.let {

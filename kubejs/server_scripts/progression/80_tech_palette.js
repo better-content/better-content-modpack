@@ -59,11 +59,12 @@ ServerEvents.recipes(function (event) {
     event.shaped('ae2:cell_workbench', workbenchParts ? ['QHQ', 'CPC', 'QGQ'] : ['QGQ', 'CPC', 'QGQ'], workbenchKey)
         .id('kubejs:tech/ae2/cell_workbench_native_components')
 
-    // World reset authority remains in WLM's operator-gated interface. Its
-    // authored recipe is replaced so that the interface itself also requires
-    // material recovered from AE2 meteorites.
-    event.remove({ output: 'better_world_management:world_condenser_interface' })
-    event.shaped('better_world_management:world_condenser_interface', ['SBS', 'BOB', 'SBS'], {
-        S: 'ae2:sky_stone_block', B: 'create:brass_sheet', O: 'minecraft:obsidian'
-    }).id('kubejs:tech/world_condenser_interface_meteor_gate')
+    // WLM is compile-only in the active pack. Never register a recipe with a
+    // missing result; retain the meteor gate when that optional mod is present.
+    if (Platform.isLoaded('better_world_management')) {
+        event.remove({ output: 'better_world_management:world_condenser_interface' })
+        event.shaped('better_world_management:world_condenser_interface', ['SBS', 'BOB', 'SBS'], {
+            S: 'ae2:sky_stone_block', B: 'create:brass_sheet', O: 'minecraft:obsidian'
+        }).id('kubejs:tech/world_condenser_interface_meteor_gate')
+    }
 })

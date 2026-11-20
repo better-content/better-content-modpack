@@ -18,9 +18,6 @@
           "F": {
             "tag": "forge:storage_blocks/redstone"
           },
-          "G": {
-            "tag": "forge:dusts/redstone"
-          },
           "P": {
             "item": "pneumaticcraft:printed_circuit_board"
           },
@@ -40,11 +37,7 @@
             "item": "tconstruct:tough_handle"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "tag": "forge:dusts/redstone"
-            },
-            "marker": "pneumaticcraft:flux_compressor"
+            "tag": "forge:dusts/redstone"
           }
         },
         "pattern": [

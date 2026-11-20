@@ -31,11 +31,7 @@
             "item": "tconstruct:tough_handle"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "item": "minecraft:iron_bars"
-            },
-            "marker": "pneumaticcraft:electrostatic_compressor"
+            "item": "minecraft:iron_bars"
           }
         },
         "pattern": [

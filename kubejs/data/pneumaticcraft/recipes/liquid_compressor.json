@@ -13,7 +13,8 @@
         "category": "misc",
         "pattern": [
           "XBA",
-          "HCL"
+          "HCL",
+          "01 "
         ],
         "key": {
           "B": {
@@ -27,9 +28,6 @@
           "L": {
             "tag": "forge:leather"
           },
-          "P": {
-            "item": "pneumaticcraft:pressure_tube"
-          },
           "X": {
             "item": "tconstruct:large_plate"
           },
@@ -37,11 +35,13 @@
             "item": "tconstruct:tough_handle"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "item": "pneumaticcraft:pressure_tube"
-            },
-            "marker": "pneumaticcraft:liquid_compressor"
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "0": {
+            "item": "pneumaticcraft:pressure_tube"
+          },
+          "1": {
+            "tag": "forge:leather"
           }
         },
         "result": {

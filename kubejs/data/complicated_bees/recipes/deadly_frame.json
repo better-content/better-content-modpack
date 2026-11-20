@@ -16,19 +16,37 @@
         "type": "minecraft:crafting_shaped",
         "category": "misc",
         "pattern": [
-          "HMP"
+          "HMP",
+          "012",
+          "345"
         ],
         "key": {
           "H": {
             "item": "tconstruct:tool_handle"
           },
           "M": {
-            "type": "forge:partial_nbt",
-            "item": "minecraft:obsidian",
-            "nbt": "{better_manufacturing:{bees_cost_deadly_frame:1}}"
+            "item": "minecraft:obsidian"
           },
           "P": {
             "item": "tconstruct:large_plate"
+          },
+          "0": {
+            "item": "minecraft:crying_obsidian"
+          },
+          "1": {
+            "item": "minecraft:skeleton_skull"
+          },
+          "2": {
+            "item": "minecraft:obsidian"
+          },
+          "3": {
+            "item": "minecraft:obsidian"
+          },
+          "4": {
+            "item": "minecraft:obsidian"
+          },
+          "5": {
+            "item": "minecraft:obsidian"
           }
         },
         "result": {

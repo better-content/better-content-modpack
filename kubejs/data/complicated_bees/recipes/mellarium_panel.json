@@ -12,19 +12,37 @@
         "type": "minecraft:crafting_shaped",
         "category": "misc",
         "pattern": [
-          "HMP"
+          "HMP",
+          "012",
+          "345"
         ],
         "key": {
           "H": {
             "item": "tconstruct:tool_handle"
           },
           "M": {
-            "type": "forge:partial_nbt",
-            "item": "complicated_bees:beeswax",
-            "nbt": "{better_manufacturing:{bees_cost_mellarium_panel:1}}"
+            "item": "complicated_bees:beeswax"
           },
           "P": {
             "item": "tconstruct:large_plate"
+          },
+          "0": {
+            "item": "complicated_bees:royal_jelly"
+          },
+          "1": {
+            "item": "complicated_bees:pollen"
+          },
+          "2": {
+            "item": "complicated_bees:honeyed_planks"
+          },
+          "3": {
+            "item": "complicated_bees:beeswax"
+          },
+          "4": {
+            "item": "complicated_bees:beeswax"
+          },
+          "5": {
+            "item": "complicated_bees:honeyed_planks"
           }
         },
         "result": {

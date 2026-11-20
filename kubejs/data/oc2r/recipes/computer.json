@@ -78,7 +78,7 @@
       "recipe": {
         "type": "minecraft:crafting_shaped",
         "pattern": [
-          "HCP",
+          "ICI",
           "XTX",
           "IBI"
         ],
@@ -97,12 +97,6 @@
           },
           "B": {
             "item": "oc2r:circuit_board"
-          },
-          "H": {
-            "item": "tconstruct:tool_handle"
-          },
-          "P": {
-            "item": "tconstruct:large_plate"
           }
         },
         "result": {

@@ -4,8 +4,6 @@ if (BC_QUARANTINE_POLICY.schema !== 'bc.quarantined_items.v1') {
     BC_QUARANTINE_POLICY = { schema: 'bc.quarantined_items.v1', items: [] }
 }
 
-var BC_CHEMLIB_FORM_POLICY = JsonIO.read('kubejs/config/chemlib_form_policy.json') || { hidden_gas_buckets: [], hidden_forms: [], hidden_compounds: [] }
-
 // The transport stack exposes several implementation, test, creative, legacy,
 // and incomplete surfaces. Keep those out of recipe viewers so every visible
 // VS-family entry represents a supported survival path. The incomplete
@@ -41,9 +39,6 @@ var BC_HIDDEN_VS_TECHNICAL_ITEMS = [
 ]
 
 var BC_HIDDEN_ITEMS = (BC_QUARANTINE_POLICY.items || [])
-    .concat(BC_CHEMLIB_FORM_POLICY.hidden_gas_buckets || [])
-    .concat(BC_CHEMLIB_FORM_POLICY.hidden_forms || [])
-    .concat(BC_CHEMLIB_FORM_POLICY.hidden_compounds || [])
     .concat(BC_HIDDEN_VS_TECHNICAL_ITEMS)
     .concat([
         'pneumaticcraft:chunkloader_upgrade',
@@ -51,7 +46,16 @@ var BC_HIDDEN_ITEMS = (BC_QUARANTINE_POLICY.items || [])
         'createsifter:advanced_brass_mesh',
         'createsifter:custom_mesh',
         'createsifter:advanced_custom_mesh',
-        'pneumaticcraft:etching_acid_bucket'
+        // Registered Manufacturing components remain for save continuity, but
+        // the removed PLA/PP chain no longer grants these acquisitions.
+        'better_manufacturing:pla_stock',
+        'better_manufacturing:pp_stock',
+        'better_manufacturing:lactide',
+        'better_manufacturing:propylene',
+        'better_manufacturing:tin_carboxylate_catalyst',
+        'better_manufacturing:supported_dehydrogenation_catalyst',
+        'better_manufacturing:coordination_polymerisation_catalyst',
+        'better_manufacturing:lactic_culture'
     ])
 
 function bcHideRegisteredItems(event) {
@@ -63,8 +67,14 @@ function bcHideRegisteredItems(event) {
 }
 
 var BC_HIDDEN_FLUIDS = [
-    'chemlib:phosphoric_acid_fluid',
-    'pneumaticcraft:etching_acid'
+    'better_manufacturing:sugar_solution',
+    'better_manufacturing:lactic_acid_broth',
+    'better_manufacturing:concentrated_lactic_acid',
+    'better_manufacturing:dry_lactide',
+    'better_manufacturing:molten_pla',
+    'better_manufacturing:hot_propylene',
+    'better_manufacturing:propylene_stream',
+    'better_manufacturing:molten_pp'
 ]
 
 JEIEvents.hideItems(function (event) {

@@ -13,15 +13,12 @@
         "category": "misc",
         "pattern": [
           "RIR",
-          "BT ",
+          "BT0",
           "AXH"
         ],
         "key": {
           "B": {
             "item": "pneumaticcraft:stone_base"
-          },
-          "G": {
-            "tag": "forge:gears/compressed_iron"
           },
           "I": {
             "tag": "forge:ingots/compressed_iron"
@@ -39,11 +36,10 @@
             "item": "tconstruct:tough_handle"
           },
           "A": {
-            "type": "better_manufacturing:pneu_native_cost_bundle",
-            "anchor": {
-              "tag": "forge:gears/compressed_iron"
-            },
-            "marker": "pneumaticcraft:manual_compressor"
+            "tag": "forge:gears/compressed_iron"
+          },
+          "0": {
+            "tag": "forge:gears/compressed_iron"
           }
         },
         "result": {

@@ -22,11 +22,7 @@
             "tag": "minecraft:planks"
           },
           "H": {
-            "type": "better_manufacturing:sophisticated_cost_bundle",
-            "marker": "sophisticatedstorage:upgrade_base",
-            "anchor": {
-              "tag": "minecraft:planks"
-            }
+            "item": "tconstruct:large_plate"
           }
         },
         "pattern": [
