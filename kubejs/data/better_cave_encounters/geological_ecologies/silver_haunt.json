@@ -29,15 +29,6 @@
       "cost": 4,
       "maximum_per_packet": 1,
       "maximum_per_encounter": 4
-    },
-    {
-      "entity": "iceandfire:ghost",
-      "role": "line",
-      "minimum_depth": 0.35,
-      "weight": 1,
-      "cost": 4,
-      "maximum_per_packet": 1,
-      "maximum_per_encounter": 4
     }
   ],
   "director": [
@@ -58,15 +49,6 @@
     },
     {
       "entity": "goety:border_wraith",
-      "role": "line",
-      "minimum_depth": 0.35,
-      "weight": 2,
-      "cost": 4,
-      "maximum_per_packet": 1,
-      "maximum_per_encounter": 4
-    },
-    {
-      "entity": "iceandfire:ghost",
       "role": "line",
       "minimum_depth": 0.35,
       "weight": 2,

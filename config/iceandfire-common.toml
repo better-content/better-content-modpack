@@ -10,7 +10,7 @@
 	"Generate Glaciers" = true
 	"Glacier Spawn Weight" = 1
 	"Generate Mausoleums" = true
-	"Generate Graveyards" = true
+	"Generate Graveyards" = false
 	"Generate Gorgon Temple" = true
 
 [Dragons.Griefing]
@@ -63,6 +63,7 @@
 	"Lich Spawn Weight" = 1
 	"Lich Spawn Chance" = 10000
 	"Hydra Caves Gen Chance" = 10000
+	"Ghost Spawn from PvP deaths" = false
 	"Villager Scribe House Weight" = 1
 
 [Items]
