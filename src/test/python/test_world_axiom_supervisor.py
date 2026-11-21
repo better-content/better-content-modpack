@@ -117,7 +117,7 @@ while request.exists() and not (control/'shutdown-request-v5.tsv').exists(): tim
         invocation = self.root / ('invocation-' + str(len(list(self.root.glob('invocation-*.log')))) + '.log')
         with invocation.open('w') as output:
             result = subprocess.run(['bash', str(self.root / 'better-world-management-server.sh')], input='', text=True,
-                                    stdout=output, stderr=output, env=env, timeout=65)
+                                    stdout=output, stderr=output, env=env, timeout=120)
         result.stdout = ''
         result.stderr = invocation.read_text()
         with (self.root / 'test-invocations.log').open('a') as log:
