@@ -2,6 +2,12 @@
   "replace": false,
   "values": [
     "unearthed:white_granite",
-    "unearthed:quartzite"
+    "unearthed:quartzite",
+    "minecraft:diorite",
+    "minecraft:packed_ice",
+    "subwild:mossy_diorite",
+    "subwild:wet_diorite",
+    "subwild:hot_diorite",
+    "subwild:molten_diorite"
   ]
 }

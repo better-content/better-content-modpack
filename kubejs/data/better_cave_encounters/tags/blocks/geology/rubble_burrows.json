@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
-    "unearthed:conglomerate"
+    "unearthed:conglomerate",
+    "minecraft:gravel",
+    "subwild:gravel_patch",
+    "subwild:mossy_gravel",
+    "subwild:pebble"
   ]
 }

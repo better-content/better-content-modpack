@@ -2,6 +2,18 @@
   "replace": false,
   "values": [
     "unearthed:rhyolite",
-    "unearthed:weathered_rhyolite"
+    "unearthed:weathered_rhyolite",
+    "minecraft:red_sand",
+    "minecraft:red_sandstone",
+    "minecraft:smooth_red_sandstone",
+    "#forge:terracotta",
+    "subwild:red_sand_patch",
+    "subwild:mossy_red_sand",
+    "subwild:mossy_red_sandstone",
+    "subwild:mossy_smooth_red_sandstone",
+    "subwild:hot_red_sandstone",
+    "subwild:hot_smooth_red_sandstone",
+    "subwild:molten_red_sandstone",
+    "subwild:molten_smooth_red_sandstone"
   ]
 }

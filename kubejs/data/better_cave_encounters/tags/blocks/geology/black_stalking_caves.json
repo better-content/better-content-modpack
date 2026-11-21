@@ -3,6 +3,21 @@
   "values": [
     "unearthed:slate",
     "unearthed:gabbro",
-    "unearthed:pillow_basalt"
+    "unearthed:pillow_basalt",
+    "minecraft:basalt",
+    "minecraft:blackstone",
+    "minecraft:obsidian",
+    "subwild:mossy_basalt",
+    "subwild:mossy_blackstone",
+    "subwild:mossy_obsidian",
+    "subwild:wet_obsidian",
+    "subwild:hot_basalt",
+    "subwild:hot_blackstone",
+    "subwild:hot_obsidian",
+    "subwild:molten_basalt",
+    "subwild:molten_blackstone",
+    "subwild:molten_obsidian",
+    "subwild:hot_stone",
+    "subwild:molten_stone"
   ]
 }

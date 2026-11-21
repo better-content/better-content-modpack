@@ -1,6 +1,17 @@
 {
   "replace": false,
   "values": [
-    "unearthed:beige_limestone"
+    "unearthed:beige_limestone",
+    "minecraft:sand",
+    "minecraft:sandstone",
+    "minecraft:smooth_sandstone",
+    "subwild:sand_patch",
+    "subwild:mossy_sand",
+    "subwild:mossy_sandstone",
+    "subwild:mossy_smooth_sandstone",
+    "subwild:hot_sandstone",
+    "subwild:hot_smooth_sandstone",
+    "subwild:molten_sandstone",
+    "subwild:molten_smooth_sandstone"
   ]
 }

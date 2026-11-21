@@ -2,6 +2,14 @@
   "replace": false,
   "values": [
     "unearthed:mudstone",
-    "unearthed:siltstone"
+    "unearthed:siltstone",
+    "minecraft:dirt",
+    "minecraft:podzol",
+    "minecraft:mud",
+    "subwild:mossy_dirt",
+    "subwild:dirt_patch",
+    "subwild:mossy_dirt_patch",
+    "subwild:podzol_patch",
+    "subwild:wet_stone"
   ]
 }

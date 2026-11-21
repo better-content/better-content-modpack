@@ -1,6 +1,16 @@
 {
   "replace": false,
   "values": [
-    "unearthed:granodiorite"
+    "unearthed:granodiorite",
+    "minecraft:granite",
+    "minecraft:andesite",
+    "subwild:mossy_granite",
+    "subwild:mossy_andesite",
+    "subwild:wet_granite",
+    "subwild:wet_andesite",
+    "subwild:hot_granite",
+    "subwild:hot_andesite",
+    "subwild:molten_granite",
+    "subwild:molten_andesite"
   ]
 }

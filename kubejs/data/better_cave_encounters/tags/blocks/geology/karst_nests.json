@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "unearthed:limestone",
-    "unearthed:grey_limestone"
+    "unearthed:grey_limestone",
+    "minecraft:moss_block",
+    "subwild:mossy_stone"
   ]
 }
