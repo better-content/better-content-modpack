@@ -18,6 +18,6 @@
   "result": {
     "item": "additionalweaponry:butcher_knife",
     "count": 1,
-    "nbt": "{Damage:0,tic_broken:0b,tic_materials:[\"tconstruct:bone\",\"tconstruct:wood\",\"tconstruct:bone\"],tic_modifiers:[{level:2,name:\"tconstruct:pierce\"},{level:1,name:\"tconstruct:cultivated\"},{level:1,name:\"tconstruct:severing\"},{level:1,name:\"tconstruct:silky_shears\"}],tic_multipliers:{\"tconstruct:attack_damage\":1.391304f},tic_persistent:{},tic_stats:{\"tconstruct:attack_damage\":5.913042f,\"tconstruct:attack_speed\":1.15f,\"tconstruct:durability\":225.0f,\"tconstruct:harvest_tier\":\"minecraft:stone\",\"tconstruct:mining_speed\":5.0f},tic_volatile_data:{abilities:1,upgrades:3}}"
+    "nbt": "{tic_materials:[\"tconstruct:bone\",\"tconstruct:wood\",\"tconstruct:bone\"]}"
   }
 }

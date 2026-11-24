@@ -18,6 +18,6 @@
   "result": {
     "item": "tconstruct:hand_axe",
     "count": 1,
-    "nbt": "{Damage:0,tic_broken:0b,tic_materials:[\"tconstruct:rock#stone\",\"tconstruct:wood\",\"tconstruct:string\"],tic_modifiers:[{level:1,name:\"tconstruct:stonebound\"},{level:1,name:\"tconstruct:cultivated\"},{level:1,name:\"tconstruct:stringy\"},{level:1,name:\"tconstruct:stripping\"}],tic_multipliers:{\"tconstruct:attack_damage\":1.777778f},tic_persistent:{},tic_stats:{\"tconstruct:attack_damage\":7.111112f,\"tconstruct:attack_speed\":0.9f,\"tconstruct:durability\":130.0f,\"tconstruct:harvest_tier\":\"minecraft:stone\",\"tconstruct:mining_speed\":8.0f},tic_volatile_data:{abilities:1,upgrades:3}}"
+    "nbt": "{tic_materials:[\"tconstruct:rock#stone\",\"tconstruct:wood\",\"tconstruct:string\"]}"
   }
 }

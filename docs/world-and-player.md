@@ -17,7 +17,7 @@ runtime logic.
 | Occult physical components | Hexerei | The mixing cauldron uses iron and a vanilla cauldron; impure chalk requires the three live Font trophies plus finite amethyst. Occultism retains rituals, spirit fire, bindings, servants, and the finite dimensional matrix |
 | Occult storage | None | Controllers, stabilizers, remotes, satchel, wormholes, mineshaft, and miners are closed; finite AE2 storage and meteor-certus-rooted logistics remain |
 | Vanilla boat durability, vessel-drop suppression, reinforced recipes | Better Content Fixes | No boat mutation or hiding scripts |
-| Player-kill spirit release, spirit commerce, village professions, and wandering-trader lifecycle | Better Spirit Commerce | The mod owns credited-kill release through Malum's animated spirit entities, authored spirit-priced villager and wandering offers, matching stations/outfits/behaviours and Local Market; coins, emerald commerce, and eldritch/umbral trade are closed. Resident needs, gathering, settlements, resident barter and Player Stalls were extracted to a private source-only repository and are not active pack content. |
+| Player-kill spirit release, spirit commerce, and wandering-trader lifecycle | Better Spirit Commerce | The mod owns credited-kill release through Malum's animated spirit entities, authored spirit-priced villager and wandering offers, and Local Market. Village jobs and workstations are vanilla; coins, emerald commerce, and eldritch/umbral trade are closed. Resident needs, gathering, settlements, resident barter and Player Stalls were extracted to a private source-only repository and are not active pack content. |
 | TCon alloy composition and casting | Tinkers' Construct | Removes bypasses and authors exact cross-mod alloy recipes |
 | Kinetic assembly | Create | Uses Machine Blocks only at listed direct roots |
 | Pressure, plastic, and PCB processing | PneumaticCraft | Native compressed-air, petroleum/plastic, and PCB etching routes remain; ChemLib acids and gas-containment upgrades are absent |
@@ -106,6 +106,15 @@ Control**. The five registered core shard items are
 `better_spirit_commerce:{power,motion,endurance,renewal,control}_spirit`; they are
 both physical currency and native Malum reagents. Eldritch and Umbral remain
 specialist Malum items, not ordinary commerce currencies.
+
+The current source uses the vanilla armorer (blast furnace) for Power,
+cartographer (cartography table) for Motion, fisherman (barrel) for Endurance,
+cleric (brewing stand) for Renewal, and weaponsmith (grindstone) for Control.
+Better Spirit Commerce replaces those five trade tables, not the professions,
+workstation blocks or village layouts. Dynamic Villager Trades is removed so
+it cannot reroll the authored stock on restock. A vanilla villager with only
+retired emerald offers generates spirit stock for its unlocked levels. A save
+that uses the removed custom stations or professions has no migration path.
 
 The foundation mechanically projects the existing eight authored stock templates
 into five markets without redesigning their goods or prices. Merged markets keep

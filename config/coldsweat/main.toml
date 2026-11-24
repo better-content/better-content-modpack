@@ -94,7 +94,8 @@
 	# Allows for more granular control of Cold Sweat's features
 	# Run "/temp debug @s <trait>" to see IDs of all modifiers affecting the player
 	# See the Cold Sweat documentation for a list of default TempModifiers
-	"Disabled Temperature Modifiers" = []
+	# Cold Sweat owns body drift; tune ambient exposure in world.toml instead.
+	"Disabled Temperature Modifiers" = ["better_survival_physiology:ambient_rate", "better_survival_physiology:ambient_world_probe"]
 	#─────────────────────────────────────────────────────────────────────────
 	# Changes the update rate for temperature modifiers on entities
 	# Temperature modifiers control most of Cold Sweat's behavior, so lowering this value will improve performance at the cost of responsiveness

@@ -2306,11 +2306,11 @@ hash = "cbbb89852c41a0ec84ac2233804e08f4bf9d94d67cc196b40a9422c44bcb4c96"
 
 [[files]]
 file = "config/coldsweat/main.toml"
-hash = "ef1c661cbf86bd3a3d6262e6c543844673dd03789f1f191614c6f99f52a4bc51"
+hash = "f3d27ed1840c03cc3a38a088e7f59dd0a44ea45c4364b8084c2207fb7685e576"
 
 [[files]]
 file = "config/coldsweat/world.toml"
-hash = "c2b2bcbb854788a4c582fcf49cff8ecbb3ff287f3a9913c5ebc32a88b8a6c6ea"
+hash = "a1c1a22577e5bfce74f95fb96de61d0b7229abaaf3916381fcdcae986a89a263"
 
 [[files]]
 file = "config/collective.json5"
@@ -7766,7 +7766,7 @@ hash = "0c58804db3c3a14f271156abc147a2445439e7c6b40bde199a0dce282717f744"
 
 [[files]]
 file = "kubejs/config/crafting_policy.json"
-hash = "ff7c8f527cca3cb2a539c231fbe57ad5c672e027f3be8a0d95736e85330c5517"
+hash = "f04b12563657c9c18d92a0a7b6464efdd61da6c4b3d21ed0fdbb403c80c39e94"
 
 [[files]]
 file = "kubejs/config/cross_mod_boundaries.json"
@@ -7786,7 +7786,7 @@ hash = "19167e554c44791c1be8056c0fefb458760179cb91cbd15694d99d9a15a58981"
 
 [[files]]
 file = "kubejs/config/hover_annotations.json"
-hash = "1773cd2ae8f39aa9704f663ca18746f920692516d93d7b247a4a0300c78075bd"
+hash = "c531209064a338448edccb3bec5244d1ab28974eb73d3c7dfe0c12a5e6fede5d"
 
 [[files]]
 file = "kubejs/config/input_rewrites.json"
@@ -10634,11 +10634,11 @@ hash = "ff5584d0a6258f32b95e2fe290e56ca8a7d100f56a5cece83360582c269bc4f1"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/primitive/bone_butcher_knife.json"
-hash = "f6b1ed504ed5a31be75ff967b57c68f99f51e21b84b843cd6c7988690e58f1a8"
+hash = "6f4d557b72c986ab2ae35054223fa6b0ae5b9d98929a2e8adce42dbc2cbcbc1b"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/primitive/bone_hand_axe.json"
-hash = "3ec02eac822bd6118c94a15206bd5c623fafa2472318088eaa44302439078799"
+hash = "d99f6549e2d9a3ece45fbc68e3001c29ff8f7f8d58346224f30aae45bfa7f704"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/primitive/canvas_from_hanging_roots.json"
@@ -10646,19 +10646,19 @@ hash = "541c0e8e07166c7610a1207a0f78a20bfa7c65201c4bb1c98e3fbb5de6e48c29"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/primitive/flint_butcher_knife.json"
-hash = "ef3b9ebd86ea69953cf99d01884dfe70ef705dde3f053686f6eac1070066aaef"
+hash = "e069ab7ff69519e4d9bb44c3c8dc465382f837701da77c9953734538f19d03ab"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/primitive/flint_hand_axe.json"
-hash = "646ec6dc115ae29eaa3cf7079a2e3d39e96d8699e53d05e50c46387ccfe82a7f"
+hash = "73101e986b38b08d83f7e67dc0d7e23203b7c601fe541aee1d2a72a058947fb4"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/primitive/rock_butcher_knife.json"
-hash = "c69d6f7af69beb4f84a05e08c98eda3d31b924ba31ebad2d5d79f986d3032729"
+hash = "786a9c98cda8cbf5443b341f2667d7a70e66f268a07e012a07f8d3a3902326dd"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/primitive/rock_hand_axe.json"
-hash = "11ac63444b7e0dd099b22ebbcbe8c01b741f52f30890e269bf717b1254c7917a"
+hash = "a9d6a720ee6a86fbeab60a92163785150977eefe3d2f6901b6fe8b01d10f09f9"
 
 [[files]]
 file = "kubejs/data/kubejs/recipes/starcatcher/primitive_hook_bone.json"
@@ -14505,11 +14505,6 @@ metafile = true
 [[files]]
 file = "mods/dynamic-trees-the-twilight-forest.pw.toml"
 hash = "fbd9628f2ed4f16ed992894279c280c10c5fc9bb5b80b72a62be8edf1d5f9eea"
-metafile = true
-
-[[files]]
-file = "mods/dynamic-villager-trades.pw.toml"
-hash = "ce7f54a9e9f378728569e81233e44eaaa12be4696ad3ae9e6736c2c8b07b1ebf"
 metafile = true
 
 [[files]]

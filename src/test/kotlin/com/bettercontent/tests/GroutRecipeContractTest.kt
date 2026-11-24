@@ -42,6 +42,18 @@ class GroutRecipeContractTest {
             });
             const families = ['gabbro', 'slate', 'phyllite', 'quartzite', 'schist'];
             if (tags.size !== families.length) throw Error('missing stone family tag');
+            const annotations = JSON.parse(fs.readFileSync('kubejs/config/hover_annotations.json', 'utf8')).annotations;
+            const ingredientRows = annotations.filter(row => row.concept_id === 'matter.metallurgy.grout_ingredient');
+            if (ingredientRows.length !== 1) throw Error('expected one grout ingredient annotation');
+            const ingredientRow = ingredientRows[0];
+            const eligible = families.flatMap(family => tags.get('kubejs:refractory_stone/' + family));
+            const annotated = ingredientRow.selector.items;
+            if (!Array.isArray(annotated) || annotated.length !== eligible.length ||
+                new Set(annotated).size !== eligible.length ||
+                eligible.some(item => !annotated.includes(item)))
+                throw Error('grout tooltip targets differ from recipe stone ingredients');
+            if (ingredientRow.lines.length !== 1 || ingredientRow.lines[0] !== 'Valid ingredient for the Grout recipe.')
+                throw Error('grout ingredient tooltip differs from the requested annotation');
             let count = 0;
             for (let i = 0; i < families.length; i++) {
                 for (let j = i + 1; j < families.length; j++) {

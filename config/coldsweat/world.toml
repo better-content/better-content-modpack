@@ -51,10 +51,48 @@
 	# • highTemp: The temperature of the biome at noon
 	# • *units: The units of the temperature ("f", "c", or "mc"). Defaults to Minecraft units (mc))
 	# • *waterTemp: The temperature of water in the biome
-	# No pack-specific biome overrides. Without another matching temperature
-	# rule, Cold Sweat uses the biome's default climate settings, not raw
-	# worldgen temperature noise.
-	"Biome Temperatures" = []
+	# Five dry ambient baselines for common Overworld surface and travel biomes.
+	# Cold Sweat still applies elevation, weather, immersion and local sources.
+	# Unlisted biomes keep native defaults. Deep ocean is shared with Abyssal City;
+	# these rules apply to a biome ID in every dimension, so it stays native.
+	"Biome Temperatures" = [
+	    # Freezing
+	    ["minecraft:snowy_plains,minecraft:snowy_taiga,minecraft:ice_spikes,minecraft:grove,minecraft:snowy_slopes,minecraft:frozen_peaks", 0.22, 0.32, "mc"],
+	    ["minecraft:jagged_peaks,minecraft:frozen_river,minecraft:frozen_ocean,minecraft:deep_frozen_ocean", 0.22, 0.32, "mc"],
+	    ["natures_spirit:sleeted_slopes,natures_spirit:snowcapped_red_peaks,natures_spirit:snowy_fir_forest,natures_spirit:snowy_redwood_forest", 0.22, 0.32, "mc"],
+	    ["natures_spirit:tundra,natures_spirit:boreal_taiga", 0.22, 0.32, "mc"],
+
+	    # Cold
+	    ["minecraft:taiga,minecraft:old_growth_pine_taiga,minecraft:old_growth_spruce_taiga,minecraft:windswept_forest,minecraft:windswept_hills", 0.48, 0.57, "mc"],
+	    ["minecraft:windswept_gravelly_hills,minecraft:snowy_beach,minecraft:stony_shore,minecraft:cold_ocean,minecraft:deep_cold_ocean", 0.48, 0.57, "mc"],
+	    ["natures_spirit:alpine_clearings,natures_spirit:alpine_highlands,natures_spirit:coniferous_covert", 0.48, 0.57, "mc"],
+	    ["natures_spirit:fir_forest,natures_spirit:redwood_forest", 0.48, 0.57, "mc"],
+
+	    # Temperate
+	    ["minecraft:plains,minecraft:sunflower_plains,minecraft:forest,minecraft:birch_forest,minecraft:old_growth_birch_forest", 0.94, 1.12, "mc"],
+	    ["minecraft:flower_forest,minecraft:dark_forest,minecraft:meadow,minecraft:cherry_grove,minecraft:swamp,minecraft:stony_peaks,minecraft:beach", 0.94, 1.12, "mc"],
+	    ["minecraft:river,minecraft:ocean,minecraft:lukewarm_ocean,minecraft:deep_lukewarm_ocean,minecraft:warm_ocean", 0.94, 1.12, "mc"],
+	    ["natures_spirit:aspen_forest,natures_spirit:blooming_sugi_forest,natures_spirit:carnation_fields,natures_spirit:cypress_fields", 0.94, 1.12, "mc"],
+	    ["natures_spirit:floral_ridges,natures_spirit:golden_wilds,natures_spirit:heather_fields,natures_spirit:lavender_fields", 0.94, 1.12, "mc"],
+	    ["natures_spirit:maple_woodlands,natures_spirit:marigold_meadows,natures_spirit:marsh,natures_spirit:prairie,natures_spirit:sugi_forest", 0.94, 1.12, "mc"],
+	    ["natures_spirit:tropical_shores,natures_spirit:white_cliffs,natures_spirit:windswept_sugi_forest,natures_spirit:wisteria_forest", 0.94, 1.12, "mc"],
+	    ["ars_nouveau:archwood_forest", 0.94, 1.12, "mc"],
+	    ["hexerei:willow_swamp", 0.94, 1.12, "mc"],
+
+	    # Hot
+	    ["minecraft:desert,minecraft:savanna,minecraft:savanna_plateau,minecraft:windswept_savanna,minecraft:jungle,minecraft:bamboo_jungle", 1.38, 1.48, "mc"],
+	    ["minecraft:sparse_jungle,minecraft:mangrove_swamp", 1.38, 1.48, "mc"],
+	    ["natures_spirit:bamboo_wetlands,natures_spirit:blooming_dunes,natures_spirit:blooming_highlands,natures_spirit:cedar_thicket", 1.38, 1.48, "mc"],
+	    ["natures_spirit:dusty_slopes,natures_spirit:flowering_shrubland,natures_spirit:lively_dunes,natures_spirit:oak_savanna", 1.38, 1.48, "mc"],
+	    ["natures_spirit:red_peaks,natures_spirit:shrubland,natures_spirit:sparse_tropical_woods,natures_spirit:tropical_basin", 1.38, 1.48, "mc"],
+	    ["natures_spirit:tropical_woods,natures_spirit:xeric_plains", 1.38, 1.48, "mc"],
+
+	    # Scorching
+	    ["minecraft:badlands,minecraft:eroded_badlands,minecraft:wooded_badlands", 1.70, 1.78, "mc"],
+	    ["natures_spirit:arid_highlands,natures_spirit:arid_savanna,natures_spirit:chaparral,natures_spirit:drylands", 1.70, 1.78, "mc"],
+	    ["natures_spirit:scorched_dunes,natures_spirit:stratified_desert,natures_spirit:wooded_drylands", 1.70, 1.78, "mc"],
+	    ["natures_spirit:shrubby_highlands,natures_spirit:woody_highlands", 1.70, 1.78, "mc"]
+	]
 
 [Blocks]
 	#─────────────────────────────────────────────────────────────────────────//v

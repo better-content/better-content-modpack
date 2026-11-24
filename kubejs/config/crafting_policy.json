@@ -539,10 +539,6 @@
       "primary_role": "world",
       "support_state": "not_applicable"
     },
-    "dynamicvillagertrades": {
-      "primary_role": "gameplay_system",
-      "support_state": "not_applicable"
-    },
     "eanimod": {
       "primary_role": "world",
       "support_state": "not_applicable"
