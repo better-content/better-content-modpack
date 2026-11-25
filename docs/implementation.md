@@ -746,10 +746,17 @@ Creating Space destinations are retired. Twilight Forest and Fallout Wastelands 
 
 `datapacks/hyle_deep` owns the exhaustive Hyle/Unearthed deep-stone pass beginning at Y -64.
 `better_compat_fixes` moves Hyle and SGI terrain conforming to decoration tail, completes only
-leftover replaceable bottom-section host blocks during generation, and registers the Unearthed
-soil aliases Dynamic Trees needs. Do not add a chunk-load replacement sweep: it could rewrite
-player-placed stone. Do not restore Unearthed Dynamic Trees soil-property files that reference
-unregistered `rooty_unearthed_*` blocks.
+leftover replaceable bottom-section host blocks during generation. Do not add a chunk-load
+replacement sweep: it could rewrite player-placed stone.
+
+`better_compat_fixes` owns Dynamic Trees soil aliases for Immersive Weathering (including farmland
+and mulch), Unearthed (plain and grassy regolith and overgrown stone), and Better Regolith Farming
+(tilled regolith). They reuse registered Dynamic Trees rooty dirt, grass, or mud; removing a tree
+may leave the substitute rather than restore the original soil. Ordinary species restrictions still
+apply. Dirt-like aliases may admit trees in newly generated chunks as well as player planting;
+there is no existing-chunk sweep. Do not put these definitions under `datapacks/*/trees` (Dynamic
+Trees 1.4.10 does not load them from there) or restore references to unregistered `rooty_unearthed_*`
+blocks.
 
 Realistic Block Physics gives narrow Create transmission blocks an anchored-network profile.
 Framed item frames and Hexerei drying racks use support-only wall attachment. Hexerei fluids,

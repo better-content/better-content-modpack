@@ -1,8 +1,0 @@
-{
-  "primitive_soil": "immersive_weathering:rooted_grass_block",
-  "acceptable_soils": [
-    "dirt_like"
-  ],
-  "substitute_soil": "dynamictrees:grass_block",
-  "only_if_loaded": "immersive_weathering"
-}

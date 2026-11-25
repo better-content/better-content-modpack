@@ -2178,7 +2178,7 @@ hash = "ba8143c549f98ca6a96210964191c8039dce10ec1b5dd954ee29bd781e48f8db"
 
 [[files]]
 file = "config/better_compat_fixes-common.toml"
-hash = "aec686fc8ddc7cacaede94289ece0dc1eb214fdd6b173012d0b2b29752fdd8fe"
+hash = "8744a21270c3350c1eea37317e9501eb3adc4d51d6c25b9f3e320418f8a15794"
 
 [[files]]
 file = "config/better_craftable_bouquets-client.toml"
@@ -4063,62 +4063,6 @@ hash = "ea68be65b7e159e8f5e3785f680251d3499a8f274e000a9425cb05e9d0e168d6"
 [[files]]
 file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/goety_red_moss_dirt.json"
 hash = "d9197a218f00f027282e392e1f3ebff81372553a02457ac85edbcadbb696c097"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_earthen_clay.json"
-hash = "1e64e2ff989f6569ca5058e425a3a535ff97ff1e766c0bb3adf695305ec1c647"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_earthen_clay_farmland.json"
-hash = "091d5781bdfa93d9a66941c336bdef034e80d11ee586cad933c6c6cc5ee6acb5"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_grassy_earthen_clay.json"
-hash = "b201af236a7de552577ae730f66fb69db097978cfabd0e0dbb7e4822c273cc1a"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_grassy_permafrost.json"
-hash = "ed45528170bc282ae0e70c27206c86c8546cb2166ceb743ae0c1b6257d637585"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_grassy_sandy_dirt.json"
-hash = "bffce8fa808410025db944aa5681208444313c066169be1d4ff595998f9a19b4"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_grassy_silt.json"
-hash = "abcdb75e2bd78c7b5c302869219988dd032088ccbd4cb3fec7f4b4c720c1293e"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_loam.json"
-hash = "41c568cc4c7cdf313b4fa52e2f257865475ed9769705e2c3c7d01ee0b5fb355b"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_loamy_farmland.json"
-hash = "4dffd269a68b5194e95456a553cc8ec0567b2538057014672d6ecf0a9f1ab306"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_permafrost.json"
-hash = "d92daad187eb012b48c1c2e957a5569272ee2674ee2004d9958fbd8128055565"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_rooted_grass_block.json"
-hash = "a49151a2c44032f6e7d3cc08a07425392fa27213a21db19096bce206877957c9"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_sandy_dirt.json"
-hash = "e8ba02580cb913a1af9b993b3b4279bec9c49b6fd04e8ba78b38a1e115fd8c70"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_sandy_farmland.json"
-hash = "eb78cbe47d54d21c4ccf4532b0984bd9bff0e290687d573694cc511288961cdf"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_silt.json"
-hash = "475bf29dc85bbfd1fad866b888c9fa445817789040c4c6ac24fe8c5218809df9"
-
-[[files]]
-file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/immersive_weathering_silty_farmland.json"
-hash = "46bc31f97d504259f7e8346af8943c0f2b52ed1216603c4f4dba8f432be76e5a"
 
 [[files]]
 file = "datapacks/dt_soil_compat/trees/kubejs/soil_properties/malum_blighted_soil.json"
@@ -14140,7 +14084,7 @@ hash = "77a68985e28d0db3ab5e537845e0ffcc18bda12397fbed30c1029face631d5ac"
 
 [[files]]
 file = "mods/better-compat-fixes-0.1.9.jar"
-hash = "1ad7cdef94a85490f4b781d23d5586b71f79c04269b8ea1ed738312744e5ae8a"
+hash = "a85a0bbf5cc59d255b2f4015004e5ddc2b53a1e0469fda6580db4371ddc707f1"
 
 [[files]]
 file = "mods/better-craftable-bouquets-0.1.0.jar"

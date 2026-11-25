@@ -1,9 +1,0 @@
-{
-  "primitive_soil": "immersive_weathering:earthen_clay",
-  "acceptable_soils": [
-    "dirt_like",
-    "mud_like"
-  ],
-  "substitute_soil": "dynamictrees:mud",
-  "only_if_loaded": "immersive_weathering"
-}

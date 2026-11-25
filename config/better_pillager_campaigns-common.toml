@@ -3,9 +3,6 @@
 	disable_vanilla_patrol_spawning = true
 	#Range: 1 ~ 1200
 	interval_ticks = 20
-	#Loaded columns inspected per scheduler pass. This never loads or tickets a chunk.
-	#Range: 64 ~ 65536
-	surface_sample_budget = 16384
 
 [scouts]
 	#Range: 0 ~ 1200000
@@ -48,8 +45,6 @@
 	minimum_blocks = 48
 	#Range: 8 ~ 384
 	maximum_blocks = 72
-	#Range: 64 ~ 65536
-	maximum_search_expansions = 4096
 
 [cleanup]
 	#Range: 200 ~ 144000

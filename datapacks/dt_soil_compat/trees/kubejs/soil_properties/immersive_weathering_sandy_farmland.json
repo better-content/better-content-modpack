@@ -1,9 +1,0 @@
-{
-  "primitive_soil": "immersive_weathering:sandy_farmland",
-  "acceptable_soils": [
-    "dirt_like",
-    "sand_like"
-  ],
-  "substitute_soil": "dynamictrees:dirt",
-  "only_if_loaded": "immersive_weathering"
-}

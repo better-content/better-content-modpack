@@ -1,0 +1,423 @@
+identical_registry_path	namespaces	item_IDs	members_with_listed_item_outputs	direct_TCon_recipe_materials_across_members	material_form_tags_across_members
+acid_bucket	2	alexscaves:acid_bucket powergrid:acid_bucket			
+advanced_alchemy_upgrade	2	sophisticatedbackpacks:advanced_alchemy_upgrade sophisticatedstorage:advanced_alchemy_upgrade	sophisticatedbackpacks:advanced_alchemy_upgrade sophisticatedstorage:advanced_alchemy_upgrade		
+advanced_compacting_upgrade	2	sophisticatedbackpacks:advanced_compacting_upgrade sophisticatedstorage:advanced_compacting_upgrade	sophisticatedbackpacks:advanced_compacting_upgrade sophisticatedstorage:advanced_compacting_upgrade		
+advanced_feeding_upgrade	2	sophisticatedbackpacks:advanced_feeding_upgrade sophisticatedstorage:advanced_feeding_upgrade	sophisticatedbackpacks:advanced_feeding_upgrade sophisticatedstorage:advanced_feeding_upgrade		
+advanced_filter_upgrade	2	sophisticatedbackpacks:advanced_filter_upgrade sophisticatedstorage:advanced_filter_upgrade	sophisticatedbackpacks:advanced_filter_upgrade sophisticatedstorage:advanced_filter_upgrade		
+advanced_jukebox_upgrade	2	sophisticatedbackpacks:advanced_jukebox_upgrade sophisticatedstorage:advanced_jukebox_upgrade	sophisticatedbackpacks:advanced_jukebox_upgrade sophisticatedstorage:advanced_jukebox_upgrade		
+advanced_magnet_upgrade	2	sophisticatedbackpacks:advanced_magnet_upgrade sophisticatedstorage:advanced_magnet_upgrade	sophisticatedbackpacks:advanced_magnet_upgrade sophisticatedstorage:advanced_magnet_upgrade		
+advanced_pickup_upgrade	2	sophisticatedbackpacks:advanced_pickup_upgrade sophisticatedstorage:advanced_pickup_upgrade	sophisticatedbackpacks:advanced_pickup_upgrade sophisticatedstorage:advanced_pickup_upgrade		
+advanced_pump_upgrade	2	sophisticatedbackpacks:advanced_pump_upgrade sophisticatedstorage:advanced_pump_upgrade	sophisticatedbackpacks:advanced_pump_upgrade		
+advanced_void_upgrade	2	sophisticatedbackpacks:advanced_void_upgrade sophisticatedstorage:advanced_void_upgrade	sophisticatedbackpacks:advanced_void_upgrade sophisticatedstorage:advanced_void_upgrade		
+air_compressor	2	pneumaticcraft:air_compressor vs_clockwork:air_compressor	pneumaticcraft:air_compressor vs_clockwork:air_compressor		
+alchemy_upgrade	2	sophisticatedbackpacks:alchemy_upgrade sophisticatedstorage:alchemy_upgrade	sophisticatedbackpacks:alchemy_upgrade sophisticatedstorage:alchemy_upgrade		
+altar	2	aether:altar bloodmagic:altar	aether:altar bloodmagic:altar		
+ambrosia	3	complicated_bees:ambrosia iceandfire:ambrosia the_deep_void:ambrosia	complicated_bees:ambrosia iceandfire:ambrosia the_deep_void:ambrosia		
+ammo_box	2	fallout_wastelands_:ammo_box tacz:ammo_box	tacz:ammo_box		
+ancient_bookshelf	2	quark:ancient_bookshelf the_deep_void:ancient_bookshelf	quark:ancient_bookshelf the_deep_void:ancient_bookshelf		
+ancient_leaves	2	alexscaves:ancient_leaves quark:ancient_leaves		tconstruct:leaves	
+ancient_sapling	2	alexscaves:ancient_sapling quark:ancient_sapling			
+andesite_bars	2	create:andesite_bars createdeco:andesite_bars	create:andesite_bars createdeco:andesite_bars		
+andesite_door	2	create:andesite_door createdeco:andesite_door	create:andesite_door createdeco:andesite_door		
+andesite_pillar	2	create:andesite_pillar quark:andesite_pillar	create:andesite_pillar quark:andesite_pillar		
+apple_crate	2	fruitsdelight:apple_crate quark:apple_crate	fruitsdelight:apple_crate quark:apple_crate		forge:storage_blocks/apple
+apple_jelly	2	brewinandchewin:apple_jelly fruitsdelight:apple_jelly	brewinandchewin:apple_jelly fruitsdelight:apple_jelly		
+arrow	2	minecraft:arrow tconstruct:arrow	minecraft:arrow tconstruct:arrow		
+ash	2	iceandfire:ash supplementaries:ash	iceandfire:ash supplementaries:ash		forge:ash forge:dusts/ash
+ash_bricks	2	supplementaries:ash_bricks the_deep_void:ash_bricks	supplementaries:ash_bricks the_deep_void:ash_bricks		
+auto_blasting_upgrade	2	sophisticatedbackpacks:auto_blasting_upgrade sophisticatedstorage:auto_blasting_upgrade	sophisticatedbackpacks:auto_blasting_upgrade sophisticatedstorage:auto_blasting_upgrade		
+auto_smelting_upgrade	2	sophisticatedbackpacks:auto_smelting_upgrade sophisticatedstorage:auto_smelting_upgrade	sophisticatedbackpacks:auto_smelting_upgrade sophisticatedstorage:auto_smelting_upgrade		
+auto_smoking_upgrade	2	sophisticatedbackpacks:auto_smoking_upgrade sophisticatedstorage:auto_smoking_upgrade	sophisticatedbackpacks:auto_smoking_upgrade sophisticatedstorage:auto_smoking_upgrade		
+backpack	2	quark:backpack sophisticatedbackpacks:backpack	sophisticatedbackpacks:backpack		
+bacon	2	farmersdelight:bacon tconstruct:bacon	farmersdelight:bacon		
+balloon	2	moreartifacts:balloon vs_eureka:balloon	moreartifacts:balloon vs_eureka:balloon		
+barrel	2	minecraft:barrel sophisticatedstorage:barrel	minecraft:barrel sophisticatedstorage:barrel		
+beach_grass	2	natures_spirit:beach_grass projectvibrantjourneys:beach_grass			
+bee_nest	2	complicated_bees:bee_nest minecraft:bee_nest	minecraft:bee_nest		
+beer	2	brewinandchewin:beer fallout_wastelands_:beer	brewinandchewin:beer		
+beetroot_crate	2	farmersdelight:beetroot_crate quark:beetroot_crate	farmersdelight:beetroot_crate quark:beetroot_crate		forge:storage_blocks/beetroot
+biodiesel_bucket	2	createdieselgenerators:biodiesel_bucket pneumaticcraft:biodiesel_bucket			
+blasting_upgrade	2	sophisticatedbackpacks:blasting_upgrade sophisticatedstorage:blasting_upgrade	sophisticatedbackpacks:blasting_upgrade sophisticatedstorage:blasting_upgrade		
+blazing_bone	2	cataclysm:blazing_bone tconstruct:blazing_bone	tconstruct:blazing_bone	tconstruct:blazing_bone	
+boar_spawn_egg	2	twilightforest:boar_spawn_egg untamedwilds:boar_spawn_egg			
+brass_bars	2	create:brass_bars createdeco:brass_bars	create:brass_bars createdeco:brass_bars		
+brass_door	2	create:brass_door createdeco:brass_door	create:brass_door createdeco:brass_door		
+brush	2	minecraft:brush occultism:brush	minecraft:brush occultism:brush		
+butcher_knife	2	additionalweaponry:butcher_knife occultism:butcher_knife	additionalweaponry:butcher_knife occultism:butcher_knife		
+cage	3	fallout_wastelands_:cage supplementaries:cage the_deep_void:cage	fallout_wastelands_:cage supplementaries:cage the_deep_void:cage		
+calcite_pillar	2	create:calcite_pillar quark:calcite_pillar	create:calcite_pillar quark:calcite_pillar		
+camel_spawn_egg	2	minecraft:camel_spawn_egg untamedwilds:camel_spawn_egg			
+candelabra	3	hexerei:candelabra the_deep_void:candelabra twilightforest:candelabra	hexerei:candelabra the_deep_void:candelabra		
+candle	2	hexerei:candle minecraft:candle	hexerei:candle minecraft:candle		
+candlestick	2	dawnoftimebuilder:candlestick the_deep_void:candlestick	dawnoftimebuilder:candlestick the_deep_void:candlestick		
+candy_cane	2	aether:candy_cane alexscaves:candy_cane			
+capacitor	2	pneumaticcraft:capacitor powergrid:capacitor	pneumaticcraft:capacitor powergrid:capacitor		
+carrot_crate	2	farmersdelight:carrot_crate quark:carrot_crate	farmersdelight:carrot_crate quark:carrot_crate		forge:storage_blocks/carrot
+catfish_spawn_egg	2	thalassophobia:catfish_spawn_egg untamedwilds:catfish_spawn_egg			
+cattail	2	natures_spirit:cattail projectvibrantjourneys:cattail			
+chain	2	iceandfire:chain minecraft:chain	iceandfire:chain minecraft:chain		
+charger	2	ae2:charger oc2r:charger	ae2:charger oc2r:charger		
+chest	3	ae2:chest minecraft:chest sophisticatedstorage:chest	ae2:chest minecraft:chest sophisticatedstorage:chest		
+chiseled_end_stone_bricks	2	cataclysm:chiseled_end_stone_bricks goety:chiseled_end_stone_bricks	cataclysm:chiseled_end_stone_bricks goety:chiseled_end_stone_bricks	tconstruct:whitestone#end	
+chiseled_quartz_block	2	ae2:chiseled_quartz_block minecraft:chiseled_quartz_block	ae2:chiseled_quartz_block minecraft:chiseled_quartz_block		
+chiseled_siltstone	2	goety:chiseled_siltstone unearthed:chiseled_siltstone	goety:chiseled_siltstone unearthed:chiseled_siltstone		
+chorus_fence	2	cataclysm:chorus_fence goety:chorus_fence	cataclysm:chorus_fence goety:chorus_fence		
+chorus_planks	2	cataclysm:chorus_planks goety:chorus_planks	cataclysm:chorus_planks goety:chorus_planks	tconstruct:wood	
+chorus_slab	2	cataclysm:chorus_slab goety:chorus_slab	cataclysm:chorus_slab goety:chorus_slab		
+chorus_stairs	2	cataclysm:chorus_stairs goety:chorus_stairs	cataclysm:chorus_stairs goety:chorus_stairs		
+chorus_trapdoor	2	cataclysm:chorus_trapdoor goety:chorus_trapdoor	cataclysm:chorus_trapdoor goety:chorus_trapdoor		
+chute	2	create:chute quark:chute	create:chute quark:chute		
+circuit_board	2	oc2r:circuit_board powergrid:circuit_board	oc2r:circuit_board		
+clock	2	minecraft:clock vs_clockwork:clock	minecraft:clock vs_clockwork:clock		
+cloth	2	fallout_wastelands_:cloth hexerei:cloth	fallout_wastelands_:cloth hexerei:cloth		
+cobbled_deepslate	2	minecraft:cobbled_deepslate unearthed:cobbled_deepslate	minecraft:cobbled_deepslate	tconstruct:flint#deepslate	forge:cobblestone forge:cobblestone/deepslate
+cobbled_limestone	2	dawnoftimebuilder:cobbled_limestone unearthed:cobbled_limestone	dawnoftimebuilder:cobbled_limestone	tconstruct:rock#stone	forge:cobblestone
+cobbled_limestone_slab	2	dawnoftimebuilder:cobbled_limestone_slab unearthed:cobbled_limestone_slab	dawnoftimebuilder:cobbled_limestone_slab unearthed:cobbled_limestone_slab		
+cobbled_limestone_stairs	2	dawnoftimebuilder:cobbled_limestone_stairs unearthed:cobbled_limestone_stairs	dawnoftimebuilder:cobbled_limestone_stairs unearthed:cobbled_limestone_stairs		
+coffee	2	fallout_wastelands_:coffee farmersrespite:coffee	farmersrespite:coffee		
+compacting_upgrade	2	sophisticatedbackpacks:compacting_upgrade sophisticatedstorage:compacting_upgrade	sophisticatedbackpacks:compacting_upgrade sophisticatedstorage:compacting_upgrade		
+controller	2	ae2:controller sophisticatedstorage:controller	ae2:controller sophisticatedstorage:controller		
+cooked_rice	2	farmersdelight:cooked_rice kaleidoscope_cookery:cooked_rice	farmersdelight:cooked_rice kaleidoscope_cookery:cooked_rice		
+copper_axe	2	everythingcopper:copper_axe iceandfire:copper_axe			
+copper_bars	3	create:copper_bars createdeco:copper_bars everythingcopper:copper_bars	create:copper_bars createdeco:copper_bars everythingcopper:copper_bars		
+copper_door	3	create:copper_door createdeco:copper_door everythingcopper:copper_door	create:copper_door createdeco:copper_door everythingcopper:copper_door		
+copper_hoe	2	everythingcopper:copper_hoe iceandfire:copper_hoe			
+copper_ladder	2	create:copper_ladder everythingcopper:copper_ladder	create:copper_ladder everythingcopper:copper_ladder		
+copper_nugget	6	create:copper_nugget everythingcopper:copper_nugget iceandfire:copper_nugget malum:copper_nugget pneumaticcraft:copper_nugget tconstruct:copper_nugget	tconstruct:copper_nugget	tconstruct:copper	forge:nuggets/copper
+copper_pickaxe	2	everythingcopper:copper_pickaxe iceandfire:copper_pickaxe			
+copper_shovel	2	everythingcopper:copper_shovel iceandfire:copper_shovel			
+copper_sword	2	everythingcopper:copper_sword iceandfire:copper_sword			
+copper_trapdoor	2	createdeco:copper_trapdoor everythingcopper:copper_trapdoor	createdeco:copper_trapdoor everythingcopper:copper_trapdoor		
+corpse_blossom	2	goety:corpse_blossom the_deep_void:corpse_blossom	goety:corpse_blossom		
+crab_bucket	2	quark:crab_bucket thalassophobia:crab_bucket			
+crab_spawn_egg	2	quark:crab_spawn_egg thalassophobia:crab_spawn_egg			
+crafting_terminal	2	ae2:crafting_terminal prettypipes:crafting_terminal	ae2:crafting_terminal prettypipes:crafting_terminal		
+crafting_upgrade	2	sophisticatedbackpacks:crafting_upgrade sophisticatedstorage:crafting_upgrade	sophisticatedbackpacks:crafting_upgrade sophisticatedstorage:crafting_upgrade		
+crank	2	ae2:crank supplementaries:crank	ae2:crank supplementaries:crank		
+crossbow	2	minecraft:crossbow tconstruct:crossbow	minecraft:crossbow tconstruct:crossbow		
+crow_spawn_egg	2	fowlplay:crow_spawn_egg hexerei:crow_spawn_egg			
+crushed_end_stone	2	createsifter:crushed_end_stone occultism:crushed_end_stone	occultism:crushed_end_stone		forge:dusts/end_stone
+crystal_ball	2	goety:crystal_ball hexerei:crystal_ball	hexerei:crystal_ball		
+dark_metal_block	2	born_in_chaos_v1:dark_metal_block goety:dark_metal_block	born_in_chaos_v1:dark_metal_block goety:dark_metal_block		
+dark_pressure_plate	2	goety:dark_pressure_plate twilightforest:dark_pressure_plate	goety:dark_pressure_plate twilightforest:dark_pressure_plate		
+debug	4	ars_elemental:debug ars_nouveau:debug citadel:debug powergrid:debug			
+debug_eraser	2	ae2:debug_eraser untamedwilds:debug_eraser			
+diesel_bucket	2	createdieselgenerators:diesel_bucket pneumaticcraft:diesel_bucket			
+diode	2	morered:diode powergrid:diode	morered:diode powergrid:diode		
+diorite_pillar	2	create:diorite_pillar quark:diorite_pillar	create:diorite_pillar quark:diorite_pillar		
+dowsing_rod	2	ars_nouveau:dowsing_rod hexerei:dowsing_rod	ars_nouveau:dowsing_rod hexerei:dowsing_rod		
+dragon_scale	2	quark:dragon_scale tconstruct:dragon_scale	tconstruct:dragon_scale	tconstruct:dragon_scale	
+dripstone_pillar	2	create:dripstone_pillar quark:dripstone_pillar	create:dripstone_pillar quark:dripstone_pillar		
+drone	2	complicated_bees:drone pneumaticcraft:drone	pneumaticcraft:drone		
+duct	2	adchimneys:duct vs_clockwork:duct	adchimneys:duct vs_clockwork:duct		
+dust	2	adpother:dust createsifter:dust			
+ectoplasm	2	goety:ectoplasm iceandfire:ectoplasm	goety:ectoplasm		
+end_stone_pillar	2	cataclysm:end_stone_pillar goety:end_stone_pillar	cataclysm:end_stone_pillar goety:end_stone_pillar	tconstruct:whitestone#end	
+enderman_head	2	supplementaries:enderman_head tconstruct:enderman_head	tconstruct:enderman_head		
+energy_cell	2	ae2:energy_cell fallout_wastelands_:energy_cell	ae2:energy_cell fallout_wastelands_:energy_cell		
+ethanol_bucket	2	createdieselgenerators:ethanol_bucket pneumaticcraft:ethanol_bucket			
+executioner_spawn_egg	2	savage_and_ravage:executioner_spawn_egg the_deep_void:executioner_spawn_egg			
+fallen_leaves	2	projectvibrantjourneys:fallen_leaves twilightforest:fallen_leaves			
+feeding_upgrade	2	sophisticatedbackpacks:feeding_upgrade sophisticatedstorage:feeding_upgrade	sophisticatedbackpacks:feeding_upgrade sophisticatedstorage:feeding_upgrade		
+fertilizer	2	alexscaves:fertilizer fallout_wastelands_:fertilizer	alexscaves:fertilizer fallout_wastelands_:fertilizer		
+fiddlehead	2	alexscaves:fiddlehead twilightforest:fiddlehead			
+filter_upgrade	2	sophisticatedbackpacks:filter_upgrade sophisticatedstorage:filter_upgrade	sophisticatedbackpacks:filter_upgrade sophisticatedstorage:filter_upgrade		
+fish_stew	2	farmersdelight:fish_stew thalassophobia:fish_stew	farmersdelight:fish_stew thalassophobia:fish_stew		
+fishing_rod	2	minecraft:fishing_rod tconstruct:fishing_rod			
+flesh_block	2	the_deep_void:flesh_block the_flesh_that_hates:flesh_block			
+flesh_bricks	2	the_deep_void:flesh_bricks the_flesh_that_hates:flesh_bricks	the_deep_void:flesh_bricks		
+floater	2	alexscaves:floater vs_eureka:floater	alexscaves:floater vs_eureka:floater		
+framed_glass	3	create:framed_glass quark:framed_glass the_deep_void:framed_glass	create:framed_glass quark:framed_glass the_deep_void:framed_glass	tconstruct:glass	forge:glass forge:glass/colorless
+framed_glass_pane	3	create:framed_glass_pane quark:framed_glass_pane the_deep_void:framed_glass_pane	create:framed_glass_pane quark:framed_glass_pane the_deep_void:framed_glass_pane	tconstruct:glass	
+fried_egg	2	farmersdelight:fried_egg kaleidoscope_cookery:fried_egg	farmersdelight:fried_egg kaleidoscope_cookery:fried_egg		
+garlic	2	better_spicy_farmers:garlic ubesdelight:garlic	better_spicy_farmers:garlic ubesdelight:garlic		
+gasoline_bucket	2	createdieselgenerators:gasoline_bucket pneumaticcraft:gasoline_bucket			
+giant_clam_spawn_egg	2	thalassophobia:giant_clam_spawn_egg untamedwilds:giant_clam_spawn_egg			
+ginger	2	better_spicy_farmers:ginger ubesdelight:ginger	ubesdelight:ginger		
+gold_bars	2	quark:gold_bars tconstruct:gold_bars	quark:gold_bars tconstruct:gold_bars		
+gold_trapdoor	2	goety:gold_trapdoor supplementaries:gold_trapdoor	supplementaries:gold_trapdoor		
+goose_spawn_egg	2	fowlplay:goose_spawn_egg upgrade_aquatic:goose_spawn_egg			
+granite_pillar	2	create:granite_pillar quark:granite_pillar	create:granite_pillar quark:granite_pillar		
+green_stained_glass	2	born_in_chaos_v1:green_stained_glass minecraft:green_stained_glass	born_in_chaos_v1:green_stained_glass minecraft:green_stained_glass	tconstruct:glass	forge:glass forge:glass/green forge:glass/silica
+grimberry_juice	2	better_drinking_water:grimberry_juice the_deep_void:grimberry_juice	better_drinking_water:grimberry_juice		
+guide	2	ae2:guide guideme:guide	ae2:guide		
+hamimelon_juice	2	better_drinking_water:hamimelon_juice fruitsdelight:hamimelon_juice	better_drinking_water:hamimelon_juice		
+hammer	2	createdieselgenerators:hammer quark:hammer	createdieselgenerators:hammer		
+heat_pipe	2	better_industrial_heat:heat_pipe pneumaticcraft:heat_pipe	better_industrial_heat:heat_pipe pneumaticcraft:heat_pipe		
+hollow_acacia_log	2	quark:hollow_acacia_log twilightforest:hollow_acacia_log	quark:hollow_acacia_log twilightforest:hollow_acacia_log	tconstruct:wood	
+hollow_birch_log	2	quark:hollow_birch_log twilightforest:hollow_birch_log	quark:hollow_birch_log twilightforest:hollow_birch_log	tconstruct:wood	
+hollow_cherry_log	2	quark:hollow_cherry_log twilightforest:hollow_cherry_log	quark:hollow_cherry_log twilightforest:hollow_cherry_log	tconstruct:wood	
+hollow_crimson_stem	2	quark:hollow_crimson_stem twilightforest:hollow_crimson_stem	quark:hollow_crimson_stem twilightforest:hollow_crimson_stem	tconstruct:wood#crimson	
+hollow_dark_oak_log	2	quark:hollow_dark_oak_log twilightforest:hollow_dark_oak_log	quark:hollow_dark_oak_log twilightforest:hollow_dark_oak_log	tconstruct:wood	
+hollow_jungle_log	2	quark:hollow_jungle_log twilightforest:hollow_jungle_log	quark:hollow_jungle_log twilightforest:hollow_jungle_log	tconstruct:wood	
+hollow_mangrove_log	2	quark:hollow_mangrove_log twilightforest:hollow_mangrove_log	quark:hollow_mangrove_log twilightforest:hollow_mangrove_log	tconstruct:wood	
+hollow_oak_log	2	quark:hollow_oak_log twilightforest:hollow_oak_log	quark:hollow_oak_log twilightforest:hollow_oak_log	tconstruct:wood	
+hollow_spruce_log	2	quark:hollow_spruce_log twilightforest:hollow_spruce_log	quark:hollow_spruce_log twilightforest:hollow_spruce_log	tconstruct:wood	
+hollow_warped_stem	2	quark:hollow_warped_stem twilightforest:hollow_warped_stem	quark:hollow_warped_stem twilightforest:hollow_warped_stem	tconstruct:wood#warped	
+honey_bucket	3	create:honey_bucket tconstruct:honey_bucket the_bumblezone:honey_bucket	the_bumblezone:honey_bucket		
+icicle	3	immersive_weathering:icicle projectvibrantjourneys:icicle subwild:icicle			
+industrial_iron_window	2	create:industrial_iron_window createdeco:industrial_iron_window	create:industrial_iron_window createdeco:industrial_iron_window		
+industrial_iron_window_pane	2	create:industrial_iron_window_pane createdeco:industrial_iron_window_pane	create:industrial_iron_window_pane createdeco:industrial_iron_window_pane	tconstruct:glass	
+infinity_upgrade	2	sophisticatedbackpacks:infinity_upgrade sophisticatedstorage:infinity_upgrade			
+iron_ladder	3	createdeco:iron_ladder quark:iron_ladder twilightforest:iron_ladder	createdeco:iron_ladder quark:iron_ladder twilightforest:iron_ladder		
+jei_dummy/none	2	goety:jei_dummy/none occultism:jei_dummy/none	goety:jei_dummy/none occultism:jei_dummy/none		
+jellyfish_bucket	2	thalassophobia:jellyfish_bucket upgrade_aquatic:jellyfish_bucket			
+jellyfish_spawn_egg	2	thalassophobia:jellyfish_spawn_egg upgrade_aquatic:jellyfish_spawn_egg			
+joshua_leaves	2	fallout_wastelands_:joshua_leaves natures_spirit:joshua_leaves		tconstruct:leaves	
+joshua_log	2	fallout_wastelands_:joshua_log natures_spirit:joshua_log		tconstruct:wood	
+jukebox_upgrade	2	sophisticatedbackpacks:jukebox_upgrade sophisticatedstorage:jukebox_upgrade	sophisticatedbackpacks:jukebox_upgrade sophisticatedstorage:jukebox_upgrade		
+kettle	2	better_spicy_farmers:kettle farmersrespite:kettle	better_spicy_farmers:kettle farmersrespite:kettle		
+kiwi_juice	2	better_drinking_water:kiwi_juice fruitsdelight:kiwi_juice	better_drinking_water:kiwi_juice		
+knightmetal_block	2	tconstruct:knightmetal_block twilightforest:knightmetal_block	tconstruct:knightmetal_block twilightforest:knightmetal_block	tconstruct:knightmetal	forge:storage_blocks/knightmetal
+knightmetal_ingot	2	tconstruct:knightmetal_ingot twilightforest:knightmetal_ingot	tconstruct:knightmetal_ingot twilightforest:knightmetal_ingot	tconstruct:knightmetal	forge:ingots/knightmetal
+lectern	2	iceandfire:lectern minecraft:lectern	iceandfire:lectern minecraft:lectern		
+lemon_juice	2	better_drinking_water:lemon_juice fruitsdelight:lemon_juice	better_drinking_water:lemon_juice		
+limestone	4	alexscaves:limestone create:limestone quark:limestone unearthed:limestone	create:limestone unearthed:limestone	tconstruct:rock#stone	forge:stone
+limestone_bricks	3	dawnoftimebuilder:limestone_bricks quark:limestone_bricks unearthed:limestone_bricks	dawnoftimebuilder:limestone_bricks quark:limestone_bricks unearthed:limestone_bricks		
+limestone_bricks_slab	2	dawnoftimebuilder:limestone_bricks_slab quark:limestone_bricks_slab	dawnoftimebuilder:limestone_bricks_slab quark:limestone_bricks_slab		
+limestone_bricks_stairs	2	dawnoftimebuilder:limestone_bricks_stairs quark:limestone_bricks_stairs	dawnoftimebuilder:limestone_bricks_stairs quark:limestone_bricks_stairs		
+limestone_bricks_wall	2	dawnoftimebuilder:limestone_bricks_wall quark:limestone_bricks_wall	dawnoftimebuilder:limestone_bricks_wall quark:limestone_bricks_wall		
+limestone_pillar	4	alexscaves:limestone_pillar create:limestone_pillar quark:limestone_pillar unearthed:limestone_pillar	alexscaves:limestone_pillar create:limestone_pillar quark:limestone_pillar unearthed:limestone_pillar		
+limestone_slab	3	alexscaves:limestone_slab quark:limestone_slab unearthed:limestone_slab	alexscaves:limestone_slab quark:limestone_slab unearthed:limestone_slab		
+limestone_stairs	3	alexscaves:limestone_stairs quark:limestone_stairs unearthed:limestone_stairs	alexscaves:limestone_stairs quark:limestone_stairs unearthed:limestone_stairs		
+limestone_wall	3	alexscaves:limestone_wall quark:limestone_wall unearthed:limestone_wall	alexscaves:limestone_wall quark:limestone_wall unearthed:limestone_wall		
+lionfish	2	cataclysm:lionfish upgrade_aquatic:lionfish			
+lionfish_bucket	2	thalassophobia:lionfish_bucket upgrade_aquatic:lionfish_bucket			
+lionfish_spawn_egg	3	cataclysm:lionfish_spawn_egg thalassophobia:lionfish_spawn_egg upgrade_aquatic:lionfish_spawn_egg			
+logo	2	the_flesh_that_hates:logo untamedwilds:logo			
+maggot_spawn_egg	2	born_in_chaos_v1:maggot_spawn_egg the_deep_void:maggot_spawn_egg			
+magnet	2	powergrid:magnet quark:magnet	powergrid:magnet		
+magnet_upgrade	3	pneumaticcraft:magnet_upgrade sophisticatedbackpacks:magnet_upgrade sophisticatedstorage:magnet_upgrade	pneumaticcraft:magnet_upgrade sophisticatedbackpacks:magnet_upgrade sophisticatedstorage:magnet_upgrade		
+mahogany_boat	2	hexerei:mahogany_boat natures_spirit:mahogany_boat	natures_spirit:mahogany_boat		
+mahogany_branch	2	better_hexerei_dynamic_trees:mahogany_branch dtnatures_spirit:mahogany_branch			
+mahogany_button	2	hexerei:mahogany_button natures_spirit:mahogany_button	natures_spirit:mahogany_button		
+mahogany_chest_boat	2	hexerei:mahogany_chest_boat natures_spirit:mahogany_chest_boat	natures_spirit:mahogany_chest_boat		
+mahogany_door	2	hexerei:mahogany_door natures_spirit:mahogany_door	natures_spirit:mahogany_door		
+mahogany_fence	2	hexerei:mahogany_fence natures_spirit:mahogany_fence	natures_spirit:mahogany_fence		
+mahogany_fence_gate	2	hexerei:mahogany_fence_gate natures_spirit:mahogany_fence_gate	natures_spirit:mahogany_fence_gate		
+mahogany_hanging_sign	2	hexerei:mahogany_hanging_sign natures_spirit:mahogany_hanging_sign	natures_spirit:mahogany_hanging_sign		
+mahogany_leaves	2	hexerei:mahogany_leaves natures_spirit:mahogany_leaves		tconstruct:leaves	
+mahogany_log	2	hexerei:mahogany_log natures_spirit:mahogany_log		tconstruct:wood	
+mahogany_planks	2	hexerei:mahogany_planks natures_spirit:mahogany_planks	natures_spirit:mahogany_planks	tconstruct:wood	
+mahogany_pressure_plate	2	hexerei:mahogany_pressure_plate natures_spirit:mahogany_pressure_plate	natures_spirit:mahogany_pressure_plate		
+mahogany_sapling	2	hexerei:mahogany_sapling natures_spirit:mahogany_sapling			
+mahogany_seed	2	better_hexerei_dynamic_trees:mahogany_seed dtnatures_spirit:mahogany_seed			
+mahogany_sign	2	hexerei:mahogany_sign natures_spirit:mahogany_sign	natures_spirit:mahogany_sign		
+mahogany_slab	2	hexerei:mahogany_slab natures_spirit:mahogany_slab	hexerei:mahogany_slab natures_spirit:mahogany_slab		
+mahogany_stairs	2	hexerei:mahogany_stairs natures_spirit:mahogany_stairs	natures_spirit:mahogany_stairs		
+mahogany_trapdoor	2	hexerei:mahogany_trapdoor natures_spirit:mahogany_trapdoor	natures_spirit:mahogany_trapdoor		
+mahogany_wood	2	hexerei:mahogany_wood natures_spirit:mahogany_wood	natures_spirit:mahogany_wood	tconstruct:wood	
+mangrove_boat	2	minecraft:mangrove_boat twilightforest:mangrove_boat	minecraft:mangrove_boat twilightforest:mangrove_boat		
+mangrove_branch	2	dttwilightforest:mangrove_branch dynamictrees:mangrove_branch			
+mangrove_button	2	minecraft:mangrove_button twilightforest:mangrove_button	minecraft:mangrove_button twilightforest:mangrove_button		
+mangrove_chest	2	quark:mangrove_chest twilightforest:mangrove_chest	quark:mangrove_chest twilightforest:mangrove_chest		
+mangrove_chest_boat	2	minecraft:mangrove_chest_boat twilightforest:mangrove_chest_boat	minecraft:mangrove_chest_boat twilightforest:mangrove_chest_boat		
+mangrove_door	2	minecraft:mangrove_door twilightforest:mangrove_door	minecraft:mangrove_door twilightforest:mangrove_door		
+mangrove_fence	2	minecraft:mangrove_fence twilightforest:mangrove_fence	minecraft:mangrove_fence twilightforest:mangrove_fence		
+mangrove_fence_gate	2	minecraft:mangrove_fence_gate twilightforest:mangrove_fence_gate	minecraft:mangrove_fence_gate twilightforest:mangrove_fence_gate		
+mangrove_hanging_sign	2	minecraft:mangrove_hanging_sign twilightforest:mangrove_hanging_sign	minecraft:mangrove_hanging_sign twilightforest:mangrove_hanging_sign		
+mangrove_leaves	2	minecraft:mangrove_leaves twilightforest:mangrove_leaves		tconstruct:leaves	
+mangrove_log	2	minecraft:mangrove_log twilightforest:mangrove_log		tconstruct:wood	
+mangrove_planks	2	minecraft:mangrove_planks twilightforest:mangrove_planks	minecraft:mangrove_planks twilightforest:mangrove_planks	tconstruct:wood	
+mangrove_pressure_plate	2	minecraft:mangrove_pressure_plate twilightforest:mangrove_pressure_plate	minecraft:mangrove_pressure_plate twilightforest:mangrove_pressure_plate		
+mangrove_roots	3	dttwilightforest:mangrove_roots dynamictrees:mangrove_roots minecraft:mangrove_roots			
+mangrove_seed	2	dttwilightforest:mangrove_seed dynamictrees:mangrove_seed			
+mangrove_sign	2	minecraft:mangrove_sign twilightforest:mangrove_sign	minecraft:mangrove_sign twilightforest:mangrove_sign		
+mangrove_slab	2	minecraft:mangrove_slab twilightforest:mangrove_slab	minecraft:mangrove_slab twilightforest:mangrove_slab		
+mangrove_stairs	2	minecraft:mangrove_stairs twilightforest:mangrove_stairs	minecraft:mangrove_stairs twilightforest:mangrove_stairs		
+mangrove_trapdoor	2	minecraft:mangrove_trapdoor twilightforest:mangrove_trapdoor	minecraft:mangrove_trapdoor twilightforest:mangrove_trapdoor		
+mangrove_wood	2	minecraft:mangrove_wood twilightforest:mangrove_wood	minecraft:mangrove_wood twilightforest:mangrove_wood	tconstruct:wood	
+marble	3	dawnoftimebuilder:marble goety:marble unearthed:marble	dawnoftimebuilder:marble goety:marble unearthed:marble	tconstruct:rock#stone	forge:stone
+marble_slab	3	dawnoftimebuilder:marble_slab goety:marble_slab unearthed:marble_slab	dawnoftimebuilder:marble_slab goety:marble_slab unearthed:marble_slab		
+marble_stairs	3	dawnoftimebuilder:marble_stairs goety:marble_stairs unearthed:marble_stairs	dawnoftimebuilder:marble_stairs goety:marble_stairs unearthed:marble_stairs		
+marble_wall	2	dawnoftimebuilder:marble_wall unearthed:marble_wall	dawnoftimebuilder:marble_wall unearthed:marble_wall		
+melon_juice	2	better_drinking_water:melon_juice farmersdelight:melon_juice	better_drinking_water:melon_juice		
+metal_barrel	2	alexscaves:metal_barrel fallout_wastelands_:metal_barrel	alexscaves:metal_barrel		
+milk_bottle	3	eanimod:milk_bottle farmersdelight:milk_bottle hexerei:milk_bottle	eanimod:milk_bottle farmersdelight:milk_bottle		
+millstone	2	create:millstone kaleidoscope_cookery:millstone	create:millstone kaleidoscope_cookery:millstone		
+mimic_spawn_egg	3	aether:mimic_spawn_egg artifacts:mimic_spawn_egg the_deep_void:mimic_spawn_egg			
+mod_logo	2	explosionoverhaul:mod_logo thalassophobia:mod_logo			
+monitor	2	ae2:monitor oc2r:monitor	ae2:monitor		
+mossy_stone	2	immersive_weathering:mossy_stone subwild:mossy_stone	immersive_weathering:mossy_stone subwild:mossy_stone		forge:stone
+nautilus_shell	2	minecraft:nautilus_shell thalassophobia:nautilus_shell	minecraft:nautilus_shell thalassophobia:nautilus_shell		
+netherite_nugget	2	createdeco:netherite_nugget tconstruct:netherite_nugget	createdeco:netherite_nugget tconstruct:netherite_nugget		forge:nuggets/netherite
+obsidian_skull	2	artifacts:obsidian_skull moreartifacts:obsidian_skull	artifacts:obsidian_skull moreartifacts:obsidian_skull		
+olive_branch	2	dtnatures_spirit:olive_branch natures_spirit:olive_branch			
+onion	2	better_spicy_farmers:onion farmersdelight:onion	farmersdelight:onion		
+orange_juice	2	better_drinking_water:orange_juice fruitsdelight:orange_juice	better_drinking_water:orange_juice		
+orange_stained_glass	2	born_in_chaos_v1:orange_stained_glass minecraft:orange_stained_glass	born_in_chaos_v1:orange_stained_glass minecraft:orange_stained_glass	tconstruct:glass	forge:glass forge:glass/orange forge:glass/silica
+paper_door	2	dawnoftimebuilder:paper_door natures_spirit:paper_door	dawnoftimebuilder:paper_door natures_spirit:paper_door		
+paper_lantern	2	natures_spirit:paper_lantern quark:paper_lantern	natures_spirit:paper_lantern quark:paper_lantern		
+paper_wall	2	dawnoftimebuilder:paper_wall quark:paper_wall	dawnoftimebuilder:paper_wall quark:paper_wall		
+pear_juice	2	better_drinking_water:pear_juice fruitsdelight:pear_juice	better_drinking_water:pear_juice		
+pearl	2	alexscaves:pearl thalassophobia:pearl	alexscaves:pearl thalassophobia:pearl		forge:raw_materials/pearl
+pedestal	2	goety:pedestal supplementaries:pedestal	goety:pedestal supplementaries:pedestal		
+penguin_spawn_egg	2	fowlplay:penguin_spawn_egg twilightforest:penguin_spawn_egg			
+permafrost	2	immersive_weathering:permafrost quark:permafrost			forge:stone
+pickup_upgrade	2	sophisticatedbackpacks:pickup_upgrade sophisticatedstorage:pickup_upgrade	sophisticatedbackpacks:pickup_upgrade sophisticatedstorage:pickup_upgrade		
+pike	2	tinkersweaponry:pike upgrade_aquatic:pike	tinkersweaponry:pike		
+pipe	4	adchimneys:pipe fallout_wastelands_:pipe prettypipes:pipe quark:pipe	adchimneys:pipe prettypipes:pipe		
+potato_crate	2	farmersdelight:potato_crate quark:potato_crate	farmersdelight:potato_crate quark:potato_crate		forge:storage_blocks/potato
+present	2	aether:present supplementaries:present	supplementaries:present		
+primordial_soup	2	alexscaves:primordial_soup malum:primordial_soup	alexscaves:primordial_soup		
+prismarine_brick_wall	2	cataclysm:prismarine_brick_wall immersive_weathering:prismarine_brick_wall	cataclysm:prismarine_brick_wall immersive_weathering:prismarine_brick_wall		
+prisoner_spawn_egg	2	goety:prisoner_spawn_egg the_deep_void:prisoner_spawn_egg			
+pump_upgrade	2	sophisticatedbackpacks:pump_upgrade sophisticatedstorage:pump_upgrade	sophisticatedbackpacks:pump_upgrade		
+purple_stained_glass	2	born_in_chaos_v1:purple_stained_glass minecraft:purple_stained_glass	born_in_chaos_v1:purple_stained_glass minecraft:purple_stained_glass	tconstruct:glass	forge:glass forge:glass/purple forge:glass/silica
+purpur_wall	2	cataclysm:purpur_wall goety:purpur_wall	cataclysm:purpur_wall		
+quartz_block	2	ae2:quartz_block minecraft:quartz_block	ae2:quartz_block minecraft:quartz_block	tconstruct:quartz	forge:storage_blocks/certus_quartz forge:storage_blocks/quartz
+quartz_brick_wall	2	ae2:quartz_brick_wall cataclysm:quartz_brick_wall	ae2:quartz_brick_wall cataclysm:quartz_brick_wall		
+quartz_bricks	2	ae2:quartz_bricks minecraft:quartz_bricks	ae2:quartz_bricks minecraft:quartz_bricks		forge:bricks/large
+quartz_pillar	2	ae2:quartz_pillar minecraft:quartz_pillar	ae2:quartz_pillar minecraft:quartz_pillar		
+quartz_slab	2	ae2:quartz_slab minecraft:quartz_slab	ae2:quartz_slab minecraft:quartz_slab		
+quartz_stairs	2	ae2:quartz_stairs minecraft:quartz_stairs	ae2:quartz_stairs minecraft:quartz_stairs		
+raven_spawn_egg	2	fowlplay:raven_spawn_egg twilightforest:raven_spawn_egg			
+raw_silver	2	iceandfire:raw_silver occultism:raw_silver	occultism:raw_silver		forge:raw_materials/silver
+raw_silver_block	2	iceandfire:raw_silver_block occultism:raw_silver_block	iceandfire:raw_silver_block occultism:raw_silver_block		forge:storage_blocks/raw_silver
+red_moss_block	2	goety:red_moss_block natures_spirit:red_moss_block	goety:red_moss_block		
+red_paper_lantern	2	dawnoftimebuilder:red_paper_lantern natures_spirit:red_paper_lantern	dawnoftimebuilder:red_paper_lantern natures_spirit:red_paper_lantern		
+redstone_module	2	pneumaticcraft:redstone_module prettypipes:redstone_module	pneumaticcraft:redstone_module prettypipes:redstone_module		
+redstone_relay	2	ars_nouveau:redstone_relay powergrid:redstone_relay	ars_nouveau:redstone_relay powergrid:redstone_relay		
+relay	2	ars_nouveau:relay powergrid:relay	ars_nouveau:relay powergrid:relay		
+rice	2	farmersdelight:rice kaleidoscope_cookery:rice	farmersdelight:rice kaleidoscope_cookery:rice		
+rice_panicle	2	farmersdelight:rice_panicle kaleidoscope_cookery:rice_panicle	farmersdelight:rice_panicle kaleidoscope_cookery:rice_panicle		
+rope	3	farmersdelight:rope quark:rope supplementaries:rope	farmersdelight:rope supplementaries:rope		forge:ropes
+rotten_button	2	goety:rotten_button the_deep_void:rotten_button	goety:rotten_button the_deep_void:rotten_button		
+rotten_door	2	goety:rotten_door the_deep_void:rotten_door	goety:rotten_door the_deep_void:rotten_door		
+rotten_fence	2	goety:rotten_fence the_deep_void:rotten_fence	goety:rotten_fence the_deep_void:rotten_fence		
+rotten_fence_gate	2	goety:rotten_fence_gate the_deep_void:rotten_fence_gate	goety:rotten_fence_gate the_deep_void:rotten_fence_gate		
+rotten_flesh	2	minecraft:rotten_flesh the_flesh_that_hates:rotten_flesh	minecraft:rotten_flesh		
+rotten_log	2	goety:rotten_log the_deep_void:rotten_log	the_deep_void:rotten_log	tconstruct:wood	
+rotten_planks	2	goety:rotten_planks the_deep_void:rotten_planks	goety:rotten_planks the_deep_void:rotten_planks	tconstruct:wood	
+rotten_pressure_plate	2	goety:rotten_pressure_plate the_deep_void:rotten_pressure_plate	goety:rotten_pressure_plate the_deep_void:rotten_pressure_plate		
+rotten_slab	2	goety:rotten_slab the_deep_void:rotten_slab	goety:rotten_slab the_deep_void:rotten_slab		
+rotten_stairs	2	goety:rotten_stairs the_deep_void:rotten_stairs	goety:rotten_stairs the_deep_void:rotten_stairs		
+rotten_trapdoor	2	goety:rotten_trapdoor the_deep_void:rotten_trapdoor	goety:rotten_trapdoor the_deep_void:rotten_trapdoor		
+rotten_wood	2	goety:rotten_wood the_deep_void:rotten_wood	goety:rotten_wood the_deep_void:rotten_wood	tconstruct:wood	
+sack	2	supplementaries:sack tinkers_things:sack	supplementaries:sack tinkers_things:sack		
+sandstone_bricks	2	dawnoftimebuilder:sandstone_bricks quark:sandstone_bricks	dawnoftimebuilder:sandstone_bricks quark:sandstone_bricks		
+sandstone_bricks_slab	2	dawnoftimebuilder:sandstone_bricks_slab quark:sandstone_bricks_slab	dawnoftimebuilder:sandstone_bricks_slab quark:sandstone_bricks_slab		
+sandstone_bricks_stairs	2	dawnoftimebuilder:sandstone_bricks_stairs quark:sandstone_bricks_stairs	dawnoftimebuilder:sandstone_bricks_stairs quark:sandstone_bricks_stairs		
+sandstone_bricks_wall	2	dawnoftimebuilder:sandstone_bricks_wall quark:sandstone_bricks_wall	dawnoftimebuilder:sandstone_bricks_wall quark:sandstone_bricks_wall		
+sandstone_coal_ore	2	subwild:sandstone_coal_ore unearthed:sandstone_coal_ore			forge:ores/coal
+sandstone_diamond_ore	2	subwild:sandstone_diamond_ore unearthed:sandstone_diamond_ore			forge:ores/diamond
+sandstone_emerald_ore	2	subwild:sandstone_emerald_ore unearthed:sandstone_emerald_ore			forge:ores/emerald
+sandstone_gold_ore	2	subwild:sandstone_gold_ore unearthed:sandstone_gold_ore			forge:ores/gold
+sandstone_iron_ore	2	subwild:sandstone_iron_ore unearthed:sandstone_iron_ore			forge:ores/iron
+sandstone_lapis_ore	2	subwild:sandstone_lapis_ore unearthed:sandstone_lapis_ore			forge:ores/lapis
+sandstone_redstone_ore	2	subwild:sandstone_redstone_ore unearthed:sandstone_redstone_ore			forge:ores/redstone
+scarecrow	2	fowlplay:scarecrow kaleidoscope_cookery:scarecrow	fowlplay:scarecrow kaleidoscope_cookery:scarecrow		
+sconce	2	ars_nouveau:sconce supplementaries:sconce	ars_nouveau:sconce supplementaries:sconce		
+shark_spawn_egg	2	thalassophobia:shark_spawn_egg untamedwilds:shark_spawn_egg			
+shulker_box	2	minecraft:shulker_box sophisticatedstorage:shulker_box	minecraft:shulker_box sophisticatedstorage:shulker_box		
+silicon	2	ae2:silicon oc2r:silicon	ae2:silicon oc2r:silicon		forge:silicon
+siltstone	2	goety:siltstone unearthed:siltstone	goety:siltstone unearthed:siltstone	tconstruct:rock#stone	forge:stone
+siltstone_slab	2	goety:siltstone_slab unearthed:siltstone_slab	goety:siltstone_slab unearthed:siltstone_slab		
+siltstone_stairs	2	goety:siltstone_stairs unearthed:siltstone_stairs	goety:siltstone_stairs unearthed:siltstone_stairs		
+siltstone_wall	2	goety:siltstone_wall unearthed:siltstone_wall	goety:siltstone_wall unearthed:siltstone_wall		
+silver_block	2	iceandfire:silver_block occultism:silver_block	occultism:silver_block	tconstruct:silver	forge:storage_blocks/silver
+silver_ingot	2	iceandfire:silver_ingot occultism:silver_ingot	occultism:silver_ingot	tconstruct:silver	forge:ingots/silver
+silver_nugget	2	iceandfire:silver_nugget occultism:silver_nugget	occultism:silver_nugget	tconstruct:silver	forge:nuggets/silver
+silver_ore	2	iceandfire:silver_ore occultism:silver_ore			forge:ores/silver
+skyroot_button	2	aether:skyroot_button tconstruct:skyroot_button	aether:skyroot_button tconstruct:skyroot_button		
+skyroot_door	2	aether:skyroot_door tconstruct:skyroot_door	aether:skyroot_door tconstruct:skyroot_door		
+skyroot_fence	2	aether:skyroot_fence tconstruct:skyroot_fence	aether:skyroot_fence tconstruct:skyroot_fence		
+skyroot_fence_gate	2	aether:skyroot_fence_gate tconstruct:skyroot_fence_gate	aether:skyroot_fence_gate tconstruct:skyroot_fence_gate		
+skyroot_hanging_sign	2	aether:skyroot_hanging_sign tconstruct:skyroot_hanging_sign	aether:skyroot_hanging_sign tconstruct:skyroot_hanging_sign		
+skyroot_log	2	aether:skyroot_log tconstruct:skyroot_log	tconstruct:skyroot_log	tconstruct:slimewood#skyroot tconstruct:wood	
+skyroot_planks	2	aether:skyroot_planks tconstruct:skyroot_planks	aether:skyroot_planks tconstruct:skyroot_planks	tconstruct:slimewood#skyroot tconstruct:wood	
+skyroot_pressure_plate	2	aether:skyroot_pressure_plate tconstruct:skyroot_pressure_plate	aether:skyroot_pressure_plate tconstruct:skyroot_pressure_plate		
+skyroot_sign	2	aether:skyroot_sign tconstruct:skyroot_sign	aether:skyroot_sign tconstruct:skyroot_sign		
+skyroot_trapdoor	2	aether:skyroot_trapdoor tconstruct:skyroot_trapdoor	aether:skyroot_trapdoor tconstruct:skyroot_trapdoor		
+skyroot_wood	2	aether:skyroot_wood tconstruct:skyroot_wood	aether:skyroot_wood tconstruct:skyroot_wood	tconstruct:slimewood#skyroot tconstruct:wood	
+slate_bricks	2	dawnoftimebuilder:slate_bricks unearthed:slate_bricks	dawnoftimebuilder:slate_bricks unearthed:slate_bricks		
+smelting_upgrade	2	sophisticatedbackpacks:smelting_upgrade sophisticatedstorage:smelting_upgrade	sophisticatedbackpacks:smelting_upgrade sophisticatedstorage:smelting_upgrade		
+smoker	2	minecraft:smoker twilightforest:smoker	minecraft:smoker		
+smoking_upgrade	2	sophisticatedbackpacks:smoking_upgrade sophisticatedstorage:smoking_upgrade	sophisticatedbackpacks:smoking_upgrade sophisticatedstorage:smoking_upgrade		
+smooth_quartz_slab	2	ae2:smooth_quartz_slab minecraft:smooth_quartz_slab	ae2:smooth_quartz_slab minecraft:smooth_quartz_slab		
+smooth_quartz_stairs	2	ae2:smooth_quartz_stairs minecraft:smooth_quartz_stairs	ae2:smooth_quartz_stairs minecraft:smooth_quartz_stairs		
+smooth_siltstone	2	goety:smooth_siltstone unearthed:smooth_siltstone	goety:smooth_siltstone unearthed:smooth_siltstone		
+smooth_siltstone_slab	2	goety:smooth_siltstone_slab unearthed:smooth_siltstone_slab	goety:smooth_siltstone_slab unearthed:smooth_siltstone_slab		
+smooth_siltstone_stairs	2	goety:smooth_siltstone_stairs unearthed:smooth_siltstone_stairs	goety:smooth_siltstone_stairs unearthed:smooth_siltstone_stairs		
+soul_shard	2	occultism:soul_shard the_deep_void:soul_shard	the_deep_void:soul_shard		
+spirit_fabric	2	goety:spirit_fabric malum:spirit_fabric	goety:spirit_fabric malum:spirit_fabric		
+stack_downgrade_tier_1	2	sophisticatedbackpacks:stack_downgrade_tier_1 sophisticatedstorage:stack_downgrade_tier_1	sophisticatedbackpacks:stack_downgrade_tier_1 sophisticatedstorage:stack_downgrade_tier_1		
+stack_downgrade_tier_2	2	sophisticatedbackpacks:stack_downgrade_tier_2 sophisticatedstorage:stack_downgrade_tier_2	sophisticatedbackpacks:stack_downgrade_tier_2 sophisticatedstorage:stack_downgrade_tier_2		
+stack_downgrade_tier_3	2	sophisticatedbackpacks:stack_downgrade_tier_3 sophisticatedstorage:stack_downgrade_tier_3	sophisticatedbackpacks:stack_downgrade_tier_3 sophisticatedstorage:stack_downgrade_tier_3		
+stack_upgrade_omega_tier	2	sophisticatedbackpacks:stack_upgrade_omega_tier sophisticatedstorage:stack_upgrade_omega_tier			
+stack_upgrade_tier_1	2	sophisticatedbackpacks:stack_upgrade_tier_1 sophisticatedstorage:stack_upgrade_tier_1	sophisticatedbackpacks:stack_upgrade_tier_1 sophisticatedstorage:stack_upgrade_tier_1		
+stack_upgrade_tier_2	2	sophisticatedbackpacks:stack_upgrade_tier_2 sophisticatedstorage:stack_upgrade_tier_2	sophisticatedbackpacks:stack_upgrade_tier_2 sophisticatedstorage:stack_upgrade_tier_2		
+stack_upgrade_tier_3	2	sophisticatedbackpacks:stack_upgrade_tier_3 sophisticatedstorage:stack_upgrade_tier_3	sophisticatedbackpacks:stack_upgrade_tier_3 sophisticatedstorage:stack_upgrade_tier_3		
+stack_upgrade_tier_4	2	sophisticatedbackpacks:stack_upgrade_tier_4 sophisticatedstorage:stack_upgrade_tier_4	sophisticatedbackpacks:stack_upgrade_tier_4 sophisticatedstorage:stack_upgrade_tier_4		
+statue	2	supplementaries:statue tacz:statue	supplementaries:statue tacz:statue		
+steel_block	2	fallout_wastelands_:steel_block tconstruct:steel_block	tconstruct:steel_block	tconstruct:steel	forge:storage_blocks/steel
+steel_ingot	2	fallout_wastelands_:steel_ingot tconstruct:steel_ingot	tconstruct:steel_ingot	tconstruct:steel	forge:ingots/steel
+stone_lamp	2	quark:stone_lamp supplementaries:stone_lamp	quark:stone_lamp supplementaries:stone_lamp		
+stone_plate	2	dawnoftimebuilder:stone_plate morered:stone_plate	morered:stone_plate		
+stone_tile_slab	2	cataclysm:stone_tile_slab supplementaries:stone_tile_slab	cataclysm:stone_tile_slab supplementaries:stone_tile_slab		
+stone_tile_stairs	2	cataclysm:stone_tile_stairs supplementaries:stone_tile_stairs	cataclysm:stone_tile_stairs supplementaries:stone_tile_stairs		
+stone_tile_wall	2	cataclysm:stone_tile_wall supplementaries:stone_tile_wall	cataclysm:stone_tile_wall supplementaries:stone_tile_wall		
+stonecutter_upgrade	2	sophisticatedbackpacks:stonecutter_upgrade sophisticatedstorage:stonecutter_upgrade	sophisticatedbackpacks:stonecutter_upgrade sophisticatedstorage:stonecutter_upgrade		
+stove	2	farmersdelight:stove kaleidoscope_cookery:stove	farmersdelight:stove kaleidoscope_cookery:stove		
+stripped_mahogany_log	2	hexerei:stripped_mahogany_log natures_spirit:stripped_mahogany_log	natures_spirit:stripped_mahogany_log	tconstruct:wood	
+stripped_mahogany_wood	2	hexerei:stripped_mahogany_wood natures_spirit:stripped_mahogany_wood	natures_spirit:stripped_mahogany_wood	tconstruct:wood	
+stripped_mangrove_log	2	minecraft:stripped_mangrove_log twilightforest:stripped_mangrove_log	minecraft:stripped_mangrove_log twilightforest:stripped_mangrove_log	tconstruct:wood	
+stripped_mangrove_wood	2	minecraft:stripped_mangrove_wood twilightforest:stripped_mangrove_wood	minecraft:stripped_mangrove_wood twilightforest:stripped_mangrove_wood	tconstruct:wood	
+stripped_rotten_log	2	goety:stripped_rotten_log the_deep_void:stripped_rotten_log	goety:stripped_rotten_log the_deep_void:stripped_rotten_log	tconstruct:wood	
+stripped_rotten_wood	2	goety:stripped_rotten_wood the_deep_void:stripped_rotten_wood	goety:stripped_rotten_wood the_deep_void:stripped_rotten_wood	tconstruct:wood	
+stripped_skyroot_log	2	aether:stripped_skyroot_log tconstruct:stripped_skyroot_log	aether:stripped_skyroot_log tconstruct:stripped_skyroot_log	tconstruct:slimewood#skyroot tconstruct:wood	
+stripped_skyroot_wood	2	aether:stripped_skyroot_wood tconstruct:stripped_skyroot_wood	aether:stripped_skyroot_wood tconstruct:stripped_skyroot_wood	tconstruct:slimewood#skyroot tconstruct:wood	
+stripped_willow_log	2	hexerei:stripped_willow_log natures_spirit:stripped_willow_log	hexerei:stripped_willow_log natures_spirit:stripped_willow_log	tconstruct:wood	
+stripped_willow_wood	2	hexerei:stripped_willow_wood natures_spirit:stripped_willow_wood	hexerei:stripped_willow_wood natures_spirit:stripped_willow_wood	tconstruct:wood	
+sulfur	4	adpother:sulfur alexscaves:sulfur bloodmagic:sulfur the_deep_void:sulfur	alexscaves:sulfur the_deep_void:sulfur		forge:dusts/sulfur
+sunfish_spawn_egg	2	thalassophobia:sunfish_spawn_egg untamedwilds:sunfish_spawn_egg			
+survival_infinity_upgrade	2	sophisticatedbackpacks:survival_infinity_upgrade sophisticatedstorage:survival_infinity_upgrade			
+swarmer_spawn_egg	2	born_in_chaos_v1:swarmer_spawn_egg the_deep_void:swarmer_spawn_egg			
+tallow	2	immersive_weathering:tallow occultism:tallow			forge:tallow
+target	2	minecraft:target tacz:target	minecraft:target tacz:target		
+tendons	2	the_deep_void:tendons the_flesh_that_hates:tendons	the_deep_void:tendons		
+terminal	2	ae2:terminal fallout_wastelands_:terminal	ae2:terminal		
+test_block	2	satako:test_block tinymultiblocklib:test_block			
+thermometer	2	cold_sweat:thermometer powergrid:thermometer	cold_sweat:thermometer powergrid:thermometer		
+tomato	2	farmersdelight:tomato kaleidoscope_cookery:tomato	farmersdelight:tomato		
+transistor	2	oc2r:transistor pneumaticcraft:transistor	oc2r:transistor pneumaticcraft:transistor		
+trash_can	2	kaleidoscope_cookery:trash_can rats:trash_can	kaleidoscope_cookery:trash_can rats:trash_can		
+tuff_pillar	2	create:tuff_pillar quark:tuff_pillar	create:tuff_pillar quark:tuff_pillar		
+turtle_egg	2	eanimod:turtle_egg minecraft:turtle_egg			
+upgrade_base	2	sophisticatedbackpacks:upgrade_base sophisticatedstorage:upgrade_base	sophisticatedbackpacks:upgrade_base sophisticatedstorage:upgrade_base		
+vodka	2	brewinandchewin:vodka fallout_wastelands_:vodka	brewinandchewin:vodka		
+void_core	2	cataclysm:void_core the_deep_void:void_core			
+void_eye	2	cataclysm:void_eye goety:void_eye	cataclysm:void_eye goety:void_eye		
+void_shard	2	cataclysm:void_shard goety:void_shard			
+void_upgrade	2	sophisticatedbackpacks:void_upgrade sophisticatedstorage:void_upgrade	sophisticatedbackpacks:void_upgrade sophisticatedstorage:void_upgrade		
+whale_shark_spawn_egg	2	thalassophobia:whale_shark_spawn_egg untamedwilds:whale_shark_spawn_egg			
+wheat_flour	2	create:wheat_flour pneumaticcraft:wheat_flour	pneumaticcraft:wheat_flour		forge:dusts/flour
+wild_rice	2	farmersdelight:wild_rice kaleidoscope_cookery:wild_rice			
+willow_boat	2	hexerei:willow_boat natures_spirit:willow_boat	hexerei:willow_boat natures_spirit:willow_boat		
+willow_branch	2	better_hexerei_dynamic_trees:willow_branch dtnatures_spirit:willow_branch			
+willow_button	2	hexerei:willow_button natures_spirit:willow_button	hexerei:willow_button natures_spirit:willow_button		
+willow_chest_boat	2	hexerei:willow_chest_boat natures_spirit:willow_chest_boat	hexerei:willow_chest_boat natures_spirit:willow_chest_boat		
+willow_door	2	hexerei:willow_door natures_spirit:willow_door	hexerei:willow_door natures_spirit:willow_door		
+willow_fence	2	hexerei:willow_fence natures_spirit:willow_fence	hexerei:willow_fence natures_spirit:willow_fence		
+willow_fence_gate	2	hexerei:willow_fence_gate natures_spirit:willow_fence_gate	hexerei:willow_fence_gate natures_spirit:willow_fence_gate		
+willow_hanging_sign	2	hexerei:willow_hanging_sign natures_spirit:willow_hanging_sign	natures_spirit:willow_hanging_sign		
+willow_leaves	2	hexerei:willow_leaves natures_spirit:willow_leaves		tconstruct:leaves	
+willow_log	2	hexerei:willow_log natures_spirit:willow_log		tconstruct:wood	
+willow_planks	2	hexerei:willow_planks natures_spirit:willow_planks	hexerei:willow_planks natures_spirit:willow_planks	tconstruct:wood	
+willow_pressure_plate	2	hexerei:willow_pressure_plate natures_spirit:willow_pressure_plate	hexerei:willow_pressure_plate natures_spirit:willow_pressure_plate		
+willow_sapling	2	hexerei:willow_sapling natures_spirit:willow_sapling			
+willow_seed	2	better_hexerei_dynamic_trees:willow_seed dtnatures_spirit:willow_seed			
+willow_sign	2	hexerei:willow_sign natures_spirit:willow_sign	hexerei:willow_sign natures_spirit:willow_sign		
+willow_slab	2	hexerei:willow_slab natures_spirit:willow_slab	hexerei:willow_slab natures_spirit:willow_slab		
+willow_stairs	2	hexerei:willow_stairs natures_spirit:willow_stairs	hexerei:willow_stairs natures_spirit:willow_stairs		
+willow_trapdoor	2	hexerei:willow_trapdoor natures_spirit:willow_trapdoor	hexerei:willow_trapdoor natures_spirit:willow_trapdoor		
+willow_vines	2	hexerei:willow_vines natures_spirit:willow_vines			
+willow_wood	2	hexerei:willow_wood natures_spirit:willow_wood	hexerei:willow_wood natures_spirit:willow_wood	tconstruct:wood	
+wind_vane	2	supplementaries:wind_vane weather2:wind_vane	supplementaries:wind_vane weather2:wind_vane		
+winter_wolf_spawn_egg	2	goety:winter_wolf_spawn_egg twilightforest:winter_wolf_spawn_egg			
+wither_shard	2	iceandfire:wither_shard moreartifacts:wither_shard	iceandfire:wither_shard		
+wraith_spawn_egg	3	goety:wraith_spawn_egg quark:wraith_spawn_egg twilightforest:wraith_spawn_egg			
+wrench	6	additionalweaponry:wrench create:wrench fallout_wastelands_:wrench oc2r:wrench prettypipes:wrench supplementaries:wrench	additionalweaponry:wrench create:wrench fallout_wastelands_:wrench oc2r:wrench prettypipes:wrench supplementaries:wrench		
+wrought_iron_fence	2	dawnoftimebuilder:wrought_iron_fence twilightforest:wrought_iron_fence	dawnoftimebuilder:wrought_iron_fence		
+xp_pump_upgrade	2	sophisticatedbackpacks:xp_pump_upgrade sophisticatedstorage:xp_pump_upgrade	sophisticatedbackpacks:xp_pump_upgrade		
+zinc_sheet	2	createdeco:zinc_sheet powergrid:zinc_sheet	createdeco:zinc_sheet powergrid:zinc_sheet		forge:plates/zinc
